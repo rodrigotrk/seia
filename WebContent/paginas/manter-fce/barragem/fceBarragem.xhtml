@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui">
+	
+	<ui:include src="/paginas/manter-fce/barragem/incluirPontoEixoInicialFinal.xhtml"/>
+	
+	<p:confirmDialog header="Confirmação" appendToBody="true" message="Deseja imprimir o relatório do cadastro de Formulário de Caracterização do Empreendimento - Barragem?"
+						severity="alert" widgetVar="confirmationSalvarFCEBarragem" id="_confirmationSalvarFCEBarragem">
+		<h:form id="formConfirmaConfirmarFCEBarragem">
+			<p:commandButton value="Sim" 
+					ajax="false" 
+					global="false" 
+					process="@this" 
+					onclick="confirmationSalvarFCEBarragem.hide(),dialogFcebarragem.hide();"
+					update="frmAnaliseTecnica">
+ 				<p:fileDownload value="#{fceBarragemController.imprimirRelatorio}" />
+			</p:commandButton>
+			<p:commandButton value="Não" onclick="confirmationSalvarFCEBarragem.hide(),dialogFcebarragem.hide();" type="button" global="false"/>
+		</h:form>
+	</p:confirmDialog>
+	
+	<!-- CONFIRM DIALOG EXCLUIR LOCALIZACAO GEOGRAFICA -->
+	<p:confirmDialog header="Confirmação" 
+		id="_dialogExcluirLocGeoPonto"  
+		widgetVar="dialogExcluirLocGeoPonto" 
+		appendToBody="true" 
+		message="#{bundle.messagem_004}" 
+		severity="alert"
+		position="center">
+		<h:form>
+			<p:commandButton value="Sim" 
+				onclick="dialogExcluirLocGeoPonto.hide();"
+				actionListener="#{fceBarragemController.removeItemList()}"
+				update="formFcebarragem">
+			</p:commandButton>
+			<p:commandButton value="Não" 
+				onclick="dialogExcluirLocGeoPonto.hide();" 
+				type="button" 
+				global="false" />
+		</h:form>
+	</p:confirmDialog>
+	
+	<p:confirmDialog header="Confirmação" 
+		id="_dialogExcluirPoligonalApp"  
+		widgetVar="dialogExcluirPoligonalApp" 
+		appendToBody="true" 
+		message="#{bundle.messagem_004}" 
+		severity="alert"
+		position="center">
+		<h:form>
+			<p:commandButton value="Sim" 
+				onclick="dialogExcluirPoligonalApp.hide();"
+				update="formFcebarragem"
+				action="#{fceBarragemController.removerPoligonalApp()}">
+			</p:commandButton>
+			<p:commandButton value="Não" 
+				onclick="dialogExcluirPoligonalApp.hide();" 
+				type="button" 
+				global="false" />
+		</h:form>
+	</p:confirmDialog>
+	
+	<p:confirmDialog header="Confirmação" 
+		id="_dialogExcluirInundacao"  
+		widgetVar="dialogExcluirInundacao" 
+		appendToBody="true" 
+		message="#{bundle.messagem_004}" 
+		severity="alert"
+		position="center">
+		<h:form>
+			<p:commandButton value="Sim" 
+				onclick="dialogExcluirInundacao.hide();"
+				update="formFcebarragem:_tabAbasFcebarragem:pgAreaMaxima"
+				actionListener="#{fceBarragemController.removerItemLocalizacaoGeografica()}">
+			</p:commandButton>
+			<p:commandButton value="Não" 
+				onclick="dialogExcluirInundacao.hide();" 
+				type="button" 
+				global="false" />
+		</h:form>
+	</p:confirmDialog>
+	
+	<p:confirmDialog header="Confirmação" 
+		id="_dialogExcluirSuprimida"  
+		widgetVar="dialogExcluirSuprimida" 
+		appendToBody="true" 
+		message="#{bundle.messagem_004}" 
+		severity="alert"
+		position="center">
+		<h:form>
+			<p:commandButton value="Sim" 
+				onclick="dialogExcluirSuprimida.hide();"
+				update="formFcebarragem">
+				<f:setPropertyActionListener target="#{fceBarragemController.fceBarragem.fceBarragemLicenciamento.poligonalAreaSuprimida}" value="#{null}" />
+			</p:commandButton>
+			<p:commandButton value="Não" 
+				onclick="dialogExcluirSuprimida.hide();" 
+				type="button" 
+				global="false" />
+		</h:form>
+	</p:confirmDialog>
+	
+	<p:dialog id="_dialogFcebarragem" widgetVar="dialogFcebarragem" 
+		modal="true" showHeader="false" 
+		appendToBody="true" width="900"
+		height="500" 
+		position="center" resizable="false" draggable="false"
+		onShow="dialogFcebarragem.initPosition();">
+		<h:form id="formFcebarragem">
+			<p:tabView id="_tabAbasFcebarragem" activeIndex="#{fceBarragemController.activeAba}" widgetVar="tabAbasFcebarragem" cache="false" rendered="#{fceBarragemController.fceBarragem != null}" 
+				>
+				
+				<p:ajax event="tabChange" listener="#{fceBarragemController.controlarAbas()}"  />
+				
+				
+				<p:tab id="FcebarragemAbaDadosGerais" title="Dados Gerais">
+					<ui:include rendered="#{fceBarragemController.activeAba == 0}" src="/paginas/manter-fce/barragem/abas/dadosGereais.xhtml" />
+				</p:tab>
+				<p:tab id="FcebarragemAbaIntervencaoBarragem" title="Intervenção - Barragem" disabled="#{fceBarragemController.disableAbaIntervencaoBarragem}">
+					<ui:include rendered="#{fceBarragemController.activeAba == 1}" src="/paginas/manter-fce/barragem/abas/intervencaoBarragem.xhtml"/>
+				</p:tab>
+				<p:tab id="FcebarragemLicenciamentoBarragem" title="Licenciamento de Barragem" disabled="#{fceBarragemController.disableAbaBarragemLicenciamento}">
+					<ui:include rendered="#{fceBarragemController.fceBarragem.fceBarragemLicenciamento != null}" src="/paginas/manter-fce/barragem/abas/licenciamentoBarragem.xhtml"/>
+				</p:tab>
+			</p:tabView>
+		</h:form>
+	</p:dialog>
+	
+</ui:composition>

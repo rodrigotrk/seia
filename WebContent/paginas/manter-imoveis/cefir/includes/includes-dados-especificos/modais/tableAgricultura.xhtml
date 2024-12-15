@@ -1,0 +1,59 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+	
+	<p:dataTable id="dataTableTipologiaAtividadeAgricultura" 
+				  
+				 var="tpaAgricultura" 
+				 value="#{imovelRuralControllerNew.areaProdutivaSelecionada.areaProdutivaTipologiaAtividadeCollection}" 
+				 lazy="true" 
+				 paginator="true" 
+				 rows="10"
+				 paginatorPosition="bottom" 
+				 paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}" 
+				 emptyMessage="#{bundle.cefir_msg_A012}"
+				 style="width: 500px;" 
+				 widgetVar="tpaAgricultura" 
+				 rendered="#{imovelRuralControllerNew.pnlAgricultura}">
+				 
+			<p:column>
+				<f:facet name="header">
+					<h:outputText value="Tipo de Atividade" />
+				</f:facet>
+				<h:outputText value="#{tpaAgricultura.ideTipologiaAtividade.dscTipologiaAtividade}" />
+			</p:column>
+			
+			<p:column>
+				<f:facet name="header">
+					<h:outputText value="Método Irrigação" />
+				</f:facet>
+				<h:outputText value="#{tpaAgricultura.ideAreaProdutivaTipologiaAtividadeAgricultura.ideMetodoIrrigacao.dscMetodoIrrigacao}" />
+			</p:column>
+			
+			<p:column>
+				<f:facet name="header">
+					<h:outputText value="Meses" />
+				</f:facet>
+				<h:outputText value="#{imovelRuralControllerNew.retornaDscMesesIrrigacao(tpaAgricultura.ideAreaProdutivaTipologiaAtividadeAgricultura.meses)}" />
+			</p:column>
+		
+			<p:column>
+				<f:facet name="header">
+					<h:outputText value="Ações" />
+				</f:facet>
+				<p:commandLink id="excluirTpa" 
+							   action="#{imovelRuralControllerNew.excluirTipologiaAtividade(tpaAgricultura)}" 
+							   title="Excluir" 
+							   update="formAreaProdutiva:listaTipologiaAtividade formAreaProdutiva:panelTipologiaAtividade" 
+							   process="@this"
+							   disabled="#{imovelRuralControllerNew.visualizacaoAp}">
+					<h:graphicImage title="Excluir" value="/resources/img/ico-excluir.png" />
+				</p:commandLink>
+			</p:column>
+			
+	</p:dataTable>
+</html>

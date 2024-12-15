@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="fce_sistema_esgotamento_sanitario_dados_elevatoria" pageWidth="495" pageHeight="817" whenNoDataType="AllSectionsNoDetail" columnWidth="495" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="80b78396-35cc-4e26-aaf9-1207b1892468">
+	<property name="ireport.zoom" value="2.4157650000000013"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String"/>
+	<parameter name="ide_fce_ses" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="ide_requerimento" class="java.lang.Integer"/>
+	<queryString>
+		<![CDATA[select ide_fce_ses_dados_elevatoria, des_identificacao_elevatoria, dsc_faixa_diametro_adutora,
+ val_extensao_linha, val_vazao from fce_ses_dados_elevatoria elevatoria
+ INNER JOIN faixa_diametro_adutora adutora
+	on elevatoria.ide_faixa_diametro_adutora = adutora.ide_faixa_diametro_adutora
+	where ide_fce_ses = $P{ide_fce_ses}]]>
+	</queryString>
+	<field name="ide_fce_ses_dados_elevatoria" class="java.lang.Integer"/>
+	<field name="des_identificacao_elevatoria" class="java.lang.String"/>
+	<field name="dsc_faixa_diametro_adutora" class="java.lang.String">
+		<fieldDescription><![CDATA[Descrição da faixa do diâmetro utilizado na adutora.]]></fieldDescription>
+	</field>
+	<field name="val_extensao_linha" class="java.math.BigDecimal"/>
+	<field name="val_vazao" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[Vazão ou vazão média dependendo do tipo de captação.]]></fieldDescription>
+	</field>
+	<title>
+		<band height="23" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="a9bc1f7b-2831-4626-a0d9-766c22f99fbd" positionType="Float" mode="Opaque" x="0" y="3" width="494" height="20" backcolor="#DDDDDD"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif" isBold="true"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<text><![CDATA[Estação Elevatória]]></text>
+			</staticText>
+		</band>
+	</title>
+	<detail>
+		<band height="153">
+			<staticText>
+				<reportElement uuid="6bc33be4-fcbb-4076-89b6-7ed2ef5580f7" x="0" y="14" width="333" height="20"/>
+				<box topPadding="3" leftPadding="2"/>
+				<textElement>
+					<font fontName="SansSerif" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Dados da elevatória]]></text>
+			</staticText>
+			<line>
+				<reportElement uuid="cf7e0220-df7b-411b-a8bc-e7aceb23a521" x="0" y="33" width="495" height="1"/>
+			</line>
+			<line>
+				<reportElement uuid="d0716305-a941-4d1c-9264-395358869a77" x="0" y="131" width="495" height="1"/>
+			</line>
+			<staticText>
+				<reportElement uuid="99c57819-010f-45f9-b4fb-a8f2c69592a0" x="0" y="112" width="333" height="20"/>
+				<box topPadding="3" leftPadding="2"/>
+				<textElement>
+					<font fontName="SansSerif" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Coordenada da elevatória]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="88f36183-36da-41d7-8acf-880da5bbea98" x="138" y="140" width="98" height="12"/>
+				<textElement>
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Longitude]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="a3b20364-0ba0-4ccd-881a-9f82fe3dc5d4" x="236" y="140" width="140" height="12"/>
+				<textElement>
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Sistema de Coordenadas]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="ba1e53b5-58fa-4565-bef5-45ad4b71029a" x="40" y="140" width="98" height="12"/>
+				<textElement>
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Latitude]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="60feb993-ff40-444b-a2ba-ebfbfe626179" x="5" y="42" width="131" height="20"/>
+				<textElement/>
+				<text><![CDATA[Identificação da elevatória:]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="c5759b9d-9052-4c69-a01b-64e6ac16241c" x="136" y="42" width="87" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{des_identificacao_elevatoria}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="ed28cc34-2844-4f38-b4ab-3a1ed5b31840" x="223" y="42" width="171" height="20"/>
+				<textElement/>
+				<text><![CDATA[Extensão da linha de Recalque (m):]]></text>
+			</staticText>
+			<textField pattern="#,##0.00">
+				<reportElement uuid="ef742bbb-2b09-4987-b0e8-055c167f7944" x="394" y="42" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{val_extensao_linha}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="941f8b54-0102-46b5-aecb-f3ff899ff0f5" x="5" y="63" width="86" height="20"/>
+				<textElement/>
+				<text><![CDATA[Vazão (m³/dia):]]></text>
+			</staticText>
+			<textField pattern="#,##0.00">
+				<reportElement uuid="102db6a0-686f-4d2e-9229-e0a16b6bb3f3" x="91" y="63" width="145" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{val_vazao}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="82345b16-2c91-4459-825a-61cb8fa78ca4" x="5" y="85" width="266" height="20"/>
+				<textElement/>
+				<text><![CDATA[Faixa de diâmetro predominante da linha de recalque:]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="42e111ce-ff5f-4e11-ba80-7ae8266b98a4" x="271" y="85" width="176" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{dsc_faixa_diametro_adutora}]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="36" splitType="Prevent"/>
+		<band splitType="Stretch">
+			<subreport runToBottom="false">
+				<reportElement uuid="42ce1884-9b66-4fe4-9b82-999648865baf" positionType="Float" isPrintRepeatedValues="false" x="40" y="-32" width="455" height="24" isRemoveLineWhenBlank="true" isPrintWhenDetailOverflows="true"/>
+				<subreportParameter name="SUBREPORT_DIR">
+					<subreportParameterExpression><![CDATA[$P{SUBREPORT_DIR}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="ide_requerimento">
+					<subreportParameterExpression><![CDATA[$P{ide_requerimento}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="ide_fce_ses">
+					<subreportParameterExpression><![CDATA[$P{ide_fce_ses}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="ide_dados_elevatoria">
+					<subreportParameterExpression><![CDATA[$F{ide_fce_ses_dados_elevatoria}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "fce_sistema_saneamento_sanitario_localizacao_elevatoria.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+		<band height="33" splitType="Prevent">
+			<subreport runToBottom="false">
+				<reportElement uuid="01724821-7151-48c2-8f70-797d32f5e169" positionType="Float" isPrintRepeatedValues="false" x="0" y="2" width="495" height="24" isRemoveLineWhenBlank="true" isPrintWhenDetailOverflows="true"/>
+				<subreportParameter name="ide_requerimento">
+					<subreportParameterExpression><![CDATA[$P{ide_requerimento}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="ide_fce_ses">
+					<subreportParameterExpression><![CDATA[$P{ide_fce_ses}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="ide_dados_elevatoria">
+					<subreportParameterExpression><![CDATA[$F{ide_fce_ses_dados_elevatoria}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "fce_sistema_saneamento_sanitario_localizacao_extravasamento.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+	</detail>
+</jasperReport>

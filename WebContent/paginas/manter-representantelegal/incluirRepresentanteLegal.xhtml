@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+<ui:composition 
+	xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      template="/layout/template.xhtml">
+<ui:define name="conteudo-principal">
+			<h:form>
+				<h:panelGrid columns="1">
+				<h:panelGrid columns="1">
+					<h:outputText value="*#{bundle.representanteLegalLabelCnpj}" />
+					<p:inputMask value="#{representanteLegalController.representanteLegal.idePessoaJuridica.numCnpj}" mask="#{bundle.consultapj_msk_cnpj}"  style="width: 150px;" converterMessage="Cnpj inválido">
+			    	</p:inputMask>					
+					<h:outputText value="#{bundle.represententeLegalUploadArquivo}" />
+				</h:panelGrid>
+					
+				<h:panelGrid columns="2">
+					<h:outputText value="#{bundle.representanteLegalLabelRazaoSocial}" />
+					<h:outputText value="#{bundle.representantelegalLabelDataAbertura}" />
+				
+					<p:inputText value="#{representanteLegalController.representanteLegal.idePessoaJuridica.nomRazaoSocial}" style="width: 400px;"/>
+					<p:calendar value="#{representanteLegalController.representanteLegal.idePessoaJuridica.dtcAbertura}" showOn="button" id="dataValidade" 
+					 label="Data de Abertura" validator="dataPosteriorValidator" />
+				</h:panelGrid>
+				
+				<h:panelGrid columns="3">
+					<h:outputText value="#{bundle.representanteLegalLabelNomeFantasia}" />
+					<h:outputText value="#{bundle.representanteLegalLabelInscricaoMunicipal}" />
+					<h:outputText value="#{bundle.representanteLegalLabelInscricaoEstadual}" />
+					
+					<p:inputText value="#{representanteLegalController.representanteLegal.idePessoaJuridica.nomeFantasia}" style="width: 400px;"/>
+					<p:inputText value="#{representanteLegalController.representanteLegal.idePessoaJuridica.nomRazaoSocial}" style="width: 150px;"/>
+					<p:inputText value="#{representanteLegalController.representanteLegal.idePessoaJuridica.nomRazaoSocial}" style="width: 150px;"/>
+				</h:panelGrid>
+				
+				<h:panelGrid columns="2">
+					<h:outputText value="#{bundle.representantelegalLabelNaturezaJuridica}" />
+					<h:outputText value="#{bundle.representanteLegalLabelEmail}" />
+										
+					<p:selectOneMenu value="#{representanteLegalController.representanteLegal.idePessoaJuridica.ideNaturezaJuridica.ideNaturezaJuridica}" style="width: 250px;">
+						<f:selectItems value="#{naturezaJuridicaController.valuesCombo}"/>
+					</p:selectOneMenu>
+					<p:inputText value="#{representanteLegalController.representanteLegal.idePessoaJuridica.pessoa.desEmail}" style="width: 400px;"
+					 validator="emailValidator"/>
+				</h:panelGrid>
+				
+				<h:outputText/>
+				<h:outputText/>
+				<h:outputText/>
+				
+				<h:panelGroup>
+					<p:commandButton value="Limpar"></p:commandButton>
+					<p:commandButton value="Salvar" ajax="false" >
+						<p:ajax process="@form"/>
+					</p:commandButton>
+				</h:panelGroup>
+				
+				</h:panelGrid>
+				</h:form>
+				
+				<ui:include src="modalAtividadeCnae.xhtml" />
+				<ui:include src="modalParticipacaoAcionaria.xhtml" />
+				
+				<h:form>
+				<h:panelGrid columns="1">
+				<h:panelGrid columns="1">
+					<h:outputText value="" />
+					<h:outputText value="#{bundle.representanteLegalLabelProcuradores}" />
+					<h:panelGroup>
+						<h:outputText value="#{bundle.representanteLegalLabelProcuradores}" />
+						<p:commandButton value="+" onclick="dialogProcurador.show()">
+						</p:commandButton>
+					</h:panelGroup>
+					
+					<h:outputText value="" />
+					<h:outputText value="#{bundle.representanteLegalLabelTelefone}" />
+					<h:panelGroup>
+						<h:outputText value="#{bundle.representanteLegalLabelIncluirTelefone}" />
+						<p:commandButton value="+" onclick="dialogTelefone.show()">
+						</p:commandButton>						
+					</h:panelGroup>					
+					
+					<h:outputText value="" />
+					<h:outputText value="#{bundle.representanteLegalLabelEndereco}" />
+					<h:outputText value="#{bundle.representanteLegalLabelCep}" />
+					<p:inputText value="#{representanteLegalController.endereco.ideEndereco.ideLogradouro.numCep}" style="width: 100px;"/>					
+									
+				</h:panelGrid>
+				
+				<h:panelGrid columns="2">
+					
+						<h:panelGrid columns="2">
+							<h:outputText value="#{bundle.representanteLegalLabelLogradouro}" />
+							<h:outputText value="" />
+							
+						<p:selectOneMenu style="width: 80px;">
+							<f:selectItem itemLabel="a" itemValue="a"/>
+						</p:selectOneMenu>
+						<p:inputText value="#{representanteLegalController.endereco.ideEndereco.ideLogradouro.nomLogradouro}" style="width: 315px"/>
+						
+						<h:outputText value="#{bundle.representanteLegalLabelNumero}" />
+						<h:outputText value="#{bundle.representanteLegalLabelComplemento}" />
+						
+						<p:inputText style="width: 65px;"/>
+						<p:inputText style="width: 317px;"/>
+							
+						</h:panelGrid>
+						
+						<h:panelGrid columns="1">
+							<h:outputText value="#{bundle.representanteLegalLabelBairroDistritro}" />
+							<h:inputText value="" style="width: 250px;"/>
+							
+							<h:panelGrid columns="2">
+								<h:outputText value="#{bundle.representanteLegalLabelUf}" />
+								<h:outputText value="#{bundle.representanteLegalLabelMunicipio}" />
+								
+								<p:selectOneMenu style="width: 50px;" id="a">
+									<f:selectItem itemLabel="a" itemValue="a"/>
+								</p:selectOneMenu>
+								<p:selectOneMenu style="width: 190px;" id="b">
+									<f:selectItem itemLabel="a" itemValue="a"/>
+								</p:selectOneMenu>
+							</h:panelGrid>
+						
+						
+						</h:panelGrid>
+					
+					</h:panelGrid>
+					
+					<h:outputText value="#{bundle.representanteLegalLabelPontoReferencia}" />
+					<p:inputText style="width: 399px;"/>
+					
+					<h:panelGrid columns="2">
+						<h:outputText value="#{bundle.lbl_preench_obrig_asterisc}" />
+						<p:button value="Avançar"/>
+					</h:panelGrid>				
+				</h:panelGrid>
+				
+				</h:form>
+				
+				<h:form>	
+					<p:dialog id="modalProcurador" header="#{bundle.procuradorLabelCabecalho}" widgetVar="dialogProcurador" width="700" height="650" modal="true">
+						<ui:include src="/paginas/manter-representantelegal/modalProcurador.xhtml" />
+					</p:dialog>
+					
+					<p:dialog id="modalTelefone" header="#{bundle.telefoneLabelCabecalho}" styleClass="form-label" widgetVar="dialogTelefone" width="300">
+						<ui:include src="modalTelefone.xhtml" />
+					</p:dialog>
+				</h:form>
+					
+	</ui:define>
+</ui:composition>
+</html>

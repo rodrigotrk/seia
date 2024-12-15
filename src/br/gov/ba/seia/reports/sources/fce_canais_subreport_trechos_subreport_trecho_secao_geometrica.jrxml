@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="fce_canais_subreport_trechos_subreport_trecho_secao_geometrica" language="java" pageWidth="495" pageHeight="572" orientation="Landscape" columnWidth="495" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="7c82eb0f-0476-4909-9f61-c7f366182773">
+	<property name="ireport.zoom" value="2.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="ide_fce_canal_trecho" class="java.lang.Integer"/>
+	<queryString>
+		<![CDATA[SELECT b.dsc_secao_geometrica,
+	ide_fce_canal_trecho_secao_geometrica, val_base_maior, val_base_menor,
+       val_altura, val_largura, val_diametro, ide_fce_canal_trecho,
+       a.ide_secao_geometrica
+  FROM fce_canal_trecho_secao_geometrica as a
+	LEFT JOIN secao_geometrica as b on (a.ide_secao_geometrica = b.ide_secao_geometrica)
+  WHERE a.ide_fce_canal_trecho = $P{ide_fce_canal_trecho}]]>
+	</queryString>
+	<field name="dsc_secao_geometrica" class="java.lang.String"/>
+	<field name="ide_fce_canal_trecho_secao_geometrica" class="java.lang.Integer"/>
+	<field name="val_base_maior" class="java.math.BigDecimal"/>
+	<field name="val_base_menor" class="java.math.BigDecimal"/>
+	<field name="val_altura" class="java.math.BigDecimal"/>
+	<field name="val_largura" class="java.math.BigDecimal"/>
+	<field name="val_diametro" class="java.math.BigDecimal"/>
+	<field name="ide_fce_canal_trecho" class="java.lang.Integer"/>
+	<field name="ide_secao_geometrica" class="java.lang.Integer"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<detail>
+		<band height="14" splitType="Stretch">
+			<textField>
+				<reportElement uuid="05a897ed-0260-4a28-8e1a-5313710dcd10" x="0" y="0" width="752" height="14"/>
+				<textElement textAlignment="Justified">
+					<font fontName="Arial" size="9" isBold="true" isItalic="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["- " + $F{dsc_secao_geometrica}]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="13">
+			<printWhenExpression><![CDATA[$F{ide_secao_geometrica}.equals(1)]]></printWhenExpression>
+			<textField pattern="#,##0.00">
+				<reportElement uuid="330ac19a-76c2-473e-b22a-602f1f49575c" x="84" y="0" width="100" height="13"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="9" isItalic="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{val_base_menor}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="93ad6af3-acc4-42ff-9947-0ea4878c0a46" x="12" y="0" width="73" height="13"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="9" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[- base menor (m):]]></text>
+			</staticText>
+		</band>
+		<band height="13">
+			<printWhenExpression><![CDATA[$F{ide_secao_geometrica}.equals(1)]]></printWhenExpression>
+			<textField pattern="#,##0.00">
+				<reportElement uuid="ebaa8ab3-0d73-4366-be39-f1bd259d69e9" x="84" y="0" width="100" height="13"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="9" isItalic="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{val_base_maior}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="0b0f0c8f-7706-461d-a6a3-574998d5b1c5" x="12" y="0" width="73" height="13"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="9" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[- base maior (m):]]></text>
+			</staticText>
+		</band>
+		<band height="13">
+			<printWhenExpression><![CDATA[$F{ide_secao_geometrica}.equals(1) || $F{ide_secao_geometrica}.equals(2)]]></printWhenExpression>
+			<textField pattern="#,##0.00">
+				<reportElement uuid="9c1617e4-12b3-4c10-a1d2-34efc7c615d2" x="67" y="0" width="105" height="13"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="9" isItalic="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{val_altura}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="d7e60593-838e-4b59-8e01-0d5947b9f0b1" x="12" y="0" width="55" height="13"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="9" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[- altura (m):]]></text>
+			</staticText>
+		</band>
+		<band height="13">
+			<printWhenExpression><![CDATA[$F{ide_secao_geometrica}.equals(2)]]></printWhenExpression>
+			<textField pattern="#,##0.00">
+				<reportElement uuid="9e886ef7-df1d-49a8-80f8-9421cffdabc8" x="67" y="0" width="104" height="13"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="9" isItalic="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{val_largura}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="6dfb5916-c67b-4683-a67b-19e57982604a" x="12" y="0" width="55" height="13"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="9" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[- largura (m):]]></text>
+			</staticText>
+		</band>
+		<band height="13">
+			<printWhenExpression><![CDATA[$F{ide_secao_geometrica}.equals(3)]]></printWhenExpression>
+			<textField pattern="#,##0.00">
+				<reportElement uuid="6713496e-7292-4170-8089-8cecf9d29963" x="73" y="0" width="100" height="13"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="9" isItalic="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{val_diametro}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="c32d901a-fd43-4040-b945-27c06e445abc" x="12" y="0" width="60" height="13"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="9" isItalic="true"/>
+				</textElement>
+				<text><![CDATA[- diâmetro (m):]]></text>
+			</staticText>
+		</band>
+	</detail>
+</jasperReport>

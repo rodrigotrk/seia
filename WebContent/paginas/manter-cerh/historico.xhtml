@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui"
+	template="../../layout/template.xhtml">
+	
+	<ui:define name="titulo-pagina">
+		<h3><h:outputText value="#{bundle.cerh_lbl_titulo_cerh}" /></h3>
+	</ui:define>
+	
+	<ui:define name="conteudo-principal">
+		<ui:include src="/paginas/manter-cerh/dlgHistoricoCerh.xhtml"/>
+		
+		<h:form id="frmCerhHistorico">			
+			
+			<h:panelGroup id="pnlHistoricoCerh">
+			
+				<p:dataTable 
+					id="tableHistorico"
+					style="width:780px;"
+					value="#{cerhHistoricoController.listaHistorico}" var="cerh"
+					lazy="true" paginator="true" rows="8" paginatorPosition="bottom"
+					paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}"
+					emptyMessage="#{bundle.geral_msg_empty_list}">
+					
+					<f:facet name="header">
+						<h:outputText value="#{bundle.cerh_historico_lbl_historico_alteracao}" />
+					</f:facet>
+					
+					<p:column headerText="#{bundle.cerh_historico_lbl_data_modificacao}">
+						
+						<h:outputText rendered="#{empty cerh.ideObjetoPai}" value="#{cerh.dtcCadastro}">
+							<f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss" locale="pt,BR" timeZone="Brazil/East"/>
+						</h:outputText>
+						
+						<p:commandLink rendered="#{not empty cerh.ideObjetoPai}" style="text-color: blue;" actionListener="#{cerhHistoricoController.setarCerhParaHistorico(cerh)}" update="frmCerhHistorico:btnComparar">
+							<h:outputText rendered="#{not empty cerh.ideObjetoPai}" value="#{cerh.dtcCadastro}">
+								<f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss" locale="pt,BR" timeZone="Brazil/East"/>
+							</h:outputText>
+						</p:commandLink>
+						
+					</p:column>
+					
+					<p:column headerText="#{bundle.cerh_historico_lbl_usuario_alteracao}">
+						<h:outputText value="#{cerh.idePessoaFisicaCadastro.nomPessoa}" />
+					</p:column>
+					
+					<p:column headerText="#{bundle.geral_lbl_acoes}">
+						<p:commandLink  type="button" actionListener="#{cerhController.load(cerh)}">
+							<h:graphicImage value="/resources/img/ico-pesquisa.png" />
+						</p:commandLink>
+					</p:column>
+					
+				</p:dataTable>
+				
+			</h:panelGroup>
+		</h:form>
+
+	</ui:define>
+	
+</ui:composition>

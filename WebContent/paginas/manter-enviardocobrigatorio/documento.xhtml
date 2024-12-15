@@ -1,0 +1,636 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui">
+
+	<!-- Dialog geral informativo relativo a seleção do item "Outros" em qualuqer lista conforme RN 20 atualizada até a presente data (20/08/2013)-->
+	<p:confirmDialog widgetVar="infoFceOutros" header="#{bundle.geral_lbl_mensagem}" appendToBody="true" message="Favor entrar em contato com o INEMA através do e-mail atendimento.seia@inema.ba.gov.br
+		para que o cadastro da opção desejada seja realizado." severity="alert" >
+		<h:form>
+			<p:commandButton value="Fechar" onclick="infoFceOutros.hide()" type="button" />
+		</h:form>
+	</p:confirmDialog>
+	
+	<p:dialog id="_dialogEnviarDocumento" widgetVar="dialogEnviarDocumento" 
+		modal="true" showHeader="false" 
+		appendToBody="true" width="900" height="550" 
+		position="center" resizable="false" draggable="false"
+		onShow="dialogEnviarDocumento.initPosition();" >
+		
+		<h:form id="documento">
+			
+			<p:remoteCommand name="updateDocumento" update=":documento:pnlListaDocumentos" oncomplete="expandAll();"/> 
+			<h1 style="font-size: 14px">ENVIAR DOCUMENTO OBRIGATÓRIO</h1>
+			<hr	style="width: 100%; margin-top: 5px; margin-bottom: 5px; border: none; border-top: 1px solid #ccc;" />	
+			<p style="margin: 5px;" class="titulo-grupo"><h:outputText value="Dados do requerimento"/></p>		
+			
+			<h:panelGrid columns="4">
+				<h:outputLabel value="Nº Requerimento : "  styleClass="tit-requerimento"/>
+				<h:outputText value="#{envioDocumentoController.requerimento.numRequerimento}"  styleClass="dados-requerimento"/>
+				<p:spacer rendered="#{empty envioDocumentoController.requerimento.ultimoEmpreendimento.nomEmpreendimento}"/>
+				<p:spacer rendered="#{empty envioDocumentoController.requerimento.ultimoEmpreendimento.nomEmpreendimento}"/>
+				<h:outputLabel value="Empreendimento : "  styleClass="tit-requerimento" rendered="#{!empty envioDocumentoController.requerimento.ultimoEmpreendimento.nomEmpreendimento}"/>
+				<h:outputText value="#{envioDocumentoController.requerimento.ultimoEmpreendimento.nomEmpreendimento}" styleClass="dados-requerimento" rendered="#{!empty envioDocumentoController.requerimento.ultimoEmpreendimento.nomEmpreendimento}"/>
+				<h:outputLabel value="CPF : "  styleClass="tit-requerimento" rendered="#{envioDocumentoController.requerimento.requerente.PF}" />
+				<h:outputLabel value="CNPJ : "  styleClass="tit-requerimento" rendered="#{envioDocumentoController.requerimento.requerente.PJ}" />
+				<h:outputText value="#{envioDocumentoController.requerimento.requerente.cpfCnpjFormatado}" styleClass="dados-requerimento"/>
+				<h:outputLabel value="Requerente : " styleClass="tit-requerimento"/>
+				<h:outputText value="#{envioDocumentoController.requerimento.requerente.nomeRazao}" styleClass="dados-requerimento" />
+			</h:panelGrid>
+			
+			<hr	style="width: 100%; margin-top: 5px; margin-bottom: 5px; border: none; border-top: 1px solid #ccc;" />
+			
+			<h:panelGrid rendered="#{not empty envioDocumentoController.formularios}">
+				<p class="titulo-grupo" style="margin-bottom:0px;">Formulário(s)</p>
+				
+				<h:panelGrid id="pnlFormularios" columns="1">
+					<ui:repeat var="formulario" value="#{envioDocumentoController.formularios}">
+						<h:panelGrid>
+							<h:panelGroup layout="block" rendered="#{envioDocumentoController.isNotFormularioDigital(formulario)}">
+						
+								<p:commandLink  value="#{formulario.nomDocumentoObrigatorio}" immediate="true" ajax="false" global="false">
+									<p:fileDownload value="#{envioDocumentoController.getFileDownload(formulario.dscCaminhoArquivo)}" />
+								</p:commandLink>
+								<p:spacer width="5" />
+								<h:commandButton title="Download Documento Obrigatório" image="/resources/img/ico-download.png" immediate="true">
+									<p:fileDownload value="#{envioDocumentoController.getFileDownload(formulario.dscCaminhoArquivo)}" />
+								</h:commandButton>
+							</h:panelGroup>
+							
+							<h:panelGroup layout="block" rendered="#{envioDocumentoController.isFormularioDigital(formulario)}">
+								
+								<p:commandLink  value="#{formulario.nomDocumentoObrigatorio}" style="cursor: default;"  global="false"/><p:spacer width="5" />
+								
+								<!-- LAC ERB -->
+								<p:commandLink rendered="#{envioDocumentoController.isLacErb(formulario)}" immediate="true" title="Preenchimento Documento Obrigatório"
+									action="#{lacErbController.novo}" oncomplete="lac.show();" update="form_lac" global="false">
+									<h:graphicImage title="Lac Erb" value="/resources/img/ico-preencher.png" />
+									<f:setPropertyActionListener target="#{lacErbController.lacErb.ideDocumentoObrigatorio}" value="#{formulario}" />
+									<f:setPropertyActionListener target="#{lacErbController.lacErb.ideRequerimento}" value="#{envioDocumentoController.requerimento}" />
+								</p:commandLink>
+								
+								<!-- LAC POSTO -->
+								<p:commandLink  rendered="#{envioDocumentoController.isLacPosto(formulario)}" immediate="true" title="Preenchimento Documento Obrigatório"
+									action="#{lacPostoController.novo}" oncomplete="lac_posto.show();"
+									update="posto_tab form_dados form_abastecimento form_controle form_manutencao" global="false">
+									
+									<h:graphicImage title="Lac Posto" value="/resources/img/ico-preencher.png" />
+									<f:setPropertyActionListener target="#{lacPostoController.lacPostoCombustivel.ideDocumentoObrigatorio}" value="#{formulario}" />
+									<f:setPropertyActionListener target="#{lacPostoController.lacPostoCombustivel.ideRequerimento}" value="#{envioDocumentoController.requerimento}" />
+								</p:commandLink>
+								
+								<!-- LAC TRANSPORTE -->
+								<p:commandLink title="Preenchimento Documento Obrigatório" 
+									update="lac_transporte" 
+									rendered="#{envioDocumentoController.isLacTransportadora(formulario)}" 
+									action="#{lacTransporteController.init()}" 
+									oncomplete="lac_transporte.show();"
+									global="false">
+									<h:graphicImage title="Lac Transportadora" value="/resources/img/ico-preencher.png" />
+									<f:setPropertyActionListener target="#{lacTransporteController.requerimento}" value="#{envioDocumentoController.requerimento}" />
+								</p:commandLink>
+	
+								<!-- FCE  AGROSSIVILPASTORIL Implementar
+								<p:commandLink action="#{agrossilvopastorilController.init()}" title="Preenchimento Documento Obrigatório" update="fce_agrossilvo" rendered="#{envioDocumentoController.isFceAgrossilvoPastoril(formulario)}" immediate="true" oncomplete="fce_agrossilvo.show();"
+									global="false">
+									<f:setPropertyActionListener target="#{agrossilvopastorilController.requerimento}" value="#{envioDocumentoController.requerimento}" />
+									<h:graphicImage title="FCE Agrossivilpastoril" value="/resources/img/ico-preencher.png" />
+								</p:commandLink>
+								-->
+								
+								<!-- FCE ASV-->
+								<p:commandLink title="Preenchimento Documento Obrigatório" rendered="#{envioDocumentoController.isFceAsv(formulario)}" action="#{asvDadosGeraisController.init()}" immediate="true" update="fce_asv" oncomplete="fce_asv.show()">
+									<h:graphicImage title="FCE ASV" value="/resources/img/ico-preencher.png" />
+									<f:setPropertyActionListener target="#{asvDadosGeraisController.requerimento}" value="#{envioDocumentoController.requerimento}" />
+								</p:commandLink> 
+								
+								<!-- FCE INTERVENÇÃO DE BARRAGEM --> 
+								<p:commandLink title="Preenchimento Documento Obrigatório" oncomplete="dialogFcebarragem.show()" update="formFcebarragem" action="#{fceBarragemController.init()}" rendered="#{envioDocumentoController.isFceIntervencaoBarragem(formulario)}">
+									<h:graphicImage value="/resources/img/ico-preencher.png" />
+									<f:setPropertyActionListener target="#{fceBarragemController.requerimento}" value="#{envioDocumentoController.requerimento}" />
+								</p:commandLink>
+								
+<!-- 							<p:commandLink title="Preenchimento Documento Obrigatório" rendered="#{envioDocumentoController.isFceBarragemComPonto(formulario)}" action="#{fceIntervencaoBarragemController.init()}" immediate="true" update=":tipoBarragem :formIntervencaoBarragem :dadoAdicional" oncomplete="tipoBarragem.show()">
+									<h:graphicImage title="FCE Intervenção de Barragem" value="/resources/img/ico-preencher.png" />
+									<f:setPropertyActionListener target="#{fceIntervencaoBarragemController.requerimento}" value="#{envioDocumentoController.requerimento}"/>
+								</p:commandLink> -->
+								 
+							 	<p:commandLink title="Preenchimento Documento Obrigatório" rendered="#{envioDocumentoController.isFceBarragemSemPonto(formulario)}" action="#{fceIntervencaoBarragemControllerSemPonto.init()}" immediate="true" update=":formIntervencaoBarragemSemPonto :formBarragemRegularizacaoSemPonto" oncomplete="tipoBarragemSemPonto.show()">
+									<h:graphicImage title="FCE Interveno de Barragem" value="/resources/img/ico-preencher.png" />
+									<f:setPropertyActionListener target="#{fceIntervencaoBarragemControllerSemPonto.requerimento}" value="#{envioDocumentoController.requerimento}"/>
+								</p:commandLink> 
+								
+								<!-- FCE CAPTAO SUPERFICIAL-->  
+								<p:commandLink title="Preenchimento Documento Obrigatório" rendered="#{envioDocumentoController.isFceOutorgaCaptacaoSuperficial(formulario)}" action="#{fceCaptacaoSuperficialController.init()}" immediate="true" update="cap_sup :formCapSuperDadosRequerimento :dadoAdicional" oncomplete="cap_sup.show()">
+									<h:graphicImage title="FCE - Captação Superficial" value="/resources/img/ico-preencher.png" />
+									<f:setPropertyActionListener target="#{fceCaptacaoSuperficialController.requerimento}" value="#{envioDocumentoController.requerimento}" />
+								</p:commandLink>
+								
+								<!-- FCE CAPTACAO SUBTERRANEA  -->
+								<p:commandLink title="Preenchimento Documento Obrigatório" rendered="#{envioDocumentoController.isFceOutorgaCaptacaoSubterranea(formulario)}" action="#{fceCaptacaoSubterraneaController.init()}" immediate="true" update="_fce_cap_subterranea :dadoAdicional" oncomplete="fce_cap_subterranea.show()">
+									<h:graphicImage title="FCE - Captação Subterrânea" value="/resources/img/ico-preencher.png" />
+									<f:setPropertyActionListener target="#{fceCaptacaoSubterraneaController.requerimento}" value="#{envioDocumentoController.requerimento}" />
+								</p:commandLink>
+								
+								<!--FCE ABASTECIMENTO INDUSTRIAL-->
+								<p:commandLink title="Preenchimento Documento Obrigatório" rendered="#{envioDocumentoController.isFceOutorgaAbastecimentoIndustrial(formulario)}" action="#{fceAbastecimentoIndustrialController.init()}" immediate="true" update=":formTabAbsIndustrial :tabAbasAbsIndustrial :dadoAdicional" oncomplete="abs_industrial.show()"> 
+									<h:graphicImage title="FCE - Outorga Abastecimento Industrial" value="/resources/img/ico-preencher.png" />
+									<f:setPropertyActionListener target="#{fceAbastecimentoIndustrialController.requerimento}" value="#{envioDocumentoController.requerimento}" />
+								</p:commandLink> 
+								
+								<!-- FCE DESSEDENTACAO ANIMAL-->
+								<p:commandLink title="Preenchimento Documento Obrigatório" rendered="#{envioDocumentoController.isFceOutorgaDessedentacaoAnimal(formulario)}" action="#{fceDessedentacaoAnimalController.init()}" immediate="true" update=":formTabAbsAnimal :tabAbasAbsAnimal" oncomplete="abs_animal.show()">
+									<h:graphicImage title="FCE - Outorga Dessedentação Animal" value="/resources/img/ico-preencher.png" />
+									<f:setPropertyActionListener target="#{fceDessedentacaoAnimalController.requerimento}" value="#{envioDocumentoController.requerimento}" />
+								</p:commandLink>
+								
+								<!-- FCE PULVERIZACAO-->
+								<p:commandLink title="Preenchimento Documento Obrigatório" rendered="#{envioDocumentoController.isFceOutorgaPulverizacao(formulario)}" action="#{fcePulverizacaoController.init()}" immediate="true" update="pulverizacao :dadoAdicional" oncomplete="pulverizacao.show()">
+									<h:graphicImage title="FCE - Pulverização" value="/resources/img/ico-preencher.png" />
+									<f:setPropertyActionListener target="#{fcePulverizacaoController.requerimento}" value="#{envioDocumentoController.requerimento}" />
+								</p:commandLink>
+								
+								<!-- FCE IRRIGACAO-->
+								<p:commandLink title="Preenchimento Documento Obrigatório" rendered="#{envioDocumentoController.isFceOutorgaIrrigacao(formulario)}" action="#{fceIrrigacaoController.init()}" immediate="true" update="irrigacao" oncomplete="irrigacao.show()">
+									<h:graphicImage title="FCE - Irrigação" value="/resources/img/ico-preencher.png" />
+									<f:setPropertyActionListener target="#{fceIrrigacaoController.requerimento}" value="#{envioDocumentoController.requerimento}" />
+								</p:commandLink>
+								
+								<!-- FCE LANAMENTO DE EFLUENTES -->
+								<p:commandLink title="Preenchimento Documento Obrigatório" rendered="#{envioDocumentoController.isFceOutorgaLancamentoEfluentes(formulario)}" action="#{fceLancamentoEfluentesController.init()}" immediate="true" update="efluentes :dadoAdicional" oncomplete="efluentes.show()">
+									<h:graphicImage title="FCE - Lançamento de Efluentes" value="/resources/img/ico-preencher.png" />
+									<f:setPropertyActionListener target="#{fceLancamentoEfluentesController.requerimento}" value="#{envioDocumentoController.requerimento}" />
+								</p:commandLink>
+								
+								<!-- FCE ABASTECIMENTO HUMANO -->   
+								<p:commandLink title="Preenchimento Documento Obrigatório" rendered="#{envioDocumentoController.isFceAbastecimentoHumano(formulario)}" action="#{fceIntervencaoAbastecimentoHumanoController.init()}" immediate="true" update="abastecimentoHumano" oncomplete="abs_humano.show()"> 
+									<h:graphicImage title="FCE - Abastecimento Humano" value="/resources/img/ico-preencher.png" />
+									<f:setPropertyActionListener target="#{fceIntervencaoAbastecimentoHumanoController.requerimento}" value="#{envioDocumentoController.requerimento}" />
+								</p:commandLink>
+								 
+								<!-- FCE PERFURAO DE POO --> 
+								<p:commandLink title="Preenchimento Documento Obrigatório" rendered="#{envioDocumentoController.isFcePerfuracaoPoco(formulario)}" action="#{fceLocalizacaoGeograficaController.init()}" immediate="true" update="_fce_perfucacao_poco :dadoAdicional" oncomplete="fce_perfucacao_poco.show()">
+									<h:graphicImage title="FCE - Perfuração de Poço " value="/resources/img/ico-preencher.png"  />
+								 	<f:setPropertyActionListener target="#{fceLocalizacaoGeograficaController.requerimento}" value="#{envioDocumentoController.requerimento}" />
+								</p:commandLink> 
+								
+							 	<!-- FCE INDUSTRIA --> 
+							 	<p:commandLink title="Preenchimento Documento Obrigatório" rendered="#{envioDocumentoController.isFceIndustria(formulario)}" action="#{fceIndustriaController.init()}" immediate="true" update="industria" oncomplete="industria.show()">
+									<h:graphicImage title="FCE - Indústria" value="/resources/img/ico-preencher.png" />
+									<f:setPropertyActionListener target="#{fceIndustriaController.requerimento}" value="#{envioDocumentoController.requerimento}" />
+								</p:commandLink>
+								
+								<!-- FCE OUTORGA AQUICULTURA -->
+								<p:commandLink title="Preenchimento Documento Obrigatório" rendered="#{envioDocumentoController.isFceOutorgaAquicultura(formulario)}" process="@this" action="#{fceOutorgaAquiculturaNavegacaoController.init()}">
+									<h:graphicImage title="FCE - Outorga para Aquicultura" value="/resources/img/ico-preencher.png" />
+								 	<f:setPropertyActionListener target="#{fceOutorgaAquiculturaNavegacaoController.requerimento}" value="#{envioDocumentoController.requerimento}" />
+								</p:commandLink>
+								
+								<!-- FCE TURISMO --> 
+								<p:commandLink title="Preenchimento Documento Obrigatório" rendered="#{envioDocumentoController.isFceTurismo(formulario)}" action="#{fceTurismoController.init()}" immediate="true" update="dlgTurismo :dadoAdicional" oncomplete="dlgTurismo.show()">
+									<h:graphicImage title="FCE - Turismo" value="/resources/img/ico-preencher.png" />
+						 			<f:setPropertyActionListener target="#{fceTurismoController.requerimento}" value="#{envioDocumentoController.requerimento}" />
+								</p:commandLink>
+								
+								<!-- FCE LICENA AQUICULTURA -->
+								<p:commandLink title="Preenchimento Documento Obrigatório" rendered="#{envioDocumentoController.isFceLicenciamentoAquicultura(formulario)}" process="@this" action="#{fceLicenciamentoAquiculturaController.init()}">
+									<h:graphicImage title="FCE - Licenciamento para Aquicultura" value="/resources/img/ico-preencher.png" />
+									<f:setPropertyActionListener target="#{fceLicenciamentoAquiculturaController.requerimento}" value="#{envioDocumentoController.requerimento}" />
+								</p:commandLink>
+								
+								<!-- FCE AUTORIZAO MINERAO -->
+								<p:commandLink title="Preenchimento Documento Obrigatório"  rendered="#{envioDocumentoController.isFceAutorizacaoMineracao(formulario)}"  action="#{fceAutorizacaoMineracaoController.init()}" oncomplete="mineracaoAutorizacao.show()" update="pnlAutMineracao">
+									<h:graphicImage title="FCE - Autorização para Mineração" value="/resources/img/ico-preencher.png" />
+									<f:setPropertyActionListener target="#{fceAutorizacaoMineracaoController.requerimento}" value="#{envioDocumentoController.requerimento}" />
+								</p:commandLink>
+								
+								<!-- FCE LICENCIAMENTO MINERAO -->
+								<p:commandLink title="Preenchimento Documento Obrigatório" rendered="#{envioDocumentoController.isFceLicenciamentoMineracao(formulario)}" action="#{fceLicenciamentoMineracaoController.init()}" oncomplete="mineracaoLicenciamento.show()" update="pnlLicMineracao">
+									<h:graphicImage title="FCE - Licenciamento para Mineração" value="/resources/img/ico-preencher.png" />
+									<f:setPropertyActionListener target="#{fceLicenciamentoMineracaoController.requerimento}" value="#{envioDocumentoController.requerimento}" />
+								</p:commandLink> 	 
+								
+								<!--  FORMULRIO RFP --> 
+								<p:commandLink  title="Preenchimento Documento Obrigatório" rendered="#{envioDocumentoController.isAtoRFP(formulario)}"  oncomplete="dialogRegistroFlorestaPlantada.show()" action="#{registroFlorestaPlantadaController.init()}" >
+									<p:ajax update=":tabRegistroFlorestaPlantada"/>
+									<h:graphicImage title="RFP - Registro de floresta de produo" value="/resources/img/ico-preencher.png" />
+									<f:setPropertyActionListener target="#{registroFlorestaPlantadaController.requerimento}" value="#{envioDocumentoController.requerimento}" />
+								</p:commandLink> 
+								
+								<p:commandLink title="Preenchimento Documento Obrigatório" 
+									action="#{declaracaoIntervencaoAppController.init()}" 
+									oncomplete="dialogDiap.show()" 
+									update="dialogDiap"
+									rendered="#{envioDocumentoController.isAtoDIAP(formulario)}">
+									<h:graphicImage title="#{bundle.diap_lbl_titulo}" value="/resources/img/ico-preencher.png" />
+									<f:setPropertyActionListener target="#{declaracaoIntervencaoAppController.requerimento}" value="#{envioDocumentoController.requerimento}" />
+								</p:commandLink>	
+								
+								<!-- FORMULRIO - DQC -->
+								<p:commandLink title="Preenchimento Documento Obrigatório" oncomplete="dialogDQC.show()" update="_dialogDQC"
+									rendered="#{envioDocumentoController.isAtoDQC(formulario)}" action="#{dqcController.init()}">
+									<h:graphicImage value="/resources/img/ico-preencher.png" />
+									<f:setPropertyActionListener target="#{dqcController.requerimento}" value="#{envioDocumentoController.requerimento}" />
+								</p:commandLink>
+								
+								<!-- FORMULRIO - FCE CANAIS -->
+								<p:commandLink action="#{fceCanalController.init()}"  oncomplete="dialogFceCanais.show()" update="formFceCanais" rendered="#{envioDocumentoController.isFceCanais(formulario)}">
+									<h:graphicImage title="FCE Cadastro dos Dados Gerais do FCE de Canais" value="/resources/img/ico-preencher.png" />
+									<f:setPropertyActionListener target="#{fceCanalController.requerimento}" value="#{envioDocumentoController.requerimento}" />
+									<f:setPropertyActionListener target="#{fceCanalController.desabilitarTudo}" value="false" />
+								</p:commandLink> 	
+								
+								<!--  FORMULÁRIO INFRAESTRUTURA --> 
+								<p:commandLink title="Preenchimento Documento Obrigatório" oncomplete="dialogInfraestrutura.show()" update="_dialogInfraestrutura"
+									rendered="#{envioDocumentoController.isFceInfraestrutura(formulario)}" action="#{fceInfraestruturaController.init()}">
+									<h:graphicImage value="/resources/img/ico-preencher.png" />
+									<f:setPropertyActionListener target="#{fceInfraestruturaController.requerimento}" value="#{envioDocumentoController.requerimento}"/>
+								</p:commandLink>
+
+								<!-- FCE - Intervenção em Recursos Hídricos para fins de Mineração -->
+								<p:commandLink  rendered="#{envioDocumentoController.isFceIntervencaoMineracao(formulario)}" immediate="true" title="Preenchimento Documento Obrigatório"
+									action="#{fceIntervencaoMineracaoController.init}" oncomplete="mineracaoIntervencao.show();"
+									update="mineracaoIntervencao" global="false">
+									<h:graphicImage title="FCE - Intervenção em Recursos Hídricos para fins de Mineração" value="/resources/img/ico-preencher.png" />
+									<f:setPropertyActionListener target="#{fceIntervencaoMineracaoController.requerimento}" value="#{envioDocumentoController.requerimento}" />
+								</p:commandLink>
+									
+								<!-- FCE - SAA -->
+								<p:commandLink title="Preenchimento Documento Obrigatório" rendered="#{envioDocumentoController.isFceSistemaAbastecimentoAgua(formulario)}" action="#{fceSaaController.init()}" oncomplete="sistemaAbastecimentoAgua.show()" update="pnlSaa">
+									<h:graphicImage title="FCE - Sistema de Abastecimento de Água" value="/resources/img/ico-preencher.png" />
+									<f:setPropertyActionListener target="#{fceSaaController.requerimento}" value="#{envioDocumentoController.requerimento}" />
+								</p:commandLink> 
+								
+								<!-- FCE - SES -->
+								<p:commandLink title="Preenchimento Documento Obrigatório" rendered="#{envioDocumentoController.isFceSES(formulario)}" action="#{fceSesController.init()}" oncomplete="caracterizacaoSes.show()" update="pnlSes">
+									<h:graphicImage title="FCE - Sistema de Esgotamento Sanitário" value="/resources/img/ico-preencher.png" />
+									<f:setPropertyActionListener target="#{fceSesController.requerimento}" value="#{envioDocumentoController.requerimento}" />
+								</p:commandLink> 
+									
+								
+								<p:commandLink title="Formulário De Caracterização De Empreendimento - Linha de Transmissão e Distribuição de Energia" 
+									oncomplete="fce_linha_trasmissao_distribuicao.show()" update="fce_linha_trasmissao_distribuicao"
+									action="#{fceLinhaTransmissaoDistribruicaoController.init()}"
+									rendered="#{envioDocumentoController.isFceLinhaEnergiaTrasmissaoEnergia(formulario)}">
+									<h:graphicImage value="/resources/img/ico-preencher.png" />
+									<f:setPropertyActionListener target="#{fceLinhaTransmissaoDistribruicaoController.requerimento}" value="#{envioDocumentoController.requerimento}" />
+									<f:setPropertyActionListener target="#{fceLinhaTransmissaoDistribruicaoController.documentoObrigatorio}" value="#{formulario}" />
+								</p:commandLink>	
+									
+ 								<!--FCE GERAÇÃO DE ENERGIA 	 -->
+								<p:commandLink title="Preenchimento Documento Obrigatório" action="#{fceGeracaoEnergiaController.init()}" 
+									oncomplete="geracaoEnergia.show()" update="geracaoEnergia" 
+									rendered="#{envioDocumentoController.isFceGeracaoEnergia(formulario)}">
+									<h:graphicImage title="FCE - Geração de Energia" value="/resources/img/ico-preencher.png" />
+									<f:setPropertyActionListener target="#{fceGeracaoEnergiaController.requerimento}" value="#{envioDocumentoController.requerimento}" />
+								</p:commandLink> 
+								
+								<!-- FCE FLORESTAL -->
+								<p:commandLink title="#{formulario.nomDocumentoObrigatorio}" actionListener="#{fceFlorestalController.init()}"  
+									oncomplete="fce_florestal.show()" update="fce_florestal"
+									rendered="#{envioDocumentoController.isFceFlorestal(formulario)}">
+									<h:graphicImage title="#{formulario.nomDocumentoObrigatorio}" value="/resources/img/ico-preencher.png" />
+									<f:attribute name="requerimento" value="#{envioDocumentoController.requerimento}" />
+									<f:attribute name="documentoObrigatorio" value="#{formulario}" />
+								</p:commandLink> 
+
+							</h:panelGroup>
+
+							<!-- Modificar o render para TRUE quando houver prototipo -->
+							<h:panelGroup id="prototipos" rendered="false">
+								<!-- FORMULÁRIO - FCE - BARRAGEM -->
+								<p:commandLink title="FCE - Barragem" oncomplete="dialogFcebarragem.show()" update="formFcebarragem" action="#{fceBarragemController.init()}">
+									<h:outputText value="FCE - Barragem" />
+									<h:graphicImage value="/resources/img/ico-preencher.png" />
+									<f:setPropertyActionListener target="#{fceBarragemController.requerimento}" value="#{envioDocumentoController.requerimento}" />
+								</p:commandLink>
+							</h:panelGroup>
+<!-- 							<h:panelGroup id="prototipos" rendered="true">
+								<p:commandLink  value="FCE - Intervenção em Recursos Hídricos para fins de Mineração" style="cursor: default;"  global="false"/><p:spacer width="5" />
+								FCE - Intervenção em Recursos
+								<p:commandLink  rendered="true" immediate="true" title="Preenchimento Documento Obrigatório"
+									action="#{fceIntervencaoMineracaoController.init}" oncomplete="mineracaoIntervencao.show();"
+									update="mineracaoIntervencao" global="false">
+									<h:graphicImage title="FCE - Intervenção em Recursos Hídricos para fins de Mineração" value="/resources/img/ico-preencher.png" />
+									<f:setPropertyActionListener target="#{fceIntervencaoMineracaoController.requerimento}" value="#{envioDocumentoController.requerimento}" />
+								</p:commandLink>
+							</h:panelGroup> -->
+							
+						</h:panelGrid>
+					</ui:repeat>
+					<!-- Modificar o render para TRUE quando houver prototipo -->
+<!-- 					<h:panelGroup id="prototipos" rendered="false">
+						<p:commandLink action="#{fceCanalController.init()}"  oncomplete="dialogFceCanais.show()" update="formFceCanais">
+							<h:outputLabel value="FCE - Canais" />
+							<h:graphicImage title="FCE Cadastro dos Dados Gerais do FCE de Canais" value="/resources/img/ico-preencher.png" />
+							<f:setPropertyActionListener target="#{fceCanalController.requerimento}" value="#{envioDocumentoController.requerimento}" />
+						</p:commandLink> 
+					</h:panelGroup> -->
+					
+					
+<!-- 					<h:panelGroup id="prototipos" rendered="true"> -->
+<!-- 						<p:commandLink action="#{fceFlorestalController.init()}"  oncomplete="fce_florestal.show()" update="fce_florestal"> -->
+<!-- 							<h:outputLabel value="FCE - Florestal" /> -->
+<!-- 							<h:graphicImage title="FCE Cadastro dos Dados Gerais do FCE de Canais" value="/resources/img/ico-preencher.png" /> -->
+<!-- 							<f:setPropertyActionListener target="#{fceFlorestalController.requerimento}" value="#{envioDocumentoController.requerimento}" /> -->
+<!-- 						</p:commandLink>  -->
+<!-- 					</h:panelGroup> -->
+					
+				</h:panelGrid>
+			</h:panelGrid>
+			
+			<p class="titulo-grupo">Documentos</p>
+			
+			<h:panelGrid id="pnlListaDocumentos" style="width: 100%">
+				<!-- REQUERIMENTOS NOVOS V2 -->
+				<p:dataTable id="tableAtosAmbientais" value="#{envioDocumentoController.listaDocumentoObrigatorioEnquadramento}" var="doc" rendered="#{!envioDocumentoController.requerimentoAntigoEnquadradoNaV1}">
+					
+					<f:facet name="header">
+						<h:outputText value="Documentos" />
+					</f:facet>			
+	
+					<p:column>  
+			            <h:panelGroup layout="block" style="text-align: center">
+				            <p:rowToggler rendered="#{!empty doc.listaDocumentoObrigatorio}" />
+				            <p:graphicImage rendered="#{empty doc.listaDocumentoObrigatorio}" value="/resources/img/ico-aprovado.png"/>  
+						</h:panelGroup>  
+			        </p:column> 	
+		
+					<p:column>
+						<f:facet name="header">
+							<h:outputText value="Ato ambiental" />
+						</f:facet>
+						<h:outputText value="#{doc.enquadramentoAtoAmbiental.atoAmbiental.nomAtoAmbiental}" />
+					</p:column>
+					
+					<p:column style="text-align: center;">
+						<f:facet name="header">
+							<h:outputText value="Tipologia" />
+						</f:facet>
+						<h:outputText rendered="#{doc.enquadramentoAtoAmbiental.tipologia ne null}" value="#{doc.enquadramentoAtoAmbiental.tipologia.desTipologia}"  />
+						<h:outputText rendered="#{doc.enquadramentoAtoAmbiental.tipologia eq null}" value="--------"  />
+					</p:column>
+						
+					<p:rowExpansion rendered="#{!empty doc.listaDocumentoObrigatorio}">
+						<p:dataTable var="documento" value="#{doc.listaDocumentoObrigatorio}" emptyMessage="#{bundle.msg_lista_vazia}">
+							<p:column headerText="Formulário/Documento" >
+								<h:panelGroup layout="block" style="width: 350px; word-wrap: break-word;">
+									<h:outputText value="#{documento.ideDocumentoAto.ideDocumentoObrigatorio.nomDocumentoObrigatorio}" />
+								</h:panelGroup>
+							</p:column>
+							<p:column headerText="Nome Arquivo" >
+								<h:panelGroup layout="block" style="width:250px; word-wrap: break-word;">
+									<h:outputText value="#{documento.fileNameDoc}" />
+								</h:panelGroup>
+							</p:column>
+							<p:column headerText="Tamanho(KB)" >
+								<h:panelGroup layout="block" style="width:100px;">
+									<h:outputText value="#{documento.tamanhoDoc}" />
+								</h:panelGroup>
+							</p:column>	
+							<p:column headerText="Aes" >
+								<h:panelGroup layout="block" style="text-align:center;width: 50px;">
+									<h:commandLink title="Download do arquivo" immediate="true" rendered="#{!empty documento.dscCaminhoArquivo}">
+										<h:graphicImage title="Download do arquivo" value="/resources/img/ico-download.png" />
+										<p:fileDownload value="#{envioDocumentoController.getFileDownload(documento.dscCaminhoArquivo)}"/>
+									</h:commandLink>
+									<p:commandLink image="/resources/img/ico-upload.gif" rendered="#{!documento.indDocumentoValidado}" title="Upload do arquivo" immediate="true" oncomplete="fileUploadDocumento.show();">
+										<h:graphicImage title="Upload do arquivo" value="/resources/img/ico-upload.gif" />
+										<f:setPropertyActionListener target="#{envioDocumentoController.documentoObrigatorioSelecionado}" value="#{documento}" />
+									</p:commandLink>
+								</h:panelGroup>
+							</p:column>						
+						</p:dataTable>  
+					</p:rowExpansion>	
+				</p:dataTable>
+				
+				
+				<!-- REQUERIMENTOS ANTIGOS ENQUADRADOS NA V1 -->
+				<p:dataTable id="tableDocumentosRequerimentoV1" value="#{envioDocumentoController.listaDocumentoObrigatorioEnquadramentoAntigo}" var="docOld" rendered="#{envioDocumentoController.requerimentoAntigoEnquadradoNaV1}">
+					
+					<f:facet name="header">
+						<h:outputText value="Documentos" />
+					</f:facet>
+					
+					<p:column headerText="Formulrio/Documento">
+						<h:outputText value="#{docOld.ideDocumentoAto.ideDocumentoObrigatorio.nomDocumentoObrigatorio}" />
+					</p:column>
+					
+					<p:column headerText="Nome Arquivo">
+						<h:outputText value="#{docOld.fileNameDoc}" />
+					</p:column>
+					
+					<p:column headerText="Tamanho(KB)">
+						<h:outputText value="#{docOld.tamanhoDoc}" />
+					</p:column>	
+										
+					<p:column headerText="Aes">
+						<h:panelGroup layout="block" style="text-align:center;">
+						<h:commandLink title="Download do arquivo" immediate="true" rendered="#{!empty docOld.dscCaminhoArquivo}">
+							<h:graphicImage title="Download do arquivo" value="/resources/img/ico-download.png" />
+							<p:fileDownload value="#{envioDocumentoController.getFileDownload(docOld.dscCaminhoArquivo)}"/>
+						</h:commandLink>
+						
+						<p:commandLink image="/resources/img/ico-upload.gif" rendered="#{!docOld.indDocumentoValidado}" title="Upload do arquivo" oncomplete="fileUploadDocumento.show();" immediate="true">
+							<h:graphicImage title="Upload do arquivo" value="/resources/img/ico-upload.gif" />
+							<f:setPropertyActionListener target="#{envioDocumentoController.documentoObrigatorioSelecionado}" value="#{docOld}" />
+						</p:commandLink>
+						</h:panelGroup>
+					</p:column>
+				</p:dataTable>
+	
+				<br/>
+				
+				<p:dataTable id="tableDocsIdentificacao" value="#{envioDocumentoController.documentosIdentificacao}" var="documento" rendered="#{!empty envioDocumentoController.documentosIdentificacao}">
+					<f:facet name="header">
+						Documentos Identificao
+					</f:facet>
+					
+					<p:column headerText="Documento">
+						<h:outputText value="#{documento.ideDocumentoIdentificacao.ideTipoIdentificacao.nomTipoIdentificacao}" />
+					</p:column>
+					
+					<p:column headerText="Nome Arquivo">
+						<h:outputText value="#{documento.ideDocumentoIdentificacao.fileName}" />
+					</p:column>
+					
+					<p:column headerText="Tamanho(KB)">
+						<h:outputText value="#{documento.ideDocumentoIdentificacao.fileSize}" />
+					</p:column>
+					
+					<p:column headerText="Aes">
+						<h:panelGroup layout="block" style="text-align:center;">
+							<h:commandLink title="Download do arquivo" immediate="true" rendered="#{!empty documento.dscCaminhoArquivo}">
+								<h:graphicImage title="Download do arquivo" value="/resources/img/ico-download.png" />
+								<p:fileDownload value="#{envioDocumentoController.getFileDownload(documento.dscCaminhoArquivo)}"/>
+							</h:commandLink>
+							<p:commandLink image="/resources/img/ico-upload.gif" title="Upload do arquivo" immediate="true" rendered="#{!documento.indDocumentoValidado}" oncomplete="fileUploadDocumentoIdentificacao.show()">
+								<h:graphicImage title="Upload do arquivo" value="/resources/img/ico-upload.gif" />
+								<f:setPropertyActionListener target="#{envioDocumentoController.documentoIdentificacaoRequerimentoSelecionado}" value="#{documento}" />
+							</p:commandLink>
+						</h:panelGroup>
+					</p:column>
+					
+				</p:dataTable>
+				
+				<br/>
+				
+				<p:dataTable id="tableDocsRepresentacao" value="#{envioDocumentoController.documentosRepresentacao}" var="documento" rendered="#{!empty envioDocumentoController.documentosRepresentacao}">
+					<f:facet name="header">
+						Documentos Representao
+					</f:facet>
+					
+					<p:column headerText="Documento">
+						<h:outputText value="#{documento.tipoDocumento}" />
+					</p:column>
+					
+					<p:column headerText="Nome Arquivo">
+						<h:outputText value="#{documento.fileNameTransient}" />
+					</p:column>
+					
+					<p:column headerText="Tamanho(KB)">
+						<h:outputText value="#{documento.sizeFile}" />
+					</p:column>
+										
+					<p:column headerText="Aes">
+						<h:panelGroup layout="block" style="text-align:center;">
+							<h:commandLink title="Download do arquivo" immediate="true" rendered="#{!empty documento.dscCaminhoArquivo}">
+								<h:graphicImage title="Download do arquivo" value="/resources/img/ico-download.png" />
+								<p:fileDownload value="#{envioDocumentoController.getFileDownload(documento.caminhoArquivoTransient)}"/>
+							</h:commandLink>
+							<p:commandLink image="/resources/img/ico-upload.gif" title="Upload do arquivo" immediate="true" rendered="false">
+								<h:graphicImage title="Upload do arquivo" value="/resources/img/ico-upload.gif" />
+								<f:setPropertyActionListener target="#{envioDocumentoController.documentoRepresentacaoRequerimentoSelecionado}" value="#{documento}" />
+							</p:commandLink>
+						</h:panelGroup>
+					</p:column>
+					
+				</p:dataTable>
+				<br/>
+				<h:panelGrid columns="2" style="float:right">
+					<p:commandButton id="btsalve" value="Salvar" style="float:right;" action="#{envioDocumentoController.salvar()}"
+						oncomplete="dialogEnviarDocumento.hide();atualizarPauta()" update="formConsultarRequerimento:tabelaRequerimentos"/>
+					
+					<p:commandButton value="Voltar" style="float:right;" process="@this" global="false" oncomplete="modalConfirmarFechamentoDaTelaEnviarDocumento.show();"/>
+				</h:panelGrid>
+			</h:panelGrid>
+			
+		</h:form>
+		
+	</p:dialog>
+	
+	<p:dialog widgetVar="fileUploadDocumento" id="fileUploadDocumento" modal="true" draggable="true" position="center" resizable="false"
+		header="#{bundle.validacao_previa_lbl_selecione_arquivo}" appendToBody="true"
+		style="max-height:80%; overflow: auto; border-collapse:collapse; margin: 100px auto 0px auto; margin-left: 50px \0/ !important">
+		
+		<h:form enctype="multipart/form-data">
+			<p:fileUpload uploadLabel="false" label="Upload Arquivo" auto="true"
+				invalidFileMessage="Tipo de arquivo invlido." mode="advanced"
+				fileUploadListener="#{envioDocumentoController.gerenciarUploadDocumentoObrigatorio}"				
+				allowTypes="/(\.|\/)(pdf|gif|jpeg|png|jpg)$/"  
+				oncomplete="fileUploadDocumento.hide();updateDocumento();" value="#{envioDocumentoController.documentoObrigatorioSelecionado}" />
+		</h:form>
+	</p:dialog>
+	
+	<p:dialog widgetVar="fileUploadDocumentoIdentificacao"
+		id="fileUploadDocumentoIdentificacao" modal="true" draggable="true"
+		position="center" resizable="false"
+		header="#{bundle.validacao_previa_lbl_selecione_arquivo}"
+		appendToBody="true"
+		style="max-height:80%; overflow: auto; border-collapse:collapse; margin: 100px auto 0px auto; margin-left: 50px \0/ !important">
+		
+		<h:form enctype="multipart/form-data">
+			<p:fileUpload uploadLabel="false" label="Upload Arquivo" auto="true"
+				invalidFileMessage="Tipo de arquivo invlido." mode="advanced"
+				fileUploadListener="#{envioDocumentoController.gerenciarUploadDocumentoIdentificacao}"
+				allowTypes="/(\.|\/)(pdf|gif|jpeg|png|jpg)$/" 
+				oncomplete="fileUploadDocumentoIdentificacao.hide();updateDocumento();" value="#{envioDocumentoController.documentoIdentificacaoRequerimentoSelecionado}" />
+		</h:form>
+	</p:dialog>
+	
+	<p:dialog widgetVar="fileUploadDocumentoRepresentacao"
+		id="fileUploadDocumentoRepresentacao" modal="true" 	position="center" resizable="false"
+		header="#{bundle.validacao_previa_lbl_selecione_arquivo}"
+		style="max-height:80%; overflow: auto; border-collapse:collapse; margin: 100px auto 0px auto; margin-left: 50px \0/ !important">
+		
+		<h:form enctype="multipart/form-data">
+			<p:fileUpload uploadLabel="false" label="Upload Arquivo" auto="true"
+				invalidFileMessage="Tipo de arquivo invlido." mode="advanced"
+				fileUploadListener="#{envioDocumentoController.gerenciarUploadDocumentoRepresentacao}"
+				allowTypes="/(\.|\/)(pdf|gif|jpeg|png|jpg)$/" 
+				oncomplete="fileUploadDocumentoRepresentacao.hide();updateDocumento();" value="#{envioDocumentoController.documentoRepresentacaoRequerimentoSelecionado}" />
+		</h:form>
+	</p:dialog>
+
+	<p:confirmDialog widgetVar="modalConfirmarFechamentoDaTelaEnviarDocumento" appendToBody="true" header="Alerta" message="#{bundle.geral_msg_confirmar_nao_salvar}" severity="alert">
+		<h:form>
+			<p:commandButton value="Sim" global="false" oncomplete="modalConfirmarFechamentoDaTelaEnviarDocumento.hide();dialogEnviarDocumento.hide();"/>
+			<p:commandButton value="Não" global="false" oncomplete="modalConfirmarFechamentoDaTelaEnviarDocumento.hide();"/>
+		</h:form>
+	</p:confirmDialog>
+	
+	<!-- [INI] Confirmar Excluso FCE - Dados Adicionais -->
+	<p:confirmDialog header="Confirmao" appendToBody="true" message="#{bundle.lac_dadosGerais_msg004}" severity="alert" widgetVar="confirmaExclusaoDadosAdicionais" id="confirmaExclusaoDadosAdicionais">
+		<h:form>
+			<p:commandButton value="Sim" update=":dadoAdicional" oncomplete="confirmaExclusaoDadosAdicionais.hide();" global="true" actionListener="#{uploadDocumentoAdicionalController.limparListaArquivo()}"/>
+			<p:commandButton value="Não" onclick="confirmaExclusaoDadosAdicionais.hide();" type="button" global="false"/>
+		</h:form>
+	</p:confirmDialog> 
+	<!-- [FIM] Confirmar Exclusão FCE - Dados Adicionais -->
+	
+	<p:dialog id="dialogCnae" dynamic="true" header="Cnae" widgetVar="dialogCnae" modal="true" 
+		appendToBody="true" width="800" height="350" 
+		position="center" resizable="false" draggable="false" >
+		<ui:include src="/paginas/manter-fce/outorga/captacao/superficial/modalAtividadeCnae.xhtml" />
+	</p:dialog>
+	
+	<p:dialog id="dialogSubterraneaCnae" dynamic="true" header="Cnae" widgetVar="dialogSubterraneaCnae" modal="true" 
+		appendToBody="true" width="800" height="350" 
+		position="center" resizable="false" draggable="false" >
+		<ui:include src="/paginas/manter-fce/outorga/captacao/subterranea/modalAtividadeCnae.xhtml" />
+	</p:dialog>
+	
+			<p:confirmDialog header="Confirmação" 
+				id="dialogExcluirCnae"  
+				widgetVar="dialogExcluirCnae" 
+				appendToBody="true" 
+				message="Deseja excluir definitivamente este Cnae?" 
+				severity="alert">
+				<h:form>
+					<p:commandButton value="Sim" 
+						onclick="dialogExcluirCnae.hide()"
+						actionListener="#{cnaeController.excluirItemLista()}"
+						process="@this" 
+						update=":capSuperAbas:formCapSuperCaptacao:pnlTableCnae">
+					</p:commandButton>
+					<p:commandButton value="Não" 
+						onclick="dialogExcluirCnae.hide();" 
+						type="button" 
+						global="false" />
+				</h:form>
+			</p:confirmDialog>	
+			
+			<p:confirmDialog header="Confirmação" 
+				id="dialogExcluirSubterraneaCnae"  
+				widgetVar="dialogExcluirSubterraneaCnae" 
+				appendToBody="true" 
+				message="Deseja excluir definitivamente este Cnae?" 
+				severity="alert">
+				<h:form>
+					<p:commandButton value="Sim" 
+						onclick="dialogExcluirSubterraneaCnae.hide()"
+						actionListener="#{cnaeController.excluirItemListaSubterranea()}"
+						process="@this" 
+						update=":formCaracteristicaPoco:pnlTableSubterraneaCnae">
+					</p:commandButton>
+					<p:commandButton value="Não" 
+						onclick="dialogExcluirSubterraneaCnae.hide();" 
+						type="button" 
+						global="false" />
+				</h:form>
+			</p:confirmDialog>	
+	
+</ui:composition>

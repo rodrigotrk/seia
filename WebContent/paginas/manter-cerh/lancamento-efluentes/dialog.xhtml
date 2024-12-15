@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui">
+	
+	<p:dialog widgetVar="dlgLancamentoEfluentes"  header="Caracterização do lançamento de Efluentes em corpo hídrico" dynamic="true" modal="true" width="1000" height="600" resizable="false" position="top">
+		<ui:include src="/paginas/manter-cerh/lancamento-efluentes/dialogLancamentoEfluentes.xhtml" />
+	</p:dialog>
+	
+	<p:confirmDialog 
+		id="confirmDialogExcluirLancamentoEfluente" widgetVar="confirmDialogExcluirLancamentoEfluente" 
+		header="#{bundle.hdr_confirma_exclusao}" message="#{bundle.msg_confirma_exclusao}" severity="alert">
+		<h:form>
+			<p:commandButton 
+				value="#{bundle.btn_sim}" 
+				actionListener="#{cerhController.abaLancamentoEfluentes.excluirCaracterizacao()}"
+				update="tabViewCerh:formAbaLancamentoEfluentes"
+			 />
+			<p:commandButton value="#{bundle.btn_nao}" onclick="confirmDialogExcluirLancamentoEfluente.hide()" />
+		</h:form>
+	</p:confirmDialog>
+	
+	<p:confirmDialog 
+		width="550"
+		id="confirmarPreencherMes" widgetVar="confirmarPreencherMes" 
+		
+		message="Um ou mais meses podem não conter o número espeficidado de dias. Deseja preencher os meses subsequentes com o valor máximo permitido?" severity="alert">
+		<h:form>
+			<p:commandButton 
+				value="#{bundle.btn_sim}" 
+				actionListener="#{cerhController.abaLancamentoEfluentes.replicarDiasMesMaximoDias()}" 
+				update="formLancamentoEfluentes:panellancamento formLancamentoEfluentes:panelDadosAuxiliares"
+				oncomplete="confirmarPreencherMes.hide();"/>
+			<p:commandButton value="#{bundle.btn_nao}" onclick="confirmarPreencherMes.hide()" />
+		</h:form>
+	</p:confirmDialog>
+	
+	
+	
+</ui:composition>

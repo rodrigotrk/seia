@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	template="/layout/template.xhtml">
+	
+	
+	<ui:define name="titulo-pagina">
+	
+	<script >
+	   $(document).ready(function() {
+	    	//função que valida dos caracteres do campos inpLogin da dialog Usuário Externo
+	    	$(this).delegate('#formUsuarioExterno .has_login','keyup',function() { 
+		    	var texto = $('#formUsuarioExterno .has_login').val();
+		    	texto = texto.replace(/[^a-z0-9.]+/gi,'');
+		    	texto = texto.toLowerCase();
+	    		$('#formUsuarioExterno .has_login').val(texto);    		
+		    });
+	    });
+	    
+	    $(window).load(function() {
+	    	dialogAlertaIndex.show();
+	    		
+		});	    
+	</script>
+		<h3>SEIA | Sistema Estadual de Informações Ambientais e de
+			Recursos Hídricos </h3>
+	</ui:define>
+	<ui:define name="conteudo-principal">
+		
+		<br />
+		<div id="TextoLogin">
+			<p style="text-align: justify;">
+				Para acessar a consulta pública ou outras funções do SEIA, siga os passos:
+			</p>
+			<p style="text-align: justify;text-indent: 30px;">
+				1 - Cadastre-se como usuário clicando <a id="lnkUsuarioExterno" href="/paginas/controle-acesso/usuarioExterno.xhtml">aqui</a>;
+			</p>
+			<p style="text-align: justify;text-indent: 30px;">
+				2 - Será enviado um e-mail para ativação do seu usuário;
+			</p>
+			<p style="text-align: justify;text-indent: 30px;">
+				3 - Informe ao lado seu login/senha para entrar no sistema.
+					
+			</p>
+			<p style="text-align: justify;">
+				Problemas em ativar seu usuário? <a id="lnkProblemaUsuario"	onclick="dialogProblemaEmailUsuario.show()" href="#">Clique aqui</a>.
+			</p>
+
+			<p style="text-align: justify;">
+				<h:form id="frmReativarUsuario">  
+				<span style="font-size: 12px;">Deseja reativar seu usuário?</span>  
+						<p:commandLink action="#{usuarioReativarController.novoUsuarioExterno()}"
+						id="lnkReativarUsuario"
+						update=":formReativarUsuarioInativo:panelReativarUsuarioInativo"
+						oncomplete="dialogReativarUsuario.show()" process="@this" style="font-size:12px;" >
+						<h:outputText value=" Clique aqui." />
+					</p:commandLink>
+				</h:form>
+			</p>
+			
+			<p style="text-align: justify;">
+				Deseja alterar o e-mail de contato para recuperar o seu login e senha?
+				 <a	id="lnkAlterarEmail" onclick="dialogProblemaEmailUsuario01.show()" href="#">Clique aqui</a>.
+			</p>
+
+			<p style="text-align: justify;">
+				Dúvidas em como utilizar o SEIA? <a id="lnkManualSeia" href="resources/Manual_SEIA_UE.pdf" target="_blank">Clique aqui</a> para
+				visualizar o manual.
+			</p>
+		</div>
+
+		<!-- <p:dialog header="Login" visible="true" closable="false" draggable="false" resizable="false" width="420"> -->
+		<div id="BoxLogin">
+
+			<p:panel id="pnlLogin" style="width: 281px; min-height: 180px;height:auto; background-color: #EDE9EF; border: 0px solid #fff;  no-repeat left scroll;">
+
+				<center>
+					<h:panelGrid rendered="#{param.error}">
+						<h:outputText value="Por favor, preencha os dados de acesso." style="color: red; font-weight: bold;"/>
+					</h:panelGrid>
+				
+					<h:panelGrid rendered="#{param.erro}">
+						<c:if
+							test="${(SPRING_SECURITY_LAST_EXCEPTION.message eq 'Incorrect result size: expected 1, actual 0')}">
+							<h:outputText value="O usuário não existe."
+								style="color: red; font-weight: bold;" />
+						</c:if>
+						<c:if
+							test="${(SPRING_SECURITY_LAST_EXCEPTION.message eq 'Maximum sessions of 1 for this principal exceeded')}">
+							<h:outputText value="O usuário já está sendo utilizado."
+								style="color: red; font-weight: bold;" />
+						</c:if>
+						<c:if test="${(SPRING_SECURITY_LAST_EXCEPTION.message eq 'Bad credentials') and empty param.userblock}">
+							<h:outputText value="A senha está incorreta! O acesso é bloqueado após 3 tentativas" style="color: red; font-weight: bold;" />
+						</c:if>
+						<c:if test="${param.userblock and (SPRING_SECURITY_LAST_EXCEPTION.message eq 'Bad credentials') }">
+							<h:outputText value="O usuário foi bloqueado!" style="color: red; font-weight: bold;" />
+							<h:outputText value="Verifique o seu e-mail para obter orientação sobre a recuperação do acesso." style="color: red; font-weight: bold;" />
+						</c:if>
+					</h:panelGrid>
+					<h:panelGrid rendered="#{param.captcha_erro}">
+						<h:outputText value="Por favor preencha o captcha" style="color: red; font-weight: bold;" />
+					</h:panelGrid>
+				</center>
+				<center>
+					<h:form id="formLoginUsuario" rendered="#{param.ativarUsuario}">
+						<h:panelGrid id="panelUsuario" columns="1"
+							rendered="#{loginController.exibePanel}">
+							<h:inputHidden id="loginUsuario"
+								value="#{loginController.loginUsuario}" />
+							<p:commandLink id="mensagemAtivacao"
+								value="Clique para ativar o usuário: #{param.loginUsuario}"
+								action="#{loginController.ativarUsuario}"
+								onclick="document.getElementById('formLoginUsuario:loginUsuario').value = '#{param.loginUsuario}';"
+								onsuccess="document.getElementById('formLoginUsuario:mensagemAtivacao').style.display='none';">
+							</p:commandLink>
+						</h:panelGrid>
+					</h:form>
+				</center>
+
+				<form action="j_spring_security_check" method="post">
+					<h:inputHidden id="csrfToken" name="csrfToken" value="#{csrfBean.csrfToken}" />
+					<h:panelGroup layout="block" style="margin-top:5px;">
+						<h:outputLabel for="j_username" value="Usuário" style="color: #4D683F; font-weight: bold; font-size: 12px;" />
+					</h:panelGroup>
+					<h:panelGroup layout="block" style="margin-top:5px;">	
+						<h:inputText style="width:95%" id="j_username"  name="j_username" required="true" />
+					</h:panelGroup>
+					<h:panelGroup layout="block" style="margin-top:5px;">
+						<h:outputLabel for="j_password" value="Senha " style="color: #4D683F; font-weight: bold; font-size: 12px;" />
+					</h:panelGroup>
+					<h:panelGroup layout="block" style="margin-top:5px;">
+						<h:inputSecret style="width:95%" id="j_password" name="j_password" required="true" />
+					</h:panelGroup>
+					<!-- SE DER ERRO DE DOMÍNIO, CRIAR OUTRA CHAVE E ADICIONAR SUAS URLS -->
+					<h:panelGroup layout="block" rendered="#{param.erro or param.captcha_erro}" style="margin-top:5px;">
+						<div class="g-recaptcha" data-sitekey="#{loginController.captchaPublicKey()}" 
+							style="transform:scale(0.85);-webkit-transform:scale(0.85);transform-origin:0 0;-webkit-transform-origin:0 0;"/>
+					</h:panelGroup>
+					<h:panelGroup layout="block" style="margin-top:5px;">
+						<button type="submit" id="btnEntrar"  value="Entrar" class="buttonLogin" style="float: right;">Entrar</button>
+					</h:panelGroup>
+					
+				</form>
+				
+				<h:form id="frmLinks">
+					<h:panelGroup layout="block" style="margin-top:-5px;">
+						<p:commandLink
+							id="lnkEsqueciSenha"
+							action="#{esquecimentoSenhaController.novoEsquecimentoSenha}"
+							title="Esqueci a senha"
+							update=":formEsquecimentoSenha:panelEsquecimentoSenha"
+							oncomplete="dlgEsqueciSenha.show()" process="@this">
+							<h:outputText value="Esqueci a senha" />
+						</p:commandLink>
+						
+					</h:panelGroup>
+					<h:panelGroup layout="block" style="margin-top:5px;">
+	 					<p:commandLink
+	 						id="lnkEsqueciUsuario"
+							title="Esqueci o usuário"
+							update=":formRecuperarUsuario:panelRecuperarUsuario"
+							oncomplete="dlgEsqueciUsuario.show()" process="@this">
+							<h:outputText value="Esqueci o usuário" />
+						</p:commandLink>
+					</h:panelGroup>
+				</h:form>
+				
+			</p:panel>
+			<br/>
+		</div>
+
+		<p:dialog id="dialogEsqueciSenha" header="Esqueci a senha"
+			closable="false" draggable="true" resizable="false" width="180"
+			widgetVar="dlgEsqueciSenha" modal="true">
+			<ui:include src="/esquecimentoSenha.xhtml" />
+		</p:dialog>
+		
+ 		<p:dialog id="dialogEsqueciUsuario" header="Esqueci o usuário"
+			closable="false" draggable="true" resizable="false" width="350"
+			widgetVar="dlgEsqueciUsuario" modal="true">
+			<ui:include src="/recuperarUsuario.xhtml" />
+		</p:dialog> 
+		
+		
+		<p:dialog id="dialogProblemaEmailUsuario"
+			header="#{bundle.lbl_problemas_reativar_usuario}" closable="true"
+			draggable="true" resizable="false" width="420"
+			widgetVar="dialogProblemaEmailUsuario" modal="true" height="270">
+			<ui:include src="/paginas/controle-acesso/problemaEmailUsuario.xhtml" />
+			<p:ajax event="close"
+				listener="${esquecimentoSenhaController.limparTela()}" />
+		</p:dialog>
+		
+		<p:dialog id="dialogProblemaEmailUsuario01"
+			header="Orientações para substituição de e-mail para recuperação de login/senha"
+			closable="true"
+			draggable="true" resizable="false" width="550"
+			widgetVar="dialogProblemaEmailUsuario01" modal="true" height="275">
+		     <ui:include src="/paginas/controle-acesso/orientacaoUsuario.xhtml"/>     
+	
+		</p:dialog>
+		
+		<p:dialog id="dialogReativarUsuario"
+			header="Reativar usuário inativo" closable="true"
+			draggable="true" resizable="false" width="420"
+			widgetVar="dialogReativarUsuario" modal="true" height="270">
+			<ui:include src="/paginas/controle-acesso/reativarUsuarioInativo.xhtml" />
+		</p:dialog>
+
+		<p:dialog id="_dialogAlertaIndex" header="Lembretes" rendered="true" visible="false" closable="true" draggable="true" resizable="false"
+			widgetVar="dialogAlertaIndex" modal="true" position="center" width="550" height="365">
+			
+			<!-- <ui:include src="/alertIndex.html" /> -->
+			<img src="resources/imagens/pop_up_inicial.png" width="528" height="360"/>
+		</p:dialog>
+
+	</ui:define>
+</ui:composition>

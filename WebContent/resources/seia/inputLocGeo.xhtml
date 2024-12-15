@@ -1,0 +1,70 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html 
+   xmlns="http://www.w3.org/1999/xhtml" 
+   xmlns:ui="http://java.sun.com/jsf/facelets"  
+   xmlns:h="http://java.sun.com/jsf/html" 
+   xmlns:f="http://java.sun.com/jsf/core" 
+   xmlns:p="http://primefaces.prime.com.tr/ui"
+   xmlns:cc="http://java.sun.com/jsf/composite"
+   xmlns:c="http://java.sun.com/jsp/jstl/core">
+		     
+   <cc:interface> 
+	   	
+		<cc:attribute name="ideTipoSecaoGeometrica" 	type="br.gov.ba.seia.enumerator.ClassificacaoSecaoEnum" 	required="false" />
+		<cc:attribute name="ideRequerimento" 			type="br.gov.ba.seia.entity.Requerimento" 					required="false" />
+		<cc:attribute name="ideEmpreendimento" 			type="br.gov.ba.seia.entity.Empreendimento" 				required="false" />
+		
+		<cc:attribute name="ideLocalizacaoGeografica" 	type="br.gov.ba.seia.entity.LocalizacaoGeografica" 			required="true" />
+		<cc:attribute name="metodo" 					required="false" />
+		<cc:attribute name="ideObjetoLocalizacao" 		type="Object" required="true" />
+		<cc:attribute name="disabled"	type="Boolean"	default="false"/>
+		<cc:attribute name="update"		type="String"/>
+		<cc:attribute name="id"			type="String"/>
+		<cc:attribute name="titulo"		type="String"/>
+		
+   	</cc:interface>
+	    
+	    
+	<cc:implementation>
+		
+		<p:commandLink
+		
+			id="#{cc.attrs.id}"
+			action="#{localizacaoGeograficaGenericController.carregarTela()}" 
+			oncomplete="dlgLocalizacaoGeograficaGeneric.show();"
+			actionListener="#{localizacaoGeograficaGenericController.limparLocalizacaoGeografSelecionada()}" 
+			disabled="#{cc.attrs.disabled}"
+			process="@this">
+				
+			<f:setPropertyActionListener target="#{localizacaoGeograficaGenericController.requerimento}" value="#{cc.attrs.ideRequerimento.ideRequerimento}" />
+
+			<f:setPropertyActionListener target="#{localizacaoGeograficaGenericController.metodoAtualizarExterno}" value="#{cc.attrs.metodo}" />
+
+			<f:setPropertyActionListener target="#{localizacaoGeograficaGenericController.tipoSecaoGeometrica}" value="#{cc.attrs.ideTipoSecaoGeometrica.value()}" />
+
+			<f:setPropertyActionListener target="#{localizacaoGeograficaGenericController.empreendimento}" value="#{cc.attrs.ideEmpreendimento}" />
+			
+			<f:setPropertyActionListener target="#{localizacaoGeograficaGenericController.localizacaoGeograficaSelecionada}"	value="#{cc.attrs.ideLocalizacaoGeografica}" />
+			
+			<f:setPropertyActionListener target="#{localizacaoGeograficaGenericController.objetoLocalizacao}" value="#{cc.attrs.ideObjetoLocalizacao}" />
+			
+			<f:setPropertyActionListener target="#{localizacaoGeograficaGenericController.idDoComponenteParaSerAtualizado}"	value="#{cc.attrs.update}" />
+			
+				 <cc:insertChildren />
+			
+			<c:choose>
+				<c:when test="#{empty cc.attrs.titulo}">
+					<h:outputText value="Incluir shapefile" style="cursor: initial;" />
+					<h:graphicImage title="Incluir shapefile" value="/resources/img/ico-expandir.png" style="margin-right: 2px;" />
+				</c:when>
+
+				<c:when test="#{not empty cc.attrs.titulo}">
+					<h:outputText value="#{cc.attrs.titulo}" style="cursor: initial;" />
+					<h:graphicImage title="#{cc.attrs.titulo}" value="/resources/img/ico-expandir.png" style="margin-right: 2px;" />
+				</c:when>
+			</c:choose>
+		</p:commandLink>
+	
+	</cc:implementation>
+ 
+ </html>

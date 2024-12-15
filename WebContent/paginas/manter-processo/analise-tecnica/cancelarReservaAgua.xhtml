@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui">
+	
+	<p:dialog id="dlgCancelarReservaAgua"  widgetVar="dlgCancelarReservaAgua" header="Cancelar Reserva de Água" height="410" width="500" 
+	resizable="false" modal="true" position="center" closable="false">
+		
+		<h:form id="frmCancelarReservaAgua">
+			<h:panelGrid columns="2">
+				<h:outputText value="N° do Processo: " /><h:outputText value="#{reservaAguaController.vwProcesso.numProcesso}" />
+				<h:outputText value="Data de formação: " />
+				<h:outputText value="#{reservaAguaController.vwProcesso.dtcFormacao}">
+					<f:convertDateTime pattern="dd/MM/yyyy"/>
+				</h:outputText>
+				<h:outputText value="Nome/Razão Social: " /><h:outputText value="#{reservaAguaController.vwProcesso.nomRequerente}" />
+				<h:outputText value="E-mail: " /><h:outputText value="#{reservaAguaController.vwProcesso.desEmail}" />
+			</h:panelGrid>
+			<p:spacer height="20" />
+			<h:panelGrid style="width: 100%;">
+				<h:outputText value="Motivo:" />
+				<p:selectOneMenu value="#{reservaAguaController.motivoReservaAgua}" converter="simpleEntityConverter">
+					<f:selectItem itemLabel="Selecione..." itemValue=""/>
+					<f:selectItems value="#{reservaAguaController.listaMotivoReservaAgua}" var="motivo" itemLabel="#{motivo.nomMotivoReservaAgua}" itemValue="#{motivo}" />  
+        		 	<p:ajax event="change" global="false" immediate="true"/>
+				</p:selectOneMenu>
+				
+				<p:spacer height="1" />
+				<h:outputText value="Justificativa:" />
+				<p:inputTextarea value="#{reservaAguaController.justificativa}" style="width: 97%; height: 150px;" />				
+			</h:panelGrid>
+			<h:panelGrid columns="2">
+				<p:spacer height="0" width="320" />
+				<h:panelGrid columns="2">
+					<p:commandButton value="Salvar" oncomplete="cancelar_reserva_agua.show();" />
+					<p:commandButton value="Voltar" actionListener="#{reservaAguaController.voltar()}" oncomplete="dlgCancelarReservaAgua.hide();" />
+				</h:panelGrid>			
+			</h:panelGrid>		
+		</h:form>
+		
+	</p:dialog>
+	<!-- dialog Cancelar Reserva de Água -->
+	
+	<p:confirmDialog message="#{bundle.reserva_agua_cancelar}"	id="cancelar_reserva_agua" widgetVar="cancelar_reserva_agua" header="Mensagem" closable="false">
+		<div align="center">
+			<h:form>
+				<p:commandButton value="Sim" process="@this" actionListener="#{reservaAguaController.cancelarReservaAguaDoProcesso()}" oncomplete="cancelar_reserva_agua.hide(); dlgCancelarReservaAgua.hide();" style="margin-right:10px;"
+				update=":formPautaGestor"/>
+				<p:commandButton value="Não" onclick="cancelar_reserva_agua.hide();" type="button" global="false"/>
+			</h:form>
+		</div>
+	</p:confirmDialog>
+	<!-- dialog Cancelar Reserva de Água -->
+</ui:composition>

@@ -1,0 +1,260 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+				xmlns:h="http://java.sun.com/jsf/html" 
+				xmlns:f="http://java.sun.com/jsf/core" 
+				xmlns:ui="http://java.sun.com/jsf/facelets" 
+				xmlns:p="http://primefaces.prime.com.tr/ui">
+
+	<h:form id="formAbaDocumentosEstudos">
+	
+		<!--
+		 
+		CAMPO
+		
+		 -->
+		
+		<fieldset>
+			<legend>Campos</legend>
+			<p:dataTable 
+				id="dataTableDocumentoCampos" 
+				var="cd" value="#{caepogController.documentosCampo}" lazy="true"
+				paginator="false" emptyMessage="#{bundle.consultapf_msg_empty_list}" widgetVar="dataTableDocumentoCampos" style="margin: 10px;">
+				
+				<p:column  headerText="Documento">
+					<h:outputText value="#{cd.caepogDocumento.nomCaepogDocumento}"/>
+				</p:column>
+				
+				<p:column headerText="Nome do Arquivo" style="word-wrap: break-word; width:200px;">
+					<h:outputText value="#{cd.caepogDocumentoApensado.nomeDocumento}"/>
+				</p:column>
+				
+				<p:column headerText="Tamanho (Kb)">
+					<h:outputText value="#{cd.caepogDocumentoApensado.tamanhoArquivos}"/>
+				</p:column>
+				
+				<p:column headerText="Ações" style="text-align: center;">
+					
+					<h:panelGrid columns="2">
+						<!-- Upload -->
+						<p:commandLink oncomplete="fileUpload.show();" style="vertical-align: middle;" process="@this"
+							rendered="#{!caepogController.caepog.visualizando and cd.caepogDocumentoApensado.dtcValidadoCaepogDocumento == null and !caepogController.caepog.validando}"
+							>
+							
+							<h:graphicImage title="Upload do Arquivo" value="/resources/img/ico-upload.gif" />
+							<f:setPropertyActionListener  value="#{cd}" target="#{caepogController.caepogDocumentoApensadoDtoSelecionado}"  />
+						</p:commandLink>
+						
+						<!-- Download -->
+						<h:commandButton immediate="true" title="Download do Arquivo" style="vertical-align: middle;" 
+							image="/resources/img/ico-download.png" rendered="#{cd.caepogDocumentoApensado.urlCaepogDocumento != null}">
+
+							<p:fileDownload value="#{caepogController.getArquivoBaixar(cd.caepogDocumentoApensado.urlCaepogDocumento)}" />
+						</h:commandButton>
+					</h:panelGrid>
+				</p:column>
+				
+				<p:column headerText="Validado" style="vertical-align: middle; text-align: center;" rendered="#{caepogController.renderedColumnValidado and security.temAcesso('2.66.13')}">
+					<p:selectBooleanCheckbox disabled="#{!caepogController.caepog.validando or cd.caepogDocumentoApensado == null}" style="margin-left: 15px;"
+						value="#{cd.caepogDocumentoApensado.arquivoValidado}" valueChangeListener="#{caepogController.validarDocumentoCaepog()}">
+						
+						<p:ajax global="true" update="tabViewOleoGas:formAbaDocumentosEstudos:dataTableDocumentoCampos"/>
+						<f:attribute name="ideCaepogDocumentoDTO" value="#{cd}" />
+					</p:selectBooleanCheckbox>
+				</p:column>
+			</p:dataTable>
+		</fieldset>
+		
+		<p:spacer width="0" height="20"/>
+		
+		<!--
+		 
+		LOCAÇÂO
+		 
+		 -->
+		 
+		<fieldset>
+			<legend>Locação</legend>
+			
+			<p:dataTable 
+				id="dataTableDocumentoLocacao" 
+				var="cd" value="#{caepogController.documentosLocacao}" lazy="true"
+				paginator="false" emptyMessage="#{bundle.consultapf_msg_empty_list}" widgetVar="dataTableDocumentoCampos" style="margin: 10px;">
+				
+				<p:column  headerText="Documento">
+					<h:outputText value="#{cd.caepogDocumento.nomCaepogDocumento}"/>
+				</p:column>
+				
+				<p:column headerText="Nome do Arquivo" style="word-wrap: break-word; width:200px;">
+					<h:outputText value="#{cd.caepogDocumentoApensado.nomeDocumento}"/>
+				</p:column>
+				
+				<p:column headerText="Tamanho (Kb)" >
+					<h:outputText value="#{cd.caepogDocumentoApensado.tamanhoArquivos}"/>
+				</p:column>
+				
+				<p:column headerText="Ações" style="text-align: center;">
+					
+					<h:panelGrid columns="2">
+						<!-- Upload -->		
+						<p:commandLink  oncomplete="fileUpload.show();" style="vertical-align: middle;" process="@this" 
+							rendered="#{!caepogController.caepog.visualizando and cd.caepogDocumentoApensado.dtcValidadoCaepogDocumento == null and !caepogController.caepog.validando}">
+							
+							<h:graphicImage title="Upload do Arquivo" value="/resources/img/ico-upload.gif" />
+							<f:setPropertyActionListener  value="#{cd}" target="#{caepogController.caepogDocumentoApensadoDtoSelecionado}"  />
+						</p:commandLink>
+						
+						<!-- Download -->
+						<h:commandButton immediate="true" title="Download do Arquivo" style="vertical-align: middle;" 
+							image="/resources/img/ico-download.png" rendered="#{cd.caepogDocumentoApensado.urlCaepogDocumento != null}">
+
+							<p:fileDownload value="#{caepogController.getArquivoBaixar(cd.caepogDocumentoApensado.urlCaepogDocumento)}" />
+						</h:commandButton>
+					 </h:panelGrid>
+				</p:column>
+					
+				<p:column headerText="Validado" style="vertical-align: middle;" rendered="#{caepogController.renderedColumnValidado and security.temAcesso('2.66.13')}">
+					<p:selectBooleanCheckbox disabled="#{!caepogController.caepog.validando or cd.caepogDocumentoApensado == null}" style="margin-left: 15px;"
+						value="#{cd.caepogDocumentoApensado.arquivoValidado}" valueChangeListener="#{caepogController.validarDocumentoCaepog()}">
+						
+						<p:ajax global="true" update="tabViewOleoGas:formAbaDocumentosEstudos:dataTableDocumentoLocacao"/>
+						<f:attribute name="ideCaepogDocumentoDTO" value="#{cd}" />
+					</p:selectBooleanCheckbox>		
+				</p:column>
+			</p:dataTable>
+		</fieldset>
+		
+		<p:spacer width="0" height="20"/>
+		
+		<!--
+		 
+		POÇO
+		 
+		 -->
+		 
+		<fieldset>
+			<legend>Poço</legend>
+			
+			<p:dataTable 
+				id="dataTableDocumentoPoco" 
+				var="cd" value="#{caepogController.documentosPoco}" lazy="true"
+				paginator="false" emptyMessage="#{bundle.consultapf_msg_empty_list}" widgetVar="dataTableDocumentoCampos" style="margin: 10px;">
+				
+				<p:column  headerText="Documento">
+					<h:outputText value="#{cd.caepogDocumento.nomCaepogDocumento}"/>
+				</p:column>
+				
+				<p:column headerText="Nome do Arquivo" style="word-wrap: break-word; width:200px;">
+					<h:outputText value="#{cd.caepogDocumentoApensado.nomeDocumento}"/>
+				</p:column>
+				
+				<p:column headerText="Tamanho (Kb)" >
+					<h:outputText value="#{cd.caepogDocumentoApensado.tamanhoArquivos}"/>
+				</p:column>
+				
+				<p:column headerText="Ações" style="text-align: center;">
+					
+					<h:panelGrid columns="2">
+						<!-- Upload -->		
+						<p:commandLink  oncomplete="fileUpload.show();" style="vertical-align: middle;" process="@this"
+							rendered="#{!caepogController.caepog.visualizando and cd.caepogDocumentoApensado.dtcValidadoCaepogDocumento == null and !caepogController.caepog.validando}">
+							
+							<h:graphicImage title="Upload do Arquivo" value="/resources/img/ico-upload.gif" />
+							<f:setPropertyActionListener  value="#{cd}" target="#{caepogController.caepogDocumentoApensadoDtoSelecionado}"  />
+						</p:commandLink>
+						
+						<!-- Download -->
+						<h:commandButton immediate="true" title="Download do Arquivo" style="vertical-align: middle;" 
+							image="/resources/img/ico-download.png" rendered="#{cd.caepogDocumentoApensado.urlCaepogDocumento != null}">
+
+							<p:fileDownload value="#{caepogController.getArquivoBaixar(cd.caepogDocumentoApensado.urlCaepogDocumento)}" />
+						</h:commandButton>
+					</h:panelGrid>
+				</p:column>
+				
+				<p:column headerText="Validado" style="vertical-align: middle;" rendered="#{caepogController.renderedColumnValidado and security.temAcesso('2.66.13')}">
+					<p:selectBooleanCheckbox disabled="#{!caepogController.caepog.validando or cd.caepogDocumentoApensado == null}" style="margin-left: 15px;"
+						value="#{cd.caepogDocumentoApensado.arquivoValidado}" valueChangeListener="#{caepogController.validarDocumentoCaepog()}">
+						
+						<p:ajax global="true" update="tabViewOleoGas:formAbaDocumentosEstudos:dataTableDocumentoPoco"/>
+						<f:attribute name="ideCaepogDocumentoDTO" value="#{cd}" />
+					</p:selectBooleanCheckbox>
+				</p:column>
+			</p:dataTable>
+		</fieldset>
+		
+		<p:spacer width="0" height="20"/>
+		
+		<!--
+		 
+		DOCUMENTOS ADICIONAIS
+		 
+		 -->
+		 
+		<fieldset>
+			<legend>Documentos Adicionais</legend>
+			
+			<p:dataTable 
+				id="dataTableDocumentoDadosAdicionais" 
+				var="cd" value="#{caepogController.documentosAdicionais}" lazy="true"
+				paginator="false" emptyMessage="#{bundle.consultapf_msg_empty_list}" widgetVar="dataTableDocumentoCampos" style="margin: 10px;">
+				
+				<p:column  headerText="Documento"  >
+					<h:outputText value="#{cd.caepogDocumento.nomCaepogDocumento}"/>
+				</p:column>
+				
+				<p:column headerText="Nome do Arquivo" style="word-wrap: break-word; width:200px;">
+					<h:outputText value="#{cd.caepogDocumentoApensado.nomeDocumento}"/>
+				</p:column>
+				
+				<p:column headerText="Tamanho (Kb)" >
+					<h:outputText value="#{cd.caepogDocumentoApensado.tamanhoArquivos}"/>
+				</p:column>
+				
+					<p:column headerText="Ações" style="text-align: center;">
+					
+					<h:panelGrid columns="3">
+						<!-- Formulario -->
+						<h:commandButton title="Download do Formulário" image="/resources/img/ico_download_form.png" style="vertical-align: middle;" 
+							rendered="#{caepogController.isRenderizaDownloadFormulario(cd)}" immediate="true">
+							
+							<p:fileDownload value="#{caepogController.getFormulario(cd)}"/>
+						</h:commandButton>
+						
+						<!-- Upload -->		
+						<p:commandLink  oncomplete="fileUpload.show();" style="vertical-align: middle;" process="@this"
+							rendered="#{!caepogController.caepog.visualizando and cd.caepogDocumentoApensado.dtcValidadoCaepogDocumento == null and !caepogController.caepog.validando}">
+							
+							<h:graphicImage title="Upload do Arquivo" value="/resources/img/ico-upload.gif" />
+							<f:setPropertyActionListener  value="#{cd}" target="#{caepogController.caepogDocumentoApensadoDtoSelecionado}"  />
+						</p:commandLink>
+						
+						<!-- Download -->
+						<h:commandButton immediate="true" title="Download do Arquivo" style="vertical-align: middle;" 
+							image="/resources/img/ico-download.png" rendered="#{cd.caepogDocumentoApensado.urlCaepogDocumento != null}">
+
+							<p:fileDownload value="#{caepogController.getArquivoBaixar(cd.caepogDocumentoApensado.urlCaepogDocumento)}" />
+						</h:commandButton>
+					</h:panelGrid>
+				</p:column>
+				
+				<p:column headerText="Validado" style="vertical-align: middle;" rendered="#{caepogController.renderedColumnValidado and security.temAcesso('2.66.13')}">
+					<p:selectBooleanCheckbox disabled="#{!caepogController.caepog.validando or cd.caepogDocumentoApensado == null}" style="margin-left: 15px;"
+						value="#{cd.caepogDocumentoApensado.arquivoValidado}" valueChangeListener="#{caepogController.validarDocumentoCaepog()}">
+						
+						<p:ajax global="true" update="tabViewOleoGas:formAbaDocumentosEstudos:dataTableDocumentoDadosAdicionais"/>
+						<f:attribute name="ideCaepogDocumentoDTO" value="#{cd}" />
+					</p:selectBooleanCheckbox>
+				</p:column>
+			</p:dataTable>
+		</fieldset>
+		
+		<p:spacer width="0" height="20"/>
+		
+		<div style="text-align: right;">
+			<p:commandButton value="Relatório de Cadastro" immediate="true"  ajax="false">
+				<p:fileDownload value="#{caepogController.imprimirRelatorioCaepog}" /> 
+			</p:commandButton>			 
+		</div>
+	</h:form>
+</ui:composition>

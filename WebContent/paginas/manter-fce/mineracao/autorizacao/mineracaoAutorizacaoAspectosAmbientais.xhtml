@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.prime.com.tr/ui">
+	
+	<h:form id="minAutAspectosAmbientais">
+
+		<h:panelGroup id="informarClasse">
+			<h:outputText value="* Informar classe dos resíduos conforme Classificação da Norma Técnica ABNT NBR 10004:2004" styleClass="titulo-grupo" style="font-weight:bold;"/><br/><br/>
+			<ui:repeat var="tipoResiduoGerado" value="#{fceAutorizacaoMineracaoController.listaTipoResiduoGerado}">
+				<h:panelGrid columns="2" >
+					<p:selectBooleanCheckbox value="#{tipoResiduoGerado.checked}"  disabled="#{fceAutorizacaoMineracaoController.desabilitarTudo}">
+						<p:ajax event="change" />
+					</p:selectBooleanCheckbox>
+					<h:outputText style="margin-left:5px;" value="#{tipoResiduoGerado.dscTipoResiduoGerado}"/>
+				</h:panelGrid>
+			</ui:repeat>
+	
+		</h:panelGroup>	
+		
+		<h:panelGroup id="destinoResiduos"><br/><br/>
+		
+			<h:outputText value="* Destino dos resíduos" styleClass="titulo-grupo"  style="font-weight:bold;"/><br/><br/>
+			<ui:repeat var="destinoResiduo" value="#{fceAutorizacaoMineracaoController.listaDestinoResiduo}">
+				<h:panelGrid columns="2" >
+					<p:selectBooleanCheckbox value="#{destinoResiduo.checked}"  disabled="#{fceAutorizacaoMineracaoController.desabilitarTudo}">
+						<p:ajax event="change" process="@this" listener="#{fceAutorizacaoMineracaoController.exibirAlertaOutrosDestinoResiduos(destinoResiduo)}"/>
+					</p:selectBooleanCheckbox>
+					<h:outputText style="margin-left:5px;" value="#{destinoResiduo.dscDestinoResiduo}"/>
+				</h:panelGrid>
+			</ui:repeat>
+
+		</h:panelGroup>	
+		
+		
+				
+		<!-- PANELGRID BOTOES -->
+		<h:panelGrid id="gridBotoes" columns="2" style="margin-top:40px; margin-left:575px;" rendered="#{!fceAutorizacaoMineracaoController.desabilitarTudo}">
+			<p:commandButton id="btnVoltar" value="Voltar" style="width:90px;" update="pnlAutMineracao" process="minAutAspectosAmbientais" action="#{fceAutorizacaoMineracaoController.voltarAbas()}" /> 
+			<p:commandButton id="btnAvancar" value="Finalizar" style="width:90px;" process="minAutAspectosAmbientais" action="#{fceAutorizacaoMineracaoController.finalizar()}" disabled="#{fceAutorizacaoMineracaoController.desabilitarTudo}"/> 
+		</h:panelGrid>
+		<!-- FIM DO PANELGRID BOTOES -->
+		
+	</h:form>
+	
+	
+</ui:composition>

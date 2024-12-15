@@ -1,0 +1,295 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+	xmlns:h="http://java.sun.com/jsf/html" 
+	xmlns:f="http://java.sun.com/jsf/core" 
+	xmlns:ui="http://java.sun.com/jsf/facelets" 
+	xmlns:p="http://primefaces.prime.com.tr/ui" 
+	template="/layout/template.xhtml">
+
+	<ui:define name="titulo-pagina">
+		<h3>Identificação do tipo de solicitação</h3>
+	</ui:define>
+
+	<ui:define name="conteudo-principal">
+	
+		<p:dialog widgetVar="dlgInformaProcessoConcluido" header="Processo no INEMA" height="120" width="270" modal="true" resizable="false">
+			<h:form id="frmDlgInformarProcessoConcluido">
+				<h:panelGrid>
+					<h:panelGrid columns="2">
+						<h:outputText value="*1. Informe o número do processo" />
+						<h:graphicImage value="/resources/img/ico-ajuda.png" id="ajuda" style="margin: 1px 1px 1px 4px;" />
+						<p:tooltip for="ajuda" showEffect="fade" hideEffect="fade"
+							value="Ao inserir o número do processo, favor atentar para a inserção do número completo, seguindo o padrão da numeração do sistema que foi gerado. 
+								Ex. Padrão do número de processos SEIA: 2013.001.099999/INEMA/LIC-09999 
+								Padrão do número de processos CERBERUS: 2001-099999/TEC/LL-0999 
+								Padrão do número de processos PROHIDROS: 2013-099999/OUT/APPO-0999" />
+					</h:panelGrid>
+					<p:inputText style="width: 220px;" value="#{identificarTipoSolicitacaoController.numProcesso}" />
+				</h:panelGrid>
+				<h:panelGroup layout="block" style="text-align: center">
+					<p:commandButton value="Salvar" 
+					process="@form"
+					update="formGeral:formRazaoSocial formEndereco:botoes" 
+					actionListener="#{identificarTipoSolicitacaoController.adicionarSolicitacaoAdministrativo}"/>
+				</h:panelGroup>
+			</h:form>
+		</p:dialog>
+	
+
+		<h:panelGrid id="panelidentificartiposolicitacao">
+			<h:form id="formGeral" style="margin: 3px 0;">
+
+				<p:selectOneRadio value="#{identificarTipoSolicitacaoController.indiceTela}" layout="pageDirection"
+				disabled="#{identificarTipoSolicitacaoController.desabilitarTudo or identificarTipoSolicitacaoController.salvoParcialmente or identificarTipoSolicitacaoController.modoEdicao}">
+					<f:selectItems value="#{identificarTipoSolicitacaoController.listaTipoSolicitacao}" var="tpSol" itemLabel="#{tpSol.descricao}" itemValue="#{tpSol.codigo}"/>
+					<!-- <f:selectItem itemValue="1" itemLabel="Solicitar regulação ambiental"/>
+					<f:selectItem itemValue="2" itemLabel="Declaração de Transportes de Resíduos Perigosos"/>
+					<f:selectItem itemValue="3" itemLabel="Declaração de Inexigibilidade"/>
+					<f:selectItem itemValue="4" itemLabel="Alteração de Razão Social (ALRS)" /> -->
+					
+					<p:ajax global="true" process="@this"
+						update="panelidentificartiposolicitacao " />
+						
+				</p:selectOneRadio>
+				
+				<!-- RAZAO SOCIAL -->
+				<h:panelGrid id="perguntaPreEmpreendimento" rendered="#{identificarTipoSolicitacaoController.indiceTela == 4}">
+				
+					<h:panelGrid id="formRazaoSocial">
+	       			
+	       				<h:panelGrid>
+							<h:outputText value="Informe a nova razão social" />
+							<p:inputText value="#{identificarTipoSolicitacaoController.novaRazaoSocial}" size="55" maxlength="200" disabled="#{identificarTipoSolicitacaoController.desabilitarTudo}">
+								<p:ajax event="blur" process="@this" />
+							</p:inputText>
+	       				</h:panelGrid>
+	       				
+	       				<br />
+	       				
+	       				<h:panelGrid>
+	       					<h:outputText value="INSTRUÇÃO" styleClass="titulo-grupo" style="font-size: 12px; font-weight: bold;" />
+	       					<h:outputText styleClass="titulo-grupo"
+	       						value="- Para realizar a alteração da razão social é necessário que exista algum ato ambiental em vigor cujo processo esteja concluído." />
+	       					<p:commandLink
+	       						update="frmDlgInformarProcessoConcluido" 
+	       						disabled="#{!empty identificarTipoSolicitacaoController.listaSolicitacaoAdministrativo or identificarTipoSolicitacaoController.desabilitarTudo}" oncomplete="dlgInformaProcessoConcluido.show();">
+								<h:graphicImage value="/resources/img/ico-expandir.png" />
+								<h:outputText value="Incluir dados do processo*" />
+							</p:commandLink>
+	       					<h:panelGroup layout="block">
+	       						<p:dataTable rendered="#{!empty identificarTipoSolicitacaoController.listaSolicitacaoAdministrativo}" var="sa"  value="#{identificarTipoSolicitacaoController.listaSolicitacaoAdministrativo}">
+	       							<p:column headerText="Sistema" style="text-align: center;">
+										<h:outputText value="#{sa.ideSistema.nomSistema}" />
+	       							</p:column>
+	       							<p:column headerText="Número do processo" style="text-align: center;">
+										<h:outputText value="#{sa.numProcesso}" />
+	       							</p:column>
+	       							<p:column headerText="Ações" style="text-align: center;">
+	       								<p:commandLink process="@this"
+	       									update="formGeral:formRazaoSocial formEndereco:botoes"
+	       									disabled="#{identificarTipoSolicitacaoController.desabilitarTudo}" 
+	       									actionListener="#{identificarTipoSolicitacaoController.limparSolicitacaoAdministrativo()}" >
+											<h:graphicImage value="/resources/img/ico-excluir.png" />
+										</p:commandLink>
+	       							</p:column>
+	       						</p:dataTable>
+	       					</h:panelGroup>
+	       				</h:panelGrid>
+	       				
+					</h:panelGrid>
+				</h:panelGrid>
+				<!-- RAZAO SOCIAL -->
+				
+				
+				<hr></hr>
+				<h:outputLabel value="#{bundle.lbl_preench_obrig_asterisc}" style="float: left; margin:-12px 0px 0px -2px;" />
+				<br/>
+				<h3><h:outputText value="#{bundle.requerimentoUnicoLabelHeaderContratoAssuntoRelacionadoRequerimento}" styleClass="titulo-grupo" style="font-size: 12px; font-weight: bold;"/></h3>
+				<br/>
+				<h:panelGroup>
+					<h:selectBooleanCheckbox value="#{identificarTipoSolicitacaoController.dadosContato}" disabled="#{identificarTipoSolicitacaoController.desabilitarTudo or identificarTipoSolicitacaoController.modoEdicao}">							
+						<f:ajax execute="@this" render="formGeral"/>
+					</h:selectBooleanCheckbox>&nbsp;&nbsp;
+					<h:outputText value="#{bundle.requerimentoUnicoLabelCheckboxContato}"/>
+				</h:panelGroup>
+				 
+				<h:panelGrid id="panelContato" columns="3">
+					<h:outputText value="*#{bundle.requerimentoUnicoLabelNome}" style="font-weight: bold;"/>
+					<h:outputText value="*#{bundle.requerimentoUnicoLabelTelefone}" style="font-weight: bold;"/>
+					<h:outputText value="*#{bundle.requerimentoUnicoLabelEmail}" style="font-weight: bold;"/>
+					
+					<p:inputText id="requerimentoUnicoLabelNome"
+						value="#{identificarTipoSolicitacaoController.requerimento.nomContato}" 
+						label="#{bundle.requerimentoUnicoLabelNome}" 
+						requiredMessage="#{bundle.requerimentoUnicoLabelNomeInvalido}" 
+						disabled="#{identificarTipoSolicitacaoController.desabilitarTudo or !identificarTipoSolicitacaoController.dadosContato or identificarTipoSolicitacaoController.modoEdicao}">
+							
+							<p:ajax update=":formGeral:requerimentoUnicoLabelNome" process="formGeral:requerimentoUnicoLabelNome" event="blur" />
+					</p:inputText>
+					
+					<p:inputMask id="requerimentoUnicoLabelTelefone" 
+						value="#{identificarTipoSolicitacaoController.requerimento.numTelefone}"
+						label="#{bundle.requerimentoUnicoLabelTelefone}" 
+						disabled="#{identificarTipoSolicitacaoController.desabilitarTudo or !identificarTipoSolicitacaoController.dadosContato or identificarTipoSolicitacaoController.modoEdicao}" 
+						mask="#{bundle.MascaraTelefone}">
+
+							<p:ajax update=":formGeral:requerimentoUnicoLabelTelefone" process="formGeral:requerimentoUnicoLabelTelefone" event="blur" />
+					</p:inputMask>
+					
+					<p:inputText id="requerimentoUnicoLabelEmail" 
+						value="#{identificarTipoSolicitacaoController.requerimento.desEmail}"
+						label="#{bundle.requerimentoUnicoLabelEmail}" 
+						disabled="#{identificarTipoSolicitacaoController.desabilitarTudo or !identificarTipoSolicitacaoController.dadosContato or identificarTipoSolicitacaoController.modoEdicao}"
+						validator="emailValidator">
+
+							<p:ajax update=":formGeral:requerimentoUnicoLabelEmail" process="formGeral:requerimentoUnicoLabelEmail" event="blur" />
+					</p:inputText>
+					
+				</h:panelGrid>
+			</h:form>
+			
+			<h:form id="formEndereco" rendered="#{!urlReqUnicoController.bloqueiaEndContatoTemporario}">
+				<h:panelGroup>
+					<h:selectBooleanCheckbox value="#{identificarTipoSolicitacaoController.enderecoContato}"  disabled="#{(identificarTipoSolicitacaoController.desabilitarTudo or urlReqUnicoController.disableImovelRural ) or urlReqUnicoController.bloqueiaEndContatoTemporario or identificarTipoSolicitacaoController.modoEdicao}">
+						<f:ajax execute="@this" render="formEndereco" listener="#{enderecoController.limparEndereco()}"/>
+					</h:selectBooleanCheckbox>&nbsp;&nbsp;
+					<h:outputText value="#{bundle.requerimentoUnicoLabelCheckboxEndereco}"/>
+				</h:panelGroup>
+													
+				<h:panelGrid columns="1" id="enderoContato" rendered="#{identificarTipoSolicitacaoController.enderecoContato}">
+					<p:spacer height="10"/>								
+					
+					<h3><h:outputText value="#{bundle.requerimentoUnicoLabelHeaderEnderecoContato}" styleClass="titulo-grupo" style="font-size: 12px; font-weight: bold;"/></h3>
+					
+					<h:panelGrid columns="1" id="formEnderecoPesquisaCep">
+						<h:outputLabel id="idlblcep" value="* CEP" /><br/>
+						<h:panelGroup>
+							<p:remoteCommand action="#{enderecoController.filtrarPorCep}" update="formEndereco" name="filtrarCepRequerimento"/>
+							<p:inputMask title="CEP" value="#{enderecoController.logradouroPesquisa.numCep}" onblur="filtrarCepRequerimento();" onkeypress="blurOnEnter(event,this);" mask="99.999-999" required="true" requiredMessage="O campo CEP deve ser preenchido."  disabled="#{identificarTipoSolicitacaoController.desabilitarTudo}">
+								<f:converter converterId="cepConverter" />
+							</p:inputMask>						
+						</h:panelGroup>
+					</h:panelGrid>
+					
+					<h:panelGrid columns="1">
+						<h:panelGrid columns="2">
+							<h:outputText id="idlblbairro" value="* Bairro"/>
+							<h:outputText />
+							
+							<p:selectOneMenu id="idcombobairro" value="#{enderecoController.bairro}" valueChangeListener="#{enderecoController.changeLogradouroMunicipio}"  disabled="#{!enderecoController.enableFormEndereco or  identificarTipoSolicitacaoController.desabilitarTudo}" >
+								<f:selectItems value="#{enderecoController.valuesComboBairro}" />
+								<f:converter converterId="bairroConverter" />
+								<f:validator validatorId="bairroComboValidator" />
+								<p:ajax  update="formEndereco" />
+							</p:selectOneMenu>
+							<p:inputText value="#{enderecoController.bairro.nomBairro}" required="true" requiredMessage="O campo Bairro é de preenchimento obrigatório." rendered="#{enderecoController.showInputs}"/>
+						</h:panelGrid>
+							
+							<h:panelGrid columns="2">
+							<h:outputLabel id="idlbllogradouro" value="* #{bundle.empreendimento_lbl_logradouro}" />
+							<h:outputText />
+							
+							<p:selectOneMenu  id="idcombotipologradouroinput" value="#{enderecoController.tipoLogradouro}" disabled="#{enderecoController.logradouro.ideLogradouro > 0}" rendered="#{enderecoController.showInputs or enderecoController.showInputLogradouro}" >
+								<f:selectItem itemLabel="#{bundle.geral_lbl_selecione}" />
+								<f:selectItems value="#{enderecoController.listTipoLogradouro}" var="tipoLogradouro" itemLabel="#{tipoLogradouro.nomTipoLogradouro}" itemValue="#{tipoLogradouro}"/>
+								<f:converter converterId="tipoLogradouroConverter" />
+							</p:selectOneMenu> 
+							
+							<p:selectOneMenu  id="idcombotipologradouro" value="#{enderecoController.tipoLogradouro}"
+								rendered="#{!enderecoController.showInputs and !enderecoController.showInputLogradouro}" disabled="true">
+								<f:selectItem itemLabel="#{bundle.geral_lbl_selecione}" />
+								<f:selectItems value="#{enderecoController.listTipoLogradouro}" var="tipoLogradouro" itemLabel="#{tipoLogradouro.nomTipoLogradouro}" itemValue="#{tipoLogradouro}"/>
+								<f:converter converterId="tipoLogradouroConverter" />
+							</p:selectOneMenu>
+							
+							<p:inputText value="#{enderecoController.logradouro.nomLogradouro}" rendered="#{enderecoController.showInputs or enderecoController.showInputLogradouro}" required="true" requiredMessage="O campo Logradouro deve ser preenchido." />
+							
+								
+							<p:selectOneMenu id="idcombologradouro" value="#{enderecoController.logradouro}" disabled="#{enderecoController.desabilitarLogradouro}"
+								rendered="#{!enderecoController.showInputs and !enderecoController.showInputLogradouro}" valueChangeListener="#{enderecoController.changeLogradouro}">
+								<f:selectItem itemLabel="#{bundle.geral_lbl_selecione}" />
+								<f:selectItems value="#{enderecoController.listLogradouro}" var="logradouro" itemLabel="#{logradouro.nomLogradouro}" itemValue="#{logradouro}"/>
+								<f:converter converterId="logradouroConverter" />
+								<f:validator validatorId="logradouroComboValidator" />
+								<p:ajax event="change" process="@this" update="formEndereco" />
+							</p:selectOneMenu>
+						</h:panelGrid>
+						<h:panelGrid columns="2" id="panelmunicipioestado" width="100%">	
+							<h:outputText id="idlblnumero" value="* Número"/>
+							<h:outputLabel id="idlblcomplemento" value="Complemento" />
+							<p:inputText style="width: 70%" disabled="#{!enderecoController.enableFormEndereco or identificarTipoSolicitacaoController.desabilitarTudo}" value="#{enderecoController.endereco.numEndereco}" size="4" required="true" requiredMessage="O campo Número deve ser preenchido." />
+							<p:inputText style="width: 100%" value="#{enderecoController.endereco.desComplemento}" disabled="#{!enderecoController.enableFormEndereco or identificarTipoSolicitacaoController.desabilitarTudo}" />
+						</h:panelGrid>
+						
+						<h:panelGrid columns="2">		
+							<h:outputText id="idlbluf" value="* UF"/>
+							<h:outputLabel id="idlblmunicipio" value="* Localidade" />					
+							
+							<p:selectOneMenu id="idcombouf" value="#{enderecoController.estado}" disabled="#{!enderecoController.showInputs or identificarTipoSolicitacaoController.desabilitarTudo}"  required="true" requiredMessage="O campo UF deve ser selecionado." >
+								<f:selectItems itemLabel="#{bundle.geral_lbl_selecione}" />
+								<f:selectItems value="#{estadoMunicipioController.valuesComboBoxEstado}" />
+								<f:converter converterId="estadoConverter" />
+								<f:validator validatorId="estadoValidator"/>
+								<p:ajax  update="idcombomunicipio" listener="#{enderecoController.changeEstado}" />
+							</p:selectOneMenu>
+								
+							<p:selectOneMenu id="idcombomunicipio" value="#{enderecoController.municipio}" disabled="#{!enderecoController.showInputs or identificarTipoSolicitacaoController.desabilitarTudo}"  required="true" requiredMessage="O campo Localidade deve ser selecionado." >
+								<f:selectItems value="#{enderecoController.valuesComboBoxMunicipio}" />
+								<f:converter converterId="municipioConverter" />
+								<f:validator validatorId="municipioValidator"/>
+							</p:selectOneMenu>
+						</h:panelGrid>
+						
+						<h:panelGrid columns="1" width="100%">
+							<h:outputText id="idlblpontoreferencia" value="Ponto de Referência"  />
+							<p:inputText style="width: 100%" value="#{enderecoController.endereco.desPontoReferencia}" disabled="#{!enderecoController.enableFormEndereco or identificarTipoSolicitacaoController.desabilitarTudo}"/>
+						</h:panelGrid>
+						
+						<h:panelGrid columns="2">	
+							<p:commandButton ajax="true" value="Salvar" action="#{enderecoController.salvarEnderecoRequerimento()}"
+								disabled="#{!enderecoController.enableFormEndereco or identificarTipoSolicitacaoController.desabilitarTudo}" process="formEndereco"/>
+						</h:panelGrid>
+					</h:panelGrid>
+				</h:panelGrid>
+				
+				<br />
+				<br />
+				<h:panelGrid id="botoes" columns="2" style="float:right;">
+					<h:panelGroup layout="div" rendered="#{identificarTipoSolicitacaoController.indiceTela == 4}">
+						<p:commandButton value="Finalizar Requerimento" actionListener="#{identificarTipoSolicitacaoController.finalizarRequerimentoRazaoSocial()}"
+										update=":formGeral" disabled="#{identificarTipoSolicitacaoController.desabilitarTudo or empty identificarTipoSolicitacaoController.listaSolicitacaoAdministrativo}"/>
+					</h:panelGroup>
+				</h:panelGrid>
+				
+				<!-- 
+					<p:remoteCommand name="initRenolvarAlteracao" actionListener="#{abaRenovacaoAlteracaoProrrogacaoController.init}" action="${abaOutorgaController.init()}"  />
+				
+					<h:panelGroup layout="div" rendered="#{identificarTipoSolicitacaoController.pergunta0_1.indResposta == false or !identificarTipoSolicitacaoController.pessoa.PJ}">
+						<p:commandButton 
+							value="Salvar" 
+							actionListener="#{identificarTipoSolicitacaoController.salvarRequerimentoAposEndereco()}" 
+							action="#{abaProcessoController.init()}" 
+							oncomplete="initRenolvarAlteracao()" 
+							disabled="${novoRequerimentoController.disableBotaoSalvar}" 
+							update=":formGeral, :abas, :formEndereco, :formQuestionario, :formPerguntas, :subViewAbas:tabAbasId, subViewAbas:tabAbasId:abaProcesso, :btnFinalizarRequerimento"/>
+					</h:panelGroup >
+					
+					
+				 -->
+			</h:form>
+			
+			<h:form id="formavancar">
+				<h:panelGrid columns="4">
+					<h:outputText style="padding-right: 620px;" />
+					<h:outputText />
+					<h:panelGroup id="panelGroupAvancar">
+						<p:commandButton value="Avançar" id="buttonAvancar"
+							action="#{identificarTipoSolicitacaoController.avancar()}" ajax="false"
+							rendered="#{identificarTipoSolicitacaoController.indiceTela != 4}"
+							/>
+					</h:panelGroup>
+				</h:panelGrid>
+			</h:form>
+		</h:panelGrid>
+	</ui:define>
+</ui:composition>

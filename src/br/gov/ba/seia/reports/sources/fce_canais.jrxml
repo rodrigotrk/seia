@@ -1,0 +1,289 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="fce_canais" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="495" leftMargin="50" rightMargin="50" topMargin="20" bottomMargin="20" isFloatColumnFooter="true" uuid="23d2a5f4-60dd-470e-8e00-a51d516775d2">
+	<property name="template.type" value="columnar"/>
+	<property name="ireport.zoom" value="2.0"/>
+	<property name="ireport.x" value="397"/>
+	<property name="ireport.y" value="96"/>
+	<style name="Title" forecolor="#000000" fontName="Times New Roman" fontSize="50" isBold="false" pdfFontName="Times-Bold"/>
+	<style name="SubTitle" forecolor="#666666" fontName="Times New Roman" fontSize="18" isBold="false" pdfFontName="Times-Roman"/>
+	<style name="Column header" forecolor="#666666" fontName="Times New Roman" fontSize="14" isBold="true" pdfFontName="Times-Roman"/>
+	<style name="Detail" mode="Transparent" fontName="Times New Roman" pdfFontName="Times-Roman"/>
+	<style name="Row" mode="Transparent" fontName="Times New Roman" pdfFontName="Times-Roman">
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$V{REPORT_COUNT}%2 == 0]]></conditionExpression>
+			<style mode="Opaque" backcolor="#F0EFEF"/>
+		</conditionalStyle>
+	</style>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="LOGO_SEIA" class="java.lang.String"/>
+	<parameter name="LOGO_INEMA" class="java.lang.String"/>
+	<parameter name="ide_fce" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[$P{ide_fce}]]></defaultValueExpression>
+	</parameter>
+	<parameter name="ide_origem_fce" class="java.lang.Integer"/>
+	<parameter name="TIPO_DOC" class="java.lang.String"/>
+	<parameter name="NOM_DOC" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[select
+a.ide_fce_canal,
+a.nom_rio,
+d.dsc_tipo_rio,
+b.dtc_criacao,
+sum(e.val_comprimento) as comprimento_total
+from fce_canal as a
+LEFT join fce as b on a.ide_fce = b.ide_fce
+LEFT join fce_canal as c on c.ide_fce = a.ide_fce
+LEFT JOIN tipo_rio as d on (d.ide_tipo_rio = a.ide_tipo_rio)
+LEFT JOIN fce_canal_trecho as e on e.ide_fce_canal = c.ide_fce_canal
+where a.ide_fce = $P{ide_fce} AND b.ide_origem_fce = $P{ide_origem_fce}
+group by a.ide_fce_canal, a.nom_rio, d.dsc_tipo_rio, b.dtc_criacao]]>
+	</queryString>
+	<field name="ide_fce_canal" class="java.lang.Integer"/>
+	<field name="nom_rio" class="java.lang.String"/>
+	<field name="dsc_tipo_rio" class="java.lang.String"/>
+	<field name="dtc_criacao" class="java.sql.Timestamp"/>
+	<field name="comprimento_total" class="java.lang.Double"/>
+	<variable name="COMPRIMENTO" class="java.lang.Double" resetType="None" incrementType="Report" calculation="Sum">
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	</variable>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<pageHeader>
+		<band height="19">
+			<subreport>
+				<reportElement uuid="96d43a20-e4cb-46c1-90c0-55c4e5181d94" x="0" y="0" width="495" height="19"/>
+				<subreportParameter name="SUBREPORT_DIR">
+					<subreportParameterExpression><![CDATA[$P{SUBREPORT_DIR}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="NOM_DOC">
+					<subreportParameterExpression><![CDATA[$P{NOM_DOC}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="TIPO_DOC">
+					<subreportParameterExpression><![CDATA[$P{TIPO_DOC}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="LOGO_SEIA">
+					<subreportParameterExpression><![CDATA[$P{LOGO_SEIA}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="LOGO_INEMA">
+					<subreportParameterExpression><![CDATA[$P{LOGO_INEMA}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "fce_cabecalho.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+	</pageHeader>
+	<detail>
+		<band height="15">
+			<subreport runToBottom="false">
+				<reportElement uuid="378089c8-8f63-4b9f-afa4-b5007ba7bd93" positionType="Float" isPrintRepeatedValues="false" x="0" y="0" width="495" height="15" isRemoveLineWhenBlank="true"/>
+				<subreportParameter name="ide_fce">
+					<subreportParameterExpression><![CDATA[$P{ide_fce}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "fce_dados_requerente.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+		<band height="15">
+			<subreport>
+				<reportElement uuid="528f6f32-2a62-4753-93ef-ac3af63380f4" x="0" y="0" width="495" height="15"/>
+				<subreportParameter name="SUBREPORT_DIR">
+					<subreportParameterExpression><![CDATA[$P{SUBREPORT_DIR}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="ide_fce">
+					<subreportParameterExpression><![CDATA[$P{ide_fce}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "fce_canais_subreport_dados_gerais.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+		<band height="54">
+			<staticText>
+				<reportElement uuid="50535c6f-0eca-4e7d-9af0-2a1e53e04d3f" positionType="Float" mode="Opaque" x="0" y="0" width="495" height="15" backcolor="#DDDDDD"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" isBold="true"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<text><![CDATA[Caracterização da Atividade]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="fca54628-93c2-48da-a5a4-7f9f71a3b04f" x="10" y="19" width="485" height="11"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="9" isBold="true" isUnderline="false"/>
+				</textElement>
+				<text><![CDATA[Trecho]]></text>
+			</staticText>
+			<subreport>
+				<reportElement uuid="a248b65b-5c49-4239-9396-44ee07fedf97" x="10" y="32" width="485" height="20"/>
+				<subreportParameter name="SUBREPORT_DIR">
+					<subreportParameterExpression><![CDATA[$P{SUBREPORT_DIR}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="ide_fce_canal">
+					<subreportParameterExpression><![CDATA[$F{ide_fce_canal}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<returnValue subreportVariable="COMPRIMENTO" toVariable="COMPRIMENTO"/>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "fce_canais_subreport_trechos.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+		<band height="36">
+			<staticText>
+				<reportElement uuid="000bc5cb-97ff-4fc5-9a35-2d1afdd0ef1c" x="10" y="4" width="236" height="11"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="9" isBold="true" isUnderline="false"/>
+				</textElement>
+				<text><![CDATA[Bacia Hidrográfica]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="ccc2e649-9aee-4ee6-afa8-60488b72461a" x="246" y="4" width="249" height="11"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="9" isBold="true" isUnderline="false"/>
+				</textElement>
+				<text><![CDATA[RPGA]]></text>
+			</staticText>
+			<subreport>
+				<reportElement uuid="5fa4e3e5-1912-4e4b-a2f4-0c11b1479cef" x="10" y="15" width="236" height="17"/>
+				<subreportParameter name="ide_fce_canal">
+					<subreportParameterExpression><![CDATA[$F{ide_fce_canal}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "fce_canais_subreport_bacia_hidrografica.jasper"]]></subreportExpression>
+			</subreport>
+			<subreport>
+				<reportElement uuid="d28a37e4-965b-4073-8f7d-841c1d3d4a89" x="246" y="15" width="249" height="17"/>
+				<subreportParameter name="ide_fce_canal">
+					<subreportParameterExpression><![CDATA[$F{ide_fce_canal}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "fce_canais_subreport_rpga.jasper"]]></subreportExpression>
+			</subreport>
+			<line>
+				<reportElement uuid="ff02491c-32c9-43b4-9252-0c8281d0fb10" x="0" y="0" width="495" height="1"/>
+			</line>
+		</band>
+		<band height="29">
+			<staticText>
+				<reportElement uuid="0432c4fc-c592-4835-af9f-886be96a987c" x="10" y="8" width="56" height="15"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="9"/>
+				</textElement>
+				<text><![CDATA[Nome do Rio:]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="8971b9fd-001b-45cd-8f45-cfb847f0caee" x="66" y="8" width="135" height="15"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nom_rio}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="25404ce2-2d05-48be-bb42-935dabf12358" x="296" y="9" width="199" height="13"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dsc_tipo_rio}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="150bc20d-463b-4157-ba41-df39bb32484c" x="246" y="9" width="49" height="13"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="9"/>
+				</textElement>
+				<text><![CDATA[Tipo do Rio:]]></text>
+			</staticText>
+			<line>
+				<reportElement uuid="a0909767-d19a-4416-b8df-dcedc91c5b87" x="0" y="0" width="495" height="1"/>
+			</line>
+			<line>
+				<reportElement uuid="c800a417-35bb-4efd-848a-ef0768a8c016" x="0" y="28" width="495" height="1"/>
+			</line>
+		</band>
+		<band height="27">
+			<staticText>
+				<reportElement uuid="2f590402-7031-4c04-bd11-4edcc71c0628" x="10" y="0" width="90" height="15"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="9" isBold="true" isUnderline="false"/>
+				</textElement>
+				<text><![CDATA[Município (s)]]></text>
+			</staticText>
+			<subreport>
+				<reportElement uuid="f69435b2-52bf-4bda-892c-09623043362d" x="10" y="15" width="236" height="12"/>
+				<subreportParameter name="ide_fce_canal">
+					<subreportParameterExpression><![CDATA[$F{ide_fce_canal}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "fce_canais_subreport_municipios.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+		<band height="39" splitType="Prevent">
+			<staticText>
+				<reportElement uuid="7df147bd-95e2-4db0-9148-94527ca3246e" positionType="Float" mode="Opaque" x="0" y="5" width="495" height="15" backcolor="#DDDDDD"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" isBold="true"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<text><![CDATA[Resumo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="5a5e5e1d-c6e9-4be2-9d73-31727ad3265b" x="10" y="23" width="137" height="15"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="9"/>
+				</textElement>
+				<text><![CDATA[Comprimento Total do Canal (m):]]></text>
+			</staticText>
+			<textField pattern="#,##0.00">
+				<reportElement uuid="cae343af-0e0d-4f73-a797-52b355cf42b5" x="147" y="23" width="142" height="15"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{comprimento_total}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="40">
+			<textField>
+				<reportElement uuid="b076d875-b29c-436c-ba7a-074c9431890c" style="Column header" mode="Opaque" x="419" y="24" width="46" height="13" forecolor="#000000"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Arial" size="10" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Pág "+$V{PAGE_NUMBER}+" de"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement uuid="7cf90333-521b-4978-bcc4-ebb87c133c4e" style="Column header" mode="Opaque" x="465" y="24" width="15" height="13" forecolor="#000000"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="10" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField pattern="EEEEE dd MMMMM yyyy">
+				<reportElement uuid="c7a496ee-8dc8-4be2-99b8-c43bb3d61b91" style="Column header" mode="Opaque" x="10" y="27" width="95" height="13" forecolor="#000000"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="10" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="34670993-83cd-4f96-96d2-1dd6fba7b4ca" x="109" y="27" width="298" height="13"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="5"/>
+				</textElement>
+				<text><![CDATA[Avenida Luis Viana Filho, 6° Avenida n° 600 - CAB - CEP 41.745-900. Salvador - BA]]></text>
+			</staticText>
+		</band>
+	</pageFooter>
+	<lastPageFooter>
+		<band/>
+	</lastPageFooter>
+</jasperReport>

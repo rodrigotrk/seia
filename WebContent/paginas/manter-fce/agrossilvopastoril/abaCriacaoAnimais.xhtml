@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui">
+
+	<h:form id="formCriacaoAnimais">
+		<h:panelGrid style="margin-left:-7px;">
+			<h:outputText value="*Deseja regularizar as atividades de Criação de Animais cadastrados no CEFIR?" styleClass="titulo-grupo" style="font-weight:bold;"/>
+			<p:selectOneRadio value="#{criacaoAnimaisController.regularizacaoAtivCefir}">
+				<f:selectItem itemLabel="Sim" itemValue="true" />
+				<f:selectItem itemLabel="Não" itemValue="false"/>
+		    </p:selectOneRadio>
+		    <br />
+		    <h:outputText value="*Tipos de Cultura" styleClass="titulo-grupo" style="font-weight:bold;"/>
+		    <h:panelGrid>
+				<br/>
+				<h:panelGroup style="margin-top:20px; margin-bottom:10px;">
+					<h:outputText value="Tipos de Cultura:"/>
+					<p:spacer width="5" height="0"/>
+					<p:inputText id="pesq_cultura" value="#{criacaoAnimaisController.nomTipologiaAtividade}" onkeyup="pesq_tipo_cultura();" style="width:250px;">
+						<p:ajax event="blur" process="@this" global="false"/>
+					</p:inputText>
+					<p:watermark for="pesq_cultura" value="Digite o nome do tipo de cultura" />
+					<p:remoteCommand name="pesq_tipo_cultura" actionListener="#{criacaoAnimaisController.pesquisarTipologiaAtividade()}" global="false" update="tabAbasId_Agro:formCriacaoAnimais:tblTipoCriacao" />
+				</h:panelGroup>
+				<p:dataTable id="tblTipoCriacao" value="#{criacaoAnimaisController.listaTipologiaAtividade}" var="cult" lazy="true" paginator="true" rows="10"  
+				paginatorPosition="bottom" paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}" rowsPerPageTemplate="5,10,15" 
+				emptyMessage="Nenhum tipo de criação encontrado." style="width: 987px;">
+					<p:column style="width: 580px; text-align:justify;">
+						<f:facet name="header">
+							<h:outputText value="Tipo Criação" />
+						</f:facet>
+						<h:outputText value="#{cult.tipoCriacao}" />
+					</p:column>
+					
+					<p:column style="width: 40px; text-align:center;" headerText="Ações">		
+						<p:commandLink title="Confirmar" process="@this" update="tabAbasId_Agro:formCriacaoAnimais:tblTipoCriacaoSelecionados tabAbasId_Agro:formCriacaoAnimais:tblTipoCriacao" 
+						action="#{criacaoAnimaisController.adicionarTipoCultura()}" global="false">
+							<h:graphicImage title="Confirmar" value="/resources/img/ico-aprovar-notificacao.png" />
+							<f:setPropertyActionListener target="#{criacaoAnimaisController.tipologiaAtividade}" value="#{cult}"/>
+						</p:commandLink>
+					</p:column>
+				</p:dataTable>				
+			</h:panelGrid>
+			<h:panelGrid id="tblTipoCriacaoSelecionados">
+				<p:dataTable value="#{criacaoAnimaisController.listaCriacaoAnimal}" var="cult" 
+				emptyMessage="#{bundle.lac_dadosGerais_msg007}" rendered="#{criacaoAnimaisController.exibirTblTipoCriacaoSelecionados}">
+					<f:facet name="header">
+						<p:spacer width="123px" height="0"/>  
+						<h:outputText value="|"/>
+					    <p:spacer width="150px" height="0"/>  
+						<h:outputText value="Evolução do Rebanho"/>
+						<p:spacer width="175px" height="0"/>  
+						<h:outputText value="|"/>
+					</f:facet>
+					<p:column styleClass="text-center" style="width: 80px;">
+						<f:facet name="header">
+							Espécie <br /> animal
+						</f:facet>
+						<div style="width:100">
+							<h:outputText value="#{cult.tipoCriacao}"/>
+						</div>
+					</p:column>
+					
+					<p:column style="width: 100px;" styleClass="text-center">
+						<f:facet name="header">
+							*Área a ser <br />Ocupada (ha)
+						</f:facet>
+						<p:inputText value="#{cult.capacidade}" style="width: 80px;" converter="doubleConverter" onkeyup="maskIt(this, event, '99.999.999,99', true)" maxlength="13">
+							<p:ajax global="false"/>
+						</p:inputText>
+					</p:column>
+					
+					<p:column headerText="*Nº Cabeças" style="width: 85px" styleClass="text-center">
+						<p:inputText value="#{cult.numCabecas}" style="width: 80px"  maxlength="9">
+							<p:ajax global="false"/>
+						</p:inputText>
+					</p:column>
+					
+					<p:column headerText="Nº Matrizes" style="width: 85px" styleClass="text-center">
+						<p:inputText value="#{cult.numMatrizes}" style="width: 80px" maxlength="9">
+							<p:ajax global="false"/>
+						</p:inputText>
+					</p:column>
+					
+					<p:column headerText="Nº Reprodutores" style="width: 105px" styleClass="text-center">
+						<p:inputText value="#{cult.numReprodutores}" style="width: 100px" maxlength="9">
+							<p:ajax global="false"/>
+						</p:inputText>
+					</p:column>
+			
+					<p:column headerText="*Produção/und" style="width: 120px;">
+						<h:panelGrid columns="2" style="margin-left:-7px;" styleClass=" ui-panelgrid">
+							<p:inputText value="#{cult.producaoEsperada}" style="width: 60px;" converter="doubleConverter" onkeyup="maskIt(this, event, '99.999.999,99', true)" maxlength="13">
+								<p:ajax global="false"/>
+							</p:inputText>
+							<p:selectOneMenu value="#{cult.unidadeMedida}" converter="simpleEntityConverter">
+					            <f:selectItems value="#{criacaoAnimaisController.listaUnidadeMedida}" var="unid" itemLabel="#{unid.codUnidadeMedida}" itemValue="#{unid}" />  
+					        </p:selectOneMenu>
+				        </h:panelGrid>
+					</p:column>
+					<p:column headerText="*Nº Animais" style="width: 75px" styleClass="text-center">
+						<p:inputText value="#{cult.numAnimais}" style="width: 70px" maxlength="9">
+							<p:ajax global="false"/>
+						</p:inputText>
+					</p:column>
+					<p:column headerText="*Finalidades" style="width: 115px;" styleClass="ui-panelgrid">
+						<h:panelGroup layout="block" style="height:80px; width:115px; overflow:auto;">		        
+						     <p:selectManyCheckbox value="#{cult.listaFinalidades}" converter="simpleEntityConverter" layout="pageDirection" valueChangeListener="#{criacaoAnimaisController.changeCheckBox}">
+		    					<f:selectItems value="#{criacaoAnimaisController.listaFinalidades}" var="fin" itemLabel="#{fin.nomFinalidades}" itemValue="#{fin}"/>
+		   					 	<p:ajax global="false"/>
+		   					 </p:selectManyCheckbox>
+				        </h:panelGroup>
+					</p:column>
+					<p:column headerText="Ações" style="width: 33px" styleClass="text-center">
+			          	<p:commandLink oncomplete="excluirTipoCultura.show()" title="Excluir" process="@this" global="false">
+		          			 <h:graphicImage title="Excluir Tipo Cultura Transportado" value="/resources/img/ico-excluir.png" />
+		     			     <f:setPropertyActionListener target="#{criacaoAnimaisController.tipoCultura}" value="#{cult}"/>
+			            </p:commandLink>						
+					</p:column>
+				</p:dataTable>
+			<h:panelGrid columns="3" style="margin-top:25px;">
+				<p:commandButton id="btnVoltar" value="Voltar" global="false" action="#{agrossilvopastorilController.voltarAba()}" update="tabAbasId_Agro"/>
+				<p:spacer width="15" height="0"/>
+			 	<p:commandButton id="btnAvancar" value="Avançar" action="#{criacaoAnimaisController.salvarAbaCriacaoAnimais()}" update="tabAbasId_Agro" global="false" />
+			</h:panelGrid>
+		</h:panelGrid>
+		</h:panelGrid>
+	</h:form>
+</ui:composition>

@@ -1,0 +1,76 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      template="../../../layout/template.xhtml"
+      xmlns:p="http://primefaces.prime.com.tr/ui">
+	<ui:define name="titulo-pagina">
+		<h3>CERH – Solicitar Geração de DAE</h3>
+	</ui:define>
+	<ui:define name="conteudo-principal">
+		<p:dialog id="dialogselecionarRequerente" dynamic="true" header="Selecionar Requerente" widgetVar="dialogselecionarRequerente" modal="true" position="center" resizable="false">
+			<ui:include src="/paginas/novo-requerimento/selecionarRequerente.xhtml" />
+		</p:dialog>
+		
+		<p:dialog header="Confirmar Geração de DAE" id="dialogConfirmCorreio" widgetVar="dialogConfirmCorreio" width="500"
+			modal="true" resizable="false" appendToBody="false" >
+			<h:form id="formDialogCerhCombrancaConfirm">
+				<h:panelGroup>
+					<p>
+						Ao optar pelo envio via Correios, os DAEs que vencem em menos de 20 dias terão seu vencimento e seu valor alterados, contabilizando juros pelo
+						atraso no pagamento, uma vez que não há tempo hábil para o pagamento do DAE dentro do prazo de vencimento original.
+						<br/>
+						<br/>
+						Os DAEs que se enquandram neste caso estarão destacados de vermelho.
+						<br/>
+						<br/>
+						Você poderá confirmar ou cancelar esta opção nos pŕoximos passos.
+					</p>
+					<p:spacer width="0" height="5"/>
+					<p:commandButton value="Voltar" styleClass="left" onclick="dialogConfirmCorreio.hide();"/>
+					<p:commandButton value="Continuar" actionListener="#{cerhCobrancaController.continuar}" styleClass="right" update="gerarDaeForm" oncomplete="dialogConfirmCorreio.hide();"/>
+				</h:panelGroup>
+			</h:form>
+		</p:dialog>
+		<p:dialog header="Confirmar Geração de DAE" id="dialogConfirmGerarDae" widgetVar="dialogConfirmGerarDae" width="500"
+			modal="true" resizable="false" appendToBody="false" >
+			<h:form id="formDialogConfirmGerarDae">
+				<h:panelGroup>
+					<p>
+						Deseja confirmar a geração destes DAEs?
+					</p>
+					<p:spacer width="0" height="5"/>
+					<p:commandButton value="Cancelar" styleClass="left" onclick="dialogConfirmGerarDae.hide();"/>
+					<p:commandButton value="Continuar" actionListener="#{cerhCobrancaController.continuar}" styleClass="right" update="gerarDaeForm" oncomplete="dialogConfirmGerarDae.hide();"/>
+				</h:panelGroup>
+			</h:form>
+		</p:dialog>
+		<h:form id="gerarDaeForm">
+		    <h:panelGroup rendered="#{cerhCobrancaController.etapa == 1}">    
+				<ui:include src="/paginas/manter-cerh/gerar-dae/abas/gerar-dae-passo-1.xhtml" />
+		    </h:panelGroup>  
+		    <h:panelGroup rendered="#{cerhCobrancaController.etapa == 2}">    
+				<ui:include src="/paginas/manter-cerh/gerar-dae/abas/gerar-dae-passo-2.xhtml" />
+		    </h:panelGroup>  
+		   	<h:panelGroup rendered="#{cerhCobrancaController.etapa == 3}">    
+				<ui:include src="/paginas/manter-cerh/gerar-dae/abas/gerar-dae-passo-3.xhtml" />
+		    </h:panelGroup>   
+		   	<h:panelGroup rendered="#{cerhCobrancaController.etapa == 4}">    
+				<ui:include src="/paginas/manter-cerh/gerar-dae/abas/gerar-dae-passo-4.xhtml" />
+		    </h:panelGroup>   
+		   	<h:panelGroup rendered="#{cerhCobrancaController.etapa == 5}">    
+				<ui:include src="/paginas/manter-cerh/gerar-dae/abas/gerar-dae-passo-5.xhtml" />
+		    </h:panelGroup>   
+			<p:spacer width="0" height="5"/>
+			<p:commandButton value="Voltar" actionListener="#{cerhCobrancaController.voltar}" styleClass="left" rendered="#{(cerhCobrancaController.usuarioExterno &amp;&amp; cerhCobrancaController.etapa > 1) || (!cerhCobrancaController.usuarioExterno &amp;&amp; cerhCobrancaController.etapa > 2)}" update="gerarDaeForm" immediate="true"/>
+			
+			<p:commandButton rendered="#{cerhCobrancaController.etapa &lt; 5}" value="#{cerhCobrancaController.etapa == 2? 'Gerar DAE(s)' : cerhCobrancaController.etapa == 3? 'Confirmar' : 'Avançar'}" process="@form" actionListener="#{cerhCobrancaController.avancar}" styleClass="right" update="gerarDaeForm,form_dialog_requerente">
+				<f:setPropertyActionListener value="#{cerhCobrancaController.papelSolicitante.tipoPessoaEnum}" target="#{requerenteController.tipoPessoaDTO.tipoPessoaEnum}"/>
+				<f:setPropertyActionListener value="true" target="#{requerenteController.tipoPessoaDTO.desabilitar}"/>
+			</p:commandButton>
+			
+			<p:spacer width="0" height="20"/>
+		</h:form>
+	</ui:define>
+</ui:composition>

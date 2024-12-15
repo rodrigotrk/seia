@@ -1,0 +1,230 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui">
+	<div id="equipamentos-utilizados" style="width: 700px;">
+	
+		<h:panelGrid columns="4" width="650">
+				<h:outputLabel value="* Potência a ser instalada no transmissor" />
+				<p:inputText id="vlrPotenciaTransmissor" maxlength="10"
+					converter="bigConverter"
+					onkeypress="mascararNumeroLR(this, event, 9, 2, '.', ',', 3);"
+					onkeyup="mascararNumeroLR(this, event, 9, 2, '.', ',', 3);"
+					style="width:60px;" disabled="#{lacErbController.viewMode}"
+					value="#{lacErbController.lacErb.vlrPotenciaTransmissor}"
+					required="true"
+					requiredMessage="Potência a ser instalada é obrigatório" />
+	
+				<h:outputLabel value="* Especificar a freqüência a ser utilizada" />
+				<p:inputText id="vlrFrequenciaUtilizada" maxlength="10"
+					converter="bigConverter"
+					onkeypress="mascararNumeroLR(this, event, 9, 2, '.', ',', 3);"
+					onkeyup="mascararNumeroLR(this, event, 9, 2, '.', ',', 3);"
+					style="width:60px;" disabled="#{lacErbController.viewMode}"
+					value="#{lacErbController.lacErb.vlrFrequenciaUtilizada}"
+					required="true"
+					requiredMessage="Freqüência a ser utilizada é obrigatória" />
+			</h:panelGrid>
+	
+		<p:fieldset legend="Cadastrar Equipamentos" >
+			<div style="float: left; width: 60%">
+				<h:panelGrid columns="2">
+					<h:outputLabel value="* Potência (ERP)" />
+					<p:inputText maxlength="10" converter="bigConverter"
+						onkeypress="mascararNumeroLR(this, event, 9, 2, '.', ',', 3);"
+						onkeyup="mascararNumeroLR(this, event, 9, 2, '.', ',', 3);"
+						id="vlrPotenciaErp"
+						value="#{lacErbController.erbEquipamento.vlrPotenciaErp}"
+						style="width:60px;" required="true"
+						requiredMessage="O campo Potência do equipamento é de preenchimento obrigatório."
+						disabled="#{lacErbController.viewMode}" />
+	
+					<h:outputLabel value="* Nível de radiação" />
+					<p:inputText maxlength="10" converter="bigConverter"
+						onkeypress="mascararNumeroLR(this, event, 9, 2, '.', ',', 3);"
+						onkeyup="mascararNumeroLR(this, event, 9, 2, '.', ',', 3);"
+						id="vlrNivelRadiacao"
+						value="#{lacErbController.erbEquipamento.vlrNivelRadiacao}"
+						style="width:60px;" required="true"
+						requiredMessage="O campo Nível de radiação do equipamento é de preenchimento obrigatório."
+						disabled="#{lacErbController.viewMode}" />
+				</h:panelGrid>
+	
+				<h:panelGrid columns="2" width="380">
+					<h:outputLabel
+						value="* Potência(ERP) irradiada pelo lóbulo principal" />
+					<p:inputText maxlength="10" converter="bigConverter"
+						onkeypress="mascararNumeroLR(this, event, 9, 2, '.', ',', 3);"
+						onkeyup="mascararNumeroLR(this, event, 9, 2, '.', ',', 3);"
+						id="vlrPotenciaLobuloPrincipal"
+						value="#{lacErbController.erbEquipamento.vlrPotenciaLobuloPrincipal}"
+						style="width:60px;" required="true"
+						requiredMessage="O campo Potência irradiada pelo lóbulo principal é de preenchimento obrigatório."
+						disabled="#{lacErbController.viewMode}" />
+				</h:panelGrid>
+			</div>
+	
+			<h:panelGrid columns="2">
+				<h:panelGrid columns="1">
+					<h:outputLabel value="* Canais Rf." />
+					<p:dataTable id="l1" var="lee"
+						value="#{lacErbController.lacErbsEquipamento}">
+						<p:column>
+							<f:facet name="header">  
+				                    Canal  
+				            </f:facet>
+							<h:outputText value="#{lee.tipoCanalErb.dscTipoCanalErb}" />
+						</p:column>
+						<p:column>
+							<f:facet name="header">  
+				                    Qtd  
+				            </f:facet>
+							<p:inputText converter="integerConverter" maxlength="9"
+									onkeypress="SomenteNumero(this);"
+								onkeyup="SomenteNumero(this);"
+								disabled="#{lacErbController.viewMode}" style="width:30px;"
+								value="#{lee.qtdCanais}" />
+						</p:column>
+					</p:dataTable>
+				</h:panelGrid>
+				<h:panelGrid columns="1">
+					<p:commandButton action="#{lacErbController.incluirEquipamento}"
+						style="margin-left:20px;" disabled="#{lacErbController.viewMode}"
+						process="@this,l1,vlrPotenciaErp,vlrNivelRadiacao,vlrPotenciaLobuloPrincipal"
+						update="vlrPotenciaErp,vlrNivelRadiacao,vlrPotenciaLobuloPrincipal,l1,lista_equipamentos,lista,bt_salvar,bt_atualizar"
+						value="Incluir Equipamento" />
+				</h:panelGrid>
+			</h:panelGrid>
+		</p:fieldset>
+		<br/>
+		<p:outputPanel id="lista" style="width:700px;margin-top:5px;">
+			<p:dataTable id="lista_equipamentos" style="width:700px" 
+				rendered="#{!empty lacErbController.equipamentosACadastrar}"
+				widgetVar="lista_equipamentos" var="equipamento"
+				value="#{lacErbController.equipamentosACadastrar}"
+				emptyMessage="Sem Equipamentos" rowIndexVar="indiceListaEquipamento"
+				paginatorPosition="bottom" paginator="true"
+				paginatorAlwaysVisible="false"
+				paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}"
+				rows="5">
+				<f:facet name="header">
+					<h:outputText value="Informações Técnicas dos Equipamentos" />
+				</f:facet>
+				<p:columnGroup type="header">
+					<p:row>
+						<p:column rowspan="2" headerText="Potência(ERP)" />
+						<p:column rowspan="2" headerText="Potência(ERP) do Lóbulo" />
+						<p:column rowspan="2" headerText="Nível Radiação" />
+						<p:column rowspan="2" headerText="Canais" />
+						<p:column colspan="2" rowspan="1" headerText="Opções" />
+					</p:row>
+					<p:row>
+						<p:column headerText="Editar" />
+						<p:column headerText="Excluir" />
+					</p:row>
+				</p:columnGroup>
+				<p:column>
+					<p:cellEditor>
+						<f:facet name="output">
+							<h:outputText value="#{equipamento.vlrPotenciaErp}" />
+						</f:facet>
+						<f:facet name="input">
+							<p:inputText maxlength="10" converter="bigConverter"
+								onkeypress="mascararNumeroLR(this, event, 9, 2, '.', ',', 3);"
+								onkeyup="mascararNumeroLR(this, event, 9, 2, '.', ',', 3);"
+								disabled="#{lacErbController.viewMode}"
+								value="#{equipamento.vlrPotenciaErp}" style="width:100%" />
+						</f:facet>
+					</p:cellEditor>
+				</p:column>
+				<p:column>
+					<p:cellEditor>
+						<f:facet name="output">
+							<h:outputText value="#{equipamento.vlrPotenciaLobuloPrincipal}" />
+						</f:facet>
+						<f:facet name="input">
+							<p:inputText maxlength="9" converter="bigConverter"
+									onkeypress="mascararNumeroLR(this, event, 9, 0, '.', ',', 3);"
+										onkeyup="mascararNumeroLR(this, event, 9, 0, '.', ',', 3);"
+								disabled="#{lacErbController.viewMode}" 
+								value="#{equipamento.vlrPotenciaLobuloPrincipal}"
+								style="width:100%" />
+						</f:facet>
+					</p:cellEditor>
+				</p:column>
+				<p:column>
+					<p:cellEditor>
+						<f:facet name="output">
+							<h:outputText value="#{equipamento.vlrNivelRadiacao}" />
+						</f:facet>
+						<f:facet name="input">
+							<p:inputText maxlength="10" converter="bigConverter"
+								onkeypress="mascararNumeroLR(this, event, 9, 2, '.', ',', 3);"
+								onkeyup="mascararNumeroLR(this, event, 9, 2, '.', ',', 3);"
+								disabled="#{lacErbController.viewMode}"
+								value="#{equipamento.vlrNivelRadiacao}" style="width:100%" />
+						</f:facet>
+					</p:cellEditor>
+				</p:column>
+				<p:column style="width:100px;">
+					<p:cellEditor>
+						<f:facet name="output">
+							<h:outputText value="#{equipamento.canais}" />
+						</f:facet>
+						<f:facet name="input">
+							<p:dataTable id="l2" var="tst"
+								value="#{equipamento.lacErbEquipamentos}">
+								<p:column>
+									<h:outputText value="#{tst.tipoCanalErb.dscTipoCanalErb}" />
+								</p:column>
+								<p:column>
+									<p:inputText maxlength="9" converter="bigConverter"
+											onkeypress="SomenteNumero(this);"
+											onkeyup="SomenteNumero(this);"
+			
+										disabled="#{lacErbController.viewMode}" style="width:30px;"
+										value="#{tst.qtdCanais}" />
+								</p:column>
+							</p:dataTable>
+						</f:facet>
+					</p:cellEditor>
+				</p:column>
+				<p:column>
+					<p:rowEditor />
+				</p:column>
+				<p:column>
+					<p:commandLink id="excluir" title="Excluir" process="@this"
+						update="form_lac:lac_tab:lista bt_salvar"
+						disabled="#{lacErbController.viewMode}"
+						action="#{lacErbController.removeEquipamento}">
+						<h:graphicImage value="/resources/img/ico-excluir.png" />
+						<f:setPropertyActionListener value="#{equipamento}"
+							target="#{lacErbController.erbEquipamentoADeletar}" />
+					</p:commandLink>
+				</p:column>
+			</p:dataTable>
+		</p:outputPanel>
+		<br/>
+		<div align="right">
+			<p:commandButton value="Imprimir" ajax="false" immediate="true"
+				rendered="#{lacErbController.viewMode}" style="margin-right:10px;">
+				<p:fileDownload value="#{lacErbController.imprimir}" />
+			</p:commandButton>
+			<p:commandButton id="bt_atualizar"
+				rendered="#{lacErbController.editMode}"
+				disabled="#{empty lacErbController.equipamentosACadastrar}"
+				value="Finalizar"  update="form_lac"				
+				action="#{lacErbController.atualizar}" 
+				process="@this,vlrPotenciaTransmissor,vlrFrequenciaUtilizada" />
+			<p:commandButton id="bt_salvar"
+				rendered="#{!lacErbController.editMode and !lacErbController.viewMode}"
+				disabled="#{empty lacErbController.equipamentosACadastrar}"
+				value="Finalizar" update="form_lac"
+				action="#{lacErbController.exibirTermos}"
+				process="@this,vlrPotenciaTransmissor,vlrFrequenciaUtilizada" />
+		</div>
+	</div>
+
+</ui:composition>

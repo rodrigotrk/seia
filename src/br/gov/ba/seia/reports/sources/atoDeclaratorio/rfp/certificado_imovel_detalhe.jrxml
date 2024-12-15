@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="certificado_imovel_detalhe" language="java" pageWidth="495" pageHeight="802" columnWidth="495" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="d7f1f7ac-a571-4b34-b7ec-4c8da3ae5955">
+	<property name="ireport.zoom" value="1.771561000000001"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["/home/alexandre/workspace/seia/src/br/gov/ba/seia/reports/sources/atoDeclaratorio/rfp/"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="ide_requerimento" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[select
+	distinct i.ide_imovel ,
+	ir.des_denominacao as denominacao,
+	l.nom_logradouro as endereco,
+	en.des_complemento as complemento,
+	m.nom_municipio as municipio,
+	es.nom_estado as estado,
+	l.num_cep as cep,
+	coalesce(ir.num_itr,' - ')  itr,
+	coalesce(ir.num_registro,' - ') registro
+from
+registro_floresta_producao r
+	inner join ato_declaratorio a on a.ide_ato_declaratorio = r.ide_ato_declaratorio
+	inner join registro_floresta_producao_imovel rf on r.ide_registro_floresta_producao = rf.ide_registro_floresta_producao
+	inner join imovel i on i.ide_imovel = rf.ide_imovel
+	left join imovel_rural ir on ir.ide_imovel_rural = i.ide_imovel
+	left join endereco en on i.ide_endereco = en.ide_endereco
+	left join logradouro l on l.ide_logradouro = en.ide_logradouro
+	left join municipio m on m.ide_municipio = l.ide_municipio
+	left join estado es on es.ide_estado = m.ide_estado
+where a.ide_requerimento = $P{ide_requerimento}]]>
+	</queryString>
+	<field name="ide_imovel" class="java.lang.Integer"/>
+	<field name="denominacao" class="java.lang.String"/>
+	<field name="endereco" class="java.lang.String"/>
+	<field name="complemento" class="java.lang.String"/>
+	<field name="municipio" class="java.lang.String"/>
+	<field name="estado" class="java.lang.String"/>
+	<field name="cep" class="java.math.BigDecimal"/>
+	<field name="itr" class="java.lang.String"/>
+	<field name="registro" class="java.lang.String"/>
+	<detail>
+		<band height="114" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="427cb5c9-3967-4987-a224-faf30c05f1a8" mode="Opaque" x="0" y="14" width="495" height="20" backcolor="#DDDDDD"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Dados do imóvel]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="a2af74ab-2b41-445d-b3eb-4943fdbb319e" x="0" y="94" width="229" height="20"/>
+				<box leftPadding="5">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA["Registro/Matrícula: " +$F{registro}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="b3964555-aed6-4df5-80e5-930307f571fa" x="0" y="54" width="229" height="20"/>
+				<box leftPadding="5">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA["Endereço: "+$F{endereco}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="90b2baa6-5ed6-40a3-8431-3027a00006a5" x="229" y="54" width="266" height="20"/>
+				<box leftPadding="5">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA["Complemento: "+$F{complemento}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="d5039d7a-b701-4884-9153-c98172fbe4df" x="0" y="74" width="229" height="20"/>
+				<box leftPadding="5">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA["Município: "+ $F{municipio}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="147a53eb-9b8d-4ee4-87a1-9b44d4b47088" x="368" y="74" width="127" height="20"/>
+				<box leftPadding="5">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA["CEP: " + $F{cep}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="6e55b17f-ff7a-446f-bb9b-4993d0799854" x="229" y="94" width="266" height="20"/>
+				<box leftPadding="5">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA["Nº na Receita Federal/ITR:" + $F{itr}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="a50ae963-4209-4cab-913f-7b859390d6f9" x="229" y="74" width="139" height="20"/>
+				<box leftPadding="5">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA["Estado: "+$F{estado}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="52afee2c-e093-485b-b83a-64dd2bee6be7" x="0" y="34" width="495" height="20"/>
+				<box leftPadding="5">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA["Denominação: "+ $F{denominacao}]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="20">
+			<subreport>
+				<reportElement uuid="2b64a2a5-619e-47f5-8def-6dae99ce0374" x="0" y="0" width="495" height="20"/>
+				<subreportParameter name="SUBREPORT_DIR">
+					<subreportParameterExpression><![CDATA[$P{SUBREPORT_DIR}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="ide_imovel">
+					<subreportParameterExpression><![CDATA[$F{ide_imovel}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "certificado_rfp_dados_plantio_situacao.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+		<band height="20">
+			<subreport>
+				<reportElement uuid="61fcb473-7042-4f5a-9ffe-1d27d38ec950" x="0" y="0" width="495" height="20"/>
+				<subreportParameter name="SUBREPORT_DIR">
+					<subreportParameterExpression><![CDATA[$P{SUBREPORT_DIR}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="ide_imovel">
+					<subreportParameterExpression><![CDATA[$F{ide_imovel}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "certificado_rfp_dados_plantio_especie.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+	</detail>
+</jasperReport>

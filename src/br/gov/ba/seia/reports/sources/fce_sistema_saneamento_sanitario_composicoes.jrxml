@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="fce_sistema_esgotamento_sanitario_localizacao_elevatoria" pageWidth="494" pageHeight="817" whenNoDataType="AllSectionsNoDetail" columnWidth="494" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="80b78396-35cc-4e26-aaf9-1207b1892468">
+	<property name="ireport.zoom" value="1.815000000000001"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String"/>
+	<parameter name="ide_requerimento" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[$P{ide_requerimento}]]></defaultValueExpression>
+	</parameter>
+	<parameter name="ide_fce_ses_dados_estacao_tratam_esgoto" class="java.lang.Integer"/>
+	<parameter name="ide_fce_ses" class="java.lang.Integer"/>
+	<queryString>
+		<![CDATA[select composicao.val_qtde_ativo, composicao.val_extensao_ativo,adutora.dsc_faixa_diametro_adutora, tipo.desc_fce_ses_tipo_composicao
+from fce_ses_dados_estacao_tipo_composicao composicao
+inner join fce_ses_tipo_composicao tipo
+	on tipo.ide_fce_ses_tipo_composicao = composicao.ide_fce_ses_tipo_composicao
+left join faixa_diametro_adutora adutora
+	on adutora.ide_faixa_diametro_adutora = composicao.ide_faixa_diametro_adutora
+where ide_fce_ses_dados_estacao_tratam_esgoto = $P{ide_fce_ses_dados_estacao_tratam_esgoto}]]>
+	</queryString>
+	<field name="val_qtde_ativo" class="java.lang.Integer">
+		<fieldDescription><![CDATA[Refere-se ao campo da grid "Composição selecionada"]]></fieldDescription>
+	</field>
+	<field name="val_extensao_ativo" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[Refere-se ao campo "Extensão" da grid "Composição selecionada"]]></fieldDescription>
+	</field>
+	<field name="dsc_faixa_diametro_adutora" class="java.lang.String">
+		<fieldDescription><![CDATA[Descrição da faixa do diâmetro utilizado na adutora.]]></fieldDescription>
+	</field>
+	<field name="desc_fce_ses_tipo_composicao" class="java.lang.String"/>
+	<columnHeader>
+		<band height="39">
+			<staticText>
+				<reportElement uuid="d6d00e88-1fc9-4311-a777-4759e4d53074" x="11" y="27" width="178" height="12"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Nome]]></text>
+			</staticText>
+			<line>
+				<reportElement uuid="5377ff7d-7820-45eb-94b3-f3f3b89c2b62" x="0" y="17" width="494" height="1"/>
+			</line>
+			<staticText>
+				<reportElement uuid="110d9c68-b540-440d-9d42-a75ce7e49c06" x="376" y="27" width="108" height="12"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Diâmetro]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="054ed13a-fa5c-4583-95c2-7136894268f6" x="284" y="27" width="92" height="12"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Extensão (m)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="b5f8749c-13f3-4219-8d64-656ee70d2836" x="189" y="27" width="95" height="12"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Quantidade (und)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="74d0ccff-bce1-42fb-b8fd-127fd7d26acd" x="2" y="0" width="333" height="20"/>
+				<box topPadding="3" leftPadding="2"/>
+				<textElement>
+					<font fontName="SansSerif" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Unidade(s) da estação]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20">
+			<textField isStretchWithOverflow="true">
+				<reportElement uuid="aa7e94fe-4a9b-4c42-a4b1-895a64768ff8" stretchType="RelativeToTallestObject" x="11" y="0" width="178" height="20"/>
+				<box leftPadding="2">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{desc_fce_ses_tipo_composicao}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement uuid="44df770c-436f-496e-b501-893c5d3ad4ad" stretchType="RelativeToTallestObject" x="284" y="0" width="92" height="20"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{val_extensao_ativo} != null ? $F{val_extensao_ativo} : "-"]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement uuid="826abf89-7325-42e9-b071-9aa6105c6eab" stretchType="RelativeToTallestObject" x="189" y="0" width="95" height="20"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{val_qtde_ativo}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement uuid="3a311c00-1c9d-4b08-8090-e4618ec0528b" stretchType="RelativeToTallestObject" x="376" y="0" width="108" height="20"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{dsc_faixa_diametro_adutora} != null ? $F{dsc_faixa_diametro_adutora} : "-"]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

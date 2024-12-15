@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="resumo_requerimento_questionario_processos" pageWidth="439" pageHeight="802" columnWidth="439" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="8719f475-cd82-4e7d-beb9-997db22c6a9d">
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="ide_requerimento" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["C:\\Users\\luis\\workspace-seia\\seia_novo_requerimento\\src\\br\\gov\\ba\\novoRequerimento\\reports\\sources\\"]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[select distinct nom_tipo_area_protegida,
+case
+	when tap.ide_tipo_area_protegida = 2 then
+		'Tipo APP: ' || array_to_string(array(
+		select nom_tipo_area_preservacao_permanente from requerimento_tipo_area_preservacao_permanente rt
+			inner join tipo_area_preservacao_permanente tp on tp.ide_tipo_area_preservacao_permanente = rt.ide_tipo_area_preservacao_permanente
+		where rt.ide_requerimento = r.ide_requerimento and tp.ide_tipo_area_protegida = tap.ide_tipo_area_protegida),'/')
+	when tap.ide_tipo_area_protegida = 3 then
+		'Gestão : ' || (
+		select nom_tipo_gestao|| '/' ||nom_unidade_conservacao from requerimento_unidade_conservacao ruc
+			inner join unidade_conservacao uc on uc.ide_unidade_conservacao = ruc.ide_unidade_conservacao
+			inner join tipo_gestao tg on uc.ide_tipo_gestao = tg.ide_tipo_gestao
+		where ruc.ide_requerimento = r.ide_requerimento)
+	else
+		'-'
+end as descricao
+ from requerimento r
+	inner join requerimento_tipo_area_protegida rtap on rtap.ide_requerimento = r.ide_requerimento
+	inner join tipo_area_protegida tap on tap.ide_tipo_area_protegida = rtap.ide_tipo_area_protegida
+where r.ide_Requerimento = $P{ide_requerimento}]]>
+	</queryString>
+	<field name="nom_tipo_area_protegida" class="java.lang.String"/>
+	<field name="descricao" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="12" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="96f86037-ae51-49fb-b793-f6f6fa12dd0d" positionType="Float" mode="Opaque" x="0" y="0" width="83" height="12" isRemoveLineWhenBlank="true" backcolor="#EEECE1"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font fontName="Arial" size="8" isBold="false" isUnderline="false"/>
+				</textElement>
+				<text><![CDATA[Tipo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="f43eab24-e7ad-41f9-aec7-ad5096e3f901" positionType="Float" mode="Opaque" x="83" y="0" width="176" height="12" isRemoveLineWhenBlank="true" backcolor="#EEECE1"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font fontName="Arial" size="8" isBold="false" isUnderline="false"/>
+				</textElement>
+				<text><![CDATA[Detalhamento]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="13" splitType="Stretch">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="70f29bb5-130d-4a77-ae03-8d83eb7df7a3" positionType="Float" stretchType="RelativeToTallestObject" mode="Opaque" x="0" y="0" width="83" height="12" isRemoveLineWhenBlank="true" isPrintInFirstWholeBand="true" isPrintWhenDetailOverflows="true" backcolor="#FFFFFF"/>
+				<box>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font fontName="Arial" size="8" isBold="false" isUnderline="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nom_tipo_area_protegida}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="70f29bb5-130d-4a77-ae03-8d83eb7df7a3" positionType="Float" mode="Opaque" x="83" y="0" width="176" height="12" isRemoveLineWhenBlank="true" backcolor="#FFFFFF"/>
+				<box>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font fontName="Arial" size="8" isBold="false" isUnderline="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{descricao}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement uuid="1b9b643d-88e9-4ee2-9a1e-7a2130d81cda" positionType="Float" x="0" y="12" width="259" height="1"/>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</line>
+			<line>
+				<reportElement uuid="96648c89-6979-4f75-b48f-bf1089c65978" positionType="Float" stretchType="RelativeToBandHeight" x="259" y="0" width="1" height="13" isRemoveLineWhenBlank="true"/>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</line>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

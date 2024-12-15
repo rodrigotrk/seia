@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.prime.com.tr/ui">
+	
+		<h:panelGrid id="pngAbaLancamentoEfluentes">
+				<h:panelGrid columns="1">
+				
+						<h1 class="titulo-grupo" style="font-weight:bold;">Coordenadas do lançamento</h1>
+						<hr style="margin-top: 0;"/>
+						
+						<h:panelGrid rendered="#{(not empty fceSesController.listFceOutorgaLocalizacaoGeografica)}">
+							<h1 style="font-weight: normal;">Coordenada(s) concedida(s) na outorga</h1> 
+							<br/>
+							
+							<p:dataTable var="efl" value="#{fceSesController.listFceOutorgaLocalizacaoGeografica}" style="width:245px;">
+								<p:column headerText="Latitude" style="text-align:center;">
+									<h:outputText value="#{efl.ideOutorgaLocalizacaoGeografica.pontos.get('latitude')}"/>
+								</p:column>
+								<p:column headerText="Longitude" style="text-align:center;">
+									<h:outputText value="#{efl.ideOutorgaLocalizacaoGeografica.pontos.get('longitude')}"/>
+								</p:column>
+								<p:column headerText="Sistema de coordeenadas" style="text-align:center;">
+									<h:outputText value="#{efl.ideOutorgaLocalizacaoGeografica.ideLocalizacaoGeografica.ideSistemaCoordenada.nomSistemaCoordenada}"/>
+								</p:column>		
+								<p:column headerText="Bacia" style="text-align:center;">
+									<h:outputText value="#{efl.ideOutorgaLocalizacaoGeografica.ideLocalizacaoGeografica.baciaHidrografica}"/>
+								</p:column>		
+								<p:column headerText="RPGA" style="text-align:center;">
+									<h:outputText value="#{efl.ideOutorgaLocalizacaoGeografica.ideLocalizacaoGeografica.rpga}"/>
+								</p:column>		
+ 								<p:column headerText="Corpo Hídrico/Receptor" style="text-align:center;">
+									<h:outputText value="#{efl.nomRio}"/>
+								</p:column>	 																														
+								<p:column headerText="Ação" style="text-align:center;">
+<!-- 									<p:commandLink id="visualizar"	update="formDialogResiduosLiquidos" oncomplete="dialogLancamentoEfluentes.show()" action="#{lancamentoEfluentesController.visualizar(efl)}" process="@this" title="Visualizar">
+										<h:graphicImage title="Visualizar" value="/resources/img/ico-pesquisa.png" />
+										<f:setPropertyActionListener value="#{fceSesController.requerimento}" target="#{novoRequerimentoController.requerimento}"/>
+										<f:setPropertyActionListener value="#{fceSesController.requerimento.ultimoEmpreendimento}" target="#{novoRequerimentoController.empreendimento}"/>
+										<f:setPropertyActionListener value="#{true}" target="#{novoRequerimentoController.desabilitarTudo}"/>
+									</p:commandLink> -->
+									
+ 									<p:commandLink update="efluentes_dialog_ses" process="@this" global="false" 
+										oncomplete="efluentes_dialog_ses.show();" action="#{fceSesController.carregarCaracteristicaLancamentoEfluente(efl)}">
+										<h:graphicImage title="Exibir características do Lançamento de Efluentes" value="/resources/img/ico-preencher.png" />
+									</p:commandLink>							
+									
+								</p:column>
+								
+							</p:dataTable>
+							<br/>
+						</h:panelGrid>
+						
+						<br/>						
+						<p:outputPanel autoUpdate="true">
+							<p:commandLink global="false" oncomplete="dlgLocalizacaoGeograficaGeneric.show();" update="locGeograficaVertices" action="#{localizacaoGeograficaGenericController.carregarTela()}" 
+								process="@this"  actionListener="#{localizacaoGeograficaGenericController.limparLocalizacaoGeografSelecionada()}">
+								<f:setPropertyActionListener target="#{localizacaoGeograficaGenericController.tipoSecaoGeometrica}" value="#{fceSesController.classificacaoPonto}" />
+								<f:setPropertyActionListener target="#{localizacaoGeograficaGenericController.localizacaoGeograficaSelecionada}" value="#{fceSesController.fceSesCoordenadasLancamentoLocalizacaoGeografica.ideLocalizacaoGeografica}" />
+								<f:setPropertyActionListener target="#{localizacaoGeograficaGenericController.empreendimento}" value="#{fceSesController.requerimento.ultimoEmpreendimento}" />
+								<f:setPropertyActionListener target="#{localizacaoGeograficaGenericController.objetoLocalizacao}" value="#{fceSesController.fceSesCoordenadasLancamentoLocalizacaoGeografica.ideLocalizacaoGeografica}" />
+								<f:setPropertyActionListener target="#{localizacaoGeograficaGenericController.requerimento}" value="#{fceSesController.requerimento.ideRequerimento}" />
+								<f:setPropertyActionListener target="#{localizacaoGeograficaGenericController.metodoAtualizarExterno}"
+		                                value="#{fceSesController.metodoExterno}" />									
+								<h:graphicImage title="Incluir..." value="/resources/img/ico-expandir.png" />
+								<h:outputText value=" Incluir outro(s) ponto(s) de lançamento(s) já outorgado(s)" />
+							</p:commandLink>
+							
+							<!-- GRID PONTO INICIAL -->
+							<p:dataTable id="tableLocalizacaoLancamento" var="localizacao" value="#{fceSesController.listFceCoordenadasLancamentoLocalizacaoGeografica}" rendered="#{not empty fceSesController.listFceCoordenadasLancamentoLocalizacaoGeografica}">
+								<p:column headerText="Latitude">
+									<h:outputText value="#{localizacao.ideLocalizacaoGeografica.latitudeInicial}" />
+								</p:column>
+								<p:column headerText="Longitude">
+									<h:outputText value="#{localizacao.ideLocalizacaoGeografica.longitudeInicial}" />
+								</p:column>
+								<p:column headerText="Sistema de Coordenadas" style="white-space:normal;width:100px">
+									<h:outputText value="#{localizacao.ideLocalizacaoGeografica.nomeSistemaCoordenadas()}" />
+								</p:column>		
+								<p:column headerText="Portaria" style="white-space:normal;width:130px">
+									<p:inputText id="nomePortaria" size="40" value="#{localizacao.numPortaria}" disabled="#{localizacao.desabilitarItem}" style="margin-left:5px; width:120px;"/>
+								</p:column>			
+								<p:column headerText="Corpo Hídrico/Receptor" style="white-space:normal;width:130px">
+									<p:inputText id="corpoHidrico" size="25" value="#{localizacao.nomeCoporHidrico}" disabled="#{localizacao.desabilitarItem}" style="margin-left:5px; width:120px;"/>
+								</p:column>	
+<!-- 								<p:column headerText="Vazão média de lançamento(m³/dia)" style="white-space:normal;width:150px">
+									<p:inputText id="vazaoMedia" value="#{localizacao.valorVazaoMediaLancamento}" styleClass="campoNumericoComDecimal-2" disabled="#{localizacao.desabilitarItem}" >
+										<f:convertNumber integerOnly="false" locale="pt,BR" minFractionDigits="2"/>
+									</p:inputText>
+								</p:column>	 -->
+								
+								<p:column headerText="Ações">
+																											
+										<p:commandLink rendered="#{!localizacao.desabilitarItem}" disabled="#{fceSesController.desabilitarTudo}" 
+										action="#{fceSesController.confirmarDadosCoordenadaEfluente(localizacao)}" 
+										process="@this, nomePortaria,corpoHidrico" 
+										update="formSes:tabSes:tableLocalizacaoLancamento" >
+											<h:graphicImage title="Confirmar" value="/resources/img/ico-msg-sucesso.png" />
+										</p:commandLink>
+
+										<p:commandLink rendered="#{localizacao.desabilitarItem}" disabled="#{fceSesController.desabilitarTudo}" 
+										action="#{fceSesController.habilitarItemLancamentoEfluente(localizacao)}" process="@this" 
+										update="formSes:tabSes:tableLocalizacaoLancamento" >
+											<h:graphicImage title="Editar..." value="/resources/img/ico-editar.png" />
+										</p:commandLink>
+										
+ 									<p:commandLink  process="@this" global="false" rendered="#{localizacao.desabilitarItem}" update="efluentes_dialog_ses"
+										action="#{fceSesController.selecionarFceLancamentoLocalizacaoGeografica(localizacao)}">
+										<h:graphicImage title="Caracterizar ponto já outorgado" value="/resources/img/ico-preencher.png" />
+									</p:commandLink>											
+									
+									<p:commandLink oncomplete="dlgLocalizacaoGeograficaGeneric.show();" disabled="#{fceSesController.desabilitarTudo}" process="@this" action="#{localizacaoGeograficaGenericController.visualizarLocalizacaoGeografica()}" >
+										<f:setPropertyActionListener target="#{localizacao.localizacaoFinal}" value="#{false}" />
+										<f:setPropertyActionListener target="#{localizacaoGeograficaGenericController.localizacaoGeograficaSelecionada}" value="#{localizacao.ideLocalizacaoGeografica}" />
+										<f:setPropertyActionListener target="#{localizacaoGeograficaGenericController.objetoLocalizacao}" value="#{localizacao}" />
+										<f:setPropertyActionListener target="#{localizacaoGeograficaGenericController.empreendimento}" value="#{fceSesController.requerimento.ultimoEmpreendimento}" />
+										<h:graphicImage title="Visualizar localização no GeoBahia" value="/resources/img/ico-pesquisa.png" />
+									</p:commandLink>
+									
+									<p:commandLink disabled="#{fceSesController.desabilitarTudo}" oncomplete="confirmaExclusaoCoordenadaLancamento.show();" process="@this" >
+										<f:setPropertyActionListener target="#{localizacaoGeograficaGenericController.localizacaoGeograficaSelecionada}" value="#{localizacao.ideLocalizacaoGeografica}" />
+										<f:setPropertyActionListener target="#{localizacaoGeograficaGenericController.objetoLocalizacao}" value="#{localizacao}" />
+										<f:setPropertyActionListener target="#{localizacaoGeograficaGenericController.empreendimento}" value="#{fceSesController.requerimento.ultimoEmpreendimento}" />
+										<f:setPropertyActionListener target="#{fceSesController.fceSesCoordenadasLancamentoLocalizacaoGeografica}" value="#{localizacao}" />
+										<h:graphicImage title="Excluir..." value="/resources/img/ico-excluir.png" />
+									</p:commandLink>
+								</p:column>
+							</p:dataTable>
+						</p:outputPanel>
+						<br/>
+					</h:panelGrid>
+					
+	</h:panelGrid>
+	
+</ui:composition>

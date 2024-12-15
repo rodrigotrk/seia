@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui"
+	xmlns:s="http://java.sun.com/jsf/composite/seia">
+	
+	<!-- REQUERENTE -->
+	<p:dialog header="Selecionar Requerente" widgetVar="dialogRequerente" modal="true" style="text-align:center;" resizable="false"  position="center" closable="true">  
+		<ui:include src="/paginas/manter-tcca/dialogRequerente.xhtml" />
+	</p:dialog>
+	
+	<!-- INCLUIR UNIDADE DE CONSERVAÇÃO -->
+	<p:dialog header="Selecionar Unidade de Conservação" widgetVar="dialogUC" modal="true" resizable="false" appendToBody="true" position="top" closable="true">
+		<h:form id="formUC">
+			<h:outputText value="Lista de Unidades de Conservação:" styleClass="bold"/><br/><br/>
+			
+			<div style="overflow-y: auto; max-height: 500px;">
+				<p:selectManyCheckbox value="#{projetoTccaController.listUnidadesConservacaoSelecionadas}" layout="pageDirection" 
+					converter="simpleEntityConverter" id="listaUnidades">
+					
+					<f:selectItems value="#{projetoTccaController.listUnidadesConservacao}" var="uc" itemLabel="#{uc.nomUnidadeConservacao}" itemValue="#{uc}" />
+					<p:ajax event="change" global="false"/>
+				</p:selectManyCheckbox>
+			</div>
+			
+			<p:spacer height="20" width="0"/>
+			
+			<s:divCentralizado>
+				<p:commandButton value="Inserir" oncomplete="dialogUC.hide();" update="formCadastroProjeto:panelUnidadeConservacao"/>
+			</s:divCentralizado>
+		</h:form>
+	</p:dialog>
+	
+	<!-- INCLUIR AÇÃO -->
+	<p:dialog header="Incluir Atividade" widgetVar="dialogAcao" modal="true" resizable="false" appendToBody="true" position="top" closable="true">
+		<h:form id="formAcao">
+			<h:outputText value="Nome da Atividade: "/>
+			<br/>
+			<br/>
+			<p:inputText value="#{projetoTccaController.acao.nomAcao}" style="width: 300px;" maxlength="200"/> 
+			<br/>
+			
+			<p:spacer height="30" width="0"/>
+			
+			<h:outputText value="Produto:"/>
+			<p:commandLink actionListener="#{projetoTccaController.preparaNovoProduto()}" update="formAcao">
+		    	<h:graphicImage title="Incluir Produto" value="/resources/img/ico-adicionar.png" />
+			</p:commandLink>
+			<br/>
+			
+			<p:spacer height="10" width="0" rendered="#{projetoTccaController.exibeGridNovoProduto}"/>
+			
+			<p:fieldset rendered="#{projetoTccaController.exibeGridNovoProduto}">
+				<h:panelGrid>
+					<h:outputText value="Nome do Produto:"/>
+					<p:inputText value="#{projetoTccaController.produto.nomProduto}" style="width: 250px;" maxlength="200"/>
+					<p:commandButton value="Inserir Produto" actionListener="#{projetoTccaController.inserirProduto()}" update="formAcao" />
+				</h:panelGrid>
+			</p:fieldset>			
+			
+			<p:spacer height="20" width="0"/>
+			
+			<div style="overflow-y: auto; max-height: 500px;">
+				<p:dataTable id="dataTableProduto" var="prod" value="#{projetoTccaController.listProdutos}"
+					lazy="true" paginator="true" rows="8" paginatorPosition="bottom" paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}"
+					rowsPerPageTemplate="5,10,15" emptyMessage="#{bundle.msg_lista_vazia}" style="max-width:315px;">
+					
+					<f:facet name="header">
+						<h:outputText value="Lista dos Produtos" />
+					</f:facet>
+					<p:column>
+						<f:facet name="header">
+							<h:outputText value="Nome" />
+						</f:facet>
+						
+						<h:outputText value="#{prod.nomProduto}" />
+					</p:column>
+					
+					<p:column>
+						<f:facet name="header">
+							<h:outputText value="Atividade" />
+						</f:facet>
+						
+						<s:divCentralizado>
+							<p:commandLink id="excluir" oncomplete="dialogExcluirProduto.show()" title="Excluir" style="margin: 2px;" ajax="true">
+								<f:setPropertyActionListener target="#{projetoTccaController.produtoSelecionado}" value="#{prod}" />
+								<h:graphicImage title="Excluir" value="/resources/img/ico-excluir.png" />
+							</p:commandLink>
+						</s:divCentralizado>
+					</p:column>
+				</p:dataTable>
+			</div>
+			
+			<p:spacer height="20" width="0"/>
+			
+			<s:divCentralizado>
+				<p:commandButton value="Salvar" actionListener="#{projetoTccaController.inserirAcao()}" oncomplete="dialogAcao.hide();" 
+					update="formCadastroProjeto:panelAcao"/>
+			</s:divCentralizado>
+		</h:form>
+	</p:dialog>
+	
+	<!-- CONSULTAR HISTÓRICO DO PROJETO -->
+    <p:dialog header="Relatório da movimentação Financeira" widgetVar="dialogRelatorioMovimentacaoProjeto" dynamic="true" modal="true" 
+    	width="1000" height="700" position="center" resizable="false">
+    	
+		<ui:include src="/paginas/manter-tcca/consultaMovimentacaoFinanceiraProjeto.xhtml" />
+	</p:dialog>
+	
+	<!-- EXCLUSÃO DA UNIDADE DE CONSERVAÇÃO -->
+	<p:confirmDialog message="Deseja remover esta unidade de conservação?" header="Mensagem" severity="alert" widgetVar="dialogExcluirUC">
+		<h:form>
+			<s:divCentralizado>
+		        <p:commandButton value="Sim" update="formCadastroProjeto:dataTableUC" oncomplete="dialogExcluirUC.hide()"
+		        	actionListener="#{projetoTccaController.excluirUnidadeConservacao()}" />
+		        	
+		        <p:commandButton value="Não" onclick="dialogExcluirUC.hide()" type="button" />
+			</s:divCentralizado>
+	    </h:form>
+    </p:confirmDialog>
+	
+	<!-- EXCLUSÃO DA AÇÃO -->
+	<p:confirmDialog message="Deseja remover esta atividade?" header="Mensagem" severity="alert" widgetVar="dialogExcluirAcao">
+		<h:form>
+			<s:divCentralizado>
+		        <p:commandButton value="Sim" update="formCadastroProjeto:dataTableAcao" oncomplete="dialogExcluirAcao.hide()"
+		        	actionListener="#{projetoTccaController.excluirAcao()}" />
+		        	
+		        <p:commandButton value="Não" onclick="dialogExcluirAcao.hide()" type="button" />
+			</s:divCentralizado>
+	    </h:form>
+    </p:confirmDialog>
+	
+	<!-- EXCLUSÃO DO PRODUTO -->
+	<p:confirmDialog message="Deseja remover este produto?" header="Mensagem" severity="alert" widgetVar="dialogExcluirProduto">
+		<h:form>
+			<s:divCentralizado>
+		        <p:commandButton value="Sim" update="formAcao" oncomplete="dialogExcluirProduto.hide()"
+		        	actionListener="#{projetoTccaController.excluirProduto()}" />
+		        	
+		        <p:commandButton value="Não" onclick="dialogExcluirProduto.hide()" type="button" />
+			</s:divCentralizado>
+	    </h:form>
+    </p:confirmDialog>
+    
+	<!-- EXCLUSÃO DO PROJETO -->
+	<p:confirmDialog message="Deseja remover este projeto?" header="Mensagem" severity="alert" widgetVar="dialogExcluirProjeto">
+		<h:form>
+			<s:divCentralizado>
+		        <p:commandButton value="Sim" update="formConsultaProjeto:dataTableProjetos" oncomplete="dialogExcluirProjeto.hide()"
+		        	actionListener="#{projetoTccaController.excluirProjeto()}" />
+		        	
+		        <p:commandButton value="Não" onclick="dialogExcluirProjeto.hide()" type="button" />
+			</s:divCentralizado>
+	    </h:form>
+    </p:confirmDialog>
+    
+	<!-- CANCELAR PROJETO -->
+	<p:confirmDialog message="Deseja cancelar este projeto?" header="Mensagem" severity="alert" widgetVar="dialogCancelarProjeto">
+		<h:form>
+			<s:divCentralizado>
+		        <p:commandButton value="Sim" update="formConsultaProjeto:dataTableProjetos" oncomplete="dialogCancelarProjeto.hide()"
+		        	actionListener="#{projetoTccaController.cancelarProjeto()}" />
+		        	
+		        <p:commandButton value="Não" onclick="dialogCancelarProjeto.hide()" type="button" />
+			</s:divCentralizado>
+	    </h:form>
+    </p:confirmDialog>
+    
+	<!-- EXCLUSÃO DA EMPRESA EXECUTORA -->
+	<p:confirmDialog message="Deseja realmente desativar a empresa executora?" header="Mensagem" severity="alert" widgetVar="dialogInativarEmpresa">
+		<h:form>
+			<s:divCentralizado>
+		        <p:commandButton value="Sim" update="formExecucaoProjeto:panelEmpresaExecutora" oncomplete="dialogInativarEmpresa.hide()"
+		        	actionListener="#{projetoTccaController.inativarEmpresaExecutora()}" />
+		        	
+		        <p:commandButton value="Não" onclick="dialogInativarEmpresa.hide()" type="button" />
+			</s:divCentralizado>
+	    </h:form>
+    </p:confirmDialog>
+	
+	<!-- CONFIRMAR EXECUÇÃO DO PROJETO -->
+	<p:confirmDialog message="Deseja realmente salvar os valores inseridos?" header="Mensagem" severity="alert" widgetVar="dialogConfirmarExecucao">
+		<h:form>
+			<s:divCentralizado>
+		        <p:commandButton value="Sim" oncomplete="dialogConfirmarExecucao.hide()"
+		        	actionListener="#{projetoTccaController.salvarExecucaoProduto()}" />
+		        	
+		        <p:commandButton value="Não" onclick="dialogConfirmarExecucao.hide()" type="button" />
+			</s:divCentralizado>
+	    </h:form>
+    </p:confirmDialog>
+	
+	<!-- CONFIRMAR MOVIMENTAÇÃO FINANCEIRA COM SALDO INSUFICIENTE -->
+	<p:confirmDialog message="Saldo insuficiente para a movimentação desejada. Confirma a operação?" header="Mensagem" severity="alert"
+		widgetVar="dialogConfirmarMovimentacaoSaldoInsuficiente">
+		
+		<h:form>
+			<s:divCentralizado>
+		        <p:commandButton value="Sim" oncomplete="dialogConfirmarMovimentacaoSaldoInsuficiente.hide()"
+		        	actionListener="#{projetoTccaController.salvarMovimentacaoFinanceiraProjeto()}" />
+		        	
+		        <p:commandButton value="Não" onclick="dialogConfirmarMovimentacaoSaldoInsuficiente.hide()" type="button" />
+			</s:divCentralizado>
+	    </h:form>
+    </p:confirmDialog>
+</ui:composition>

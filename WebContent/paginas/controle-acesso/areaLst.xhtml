@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui"
+	template="../../layout/template.xhtml">
+
+	<ui:define name="titulo-pagina">		
+		<h3>Cadastrar Áreas</h3>		
+	</ui:define>	
+
+	<ui:define name="conteudo-principal">
+
+		<h:form id="formFiltroArea">
+			<h:outputFormat value="#{bundle.lbl_nome_area}:"/><p:inputText value="#{areaController.nomeArea}" onkeyup="pesquisar_area();"/>
+			&nbsp;
+			<p:commandButton value="#{bundle.btn_pesquisar}" action="#{areaController.pesquisarArea}" ajax="false" process="pesquisar"/>
+			&nbsp;
+			<p:commandButton action="#{areaController.novaArea}" update=":formArea:panelArea" value="#{bundle.btn_incluir_area}" oncomplete="dlgArea.show()"/>
+			<p:remoteCommand name="pesquisar_area" actionListener="#{areaController.pesquisarArea}" global="false" update="formListaAreas:dataTableAreas" />
+		</h:form>
+		<br />
+		<h:form id="formListaAreas">
+			<p:dataTable id="dataTableAreas" widgetVar="dtTbAreas" value="#{areaController.modelAreas}" var="area" 
+			lazy="true" paginator="true" rows="10" paginatorPosition="bottom" paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}" rowsPerPageTemplate="5,10,15" emptyMessage="#{bundle.msg_lista_vazia}" style="width: 700px;">
+
+        		<f:facet name="header">
+					<h:outputText value="#{bundle.lst_areas}" />
+				</f:facet>
+				<p:column style="width: 110px;">  
+					<f:facet name="header">
+						<h:outputText value="#{bundle.lbl_area_responsavel}" />  
+					</f:facet>
+					<h:outputText value="#{area.ideAreaPai.nomArea}" />
+				</p:column>
+				<p:column style="width: 240px;">  
+					<f:facet name="header">
+						<h:outputText value="#{bundle.lbl_nome_area}" />  
+					</f:facet>
+					<h:outputText value="#{area.nomArea}" />
+				</p:column>
+				<p:column style="width: 115px;">  
+					<f:facet name="header">
+						<h:outputText value="#{bundle.lbl_orgao}" />  
+					</f:facet>
+					<h:outputText value="#{area.ideOrgao.dscOrgao}" />
+				</p:column>
+				<p:column>
+					<f:facet name="header">  
+						<h:outputText value="#{bundle.msg_acoes}" />  
+					</f:facet>
+					<p:commandLink id="alterar" disabled="${!security.temAcesso('1.2.3')}" action="#{areaController.limparTela}" 	               title="#{bundle.btn_editar}" update=":formArea:panelArea" 
+					               onclick="dlgArea.show()" process="alterar"
+					               oncomplete="atualizarResposavelArea();">
+						<h:graphicImage title="Editar" value="/resources/img/ico-alterar.png" />
+						<f:setPropertyActionListener value="#{area}" target="#{areaController.area}" />
+						<f:setPropertyActionListener value="#{area.ideTipoArea}" target="#{areaController.tipoArea.ideTipoArea}" />
+            		</p:commandLink>
+            		<p:remoteCommand name="atualizarResposavelArea" action="#{areaController.carregarResponsavelArea}" update=":formArea:panelArea" />
+					<p:commandLink id="excluir" disabled="${!security.temAcesso('1.2.2')}" title="#{bundle.btn_excluir}" onclick="confirmDlgExclusaoArea.show()" process="excluir">
+						<h:graphicImage title="Excluir" value="/resources/img/ico-excluir.png" />
+						<f:setPropertyActionListener value="#{area}" target="#{areaController.area}" />
+            		</p:commandLink>
+        		</p:column>
+    		</p:dataTable>
+
+			<p:confirmDialog id="confirmDialogExclusaoArea" widgetVar="confirmDlgExclusaoArea" header="#{bundle.hdr_confirma_exclusao}" message="#{bundle.msg_confirma_exclusao}" severity="alert">
+				<p:commandButton id="confirmarExclusao" value="#{bundle.btn_sim}" update=":formListaAreas:dataTableAreas" action="#{areaController.excluirArea}" oncomplete="confirmDlgExclusaoArea.hide()" process="confirmarExclusao"/>
+				<p:commandButton value="#{bundle.btn_nao}" type="button" onclick="confirmDlgExclusaoArea.hide()" />
+			</p:confirmDialog>
+	   	</h:form>
+
+		<p:dialog id="dialogArea" header="#{bundle.btn_incluir_area}" closable="true" draggable="true" resizable="false" width="350" widgetVar="dlgArea" modal="true">	
+			<ui:include src="/paginas/controle-acesso/area.xhtml" />
+		</p:dialog>
+
+	</ui:define>
+</ui:composition>

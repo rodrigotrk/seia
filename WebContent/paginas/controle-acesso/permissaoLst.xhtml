@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui"
+	template="../../layout/template.xhtml">
+
+	<ui:define name="titulo-pagina">		
+		<h3>Cadastrar Permissões</h3>		
+	</ui:define>	
+
+	<ui:define name="conteudo-principal">
+
+		<h:form id="formFiltroPermissao">
+
+			<h:panelGrid columns="9">
+				<h:outputLabel value="#{bundle.lbl_perfil}:" />
+				<p:selectOneMenu id="selectOnePerfilFiltro" value="#{relGrupoPerfilFuncionalidadeController.perfil}" style="width: 170px;" converter="perfilConverter">
+		        	<f:selectItem itemLabel="Selecione..." />
+		            <f:selectItems value="#{relGrupoPerfilFuncionalidadeController.perfis}" var="perfil" itemLabel="#{perfil.dscPerfil}" itemValue="#{perfil}"/>  
+		        </p:selectOneMenu>
+				&nbsp;
+				<h:outputLabel value="#{bundle.lbl_funcionalidade}:" />
+		        <p:selectOneMenu id="selectOneFuncionalidadeFiltro" value="#{relGrupoPerfilFuncionalidadeController.funcionalidade}" style="width: 170px;" converter="funcionalidadeConverter" 
+		        	onchange="carregarAcoes();">
+		        	
+		            <f:selectItems value="#{relGrupoPerfilFuncionalidadeController.listaFuncionalidades}" var="funcionalidade" itemLabel="#{funcionalidade.dscFuncionalidade}" itemValue="#{funcionalidade}"/>
+		        </p:selectOneMenu>
+		        <p:remoteCommand name="carregarAcoes" actionListener="#{relGrupoPerfilFuncionalidadeController.carregaAcoes()}" global="false" update="selectOneAcaoFiltro" />
+		        &nbsp;
+		        <h:outputLabel value="#{bundle.lbl_acao}:" />
+		        <p:selectOneMenu id="selectOneAcaoFiltro" value="#{relGrupoPerfilFuncionalidadeController.acao}" style="width: 170px;" converter="simpleEntityConverter" 
+		        	disabled="#{!relGrupoPerfilFuncionalidadeController.exibeComboAcao}">
+		        	<f:selectItem itemLabel="Selecione..." />
+		            <f:selectItems value="#{relGrupoPerfilFuncionalidadeController.listaAcoes}" var="acao" itemLabel="#{acao.dscAcao}" itemValue="#{acao}"/>  
+		        </p:selectOneMenu>
+	        </h:panelGrid>
+	        <br />
+			<p:commandButton value="#{bundle.btn_pesquisar}" action="#{relGrupoPerfilFuncionalidadeController.pesquisarPermissao}" ajax="false" process="pesquisar"/>
+			&nbsp;
+			<p:commandButton action="#{relGrupoPerfilFuncionalidadeController.novaPermissao}" update=":formPermissao:panelPermissao" value="#{bundle.btn_incluir_permissao}" oncomplete="dlgPermissao.show()"/>
+			
+		</h:form>
+		<br />
+		<h:form id="formListaPermissoes">
+			<p:dataTable id="dataTablePermissoes" widgetVar="dtTbPermissoes" value="#{relGrupoPerfilFuncionalidadeController.modelPermissoes}" var="permissao" 
+			lazy="true" paginator="true" rows="10" paginatorPosition="bottom" paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}" rowsPerPageTemplate="5,10,15" emptyMessage="#{bundle.msg_lista_vazia}" style="width: 700px;">
+
+        		<f:facet name="header">
+					<h:outputText value="#{bundle.lst_permissoes}" />
+				</f:facet>
+				<p:column style="width: 120px;">  
+					<f:facet name="header">
+						<h:outputText value="#{bundle.lbl_perfil}" />  
+					</f:facet>
+					<h:outputText value="#{permissao.perfil.dscPerfil}" />
+				</p:column>
+				<p:column style="width: 230px;">  
+					<f:facet name="header">
+						<h:outputText value="#{bundle.lbl_funcionalidade}" />  
+					</f:facet>
+					<h:outputText value="#{permissao.funcionalidade.dscFuncionalidade}" />
+				</p:column>
+				<p:column style="width: 135px;">  
+					<f:facet name="header">
+						<h:outputText value="#{bundle.lbl_acao}" />
+					</f:facet>
+					<h:outputText value="#{permissao.acao.dscAcao}" />
+				</p:column>
+				<p:column style="width: 25px;">
+					<f:facet name="header">  
+						<h:outputText value="#{bundle.lbl_acao}" />  
+					</f:facet>
+					<p:commandLink id="excluir" disabled="${!security.temAcesso('1.10.1')}" title="#{bundle.btn_excluir}" onclick="confirmDlgExclusaoPermissao.show()" process="excluir">
+						<h:graphicImage title="Excluir" value="/resources/img/ico-excluir.png" />
+						<f:setPropertyActionListener value="#{permissao}" target="#{relGrupoPerfilFuncionalidadeController.permissao}" />
+            		</p:commandLink>
+        		</p:column>
+    		</p:dataTable>
+
+			<p:confirmDialog id="confirmDialogExclusaoPermissao" widgetVar="confirmDlgExclusaoPermissao" header="#{bundle.hdr_confirma_exclusao}" message="#{bundle.msg_confirma_exclusao}" severity="alert">
+				<p:commandButton id="confirmarExclusao" value="#{bundle.btn_sim}" update=":formListaPermissoes:dataTablePermissoes" action="#{relGrupoPerfilFuncionalidadeController.excluirPermissao}" oncomplete="confirmDlgExclusaoPermissao.hide()" process="confirmarExclusao"/>
+				<p:commandButton value="#{bundle.btn_nao}" type="button" onclick="confirmDlgExclusaoPermissao.hide()" />
+			</p:confirmDialog>
+	   	</h:form>
+
+		<p:dialog id="dialogPermissao" header="#{bundle.btn_incluir_permissao}" closable="true" draggable="true" resizable="false" width="350" widgetVar="dlgPermissao" modal="true">	
+			<ui:include src="/paginas/controle-acesso/permissao.xhtml" />
+		</p:dialog>
+		
+	</ui:define>
+</ui:composition>

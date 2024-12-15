@@ -1,0 +1,323 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui">
+	
+	<!-- PROCURADOR PESSOA FISICA -->
+	<h:form id="formModelProc">
+		<h:panelGrid id="paneltableproc">
+			<p:dataTable id="tabelaproc" widgetVar="tabelaproc" var="procPfEmp" style="width:400px;" rendered="#{procuradorEmpreendimentoController.mostrarTabelaProcuradoresPf}"
+				value="#{procuradorEmpreendimentoController.modelProcPf}"
+				paginator="true" rows="5" paginatorPosition="bottom"
+                paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}"  >
+				
+				<f:facet name="header">  
+					<h:outputText value="Procuradores Inseridos" />
+				</f:facet>
+				
+				<p:column headerText="CPF">
+					<h:outputText value="#{procPfEmp.ideProcuradorPessoaFisica.ideProcurador.numCpf}" >
+						<f:converter converterId="cpfConverter"/>
+					</h:outputText>
+				</p:column>
+				
+				<p:column headerText="Nome" style="text-align: center;">
+					<h:outputText value="#{procPfEmp.ideProcuradorPessoaFisica.ideProcurador.nomPessoa}" />
+				</p:column>
+				
+				<p:column style="text-align: center;" headerText="Ação">
+					<p:commandLink title="Visualizar" actionListener="#{procuradorEmpreendimentoController.visualizarProcuracaoPF()}" process="@this" update="tabAbas:formProcuradorPf">
+						<h:graphicImage  value="/resources/img/ico-pesquisa.png" />
+						<f:attribute name="procPfEmp" value="#{procPfEmp}"/>
+					</p:commandLink>					
+					<p:commandLink title="Editar" disabled="#{empreendimentoController.visualizarEmpreendimento}" actionListener="#{procuradorEmpreendimentoController.editarProcuracaoPF()}" process="@this" update="tabAbas:formProcuradorPf">
+						<h:graphicImage  value="/resources/img/ico-editar.png" />
+						<f:attribute name="procPfEmp" value="#{procPfEmp}"/>
+					</p:commandLink>					
+					<p:commandLink oncomplete="confirmation.show()" title="Remover" disabled="#{empreendimentoController.visualizarEmpreendimento}">
+						<h:graphicImage title="Remover" value="/resources/img/ico-excluir.png" />
+						<f:setPropertyActionListener value="#{procPfEmp}" target="#{procuradorEmpreendimentoController.procPfEmpreendimentoSelecionado}" />
+					</p:commandLink>
+				</p:column>
+			</p:dataTable>
+		</h:panelGrid>
+	</h:form>
+	
+	<h:panelGroup id="formProcuradorPf" layout="block" rendered="#{procuradorEmpreendimentoController.isProcuradorPf}">
+	
+		<h:form>
+			<h:panelGrid columns="2" id ="panelVisualizar">
+				<h:outputLabel value="* Procurador" />
+				<h:outputLabel />
+				<p:selectOneMenu id="selectMenuProcuradorCHoi" value="#{procuradorEmpreendimentoController.procuradorPessoaFisica}"  disabled="#{empreendimentoController.visualizarEmpreendimento or procuradorEmpreendimentoController.isVisualizar}"
+					required="true" requiredMessage="O campo Procurador é uma informação obrigatória.">
+					<f:selectItem itemLabel="Selecione..." />
+					<f:selectItems value="#{procuradorEmpreendimentoController.valuesComboProcuradores}" />
+					<f:converter converterId="procuradorPessoaFisicaConverter" />
+					<p:ajax event="change" process="@this" />
+				</p:selectOneMenu>
+			</h:panelGrid>
+			
+			<h:panelGrid>
+				<p:commandLink action="#{procuradorEmpreendimentoController.incluirProcurador}" 
+					ajax="false"
+					immediate="true" 
+					disabled="#{empreendimentoController.visualizarEmpreendimento}">
+					
+					<h:graphicImage title="Incluir Procurador" value="/resources/img/ico-expandir.png"  />
+					<h:outputText value="Incluir Procurador" style="margin-left:5px; font-size: 11px;text-decoration:none;"/>
+					
+					<f:setPropertyActionListener target="#{pessoaFisicaController.urlOrigem}" value="/paginas/manter-empreendimento/empreendimento.xhtml"  />
+				  	<f:setPropertyActionListener target="#{pessoaFisicaController.disableAbasDependencias}" value="true"  />
+				</p:commandLink>
+			</h:panelGrid>
+			
+			<h:panelGroup>
+				<h:panelGrid columns="1">
+					<h:outputLabel id="idlblcopiaprocuracao" value="* Cópia da procuração (.pdf.jpg - Máximo 5MB)" />
+				</h:panelGrid>
+			</h:panelGroup>
+			
+			<h:panelGroup>
+				<h:panelGrid columns="1" >
+					<p:fileUpload uploadLabel="false" label="Upload Documento"
+							fileUploadListener="#{procuradorEmpreendimentoController.trataArquivoProc()}" invalidFileMessage="Tipo de arquivo inválido."
+							mode="advanced" oncomplete="remoteCommandUpdateDataTable()" auto="true" required="true" requiredMessage="Arquivo é Obrigatório!"
+							allowTypes="/(\.|\/)(pdf|gif|jpeg|png|jpg)$/" disabled="#{empreendimentoController.visualizarEmpreendimento or procuradorEmpreendimentoController.bloquearEdicao}"/>
+					
+					<p:remoteCommand name="remoteCommandUpdateDataTable" immediate="true" update="tblDocumento"/> 
+					
+					<h:panelGrid id="tblDocumento">
+						<p:dataTable id="dataTableDocumentos"  widgetVar="dtTbDocumentos" value="#{procuradorEmpreendimentoController.listaArquivoProc}" var="arquivo"
+							lazy="true" emptyMessage="#{bundle.msg_lista_vazia}" style="width:472px;" rendered="#{procuradorEmpreendimentoController.temArquivoProc}">
+							
+							<p:column>  
+							    <h:outputText value="#{arquivo}"/>
+							</p:column>	
+							
+							<p:column>  
+								<h:commandButton value="#{arquivo}"  image="/resources/img/ico-download.png">
+									<p:fileDownload value="#{procuradorEmpreendimentoController.arquivoBaixarProc}" />				              
+								</h:commandButton>
+							</p:column>	
+						</p:dataTable>
+					</h:panelGrid>
+				</h:panelGrid>
+			</h:panelGroup>		
+		</h:form>
+		
+		<h:form>
+			<h:panelGrid columns="1">
+				<h:outputLabel id="idlblperiodoprocuracao" value="* Período de validade  da procuração" />
+			</h:panelGrid>
+			
+			<h:panelGroup>
+				<h:panelGrid columns="2" >
+					<h:panelGroup>
+						<h:outputText value="De   " />
+						<p:calendar value="#{procuradorEmpreendimentoController.procPfEmpreendimento.dtcInicioProcuracao}" 
+							showOn="button" locale="pt" pattern="dd/MM/yyyy"
+							required="true" requiredMessage="O campo Período da Procuração Data Início é de preechimento obrigatório." 
+							navigator="true" readOnlyInputText="true" maxdate="#{pessoaFisicaController.dataAtual}" disabled="#{empreendimentoController.visualizarEmpreendimento or procuradorEmpreendimentoController.bloquearEdicao}"  />
+						<h:outputText value="   Até" />
+					</h:panelGroup>
+					
+					<p:calendar value="#{procuradorEmpreendimentoController.procPfEmpreendimento.dtcFimProcuracao}" showOn="button" 
+					 	locale="pt" pattern="dd/MM/yyyy" disabled="#{empreendimentoController.visualizarEmpreendimento or procuradorEmpreendimentoController.bloquearEdicao}"
+						required="true" requiredMessage="O campo Período da Procuração Data Fim é de preechimento obrigatório."
+						navigator="true" readOnlyInputText="true" mindate="#{pessoaFisicaController.dataAtual}" />
+				</h:panelGrid>
+			</h:panelGroup>
+			
+			<h:panelGroup>
+				<h:panelGrid columns="1">
+					<h:outputLabel id="idlblassinaturareplegal" value="* Existe assinatura conjunta entre os procuradores?" />
+					<h:selectOneRadio value="#{procuradorEmpreendimentoController.procPfEmpreendimento.indAssinaturaObrigatoria}" disabled="#{empreendimentoController.visualizarEmpreendimento or procuradorEmpreendimentoController.bloquearEdicao}" required="true" requiredMessage="O campo Assinatura de procuradores é de preenchimento obrigatório.">
+						<f:selectItem itemLabel="Sim" itemValue="#{true}" />
+						<f:selectItem itemLabel="Não" itemValue="#{false}" />
+					</h:selectOneRadio>
+				</h:panelGrid>
+			</h:panelGroup>
+			<h:panelGroup>
+				<h:panelGrid columns="2" >
+					<p:commandButton value="Limpar" actionListener="#{procuradorEmpreendimentoController.limparObjetosPf()}" disabled="#{empreendimentoController.visualizarEmpreendimento}" update=":tabAbas:formModelProc:paneltableproc :tabAbas:formProcuradorPf" process="@this" />
+					<p:commandButton value="Associar Procurador" actionListener="#{procuradorEmpreendimentoController.salvarProcPf()}" disabled="#{empreendimentoController.visualizarEmpreendimento or procuradorEmpreendimentoController.bloquearEdicao}" update=":tabAbas:formModelProc:paneltableproc :tabAbas:formProcuradorPf" />
+				</h:panelGrid>
+			</h:panelGroup>
+			<h:outputLabel value="#{bundle.lbl_preench_obrig_asterisc}" style="float: left;" />
+		</h:form>
+	</h:panelGroup>		
+	
+	<p:confirmDialog message="#{bundle.consultapf_msg_confimrexclusao}" header="Mensagem" widgetVar="confirmation" id="confirmation">
+		<h:form>
+			<p:commandButton value="Sim" update="tabAbas:formModelProc:paneltableproc tabAbas:formProcuradorPf"
+				actionListener="#{procuradorEmpreendimentoController.excluirProcEmpPf()}"
+				oncomplete="confirmation.hide()" process="@this"/>
+			
+			<p:commandButton value="Não" onclick="confirmation.hide()" type="button" />
+		</h:form>
+	</p:confirmDialog>
+	<!-- FIM PROCURADOR PESSOA FISICA -->
+	
+	
+	
+	
+	<!-- PROCURADOR PESSOA JURIDICA -->
+	<h:form id="formModelProcPj">
+		<h:panelGrid id="paneltableprocpj">
+			<p:dataTable id="tabelaprocpj" widgetVar="tabelaprocpj" var="procRepEmp" style="width:400px;" rendered="#{procuradorEmpreendimentoController.mostrarTabelaProcuradoresPj}"
+				value="#{procuradorEmpreendimentoController.modelProcRep}"
+				paginator="true" rows="5" paginatorPosition="bottom"
+                paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}"  >
+				<f:facet name="header">  
+					<h:outputText value="Procuradores Inseridos" />
+				</f:facet>
+				<p:column headerText="CPF">
+					<h:outputText value="#{procRepEmp.ideProcuradorRepresentante.ideProcurador.numCpf}" >
+						<f:converter converterId="cpfConverter"/>
+					</h:outputText>
+				</p:column>
+
+				<p:column headerText="Nome" style="text-align: center;">
+					<h:outputText value="#{procRepEmp.ideProcuradorRepresentante.ideProcurador.nomPessoa}" />
+				</p:column>
+				<p:column style="text-align: center;" headerText="Ação">	
+					<p:commandLink title="Visualizar" actionListener="#{procuradorEmpreendimentoController.visualizarProcuracaoPJ()}" disabled="#{empreendimentoController.visualizarEmpreendimento}" process="@this" update="tabAbas:formProcuradorPJ">
+						<h:graphicImage value="/resources/img/ico-pesquisa.png" />
+						<f:attribute name="procRepEmp" value="#{procRepEmp}"  />
+					</p:commandLink>					
+					<p:commandLink title="Editar" actionListener="#{procuradorEmpreendimentoController.editarProcuracaoPJ()}" disabled="#{empreendimentoController.visualizarEmpreendimento}" process="@this" update="tabAbas:formProcuradorPJ">
+						<h:graphicImage value="/resources/img/ico-editar.png" />
+						<f:attribute name="procRepEmp" value="#{procRepEmp}"  />
+					</p:commandLink>					
+					<p:commandLink oncomplete="confirmationpj.show()" title="Remover" disabled="#{empreendimentoController.visualizarEmpreendimento}">
+						<h:graphicImage title="Excluir" value="/resources/img/ico-excluir.png" />
+						<f:setPropertyActionListener value="#{procRepEmp}" target="#{procuradorEmpreendimentoController.procRepEmpreendimentoSelecionado}" />
+					</p:commandLink>					
+				</p:column>
+			</p:dataTable>
+			</h:panelGrid>
+	</h:form>
+	
+	<h:panelGroup id="formProcuradorPJ" rendered="#{!procuradorEmpreendimentoController.isProcuradorPf}">
+		<h:form>
+			<h:panelGrid columns="2">
+				<h:outputLabel value="* Procurador" />
+				<h:outputLabel />
+				<p:selectOneMenu id = "selectProcurador"
+								 value="#{procuradorEmpreendimentoController.procuradorRepresentante}"  
+								 required="true" 
+								 requiredMessage="O campo Procurador é uma informação obrigatória."
+								 disabled="#{empreendimentoController.visualizarEmpreendimento or procuradorEmpreendimentoController.isVisualizar}">
+								 
+					<f:selectItem itemLabel="Selecione..." />
+					<f:selectItems value="#{procuradorEmpreendimentoController.valuesComboProcuradoresRep}" />
+					<f:converter converterId="procuradorRepresentanteConverter" />
+					<p:ajax event="change" process="@this"/>
+				</p:selectOneMenu>
+			</h:panelGrid>
+			
+			<h:panelGrid>
+				<p:commandLink action="#{procuradorEmpreendimentoController.incluirProcuradorPJ}" 
+					ajax="false" 
+					immediate="true" 
+					disabled="#{empreendimentoController.visualizarEmpreendimento}">
+					
+					<h:graphicImage title="Incluir Procurador" value="/resources/img/ico-expandir.png" />
+					<h:outputText value="Incluir Procurador" style="margin-left:5px; font-size: 11px;text-decoration:none;"/>
+					
+					<f:setPropertyActionListener target="#{pessoaJuridicaController.urlOrigem}" value="/paginas/manter-empreendimento/empreendimento.xhtml" />
+					<f:setPropertyActionListener target="#{pessoaJuridicaController.disableAbasDependencias}" value="true" />
+					<f:setPropertyActionListener target="#{pessoaJuridicaController.tabAtual}" value="5" />
+					<f:setPropertyActionListener target="#{pessoaJuridicaController.empreendimento}" value="#{empreendimentoController.empreendimento}" />
+				</p:commandLink>
+				
+			</h:panelGrid>
+			
+			<h:panelGroup>
+				<h:panelGrid columns="1">
+					<h:outputLabel id="idlblcopiaprocuracao" value="* Cópia da procuração (.pdf.jpg - Máximo 5MB)" />
+				</h:panelGrid>
+			</h:panelGroup>
+			
+			<h:panelGroup>
+				<h:panelGrid columns="1" >
+					<p:fileUpload uploadLabel="false" label="Upload Documento" disabled="#{empreendimentoController.visualizarEmpreendimento or procuradorEmpreendimentoController.bloquearEdicao}"
+						fileUploadListener="#{procuradorEmpreendimentoController.trataArquivoProcPj()}" invalidFileMessage="Tipo de arquivo inválido."
+						mode="advanced" oncomplete="remoteCommandUpdateDataTable()" update="tblDocumento" auto="true" required="true" requiredMessage="Arquivo é Obrigatório!"
+						allowTypes="/(\.|\/)(pdf|gif|jpeg|png|jpg)$/" />
+					<p:remoteCommand name="remoteCommandUpdateDataTable" immediate="true" update="tblDocumento" /> 
+					<h:panelGrid id="tblDocumento">
+						<p:dataTable id="dataTableDocumentos"  widgetVar="dtTbDocumentos" value="#{procuradorEmpreendimentoController.listaArquivoProcPj}" var="arquivo"
+							lazy="true" emptyMessage="#{bundle.msg_lista_vazia}" style="width:472px;" rendered="#{procuradorEmpreendimentoController.temArquivoProcPj}">
+							<p:column>  
+								<h:outputText value="#{arquivo}"/>
+							</p:column>	
+							<p:column>  
+								<h:commandButton value="#{arquivo}"  image="/resources/img/ico-download.png" >
+								<p:fileDownload value="#{procuradorEmpreendimentoController.arquivoBaixarProcPj}" />				              
+								</h:commandButton>
+							</p:column>
+						</p:dataTable>		    
+					</h:panelGrid>
+				</h:panelGrid>
+			</h:panelGroup>
+		</h:form>
+		
+		<h:form>
+			<h:panelGrid columns="1">
+				<h:outputLabel id="idlblperiodoprocuracao" value="* Período de validade  da procuração" />
+			</h:panelGrid>
+			
+			<h:panelGroup>
+				<h:panelGrid columns="2" >
+					<h:panelGroup>
+					<h:outputText value="De   " />
+					<p:calendar value="#{procuradorEmpreendimentoController.procRepEmpreendimento.dtcInicioProcuracao}" disabled="#{empreendimentoController.visualizarEmpreendimento or procuradorEmpreendimentoController.bloquearEdicao}"
+						showOn="button" locale="pt" pattern="dd/MM/yyyy"
+						required="true" requiredMessage="O campo Período da Procuração Data Início é de preechimento obrigatório." 
+						navigator="true" readOnlyInputText="true" maxdate="#{pessoaFisicaController.dataAtual}"  />
+					<h:outputText value="   Até" />
+					</h:panelGroup>
+					<p:calendar value="#{procuradorEmpreendimentoController.procRepEmpreendimento.dtcFimProcuracao}" showOn="button" disabled="#{empreendimentoController.visualizarEmpreendimento or procuradorEmpreendimentoController.bloquearEdicao}"
+					 	locale="pt" pattern="dd/MM/yyyy" 
+						required="true" requiredMessage="O campo Período da Procuração Data Fim é de preechimento obrigatório."
+						navigator="true" readOnlyInputText="true" mindate="#{pessoaFisicaController.dataAtual}" 
+					 />
+				</h:panelGrid>
+			</h:panelGroup>
+			
+			<h:panelGroup>
+				<h:panelGrid columns="1">
+					<h:outputLabel id="idlblassinaturareplegal" value="* Existe assinatura conjunta entre os procuradores?" />
+					<h:selectOneRadio value="#{procuradorEmpreendimentoController.procRepEmpreendimento.indAssinaturaObrigatoria}" disabled="#{empreendimentoController.visualizarEmpreendimento or procuradorEmpreendimentoController.bloquearEdicao}" required="true" requiredMessage="O campo Assinatura de procuradores é de preenchimento obrigatório.">
+						<f:selectItem itemLabel="Sim" itemValue="#{true}" />
+						<f:selectItem itemLabel="Não" itemValue="#{false}" />
+					</h:selectOneRadio>
+				</h:panelGrid>
+			</h:panelGroup>
+			
+			<h:panelGroup>
+				<h:panelGrid columns="2" >
+					<p:commandButton value="Limpar" actionListener="#{procuradorEmpreendimentoController.limparObjetosRep()}" disabled="#{empreendimentoController.visualizarEmpreendimento}" update=":tabAbas:formModelProcPj:paneltableprocpj :tabAbas:formProcuradorPJ" process="@this" />
+					<p:commandButton value="Incluir Procurador" actionListener="#{procuradorEmpreendimentoController.salvarProcRep()}" disabled="#{empreendimentoController.visualizarEmpreendimento or procuradorEmpreendimentoController.bloquearEdicao}" update=":tabAbas:formModelProcPj:paneltableprocpj :tabAbas:formProcuradorPJ" />
+				</h:panelGrid>
+			</h:panelGroup>
+			<h:outputLabel value="#{bundle.lbl_preench_obrig_asterisc}" />
+		</h:form>
+	</h:panelGroup>		
+	
+	<p:confirmDialog message="#{bundle.consultapf_msg_confimrexclusao}" header="Mensagem" widgetVar="confirmationpj" id="confirmationpj">
+		<h:form>
+			<p:commandButton value="Sim" update="tabAbas:formModelProcPj:paneltableprocpj tabAbas:formProcuradorPJ"
+				actionListener="#{procuradorEmpreendimentoController.excluirProcEmpPJ()}"
+				oncomplete="confirmationpj.hide()" process="@this"/>
+			
+			<p:commandButton value="Não" onclick="confirmationpj.hide()" type="button" />
+		</h:form>
+	</p:confirmDialog>
+<!-- FIM PROCURADOR PESSOA JURIDICA -->
+</ui:composition>

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+	xmlns:h="http://java.sun.com/jsf/html" 	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets" 	xmlns:p="http://primefaces.prime.com.tr/ui">
+	
+        <h:panelGrid columns="2" cellpadding="10">
+        
+
+        
+        <!-- TABELA DA CONSULTA FORMA MANEJO -->
+        
+        <h:form id="formformamanejotabela" rendered="#{tipologiaPaiController.disableTabFormaManejo}">
+
+			<h:panelGrid id="pnltabelaFormamanejo"  columns="2">
+			
+				<p:dataTable value="#{tipologiaPaiController.modelVwFormaManejo}" var="formaManejo" 
+				lazy="true"
+				paginator="true" 
+				paginatorPosition="bottom" 
+				paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}" 
+				rowsPerPageTemplate="5,10,15" 
+				emptyMessage="Nenhum registro encontrado." 
+				rowIndexVar="index" >
+					<f:facet name="header">  
+					            Formas de Manejo   
+					</f:facet>
+					<p:column headerText="Forma de Manejo" style="width: 150px;">
+						<h:outputText value="#{formaManejo.nomTipoManejo}" />
+					</p:column>
+					<p:column headerText="Unidade de Medida" style="width: 135px;">
+						<h:outputText value="#{formaManejo.nomUnidades}" />
+					</p:column>
+					<p:column headerText="Potencial de Poluição" style="width: 130px;">
+						<h:outputText value="#{formaManejo.nomPotencialPoluicao}" />
+					</p:column>
+
+					<p:column headerText="Coordenação" style="width: 100px;">
+						<h:outputText value="#{formaManejo.nomAreas}" />
+					</p:column>
+
+					<p:column headerText="Ação">
+
+					
+					   <p:commandLink id="alterar" update="tabAbas:formaddproc tabAbas:formManejo" rendered="${security.temAcesso('3.12.3')}"
+							action="#{tipologiaPaiController.prepararParaEditarFormaManejo()}" process="@this" >
+							<h:graphicImage title="Editar" value="/resources/img/ico-alterar.png" />
+							
+							<f:ajax execute="@this" render="tabAbas:formaddproc tabAbas:formManejo"/>
+							<f:setPropertyActionListener target="#{tipologiaPaiController.disableFormCadFormaManejo}" value="{false}" />
+							<f:setPropertyActionListener target="#{tipologiaPaiController.showExpandirCadFormaManejo}" value="{true}" />
+							<f:setPropertyActionListener target="#{tipologiaPaiController.vwFormaManejoSelecionado}" value="#{formaManejo}" />
+							
+						</p:commandLink>
+						
+					
+					
+					
+						<p:commandLink id="excluir" title="#{bundle.btn_excluir}" onclick="confirmDlgExclusaoUsuarioExterno.show()" process="excluir">
+							<h:graphicImage title="Excluir" value="/resources/img/ico-excluir.png" />
+							<f:setPropertyActionListener value="#{formaManejo}" target="#{tipologiaPaiController.vwFormaManejoExcluir}" />
+      					</p:commandLink>
+      					
+      					
+					</p:column>
+				</p:dataTable>
+			</h:panelGrid>
+		</h:form>
+        
+        
+         	
+	</h:panelGrid>		
+		  
+</ui:composition>

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui">
+
+	<br />
+		<h:panelGrid columns="1">
+			<h:outputText style="font-size: 11px;font-weight: bold;"
+						  value="#{bundle.empreendimento_lbl_denominacao}" rendered="#{!imovelRuralControllerNew.showPCT}"/>
+			<h:outputText value="Nome do território" rendered="#{imovelRuralControllerNew.showPCT}" style="font-size: 11px;font-weight: bold;"/>			  
+			<h:outputText value="#{imovelRuralControllerNew.imovelRural.desDenominacao}"/>
+		</h:panelGrid>
+	<br />
+		<h:panelGrid columns="1" rendered="#{!imovelRuralControllerNew.showPCT}">
+			<h:outputText style="font-size: 11px;font-weight: bold;" 
+						  value="#{bundle.empreendimento_lbl_forma_vinculo_titular}" />
+			<h:outputText value="#{imovelRuralControllerNew.tipoVinculoImovel=='1'?'Proprietário':'Justo Possuidor'}" />
+		</h:panelGrid>
+		<h:panelGrid columns="1" rendered="#{imovelRuralControllerNew.showPCT}">
+			<h:outputText value="Tipo de vínculo/domínio" style="font-size: 11px;font-weight: bold;"/>
+			<h:outputText value="#{imovelRuralControllerNew.pctImovelRural.ideTipoTerritorioPct.dscTipoTerritorioPct}" />
+		</h:panelGrid>
+	<br />
+		<h:panelGrid columns="1" rendered="#{imovelRuralControllerNew.showPCT}">
+			<h:outputText value="Tipos de segmentos do PCT" style="font-size: 11px;font-weight: bold;"/>
+			
+			<p:dataTable value="#{imovelRuralControllerNew.pctImovelRural.tipoSeguimentoPctCollection}" var="segmento" lazy="true"
+				emptyMessage="Nenhuma segmento encontrado.">
+				<p:column>
+					<f:facet name="header">
+						<h:outputText value="Segmento" />
+					</f:facet>
+					<h:outputText rendered="#{segmento.dscTipoSeguimentoPct ne 'Outros'}" value="#{segmento.dscTipoSeguimentoPct}"/>
+					<h:outputText rendered="#{segmento.dscTipoSeguimentoPct eq 'Outros'}" value="#{imovelRuralControllerNew.pctImovelRural.dscTipoSeguimentoPctOutros}"/>
+				</p:column>
+			</p:dataTable>
+		</h:panelGrid>
+	<br />
+		<h:panelGrid columns="1" rendered="#{imovelRuralControllerNew.showPCT}">
+			<h:outputText value="Nº de família(s)" style="font-size: 11px;font-weight: bold;"/>
+			<h:outputText value="#{imovelRuralControllerNew.pctImovelRural.numFamilias}" />
+		</h:panelGrid>
+	<br />
+		<h:panelGrid columns="2">
+			<h:outputText style="font-size: 11px;font-weight: bold;"
+						  value="#{bundle.empreendimento_lbl_area_registrada_cartorio_ha}" />
+			<h:outputText style="font-size: 11px;font-weight: bold;"
+						  value="Quantidade de módulos fiscais" />
+						  
+						  
+			<h:outputText value="#{imovelRuralControllerNew.imovelRural.valArea}" converter="doubleQuatroCasasDecimaisConverter"/>
+			<h:outputText value="#{imovelRuralControllerNew.imovelRural.qtdModuloFiscal}" converter="doubleQuatroCasasDecimaisConverter"/>
+		</h:panelGrid>
+	<br />
+		<h3>
+			<h:outputLabel styleClass="titulo-grupo" value="#{bundle.representanteLegalLabelEndereco}" />
+		</h3>
+	<br />
+	<ui:include
+				src="/paginas/manter-imoveis/cefir/includes/includes-confirmacao/confirmarEnderecoImovelRural.xhtml" />
+</ui:composition>

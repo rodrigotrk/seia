@@ -1,0 +1,342 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui">
+	
+	<ui:include src="/paginas/manter-fce/licenciamento/aquicultura/abas/viveiro-escavado/licenciamentoAquiculturaIncluirPoligonalAreaCultivo.xhtml" />
+		 
+	<h:panelGrid id="gridEspecieRanicultura"
+		style="overflow:auto; margin-top:15px; margin-bottom:5px;">
+		<h:outputText styleClass="titulo-grupo" style="font-weight:bold;"
+			value="Selecione a espécie*" />
+		<p:selectManyMenu id="tabelaEspeciesRanicultura"
+			value="#{viveiroEscavadoController.aquiculturaAtividadeDTO.listaEspecieSelecionada}"
+			style="width:300px; height:150px; line-height:1.5;"
+			converter="simpleEntityConverter"
+			disabled="#{!viveiroEscavadoController.aquiculturaAtividadeDTO.podePreencherNaLicenca 
+				or fceLicenciamentoAquiculturaController.fceTecnico or fceLicenciamentoAquiculturaController.desabilitarTudo}" 
+			styleClass="selecioneEspecie">
+			<f:selectItems var="especie"
+				value="#{viveiroEscavadoController.aquiculturaAtividadeDTO.listaEspecie}"
+				itemLabel="#{especie.ideEspecie.nomeToLabel}" itemValue="#{especie}" />
+			<p:ajax global="false" process="@this" />
+		</p:selectManyMenu>
+		<h:outputText value="É possível selecionar mais de uma opção."
+			style="font-size:xx-small; color:orange;" />
+		<p:commandButton value="Incluir" style="margin-left:240px;"
+			actionListener="#{viveiroEscavadoController.adicionarEspecie()}"
+			process="@this"
+			disabled="#{!viveiroEscavadoController.aquiculturaAtividadeDTO.podePreencherNaLicenca 
+				or fceLicenciamentoAquiculturaController.fceTecnico or fceLicenciamentoAquiculturaController.desabilitarTudo}"
+			update="licenciamentoAquiculturaAbas:formLicenciamentoAquiculturaAbaViveiro:tabAquiculturaAtividade:gridEspecieRanicultura 
+					licenciamentoAquiculturaAbas:formLicenciamentoAquiculturaAbaViveiro:tabAquiculturaAtividade:gridEspeciesRaniculturaAdicionada
+					licenciamentoAquiculturaAbas:formLicenciamentoAquiculturaAbaViveiro:tabAquiculturaAtividade:gridSomatorioAtividadesRanicultura"/>
+					
+	</h:panelGrid>
+
+	<h:panelGrid id="gridEspeciesRaniculturaAdicionada"
+		style="overflow:auto; margin-top:15px; margin-bottom:5px;">
+		<h:outputText styleClass="titulo-grupo" style="font-weight:bold;"
+			value="Caracterização do cultivo*"
+			rendered="#{viveiroEscavadoController.especieAdicionada}" />
+
+		<p:accordionPanel id="caracterizacaoRanicultura" var="ranicultura"
+			widgetVar="ranicultura"
+			value="#{viveiroEscavadoController.aquiculturaAtividadeDTO.listaCaracterizacaoCultivo}"
+			style="margin-top:10px; width:1020px;"
+			rendered="#{viveiroEscavadoController.especieAdicionada}">
+			<p:tab title="#{ranicultura.nomEspecie}" id="especie" titleStyleClass="tabEspecie">
+				<br />
+				<h:outputText styleClass="titulo-grupo" style="font-weight:bold;"
+					value="Tipo de produção:" 
+					rendered="#{!ranicultura.ideEspecieAquiculturaTipoAtividade.outrasEspecies}"/>
+				<h:panelGrid id="gridRaniculturaTipoProducao" columns="4"
+					style="margin-bottom:15px; margin-top:15px;"
+					rendered="#{!ranicultura.ideEspecieAquiculturaTipoAtividade.outrasEspecies}">
+					<p:selectBooleanCheckbox id="checkFormasJovens"
+						value="#{ranicultura.producaoFormaJovem}"
+						disabled="#{fceLicenciamentoAquiculturaController.fceTecnico or fceLicenciamentoAquiculturaController.desabilitarTudo}"
+						>
+						<p:ajax
+							listener="#{viveiroEscavadoController.listarDependenciaFormaJovem(ranicultura)}"
+							event="change" />
+						<p:ajax
+							listener="#{viveiroEscavadoController.abasAtividades.atualizarTipoProducao()}"
+							event="change" />
+					</p:selectBooleanCheckbox>
+					<h:outputText value="Formas Jovens" />
+
+					<p:selectBooleanCheckbox id="checkEngorda"
+						value="#{ranicultura.producaoEngorda}" style="margin-left:15px;"
+						disabled="#{fceLicenciamentoAquiculturaController.fceTecnico or fceLicenciamentoAquiculturaController.desabilitarTudo}"
+						>
+						<p:ajax
+							listener="#{viveiroEscavadoController.listarDependenciaEngorda(ranicultura)}"
+							event="change" />
+						<p:ajax
+							listener="#{viveiroEscavadoController.abasAtividades.atualizarTipoProducao()}"
+							event="change" />
+					</p:selectBooleanCheckbox>
+					<h:outputText value="Engorda / Crescimento" />
+
+				</h:panelGrid>
+				<!-- fim grid Tipo de Producao -->
+
+				<!-- FORMAS JOVENS -->
+
+				<h:panelGroup id="group"
+					rendered="#{!ranicultura.ideEspecieAquiculturaTipoAtividade.outrasEspecies}">
+					<h:outputText styleClass="titulo-grupo" value="Forma Jovem"
+						rendered="#{ranicultura.producaoFormaJovem}" />
+					<h:panelGrid id="gridRaniculturaFormaJovem" columns="4"
+						style="width:996px;" rendered="#{ranicultura.producaoFormaJovem}">
+
+						<p:dataTable id="tableSistemaCultivo" var="sistema"
+							value="#{ranicultura.aquiculturaProducaoDTOFormaJovem.listaSistemaCultivo}"
+							style="width:183px; margin-top:-20px;" scrollRows="5"
+							scrollable="#{true}" scrollHeight="91">
+							<p:column style="width:20px;">
+								<p:selectBooleanCheckbox value="#{sistema.rowSelect}"
+									disabled="#{fceLicenciamentoAquiculturaController.fceTecnico or fceLicenciamentoAquiculturaController.desabilitarTudo}"
+									>
+									<p:ajax event="change" global="false" />
+								</p:selectBooleanCheckbox>
+							</p:column>
+
+							<p:column style="text-align:left; width:120px;"
+								headerText="Sistema de cultivo">
+								<h:outputText value="#{sistema.nomSistemaCultivo}" />
+							</p:column>
+						</p:dataTable>
+
+						<p:dataTable id="tableTipoInstalacao" var="instalacao"
+							value="#{ranicultura.aquiculturaProducaoDTOFormaJovem.listaTipoInstalacao}"
+							style="width:362px; margin-top:-20px;" scrollRows="5"
+							scrollable="#{true}" scrollHeight="91">
+							<p:column style="width:20px;">
+								<p:selectBooleanCheckbox value="#{instalacao.rowSelect}"
+									disabled="#{fceLicenciamentoAquiculturaController.fceTecnico or fceLicenciamentoAquiculturaController.desabilitarTudo}"
+									>
+									<f:attribute name="tipoInstalacao" value="#{ranicultura.aquiculturaProducaoDTOFormaJovem}"/>
+									<p:ajax
+										listener="#{viveiroEscavadoController.limparVolumeCultivo()}" event="change" global="true"
+										update="licenciamentoAquiculturaAbas:formLicenciamentoAquiculturaAbaViveiro:tabAquiculturaAtividade:gridSomatorioAtividadesRanicultura"/>
+								</p:selectBooleanCheckbox>
+							</p:column>
+							<p:column style="text-align:left; width:170px;"
+								headerText="Tipo de instalação">
+								<h:outputText value="#{instalacao.nomTipoInstalacao}"
+									style="width:170px;" />
+							</p:column>
+							<p:column headerText="Nº de estruturas">
+								<p:inputText value="#{instalacao.numEstrutura}"
+									onkeyup="mascararNumeroAndAddZeros(this, event, 9, 0, '.', ',', 3);"
+									style="width:80px; height:10px;"
+									disabled="#{!instalacao.rowSelect or instalacao.outros 
+										or fceLicenciamentoAquiculturaController.fceTecnico or fceLicenciamentoAquiculturaController.desabilitarTudo}"
+									>
+									<f:convertNumber integerOnly="true"  minFractionDigits="0" />
+									<p:ajax event="blur" global="false" />
+								</p:inputText>
+							</p:column>
+						</p:dataTable>
+
+						<p:dataTable id="tableOrganismo" var="organismo"
+							value="#{ranicultura.aquiculturaProducaoDTOFormaJovem.listaOrganismo}"
+							style="width:140px; margin-left: -40px; margin-top:-20px;"
+							rendered="#{ranicultura.producaoFormaJovem}" scrollRows="5"
+							scrollable="#{true}" scrollHeight="91">
+							<p:column style="width:20px;">
+								<p:selectBooleanCheckbox value="#{organismo.rowSelect}"
+									disabled="#{fceLicenciamentoAquiculturaController.fceTecnico or fceLicenciamentoAquiculturaController.desabilitarTudo}"
+									>
+									<p:ajax event="change" global="false" />
+								</p:selectBooleanCheckbox>
+							</p:column>
+							<p:column style="text-align:left;" headerText="Organismos">
+								<h:outputText value="#{organismo.nomOrganismo}" />
+							</p:column>
+						</p:dataTable>
+
+						<h:panelGrid id="gridInput" columns="1"
+							style="width:300x; margin-left:10px;"
+							rendered="#{ranicultura.producaoFormaJovem}">
+							<h:outputText value="Volume do cultivo (m³)" />
+
+							<p:inputText
+								value="#{ranicultura.aquiculturaProducaoDTOFormaJovem.fceAquiculturaLicencaTipoAtividadeTipoProducao.numVolumeCultivo}"
+								onkeyup="mascararNumeroAndAddZeros(this, event, 10, 2, '.', ',', 3);"
+								maxlength="15" style="width:128px;"
+								disabled="#{!ranicultura.tipoInstalacaoRacewaysInFormaJovem 
+									or fceLicenciamentoAquiculturaController.fceTecnico or fceLicenciamentoAquiculturaController.desabilitarTudo}"
+								>
+								<f:convertNumber integerOnly="false" minFractionDigits="2" />
+								<p:ajax event="blur" global="false" />
+							</p:inputText>
+
+							<h:outputText value="Área do cultivo (ha)"
+								style="margin-top:14px" />
+
+							<p:inputText
+								value="#{ranicultura.aquiculturaProducaoDTOFormaJovem.fceAquiculturaLicencaTipoAtividadeTipoProducao.numAreaCultivo}"
+								onkeyup="mascararNumeroAndAddZeros(this, event, 8, 4, '.', ',', 3);"
+								maxlength="15" style="width:128px;"
+								disabled="#{fceLicenciamentoAquiculturaController.fceTecnico or fceLicenciamentoAquiculturaController.desabilitarTudo}"
+								>
+								<f:convertNumber integerOnly="false" minFractionDigits="4" />
+								<p:ajax event="blur" global="false" />
+							</p:inputText>
+
+							<h:outputText value="Produção (milheiro/ano)"
+								style="margin-top:14px" />
+							<p:inputText
+								value="#{ranicultura.aquiculturaProducaoDTOFormaJovem.fceAquiculturaLicencaTipoAtividadeTipoProducao.numProducao}"
+								onkeyup="mascararNumeroAndAddZeros(this, event, 9, 2, '.', ',', 3);"
+								maxlength="15" style="width:128px;"
+								disabled="#{fceLicenciamentoAquiculturaController.fceTecnico or fceLicenciamentoAquiculturaController.desabilitarTudo}"
+								>
+								<f:convertNumber integerOnly="false" minFractionDigits="2" />
+								<p:ajax event="blur" global="false" />
+							</p:inputText>
+						</h:panelGrid>
+						<!-- fim grid inputs -->
+					</h:panelGrid>
+					<!-- fim grid Formas Jovens -->
+
+					<!-- ENGORDA / CRESCIMENTO -->
+
+					<h:outputText styleClass="titulo-grupo"
+						value="Engorda / Crescimento"
+						rendered="#{ranicultura.producaoEngorda}" />
+					<h:panelGrid id="gridRaniculturaEngorda"
+						rendered="#{ranicultura.producaoEngorda}" columns="4">
+
+						<p:dataTable id="tableSistemaCultivoEngorda" var="sistema"
+							value="#{ranicultura.aquiculturaProducaoDTOEngorda.listaSistemaCultivo}"
+							style="width:183px; margin-top:-20px;" scrollRows="5"
+							scrollable="#{true}" scrollHeight="91">
+							<p:column style="width:20px;">
+								<p:selectBooleanCheckbox value="#{sistema.rowSelect}"
+									disabled="#{fceLicenciamentoAquiculturaController.fceTecnico or fceLicenciamentoAquiculturaController.desabilitarTudo}"
+									>
+									<p:ajax event="change" global="false" />
+								</p:selectBooleanCheckbox>
+							</p:column>
+
+							<p:column style="text-align:left; width:120px;"
+								headerText="Sistema de cultivo">
+								<h:outputText value="#{sistema.nomSistemaCultivo}" />
+							</p:column>
+						</p:dataTable>
+
+						<p:dataTable id="tableTipoInstalacaoEngorda" var="instalacao"
+							value="#{ranicultura.aquiculturaProducaoDTOEngorda.listaTipoInstalacao}"
+							style="width:362px; margin-left:38px; margin-top:-20px;"
+							scrollRows="5" scrollable="#{true}" scrollHeight="91">
+							<p:column style="width:20px;">
+								<p:selectBooleanCheckbox value="#{instalacao.rowSelect}" 
+									disabled="#{fceLicenciamentoAquiculturaController.fceTecnico or fceLicenciamentoAquiculturaController.desabilitarTudo}"
+									>
+									<f:attribute name="tipoInstalacao" value="#{ranicultura.aquiculturaProducaoDTOEngorda}"/>
+									<p:ajax
+										listener="#{viveiroEscavadoController.limparVolumeCultivo()}" event="change" global="true"
+										update="licenciamentoAquiculturaAbas:formLicenciamentoAquiculturaAbaViveiro:tabAquiculturaAtividade:gridSomatorioAtividadesRanicultura"/>
+								</p:selectBooleanCheckbox>
+							</p:column>
+							<p:column style="text-align:left; width:170px;"
+								headerText="Tipo de instalação">
+								<h:outputText value="#{instalacao.nomTipoInstalacao}"
+									style="width:170px;" />
+							</p:column>
+							<p:column headerText="Nº de estruturas">
+								<p:inputText value="#{instalacao.numEstrutura}"
+									onkeyup="mascararNumeroAndAddZeros(this, event, 9, 0, '.', ',', 3);"
+									style="width:80px; height:10px;"
+									disabled="#{!instalacao.rowSelect or instalacao.outros 
+										or fceLicenciamentoAquiculturaController.fceTecnico or fceLicenciamentoAquiculturaController.desabilitarTudo}"
+									>
+									<f:convertNumber integerOnly="true"  minFractionDigits="0" />
+									<p:ajax event="blur" global="false" />
+								</p:inputText>
+							</p:column>
+						</p:dataTable>
+
+						<h:panelGrid id="gridInputEngorda" columns="1"
+							style="width:300x; margin-left:30px;"
+							rendered="#{ranicultura.producaoEngorda}">
+							<h:outputText value="Volume do cultivo (m³)" />
+
+							<p:inputText
+								value="#{ranicultura.aquiculturaProducaoDTOEngorda.fceAquiculturaLicencaTipoAtividadeTipoProducao.numVolumeCultivo}"
+								onkeyup="mascararNumeroAndAddZeros(this, event, 10, 2, '.', ',', 3);"
+								maxlength="15" style="width:128px;"
+								disabled="#{!ranicultura.tipoInstalacaoRacewaysInEngorda 
+									or fceLicenciamentoAquiculturaController.fceTecnico or fceLicenciamentoAquiculturaController.desabilitarTudo}"
+								>
+								<f:convertNumber integerOnly="false" minFractionDigits="2" />
+								<p:ajax event="blur" global="false" />
+							</p:inputText>
+
+							<h:outputText value="Área do cultivo (ha)"
+								style="margin-top:14px" />
+
+							<p:inputText
+								value="#{ranicultura.aquiculturaProducaoDTOEngorda.fceAquiculturaLicencaTipoAtividadeTipoProducao.numAreaCultivo}"
+								onkeyup="mascararNumeroAndAddZeros(this, event, 8, 4, '.', ',', 3);"
+								maxlength="15" style="width:128px;"
+								disabled="#{fceLicenciamentoAquiculturaController.fceTecnico or fceLicenciamentoAquiculturaController.desabilitarTudo}"
+								>
+								<f:convertNumber integerOnly="false" minFractionDigits="4" />
+								<p:ajax event="blur" global="false" />
+							</p:inputText>
+
+							<h:outputText value="Produção (tonelada/ano)"
+								style="margin-top:14px" />
+							<p:inputText
+								value="#{ranicultura.aquiculturaProducaoDTOEngorda.fceAquiculturaLicencaTipoAtividadeTipoProducao.numProducao}"
+								onkeyup="mascararNumeroAndAddZeros(this, event, 9, 2, '.', ',', 3);"
+								maxlength="15" style="width:128px;"
+								disabled="#{fceLicenciamentoAquiculturaController.fceTecnico or fceLicenciamentoAquiculturaController.desabilitarTudo}"
+								>
+								<f:convertNumber integerOnly="false" minFractionDigits="2" />
+								<p:ajax event="blur" global="false" />
+							</p:inputText>
+						</h:panelGrid>
+						<!-- fim grid inputs -->
+					</h:panelGrid>
+					<!-- fim grid Engorda / Crescimento -->
+				</h:panelGroup>
+				<h:panelGrid id="gridBotao" columns="2"
+					style="margin-top:15px; margin-left:795px;">
+					<p:commandButton id="btnExcluir" value="Excluir"
+						style="width:90px;"
+						process="@this"
+						global="true"
+						actionListener="#{viveiroEscavadoController.excluirCaracterizacaoCultivo(ranicultura)}"
+						update="licenciamentoAquiculturaAbas:formLicenciamentoAquiculturaAbaViveiro:tabAquiculturaAtividade:gridEspecieRanicultura 
+								licenciamentoAquiculturaAbas:formLicenciamentoAquiculturaAbaViveiro:tabAquiculturaAtividade:gridEspeciesRaniculturaAdicionada
+								licenciamentoAquiculturaAbas:formLicenciamentoAquiculturaAbaViveiro:tabAquiculturaAtividade:gridSomatorioAtividadesRanicultura"
+						disabled="#{!viveiroEscavadoController.aquiculturaAtividadeDTO.podePreencherNaLicenca 
+							or fceLicenciamentoAquiculturaController.fceTecnico or fceLicenciamentoAquiculturaController.desabilitarTudo}"
+						/>
+					<p:commandButton id="btnSalvar" value="Salvar" style="width:90px;"
+						actionListener="#{viveiroEscavadoController.salvarCaracterizacaoCultivo(ranicultura)}"
+						process="@this"
+						global="true"
+						update="licenciamentoAquiculturaAbas:formLicenciamentoAquiculturaAbaViveiro:tabAquiculturaAtividade:gridSomatorioAtividadesRanicultura"
+						disabled="#{fceLicenciamentoAquiculturaController.fceTecnico or fceLicenciamentoAquiculturaController.desabilitarTudo}"
+						/>
+				</h:panelGrid>
+			</p:tab>
+		</p:accordionPanel>
+	</h:panelGrid>
+
+	<h:panelGrid id="gridSomatorioAtividadesRanicultura"
+		style="margin-top:15px; margin-bottom:17px; margin-left:4px; width:1020px;"
+		>
+		<ui:include src="/paginas/manter-fce/licenciamento/aquicultura/abas/viveiro-escavado/abas-atividade/licenciamentoAquiculturaAtividadeRodape.xhtml" />
+	</h:panelGrid>
+</ui:composition>

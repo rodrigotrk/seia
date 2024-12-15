@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui">
+	<h:form id="formAnalisarProcesso" binding="#{analiseTecnicaController.formularioASerLimpo}">
+		<h3><h:outputLabel styleClass="titulo-grupo" style="font-weight:bolder" value="Dados do processo" /></h3>	
+		<h:panelGrid>
+			<h:panelGrid columns="4">
+				<p:spacer width="10" height="10" />
+				<h:outputText value="Número do Processo:" style="font-weight:bold"/>
+				<p:spacer width="60" height="10" />
+				<h:outputText value="Data de Formação do processo:" style="font-weight:bold"/>
+				
+				<p:spacer width="10" height="10" />
+				<h:outputText value="#{analiseTecnicaController.vwProcesso.numProcesso}"/>
+				<p:spacer width="60" height="10" />
+				<h:outputText value="#{analiseTecnicaController.vwProcesso.dtcFormacao}">
+					<f:convertDateTime pattern="dd/MM/yyyy" locale="pt,BR" timeZone="Brazil/East"/>
+				</h:outputText>				
+			</h:panelGrid>
+		</h:panelGrid>
+		<br />				
+		<h:panelGrid columns="2">
+			<p:spacer width="10" height="10" />
+			<h:panelGrid>				
+				<p:outputPanel autoUpdate="true">					
+					<p:dataTable id="dataTableReqImovel" var="imovel"
+							value="#{analiseTecnicaController.listaImoveis}"
+							paginator="true" rows="5" paginatorPosition="bottom"
+							paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}"
+							emptyMessage="#{bundle.consultapf_msg_empty_list}"
+							widgetVar="tblImovel">
+		
+							<f:facet name="header">
+								<h:outputText value="Lista de Imóveis Rurais" />
+							</f:facet>
+							
+							<p:column style="width: 60px;" headerText="ITR/NIRF">						
+								<h:outputText value="#{imovel.imovelRural.numItr}" />
+							</p:column>
+		
+							<p:column style="width: 155px;" headerText="Nome Imóvel Rural">						
+								<h:outputText value="#{imovel.imovelRural.desDenominacao}" />
+							</p:column>
+		
+							<p:column style="width: 185px;" headerText="Proprietário/Justo Possuidor">
+								<h:outputText value="#{analiseTecnicaController.retornaNomeDaPessoa(imovel.proprietario)}" />
+							</p:column>
+		
+							<p:column style="width: 80px;" headerText="Localidade" >						
+								<h:outputText
+									value="#{imovel.ideEndereco.ideLogradouro.ideMunicipio.nomMunicipio}" />
+							</p:column>
+		
+							<p:column style="width: 90px;" headerText="Status Imóvel">						
+								<h:outputText value="#{analiseTecnicaController.retornaStatusImovel(imovel.imovelRural)}" rendered="${!analiseTecnicaController.habilitarLinkStatusPendenteImovel(imovel.imovelRural)}"/>
+								
+								<p:commandLink rendered="${analiseTecnicaController.habilitarLinkStatusPendenteImovel(imovel.imovelRural)}"
+								action="#{suspenderCadastroController.iniciar()}" update="panelPendenciaCadastro"
+								process="@this" oncomplete="dialogPendenciaCadastro.show()" type="button">
+								<f:ajax execute="@this" />
+								<h:outputText style="#{listarImovelRuralController.mudarCorFonte(imovel.imovelRural)}" value="#{analiseTecnicaController.retornaStatusImovel(imovel.imovelRural)}" />
+								<f:setPropertyActionListener value="#{imovel.imovelRural}" target="#{suspenderCadastroController.imovelRural}" />
+							</p:commandLink>
+								
+							</p:column>
+							
+							<p:column style="width: 90px;" headerText="Status RL">						
+								<h:outputText value="#{imovel.imovelRural.reservaLegal.ideStatus.dscStatus}" />
+							</p:column>
+							
+							<p:column style="width: 25px; text-align: center;" headerText="ASV">						
+								<h:graphicImage title="Com Restrinção de solicitação de ASV"
+											value="/resources/img/ico-msg-erro.png" rendered="${imovel.imovelRural.indPermissaoASV != null and imovel.imovelRural.indPermissaoASV == false}" />
+								<h:graphicImage title="Sem Restrinção de solicitação de ASV"
+											value="/resources/img/ico-aprovar-notificacao.png" rendered="${imovel.imovelRural.indPermissaoASV == null or imovel.imovelRural.indPermissaoASV == true}" />
+								<h:outputText value="" />
+							</p:column>
+		
+							<p:column style="width: 55px; text-align: center;" headerText="Ações">			
+								<h:panelGrid style="color:white;text-align:center;" columns="3">								
+									<p:commandLink id="btnVisualizarImovelRural" title="Visualizar"
+										action="#{detalharImovelRuralController.detalharImovelRural()}"
+										update=":formDetalharImovelRural:tabviewimovelrural"
+										oncomplete="dialogDetalharImovelRural.show()"
+										process="@this" image="ui-icon ui-icon-close">							
+										<h:graphicImage title="Visualizar"
+											value="/resources/img/ico-pesquisa.png" />											
+										<f:setPropertyActionListener value="#{false}"
+											target="#{contextoController.imprimindoImovel}" />										
+										<f:setPropertyActionListener value="#{imovel.imovelRural}"
+											target="#{detalharImovelRuralController.imovelRural}" />
+										<f:setPropertyActionListener value="#{imovel.proprietario}"
+											target="#{detalharImovelRuralController.solicitanteVisualizacao}" />
+									</p:commandLink>
+																
+								    <h:outputLink value="#{analiseTecnicaController.caminhoDesenharGeoBahia}" title="GEOBAHIA" target="_blank">  
+								        <h:graphicImage title="Visualizar" value="/resources/img/ico-arl-relocacao.png" /> 
+								        <f:param name="acao" value="view"/>
+								        <f:param name="idloc" value="#{imovel.imovelRural.reservaLegal.ideLocalizacaoGeografica.ideLocalizacaoGeografica}"/>
+								        <f:param name="tipo" value="2" />
+								        <f:param name="perfil" value="tecnico" />
+								    </h:outputLink>
+
+									<p:commandLink id="btnAprovarRL" title="Aprovar Reserva Legal" action="#{analiseTecnicaController.carregarReservaLegal()}"								
+										update=":formAprovarRL" oncomplete="dialogAprovarRL.show()" process="@this" image="ui-icon ui-icon-close"
+										rendered="${(security.temAcesso('5.19.45') or security.temAcesso('5.18.45')) 
+														and imovel.imovelRural.cadastrado
+														and (imovel.imovelRural.reservaLegal.ideStatus.ideStatusReservaLegal == 3 
+																or imovel.imovelRural.reservaLegal.ideStatus.ideStatusReservaLegal == 5)
+														and analiseTecnicaController.habilitarBotoesStatusPendenteImovel(imovel.imovelRural) }">							
+										
+										<h:graphicImage title="Aprovar Reserva Legal" value="/resources/img/ico-rl-amarelo.png" />
+										<f:setPropertyActionListener value="true" target="#{analiseTecnicaController.chamadaTelaPautaTecnico}" />	
+										<f:setPropertyActionListener value="#{imovel}" target="#{analiseTecnicaController.imovelSelecionado}" />
+										<f:setPropertyActionListener value="#{true}" target="#{analiseTecnicaController.indAprovacao}" />								
+									</p:commandLink>
+								</h:panelGrid>												
+							</p:column>
+						</p:dataTable>					
+					</p:outputPanel>
+			</h:panelGrid>
+		</h:panelGrid>
+	</h:form>		
+</ui:composition>

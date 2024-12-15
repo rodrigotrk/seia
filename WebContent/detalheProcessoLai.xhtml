@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui">
+	
+	<h:form id="formDetalharProcesso">
+		<p:tabView id="tabviewprocesso" style="width: 920px">
+			<p:tab title="Atos e Dados Gerais">
+				<h3><h:outputLabel styleClass="titulo-grupo" style="font-weight:bolder" value="Ato(s) do processo:" /></h3>
+				
+				<h:panelGrid columns="1">
+					<p:dataTable id="tabelaAtos" paginator="false" paginatorPosition="bottom" emptyMessage="#{bundle.msg_lista_vazia}" lazy="true" 
+						value="#{laiController.vwProcesso.listProcessoAto}" var="processoAto">
+						
+						<p:column>
+							<f:facet name="header">Nome do ato ambiental</f:facet>
+				           	<h:outputText value="#{processoAto.atoAmbiental.nomAtoAmbiental}" />
+				        </p:column>
+				        
+				        <p:column style="text-align:center;">
+							<f:facet name="header">Tipologia do ato ambiental </f:facet>
+				           	<h:outputText rendered="#{processoAto.tipologia ne null}" value="#{processoAto.tipologia.desTipologia}" />
+				           	<h:outputText rendered="#{processoAto.tipologia eq null}" value="-----------------" />
+				        </p:column>
+					</p:dataTable>				
+				</h:panelGrid>
+				<br />        
+				<h3><h:outputLabel styleClass="titulo-grupo" value="Dados Gerais" /></h3>
+					
+				<h:panelGrid columns="6">
+					<h:outputText value="Número do Processo" style="font-weight:bold"/>
+					<p:spacer width="30" height="10" />
+					<h:outputText value="Data de Formação" style="font-weight:bold"/>
+					<p:spacer width="30" height="10" />
+					<h:outputText value="Status Atual" style="font-weight:bold"/>
+					<h:outputText value=""/>
+					
+					<h:outputText value="#{laiController.vwProcesso.numProcesso}"/>
+					<p:spacer width="30" height="10" />
+					<h:outputText value="#{laiController.vwProcesso.dtcFormacao}">
+						<f:convertDateTime pattern="dd/MM/yyyy" locale="pt,BR" timeZone="Brazil/East"/>
+					</h:outputText>
+					<p:spacer width="30" height="10" />
+					<h:outputText value="#{laiController.vwProcesso.statusFluxo.dscStatusFluxoExternoOuInterno}"/>
+				</h:panelGrid>
+				<h:panelGrid columns="3">
+					<h:outputText value="Nome/Razão Social" style="font-weight:bold"/>
+					<p:spacer width="50" height="10" />
+					<h:outputText value="CPF/CNPJ" style="font-weight:bold"/>
+					
+					<h:outputText value="#{laiController.vwProcesso.nomRequerente}"/>
+					<p:spacer width="50" height="10" />
+					<h:outputText value="#{laiController.vwProcesso.numCpfcnpjRequerenteFormatado}"/>
+					
+					<h:outputText value="Nome do Empreendimento" style="font-weight:bold"/>
+					<p:spacer width="50" height="10" />
+					<h:outputText value="Localidade" style="font-weight:bold"/>
+					
+					<h:outputText value="#{laiController.vwProcesso.nomEmpreendimento}"/>
+					<p:spacer width="50" height="10" />
+					<h:outputText value="#{laiController.vwProcesso.nomMunicipio}"/>
+				</h:panelGrid>
+				<h:panelGrid columns="1">
+					<h:outputText value="E-mail" style="font-weight:bold"/>
+					<h:outputText value="#{laiController.vwProcesso.desEmail}"/>
+					
+					<h:outputText value="Porte" style="font-weight:bold"/>
+					<h:outputText value="#{laiController.vwProcesso.nomPorte}"/>
+				</h:panelGrid>
+				
+				<br/>
+				
+				<h3><h:outputLabel styleClass="titulo-grupo" value="Requerimento" /></h3>
+				
+				<h:panelGrid columns="3">
+					<h:outputText value="Número do Requerimento" style="font-weight:bold"/>
+					<p:spacer width="50" height="10" />
+					<h:outputText value="Data de Abertura" style="font-weight:bold"/>
+					
+					<h:outputText value="#{laiController.vwProcesso.numRequerimento}" />
+					<p:spacer width="50" height="10" />
+					<h:outputText value="#{laiController.vwProcesso.dtcCriacaoRequerimento}">
+						<f:convertDateTime pattern="dd/MM/yyyy" locale="pt,BR" timeZone="Brazil/East"/>
+					</h:outputText>
+				</h:panelGrid>
+				
+				<br/>
+				</p:tab>
+			
+			<p:tab title="Docs de Formação">        
+				<h3><h:outputLabel styleClass="titulo-grupo" value="Documento(s) de Formação do Processo" /></h3>
+			
+				<h:panelGrid columns="1">
+					<p:dataTable id="tabelaDocumentosRequerimento" scrollHeight="300"  scrollable="true" 
+						 paginator="false" paginatorPosition="bottom" lazy="true" value="#{laiController.vwProcesso.documentoObrigatorioRequerimentoList}" 
+						 var="docRequerimento" emptyMessage="Nenhum registro encontrado."
+						 style="padding-right: 0px !important; width: 890px;">
+						
+						<p:column style="width:260px;">
+							<f:facet name="header" >Descrição</f:facet>
+				           	<h:outputText value="#{docRequerimento.ideDocumentoAto.ideDocumentoObrigatorio.nomDocumentoObrigatorio}" 
+						           		rendered="#{docRequerimento.ideDocumentoAto != null}"/>
+				           	<h:outputText value=" #{docRequerimento.ideDocumentoObrigatorio.nomDocumentoObrigatorio}" 
+				           		rendered="#{docRequerimento.ideDocumentoAto == null}"/>
+				        </p:column>
+				        
+				        <p:column style="width:260px;">
+							<f:facet name="header">Nome do Arquivo</f:facet>
+				           	<h:outputText value="#{docRequerimento.dscCaminhoArquivoNome}" />
+				        </p:column>
+				        
+				        <p:column style="width:87px;">
+							<f:facet name="header">Tamanho (KB)</f:facet>
+				           	<h:outputText value="#{docRequerimento.fileSizeFormated}" />
+				        </p:column>
+				        
+				        <p:column style="width:95px;">
+							<f:facet name="header">Gravado em</f:facet>
+				           	<h:outputText value="#{docRequerimento.dtcValidacao}">
+								<f:convertDateTime pattern="dd/MM/yyyy" locale="pt,BR" timeZone="Brazil/East"/>
+							</h:outputText>
+				        </p:column>			    
+				        
+				        <p:column style="width:63px;">
+							<f:facet name="header">Download</f:facet>
+							<h:commandLink ajax="false" rendered="#{!laiController.isDocLac(docRequerimento)}">
+								<h:graphicImage title="Consultar" value="/resources/img/ico-download.png" />
+				            	<p:fileDownload value="#{laiController.getDocumentoObrigatorioSC(docRequerimento.dscCaminhoArquivo)}" />
+				            </h:commandLink>
+				        </p:column>
+					</p:dataTable>
+				</h:panelGrid>
+										
+				<br/>
+				
+				<h:panelGrid columns="1" rendered="#{not empty laiController.vwProcesso.perguntas}">
+					<h3><h:outputLabel styleClass="titulo-grupo" value="Localização Geográfica" /></h3>
+					
+					<p:dataTable var="pergunta" value="#{laiController.vwProcesso.perguntas}" scrollHeight="100"  scrollable="true"
+						style="padding-right: 0px !important; width: 890px;">
+						
+						<p:column headerText="Pergunta" style="width:765px;">
+				           	<h:outputText value="#{pergunta.idePergunta.dscPergunta}" />
+				        </p:column>
+						<p:column headerText="Download" style="width:63px;"> 
+			           	    <h:panelGrid rendered="#{pergunta.ideLocalizacaoGeografica.ideLocalizacaoGeografica != null}" style="border:none;">
+								<a onclick='javascript:${localizacaoGeograficaAllController.criarUrlShapeVisualizacao(pergunta.ideLocalizacaoGeografica)}'>
+									<img title="Visualizar Shape Persistido" src="/resources/img/ico-arl-relocacao.png" />
+								</a>
+				            </h:panelGrid>
+				        </p:column>
+					</p:dataTable>
+				</h:panelGrid>	
+			</p:tab>
+				
+			<p:tab title="Docs Apensados" rendered="#{not empty laiController.vwProcesso.arquivoProcessoList}">
+				<h3><h:outputLabel styleClass="titulo-grupo" value="Documento(s) Apensados ao Processo"  /></h3>
+				
+				<h:panelGrid columns="1" >
+					<p:dataTable id="tabelaDocumentosProcesso" scrollRows="20" scrollable="true" scrollHeight="350"  paginator="false" paginatorPosition="bottom" 
+						lazy="true" value="#{laiController.vwProcesso.arquivoProcessoList}" var="docProcesso" emptyMessage="Nenhum registro encontrado."
+						style="padding-right: 0px !important; width: 890px;">
+						
+						<p:column style="width:170px;">
+							<f:facet name="header">Descrição</f:facet>
+				           	<h:outputText value="#{docProcesso.dscArquivoProcesso}" />
+				        </p:column>
+			        	
+			        	<p:column style="width:170px;">
+							<f:facet name="header">Categoria</f:facet>
+				           	<h:outputText rendered="#{not empty docProcesso.categoriaDocumento}" value="#{docProcesso.categoriaDocumento.nomCategoria}" />
+				        </p:column>
+				        
+				        <p:column style="width:160px;">
+							<f:facet name="header">Nome do Arquivo</f:facet>
+				           	<h:outputText value="#{docProcesso.fileName}" />
+				        </p:column>
+				        
+				        <p:column style="width:87px;">
+							<f:facet name="header">Tamanho (KB)</f:facet>
+				           	<h:outputText value="#{docProcesso.fileSizeFormated}" />
+				        </p:column>
+				        
+				        <p:column style="width:95px;">
+							<f:facet name="header">Gravado em</f:facet>
+				           	<h:outputText value="#{docProcesso.dtcCriacao}">
+								<f:convertDateTime pattern="dd/MM/yyyy" locale="pt,BR" timeZone="Brazil/East"/>
+							</h:outputText>
+				        </p:column>				        
+				        
+				        <p:column style="width:63px;">
+							<f:facet name="header">Download</f:facet>
+							<h:commandButton value="#{docProcesso}" image="/resources/img/ico-download.png" rendered="#{docProcesso.localizacaoGeografica.ideLocalizacaoGeografica == null}">			            	
+				            	<p:fileDownload value="#{laiController.getArquivoProcessoSC(docProcesso)}" />
+				            </h:commandButton>
+				            <h:panelGrid rendered="#{docProcesso.localizacaoGeografica.ideLocalizacaoGeografica != null}" style="border:none;">
+								<a onclick='javascript:${localizacaoGeograficaAllController.criarUrlShapeVisualizacao(docProcesso.localizacaoGeografica)}'>
+									<img title="Visualizar Shape Persistido" src="/resources/img/ico-arl-relocacao.png" />
+								</a>
+				            </h:panelGrid>
+				        </p:column>
+					</p:dataTable>				
+					
+					<p:remoteCommand name="setLocalizacao" process="@this">
+						<f:setPropertyActionListener target="#{localizacaoGeograficaAllController.localizacaoGeograficaSelecionada}" value="#{docProcesso.localizacaoGeografica}"/>
+					</p:remoteCommand>
+					
+				</h:panelGrid>
+				
+				<br/>
+				</p:tab>
+			
+			
+			<p:tab title="Notificações Emitidas" rendered="#{not empty laiController.vwProcesso.notificacaoEnviadaList}">
+				<h3><h:outputLabel styleClass="titulo-grupo" value="Notificações Emitidas"/></h3>
+				
+				<h:panelGrid columns="1">
+					<p:dataTable id="tabelaNotificacoesParciais" scrollRows="20"  
+	                    scrollable="true"  scrollHeight="350"  paginator="false" paginatorPosition="bottom" lazy="true" 
+						value="#{laiController.vwProcesso.notificacaoEnviadaList}" var="np" emptyMessage="Nenhum registro encontrado.">
+						<p:column style="width:250px">
+							<f:facet name="header">Data de Criação</f:facet>
+				           	<h:outputText value="#{np.dtcCriacao}">
+								<f:convertDateTime pattern="dd/MM/yyyy" locale="pt,BR" timeZone="Brazil/East"/>
+							</h:outputText>
+				        </p:column>
+				        <p:column style="width:200px">
+							<f:facet name="header">Número</f:facet>
+				        	<p:commandLink type="button" ajax="false">
+								<f:ajax execute="@this" />
+								<h:outputText value="#{np.numNotificacao}" />
+								<p:fileDownload value="#{laiController.getGerarDetalhesNotificacaoPdf(np)}" />
+							</p:commandLink>
+				        </p:column>
+					</p:dataTable>				
+				</h:panelGrid>
+				
+			</p:tab>
+				
+		</p:tabView>
+	</h:form>
+</ui:composition>

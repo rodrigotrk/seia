@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="resumo_requerimento_crf_detentor" language="java" pageWidth="572" pageHeight="752" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="6aec687b-df2a-483e-8f2d-b6ddb60ecb57">
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="ide_cumprimento_reposicao_florestal" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT this_.ide_detentor_reposicao_florestal,
+       pag.ide_pagamento_reposicao_florestal,
+       pag.nom_pagamento_reposicao_florestal,
+       crf1_.ide_cumprimento_reposicao_florestal,
+       this_.num_portaria,
+       this_.data_publicacao_portaria,
+       this_.num_processo,
+       this_.volume_autorizado,
+       tvfr2_.nom_tipo_volume_florestal_remanescente,
+       this_.num_processo_asv_aml,
+       um.cod_unidade_medida
+FROM detentor_reposicao_florestal this_
+INNER JOIN cumprimento_reposicao_florestal crf1_ ON this_.ide_cumprimento_reposicao_florestal=crf1_.ide_cumprimento_reposicao_florestal
+INNER JOIN unidade_medida um on um.ide_unidade_medida=this_.ide_unidade_medida
+INNER JOIN pagamento_reposicao_florestal pag ON pag.ide_pagamento_reposicao_florestal=crf1_.ide_pagamento_reposicao_florestal
+LEFT OUTER JOIN tipo_volume_florestal_remanescente tvfr2_ ON this_.ide_tipo_volume_florestal_remanescente=tvfr2_.ide_tipo_volume_florestal_remanescente
+WHERE this_.ide_cumprimento_reposicao_florestal=$P{ide_cumprimento_reposicao_florestal}]]>
+	</queryString>
+	<field name="ide_detentor_reposicao_florestal" class="java.lang.Integer"/>
+	<field name="ide_pagamento_reposicao_florestal" class="java.lang.Integer"/>
+	<field name="nom_pagamento_reposicao_florestal" class="java.lang.String"/>
+	<field name="ide_cumprimento_reposicao_florestal" class="java.lang.Integer"/>
+	<field name="num_portaria" class="java.lang.String"/>
+	<field name="data_publicacao_portaria" class="java.sql.Timestamp"/>
+	<field name="num_processo" class="java.lang.String">
+		<fieldDescription><![CDATA[Número do processo de licenciamento da área produtiva]]></fieldDescription>
+	</field>
+	<field name="volume_autorizado" class="java.math.BigDecimal"/>
+	<field name="nom_tipo_volume_florestal_remanescente" class="java.lang.String"/>
+	<field name="num_processo_asv_aml" class="java.lang.String"/>
+	<field name="cod_unidade_medida" class="java.lang.String"/>
+	<detail>
+		<band height="182" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="d3bdf72c-03a1-4b7c-8f45-e99966ed8ee8" x="0" y="0" width="163" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Ato relacionado a reposição florestal:]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="7ae3f3ab-2f66-455f-a4a1-f4c41d8eca29" x="13" y="20" width="548" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nom_pagamento_reposicao_florestal}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="adedf006-b6f9-418e-8dc7-1c3ac01b2b79" x="0" y="40" width="219" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Número da portaria " + ( $F{ide_pagamento_reposicao_florestal} == 21 ? "da ASV:" : ( $F{ide_pagamento_reposicao_florestal} == 22 ? "da AML:" : "de RVFR:" ) )]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="f6d6b2cf-2b19-43a0-ab09-1f814171719b" x="219" y="40" width="353" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{num_portaria}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement uuid="abfc5f3f-eecc-4406-9d50-4a300f4aced3" x="219" y="60" width="353" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{data_publicacao_portaria}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="a42f88a7-089f-472f-a8af-960d1f638043" x="0" y="80" width="219" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Número do processo da " + ( $F{ide_pagamento_reposicao_florestal} == 21 ? "da ASV:" : ( $F{ide_pagamento_reposicao_florestal} == 22 ? "da AML:" : "de RVFR:" ) )]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="58dc435a-5435-4d10-b503-eaccdcb33402" x="219" y="80" width="353" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{num_processo}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="05dc5dfc-b4d0-4c41-8ea0-9c69821cf67f" x="0" y="100" width="219" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Volume da reposição florestal a ser cumprido:]]></text>
+			</staticText>
+			<textField pattern="#,##0.0000">
+				<reportElement uuid="ff36535c-80c8-42dc-8e48-5d15936269d2" x="219" y="100" width="87" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{volume_autorizado}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="27bc7734-de1f-4355-83c9-e2a84c98fca5" positionType="Float" x="0" y="120" width="233" height="20" isRemoveLineWhenBlank="true" isPrintWhenDetailOverflows="true">
+					<printWhenExpression><![CDATA[$F{nom_tipo_volume_florestal_remanescente} != null]]></printWhenExpression>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[O reconhecimento de volume florestal remanescente é:]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="9c0af81d-15e9-4553-bcdf-81de254d6101" positionType="Float" x="13" y="140" width="530" height="20" isRemoveLineWhenBlank="true" isPrintWhenDetailOverflows="true">
+					<printWhenExpression><![CDATA[$F{nom_tipo_volume_florestal_remanescente} != null]]></printWhenExpression>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nom_tipo_volume_florestal_remanescente}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="ee3770db-e590-45ca-8e38-7fc6927ca1a5" positionType="Float" x="0" y="160" width="163" height="20" isRemoveLineWhenBlank="true" isPrintWhenDetailOverflows="true">
+					<printWhenExpression><![CDATA[$F{nom_tipo_volume_florestal_remanescente} != null]]></printWhenExpression>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Número do processo da ASV ou AML:]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="1d59a513-aac4-4995-8d17-549bf2e4db8b" positionType="Float" x="163" y="160" width="380" height="20" isRemoveLineWhenBlank="true" isPrintWhenDetailOverflows="true">
+					<printWhenExpression><![CDATA[$F{nom_tipo_volume_florestal_remanescente} != null]]></printWhenExpression>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{num_processo_asv_aml}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="a21ea590-28a1-4dcb-af3e-e13d2ebb4ae2" x="0" y="60" width="219" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Data da publicação da portaria " + ( $F{ide_pagamento_reposicao_florestal} == 21 ? "da ASV:" : ( $F{ide_pagamento_reposicao_florestal} == 22 ? "da AML:" : "de RVFR:" ) )]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="f20f26ec-3e27-4412-bccd-e2305e879ba4" x="306" y="100" width="100" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[" (" + $F{cod_unidade_medida} + ")"]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="resumo_requerimento_questionario_acoes_outorga_alteracao_finalidade" language="java" pageWidth="439" pageHeight="802" columnWidth="439" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="60e80b02-09e9-44b6-b38e-f6d4848a7d68">
+	<property name="ireport.zoom" value="2.143588810000008"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["/home/mega/workspace/seia/src/br/gov/ba/novoRequerimento/reports/sources/"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="ide_requerimento" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="ide_outorga_localizacao_geografica" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[select  distinct
+num_vazao,
+num_area_irrigada_captacao,
+case
+when ind_finalidade = 1 then 'Incluir finalidade(s)'
+when ind_finalidade = 2 then 'Alterar finalidade(s) já outorgada(s)'
+when ind_finalidade = 3 then 'Manter finalidade(s) já outorgada(s)'
+end as sobreFinalidade
+
+		from outorga o
+
+		inner join outorga_localizacao_geografica olg on olg.ide_outorga = o.ide_outorga
+		inner join localizacao_geografica lg on lg.ide_localizacao_geografica = olg.ide_localizacao_geografica
+		inner join outorga_localizacao_geografica_finalidade olgf on olgf.ide_outorga_localizacao_geografica = olg.ide_outorga_localizacao_geografica
+		inner join tipo_finalidade_uso_agua t on t.ide_tipo_finalidade_uso_agua = olgf.ide_tipo_finalidade_uso_agua
+		where  o.ide_tipo_solicitacao = 6 --alterar outorga
+		and o.ide_requerimento = $P{ide_requerimento}
+		and olg.ide_outorga_localizacao_geografica = $P{ide_outorga_localizacao_geografica}]]>
+	</queryString>
+	<field name="num_vazao" class="java.math.BigDecimal"/>
+	<field name="num_area_irrigada_captacao" class="java.math.BigDecimal"/>
+	<field name="sobrefinalidade" class="java.lang.String"/>
+	<title>
+		<band height="12" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="02e961ab-8829-4286-ab9c-480a0a9b477b" positionType="Float" mode="Opaque" x="95" y="0" width="138" height="12" backcolor="#EEECE1"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font fontName="Arial" size="8" isBold="false" isUnderline="false"/>
+				</textElement>
+				<text><![CDATA[Finalidade(s) da captação]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="02e961ab-8829-4286-ab9c-480a0a9b477b" positionType="Float" mode="Opaque" x="233" y="0" width="108" height="12" backcolor="#EEECE1"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font fontName="Arial" size="8" isBold="false" isUnderline="false"/>
+				</textElement>
+				<text><![CDATA[Vazão informada]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="f43eab24-e7ad-41f9-aec7-ad5096e3f901" positionType="Float" mode="Opaque" x="341" y="0" width="98" height="12" backcolor="#EEECE1"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font fontName="Arial" size="8" isBold="false" isUnderline="false"/>
+				</textElement>
+				<text><![CDATA[Área para agricultura irrigada]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="96f86037-ae51-49fb-b793-f6f6fa12dd0d" positionType="Float" mode="Opaque" x="0" y="0" width="95" height="12" backcolor="#EEECE1"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font fontName="Arial" size="8" isBold="false" isUnderline="false"/>
+				</textElement>
+				<text><![CDATA[Sobre a finalidade]]></text>
+			</staticText>
+			<line>
+				<reportElement uuid="825b8c82-4df2-4293-9553-1f79ba916e4f" x="0" y="11" width="439" height="1"/>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</line>
+			<line>
+				<reportElement uuid="796ea3b0-79ec-4e1b-9a88-6b50a708b0af" x="233" y="0" width="1" height="12"/>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</line>
+			<line>
+				<reportElement uuid="6d4c194b-4a7f-4806-b3c1-24d3a80e8b3f" x="438" y="0" width="1" height="12"/>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</line>
+			<line>
+				<reportElement uuid="f9eb2e6a-85f7-4932-a6de-461b7ec1fe3b" x="341" y="0" width="1" height="12"/>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</line>
+			<line>
+				<reportElement uuid="f258a9d4-c66d-4e74-bf51-67ec808769c5" x="95" y="0" width="1" height="12"/>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</line>
+			<line>
+				<reportElement uuid="c382b44f-6ca5-4dd5-84c6-a1c92428698a" x="0" y="0" width="1" height="12"/>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</line>
+			<line>
+				<reportElement uuid="a84ebb65-aaec-41f8-ad5d-297e2bd84df0" x="0" y="0" width="439" height="1"/>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</line>
+		</band>
+	</title>
+	<detail>
+		<band height="21" splitType="Stretch">
+			<subreport>
+				<reportElement uuid="ffb24b05-f136-4101-87bd-f241d47cdb10" x="95" y="0" width="138" height="20"/>
+				<subreportParameter name="SUBREPORT_DIR">
+					<subreportParameterExpression><![CDATA[$P{SUBREPORT_DIR}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="ide_requerimento">
+					<subreportParameterExpression><![CDATA[$P{ide_requerimento}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="ide_outorga_localizacao_geografica">
+					<subreportParameterExpression><![CDATA[$P{ide_outorga_localizacao_geografica}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "resumo_requerimento_questionario_acoes_outorga_alteracao_finalidade_captacao.jasper"]]></subreportExpression>
+			</subreport>
+			<textField>
+				<reportElement uuid="ab01cf7a-add0-4ed1-b61d-af44ed812228" x="234" y="0" width="107" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{num_vazao} == null ? " - " : $F{num_vazao}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00">
+				<reportElement uuid="37688c68-b492-458d-b14b-8b35c05471ac" x="341" y="0" width="98" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{num_area_irrigada_captacao}  == null ? "-" :$F{num_area_irrigada_captacao}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement uuid="bd1b6c04-9a0b-4d4c-9831-795a21e3fd8b" stretchType="RelativeToBandHeight" x="0" y="0" width="1" height="20"/>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</line>
+			<line>
+				<reportElement uuid="4b3dfee1-aa63-48f2-b7f9-5e7395ff058a" stretchType="RelativeToBandHeight" x="95" y="0" width="1" height="20"/>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</line>
+			<line>
+				<reportElement uuid="d2c36472-b96e-4b2f-8235-9bb44cd07895" stretchType="RelativeToBandHeight" x="233" y="0" width="1" height="20"/>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</line>
+			<line>
+				<reportElement uuid="64508cf6-8c07-42fa-8e64-d9c4d72d594a" stretchType="RelativeToBandHeight" x="341" y="0" width="1" height="20"/>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</line>
+			<line>
+				<reportElement uuid="a698027a-ef60-482b-8513-ca71c16a6d3e" stretchType="RelativeToBandHeight" x="438" y="0" width="1" height="20"/>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</line>
+			<textField>
+				<reportElement uuid="76382ed6-6892-4ffb-b65e-e313a417c591" stretchType="RelativeToBandHeight" x="1" y="0" width="94" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{sobrefinalidade} == null ? "-":$F{sobrefinalidade}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement uuid="96405378-c239-4f8f-9d6d-5a58b3475ddd" x="0" y="20" width="439" height="1"/>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</line>
+		</band>
+	</detail>
+</jasperReport>

@@ -1,0 +1,371 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="relatorio_caepog_poco_detalhe" pageWidth="495" pageHeight="802" columnWidth="495" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="55e615d6-06c2-443f-be6a-a240d9f19f9f">
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="ide_caepog_locacao" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[0]]></defaultValueExpression>
+	</parameter>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["/home/eduardo/workspace/seia_caepog/src/br/gov/ba/seia/reports/sources/caepog/"]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT
+	(
+	SELECT
+		m.nom_municipio
+	FROM
+		municipio m
+	WHERE
+		m.cod_ibge_municipio = (
+		SELECT
+			CAST( sp_get_municipio(cp.ide_localizacao_geografica) AS int))
+		AND m.ind_excluido = FALSE
+		AND m.ide_tipo_municipio = 1) AS localidade,
+	--formações
+	(
+	SELECT
+		COUNT(cfg_i.nom_caepog_formacao_geologica)
+	FROM
+		caepog_formacao_geologica_poco cfgp_i
+	INNER JOIN caepog_formacao_geologica cfg_i ON
+		cfg_i.ide_caepog_formacao_geologica = cfgp_i.ide_caepog_formacao_geologica
+	INNER JOIN caepog_poco cp_i ON
+		cp_i.ide_caepog_poco = cfgp_i.ide_caepog_poco
+	WHERE
+		cp_i.ide_caepog_poco = cp.ide_caepog_poco) formacoes,
+		cp.ide_localizacao_geografica,
+		cp.cascalho_residuo_caepog_poco,
+		cp.empolamento_caepog_poco,
+		cp.ide_caepog_poco,
+		cp.nom_poco_caepog_poco,
+		cp.profundidade_caepog_poco,
+		cp.ind_novo_caepog_poco,
+		cp.ind_alt_porte_caepog_poco,
+		cp.num_processo_asv_caepog_poco,
+		cp.num_processo_caepog_poco,
+	-- Objetivos
+	array_to_string (ARRAY (
+	SELECT
+		nom_caepog_objetivo_atividade
+	FROM
+		caepog_objetivo_atividade_poco coap_i
+	INNER JOIN caepog_objetivo_atividade coa_i ON
+		coa_i.ide_caepog_objetivo_atividade = coap_i.ide_caepog_objetivo_atividade
+	WHERE
+		coap_i.ide_caepog_poco = cp.ide_caepog_poco),
+	', ') AS objetivo_poco,
+	transformar_coordenada_decimal_para_graus(
+		CAST (
+		trim(
+		substring(
+			REPLACE(substring(trim(ST_AsText(dg.the_geom)) FROM strpos (trim(ST_AsText(dg.the_geom)), '(') + 1), ')', ' ') FROM
+			strpos(REPLACE(substring(trim(ST_AsText(dg.the_geom)) FROM strpos (trim(ST_AsText(dg.the_geom)), '(') + 1), ')', ' '), ' ') FOR
+			char_length(REPLACE(substring(trim(ST_AsText(dg.the_geom)) FROM strpos (trim(ST_AsText(dg.the_geom)), '(') + 1), ')', ' ')))) AS decimal),
+		CAST(
+		trim(
+		substring(
+			REPLACE(substring(trim(ST_AsText(dg.the_geom)) FROM strpos (trim(ST_AsText(dg.the_geom)), '(') + 1), ')', ' ') FOR
+			strpos(REPLACE(substring(trim(ST_AsText(dg.the_geom)) FROM strpos (trim(ST_AsText(dg.the_geom)), '(') + 1), ')', ' '), ' '))) AS decimal )
+	)AS coordenada,
+	ctp.nom_caepog_tipo_poco,
+	cp.ind_sup_vegeta_caepog_poco
+FROM
+	caepog_poco cp
+LEFT OUTER JOIN caepog_tipo_poco ctp ON
+	ctp.ide_caepog_tipo_poco = cp.ide_caepog_tipo_poco
+INNER JOIN dado_geografico dg ON
+	dg.ide_localizacao_geografica = cp.ide_localizacao_geografica
+INNER JOIN localizacao_geografica lg ON
+	lg.ide_localizacao_geografica = cp.ide_localizacao_geografica
+WHERE
+	cp.ide_caepog_locacao = $P{ide_caepog_locacao};]]>
+	</queryString>
+	<field name="localidade" class="java.lang.String"/>
+	<field name="formacoes" class="java.lang.String"/>
+	<field name="ide_localizacao_geografica" class="java.lang.Integer">
+		<fieldDescription><![CDATA[Identificar da localização geográfica da Área de Preservação Permanente]]></fieldDescription>
+	</field>
+	<field name="cascalho_residuo_caepog_poco" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[Quantidade de cascalho gerado por poço (m3)]]></fieldDescription>
+	</field>
+	<field name="empolamento_caepog_poco" class="java.lang.Integer">
+		<fieldDescription><![CDATA[Coeficiente de empolamento do resíduo gerado por poço]]></fieldDescription>
+	</field>
+	<field name="ide_caepog_poco" class="java.lang.Integer">
+		<fieldDescription><![CDATA[Chave primária da tabela CAEPOG_POCO]]></fieldDescription>
+	</field>
+	<field name="nom_poco_caepog_poco" class="java.lang.String">
+		<fieldDescription><![CDATA[Nome do poço cadastrado]]></fieldDescription>
+	</field>
+	<field name="profundidade_caepog_poco" class="java.lang.Integer">
+		<fieldDescription><![CDATA[Profundidade do poço cadastrado]]></fieldDescription>
+	</field>
+	<field name="ind_novo_caepog_poco" class="java.lang.Boolean">
+		<fieldDescription><![CDATA[Indicador para poços novos, considerando como true poços novos e false como poços antigos]]></fieldDescription>
+	</field>
+	<field name="ind_alt_porte_caepog_poco" class="java.lang.Boolean">
+		<fieldDescription><![CDATA[Indicador da alteração do porte, para o caso do requerente marca se houve alteração do porte para um poço novo]]></fieldDescription>
+	</field>
+	<field name="num_processo_asv_caepog_poco" class="java.lang.String">
+		<fieldDescription><![CDATA[Número do processo da ASV da perfuração do poço]]></fieldDescription>
+	</field>
+	<field name="num_processo_caepog_poco" class="java.lang.String">
+		<fieldDescription><![CDATA[Número do processo de alteração de licença para o poço novo]]></fieldDescription>
+	</field>
+	<field name="objetivo_poco" class="java.lang.String"/>
+	<field name="coordenada" class="java.lang.String"/>
+	<field name="nom_caepog_tipo_poco" class="java.lang.String">
+		<fieldDescription><![CDATA[Nome do tipo do poço]]></fieldDescription>
+	</field>
+	<field name="ind_sup_vegeta_caepog_poco" class="java.lang.Boolean">
+		<fieldDescription><![CDATA[Indicador de supressão nativa. Marcado true haverá/houve supressão de vegetação]]></fieldDescription>
+	</field>
+	<detail>
+		<band height="80" splitType="Stretch">
+			<textField>
+				<reportElement x="20" y="0" width="475" height="20" uuid="24a8f1d4-9ac9-4a0a-868d-ca696c686f64"/>
+				<textElement verticalAlignment="Middle" markup="html">
+					<font fontName="Arial" size="9" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nom_poco_caepog_poco}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="40" y="20" width="220" height="40" uuid="ed79e950-cae8-4456-9bbc-c00ce7163cb9"/>
+				<box leftPadding="6">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement verticalAlignment="Middle" markup="html">
+					<font fontName="Arial" size="9"/>
+					<paragraph lineSpacing="1_1_2"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Localização geográfica: <br><b>" + $F{coordenada} +  "<b>"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="260" y="20" width="220" height="40" uuid="71a54f3f-722c-41d7-af00-8870907ae074"/>
+				<box leftPadding="6">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement verticalAlignment="Middle" markup="html">
+					<font fontName="Arial" size="9"/>
+					<paragraph lineSpacing="1_1_2"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Localização: <br><b>" +
+($F{localidade}!=null ? $F{localidade}: " --- ")
++"<b>"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="40" y="60" width="220" height="20" uuid="d3a08eef-a8e8-4a6e-8a3e-db4e35cc3dff"/>
+				<box leftPadding="6">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement verticalAlignment="Middle" markup="html">
+					<font fontName="Arial" size="9"/>
+					<paragraph lineSpacing="1_1_2"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Situação: <b>" +
+($F{ind_novo_caepog_poco} ? "Poço novo":"Poço antigo") + "<b>"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="260" y="60" width="220" height="20" uuid="4bc580c8-520f-44f4-8ec9-636c1af73464"/>
+				<box leftPadding="6">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement verticalAlignment="Middle" markup="html">
+					<font fontName="Arial" size="9"/>
+					<paragraph lineSpacing="1_1_2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{ind_novo_caepog_poco}
+    ? "Geometria do poço: <b>"+ $F{nom_caepog_tipo_poco} + "<b>"
+    : "Profundidade: <b>" + $F{profundidade_caepog_poco} + "m <b>")]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="136">
+			<printWhenExpression><![CDATA[$F{ind_novo_caepog_poco}]]></printWhenExpression>
+			<textField>
+				<reportElement x="40" y="0" width="220" height="40" uuid="ecd2bbed-d874-4a89-b018-2d5807c371dc"/>
+				<box leftPadding="6">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement verticalAlignment="Middle" markup="html">
+					<font fontName="Arial" size="9"/>
+					<paragraph lineSpacing="1_1_2"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Esse novo poço irá alterar o porte do campo: <br> <b>" +
+($F{ind_alt_porte_caepog_poco} ? "Sim":"Não") + "<b>"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="40" y="40" width="220" height="40" uuid="c5e4ec77-51a1-4671-88da-5aec16bc05bb"/>
+				<box leftPadding="6">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement verticalAlignment="Middle" markup="html">
+					<font fontName="Arial" size="9"/>
+					<paragraph lineSpacing="1_1_2"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Objetivos: <br> <b>" +
+($F{objetivo_poco}!=null ? $F{objetivo_poco} :" --- " ) + "<b>"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="260" y="0" width="220" height="40" uuid="e6d6d49d-a6dc-4da1-84ce-2314643302ca"/>
+				<box leftPadding="6">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement verticalAlignment="Middle" markup="html">
+					<font fontName="Arial" size="9"/>
+					<paragraph lineSpacing="1_1_2"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Nº da licença de alteração: <br><b>" +
+($F{ind_alt_porte_caepog_poco}
+    ? $F{num_processo_caepog_poco}
+    :" --- " )
++"<b>"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="260" y="40" width="220" height="40" uuid="9cd284e3-9227-4091-a5c1-797b0721d881"/>
+				<box leftPadding="6">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement verticalAlignment="Middle" markup="html">
+					<font fontName="Arial" size="9"/>
+					<paragraph lineSpacing="1_1_2"/>
+				</textElement>
+				<textFieldExpression><![CDATA["A perfuração transpassa a formação: <br><b>" +
+( $F{formacoes}!= null?  $F{formacoes} : " --- ")
++"<b>"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="40" y="80" width="220" height="56" uuid="cfa8f27b-279f-43c4-a624-1c0f7b5162d7"/>
+				<box leftPadding="6">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement verticalAlignment="Middle" markup="html">
+					<font fontName="Arial" size="9"/>
+					<paragraph lineSpacing="1_1_2"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Para a perfuração deste poço será necessário outorga de uso       de recursos hídricos,supressão de vegetação nativa  e/ou algum outro ato autorizativo? <br><b>"+
+($F{ind_sup_vegeta_caepog_poco}==true ? " Sim ":" Não ")
++"<b>"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="260" y="80" width="220" height="56" uuid="89e2f7f0-dac9-4d56-8c84-0e2befb40070"/>
+				<box leftPadding="6">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement verticalAlignment="Middle" markup="html">
+					<font fontName="Arial" size="9"/>
+					<paragraph lineSpacing="1_1_2"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Nº processo: <br><b>"+
+($F{ind_sup_vegeta_caepog_poco}
+    ? $F{num_processo_asv_caepog_poco}
+    : " --- ")
++"<b>"]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="60">
+			<printWhenExpression><![CDATA[$F{ind_novo_caepog_poco}]]></printWhenExpression>
+			<subreport>
+				<reportElement x="40" y="40" width="440" height="20" uuid="1ce1723a-b956-4be0-875e-e9a9b0adaa33"/>
+				<subreportParameter name="SUBREPORT_DIR">
+					<subreportParameterExpression><![CDATA[$P{SUBREPORT_DIR}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="ide_caepog_poco">
+					<subreportParameterExpression><![CDATA[$F{ide_caepog_poco}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "relatorio_caepog_poco_detalhe_fase_perfuracao.jasper"]]></subreportExpression>
+			</subreport>
+			<textField>
+				<reportElement x="40" y="20" width="220" height="20" uuid="253b89ca-a870-4b6c-a070-53fae285dc81"/>
+				<textElement verticalAlignment="Middle" markup="html">
+					<font fontName="Arial" size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Fase da perfuração"]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="80">
+			<printWhenExpression><![CDATA[$F{ind_novo_caepog_poco}]]></printWhenExpression>
+			<textField>
+				<reportElement x="40" y="20" width="220" height="20" uuid="08bb5ce1-f24a-43fe-9e89-628415e974a9"/>
+				<textElement verticalAlignment="Middle" markup="html">
+					<font fontName="Arial" size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Resíduos Gerados"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="40" y="40" width="220" height="20" uuid="40c8ad4f-78db-4469-84b0-8c034e2156b1"/>
+				<box leftPadding="6">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement verticalAlignment="Middle" markup="html">
+					<font fontName="Arial" size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Cascalho gerado (m³): <b>" +
+($F{cascalho_residuo_caepog_poco}!=null?$F{cascalho_residuo_caepog_poco}: " --- ")
+
++"<b>"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="260" y="40" width="220" height="20" uuid="d58c8f9a-3bd1-4e07-8f4c-8b2872cba16d"/>
+				<box leftPadding="6">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement verticalAlignment="Middle" markup="html">
+					<font fontName="Arial" size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Coeficiente de empolamento (%): <b>" +
+($F{empolamento_caepog_poco}!=null?$F{empolamento_caepog_poco}:"")
++"<b>"]]></textFieldExpression>
+			</textField>
+			<subreport>
+				<reportElement x="40" y="60" width="440" height="20" uuid="0cc4577f-617e-4e8f-9cc6-2a98ed3c01f0"/>
+				<subreportParameter name="SUBREPORT_DIR">
+					<subreportParameterExpression><![CDATA[$P{SUBREPORT_DIR}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="ide_caepog_poco">
+					<subreportParameterExpression><![CDATA[$F{ide_caepog_poco}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "relatorio_caepog_poco_detalhe_residuo_gerado.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+		<band height="20"/>
+	</detail>
+</jasperReport>

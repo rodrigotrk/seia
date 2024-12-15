@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui">
+	
+	<h:outputText styleClass="titulo-grupo" style="font-weight:bold;" value="Traçado do Canal" />
+	<hr/>
+	<br/>
+	<h3>Trecho(s):</h3>
+	<br/>
+	<p:commandLink  oncomplete="dialogAddtrecho.show();" action="#{localizacaoGeograficaGenericController.carregarTela()}" disabled="#{fceCanalController.desabilitarTudo}"
+		actionListener="#{fceCanalController.addtrecho()}" process="@this" immediate="true" update="formFceCanaisTrecho">
+		<h:graphicImage title="Incluir trecho" value="/resources/img/ico-expandir.png" style="margin-right: 2px;"/>
+		<h:outputText value="Incluir trecho" />
+	</p:commandLink>
+	<br/>
+	<br/>
+	<p:dataTable
+		id="dataTableTrechos"
+		rendered="#{not empty fceCanalController.fceCanal.canalTrechos}"
+		var="trecho"
+		value="#{fceCanalController.fceCanal.canalTrechos}">
+		<p:column headerText="Ponto Início">
+			<h:outputText value="#{localizacaoGeograficaGenericController.getLatitude(trecho.localizacaoGeograficaInicio.dadoGeograficoCollection.get(0))} 
+			#{localizacaoGeograficaGenericController.getLongitude(trecho.localizacaoGeograficaInicio.dadoGeograficoCollection.get(0))}" />
+		</p:column>
+		<p:column headerText="Ponto Fim">
+			<h:outputText value="#{localizacaoGeograficaGenericController.getLatitude(trecho.localizacaoGeograficaFim.dadoGeograficoCollection.get(0))} 
+			#{localizacaoGeograficaGenericController.getLongitude(trecho.localizacaoGeograficaFim.dadoGeograficoCollection.get(0))}" />
+		</p:column>
+		<p:column headerText="Comprimento (m)">
+			<center>
+				<p:inputText value="#{trecho.comprimento}" onkeyup="maskIt(this, event, '99.999.999,99', true)" maxlength="10" disabled="#{fceCanalController.desabilitarTudo}">
+					<f:converter converterId="doubleConverter"/>
+					<p:ajax event="change" process="@this"/>
+				</p:inputText>
+			</center>
+		</p:column>
+		<p:column headerText="#{bundle.geral_lbl_acoes}">
+			<center>
+			    <p:commandLink oncomplete="dialogDadostrecho.show();" style="cursor: pointer; margin-left:5px;" global="false" accesskey="VISUALIZAR" rendered="#{fceCanalController.validarDadosTrecho(trecho)}" actionListener="#{fceCanalController.visualizarTrecho(trecho)}">
+					<h:graphicImage title="#{bundle.geral_btn_visualizar}" value="/resources/img/ico-pesquisa.png" />
+				</p:commandLink>
+				<h:outputText value=" "/> 
+				<p:commandLink actionListener="#{fceCanalController.editarTrecho(trecho)}" oncomplete="dialogDadostrecho.show();" disabled="#{fceCanalController.desabilitarTudo}">
+					<h:graphicImage title="Editar" value="#{!fceCanalController.validarDadosTrecho(trecho) ? '/resources/img/ico-preencher.png' : '/resources/img/ico-editar.png'}" />
+				</p:commandLink>
+				<h:outputText value=" "/>
+				<p:commandLink onclick="dialogExcluirLocGeoTrecho.show()" actionListener="#{fceCanalController.setTrecho(trecho)}" disabled="#{fceCanalController.desabilitarTudo}">
+					<h:graphicImage title="#{bundle.diap_lbl_legenda_excluir}" value="/resources/img/ico-excluir.png" />
+				</p:commandLink>
+				<h:outputText value=" "/>
+	 			<a style="cursor: pointer; margin-left:5px;" onclick="javascript:${localizacaoGeograficaGenericController.retornarUrl(trecho.localizacaoGeograficaInicio)}">
+					<h:graphicImage title="Geobahia" value="/resources/img/ico-arl-relocacao.png" />
+				</a> 
+			</center>
+		</p:column>
+	</p:dataTable>
+	<br/>
+	<h:panelGrid columns="2" layout="grid" width="600"> 
+		<h:panelGrid columns="1" layout="grid">
+			<h3>Bacia Hidrográfica</h3>
+			<ui:repeat var="bacia" value="#{fceCanalController.getBacias(fceCanalController.fceCanal)}">
+				<h:outputText value="#{bacia}" />
+				<br/>
+			</ui:repeat>
+		</h:panelGrid>
+		<h:panelGrid columns="1" layout="grid">
+			<h3>RPGA</h3>
+			<ui:repeat var="rpga" value="#{fceCanalController.getRpga(fceCanalController.fceCanal)}">
+				<h:outputText value="#{rpga}" />
+				<br/>
+			</ui:repeat>           
+		</h:panelGrid>
+		<h:panelGrid columns="1" layout="grid">
+			<h3> * Nome do Rio</h3>           
+		    <p:inputText value="#{fceCanalController.fceCanal.nomeRio}" disabled="#{fceCanalController.desabilitarTudo}">
+		    	<p:ajax event="change" process="@this"/>
+		    </p:inputText>
+		</h:panelGrid>
+		<h:panelGrid columns="1" layout="grid">
+			<h3>* Tipo do Rio</h3>           
+			<p:selectOneMenu id="listaTipoRio" value="#{fceCanalController.fceCanal.tipoRio}" rendered="#{not empty fceCanalController.tiposCanal}" disabled="#{fceCanalController.desabilitarTudo}">
+				<f:converter converterId="simpleEntityConverter" />
+				<f:selectItem itemLabel="Selecione"/>
+				<f:selectItems value="#{fceCanalController.tiposRios}" var="tipoRio" itemValue="#{tipoRio}"  itemLabel="#{tipoRio.dsTipoRio}" />
+				<p:ajax event="change" process="@this"/>
+			</p:selectOneMenu>
+		</h:panelGrid>
+	</h:panelGrid>
+	<br/>
+	<h:panelGrid columns="1" layout="grid">
+		<h3>Município(s)</h3>           
+	</h:panelGrid>
+	<h:panelGrid columns="1" layout="grid"  width="500">
+		<p:row>
+			<h:panelGrid id="pnlBotaoAdicionar">
+				<p:commandLink id="adicionarMunicipio" disabled="#{fceCanalController.desabilitarTudo}"
+					actionListener="#{adicionarMunicipioController.carregarDialogAdicionarMunicipio()}" immediate="true"
+					update="frmAdicionarMunicipio">
+					<h:graphicImage value="/resources/img/ico-expandir.png" />
+					<h:outputText value="Adicionar município" />
+					<f:setPropertyActionListener target="#{adicionarMunicipioController.listaMunicipioSelecionado}" value="#{fceCanalController.fceCanal.municipios}" />
+					<f:setPropertyActionListener target="#{adicionarMunicipioController.listaMunicipioEnvolvido}" value="#{fceCanalController.municipiosTrechos}" />
+					<f:setPropertyActionListener target="#{adicionarMunicipioController.naoSalvarEmprendimento}" value="true" />
+					<f:setPropertyActionListener target="#{adicionarMunicipioController.updateComponente}" value="formFceCanais" />
+				</p:commandLink>
+			</h:panelGrid>
+		</p:row>
+	</h:panelGrid> 
+	<h:panelGrid id="pnlListaMunicipioEnvolvido">
+		<p:dataTable id="listaMunicipioEnvolvido" var="municipio" value="#{fceCanalController.municipios}">
+			<p:column>
+				<f:facet name="header">
+					<h:outputText value="Municípios" />
+				</f:facet>
+				<h:outputText value="#{municipio.nomMunicipio}" />
+			</p:column>
+			<p:column>
+				<f:facet name="header">
+					<h:outputText value="Ação" />
+				</f:facet>
+				<h:panelGroup layout="block">
+					<p:commandLink actionListener="#{fceCanalController.removeMunicipio(municipio)}"
+						process="@this" disabled="#{fceCanalController.desabilitarTudo}"
+						update="formFceCanais"
+						rendered="#{municipio.selectable}">
+						<h:graphicImage value="/resources/img/ico-excluir.png" />
+					</p:commandLink>
+				</h:panelGroup>
+			</p:column>
+		</p:dataTable>
+	</h:panelGrid>
+</ui:composition>

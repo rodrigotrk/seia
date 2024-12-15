@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui">
+
+	<p:confirmDialog widgetVar="confirmaExclusaoDocumento" message="Realmente deseja excluir o documento?">
+		<h:form>
+			<p:commandButton value="#{bundle.geral_lbl_sim}" 
+				actionListener="#{cancelarCerhController.excluirDocumento()}"
+				update="formCancelarCerh:gridDocumento" 
+				oncomplete="confirmaExclusaoDocumento.hide();" />
+			<p:commandButton value="#{bundle.geral_lbl_nao}" type="button" onclick="confirmaExclusaoDocumento.hide();" />
+		</h:form>
+	</p:confirmDialog>
+
+
+	<p:dialog 
+		widgetVar="confirma_exclusao" 
+		dynamic="true" 
+		header="Excluir cadastro" 
+		modal="true" 
+		position="center" 
+		width="350"
+		height="200"
+		resizable="false">
+		
+		<h:form id="excluir_cadastro">
+		
+		<h:panelGrid columns="2">
+	
+			<h:outputText value="Nome:" />
+			<h:outputText value="#{cancelarCerhController.cerh.idePessoaRequerente.nomeRazao}" />
+	
+			<h:outputText value="CPF/CNPJ:" />
+			<h:outputText value="#{cancelarCerhController.cerh.idePessoaRequerente.cpfCnpjFormatado}" />
+		
+			<h:outputText value="Empreendimento:" />
+			<h:outputText value="#{cancelarCerhController.cerh.ideEmpreendimento.nomEmpreendimento}" />
+	
+		</h:panelGrid>
+		
+		<p:spacer height="20"/>
+		
+		<h:panelGrid columns="1">
+			<h:outputText value="Deseja Realmente excluir o Cadastro?" />
+			<h:outputText value="Essa ação não pode ser desfeita." />
+		</h:panelGrid>
+
+		<p:spacer height="20"/>
+
+
+		<h:panelGrid columns="2">
+			<p:commandButton 
+				value="Confirmar" 
+				actionListener="#{cancelarCerhController.excluir()}"
+				global="false" 	>
+				
+				<f:attribute name="metodoConsultar" value="#{consultarCerhController.metodoConsultar}"/>
+			</p:commandButton>
+	
+			<p:commandButton 
+				value="Cancelar"
+				onclick="confirma_exclusao.hide()" 
+				global="false" 
+				/>
+		</h:panelGrid>
+
+		</h:form>
+	</p:dialog>
+
+
+	<p:dialog id="dialogCancelar" 
+		widgetVar="dialogCancelar" 
+		dynamic="true" 
+		header="#{bundle.cerh_cancelar_titulo_cerh}" 
+		modal="true" 
+		position="center" 
+		resizable="false"
+		width="545"
+		height="550">
+		<ui:include src="/paginas/manter-cerh/cancelarConteudo.xhtml" />
+	</p:dialog>
+	
+</ui:composition>

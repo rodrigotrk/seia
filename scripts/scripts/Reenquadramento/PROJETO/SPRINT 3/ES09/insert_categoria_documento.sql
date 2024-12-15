@@ -1,0 +1,1 @@
+INSERT INTO categoria_documento (nom_categoria) VALUES('JUSTIFICATIVA PARA NÃO REENQUADRAR');

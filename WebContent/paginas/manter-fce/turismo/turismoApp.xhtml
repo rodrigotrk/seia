@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui">
+	<!-- Lista de Apps para Imovel Urbano -->
+	<h:panelGrid id="gridAppUrbano" rendered="#{!fceTurismoController.cessionario}">
+		<p:dataTable id="appUrbano" widgetVar="appUrbano" value="#{fceTurismoController.listaTipoApps}" var="apps" lazy="true" paginator="true" rows="10"  
+			paginatorPosition="bottom" paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}" 
+			rowsPerPageTemplate="5,10,15" emptyMessage="#{bundle.msg_lista_vazia}" style="width: 400px; margin-left:27px; margin-top:10px; margin-bottom:35px;" rendered="#{fceTurismoController.zonaUrbana and fceTurismoController.existeAppParaAdicionar}">
+			<p:column style="width:265px; text-align:justify;" headerText="APP">
+				<h:outputText value="#{apps.dscTipoApp}" />
+			</p:column>
+			<p:column headerText="Ações" style="width:35px; text-align:center;">
+				<p:commandLink update="formTurismo:gridAppUrbano" action="#{fceTurismoController.adicionarApp()}" global="false" disabled="#{fceTurismoController.desabilitarTudo}">
+					<h:graphicImage title="Confirmar" value="/resources/img/ico-adicionar.png" />
+					<f:setPropertyActionListener target="#{fceTurismoController.tipoApp}" value="#{apps}"/>
+				</p:commandLink>
+			</p:column>
+		</p:dataTable>
+	</h:panelGrid>
+	
+ 	<p:outputPanel autoUpdate="true" rendered="#{!fceTurismoController.cessionario}">
+		
+		<h:outputText styleClass="titulo-grupo" style="font-weight:bold; margin-left:27px;" value="#{bundle.fce_tur_poligonal}" rendered="#{fceTurismoController.existeAppAdicionada and fceTurismoController.zonaUrbana}"/>
+		<h:outputText styleClass="titulo-grupo" style="font-weight:bold; margin-left:27px;" value="#{bundle.fce_tur_visualizar_poligonal}" rendered="#{!fceTurismoController.zonaUrbana}"/>
+		
+		
+		<p:dataTable id="app" widgetVar="app" value="#{fceTurismoController.listaFceTurismoLocalizacaoGeografica}" var="fceTurismoLocGeo" lazy="true" paginator="true" rows="10"  
+			paginatorPosition="bottom" paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}" 
+			rowsPerPageTemplate="5,10,15" emptyMessage="#{bundle.msg_lista_vazia}" style="width: 570px; margin-left:27px; margin-top:10px;" rendered="#{fceTurismoController.existeAppAdicionada}">
+			<p:column style="width: 300px; text-align:justify;">
+				<f:facet name="header">
+					<h:outputText value="Nome do Imóvel Rural - APP" rendered="#{fceTurismoController.zonaRural}"/>
+					<h:outputText value="APP(s) Selecionada(s)" rendered="#{fceTurismoController.zonaUrbana}"/>
+				</f:facet>
+				<h:outputText value="#{fceTurismoLocGeo.ideTipoApp.nomeImovelAndApp}" rendered="#{fceTurismoController.zonaRural}"/>
+				<h:outputText value="#{fceTurismoLocGeo.ideTipoApp.dscTipoApp}" rendered="#{fceTurismoController.zonaUrbana}"/>
+			</p:column>
+			
+			<p:column headerText="Ações" style="text-align:center;">
+				<p:commandLink oncomplete="dlgLocalizacaoGeograficaGeneric.show();" action="#{localizacaoGeograficaGenericController.carregarTela()}" actionListener="#{localizacaoGeograficaGenericController.limparLocalizacaoGeografSelecionada()}" process="@this" disabled="#{fceTurismoController.getTipoAppComShape(fceTurismoLocGeo) or fceTurismoController.desabilitarTudo}" rendered="#{fceTurismoController.zonaUrbana}">
+					<f:setPropertyActionListener target="#{localizacaoGeograficaGenericController.tipoSecaoGeometrica}" value="#{fceTurismoController.somenteShape}" />
+					<f:setPropertyActionListener target="#{localizacaoGeograficaGenericController.empreendimento}" value="#{fceTurismoController.empreendimento}" />
+					<f:setPropertyActionListener target="#{localizacaoGeograficaGenericController.localizacaoGeograficaSelecionada}" value="#{fceTurismoLocGeo.ideLocalizacaoGeografica}" />
+					<f:setPropertyActionListener target="#{localizacaoGeograficaGenericController.objetoLocalizacao}" value="#{fceTurismoLocGeo}" />
+					<h:graphicImage title="Incluir Poligonal da APP" value="/resources/img/ico-expandir.png" />
+					<h:outputText value="Incluir Poligonal da APP" />
+				</p:commandLink>
+				
+				<p:commandLink style="cursor: pointer; margin-left:5px;" onclick='javascript:${fceTurismoController.exibirLocalizacaoGeografica(fceTurismoLocGeo)}' global="false" disabled="#{!fceTurismoController.getTipoAppComShape(fceTurismoLocGeo)}" accesskey="VISUALIZAR GEOBAHIA">
+					<h:graphicImage title="Localização da Poligonal da APP no Geobahia" value="/resources/img/ico-arl-relocacao.png"/>
+				</p:commandLink>
+				
+				<p:commandLink style="margin-left:5px;" oncomplete="confirmaExclusaoApp.show()" title="Excluir" process="@this" global="false" rendered="#{fceTurismoController.zonaUrbana}" disabled="#{fceTurismoController.desabilitarTudo}">
+					<f:setPropertyActionListener target="#{fceTurismoController.fceTurismoLocalizacaoGeografica}" value="#{fceTurismoLocGeo}" />	
+					<h:graphicImage title="Excluir APP" value="/resources/img/ico-excluir.png" rendered="#{fceTurismoController.zonaUrbana}"/>
+				</p:commandLink>
+			</p:column>
+		</p:dataTable>
+	</p:outputPanel>
+</ui:composition>

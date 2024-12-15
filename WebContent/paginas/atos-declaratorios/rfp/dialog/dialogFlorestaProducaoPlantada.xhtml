@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+	xmlns:h="http://java.sun.com/jsf/html" 
+	xmlns:f="http://java.sun.com/jsf/core" 
+	xmlns:ui="http://java.sun.com/jsf/facelets" 
+	xmlns:p="http://primefaces.prime.com.tr/ui">
+	
+	<h:form id="formFlorestaProducaoPlantada" styleClass="col-12">
+	
+		<h:panelGrid>
+			<h:panelGrid>
+			
+				<h:outputText value="Selecione o imóvel" />
+				<p:selectOneMenu 
+						converter="simpleEntityConverter" 
+						value="#{registroFlorestaPlantadaController.ideRegistroFlorestaProducaoImovel.ideImovel}" 
+						disabled="#{registroFlorestaPlantadaController.ideRegistroFlorestaProducaoImovel.visualizar 
+							or registroFlorestaPlantadaController.ideRegistroFlorestaProducaoImovel.editar
+							or !registroFlorestaPlantadaController.imovelListPossuiRuralOuUrbano}">
+					<p:ajax event="change" process="@this"/>
+					<f:selectItem itemLabel="Selecione..."/>
+					<f:selectItems value="#{registroFlorestaPlantadaController.imovelList}" var="imovel" itemValue="#{imovel}" itemLabel="#{imovel.nomImovel}" />
+				</p:selectOneMenu>
+
+				<h:panelGrid columns="2" > 
+					<p:commandLink styleClass="link mb1" actionListener="#{registroFlorestaPlantadaController.exibirImovel()}" 
+						disabled="#{registroFlorestaPlantadaController.ideRegistroFlorestaProducaoImovel.visualizar 
+							or registroFlorestaPlantadaController.ideRegistroFlorestaProducaoImovel.editar}">
+						
+						<h:graphicImage title="#{bundle.fce_lic_min_incluir_shape}" value="/resources/img/ico-expandir.png"  style="margin-right: 2px;"/>
+						<h:outputText value=" Incluir imóvel" />
+					</p:commandLink>
+				</h:panelGrid>
+			</h:panelGrid>
+			
+			<h:panelGrid id="pnlDadosPlantio" styleClass="col-12">
+			
+				<h:panelGrid columns="2">
+						
+					<p:commandLink styleClass="link mb1" actionListener="#{registroFlorestaPlantadaController.exibirPlantio()}" 
+						disabled="#{registroFlorestaPlantadaController.desabiltarEnvioSituacao}">
+					
+						<h:graphicImage title="#{bundle.fce_lic_min_incluir_shape}" value="/resources/img/ico-expandir.png" style="margin-right: 2px;"/>
+						<h:outputText value=" Incluir dados para cada plantio" />
+					</p:commandLink>
+					
+				</h:panelGrid>
+
+				<p:dataTable 
+					value="#{registroFlorestaPlantadaController.registroFlorestaProducaoImovelPlantioList}"
+					emptyMessage="Nenhum registro encontrado"
+					var="imovelPlantio" styleClass="col-12"	>
+					
+					<p:column headerText="Situação atual da floresta">
+						<h:outputText value="#{imovelPlantio.ideSituacaoAtualFlorestaProducao.desSituacaoFlorestaProducao}" />
+					</p:column>
+				
+					<p:column headerText="Área do plantio">
+						<h:outputText value="#{imovelPlantio.valAreaPlantio}" >
+							<f:convertNumber maxIntegerDigits="9" maxFractionDigits="4" pattern="###,##0.0000" locale="pt_BR"/>
+						</h:outputText>
+					</p:column>
+			
+					<p:column headerText="Período">
+						<h:outputText value="#{imovelPlantio.periodo}"/>
+					</p:column>
+				
+					<p:column headerText="Ações">
+						
+						<p:commandLink id="visualizar" title="Visualizar"  oncomplete="dialogPlantio.show()" update="formPlantio">
+							<f:setPropertyActionListener value="#{imovelPlantio}" target="#{registroFlorestaPlantadaController.ideRegistroFlorestaProducaoImovelPlantio}"/>
+							<f:setPropertyActionListener value="#{true}"		  target="#{registroFlorestaPlantadaController.ideRegistroFlorestaProducaoImovelPlantio.visualizar}"/>
+							<p:graphicImage value="/resources/img/ico-pesquisa.png"/>
+						</p:commandLink>
+						
+						<p:commandLink id="alterar" title="Editar" oncomplete="dialogPlantio.show()" update="formPlantio" disabled="#{registroFlorestaPlantadaController.ideRegistroFlorestaProducaoImovel.visualizar}">
+							<f:setPropertyActionListener value="#{imovelPlantio}" target="#{registroFlorestaPlantadaController.ideRegistroFlorestaProducaoImovelPlantio}"/>
+							<f:setPropertyActionListener value="#{true}"		  target="#{registroFlorestaPlantadaController.ideRegistroFlorestaProducaoImovelPlantio.editar}"/>
+							<f:setPropertyActionListener value="#{false}"		  target="#{registroFlorestaPlantadaController.ideRegistroFlorestaProducaoImovelPlantio.visualizar}"/>
+							<p:graphicImage value="/resources/img/ico-alterar.png"/>
+						</p:commandLink>
+
+ 						<p:commandLink id="excluir" title="excluir" oncomplete="confirmDialogExcluirPlantio.show()" rendered="#{!registroFlorestaPlantadaController.ideRegistroFlorestaProducaoImovel.editar}" disabled="#{registroFlorestaPlantadaController.ideRegistroFlorestaProducaoImovel.visualizar}" >
+							<f:setPropertyActionListener value="#{imovelPlantio}" target="#{registroFlorestaPlantadaController.ideRegistroFlorestaProducaoImovelPlantio}"/>
+							<p:graphicImage value="/resources/img/ico-excluir.png"/>
+						</p:commandLink> 	 
+					
+					</p:column>
+					
+				</p:dataTable>
+			</h:panelGrid>
+		
+			
+			<h:panelGrid id="pnlEspecieProducao" styleClass="col-12">
+				
+				<h:panelGrid columns="2">
+						
+					<p:commandLink styleClass="link mb1" actionListener="#{registroFlorestaPlantadaController.exibirEspecieProducao()}" 
+						disabled="#{registroFlorestaPlantadaController.ideRegistroFlorestaProducaoImovel.visualizar}">
+						
+						<h:graphicImage title="#{bundle.fce_lic_min_incluir_shape}" value="/resources/img/ico-expandir.png" style="margin-right: 2px;"/>
+						<h:outputText value=" Incluir dados da espécie(s) produção" />
+					</p:commandLink>
+				</h:panelGrid>
+				 
+				<p:dataTable 
+					emptyMessage="Nenhum registro encontrado"
+					value="#{registroFlorestaPlantadaController.registroFlorestaProducaoImovelEspecieProducaoList}" var="fp" styleClass="col-12">
+					
+					<p:column headerText="Natureza da especie">
+						<h:outputText value="#{fp.ideEspecieFloresta.ideNaturezaEspecieFloresta.nomNaturezaEspecieFloresta}" />	
+					</p:column>
+				
+					<p:column headerText="Nome">
+						<h:outputText value="#{fp.ideEspecieFloresta.nomEspecieFloresta}" />	
+					</p:column>
+			
+					<p:column>
+						<f:facet name="header">
+							<h:outputText value="Estimativa de volume" /><br/>
+							<h:outputText value="de produção final" /><br/>
+							<h:outputText value="no primeiro corte" />
+						</f:facet>
+
+						<h:outputText value="#{fp.valEstimativaVolumeTotalFinal}" />
+					</p:column>
+				
+					<p:column headerText="Ações">
+						
+						<p:commandLink id="visualizar" title="Visualizar" action="#{registroFlorestaPlantadaController.carregarEspecieProducao}" oncomplete="dialogEspecieProducao.show()" update="formEspecieProducao">
+							<f:setPropertyActionListener value="#{fp}" target="#{registroFlorestaPlantadaController.ideRegistroFlorestaProducaoImovelEspecieProducao}"/>
+							<f:setPropertyActionListener value="#{fp.ideEspecieFloresta}" target="#{registroFlorestaPlantadaController.especieFlorestaAuxiliar}"/>
+							<f:setPropertyActionListener value="#{true}" target="#{registroFlorestaPlantadaController.ideRegistroFlorestaProducaoImovelEspecieProducao.visualizar}"/>
+							<p:graphicImage value="/resources/img/ico-pesquisa.png"/>
+						</p:commandLink>
+						
+					    <p:commandLink id="alterar"	title="Editar" action="#{registroFlorestaPlantadaController.carregarEspecieProducao}" oncomplete="dialogEspecieProducao.show()" update="formEspecieProducao" disabled="#{registroFlorestaPlantadaController.ideRegistroFlorestaProducaoImovel.visualizar}" >
+							<f:setPropertyActionListener value="#{fp}" target="#{registroFlorestaPlantadaController.ideRegistroFlorestaProducaoImovelEspecieProducao}"/>
+							<f:setPropertyActionListener value="#{fp.ideEspecieFloresta}" target="#{registroFlorestaPlantadaController.especieFlorestaAuxiliar}"/>
+							<f:setPropertyActionListener value="#{true}" target="#{registroFlorestaPlantadaController.ideRegistroFlorestaProducaoImovelEspecieProducao.editar}"/>
+							<f:setPropertyActionListener value="#{false}" target="#{registroFlorestaPlantadaController.ideRegistroFlorestaProducaoImovelEspecieProducao.visualizar}"/>
+							<p:graphicImage value="/resources/img/ico-alterar.png"/>
+						</p:commandLink> 	
+
+ 						<p:commandLink id="excluir" title="excluir" onclick="confirmDialogExcluirEspecieProducao.show()"  disabled="#{registroFlorestaPlantadaController.ideRegistroFlorestaProducaoImovel.visualizar}" >
+							<f:setPropertyActionListener value="#{fp}" target="#{registroFlorestaPlantadaController.ideRegistroFlorestaProducaoImovelEspecieProducao}"/>
+							<p:graphicImage value="/resources/img/ico-excluir.png"/>
+						</p:commandLink> 	 
+						
+					</p:column>
+				
+				</p:dataTable>
+				 
+			</h:panelGrid>
+		
+		</h:panelGrid>
+		
+		
+		<h:panelGrid columns="2">
+			<p:commandButton title="Voltar" value="Voltar" styleClass="btn-medio right"  onclick="dialogFlorestaProducaoPlantada.hide()" />
+			<p:commandButton title="Salvar" value="Salvar" styleClass="btn-medio right" actionListener="#{registroFlorestaPlantadaController.adicionarFlorestaProducao()}"  disabled="#{registroFlorestaPlantadaController.ideRegistroFlorestaProducaoImovel.visualizar}"/>
+		</h:panelGrid>
+
+		
+	</h:form>
+
+</ui:composition>

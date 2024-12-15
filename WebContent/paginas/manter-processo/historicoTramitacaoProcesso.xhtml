@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui">
+
+	<h:form id="formHistoricoTramitacaoProcesso">
+		<h:panelGrid id="panelHistoricoTramitacaoProcesso" columns="1">
+			<h:outputText value="Número do Processo" style="font-weight:bold" />
+			<h:outputText value="#{historicoTramitacaoProcessoController.vwProcesso.numProcesso}" />
+			<h3><h:outputLabel styleClass="titulo-grupo" value="Histórico de Tramitação" /></h3>
+			<p:dataTable id="tabelaControleTramitacao" scrollable="true" scrollHeight="180" style="heght:150px; width:900px; border:1px solid #ccc;"
+				value="#{historicoTramitacaoProcessoController.vwProcesso.controleTramitacaoAllList}" var="controleTramitacao">
+				<p:column style="width:94px;text-align:center;">
+					<f:facet name="header">Data e Hora</f:facet>
+					<h:outputText value="#{controleTramitacao.dtcTramitacaoFormatado}">
+					</h:outputText>
+				</p:column>
+				<p:column style="width:100px;text-align:center;">
+					<f:facet name="header">Status</f:facet>
+					<h:outputText value="#{controleTramitacao.ideStatusFluxo.dscStatusFluxo}" />
+				</p:column>
+				<p:column style="width:200px;">
+					<f:facet name="header">Observações</f:facet>
+					<h:outputText value="#{controleTramitacao.dscComentarioInterno}" />
+				</p:column>
+				<p:column style="width:200px;">
+					<f:facet name="header">Usuário Destino</f:facet>
+					<h:outputText value="#{historicoTramitacaoProcessoController.getUserDestino(controleTramitacao)}" />
+				</p:column>
+				<p:column style="width:200px;text-align:center;">
+					<f:facet name="header">Realizador da ação</f:facet>
+					<h:outputText rendered="#{controleTramitacao.idePessoaFisica eq null}" value="--------------" />
+					<h:outputText rendered="#{controleTramitacao.idePessoaFisica ne null}" value="#{controleTramitacao.idePessoaFisica.nomPessoa}" />
+				</p:column>
+			</p:dataTable>
+		</h:panelGrid>
+
+	</h:form>
+	
+</ui:composition>

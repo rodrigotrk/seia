@@ -1,0 +1,1010 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui">
+
+
+<ui:composition template="/layout/template.xhtml">
+
+	<ui:define name="titulo-pagina">
+		<h3>Consultar Imóveis Rurais</h3>
+	</ui:define>
+
+	<ui:define name="conteudo-principal">
+		<h:form>
+			<p:remoteCommand name="verificarImoveisRegistroIncompleto"
+				action="#{listarImovelRuralController.verificarImovelCadastroIncompleto()}"
+				global="true" />
+		</h:form>
+
+		<ui:include src="/paginas/identificar-papel/dialogSelecionarSolicitante.xhtml" />
+
+		<!-- form -->
+		<h:form id="filtroImoveis">
+			<p:poll interval="1" global="false"
+				rendered="#{listarImovelRuralController.rendererPoll}"
+				listener="#{listarImovelRuralController.pollAjax()}"
+				widgetVar="pollMensagens" />
+			<h3>
+				<h:outputLabel styleClass="titulo-grupo" style="font-weight:bold;"
+					value="INSTRUÇÕES" />
+			</h3>
+			<p class="titulo-grupo">
+				- Para consultar um ou mais Imóveis Rurais, informe o(s)
+				parâmetro(s) de consulta desejado(s) e clique no botão "Consultar".<br />
+				<h:outputText
+					value="- Para incluir um novo Imóvel Rural, clique no botão &#34;Incluir Imóvel Rural&#34;."
+					rendered="#{!contextoController.usuarioLogado.usuarioExterno}" />
+				<br />
+				<h:outputText
+					value="- O cadastro deve ser feito por imóvel rural. Entende-se imóvel como área definida por uma matrícula."
+					rendered="#{!contextoController.usuarioLogado.usuarioExterno}" />
+			</p>
+
+			<h3>
+				<h:outputLabel styleClass="titulo-grupo" style="font-weight:bold;"
+					value="PARÂMETROS DA CONSULTA" />
+			</h3>
+
+			<h:panelGrid columns="1" id="panel">
+				<h:panelGrid id="tblFiltroRequerente" columns="3"
+					style="width: 90%; max-width:90%">
+					<h:outputLabel id="lblRequerente"
+						size="47"
+						value="#{bundle.consulta_empree_requerente}" />
+					<p:spacer width="10px;" height="10px" />
+					<h:outputLabel id="lblNomeRequerenteImovelRural"
+						value="#{listarImovelRuralController.requerente.pessoaFisica.nomPessoa}"
+						style="font-weight: bold;"
+						rendered="${listarImovelRuralController.seUsuarioExterno}" />
+					<h:outputLabel value="Matrícula do Imóvel" style="margin-left:10px" />
+					<p:inputText id="fdDescNome"
+						value="#{listarImovelRuralController.descNome}"
+						size="47"
+						rendered="${!listarImovelRuralController.seUsuarioExterno}" />
+
+					<p:commandLink actionListener="#{selecionarSolicitanteController.init()}" oncomplete="dialogSolicitante.show()"
+							update="dialogSolicitante"
+							rendered="#{!listarImovelRuralController.seUsuarioExterno}"
+							disabled="#{listarImovelRuralController.seUsuarioExterno}"
+					>
+						<f:attribute name="title" value="Selecionar Requerente" />
+						<f:attribute name="metodoSelecionarSolicitante"
+							value="#{listarImovelRuralController.metodoSelecionarSolicitante}" />
+						<h:graphicImage value="/resources/img/ico-pesquisa.png" />
+					</p:commandLink>
+					<p:inputText value="#{listarImovelRuralController.numeroMatricula}"
+						size="47"
+						style="margin-left:10px"
+						rendered="${!listarImovelRuralController.seUsuarioExterno}" />
+				</h:panelGrid>
+
+				<h:panelGrid id="tblFiltroProcuradorResponsavel" columns="4"
+					style="width:90%">
+					<h:outputLabel id="lblProcurador"
+						value="Procurador / Representante Legal" />
+					<p:spacer width="10px;" height="10px" />
+					<h:outputLabel style="margin-left:10px" value="Responsável Técnico" />
+					<p:spacer width="10px;" height="10px" />
+
+					<!-- Procurador -->
+					<p:inputText id="nomProcurador"
+						value="#{listarImovelRuralController.nomeProcurador}"
+						disabled="true" size="47" />
+					<p:commandLink actionListener="#{selecionarSolicitanteController.init()}" oncomplete="dialogSolicitante.show()"
+							update="dialogSolicitante">
+							<f:attribute name="metodoSelecionarSolicitante" value="#{listarImovelRuralController.metodoSelecionarProcurador}" />
+							<f:attribute name="title" value="Selecionar Procurador / Representante Legal" />
+							<f:setPropertyActionListener value="false" target="#{selecionarSolicitanteController.renderizaTipoPessoa}" />
+							<h:graphicImage title="Consultar" value="/resources/img/ico-pesquisa.png" />
+						</p:commandLink>
+
+					<!-- Responsavel Tecnico -->
+					<p:inputText id="nomRespTec" value="#{listarImovelRuralController.nomeResponsavelTecnico}" 
+							disabled="true" size="47" style="margin-left:10px;"/>
+                    	<p:commandLink actionListener="#{selecionarSolicitanteController.init()}" oncomplete="dialogSolicitante.show()"
+							update="dialogSolicitante">							
+							<f:attribute name="metodoSelecionarSolicitante" value="#{listarImovelRuralController.metodoSelecionarResponsavelTecnico}" />
+							<f:attribute name="title" value="Selecionar Responsável Técnico" />							
+							<f:setPropertyActionListener value="false" target="#{selecionarSolicitanteController.renderizaTipoPessoa}" />
+							<h:graphicImage title="Consultar" value="/resources/img/ico-pesquisa.png" />
+						</p:commandLink>
+				</h:panelGrid>
+
+
+				<h:panelGrid columns="3" style="width: 90%;">
+					<h:outputLabel value="Nome do Imóvel Rural" />
+
+					<h:outputFormat value="#{bundle.consulta_empree_municipio}" />
+
+					<h:outputLabel value="Status do cadastro" />
+
+					<p:inputText value="#{listarImovelRuralController.nomeImovel}"
+						style="width: 250px;" disabled="${!security.temAcesso('3.33')}" />
+
+					<h:panelGroup id="pnlGrpComboMunicipio">
+						<p:selectOneMenu value="#{listarImovelRuralController.municipio}"
+							converter="municipioConverter"
+							valueChangeListener="${listarImovelRuralController.changeMunicipio}"
+							style="width:200px" disabled="${!security.temAcesso('3.33')}">
+							<f:selectItem itemLabel="Selecione..." />
+							<f:selectItems
+								value="#{listarImovelRuralController.listaMunicipios}"
+								var="municipio" itemLabel="#{municipio.nomMunicipio}"
+								itemValue="#{municipio}" />
+						</p:selectOneMenu>
+					</h:panelGroup>
+
+					<h:panelGrid id="gridSelectStatus" columns="1">
+						<p:selectOneMenu
+							value="${listarImovelRuralController.imoveisAValidar}">
+							<f:selectItem itemLabel="Selecione..." itemValue="" />
+							<f:selectItem itemLabel="Registro incompleto"
+								itemValue="RegPendente" />
+							<f:selectItem itemLabel="Registrado" itemValue="Registrado" />
+							<f:selectItem itemLabel="Cadastrado" itemValue="Cadastrado" />
+							<f:selectItem itemLabel="Pendente" itemValue="Pendente" />
+						</p:selectOneMenu>
+					</h:panelGrid>
+				</h:panelGrid>
+
+				<h:panelGrid>
+					<h:outputLabel value="Número do Sicar" />
+					<p:inputMask
+						mask="?aa-9999999-****.****.****.****.****.****.****.****"
+						style="text-transform:uppercase;width:305px;" id="idSicar"
+						value="#{listarImovelRuralController.numSicar}" />
+				</h:panelGrid>
+
+				<h:panelGrid rendered="#{security.temAcesso('3.33.58')}">
+					<h:panelGrid columns="3">
+						<h:selectBooleanCheckbox
+							value="#{listarImovelRuralController.imovelCDA}" />
+						<h:outputText value="Imóveis CDA" />
+					</h:panelGrid>
+				</h:panelGrid>
+
+				<h:panelGrid
+					rendered="#{listarImovelRuralController.renderedCheckProjetoBndes}">
+					<h:panelGrid columns="3">
+						<h:selectBooleanCheckbox
+							value="#{listarImovelRuralController.imovelBndes}" />
+						<h:outputText value="Projeto CAR/BNDES/INEMA" />
+					</h:panelGrid>
+				</h:panelGrid>
+
+				<h:panelGrid>
+					<h:outputText value="Tipo de cadastro" />
+					<p:selectOneMenu
+						value="#{listarImovelRuralController.tipoCadastro}"
+						style="width:200px">
+						<f:selectItem itemLabel="Imóvel Rural" itemValue="Rural" />
+						<f:selectItem itemLabel="Assentamento" itemValue="Assentamento" />
+						<f:selectItem itemLabel="Povos e Comunidades Tradicionais"
+							itemValue="PCT" />
+					</p:selectOneMenu>
+				</h:panelGrid>
+
+				<h:panelGrid
+					rendered="${security.temAcesso('3.33.45') or security.temAcesso('3.33.46')}"
+					style="margin-left: -4px;">
+					<h:panelGrid columns="3">
+						<h:selectOneRadio
+							value="#{listarImovelRuralController.cefirOuTermo}"
+							id="cefirOuTermo" disabled="${!security.temAcesso('3.33')}">
+							<f:selectItem itemLabel="Termo de Compromisso" itemValue="termo" />
+							<f:selectItem itemLabel="Certificado de Inscrição"
+								itemValue="cefir" />
+							<f:ajax execute="@this" />
+						</h:selectOneRadio>
+						<h:outputLabel value="Status da Reserva Legal"
+							style="margin-left: 0px;" />
+						<p:spacer width="50" height="10" />
+
+						<p:inputMask id="idCertificado" mask="?9999.999.999999"
+							placeHolder=" " widgetVar="idCertificado"
+							value="#{listarImovelRuralController.certificado}"
+							style="width: 350px;" disabled="${!security.temAcesso('3.33')}" />
+						<p:selectOneMenu id="selectStatus"
+							value="#{listarImovelRuralController.statusRLFiltro}"
+							converter="statusReservaLegalConverter"
+							valueChangeListener="${listarImovelRuralController.changeStatusReservaLegal}"
+							style="width: 140px;">
+							<f:selectItem itemLabel="Selecione..." />
+							<f:selectItems
+								value="#{listarImovelRuralController.listaStatusRL}"
+								var="statusRL" itemLabel="#{statusRL.dscStatus}"
+								itemValue="#{statusRL}" />
+						</p:selectOneMenu>
+						<h:panelGrid columns="3">
+							<h:selectBooleanCheckbox
+								value="#{listarImovelRuralController.bloqueioAsvFiltro}" />
+							<h:outputText value="Imóveis com bloqueio ASV" />
+						</h:panelGrid>
+					</h:panelGrid>
+
+					<p:spacer height="0" width="5" />
+
+					<h:panelGrid>
+						<h:outputText value="Localização Geográfica" />
+						<h:panelGrid columns="2">
+							<h:outputText value="Incluir Pontos" />
+							<p:commandLink
+								action="#{listarImovelRuralController.limparObjetosPontoPesquisa()}"
+								oncomplete="dlgPontoPesquisa.show()" process="@this"
+								update=":formDlgPontoPesquisa:panelPontoPesquisa">
+								<h:graphicImage title="" value="/resources/img/ico-expandir.png" />
+								<f:ajax execute="@this" />
+							</p:commandLink>
+						</h:panelGrid>
+						<p:outputPanel autoUpdate="true" id="listaPontoPesquisa">
+							<h:panelGrid id="panelTablePontoPesquisa" columns="2">
+								<p:dataTable id="tablePontoPesquisa" style="width:150px;"
+									value="#{listarImovelRuralController.listaPontoPesquisa}"
+									widgetVar="tablePontoPesquisa" var="pontoPesquisa"
+									paginator="true" rows="10" paginatorAlwaysVisible="false"
+									emptyMessage="#{bundle.cefir_msg_A012}"
+									paginatorPosition="bottom">
+
+									<p:column>
+										<f:facet name="header" style="width: 50px;">
+											<h:outputText value="Latitude" />
+										</f:facet>
+										<h:outputText
+											value="#{listarImovelRuralController.obterLatitudePontoPesquisa(pontoPesquisa)}" />
+									</p:column>
+
+									<p:column>
+										<f:facet name="header" style="width: 50px;">
+											<h:outputText value="Longitude" />
+										</f:facet>
+										<h:outputText
+											value="#{listarImovelRuralController.obterLongitudePontoPesquisa(pontoPesquisa)}" />
+									</p:column>
+
+									<p:column>
+										<f:facet name="header" style="width: 50px;">
+											<h:outputText value="Ação" />
+										</f:facet>
+										<h:panelGrid columns="2" style="color:white;">
+											<!-- 											<p:lightBox iframe="true" width="1010" height="650" overlayClose="false">   -->
+											<h:outputLink
+												value="#{listarImovelRuralController.caminhoDesenharGeoBahia}"
+												title="GEOBAHIA" target="_blank">
+												<h:graphicImage title="Visualizar"
+													value="/resources/img/ico-arl-relocacao.png" />
+												<f:param name="xy"
+													value="#{listarImovelRuralController.obterLatLongPontoPesquisa(pontoPesquisa)}" />
+											</h:outputLink>
+											<!-- 											</p:lightBox>		 -->
+											<p:commandLink title="Remover"
+												action="#{listarImovelRuralController.excluirPontoPesquisa(pontoPesquisa)}"
+												update="panelTablePontoPesquisa">
+												<h:graphicImage title="Excluir"
+													value="/resources/img/ico-excluir.png" />
+												<f:ajax execute="@this" />
+											</p:commandLink>
+										</h:panelGrid>
+									</p:column>
+								</p:dataTable>
+
+							</h:panelGrid>
+						</p:outputPanel>
+					</h:panelGrid>
+				</h:panelGrid>
+				<br />
+
+				<h:panelGrid columns="3" width="44%">
+					<p:commandButton id="btnConsulta" value="Consultar"
+						action="#{listarImovelRuralController.consultarReqImoveis()}"
+						disabled="${!security.temAcesso('3.33.4')}"
+						update=":filtroImoveis:dataTableReqImovel, formBtnDownloadAvisoCarLote"
+						widgetVar="btnConsulta"
+						oncomplete="javascript:$('#filtroImoveis\\:dataTableReqImovel').find('.ui-row-toggler').attr('title', 'Clique aqui para visualizar as ações.');">
+						<f:setPropertyActionListener value="#{false}"
+							target="#{contextoController.imprimindoImovel}" />
+					</p:commandButton>
+					<p:commandButton value="Incluir Imóvel"
+						action="#{listarImovelRuralController.incluirReqImovel}"
+						ajax="false" rendered="${security.temAcesso('3.33.1')}">
+						<f:setPropertyActionListener value="#{false}"
+							target="#{contextoController.imprimindoImovel}" />
+					</p:commandButton>
+					<p:commandButton value="Limpar"
+						action="#{listarImovelRuralController.limparFormConsulta()}"
+						update="filtroImoveis:panel" process="@this"
+						rendered="${security.temAcesso('3.33.4')}">
+						<f:setPropertyActionListener value="#{false}"
+							target="#{contextoController.imprimindoImovel}" />
+					</p:commandButton>
+				</h:panelGrid>
+
+				<br />
+				<br />
+
+				<!-- tabela IMOVEIS RURAIS -->
+				<p:dataTable id="dataTableReqImovel" var="imovel"
+					styleClass="middle"
+					value="#{listarImovelRuralController.listaImoveis}" lazy="true"
+					paginator="true" rows="5" paginatorPosition="bottom"
+					paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}"
+					emptyMessage="#{bundle.cefir_msg_A012}" widgetVar="tblImovel">
+
+					<f:facet name="header">
+						<h:outputText value="Lista de Imóveis Rurais" />
+					</f:facet>
+
+					<p:column style="width: 170px;">
+						<f:facet name="header">
+							<h:outputText value="#{bundle.consulta_empree_nome}" />
+						</f:facet>
+						<h:outputText value="#{imovel.imovelRural.desDenominacao}" />
+					</p:column>
+
+					<p:column style="width: 110px;">
+						<f:facet name="header">
+							<h:outputText value="Requerente" />
+						</f:facet>
+
+						<h:outputText
+							value="${listarImovelRuralController.retornaNomeDoRequerente(imovel.imovelRural.ideRequerenteCadastro)}" />
+					</p:column>
+
+					<p:column style="width: 80px;">
+						<f:facet name="header">
+							<h:outputText value="#{bundle.consulta_empree_municipio}" />
+						</f:facet>
+
+						<h:outputText
+							value="#{imovel.ideEndereco.ideLogradouro.ideMunicipio.nomMunicipio}" />
+					</p:column>
+
+					<p:column style="width: 65px;">
+						<f:facet name="header">
+							<h:outputText value="Status" />
+						</f:facet>
+
+						<h:outputText
+							style="#{listarImovelRuralController.mudarCorFonte(imovel.imovelRural)}"
+							value="${listarImovelRuralController.retornaStatusImovel(imovel.imovelRural)}"
+							update="filtroImoveis" />
+					</p:column>
+
+					<p:column style="width: 65px;">
+						<f:facet name="header">
+							<h:outputText value="Status RL" />
+						</f:facet>
+						<h:outputText
+							value="#{imovel.imovelRural.reservaLegal.ideStatus.dscStatus}" />
+					</p:column>
+
+					<p:column style="width: 70px;">
+						<f:facet name="header">Data<br />Finalização</f:facet>
+						<h:outputText value="#{imovel.imovelRural.dtcFinalizacao}">
+							<f:convertDateTime for="dtcFormacao" pattern="dd/MM/yyyy"
+								locale="pt,BR" timeZone="Brazil/East" />
+						</h:outputText>
+					</p:column>
+
+					<p:column style="text-align: center; width: 40px;">
+						<f:facet name="header">
+							<h:outputText value="#{bundle.geral_lbl_acoes}" />
+						</f:facet>
+
+						<p:rowToggler />
+					</p:column>
+
+					<p:rowExpansion>
+						<h:panelGrid style="text-align: center; margin:10px;" columns="16">
+							<p:commandLink id="btnVisualizarImovelRural" title="Visualizar"
+								action="#{detalharImovelRuralController.detalharImovelRural()}"
+								update=":formDetalharImovelRural"
+								oncomplete="dialogDetalharImovelRural.show()"
+								style="margin: 0.7px;" process="@this"
+								image="ui-icon ui-icon-close">
+								<h:graphicImage title="Visualizar"
+									value="/resources/img/ico-pesquisa.png" />
+								<f:ajax execute="@this" />
+								<f:setPropertyActionListener value="#{false}"
+									target="#{contextoController.imprimindoImovel}" />
+								<f:setPropertyActionListener value="#{imovel.imovelRural}"
+									target="#{detalharImovelRuralController.imovelRural}" />
+								<f:setPropertyActionListener value="#{imovel}"
+									target="#{detalharImovelRuralController.imovelRural.imovel}" />
+								<f:setPropertyActionListener value="#{imovel.proprietario}"
+									target="#{detalharImovelRuralController.solicitanteVisualizacao}" />
+								<f:setPropertyActionListener value="#{imovel.proprietario}"
+									target="#{contextoController.solicitanteRequerimento}" />
+							</p:commandLink>
+
+							<p:commandLink id="btnEditarImovelRural" title="Editar"
+								oncomplete="confirmDlgEdicaoImovelRural.show()"
+								style="margin: 0.7px;"
+								rendered="${(security.temAcesso('3.33.3') and imovel.imovelRural.isFinalizado)}"
+								process="@this">
+								<h:graphicImage title="Editar"
+									value="/resources/img/ico-editar.png" />
+								<f:setPropertyActionListener value="#{false}"
+									target="#{contextoController.imprimindoImovel}" />
+								<f:setPropertyActionListener value="#{false}"
+									target="#{listarImovelRuralController.imprimindoImovel}" />
+								<f:setPropertyActionListener value="#{imovel.imovelRural}"
+									target="#{imovelRuralControllerNew.imovelRural}" />
+								<f:setPropertyActionListener value="#{imovel}"
+									target="#{imovelRuralControllerNew.imovelRural.imovel}" />
+								<f:setPropertyActionListener value="#{imovel.proprietario}"
+									target="#{listarImovelRuralController.solicitante}" />
+							</p:commandLink>
+
+							<p:commandLink id="btnEditarImovelRuralNaoFinalizados"
+								title="Editar"
+								action="#{imovelRuralControllerNew.editarImovelRural()}"
+								style="margin: 0.7px;"
+								rendered="${(security.temAcesso('3.33.3') and !imovel.imovelRural.isFinalizado)}"
+								process="@this" ajax="false">
+								<h:graphicImage title="Editar"
+									value="/resources/img/ico-editar.png" />
+								<f:setPropertyActionListener value="#{false}"
+									target="#{contextoController.imprimindoImovel}" />
+								<f:setPropertyActionListener value="#{false}"
+									target="#{listarImovelRuralController.imprimindoImovel}" />
+								<f:setPropertyActionListener value="#{imovel.imovelRural}"
+									target="#{imovelRuralControllerNew.imovelRural}" />
+								<f:setPropertyActionListener value="#{imovel}"
+									target="#{imovelRuralControllerNew.imovelRural.imovel}" />
+							</p:commandLink>
+
+							<h:commandLink id="lnkGerarCertificado"
+								title="Visualizar Certificado" ajax="false"
+								rendered="${imovel.imovelRural.stsCertificado and imovel.imovelRural.reservaLegal.ideStatus.ideStatusReservaLegal != 5 and imovel.imovelRural.reservaLegal.ideStatus.ideStatusReservaLegal != 6 and listarImovelRuralController.habilitarBotoesStatusPendenteImovel(imovel.imovelRural)}"
+								style="margin: 0.7px;">
+								<h:graphicImage title="Visualizar Certificado"
+									value="/resources/img/cicon.png" />
+								<p:fileDownload
+									value="#{listarImovelRuralController.getImprimirCertificado(imovel.imovelRural.ideImovelRural)}"></p:fileDownload>
+							</h:commandLink>
+
+							<h:commandLink id="lnkGerarTermoDeCompromisso"
+								title="Visualizar Termo de Compromisso" ajax="false"
+								style="margin: 0.7px;"
+								rendered="${imovel.imovelRural.termoCompromisso and imovel.imovelRural.reservaLegal.ideStatus.ideStatusReservaLegal != 5 
+											and imovel.imovelRural.reservaLegal.ideStatus.ideStatusReservaLegal != 6 
+											and listarImovelRuralController.habilitarBotoesStatusPendenteImovel(imovel.imovelRural)}">
+
+								<h:graphicImage title="Visualizar Termo de Compromisso"
+									value="/resources/img/ticon.png" />
+								<p:fileDownload
+									value="#{listarImovelRuralController.getImprimirTermoDeCompromisso(imovel.imovelRural.ideImovelRural)}" />
+							</h:commandLink>
+
+							<h:commandLink id="lnkGerarAvisoBndes"
+								title="Visualizar Aviso Projeto CAR/BNDES/INEMA" ajax="false"
+								style="margin: 0.7px;"
+								rendered="${imovel.imovelRural.avisoBndes and listarImovelRuralController.habilitarBotoesStatusPendenteImovel(imovel.imovelRural)}">
+
+								<h:graphicImage title="Visualizar Aviso Projeto CAR/BNDES/INEMA"
+									value="/resources/img/aicon.png" />
+								<p:fileDownload
+									value="#{listarImovelRuralController.getImprimirAvisoBndes(imovel.imovelRural.ideImovelRural)}" />
+							</h:commandLink>
+
+							<h:outputLink
+								value="#{imovel.imovelRural.imovelRuralSicar.urlReciboInscricao}"
+								rendered="${imovel.imovelRural.imovelRuralSicar.urlReciboInscricao != nulL and listarImovelRuralController.habilitarBotoesStatusPendenteImovel(imovel.imovelRural)}"
+								style="margin: 0.7px;" target="_blank">
+								<h:graphicImage title="Visualizar Recibo SICAR"
+									value="/resources/img/icon_car.png" />
+							</h:outputLink>
+
+							<p:commandLink
+								rendered="#{imovel.imovelRural.imovelRuralSicar.urlReciboInscricao == null and imovel.imovelRural.imovelRuralSicar.indSicronia and listarImovelRuralController.habilitarBotoesStatusPendenteImovel(imovel.imovelRural)}"
+								style="margin: 0.7px;" oncomplete="dlgErroCar.show()">
+								<h:graphicImage title="Notificação SICAR"
+									value="/resources/img/icon_car_erro.png" />
+								<f:setPropertyActionListener value="#{imovel.imovelRural}"
+									target="#{listarImovelRuralController.imovelRural}" />
+							</p:commandLink>
+
+							<p:commandLink id="btnImprimirImovelRural" title="Imprimir"
+								action="#{detalharImovelRuralController.imprimirImovelRural()}"
+								style="margin: 0.7px;"
+								rendered="${security.temAcesso('3.33.5')}"
+								image="ui-icon ui-icon-close"
+								oncomplete="window.open('/paginas/manter-imoveis/cefir/imprimirImovelRural.xhtml','imprimir','height=600,width=850,toolbar=no,scrollbars=yes,resizable=no');"
+								target="imprimir">
+								<h:graphicImage title="Imprimir"
+									value="/resources/img/ico-impressao.png" />
+								<f:setPropertyActionListener value="#{true}"
+									target="#{contextoController.imprimindoImovel}" />
+								<f:setPropertyActionListener value="#{imovel.imovelRural}"
+									target="#{detalharImovelRuralController.imovelRural}" />
+								<f:setPropertyActionListener value="#{imovel.proprietario}"
+									target="#{detalharImovelRuralController.solicitanteVisualizacao}" />
+							</p:commandLink>
+
+							<p:commandLink id="btnAprovarRL" title="Aprovar Reserva Legal"
+								action="#{analiseTecnicaController.carregarReservaLegal()}"
+								update="formAprovarRL dialogAprovarRL formConfirmacaoAprovacaoRl:confirmacaoAprovacaoRl"
+								oncomplete="dialogAprovarRL.show()" process="@this"
+								image="ui-icon ui-icon-close"
+								rendered="${security.temAcesso('3.33.45') and imovel.imovelRural.cadastrado
+													and imovel.imovelRural.reservaLegal.ideStatus.ideStatusReservaLegal == 3 
+													and listarImovelRuralController.habilitarBotoesStatusPendenteImovel(imovel.imovelRural)}">
+
+								<h:graphicImage title="Aprovar Reserva Legal"
+									value="/resources/img/ico-rl-amarelo.png" />
+								<f:setPropertyActionListener value="false"
+									target="#{analiseTecnicaController.chamadaTelaPautaTecnico}" />
+								<f:setPropertyActionListener value="#{imovel}"
+									target="#{analiseTecnicaController.imovelSelecionado}" />
+							</p:commandLink>
+
+							<p:commandLink id="btnValidarDocumentacaoRL"
+								title="Validar documentação da reserva legal"
+								rendered="${(security.temAcesso('3.33.46') or security.temAcesso('3.33.49')) and (imovel.imovelRural.statusCadastro == 3 or imovel.imovelRural.statusCadastro == 1) and (imovel.imovelRural.reservaLegal.ideStatus.ideStatusReservaLegal == 4 or imovel.imovelRural.reservaLegal.ideStatus.ideStatusReservaLegal == 8)}"
+								action="#{reservaLegalController.carregarReservaLegalParaValidacao()}"
+								update=":formValidacaoDocumentacaoRL"
+								onclick="dialogAprovarDocumentoAverbacaoRL.show()"
+								process="@this" image="ui-icon ui-icon-close">
+								<h:graphicImage title="Validar documentação da reserva regal"
+									value="/resources/img/ico-validar-doc-rl.png" />
+								<f:setPropertyActionListener
+									value="#{imovel.imovelRural.reservaLegal}"
+									target="#{reservaLegalController.reservaLegalSelecionada}" />
+								<f:setPropertyActionListener
+									value="#{imovel.imovelRural.ideImovelRural}"
+									target="#{reservaLegalController.ideImovelRural}" />
+							</p:commandLink>
+
+							<p:commandLink id="btnMudancaStatusImovelJustificativa"
+								title="Alterar Status do Imóvel"
+								action="#{imovelRuralMudancaStatusJustificativaController.validarCondicoesImovel()}"
+								rendered="${security.temAcesso('3.33.50') and (imovel.imovelRural.statusCadastro == 3 or imovel.imovelRural.statusCadastro == 1)}"
+								actionListener="#{imovelRuralMudancaStatusJustificativaController.limparCampos()}"
+								update="dlgAlterarStatusImovel :formSolicitacaoAlteracao"
+								oncomplete="if(args.valido){dlgAlterarStatusImovel.show();}"
+								process="@this" image="ui-icon ui-icon-close">
+								<h:graphicImage title="Alterar Status do Imóvel"
+									value="/resources/img/alterar_status_imovel.png" />
+								<f:setPropertyActionListener value="#{imovel.imovelRural}"
+									target="#{imovelRuralMudancaStatusJustificativaController.imovelRural}" />
+							</p:commandLink>
+
+							<!-- 								<p:commandLink id="btnMudancaStatusImovelJustificativaRequerente" title="Alterar Status do Imóvel"				 -->
+							<!-- 									action="#{imovelRuralMudancaStatusJustificativaController.validarCondicoesImovel()}" -->
+							<!-- 									rendered="${imovelRuralMudancaStatusJustificativaController.usuarioExterno  and (imovel.imovelRural.statusCadastro == 3 or imovel.imovelRural.statusCadastro == 1)}"			 -->
+							<!-- 									actionListener="#{imovelRuralMudancaStatusJustificativaController.limparCamposTransferencia()}"				 -->
+							<!-- 									update="dlgAlterarStatusImovelRequerente :formSolicitacaoAlteracaoRequerente" -->
+							<!-- 									oncomplete="if(args.valido){dlgAlterarStatusImovelRequerente.show();}" -->
+							<!-- 									process="@this" image="ui-icon ui-icon-close">							 -->
+							<!-- 									<h:graphicImage title="Transferência de titularidade - CEFIR" -->
+							<!-- 										value="/resources/img/alterar_status_imovel.png" /> -->
+							<!-- 									<f:setPropertyActionListener value="#{imovel.imovelRural}" -->
+							<!-- 										target="#{imovelRuralMudancaStatusJustificativaController.imovelRural}" /> -->
+							<!-- 								</p:commandLink> -->
+
+							<p:commandLink id="historicoAlteracao"
+								title="Pesquisar histórico de alteração"
+								onclick="dlgBuscaHist.show();"
+								rendered="${security.temAcesso('3.33.47')}"
+								style="margin: 0.7px;" update=":formPesquisaHistorico"
+								process="@this" image="ui-icon ui-icon-close">
+								<h:graphicImage title="Pesquisar histórico de alteração"
+									value="/resources/img/ico-mnp.gif" />
+								<f:setPropertyActionListener
+									value="#{imovel.imovelRural.ideImovelRural}"
+									target="#{listarImovelRuralController.imovelRural.ideImovelRural}" />
+							</p:commandLink>
+							
+							<p:commandLink id="desbloqueioImovel"
+							    rendered="#{security.temAcessoPorPerfil('29') and imovel.imovelRural.indBloqueioLimite == true}"
+								title="Desbloquear limite do imóvel"
+								actionListener="#{imovelRuralControllerNew.limparCampos()}"
+								update="dlgConfirmacaoDesbloqueioLimite :formDesbloqueioLimite"
+								onclick="dlgConfirmacaoDesbloqueioLimite.show();"
+								style="margin: 0.7px;" 
+								process="@this" image="ui-icon ui-icon-bloqueio">
+								<h:graphicImage title="Desbloquear limite do imóvel"
+									value="/resources/img/ico-bloqueio.png" />	
+								<f:setPropertyActionListener value="#{imovel.imovelRural}"
+									target="#{imovelRuralControllerNew.imovelRural}" />
+								<f:setPropertyActionListener value="#{imovel}"
+									target="#{imovelRuralControllerNew.imovelRural.imovel}" />
+								<f:setPropertyActionListener value="#{imovel.proprietario}"
+									target="#{listarImovelRuralController.solicitante}" />
+							</p:commandLink>
+				
+							<!-- Suspender Cadastro -->
+							<p:commandLink id="btnSuspenderCadastro"
+								title="#{suspenderCadastroController.textoBotaoSuspensaoCadastro()}"
+								update="formSuspensaoCadastro"
+								oncomplete="dialogSuspensaoCadastro.show()"
+								style="margin: 0.7px;" image="ui-icon ui-icon-close"
+								action="#{suspenderCadastroController.iniciar}">
+
+								<h:graphicImage
+									title="#{suspenderCadastroController.textoBotaoSuspensaoCadastro()}"
+									value="/resources/img/ico-suspender-externo.png" />
+								<f:setPropertyActionListener value="#{imovel.imovelRural}"
+									target="#{suspenderCadastroController.imovelRural}" />
+								<f:setPropertyActionListener value="#{imovel}"
+									target="#{suspenderCadastroController.imovelRural.imovel}" />
+								<f:ajax execute="@this" />
+							</p:commandLink>
+
+							<!-- Atualização Shapes -->
+							<p:commandLink id="btnVisualizarShape" title="Atualização Shapes"
+								rendered="#{security.temAcesso('CADASTRO', 'SHAPES_CEFIR', 'ALTERAR')}"
+								update="formAtualizacaoShape:abasAtualizacaoShapes formAcao:panelAcao formAtualizacaoShape:abaVisualizacao"
+								style="margin: 0.7px;" image="ui-icon ui-icon-close"
+								action="#{atualizarShapesController.carregarDados}"
+								oncomplete="dialogAtualizarShape.show()">
+
+								<h:graphicImage title="Atualização Shapes"
+									value="/resources/img/ico-preencher.png" />
+								<f:setPropertyActionListener value="#{imovel.imovelRural}"
+									target="#{atualizarShapesController.imovelRural}" />
+								<f:setPropertyActionListener value="#{imovel.imovelRural}"
+									target="#{atualizarShapesController.imovelRuralOld}" />
+								<f:setPropertyActionListener value="#{imovel}"
+									target="#{atualizarShapesController.imovelRural.imovel}" />
+								<f:ajax execute="@this" />
+							</p:commandLink>
+							<p:commandLink id="excluir" title="#{bundle.btn_excluir}"
+								onclick="confirmDlgExclusaoEmpreendimento.show()"
+								style="margin: 0.7px;" image="ui-icon ui-icon-close"
+								process="excluir"
+								rendered="${security.temAcesso('3.33.2') and listarImovelRuralController.renderedBotaoExclusao(imovel)}">
+								<h:graphicImage title="Excluir"
+									value="/resources/img/ico-excluir.png" />
+								<f:setPropertyActionListener value="#{false}"
+									target="#{contextoController.imprimindoImovel}" />
+								<f:setPropertyActionListener value="#{imovel}"
+									target="#{listarImovelRuralController.imovelExcluir}" />
+							</p:commandLink>
+							<p:commandLink id="lnkInativarImovel"
+								title="#{bundle.btn_inativar_imovel}"
+								onclick="confirmDlgInativacaoEmpreendimento.show()"
+								rendered="${security.temAcesso('3.33.81')}"
+								style="margin: 0.7px;" image="ui-icon ui-icon-close"
+								process="lnkInativarImovel">
+								<h:graphicImage title="Inativar"
+									value="/resources/img/icon_inativar_imovel.png"
+									style="width: 15px" />
+								<f:setPropertyActionListener value="#{imovel}"
+									target="#{listarImovelRuralController.inativarImovel}" />
+							</p:commandLink>
+						</h:panelGrid>
+					</p:rowExpansion>
+				</p:dataTable>
+				<h:outputText value="versão CEFIR 2.1.1"
+					style="font-size:10px; color: white;" />
+				<!-- fim tabela -->
+			</h:panelGrid>
+		</h:form>
+		<!-- fim form -->
+
+		<h:form id="formBtnDownloadAvisoCarLote" rendered="false">
+			<div style="text-align: right;">
+				<p:commandButton id="btnDownloadAvisoCarLote"
+					title="Essa opção permite baixar de uma só vez todos os arquivos Aviso Projeto CAR/BNDES/INEMA listados acima"
+					process="@this" immediate="true" value="Baixar tudo"
+					widgetVar="btnDownloadAvisoCarLote"
+					rendered="#{listarImovelRuralController.habilitaDownloadAvisoCarLote}"
+					action="#{listarImovelRuralController.getDownloadAvisoCarBndesLote()}" />
+			</div>
+		</h:form>
+
+		<!-- Efetuar validação prévia -->
+		<p:dialog dynamic="true" id="dialogEfetuarValidacaoPrevia"
+			modal="true" appendToBody="true" closable="false" position="center"
+			widgetVar="dialogEfetuarValidacaoPrevia"
+			style="max-height:80%; overflow: auto; border-collapse:collapse;"
+			resizable="false">
+			<ui:include src="/paginas/manter-imoveis/validacaoDeDocumentos.xhtml" />
+		</p:dialog>
+
+		<p:confirmDialog id="confirmarFecharValidacao"
+			widgetVar="confirmarFecharValidacao" appendToBody="true"
+			header="#{bundle.geral_lbl_mensagem}"
+			message="O cadastro ainda não foi concluído. Deseja cancelá-lo?"
+			severity="alert">
+			<h:form>
+				<h:panelGroup>
+					<p:commandButton type="submit" value="#{bundle.btn_sim}"
+						oncomplete="confirmarFecharValidacao.hide();dialogEfetuarValidacaoPrevia.hide();"
+						actionListener="#{efetuarValidacaoPreviaController.atualizarStatusRequerimento()}"
+						action="${requerimentoUnicoController.consultar()}"
+						update="formConsultarRequerimento:tabelaRequerimentos" />
+					<p:commandButton value="#{bundle.btn_nao}" type="button"
+						onclick="confirmarFecharValidacao.hide();dialogEfetuarValidacaoPrevia.show();" />
+				</h:panelGroup>
+			</h:form>
+		</p:confirmDialog>
+		<!-- FIM - Efetuar validação prévia -->
+
+		<!--  dialog de confirmação -->
+		<p:confirmDialog id="confirmDialogExclusaoEmpreendimento"
+			widgetVar="confirmDlgExclusaoEmpreendimento"
+			header="#{bundle.hdr_confirma_exclusao}"
+			message="#{bundle.msg_confirma_exclusao}" severity="alert">
+			<h:form>
+				<p:commandButton id="confirmarExclusao" value="#{bundle.btn_sim}"
+					update=":filtroImoveis:panel @form"
+					action="#{listarImovelRuralController.excluirImovel}"
+					oncomplete="confirmDlgExclusaoEmpreendimento.hide()"
+					process="confirmarExclusao" />
+				<p:commandButton value="#{bundle.btn_nao}" type="button"
+					onclick="confirmDlgExclusaoEmpreendimento.hide()" />
+			</h:form>
+		</p:confirmDialog>
+		<!--  fim dialgo -->
+
+		<!--  dialog de confirmação inativação imóvel-->
+		<p:confirmDialog id="confirmDialogInativacaoEmpreendimento"
+			widgetVar="confirmDlgInativacaoEmpreendimento"
+			header="#{bundle.hdr_confirma_exclusao}"
+			message="#{bundle.msg_confirma_inativacao}" severity="alert">
+			<h:form>
+				<p:commandButton id="btnConfirmarInativacao"
+					value="#{bundle.btn_sim}" update=":filtroImoveis:panel @form"
+					action="#{listarImovelRuralController.inativarImovel}"
+					oncomplete="confirmDlgInativacaoEmpreendimento.hide()"
+					process="btnConfirmarInativacao" />
+				<p:commandButton value="#{bundle.btn_nao}" type="button"
+					onclick="confirmDlgInativacaoEmpreendimento.hide()" />
+			</h:form>
+		</p:confirmDialog>
+		<!--  fim dialgo -->
+
+		<p:confirmDialog id="confirmDialogEdicaoImovelRural"
+			widgetVar="confirmDlgEdicaoImovelRural"
+			header="#{bundle.cefir_lbl_mensagem}"
+			message="#{bundle.cefir_msg_confirma_edicao_cadastro_finalizado}"
+			severity="alert" width="480">
+			<h:form>
+				<p:commandButton id="confirmarEdicao" value="#{bundle.btn_ok}"
+					action="#{imovelRuralControllerNew.editarImovelRural()}"
+					ajax="false" oncomplete="confirmDlgEdicaoImovelRural.hide()" />
+			</h:form>
+		</p:confirmDialog>
+
+		<!-- Modal detalhar Imóvel Rural -->
+		<p:dialog dynamic="true" id="dialogDetalharImovelRural"
+			closable="true" resizable="false" header="Detalhes do Imóvel Rural"
+			widgetVar="dialogDetalharImovelRural" position="center" modal="true"
+			height="600" width="850">
+			<ui:include
+				src="/paginas/manter-imoveis/cefir/detalharImovelRural.xhtml" />
+		</p:dialog>
+		<!-- <ui:include src="/paginas/manter-imoveis/dialogDetalharImovelRural.xhtml" /> -->
+
+		<p:dialog dynamic="true" id="dialogAprovarRL" closable="true"
+			draggable="true" resizable="false"
+			header="Aprovação de Reserva Legal" widgetVar="dialogAprovarRL"
+			position="center" modal="false"
+			onShow="dialogAprovarRL.initPosition();">
+			<ui:include
+				src="/paginas/manter-imoveis/cefir/modalAprovarReservaLegal.xhtml" />
+		</p:dialog>
+		<p:dialog dynamic="true" id="dialogAprovarDocumentoAverbacaoRL"
+			closable="true" draggable="true" resizable="false"
+			header="Validar Documentação"
+			widgetVar="dialogAprovarDocumentoAverbacaoRL" position="center"
+			modal="false" width="520">
+			<ui:include
+				src="/paginas/manter-imoveis/cefir/modalValidarDocumentosReservaLegal.xhtml" />
+		</p:dialog>
+		<p:dialog dynamic="true" id="dlgBuscaHistorico"
+			header="Histórico Alteração" closable="true" onShow="clearFields()"
+			widgetVar="dlgBuscaHist" modal="true" style="text-align:center;"
+			height="600" width="850" resizable="false" position="center"
+			draggable="true">
+			<ui:include
+				src="/paginas/manter-imoveis/historico-alteracao/historico-alteracao.xhtml" />
+		</p:dialog>
+		<p:dialog dynamic="true" id="iddlgPontoPesquisa"
+			header="Ponto para pesquisa " closable="true"
+			widgetVar="dlgPontoPesquisa" resizable="false" modal="true"
+			position="center" draggable="true">
+			<ui:include
+				src="/paginas/manter-imoveis/modalInclusaoPontoPesquisa.xhtml" />
+		</p:dialog>
+
+		<!-- Atualização Shapes -->
+		<p:dialog dynamic="true" id="dialogAtualizarShape" closable="true"
+			draggable="true" resizable="false"
+			header="Atualização Shapes - CEFIR" widgetVar="dialogAtualizarShape"
+			position="center" modal="true" height="530" width="1080">
+			<ui:include
+				src="/paginas/manter-imoveis/cefir/atualizacao-shapes/limitePropriedade.xhtml" />
+		</p:dialog>
+		<!-- FIM Atualização Shapes -->
+
+		<p:dialog dynamic="true" id="dlgUploadShapeAjustadoCefir"
+			header="Upload Arquivo" closable="true" width="630"
+			widgetVar="dlgUploadShapeAjustadoCefir" resizable="false"
+			modal="true" position="center">
+			<ui:include
+				src="/paginas/manter-imoveis/cefir/includes/includes-dados-especificos/modais/uploads/dialogUploadShapeAjustadoCefir.xhtml" />
+		</p:dialog>
+
+		<!--Melhoria #9788  -->
+		<p:dialog dynamic="true" id="dlgDownloadShapesCefir"
+			header="Download Shapes" closable="true" width="298" height="130"
+			widgetVar="dlgDownloadShapesCefir" resizable="false" modal="true"
+			position="center">
+
+			<h:outputText
+				value="Clique com o botão sobre cada arquivo para salvar." />
+
+			<br />
+			<br />
+
+			<h:form>
+				<h:commandLink id="downloandDBF">
+					<h:outputLabel value="#{atualizarShapesController.nomeDBF}"
+						style="cursor:pointer;" />
+					<p:fileDownload
+						value="#{atualizarShapesController.fileDownloadDBF}" />
+				</h:commandLink>
+			</h:form>
+
+			<h:form>
+				<h:commandLink id="downloandSHP">
+					<h:outputLabel value="#{atualizarShapesController.nomeSHP}"
+						style="cursor:pointer;" />
+					<p:fileDownload
+						value="#{atualizarShapesController.fileDownloadSHP}" />
+				</h:commandLink>
+			</h:form>
+
+			<h:form>
+				<h:commandLink id="downloandSHX">
+					<h:outputLabel value="#{atualizarShapesController.nomeSHX}"
+						style="cursor:pointer;" />
+					<p:fileDownload
+						value="#{atualizarShapesController.fileDownloadSHX}" />
+				</h:commandLink>
+			</h:form>
+		</p:dialog>
+
+		<h:form id="formConfirmacaoAprovacaoRl">
+			<p:confirmDialog id="confirmacaoAprovacaoRl"
+				widgetVar="confirmacaoAprovacaoRl"
+				header="#{bundle.geral_lbl_mensagem}"
+				message="Confirma a aprovação da localização da reserva Legal?"
+				severity="alert">
+				<p:commandButton value="#{bundle.btn_sim}"
+					action="#{analiseTecnicaController.salvarAprovacao()}"
+					process="@form">
+				</p:commandButton>
+				<p:commandButton value="#{bundle.btn_nao}"
+					onclick="confirmacaoAprovacaoRl.hide()" />
+			</p:confirmDialog>
+		</h:form>
+
+		<p:dialog dynamic="true" id="iddlgAlterarStatusImovel"
+			header="Alterar Status Cadastro do Imóvel Rural"
+			widgetVar="dlgAlterarStatusImovel" resizable="false" closable="true"
+			modal="true" position="center" draggable="true"
+			onShow="dlgAlterarStatusImovel.initPosition();">
+			<ui:include
+				src="/paginas/manter-imoveis/modalMudancaStatusJustificativaImovelRural.xhtml" />
+		</p:dialog>
+		<p:dialog id="iddlgAlterarStatusImovelRequerente"
+			header="Transferência de titularidade - CEFIR"
+			widgetVar="dlgAlterarStatusImovelRequerente" resizable="false"
+			closable="true" modal="true" position="center" draggable="true"
+			onShow="dlgAlterarStatusImovelRequerente.initPosition();">
+			<ui:include
+				src="/paginas/manter-imoveis/modalMudancaStatusJustificativaImovelRuralRequerente.xhtml" />
+		</p:dialog>
+
+		<p:confirmDialog id="dialogCadastroConcluido"
+			widgetVar="dialogCadastroConcluido" header="Cadastro de imóvel rural"
+			severity="alert" width="520">
+			<f:facet name="message">
+				<p:outputPanel autoUpdate="true">
+					<h:outputText
+						value="#{listarImovelRuralController.msgCadastroConcluido()}" />
+				</p:outputPanel>
+			</f:facet>
+			<h:form>
+				<p:commandButton id="dialogCadastroConcluidobutton" process="@this"
+					value="#{bundle.btn_ok}" ajax="true"
+					onclick="dialogCadastroConcluido.hide()"
+					oncomplete="dialogStatusCadastro.show();" />
+			</h:form>
+		</p:confirmDialog>
+
+		<p:confirmDialog id="_dialogStatusCadastro"
+			widgetVar="dialogStatusCadastro" header="Cadastro de imóvel rural"
+			severity="alert" width="520">
+			<f:facet name="message">
+				<p:outputPanel autoUpdate="true">
+					<h:outputText value="#{bundle.cefir_status_cadastro}" />
+				</p:outputPanel>
+			</f:facet>
+			<h:form>
+				<p:commandButton id="dialogStatusCadastrobutton" process="@this"
+					value="#{bundle.btn_ok}" ajax="true"
+					onclick="dialogStatusCadastro.hide()" />
+			</h:form>
+		</p:confirmDialog>
+
+		<p:confirmDialog id="dlgErroCar" widgetVar="dlgErroCar" header="Aviso"
+			severity="alert" width="520">
+			<f:facet name="message">
+				<p:outputPanel autoUpdate="true">
+					<h:panelGrid>
+						<h:outputText escape="false"
+							value="#{listarImovelRuralController.mensagemErroCar()}" />
+					</h:panelGrid>
+				</p:outputPanel>
+			</f:facet>
+			<h:form>
+				<p:commandButton id="dlgErroCarbutton" process="@this"
+					value="#{bundle.btn_ok}" ajax="true" onclick="dlgErroCar.hide()" />
+			</h:form>
+		</p:confirmDialog>
+
+		<!-- Suspender Cadastro  -->
+		<p:dialog dynamic="true" id="dialogSuspensaoCadastro" closable="true"
+			draggable="true" resizable="false" header="Pendências - CEFIR"
+			widgetVar="dialogSuspensaoCadastro" position="center" modal="true"
+			height="700" width="1200">
+			<ui:include
+				src="/paginas/manter-imoveis/cefir/suspensao-cadastro/suspenderCadastro.xhtml" />
+		</p:dialog>
+		<p:dialog id="_dialogImovelRegistroIncompletoRequerente" modal="true"
+			appendToBody="true" closable="true" position="center"
+			widgetVar="dialogImovelRegistroIncompletoRequerente"
+			style="max-height:50%; overflow: auto; border-collapse:collapse;"
+			resizable="false">
+			<h2>
+				Prezado usuário,<br /> existe(m) cadastro(s) de imóveis rurais com
+				registro incompleto.<br /> Finalize o(s) cadastro(s) ou exclua-o(s)
+				caso este(s) não seja(m) mais necessário(s)
+			</h2>
+		</p:dialog>
+		
+		<p:dialog id="iddlgConfirmacaoDesbloqueioLimite"
+			header="Desbloquear o Limite do Imóvel"
+			widgetVar="dlgConfirmacaoDesbloqueioLimite" resizable="false"
+			closable="true" modal="true" position="center" draggable="true"
+			onShow="dlgConfirmacaoDesbloqueioLimite.initPosition();">
+			<ui:include
+				src="/paginas/manter-imoveis/modalDesbloqueioLimiteImovel.xhtml" />
+		</p:dialog>
+		
+		<!--  
+		<h:form id="formConfirmacaoDesbloqueioLimite">
+			<p:confirmDialog id="confirmacaoDesbloqueioLimite"
+				widgetVar="confirmacaoDesbloqueioLimite"
+				header="#{bundle.cefir_lbl_desbloqueio_imovel}"
+				message="Confirma o desbloqueio do limite do imóvel?"
+				severity="alert">
+				<p:commandButton value="#{bundle.btn_sim}"
+				update=":filtroImoveis:panel @form"
+				onclick="confirmacaoDesbloqueioLimite.hide()"
+				actionListener="#{imovelRuralControllerNew.desbloquearLimiteImovel()}"
+				process="@form">
+				</p:commandButton>
+				<p:commandButton value="#{bundle.btn_nao}"
+					onclick="confirmacaoDesbloqueioLimite.hide()" />
+			</p:confirmDialog>
+		</h:form>
+		-->
+		<!-- 		<h:outputScript> -->
+		<!-- 		$(document).ready(function() { -->
+		<!-- 			verificarImoveisRegistroIncompleto(); -->
+		<!-- 		}); -->
+
+		<!-- 		</h:outputScript> -->
+		
+	</ui:define>
+</ui:composition>
+</html>

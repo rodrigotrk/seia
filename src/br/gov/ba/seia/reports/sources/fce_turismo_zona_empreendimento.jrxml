@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="fce_turismo_zona_empreendimento" pageWidth="200" pageHeight="802" whenNoDataType="AllSectionsNoDetail" columnWidth="200" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="80b78396-35cc-4e26-aaf9-1207b1892468">
+	<property name="ireport.zoom" value="2.4157650000000013"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String"/>
+	<parameter name="ide_requerimento" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[select distinct i.ide_tipo_imovel
+from imovel i
+inner join imovel_empreendimento ie on ie.ide_imovel = i.ide_imovel
+inner join empreendimento_requerimento er on ie.ide_empreendimento = er.ide_empreendimento
+where er.ide_requerimento = $P{ide_requerimento}]]>
+	</queryString>
+	<field name="ide_tipo_imovel" class="java.lang.Integer"/>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<printWhenExpression><![CDATA[$F{ide_tipo_imovel} == 1]]></printWhenExpression>
+			<staticText>
+				<reportElement uuid="eeb21139-9a71-41af-8926-462cec1e9940" x="20" y="0" width="100" height="20"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[Zona Rural]]></text>
+			</staticText>
+			<ellipse>
+				<reportElement uuid="88a5af06-477b-4d2a-9ef3-1ea87c79884b" x="7" y="8" width="5" height="5" backcolor="#000000"/>
+			</ellipse>
+		</band>
+		<band height="20">
+			<printWhenExpression><![CDATA[$F{ide_tipo_imovel} == 2]]></printWhenExpression>
+			<staticText>
+				<reportElement uuid="615f6184-733d-4c60-a161-b323f635eb11" x="20" y="0" width="100" height="20"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[Zona Urbana]]></text>
+			</staticText>
+			<ellipse>
+				<reportElement uuid="2918b21c-c221-4d5a-84aa-fe8228c29548" x="7" y="8" width="5" height="5" backcolor="#000000"/>
+			</ellipse>
+		</band>
+	</detail>
+</jasperReport>

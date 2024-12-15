@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui">
+
+	<h:panelGrid id="gridCulturaIrrigada" style="width:100%;" styleClass="grid-border-15">
+		
+		<h:outputText value="Cultura Irrigada"/>
+		<p:inputText id="buscaCultura" 
+			value="#{cerhController.abaCaptacaoSuperficial.cerhCaptacaoDadosIrrigacaoDTO.nomeCulturaIrrigadaPesquisa}"
+			style="width:250px;"
+			disabled="#{cerhController.abaCaptacaoSuperficial.dto.caracterizacaoDTO.visualizacao or cerhController.abaCaptacaoSuperficial.cerhDTO.visualizar}">
+			<p:ajax event="keyup" global="false" listener="#{cerhController.abaCaptacaoSuperficial.pesquisarCultura()}"/>
+			<f:attribute name="nomeCultura" value="#{cerhController.abaCaptacaoSuperficial.cerhCaptacaoDadosIrrigacaoDTO.nomeCulturaIrrigadaPesquisa}"/>
+		</p:inputText>
+		<p:watermark for="buscaCultura" value="Pesquisar pelo nome da cultura irrigada" />
+		
+		<p:dataTable id="dataTableCultura" 
+			widgetVar="dataTableCultura" 
+			value="#{cerhController.abaCaptacaoSuperficial.cerhCaptacaoDadosIrrigacaoDTO.listaTipologiaAtividade}" 
+			var="cultura" 
+			lazy="true" 
+			paginator="true" 
+			rows="10"  
+			paginatorPosition="bottom" 
+			paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}" 
+			rowsPerPageTemplate="5,10,15"
+			emptyMessage="#{bundle.msg_lista_vazia}" 
+			style="width: 50%;">
+		
+			<p:column headerText="Cultura Irrigada" style="text-align:justify;">
+				<h:outputText value="#{cultura.dscTipologiaAtividade}"/>
+			</p:column>
+			
+			<p:column style="text-align:center;" 
+				headerText="Ações">
+				<p:commandLink id="addCultura" 
+					title="Adicionar" 
+					process="@this"
+					update="formCaracterizacao:finalidadeSelecionadas"
+					actionListener="#{cerhController.abaCaptacaoSuperficial.adicionarCultura()}"
+					disabled="#{cerhController.abaCaptacaoSuperficial.dto.caracterizacaoDTO.visualizacao or cerhController.abaCaptacaoSuperficial.cerhDTO.visualizar}">
+					<h:graphicImage title="Adicionar Cultura Irrigada" value="/resources/img/ico-adicionar.png"/>
+					<f:attribute name="culturaIrrigada" value="#{cultura}" />
+				</p:commandLink>
+			</p:column>
+		</p:dataTable> 
+		<!-- FIM DATATABLE dataTableCultura -->
+	</h:panelGrid>
+	
+	<h:panelGrid id="gridDadosIrrigacao" style="width:100%;">
+		<p:dataTable id="tableDadosIrrigacao" 
+			value="#{cerhController.abaCaptacaoSuperficial.cerhFinalidadeIrrigacao.cerhCaptacaoDadosIrrigacaoCollection}" 
+			var="dadoIrrigacao" 
+			style="width: 800px; margin-top:15px;"
+			styleClass="grid-border-15"
+			emptyMessage="#{bundle.msg_lista_vazia}"
+			rendered="#{not empty cerhController.abaCaptacaoSuperficial.cerhFinalidadeIrrigacao.cerhCaptacaoDadosIrrigacaoCollection}">
+			
+			<p:column headerText="Cultura Irrigada" 
+				style="width: 300px; text-align:justify;">
+				<h:outputText value="#{dadoIrrigacao.ideTipologiaAtividade.dscTipologiaAtividade}" />
+			</p:column>
+			
+			<p:column headerText="Método de Irrigação" 
+				style="width: 300px; text-align:center;">
+				<p:selectOneMenu value="#{dadoIrrigacao.ideMetodoIrrigacao}" 
+					converter="simpleEntityConverter"
+					style="width:250px;" 
+					rendered="#{!dadoIrrigacao.ideTipologiaAtividade.outros}"
+					disabled="#{cerhController.abaCaptacaoSuperficial.dto.caracterizacaoDTO.visualizacao or dadoIrrigacao.confirmado}">
+					<f:selectItem noSelectionOption="true" itemLabel="Selecione"/> 
+		            <f:selectItems value="#{cerhController.abaCaptacaoSuperficial.cerhCaptacaoDadosIrrigacaoDTO.metodoIrrigacaoCollection}" 
+		            	var="metodo" 
+		            	itemLabel="#{metodo.dscMetodoIrrigacao}" 
+		            	itemValue="#{metodo}" />
+	            	<p:ajax event="change"/>
+		        </p:selectOneMenu>
+	        </p:column>
+			
+			<p:column headerText="Área Irrigada (ha)" 
+				style="width: 150px; text-align:center;">
+				<h:panelGroup rendered="#{!dadoIrrigacao.ideTipologiaAtividade.outros}">
+					<p:inputText value="#{dadoIrrigacao.valAreaIrrigada}" 
+						maxlength="13"
+						style="margin-left:5px; width:80px;" 
+						onblur="mascararNumeroAndAddZeros(this, event, 8, 2, '.', ',', 3);"
+						onkeyup="mascararNumeroAndAddZeros(this, event, 8, 2, '.', ',', 3);"
+						disabled="#{cerhController.abaCaptacaoSuperficial.dto.caracterizacaoDTO.visualizacao or dadoIrrigacao.confirmado}">
+						<f:convertNumber integerOnly="false" maxIntegerDigits="8" maxFractionDigits="2" pattern="#,##0.00" locale="pt_BR"/>
+						<p:ajax event="keyup"  global="false"/>
+					</p:inputText>
+				</h:panelGroup>
+			</p:column>
+			
+			<p:column headerText="Ações" 
+				style="width: 50px; text-align:center;">
+				
+				<p:commandLink actionListener="#{cerhController.abaCaptacaoSuperficial.confirmarCultura()}"
+					process="@this"
+					update="formCaracterizacao:finalidadeSelecionadas"
+					rendered="#{!dadoIrrigacao.confirmado}" 
+					disabled="#{cerhController.abaCaptacaoSuperficial.dto.caracterizacaoDTO.visualizacao}">
+					<h:graphicImage title="Confirmar" value="/resources/img/ico-aprovar-notificacao.png" />
+					<f:attribute name="cerhDadoIrrigacao" value="#{dadoIrrigacao}" />
+				</p:commandLink>
+
+				<p:commandLink actionListener="#{cerhController.abaCaptacaoSuperficial.editarCultura()}"
+					process="@this"
+					update="formCaracterizacao:finalidadeSelecionadas"
+					rendered="#{dadoIrrigacao.confirmado}"  
+					disabled="#{cerhController.abaCaptacaoSuperficial.dto.caracterizacaoDTO.visualizacao}">
+					<h:graphicImage title="Editar" value="/resources/img/ico-editar.png" />
+					<f:attribute name="cerhDadoIrrigacao" value="#{dadoIrrigacao}" />
+				</p:commandLink>
+				
+				<p:commandLink oncomplete="confirmExcluirIrrigacao.show()" 
+					process="@this"
+					disabled="#{cerhController.abaCaptacaoSuperficial.dto.caracterizacaoDTO.visualizacao}">
+					<h:graphicImage title="Excluir" value="/resources/img/ico-excluir.png" />
+					<f:setPropertyActionListener value="#{dadoIrrigacao}" target="#{cerhController.abaCaptacaoSuperficial.cerhCaptacaoDadosIrrigacaoDTO.cerhCaptacaoDadosIrrigacao}"/>
+				</p:commandLink>
+				
+			</p:column>
+		</p:dataTable>
+		<!-- FIM DATATABLE tableProdutos -->		
+	</h:panelGrid>
+</ui:composition>

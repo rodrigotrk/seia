@@ -1,0 +1,284 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="relatorio" pageWidth="595" pageHeight="842" columnWidth="495" leftMargin="50" rightMargin="50" topMargin="50" bottomMargin="50" uuid="2f311ada-60dd-4ead-9d15-afa793b77d65">
+	<property name="ireport.zoom" value="1.7715610000000075"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="LOGO_INEMA" class="java.lang.String"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="LOGO_SEIA" class="java.lang.String"/>
+	<parameter name="MARCA_DAGUA" class="java.lang.String"/>
+	<parameter name="ide_ato_declaratorio" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT diap.ide_declaracao_intervencao_app, diap.ide_localizacao_geografica, diap.des_objetivo_intervencao_app, sc.nom_sistema_coordenada, ad.dtc_criacao
+	FROM declaracao_intervencao_app diap
+	inner join localizacao_geografica lg on lg.ide_localizacao_geografica = diap.ide_localizacao_geografica
+	inner join sistema_coordenada sc on sc.ide_sistema_coordenada = lg.ide_sistema_coordenada
+	inner join ato_declaratorio ad on ad.ide_ato_declaratorio = diap.ide_ato_declaratorio
+	WHERE ad.ide_ato_declaratorio = $P{ide_ato_declaratorio};]]>
+	</queryString>
+	<field name="ide_declaracao_intervencao_app" class="java.lang.Integer"/>
+	<field name="ide_localizacao_geografica" class="java.lang.Integer">
+		<fieldDescription><![CDATA[Identificar da localização geográfica da Área de Preservação Permanente]]></fieldDescription>
+	</field>
+	<field name="des_objetivo_intervencao_app" class="java.lang.String"/>
+	<field name="nom_sistema_coordenada" class="java.lang.String"/>
+	<field name="dtc_criacao" class="java.sql.Timestamp"/>
+	<title>
+		<band height="60" splitType="Stretch">
+			<line>
+				<reportElement uuid="93c331cb-f41c-409e-9f91-ac100822e106" x="0" y="0" width="495" height="1"/>
+			</line>
+			<image isLazy="true" onErrorType="Blank">
+				<reportElement uuid="ee4dbec8-ce13-43eb-8896-5fd840c0f779" x="0" y="2" width="99" height="47" forecolor="#FFFFFF"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<graphicElement>
+					<pen lineWidth="1.0" lineStyle="Solid" lineColor="#FFFFFF"/>
+				</graphicElement>
+				<imageExpression><![CDATA[$P{LOGO_SEIA}]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement uuid="5dc370f5-31ed-4381-a723-87780cec2096" x="99" y="1" width="297" height="15"/>
+				<textElement textAlignment="Center" verticalAlignment="Top">
+					<font fontName="SansSerif" size="10" isBold="true"/>
+					<paragraph leftIndent="2" rightIndent="2" spacingBefore="2" spacingAfter="2"/>
+				</textElement>
+				<text><![CDATA[RELATÓRIO DE DECLARAÇÃO]]></text>
+			</staticText>
+			<image isLazy="true" onErrorType="Blank">
+				<reportElement uuid="19a93141-7836-4273-a80c-496aea1992a7" x="396" y="2" width="99" height="47" forecolor="#FFFFFF"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<graphicElement>
+					<pen lineWidth="0.0"/>
+				</graphicElement>
+				<imageExpression><![CDATA[$P{LOGO_INEMA}]]></imageExpression>
+			</image>
+			<line>
+				<reportElement uuid="708c4f3b-ddb8-4bf7-aa20-7fe554542248" x="0" y="48" width="495" height="1"/>
+			</line>
+			<staticText>
+				<reportElement uuid="689a596e-f8c9-41cb-a3c6-d258f057d876" x="99" y="17" width="297" height="15"/>
+				<textElement textAlignment="Center" verticalAlignment="Top">
+					<font fontName="SansSerif" size="10" isBold="false"/>
+					<paragraph leftIndent="2" rightIndent="2" spacingBefore="2" spacingAfter="2"/>
+				</textElement>
+				<text><![CDATA[Intervenção em Área de Preservação Permanente]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="51df66d0-7565-4511-b7e8-c155b87c7c47" x="99" y="34" width="297" height="15" forecolor="#FF0000"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="7" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Este documento não regulariza ambientalmente a execução da atividade]]></text>
+			</staticText>
+		</band>
+	</title>
+	<detail>
+		<band height="25" splitType="Stretch">
+			<subreport runToBottom="false">
+				<reportElement uuid="1aa69c8e-bd45-4434-89fa-2a0801e489f8" positionType="Float" isPrintRepeatedValues="false" x="0" y="0" width="495" height="15" isRemoveLineWhenBlank="true"/>
+				<subreportParameter name="ide_ato_declaratorio">
+					<subreportParameterExpression><![CDATA[$P{ide_ato_declaratorio}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "relatorio_dados_requerente.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+		<band height="79">
+			<staticText>
+				<reportElement uuid="4b603b9b-ea52-4f08-ae33-b7b235c882e9" positionType="Float" mode="Opaque" x="0" y="0" width="495" height="17" backcolor="#DDDDDD"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif" isBold="true"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<text><![CDATA[Localização Geográfica]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="2b37114e-2fce-44b5-8fae-06e963ab34bd" x="1" y="27" width="153" height="17"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[Coordenadas da Intervenção]]></text>
+			</staticText>
+			<subreport runToBottom="false">
+				<reportElement uuid="ddf042ec-527e-48fc-89a4-421b944a28d8" positionType="Float" stretchType="RelativeToBandHeight" isPrintRepeatedValues="false" x="0" y="54" width="494" height="15" isRemoveLineWhenBlank="true"/>
+				<subreportParameter name="ide_localizacao_geografica">
+					<subreportParameterExpression><![CDATA[$F{ide_localizacao_geografica}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="nom_sistema_coordenada">
+					<subreportParameterExpression><![CDATA[$F{nom_sistema_coordenada}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "relatorio_localizacao_geografica.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+		<band height="52" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="b5f3340b-cf24-4277-9ed7-ab7711579a7b" positionType="Float" mode="Opaque" x="0" y="0" width="495" height="17" backcolor="#DDDDDD"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif" isBold="true"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<text><![CDATA[Caracterização da Intervenção]]></text>
+			</staticText>
+			<subreport runToBottom="false">
+				<reportElement uuid="0eb57bf5-3f95-4d90-950e-101110f13c15" positionType="Float" stretchType="RelativeToBandHeight" isPrintRepeatedValues="false" x="0" y="27" width="494" height="15" isRemoveLineWhenBlank="true"/>
+				<subreportParameter name="SUBREPORT_DIR">
+					<subreportParameterExpression><![CDATA[$P{SUBREPORT_DIR}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="ide_diap">
+					<subreportParameterExpression><![CDATA[$F{ide_declaracao_intervencao_app}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "relatorio_caracterizacao_intervencao.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+		<band height="60">
+			<staticText>
+				<reportElement uuid="f8d3f2c1-0f6b-4531-8074-0247871429a8" positionType="Float" mode="Opaque" x="1" y="0" width="495" height="17" backcolor="#DDDDDD"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif" isBold="true"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<text><![CDATA[Descrição do objetivo da Intervenção]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true">
+				<reportElement uuid="4eae405e-f1dc-4c71-8c5e-35f0618665dc" x="1" y="30" width="495" height="20" isPrintWhenDetailOverflows="true"/>
+				<box topPadding="0" leftPadding="5" bottomPadding="0" rightPadding="5"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{des_objetivo_intervencao_app}]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="100">
+			<staticText>
+				<reportElement uuid="69a649c7-da25-4c29-95e9-f0de15f3047e" positionType="Float" mode="Opaque" x="1" y="0" width="495" height="17" backcolor="#DDDDDD"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif" isBold="true"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<text><![CDATA[Responsabilidade]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="ef24b266-f6ab-4fc0-a7f6-c910a0514cc2" stretchType="RelativeToBandHeight" x="0" y="30" width="495" height="57" isPrintWhenDetailOverflows="true"/>
+				<box leftPadding="5" rightPadding="5"/>
+				<textElement textAlignment="Justified"/>
+				<text><![CDATA[O requerente está ciente que a prestação de informaçães falsas ao INEMA constitui prática de crime e resultará na aplicação das sanções penais cabíveis, nos termos dispostos no código penal (Decreto-Lei nº 2.848/40), na lei de crimes ambientais (Lei Federal nº 9.605/98) e no regulamento.]]></text>
+			</staticText>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="26" splitType="Stretch">
+			<textField>
+				<reportElement uuid="fe0423c1-2bcd-45ae-9ba1-a4be48dd8156" mode="Opaque" x="419" y="13" width="46" height="13" forecolor="#000000"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="9" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Pág "+$V{PAGE_NUMBER}+" de"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement uuid="f2bf1927-4cea-4dd5-bf8e-c1b25e0e9ee4" mode="Opaque" x="465" y="13" width="15" height="13" forecolor="#000000"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="9" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField pattern="EEEEE dd MMMMM yyyy">
+				<reportElement uuid="e9511e26-9e3f-42fd-a1b4-bf6ea7545de8" mode="Opaque" x="10" y="13" width="95" height="13" forecolor="#000000"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif" size="9" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="364a1ad8-1761-4b3c-8219-9e590467f319" x="109" y="13" width="298" height="13"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="5"/>
+				</textElement>
+				<text><![CDATA[Avenida Luis Viana Filho, 6° Avenida n° 600 - CAB - CEP 41.745-900. Salvador - BA]]></text>
+			</staticText>
+		</band>
+	</pageFooter>
+	<lastPageFooter>
+		<band height="50">
+			<textField pattern="dd &apos;de&apos; MMMMM &apos;de&apos; yyyy" isBlankWhenNull="true">
+				<reportElement uuid="52567543-807f-4995-894f-8ddc4ca737f8" x="37" y="5" width="126" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif" size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dtc_criacao}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="c47eceac-9037-4497-b0ea-1a7e8bac4dc2" x="1" y="5" width="36" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif" size="9"/>
+				</textElement>
+				<text><![CDATA[Data:]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="0fe82fc0-9dc1-478b-a6e6-8ccc38fe96e5" mode="Opaque" x="419" y="37" width="46" height="13" forecolor="#000000"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="9" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Pág "+$V{PAGE_NUMBER}+" de"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement uuid="4abee6f3-2b7a-442c-8187-955afe3085fe" mode="Opaque" x="465" y="37" width="15" height="13" forecolor="#000000"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="9" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField pattern="EEEEE dd MMMMM yyyy">
+				<reportElement uuid="f9c93500-30bb-416a-b559-38c16b60dd7d" mode="Opaque" x="10" y="37" width="95" height="13" forecolor="#000000"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif" size="9" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="45f47e37-0e80-4684-aa22-c57023d27cd1" x="109" y="37" width="298" height="13"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="5"/>
+				</textElement>
+				<text><![CDATA[Avenida Luis Viana Filho, 6° Avenida n° 600 - CAB - CEP 41.745-900. Salvador - BA]]></text>
+			</staticText>
+		</band>
+	</lastPageFooter>
+</jasperReport>

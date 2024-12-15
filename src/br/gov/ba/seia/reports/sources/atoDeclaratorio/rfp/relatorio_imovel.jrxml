@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="relatorio_imovel" language="java" pageWidth="555" pageHeight="802" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="b3451a0b-8070-4e0d-b803-82364a7764dc">
+	<property name="ireport.zoom" value="2.143588810000002"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="ide_ato_declaratorio" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[select
+
+	rfpi.ide_registro_floresta_producao_imovel,
+
+	coalesce(
+		ir.des_denominacao,
+		(select
+			ei.nom_empreendimento
+		from ato_declaratorio ati
+		inner join empreendimento_requerimento eri on eri.ide_requerimento = ati.ide_requerimento
+		inner join empreendimento ei on ei.ide_empreendimento = eri.ide_empreendimento
+		where eri.ide_requerimento = at_.ide_requerimento)
+	)
+	 as nom_imovel
+
+
+
+from
+ato_declaratorio at_
+inner join registro_floresta_producao rfp on rfp.ide_ato_declaratorio = at_.ide_ato_declaratorio
+inner join registro_floresta_producao_imovel rfpi on rfpi.ide_registro_floresta_producao = rfp.ide_registro_floresta_producao
+
+INNER JOIN imovel i on i.ide_imovel = rfpi.ide_imovel
+	left join imovel_urbano iu on iu.ide_imovel_urbano = i.ide_imovel
+	left join imovel_rural ir on ir.ide_imovel_rural = i.ide_imovel
+
+where at_.ide_ato_declaratorio = $P{ide_ato_declaratorio}]]>
+	</queryString>
+	<field name="ide_registro_floresta_producao_imovel" class="java.lang.Integer"/>
+	<field name="nom_imovel" class="java.lang.String"/>
+	<title>
+		<band height="15"/>
+	</title>
+	<detail>
+		<band height="25" splitType="Stretch">
+			<textField>
+				<reportElement uuid="a613e1f5-4494-4f33-af45-50136b49eb8c" x="5" y="5" width="272" height="20"/>
+				<box topPadding="5" leftPadding="0"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nom_imovel}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement uuid="ae1178cb-7e26-4541-8fd3-204709365042" x="0" y="0" width="555" height="1"/>
+			</line>
+			<line>
+				<reportElement uuid="2c68473f-bbfd-4588-a4da-e8ff266cafcc" x="0" y="0" width="1" height="25"/>
+			</line>
+			<line>
+				<reportElement uuid="6e50292e-c613-4db6-a4a8-74d8cd602a18" x="554" y="0" width="1" height="25"/>
+			</line>
+		</band>
+		<band height="20">
+			<subreport>
+				<reportElement uuid="4a12ae3e-dc0f-42a0-a4b1-75bd06a3dc9e" x="5" y="0" width="545" height="20"/>
+				<subreportParameter name="ide_registro_floresta_producao_imovel">
+					<subreportParameterExpression><![CDATA[$F{ide_registro_floresta_producao_imovel}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "relatorio_imovel_situacao_floresta.jasper"]]></subreportExpression>
+			</subreport>
+			<staticText>
+				<reportElement uuid="16666625-aa5f-4804-8912-49dd896a6b75" x="355" y="0" width="195" height="20">
+					<printWhenExpression><![CDATA[false]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Center">
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[Situação Atual Floresta de produção]]></text>
+			</staticText>
+			<line>
+				<reportElement uuid="158adcf7-5f8b-4648-8170-3f5a2212fe3a" stretchType="RelativeToBandHeight" x="0" y="0" width="1" height="20"/>
+			</line>
+			<line>
+				<reportElement uuid="571d4119-5a9f-45b2-8894-863675a57523" stretchType="RelativeToBandHeight" x="554" y="0" width="1" height="20"/>
+			</line>
+		</band>
+		<band height="20">
+			<subreport>
+				<reportElement uuid="2224e653-06b4-4bcc-b449-cb8557562473" x="5" y="0" width="545" height="20"/>
+				<subreportParameter name="ide_registro_floresta_producao_imovel">
+					<subreportParameterExpression><![CDATA[$F{ide_registro_floresta_producao_imovel}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "relatorio_imovel_natureza_especie.jasper"]]></subreportExpression>
+			</subreport>
+			<staticText>
+				<reportElement uuid="97f2fd2a-3d10-446d-9b50-2904a4357fd8" x="355" y="0" width="195" height="20">
+					<printWhenExpression><![CDATA[false]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Center">
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[Natureza Especie Floresta]]></text>
+			</staticText>
+			<line>
+				<reportElement uuid="06c68503-ac2e-406e-a377-9607139696d3" stretchType="RelativeToBandHeight" x="0" y="0" width="1" height="20"/>
+			</line>
+			<line>
+				<reportElement uuid="3eaf40f9-0ccb-43f4-bab6-2cf1c080a663" stretchType="RelativeToBandHeight" x="554" y="0" width="1" height="20"/>
+			</line>
+		</band>
+		<band height="6">
+			<line>
+				<reportElement uuid="89c2e73e-45aa-42f3-b121-38dec94e5d2d" x="0" y="0" width="1" height="5"/>
+			</line>
+			<line>
+				<reportElement uuid="cd1f901b-576c-4b20-b07c-1b23dcdf2b29" x="554" y="0" width="1" height="5"/>
+			</line>
+			<line>
+				<reportElement uuid="9cec9211-3b03-4598-93d3-326bf2cf082c" x="0" y="5" width="555" height="1"/>
+			</line>
+		</band>
+		<band height="15"/>
+	</detail>
+</jasperReport>

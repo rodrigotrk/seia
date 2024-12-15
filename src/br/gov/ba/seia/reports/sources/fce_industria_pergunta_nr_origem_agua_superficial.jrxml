@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="fce_industria_pergunta_nr_origem_agua_subterranea" language="java" pageWidth="200" pageHeight="802" columnWidth="200" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="8719f475-cd82-4e7d-beb9-997db22c6a9d">
+	<property name="ireport.zoom" value="3.5431220000000034"/>
+	<property name="ireport.x" value="10"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="ide_requerimento" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT DISTINCT
+	olg.ide_localizacao_geografica,
+	olg.ide_outorga_localizacao_geografica,
+	o.ide_requerimento,
+
+	array_to_string( array(SELECT latitude FROM (
+		SELECT
+			case when length(trim(f_get_vertices(ide_localizacao_geografica)):: character varying) > 0 then substring((SELECT trim(f_get_vertices(ide_localizacao_geografica))) FROM (strpos((SELECT trim(f_get_vertices(ide_localizacao_geografica))), '(') + 1) for (strpos((SELECT trim(f_get_vertices(ide_localizacao_geografica))), ' -') - 2)) else 'valor não informado.' end AS latitude
+		FROM
+			localizacao_geografica
+		WHERE
+			ide_localizacao_geografica = loc.ide_localizacao_geografica) pontos), ', ') AS latitudeInicial,
+
+	array_to_string( array(SELECT longitude FROM (
+		SELECT
+			case when length(trim(f_get_vertices(ide_localizacao_geografica)):: character varying) > 0 then replace(substring((SELECT trim(f_get_vertices(ide_localizacao_geografica))) FROM (strpos((SELECT trim(f_get_vertices(ide_localizacao_geografica))), ' -') + 1) for (strpos((SELECT trim(f_get_vertices(ide_localizacao_geografica))), ')') - 1)), ')', '') else 'valor não informado.' end AS longitude
+		FROM
+			localizacao_geografica
+		WHERE
+			ide_localizacao_geografica = loc.ide_localizacao_geografica) pontos), ', ') AS longitudeInicial
+
+
+FROM outorga o
+inner join outorga_localizacao_geografica olg on olg.ide_outorga = o.ide_outorga
+INNER JOIN localizacao_geografica loc ON olg.ide_localizacao_geografica = loc.ide_localizacao_geografica
+inner join outorga_tipo_captacao otc on otc.ide_outorga = olg.ide_outorga and ide_tipo_captacao = 3
+where o.ide_requerimento = $P{ide_requerimento} and o.ide_modalidade_outorga = 1]]>
+	</queryString>
+	<field name="ide_localizacao_geografica" class="java.lang.Integer"/>
+	<field name="ide_outorga_localizacao_geografica" class="java.lang.Integer"/>
+	<field name="ide_requerimento" class="java.lang.Integer"/>
+	<field name="latitudeinicial" class="java.lang.String"/>
+	<field name="longitudeinicial" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<detail>
+		<band height="25" splitType="Stretch">
+			<rectangle>
+				<reportElement uuid="c72c0f2d-5dcb-407e-91d6-ed0c8e2461f7" x="0" y="0" width="200" height="25" backcolor="#F0F0F0"/>
+				<graphicElement>
+					<pen lineWidth="0.0"/>
+				</graphicElement>
+			</rectangle>
+			<textField pattern="">
+				<reportElement uuid="56f9d646-6763-429c-801c-926f1ddaa803" mode="Opaque" x="70" y="0" width="70" height="20" backcolor="#FFFFFF"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{longitudeinicial}]]></textFieldExpression>
+			</textField>
+			<textField pattern="">
+				<reportElement uuid="e0deefae-64b0-4b75-93c7-902eb25574ff" mode="Opaque" x="0" y="0" width="70" height="20" backcolor="#FFFFFF"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{latitudeinicial}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement uuid="cbd1e147-407a-4fb9-89a1-3e7bcc40fe19" x="0" y="19" width="140" height="1"/>
+			</line>
+			<line>
+				<reportElement uuid="7f135e15-831e-49ca-86ab-a64b8bd9f8b2" x="140" y="0" width="1" height="20"/>
+			</line>
+			<line>
+				<reportElement uuid="de710635-a895-4413-b4cb-4618bccb5ac8" x="0" y="0" width="1" height="20"/>
+			</line>
+			<line>
+				<reportElement uuid="a714cd06-504c-446f-819c-39b3dcb9b149" x="70" y="0" width="1" height="20"/>
+			</line>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="resumo_requerimento_questionario_origem_agua_superficial_caracteristicas_captacao_em_barragem" language="java" pageWidth="100" pageHeight="802" columnWidth="100" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="10c765c2-59ad-4b0f-b908-58982dc13274">
+	<property name="ireport.zoom" value="1.4641000000000006"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<queryString>
+		<![CDATA[select
+	ind_resposta
+from pergunta_requerimento pr
+
+	where pr.ide_pergunta = (34) -- A captação é em barragem
+	and pr.ide_requerimento = 31947
+	and pr.ind_resposta = true
+]]>
+	</queryString>
+	<field name="ind_resposta" class="java.lang.Boolean"/>
+	<detail>
+		<band height="32" splitType="Stretch">
+			<printWhenExpression><![CDATA[100]]></printWhenExpression>
+			<textField>
+				<reportElement uuid="232a94b7-5055-45a2-a45a-237778991d54" x="0" y="0" width="100" height="32"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{ind_resposta}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

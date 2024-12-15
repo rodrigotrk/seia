@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui">
+
+	<h:form id="formAtividadeInexigivel" binding="#{atividadeInexigivelController.formularioASerLimpo}">
+		<h:panelGrid id="panelAtividade" columns="1">
+
+ 			<h:outputLabel value="Nome da atividade:" />
+			<p:inputText id="inputNomeAtividade" disabled="#{atividadeInexigivelController.visualizar}" style="width: 350px;" value="#{atividadeInexigivelController.atividade.nomAtividadeInexigivel}" maxlength="255"/>
+			<hr/>
+
+			<h3>Tipo de atividade</h3>
+			<h:panelGrid columns="4">
+				<p:selectBooleanCheckbox id="chkInexigivelOutorga" value="#{atividadeInexigivelController.inexigivelOutorga}" disabled="#{atividadeInexigivelController.visualizar}"/>
+				<h:outputText value="Inexigível de Outorga" />
+				
+				<p:selectBooleanCheckbox id="chkInexigivelLicenca" value="#{atividadeInexigivelController.inexigivelLicenca}" disabled="#{atividadeInexigivelController.visualizar}">
+				</p:selectBooleanCheckbox>
+				<h:outputText value="Inexigível de Licença" />
+			</h:panelGrid>
+			
+			<hr/>
+
+  			<h3>Caracterização da Atividade</h3>
+			
+			<h:panelGrid columns="2">
+
+				<p:selectOneRadio id="finalidadeAtividade" value="#{atividadeInexigivelController.finalidadeSelecionada}" layout="pageDirection" disabled="#{atividadeInexigivelController.visualizar}">
+		            <f:selectItem itemLabel="Ponte" itemValue="ponte" />
+		            <f:selectItem itemLabel="Sistema" itemValue="sistema" />
+		            <f:selectItem itemLabel="Intervenção" itemValue="projeto" />
+		            <f:selectItem itemLabel="Unidade" itemValue="unidade" />
+		            <f:selectItem itemLabel="Nenhuma das opções" itemValue="nenhuma" />
+		            <p:ajax listener="#{atividadeInexigivelController.changeFinalidade}" update="realizacaoAtividade"/>
+	       		</p:selectOneRadio> 
+	
+				<h:panelGrid columns="2">
+	
+		            <h:graphicImage value="/resources/img/ico-ajuda.png" id="titPonte" style="margin: 3px 1px 2px 4px;" />
+		            <p:tooltip for="titPonte"
+		                       value="#{atividadeInexigivelController.hintPonte}"
+		                       showEffect="fade" hideEffect="fade" />
+		            <h:graphicImage value="/resources/img/ico-ajuda.png" id="titSistema" style="margin: 3px 1px 2px 4px;" />
+		            <p:tooltip for="titSistema"
+		                       value="#{atividadeInexigivelController.hintSistema}"
+		                       showEffect="fade" hideEffect="fade" />		            
+		            <h:graphicImage value="/resources/img/ico-ajuda.png" id="titProjeto" style="margin: 3px 1px 2px 4px;" />
+		            <p:tooltip for="titProjeto"
+		                       value="#{atividadeInexigivelController.hintProjeto}"
+		                       showEffect="fade" hideEffect="fade" />	
+		            <h:graphicImage value="/resources/img/ico-ajuda.png" id="titUnidade" style="margin: 3px 1px 2px 4px;" />
+		            <p:tooltip for="titUnidade"
+		                       value="#{atividadeInexigivelController.hintUnidade}"
+		                       showEffect="fade" hideEffect="fade" />
+		            <h:graphicImage value="/resources/img/ico-ajuda.png" id="titNenhuma" style="margin: 3px 1px 2px 4px;" />
+		            <p:tooltip for="titNenhuma"
+		                       value="#{atividadeInexigivelController.hintNenhuma}"
+		                       showEffect="fade" hideEffect="fade" />
+				</h:panelGrid>
+			</h:panelGrid>
+			
+			<hr/>
+			
+			<h3>Detalhamento</h3>
+			<br/>
+			<h:panelGrid id="perguntas">
+			
+				<h:outputText value="A atividade faz parte do programa luz para todos?" />
+				<p:selectOneRadio id="luzParaTodos" value="#{atividadeInexigivelController.atividade.permiteLuzParaTodos}" disabled="#{atividadeInexigivelController.visualizar}">
+		            <f:selectItem itemLabel="Sim" itemValue="true" />
+		            <f:selectItem itemLabel="Não" itemValue="false" />
+	       		</p:selectOneRadio>		
+	       		
+				<h:outputText value="A atividade poderá ser realizada em municípios em estado de emergência?" />
+				<p:selectOneRadio id="estadoEmergencia" value="#{atividadeInexigivelController.atividade.permiteMunicipioEmergencial}" disabled="#{atividadeInexigivelController.visualizar}">
+		            <f:selectItem itemLabel="Sim" itemValue="true" />
+		            <f:selectItem itemLabel="Não" itemValue="false" />
+	       		</p:selectOneRadio>		
+	       		
+				<h:outputText value="Perguntar se a atividade é realizada em um local especifico ou em vários locais do estado da Bahia?" />
+				<p:selectOneRadio id="local" value="#{atividadeInexigivelController.atividade.permiteLocalRealizacao}" disabled="#{atividadeInexigivelController.visualizar}">
+		            <f:selectItem itemLabel="Sim" itemValue="true" />
+		            <f:selectItem itemLabel="Não" itemValue="false" />
+		            <p:ajax listener="#{atividadeInexigivelController.changeAtividadeLocaisEspecificos()}" update="realizacaoAtividade"/>
+	       		</p:selectOneRadio>	 
+	       		
+				<h:outputText value="É necessário informar endereço de realização da atividade?" />
+				<p:selectOneRadio id="realizacaoAtividade" value="#{atividadeInexigivelController.atividade.permiteEndereco}" disabled="#{atividadeInexigivelController.visualizar or atividadeInexigivelController.disableEndereco}">
+		            <f:selectItem itemLabel="Sim" itemValue="true" />
+		            <f:selectItem itemLabel="Não" itemValue="false" />
+	       		</p:selectOneRadio>	 
+       		</h:panelGrid>
+		<br/>
+			<h:panelGroup>
+				<p:commandButton value="#{bundle.geral_lbl_voltar}" onclick="dlgAtividade.hide()" />
+				<p:commandButton action="#{atividadeInexigivelController.avancar()}" value="#{bundle.geral_lbl_avancar}" update=":tabViewDI" />
+			</h:panelGroup>
+		</h:panelGrid> 
+		
+	</h:form>
+
+</ui:composition>

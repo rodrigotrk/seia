@@ -1,0 +1,471 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:t="http://myfaces.apache.org/tomahawk">
+
+	<p:dialog id="_dlgLocalizacaoGeograficaGeneric"
+		widgetVar="dlgLocalizacaoGeograficaGeneric" width="660" minHeight="410"
+		header="Localização Geográfica" appendToBody="true"
+		resizable="false" position="center" dynamic="true"
+		modal="true">
+
+		<p:ajax event="close"
+			update="formDialogFlorestal:pngTb122 
+			formDialogFlorestal:pngTb133 
+			formDialogFlorestal:pngTb152 
+			formDialogFlorestal:pngTb162 
+			formDialogFlorestal:pngTb182 
+			formDialogFlorestal:pngTb193 
+			formDialogFlorestal:pngTb1122 
+			tabAbasId:formDadosGerais:dataLocGeo 
+			:formIntervencaoBarragemSemPonto:pnl1"
+			listener="#{localizacaoGeograficaGenericController.buscaLocalizacaoInserida()}"/>
+			
+
+		<h:panelGrid columns="1" id="localizacaoGeograficaGeneric">
+			<h3>
+				<h:outputLabel styleClass="titulo-grupo" value="LOCALIZAÇÃO GEOGRÁFICA" />
+			</h3>
+
+			<h:form id="locGeograficaGeneric">
+				<p:outputPanel autoUpdate="true">
+					<h:panelGrid columns="3" cellpadding="7">
+						<h:outputLabel styleClass="form-label" value="#{bundle.empreendimento_lbl_secao_geometrica}" />
+						<h:outputLabel styleClass="form-label" value="* #{bundle.empreendimento_lbl_datum}" />
+						<h:outputLabel styleClass="form-label" value="Descrição" />
+						<p:selectOneMenu id="tipoSecaoGeometrica"
+							value="#{localizacaoGeograficaGenericController.localizacaoGeograficaSelecionada.ideClassificacaoSecao}"
+							disabled="#{localizacaoGeograficaGenericController.existeTheGeom or localizacaoGeograficaGenericController.disableParaVisualizar or localizacaoGeograficaGenericController.desabilitaSecaoGeometrica}"
+							required="true"
+							requiredMessage="O campo Tipo de Inserção é de preenchimento obrigatório."
+							converter="simpleEntityConverter"
+							style="width: 160px;">
+							<f:selectItem itemLabel="Selecione..." />
+							<f:selectItems value="#{localizacaoGeograficaGenericController.listaSecaoGeomerica}"
+								var="secaoGeometrica"
+								itemLabel="#{secaoGeometrica.nomClassificacaoSecao}"
+								itemValue="#{secaoGeometrica}" />
+							<p:ajax event="change" update="locGeograficaGeneric" global="false" listener="#{localizacaoGeograficaGenericController.verificaTipoSecaoGeometricaShape()}" />
+						</p:selectOneMenu>
+						<p:selectOneMenu id="combodatum"
+							value="#{localizacaoGeograficaGenericController.datumSelecionado}"
+							disabled="#{localizacaoGeograficaGenericController.temLocGeoDesenho 
+									or localizacaoGeograficaGenericController.existeTheGeom 
+									or localizacaoGeograficaGenericController.disableParaVisualizar 
+									or localizacaoGeograficaGenericController.editandoVertice}"
+							required="true"
+							requiredMessage="O campo Sistema de Coordenada/Referência Espacial é de preenchimento obrigatório."
+							converter="simpleEntityConverter"
+							valueChangeListener="#{localizacaoGeograficaGenericController.selectedDatumChanged}"
+							style="width: 260px;">
+							<f:selectItem itemLabel="Selecione..." />
+							<f:selectItems value="#{localizacaoGeograficaGenericController.datums}"
+								var="datumItem"
+								itemLabel="#{datumItem.nomSistemaCoordenada}" 
+								itemValue="#{datumItem}"/>
+							<p:ajax global="false" process="@this" event="change" />
+						</p:selectOneMenu>
+						<p:inputText id="inputDescLocalizaGeograf" maxlength="150"
+							onkeypress="ExcetoNumero(this);" onkeyup="ExcetoNumero(this);"
+							value="#{localizacaoGeograficaGenericController.localizacaoGeograficaSelecionada.desLocalizacaoGeografica}"
+							title="Descrição da Localização"
+							disabled="#{localizacaoGeograficaGenericController.existeTheGeom or localizacaoGeograficaGenericController.disableParaVisualizar}" />
+						<p:commandButton
+							title="Salvar Coordenadas da Localização Geografica"
+							value="Salvar"
+							disabled="#{localizacaoGeograficaGenericController.existeTheGeom or localizacaoGeograficaGenericController.disableParaVisualizar}"
+							actionListener="#{localizacaoGeograficaGenericController.salvarLocalizacaoGeografica()}"
+							global="true" />
+					</h:panelGrid>
+
+					<!-- GRID PERSISTIR SHAPE -->
+					<h:panelGrid id="uplShapefile" styleClass="clean"
+						rendered="#{localizacaoGeograficaGenericController.temLocGeoShape and !localizacaoGeograficaGenericController.existeTheGeom}"
+						columns="1" style="width:370px">
+						
+						<h:outputLabel value="#{bundle.empreendimento_lbl_localizacao_geografica_shp}" style="float:left; width:330px;" />
+						
+						<p:fileUpload uploadLabel="false" label="Upload Documento"
+							disabled="#{novoRequerimentoController.desabilitarTudo or !localizacaoGeograficaGenericController.habilitaIncluirLoc or localizacaoGeograficaGenericController.disableParaVisualizar}"
+							fileLimit="3"
+							fileUploadListener="#{localizacaoGeograficaGenericController.trataArquivo()}"
+							invalidFileMessage="Tipo de arquivo inválido." mode="advanced"
+							update="tblDocumento" auto="true"
+							required="true" requiredMessage="Arquivo é Obrigatório!"
+							allowTypes="/(\.|\/)(shp|dbf|shx|SHP|DBF|SHX)$/" immediate="true" />
+
+						<h:panelGrid id="tblDocumento" rendered="#{localizacaoGeograficaGenericController.temLocGeoShape}" styleClass="clean right">
+							
+							<p:dataTable id="dataTableDocumentos" widgetVar="dtTbDocumentos" value="#{localizacaoGeograficaGenericController.listaArquivo}"
+								var="arquivo" lazy="true" emptyMessage="#{bundle.msg_lista_vazia}" style="width:472px;">
+								
+								<p:column>
+									<h:outputText value="#{arquivo}" />
+								</p:column>
+								
+								<p:column>
+									<p:commandLink onclick="confirmaExclusaoShapeFileLocGeoImovelGeneric.show()">
+										<f:setPropertyActionListener target="#{localizacaoGeograficaGenericController.arqDeExclusao}" value="#{arquivo}"/>
+										<h:graphicImage title="Excluir" value="/resources/img/ico-excluir.png" />
+									</p:commandLink>
+								</p:column>
+							</p:dataTable>
+							
+							<h:panelGrid id="pnlBtnsAcoesShapes" styleClass="clean right">
+								<p:commandButton value="Salvar Shape" id="btnLnkEnviarArqShapes"
+									disabled="#{localizacaoGeograficaGenericController.desabilitaSalvarShape}"
+									style="width:150px; float:right;background-image: url(/resources/img/geraImgShape.png)!important;"
+									title="Gerar Imagem dos ShapeFiles" async="true"
+									action="#{localizacaoGeograficaGenericController.persistirShapes(1)}"
+									global="true" update="locGeograficaGeneric formDialogPoco:tabViewDialogPoco:panelLocGeoPoco" />
+							</h:panelGrid>
+							
+						</h:panelGrid>
+						
+					</h:panelGrid>
+					<!-- FIM DA GRID PERSISTIR SHAPE -->
+					
+					<br />
+					<br />
+
+					<!-- GRID PERSISTIR DESENHO -->
+					<h:panelGrid id="uplDesenho"
+						rendered="#{localizacaoGeograficaGenericController.temLocGeoDesenho and !localizacaoGeograficaGenericController.existeTheGeom}"
+						columns="1" style="width:370px">
+						<p:lightBox iframe="true" width="1010" height="650"
+							overlayClose="false">
+							<h:outputLink
+								value="#{localizacaoGeograficaGenericController.caminhoDesenharGeoBahia}"
+								title="GEOBAHIA">
+								<h:outputText value="DESENHAR IMÓVEL NO GEOBAHIA" />
+								<f:param name="acao" value="draw" />
+								<f:param name="idimov"
+									value="#{listarImovelRuralController.imovelRural.ideImovelRural}" />
+								<f:param name="codibge"
+									value="#{listarImovelRuralController.imovelRural.imovel.ideEndereco.ideLogradouro.ideMunicipio.coordGeobahiaMunicipio}" />
+								<f:param name="idloc"
+									value="#{localizacaoGeograficaGenericController.localizacaoGeograficaSelecionada.ideLocalizacaoGeografica}" />
+								<f:param name="tipo" value="1" />
+							</h:outputLink>
+						</p:lightBox>
+						<h:panelGrid id="pnlBtnsAcoesDesenho" style="width:200px;"
+							columns="1">
+							<p:commandButton id="btnLnkEnviarArqDesenho"
+								value="Gravar Desenho"
+								style="width:150px; float:right;background-image: url(/resources/img/geraImgShape.png)!important;"
+								title="Gravar Desenho" async="true"
+								action="#{localizacaoGeograficaGenericController.persistirShapes(2)}"
+								update="locGeograficaGeneric" />
+						</h:panelGrid>
+					</h:panelGrid>
+					<!-- FIM DA GRID PERSISTIR DESENHO -->
+					
+					<h:panelGrid id="pnlTheGeom"
+						rendered="#{localizacaoGeograficaGenericController.existeTheGeom}"
+						columns="1">
+						<h:panelGrid id="pnlAcoesVisualizarShapes" columns="3">
+							<a
+								onclick='javascript:${localizacaoGeograficaGenericController.criarUrlShape("null")}'
+								style="cursor: pointer;"> <img
+								title="Visualisar Shape Persistido"
+								src="/resources/img/ico-arl-relocacao.png" />
+							</a>
+							<a
+								onclick='javascript:${localizacaoGeograficaGenericController.criarUrlShape("null")}'
+								title="VISUALIZAR GEOBAHIA" accesskey="VISUALIZAR GEOBAHIA"
+								style="cursor: pointer;"> VISUALIZAR SHAPE </a>
+							<p:commandLink
+								onclick="confirmaExclusaoShapeFileLocGeoGeneric.show()"
+								global="false"
+								rendered="#{localizacaoGeograficaGenericController.disableParaExcluir}"
+								disabled="#{localizacaoGeograficaGenericController.disableParaVisualizar}">
+								<h:graphicImage title="Excluir"
+									value="/resources/img/ico-excluir.png" />
+							</p:commandLink>
+							
+						</h:panelGrid>
+					</h:panelGrid>
+
+					<!-- GRID PONTO SIRGAS -->
+					<h:panelGrid id="pnlUplPonto" rendered="#{localizacaoGeograficaGenericController.locGeoIsPonto}">
+						<h:panelGrid columns="1" cellpadding="7">
+							<h:panelGroup>
+								<p:commandLink update="locGeograficaVerticesGeneric"
+									oncomplete="dialogIncluirVerticeGeneric.show();"
+									action="#{localizacaoGeograficaGenericController.limparVertice}"
+									process="@this"
+									disabled="#{localizacaoGeograficaGenericController.existePonto}">
+									<h:graphicImage title="Incluir coordenadas" value="/resources/img/ico-expandir.png" style="margin-right: 2px;" />
+									<h:outputText value="Incluir coordenadas *" style="cursor: initial;" />
+								</p:commandLink>
+							</h:panelGroup>
+							<h:panelGrid id="tabelaVertices">
+								<p:dataTable
+									rendered="#{localizacaoGeograficaGenericController.mostraLista}"
+									var="vertice" styleClass="w100px"
+									value="#{localizacaoGeograficaGenericController.localizacaoGeograficaSelecionada.dadoGeograficoCollection}">
+									<p:column headerText="#{bundle.empreendimento_lbl_latitude}">
+										<h:outputText value="#{localizacaoGeograficaGenericController.getLatitude(vertice)}" />
+									</p:column>
+									<p:column headerText="#{bundle.empreendimento_lbl_longitude}">
+										<h:outputText value="#{localizacaoGeograficaGenericController.getLongitude(vertice)}" />
+									</p:column>
+									<p:column style="width:100px" headerText="#{bundle.geral_lbl_acoes}">
+										<p:commandLink update="dialogIncluirVerticeGeneric"
+											oncomplete="dialogIncluirVerticeGeneric.show();"
+											action="#{localizacaoGeograficaGenericController.carregarVertice}"
+											process="@this" immediate="true"
+											disabled="#{localizacaoGeograficaGenericController.disableParaVisualizar}">
+											<h:graphicImage title="Editar" value="/resources/img/ico-editar.png" />
+											<f:setPropertyActionListener value="#{vertice}" target="#{localizacaoGeograficaGenericController.vertice}" />
+										</p:commandLink>
+
+										<p:commandLink onclick="confirmExclusaoVerticeLoc.show()"
+											rendered="#{!localizacaoGeograficaGenericController.disableParaVisualizar and !localizacaoGeograficaGenericController.analiseTecnicaDeFce}">
+											<f:setPropertyActionListener target="#{localizacaoGeograficaGenericController.verticeExclusao}" value="#{vertice}" />
+											<h:graphicImage title="Excluir" value="/resources/img/ico-excluir.png" />
+										</p:commandLink>
+
+										<a onclick="javascript:${localizacaoGeograficaGenericController.getUrl(vertice)}">
+											<h:graphicImage title="Geobahia" value="/resources/img/ico-arl-relocacao.png" />
+										</a>
+									</p:column>
+								</p:dataTable>
+							</h:panelGrid>
+							<h:outputLabel value="#{bundle.lbl_preench_obrig_asterisc}" style="float: left;" />
+						</h:panelGrid>
+					</h:panelGrid>
+					<!-- FIM GRID PONTO SIRGAS -->
+					
+					<!-- GRID PONTO UTM -->
+					<h:panelGrid id="pnlUplUTM"
+						rendered="#{localizacaoGeograficaGenericController.locGeoIsUTM}">
+						<h:panelGrid columns="1" cellpadding="7">
+							<h:panelGroup>
+								<p:commandLink update="locGeograficaPontosUTM"
+									oncomplete="dialogIncluirVerticeUtmGeneric.show();"
+									action="#{localizacaoGeograficaGenericController.limparVertice}"
+									actionListener="#{localizacaoGeograficaGenericController.carregarZona}"
+									disabled="#{localizacaoGeograficaGenericController.disabledIncluirPonto}"
+									process="@this" immediate="true">
+									<h:graphicImage title="Incluir coordenadas" value="/resources/img/ico-expandir.png" style="margin-right: 2px;" />
+									<h:outputText value="Incluir coordenadas *" style="cursor: initial;" />
+								</p:commandLink>
+							</h:panelGroup>
+
+							<h:panelGrid id="tabelaVerticesUTM">
+								<p:dataTable
+									rendered="#{localizacaoGeograficaGenericController.mostraLista}"
+									var="vertice" styleClass="w100px"
+									value="#{localizacaoGeograficaGenericController.localizacaoGeograficaSelecionada.dadoGeograficoCollection}">
+									<p:column headerText="#{bundle.latitude_UTM_N}">
+										<h:outputText value="#{localizacaoGeograficaGenericController.getLatitudeUTM(vertice)}" />
+									</p:column>
+									<p:column headerText="#{bundle.longitude_UTM_E}">
+										<h:outputText value="#{localizacaoGeograficaGenericController.getLongitudeUTM(vertice)}" />
+									</p:column>
+									<p:column style="width:100px"
+										headerText="#{bundle.geral_lbl_acoes}">
+										<p:commandLink update="locGeograficaPontosUTM"
+											oncomplete="dialogIncluirVerticeUtmGeneric.show();"
+											action="#{localizacaoGeograficaGenericController.carregarVerticeUTM}"
+											process="@this" immediate="true"
+											disabled="#{localizacaoGeograficaGenericController.disableParaVisualizar}">
+											<h:graphicImage title="Editar"
+												value="/resources/img/ico-editar.png" />
+											<f:setPropertyActionListener value="#{vertice}"
+												target="#{localizacaoGeograficaGenericController.vertice}" />
+										</p:commandLink>
+
+										<p:commandLink onclick="confirmExclusaoVerticeLoc.show()"
+											rendered="#{!localizacaoGeograficaGenericController.disableParaVisualizar}">
+											<f:setPropertyActionListener
+												target="#{localizacaoGeograficaGenericController.verticeExclusao}"
+												value="#{vertice}" />
+											<h:graphicImage title="Excluir"
+												value="/resources/img/ico-excluir.png" />
+										</p:commandLink>
+
+										<a
+											onclick="javascript:${localizacaoGeograficaGenericController.getUrl(vertice)}">
+											<h:graphicImage title="Geo Bahia"
+												value="/resources/img/ico-arl-relocacao.png" />
+										</a>
+									</p:column>
+								</p:dataTable>
+							</h:panelGrid>
+							<h:outputLabel value="#{bundle.lbl_preench_obrig_asterisc}"
+								style="float: left;" />
+						</h:panelGrid>
+					</h:panelGrid>
+					<!-- FIM DA GRID PONTO UTM -->
+					
+					<h:panelGrid style="float:right;">
+						<h:panelGrid id="botaoCancelar">
+							<p:commandButton
+								title="Cancelar Localização Geografica [*Remove a localização, se foi salva]."
+								actionListener="#{localizacaoGeograficaGenericController.cancelar()}"
+								rendered="#{!localizacaoGeograficaGenericController.existeTheGeom and !localizacaoGeograficaGenericController.localizacaoGeografSelecTemDadoGeografico and !localizacaoGeograficaGenericController.disableParaVisualizar}"
+								value="Cancelar"
+								onsuccess="dlgLocalizacaoGeograficaGeneric.hide();"
+								update="pnl152" process="@this"
+								disabled="#{localizacaoGeograficaGenericController.disableParaVisualizar}"
+								oncomplete="esconderCheck()">
+							</p:commandButton>
+						</h:panelGrid>
+						<h:panelGrid id="botaoConcluir">
+							<p:commandButton title="Concluir e Fechar a janela."
+								value="Concluir"
+								rendered="#{(localizacaoGeograficaGenericController.existeTheGeom or localizacaoGeograficaGenericController.localizacaoGeografSelecTemDadoGeografico) and !localizacaoGeograficaGenericController.disableParaVisualizar}"
+								oncomplete="dlgLocalizacaoGeograficaGeneric.hide();esconderCheck();" 
+								actionListener="#{localizacaoGeograficaGenericController.salvarLocalizacaoGeografica()}"
+								update="formCapSuperDadosRequerimento:capSupTabelaPontos"/>
+						</h:panelGrid>
+						<h:panelGrid id="botaoFecharDoVisualizar">
+							<p:commandButton title="Concluir e Fechar a janela."
+								rendered="#{localizacaoGeograficaGenericController.disableParaVisualizar}"
+								value="Fechar"
+								oncomplete="dlgLocalizacaoGeograficaGeneric.hide();esconderCheck();"
+								actionListener="#{localizacaoGeograficaGenericController.salvarLocalizacaoGeografica()}"
+								update="formCapSuperDadosRequerimento:capSupTabelaPontos"/>
+						</h:panelGrid>
+					</h:panelGrid>
+				</p:outputPanel>
+			</h:form>
+		</h:panelGrid>
+	</p:dialog>
+
+	<!-- Diaglog dadoGeo UTM -->
+	<p:dialog header="Incluir coordenadas"
+		widgetVar="dialogIncluirVerticeUtmGeneric"
+		style="z-index: 99999;top:300px;left:400px;" modal="true"
+		id="dialogIncluirVerticeUtmGeneric" resizable="false"
+		appendToBody="true">
+		<ui:include
+			src="/paginas/novo-requerimento/dialogIncluirPontosUTM.xhtml" />
+	</p:dialog>
+
+	<!-- FIM - Diaglog dadoGeo UTM -->
+		
+	<p:dialog header="Coordenada geográfica"
+		widgetVar="dialogIncluirVerticeGeneric"
+		style="z-index: 99999;top:300px;left:400px;" modal="true"
+		id="dialogIncluirVerticeGeneric" resizable="false" appendToBody="true">
+		<ui:include src="/paginas/manter-localizacao-geografica/dlgIncluirVertices.xhtml" />
+	</p:dialog>
+
+	<p:confirmDialog id="confirmExclusaoVerticeLoc"
+		widgetVar="confirmExclusaoVerticeLoc"
+		header="#{bundle.geral_lbl_mensagem}" appendToBody="true"
+		message="#{bundle.msg_confirma_exclusao}" severity="alert">
+		<h:form>
+			<div style="text-align: center;">
+				<p:commandButton value="#{bundle.btn_sim}"
+					update="locGeograficaGeneric:pnlVerticesHabilitado locGeograficaGeneric:tabelaVertices formFceInterMineracao:dataTableIntervMine"
+					onclick="confirmExclusaoVerticeLoc.hide()"
+					action="#{localizacaoGeograficaGenericController.excluirVertice()}" />
+				<p:commandButton value="#{bundle.btn_nao}" type="button"
+					onclick="confirmExclusaoVerticeLoc.hide()" />
+			</div>
+		</h:form>
+	</p:confirmDialog>
+
+	<p:confirmDialog id="confirmacaoExclusaoLocalizacaoGenerica"
+		widgetVar="confirmacaoExclusaoLocalizacaoGenerica"
+		header="#{bundle.geral_lbl_mensagem}"
+		message="#{bundle.msg_confirma_exclusao}" appendToBody="true"
+		closable="false" severity="alert">
+		<h:form id="formConfirmExclusaoLocGeoGenerica">
+			<h:panelGroup>
+				<div style="text-align: center;">
+					<p:commandButton id="confirmarExclusaoLoc" process="@this"
+						value="#{bundle.btn_sim}"
+						update="formDialogFlorestal:pngTb122 
+						formDialogFlorestal:pngTb133 
+						formDialogFlorestal:pngTb152 
+						formDialogFlorestal:pngTb162 
+						formDialogFlorestal:pngTb182 
+						formDialogFlorestal:pngTb193 
+						formDialogFlorestal:pngTb1122 
+						subViewAbas:tabAbasId:formAbaOutorga:pngTb122 
+						subViewAbas:tabAbasId:formAbaOutorga:panelGrid11 
+						formDialogAlterCancelOutorga:tableLocalizaoGeograficaOutorga" 
+						action="#{localizacaoGeograficaGenericController.excluirLocGeo()}" 
+						oncomplete="confirmacaoExclusaoLocalizacaoGenerica.hide()" />
+					<p:commandButton value="#{bundle.btn_nao}" process="@this"
+						oncomplete="confirmacaoExclusaoLocalizacaoGenerica.hide()">
+						<f:setPropertyActionListener value="#{null}"
+							target="#{localizacaoGeograficaGenericController.objetoLocalizacao}" />
+					</p:commandButton>
+				</div>
+			</h:panelGroup>
+		</h:form>
+	</p:confirmDialog>
+
+	<p:confirmDialog id="_confirmaExclusaoShapeFileLocGeoImovelGeneric"
+		widgetVar="confirmaExclusaoShapeFileLocGeoImovelGeneric"
+		header="#{bundle.geral_lbl_mensagem}" appendToBody="true"
+		style="top: 25px!important;left: 30% !important"
+		message="#{bundle.msg_confirma_exclusao}" severity="alert">
+		<h:form id="formConfirmaExclusaoShapeFileLocGeoImovelGeneric">
+			<div style="text-align: center;">
+				<p:commandButton id="btnConfirmaExclusaoShapeFileLocGeoImovel"
+					action="#{localizacaoGeograficaGenericController.excluirArquivo()}"
+					update=":tabAbas:locGeograficaGeneric:dataTableDocumentos :tabAbas:locGeograficaGeneric:tblDocumento"
+					onclick="confirmaExclusaoShapeFileLocGeoImovelGeneric.hide()"
+					value="#{bundle.btn_sim}" />
+
+				<p:commandButton value="#{bundle.btn_nao}" type="button"
+					onclick="confirmaExclusaoShapeFileLocGeoImovelGeneric.hide()" />
+			</div>
+		</h:form>
+	</p:confirmDialog>
+
+	<p:confirmDialog id="_confirmaExclusaoShapeFileLocGeoGeneric"
+		widgetVar="confirmaExclusaoShapeFileLocGeoGeneric"
+		header="#{bundle.geral_lbl_mensagem}" appendToBody="true"
+		style="top: 40px!important;left: 30% !important"
+		message="#{bundle.msg_confirma_exclusao}" severity="alert">
+		<h:form id="formConfirmaExclusaoShapeFileLocGeoGeneric">
+			<div style="text-align: center;">
+				<p:commandButton global="false"
+					id="btnConfirmaExclusaoShapeFileLocGeo"
+					actionListener="#{localizacaoGeograficaGenericController.excluirShape(localizacaoGeograficaGenericController.localizacaoGeograficaSelecionada.ideLocalizacaoGeografica)}"
+					action="#{localizacaoGeograficaGenericController.limpaFormLocGeo()}"
+					update="locGeograficaGeneric "
+					onclick="confirmaExclusaoShapeFileLocGeoGeneric.hide()"
+					value="#{bundle.btn_sim}" />
+				<p:commandButton value="#{bundle.btn_nao}" type="button"
+					onclick="confirmaExclusaoShapeFileLocGeoGeneric.hide()" />
+			</div>
+		</h:form>
+	</p:confirmDialog>
+
+	<p:confirmDialog id="confirmaExclusaoShapePontoLocGeo"
+		widgetVar="confirmaExclusaoShapePontoLocGeo"
+		header="#{bundle.geral_lbl_mensagem}" appendToBody="true"
+		message="#{bundle.msg_confirma_exclusao}" severity="alert">
+		<h:form id="formConfirmaExclusaoShapePontoLocGeoGeneric">
+			<div style="text-align: center;">
+				<p:commandButton id="btnConfirmaExclusaoShapePontoLocGeo"
+					actionListener="#{localizacaoGeograficaGenericController.excluirLocGeo(localizacaoGeograficaGenericController.localizacaoGeograficaSelecionada.ideLocalizacaoGeografica)}"
+					action="#{localizacaoGeograficaGenericController.limpaFormLocGeo()}"
+					update="locGeograficaGeneric localizacaoGeograficaGeneric"
+					onclick="confirmaExclusaoShapePontoLocGeo.hide()"
+					value="#{bundle.btn_sim}" />
+				<p:commandButton value="#{bundle.btn_nao}" type="button"
+					onclick="confirmaExclusaoShapePontoLocGeo.hide()" />
+			</div>
+		</h:form>
+	</p:confirmDialog>
+	
+	<script>
+    var esconderCheck = function(){
+    	$("[name*='checkAll']").css('display','none');
+    }
+	</script>
+</ui:composition>

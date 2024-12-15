@@ -1,0 +1,505 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+xmlns:h="http://java.sun.com/jsf/html" 
+xmlns:f="http://java.sun.com/jsf/core" 
+xmlns:ui="http://java.sun.com/jsf/facelets" 
+xmlns:p="http://primefaces.prime.com.tr/ui">
+
+	<h:form id="formDadosGerais" style="width:800px">
+		<p:outputPanel id="panel01">
+			<h:outputText styleClass="titulo-grupo" style="font-weight:bold; margin-left:5px;" value="Frota de Veículos" />
+			<h:panelGrid id="grid01">
+			<br />
+			<!-- Lista de exibição, somente leitura, para visualização da frota de veículos cadastrados no empreendimento -->
+				<p:dataTable id="tableTransporte" var="veiculo" value="#{lacTransporteController.listEmpreendimentoVeiculos}" emptyMessage="#{bundle.lac_dadosGerais_msg007}" style="width:765px; margin-left:10px;">
+					<p:column headerText="Nº do Veículo" style="text-align: center;">
+						<h:outputText value="#{lacTransporteController.listEmpreendimentoVeiculos.indexOf(veiculo) + 1}" />
+					</p:column>
+					
+					<p:column headerText="Tipo de Veículo" style="text-align: center;">
+						<h:outputText value="#{veiculo.ideTipoVeiculo.dscTipoVeiculo}" />
+					</p:column>
+					
+					<p:column headerText="Placa de Cavalo Mecânico" style="text-align: center;">
+						<h:outputText value="#{veiculo.dscPlacaCavaloMecanico}" />
+					</p:column>
+					
+					<p:column headerText="Placa da Carroceria" style="text-align: center;">
+						<h:outputText value="#{veiculo.dscPlacaCarroceria}" />
+					</p:column>
+					
+					<p:column headerText="Data do Cadastro" style="text-align: center;">
+						<h:outputText value="#{veiculo.dtcCadastroVeiculo}">
+			            	<f:convertDateTime pattern="dd/MM/yyyy" locale="pt,BR" timeZone="Brazil/East" /> 
+						</h:outputText>
+					</p:column>
+				</p:dataTable>
+			</h:panelGrid>
+			<br />
+			<br />
+			<br />
+		</p:outputPanel>
+		
+		<h:outputText styleClass="titulo-grupo" style="font-weight:bold;" value="* O transporte será de Produtos e/ou Resíduos?"/>
+        <br />
+		<p:outputPanel id="panelProdutos">
+		<br />
+			<h:panelGrid id="transporteTipoProduto" columns="2">
+        		<p:selectBooleanCheckbox value="#{lacTransporteController.lacTransporte.indProduto}" valueChangeListener="#{lacTransporteController.limparComboProduto()}" style="margin-left:10px;">
+					<p:ajax update="panelProdutos" global="false"/>        		
+        		</p:selectBooleanCheckbox> 
+				<h:panelGroup>       		  	
+   		        	<h:outputText value="Produtos"/>
+   		        	<h:graphicImage title="#{bundle.lac_dadosGerais_ajuda001}" value="/resources/img/ico-ajuda.png" id="ajuda001" style="margin: 1px 1px 1px 4px; text-align:justify;"/>
+		        </h:panelGroup>
+     		</h:panelGrid>
+			
+			<h:panelGrid id="selectProdutos" rendered="#{lacTransporteController.lacTransporte.indProduto}" columns="3"> <!-- se PRODUTO for marcado -->
+				<br />
+				<br />
+				<h:outputText styleClass="titulo-grupo" style="font-weight:bold;" value="* Produtos Transportados"/>
+				<p:spacer/>
+				<p:spacer/>
+				
+				<h:outputText value="Nome do Produto / Nº ONU" style="margin-left:10px;"/>
+				<p:inputText id="buscaProduo" value="#{lacTransporteController.nomeProduto}" onkeyup="pesquisar_produto();" style="margin-left:-590px;" >
+					<p:ajax event="blur" process="@this" global="false"/>
+				</p:inputText>
+				
+				<p:remoteCommand name="pesquisar_produto" actionListener="#{lacTransporteController.pesquisarProdutos()}" global="false" update="tabAbasId:formDadosGerais:dataTableProdutos" />
+				
+				<p:dataTable id="dataTableProdutos" widgetVar="dtTbProdutos" value="#{lacTransporteController.listProdutos}" var="produto" lazy="true" paginator="true" rows="10"  
+				paginatorPosition="bottom" paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}" rowsPerPageTemplate="5,10,15" 
+				emptyMessage="#{bundle.msg_lista_vazia}" style="width: 755px; margin-left:10px;">
+
+					<f:facet name="header">
+						<h:outputText value="Lista de Produtos Cadastrados" />
+					</f:facet>
+					
+					<p:column style="width: 580px; text-align:justify;">  
+						<f:facet name="header">
+							<h:outputText value="Descrição do Produto" />  
+						</f:facet>
+						<h:outputText value="#{produto.dscProduto}" />
+					</p:column>
+					
+					<p:column style="text-align:center">  
+						<f:facet name="header">
+							<h:outputText value="Nº ONU" />  
+						</f:facet>
+						<h:outputText value="#{produto.numOnu}" />
+					</p:column>
+					
+					<p:column style="width: 40px; text-align:center;" headerText="Ações">		
+						<p:commandLink title="Confirmar" process="@this" 
+							update="tabAbasId:formDadosGerais:buscaProduo
+									tabAbasId:formDadosGerais:dataTableProdutos
+									tabAbasId:formDadosGerais:gridProdutos"  
+							action="#{lacTransporteController.adicionarProdutoLista()}" global="false" immediate="true">
+							<h:graphicImage title="Confirmar" value="/resources/img/ico-aprovar-notificacao.png"/>
+		     			    <f:setPropertyActionListener target="#{lacTransporteController.produtoSelecionado}" value="#{produto}"/>
+						</p:commandLink>
+					</p:column>
+				</p:dataTable>				
+			</h:panelGrid>
+			
+			<h:panelGrid id="gridProdutos">
+				<br />
+				<h:panelGroup id="groupProdSelect" rendered="#{lacTransporteController.temProdutoSelecionado}">
+					<h:outputText styleClass="titulo-grupo" style="font-weight:bold; margin-left:8px;" value="Produtos Selecionados"/>
+				</h:panelGroup>
+				
+				<p:dataTable id="tableProdutos" value="#{lacTransporteController.listProdutoSelected}" var="produto" style="width: 755px; margin-left:18px;" 
+				emptyMessage="#{bundle.lac_dadosGerais_msg007}"
+				rendered="#{lacTransporteController.temProdutoSelecionado()}">
+					<p:column headerText="Descrição do Produto" style="width: 340px; text-align:justify;">
+						<h:outputText value="#{produto.dscProduto}" />
+					</p:column>
+					
+					<p:column headerText="Nº ONU" style="text-align:center;">
+						<h:outputText value="#{produto.numOnu}" />
+					</p:column>
+					
+					<p:column style="text-align:center; width: 80px;">
+						<f:facet name="header">Classe de<br/>Risco</f:facet>
+						<h:outputText value="#{produto.dscClasseRisco}" />
+					</p:column>
+					
+					<p:column style="text-align:center; width:140px;">
+						<f:facet name="header">Quantidade Média <br/>Anual Transportada</f:facet>
+						<h:panelGroup rendered="#{produto.outro == false}">
+							<p:inputText id="qtdProduto" value="#{produto.qtdTransporteAnual}" onkeyup="maskIt(this, event, '99.999.999,99', true)" converter="doubleConverter" style="width:70px;" disabled="#{produto.desabilitaQtd}" maxlength="12">
+								<p:ajax event="blur" global="false"/>
+							</p:inputText>
+							<h:outputText value="(t/ano)" />
+						</h:panelGroup>
+					</p:column>
+			
+					<p:column headerText="Ações" style="width:35px; text-align:center;">
+						<p:commandLink title="Confirmar" process="@this,qtdProduto" update="tabAbasId:formDadosGerais:tableProdutos" actionListener="#{produto.setDesabilitaQtd(true)}" global="false"
+							rendered="#{produto.desabilitaQtd == false and produto.outro == false}">
+							<h:graphicImage title="Confirmar" value="/resources/img/ico-aprovar-notificacao.png" />
+		     			    <f:setPropertyActionListener target="#{lacTransporteController.produtoSelecionado}" value="#{produto}"/>
+						</p:commandLink>
+						<p:commandLink title="Editar quantidade de produto transportado" process="@this" update="tabAbasId:formDadosGerais:tableProdutos" actionListener="#{produto.setDesabilitaQtd(false)}" global="false"
+							 rendered="#{produto.desabilitaQtd and produto.outro == false}">
+		          			 <h:graphicImage title="Editar quantidade de produto transportado" value="/resources/img/ico-editar.png" />
+		     			     <f:setPropertyActionListener target="#{lacTransporteController.produtoSelecionado}" value="#{produto}"/>
+			            </p:commandLink>
+			          	<p:commandLink oncomplete="confirmaExclusaoProduto.show()" title="Excluir Produto Transportado" process="@this" global="false">
+		          			 <h:graphicImage title="Excluir produto transportado" value="/resources/img/ico-excluir.png" />
+		     			     <f:setPropertyActionListener target="#{lacTransporteController.produtoSelecionado}" value="#{produto}"/>
+			            </p:commandLink>
+						
+					</p:column>
+				</p:dataTable>
+			
+			</h:panelGrid>
+		</p:outputPanel>
+		
+		<p:outputPanel id="panelResiduos" >
+			<h:panelGrid id="transporteTipoResiduo" columns="2">	
+	        	<p:selectBooleanCheckbox value="#{lacTransporteController.lacTransporte.indResiduo}" valueChangeListener="#{lacTransporteController.limparComboResiduo()}" style="margin-left:10px;">    
+	            	<p:ajax update="panelResiduos" global="false"/>
+            	</p:selectBooleanCheckbox>
+	            <h:panelGroup>
+	     		    <h:outputText value="Resíduos"/>
+	     		    <h:graphicImage title="#{bundle.lac_dadosGerais_ajuda002}" value="/resources/img/ico-ajuda.png" id="ajuda002" style="margin: 1px 1px 1px 4px; text-align:justify;"/>
+	            </h:panelGroup>
+       			<br />
+			</h:panelGrid>
+			
+			<h:panelGrid id="selectResiduos" rendered="#{lacTransporteController.lacTransporte.indResiduo}" columns="3"> <!-- se RESÍDUO for marcado -->
+				<br />
+				<br />
+				<h:outputText styleClass="titulo-grupo" style="font-weight:bold;" value="* Resíduos Transportados"/>
+				<p:spacer/>
+				<p:spacer/>
+				
+				<h:outputText value="Nome do Resíduo / Código" style="margin-left:10px;"/>
+				<p:inputText id="buscaResiduo" value="#{lacTransporteController.nomeResiduo}" onkeyup="pesquisar_residuo();" style="margin-left:-580px;">
+					<p:ajax event="blur" process="@this" global="false"/>
+				</p:inputText>
+				<p:remoteCommand name="pesquisar_residuo" actionListener="#{lacTransporteController.pesquisarResiduos()}" global="false" update="tabAbasId:formDadosGerais:dataTableResiduos" />
+				
+				<p:dataTable id="dataTableResiduos" widgetVar="dtTbResiduos" value="#{lacTransporteController.listResiduos}" var="residuo" lazy="true" paginator="true" rows="10"  
+				paginatorPosition="bottom" paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}" rowsPerPageTemplate="5,10,15" 
+				emptyMessage="#{bundle.lac_dadosGerais_msg007}" style="width: 755px; margin-left:10px;" >
+					<f:facet name="header">
+						<h:outputText value="Lista de Resíduos Cadastrados" />
+					</f:facet>
+					<p:column style="width: 600px; text-align:justify;">
+						<f:facet name="header">
+							<h:outputText value="Descrição do Resíduo" />  
+						</f:facet>
+						<h:outputText value="#{residuo.nomResiduo}" />
+					</p:column>
+					<p:column style="text-align:center">  
+						<f:facet name="header">
+							<h:outputText value="Código" />  
+						</f:facet>
+						<h:outputText value="#{residuo.codResiduo}" />
+					</p:column>
+					<p:column style="width: 40px; text-align:center;" headerText="Ações">
+						<p:commandLink title="Confirmar" process="@this" action="#{lacTransporteController.adicionarResiduoLista()}" global="false" immediate="true"  
+						update="tabAbasId:formDadosGerais:buscaResiduo
+								tabAbasId:formDadosGerais:dataTableResiduos
+								tabAbasId:formDadosGerais:gridResiduos"	>
+							<h:graphicImage title="Confirmar" value="/resources/img/ico-aprovar-notificacao.png"/>
+		     			    <f:setPropertyActionListener target="#{lacTransporteController.residuoSelecionado}" value="#{residuo}"/>
+						</p:commandLink>
+					</p:column>
+				</p:dataTable>				
+			</h:panelGrid>
+				
+			<h:panelGrid id="gridResiduos">	 
+				<h:panelGroup id="groupResidSelect" rendered="#{lacTransporteController.temResiduoSelecionado()}">
+					<br />
+					<h:outputText styleClass="titulo-grupo" style="font-weight:bold; margin-left:8px;" value="Resíduos Selecionados"/>
+					<br />
+				</h:panelGroup>
+				<p:dataTable id="tableResiduos" value="#{lacTransporteController.listResiduoSelected}" var="residuo" emptyMessage="#{bundle.lac_dadosGerais_msg007}" 
+							 rendered="#{lacTransporteController.temResiduoSelecionado()}" 
+							 style="width: 755px; margin-left:18px;">
+					<p:column headerText="Código" style="text-align: center;">
+						<h:outputText value="#{residuo.codResiduo}" />
+					</p:column>
+					
+					<p:column headerText="Descrição do Resíduo" style="text-align: justify; width:310px;">
+						<h:outputText value="#{residuo.nomResiduo}" />
+					</p:column>
+					
+					<p:column headerText="Periculosidade" style="text-align:center; width:120px;">
+						<h:outputText value="#{residuo.dscPericulosidade}" />				
+					</p:column>
+					
+					<p:column style="text-align:center; width:140px;" id="colQtd">
+			        	<f:facet name="header">Quantidade Média <br/>Anual Transportada</f:facet>
+			        	<h:panelGroup rendered="#{residuo.outro == false}">
+							<p:inputText id="qtdResiduo" value="#{residuo.qtdTransporteAnual}" onkeyup="maskIt(this, event, '99.999.999,99', true)" converter="doubleConverter" style="width:70px;" disabled="#{residuo.desabilitaQtd}" maxlength="12">
+								<p:ajax event="blur" global="false"/>
+							</p:inputText>  
+							<h:outputText value="(t/ano)" />
+						</h:panelGroup>
+					</p:column>
+					
+					<p:column headerText="Ações" style="width:35px; text-align:center">
+						<p:commandLink title="Confirmar" process="@this,qtdResiduo" update="tabAbasId:formDadosGerais:tableResiduos" actionListener="#{residuo.setDesabilitaQtd(true)}" global="false"
+							rendered="#{residuo.desabilitaQtd == false and residuo.outro == false}">
+							<h:graphicImage title="Confirmar" value="/resources/img/ico-aprovar-notificacao.png" />
+		     			    <f:setPropertyActionListener target="#{lacTransporteController.residuoSelecionado}" value="#{residuo}"/>
+						</p:commandLink>
+						<p:commandLink title="Editar quantidade de resíduo transportado" process="@this" update="tabAbasId:formDadosGerais:tableResiduos" actionListener="#{residuo.setDesabilitaQtd(false)}" global="false"
+							  rendered="#{residuo.desabilitaQtd and residuo.outro == false}">
+		          			 <h:graphicImage title="Editar quantidade do resíduo transportado" value="/resources/img/ico-editar.png" />
+		     			     <f:setPropertyActionListener target="#{lacTransporteController.residuoSelecionado}" value="#{residuo}"/>
+			            </p:commandLink>
+			          	<p:commandLink oncomplete="confirmaExclusaoResiduo.show()" title="Excluir Resíduo Transportado" process="@this" global="false">
+		          			 <h:graphicImage title="Excluir resíduo transportado" value="/resources/img/ico-excluir.png" />
+		     			     <f:setPropertyActionListener target="#{lacTransporteController.residuoSelecionado}" value="#{residuo}"/>
+			            </p:commandLink>
+					</p:column>		
+				</p:dataTable>
+				<p:spacer/>
+				<h:panelGroup id="mensagemComposicao" rendered="#{lacTransporteController.temResiduoSelecionado()}" style="color:green;">
+					<h:outputText value="Para verificar a composição do resíduo conforme NBR-10.004," style="margin-left:18px;"/>
+					<a href="/resources/NBRn10004-2004.pdf"  target="_blanck" style="color:green; font-weight:bold;"> clique aqui.</a>
+					<br />
+					<br />
+				</h:panelGroup>
+			</h:panelGrid>
+		</p:outputPanel>
+
+		<p:outputPanel id="panelShape">
+			<h:panelGrid id="gridShape">
+				<h:panelGroup>
+					<h:outputText styleClass="titulo-grupo" style="font-weight:bold;" value="Roteiro Programado para Transporte"/>
+	            	<h:graphicImage title="#{bundle.lac_dadosGerais_ajuda003}" value="/resources/img/ico-ajuda.png" id="ajuda003" style="margin: 1px 1px 1px 4px;"/>
+		        </h:panelGroup>
+ 	            <br />
+		        
+     			<p:commandLink 
+     				oncomplete="dlgLocalizacaoGeograficaGeneric.show();" 
+     				action="#{localizacaoGeograficaGenericController.carregarTela()}" 
+					actionListener="#{localizacaoGeograficaGenericController.limparLocalizacaoGeografSelecionada()}" 
+			   	 	process="@this">
+					<f:setPropertyActionListener target="#{localizacaoGeograficaGenericController.tipoSecaoGeometrica}" value="#{lacTransporteController.shape}" />
+					<f:setPropertyActionListener target="#{localizacaoGeograficaGenericController.localizacaoGeograficaSelecionada}" value="#{lacTransporteController.lacTransporte.ideLocalizacaoGeografica}" />
+					<f:setPropertyActionListener target="#{localizacaoGeograficaGenericController.objetoLocalizacao}" value="#{lacTransporteController.lacTransporte}" />
+					<f:setPropertyActionListener target="#{localizacaoGeograficaGenericController.requerimento}" value="#{lacTransporteController.requerimento.ideRequerimento}" />
+					<f:setPropertyActionListener target="#{localizacaoGeograficaGenericController.idDoComponenteParaSerAtualizado}" value="tabAbasId:formDadosGerais:panelShape" />
+					<h:graphicImage title="Incluir Vertice" value="/resources/img/ico-expandir.png" />
+					<h:outputText value="#{bundle.novoRequerimneto_lbl_incluirShape}" />
+				</p:commandLink>
+	        </h:panelGrid>
+	        
+	       	<h:panelGrid id="dataLocGeo">
+			<!-- DATA TABLE LOCALIZACAO GEOGRAFICA -->
+			<h:panelGroup id="pngTb122" rendered="#{lacTransporteController.temLocGeo}">
+				<p:outputPanel autoUpdate="true">
+					<p:dataTable var="localizacao" styleClass="90%" value="#{lacTransporteController.lacTransporte.ideLocalizacaoGeografica}" emptyMessage="#{bundle.lac_dadosGerais_msg007}" rendered="true"
+								 style="width:760px; margin-left:10px;">
+						<p:column headerText="Descrição" style="width:320px; text-align:center;"> 
+							<h:outputText value="#{localizacao.desLocalizacaoGeografica}" />
+						</p:column>
+						<p:column headerText="Fonte da Coordenada" style="text-align:center;">
+							<h:outputText value="#{localizacao.ideClassificacaoSecaoToString()}" />
+						</p:column>
+						<p:column headerText="Sistema de Coordenadas" style="text-align:center; width:180px;">
+							<h:outputText value="#{localizacao.nomeSistemaCoordenadas()}" />
+						</p:column>
+						<p:column headerText="Ações" style="width:40px;">
+							<p:commandLink process="@this" oncomplete="confirmacaoExclusaoLocalizacaoGenerica.show();" >
+								<f:setPropertyActionListener target="#{localizacaoGeograficaGenericController.objetoLocalizacao}" value="#{lacTransporteController.lacTransporte.ideLocalizacaoGeografica}" />
+								<h:graphicImage title="Excluir" value="/resources/img/ico-excluir.png" />
+							</p:commandLink>
+							<p:commandLink oncomplete="dlgLocalizacaoGeograficaGeneric.show();" process="@this" action="#{localizacaoGeograficaGenericController.visualizarLocalizacaoGeografica()}">
+								<f:setPropertyActionListener target="#{localizacaoGeograficaGenericController.localizacaoGeograficaSelecionada}" value="#{lacTransporteController.lacTransporte.ideLocalizacaoGeografica}" />
+								<f:setPropertyActionListener target="#{localizacaoGeograficaGenericController.objetoLocalizacao}" value="#{lacTransporteController.lacTransporte}" />
+								<h:graphicImage title="Visualizar Localização no Geobahia" value="/resources/img/ico-pesquisa.png" />
+							</p:commandLink>
+						</p:column>
+					</p:dataTable>
+				</p:outputPanel>
+			</h:panelGroup>
+			<!-- DATA TABLE LOCALIZACAO GEOGRAFICA -->	       	
+	       	</h:panelGrid>
+		</p:outputPanel>
+		
+		<p:outputPanel id="panelAtendimento">
+			<h:panelGrid id="cbAtendimento">
+				<br />
+				<h:outputText styleClass="titulo-grupo" style="font-weight:bold;" value="* Atendimento a Emergências Ambientais"/>
+		        <p:spacer/>
+		        <h:panelGroup>
+		        	<br />
+			        <p:selectBooleanCheckbox value="#{lacTransporteController.lacTransporte.indAtendimentoEmergenciaEmpresa}" style="margin-left:10px;">
+		        		<p:ajax global="false"/>
+	        		</p:selectBooleanCheckbox>
+		        	<h:outputText value="Próprio"/>
+		        </h:panelGroup>
+		        <br />
+        		<h:panelGroup>
+        			<p:selectBooleanCheckbox value="#{lacTransporteController.lacTransporte.indAtendimentoEmergenciaTerceiro}" valueChangeListener="#{lacTransporteController.limparTerceiro()}" style="margin-left:10px;">   
+	            		<p:ajax global="false" 
+	            		update="panelTerceiros 
+	            				tabAbasId:formDadosGerais:idlblcep
+	            				tabAbasId:formDadosGerais:gridBotoes 
+	            				tabAbasId:formDadosGerais:gridPj
+	            				tabAbasId:formDadosGerais:cnpj"/>
+            		</p:selectBooleanCheckbox>
+     		    	<h:outputText value="Terceiros"/>
+        		</h:panelGroup>
+ 				<br />
+			</h:panelGrid>
+		</p:outputPanel>
+		
+		<p:outputPanel id="panelTerceiros">
+	       	<h:panelGroup layout="block" style="width:90%; overflow:auto; border:1px solid gray; margin-left:15px;" 
+	       		rendered="#{lacTransporteController.lacTransporte.indAtendimentoEmergenciaTerceiro}">
+
+				<br />
+				<h2 style="margin-left:5px;"> Empresa Contratada </h2>
+	       		<br />
+	       		<br />
+	       		<h:panelGrid id="gridPj" columns="3">
+				    <h:outputText value="  * CNPJ" />
+					<p:inputMask id="cnpj" mask="#{bundle.consultapj_msk_cnpj}"
+						value="#{lacTransporteController.numCnpj}" style="width: 105px;">
+						<p:ajax event="blur" global="false" update="tabAbasId:formDadosGerais:gridBotoes"/>
+						<f:converter converterId="cnpjConverter"/>
+						<f:validator validatorId="CnpjValidator" />
+					</p:inputMask>
+					
+					<p:commandLink id="btnConsulta" 
+						action="#{lacTransporteController.consultarPJ()}" 
+						style="margin-left:-180px;" 
+						update="tabAbasId:formDadosGerais:gridPj
+						tabAbasId:formDadosGerais:gridTelefone
+						tabAbasId:formDadosGerais:gridBotoes" 
+						process="@this">
+						<h:graphicImage title="Validar CNPJ" value="/resources/img/ico-pesquisa.png" />
+						<f:ajax execute="cnpj" render="gridPj gridTelefone"/>
+					</p:commandLink>
+					
+					<h:outputText value="  * Razão Social" />
+					<p:inputText value="#{lacTransporteController.lacTransporte.idePessoaJuridica.nomRazaoSocial}" 
+						style="width: 290px;" 
+						maxlength="200" 
+						disabled="#{lacTransporteController.blockForm}">
+						<p:ajax event="blur" process="@this" global="false"/>
+					</p:inputText>
+					<p:spacer/>
+					
+					<h:outputText value="  * Email" />
+					<p:inputText value="#{lacTransporteController.lacTransporte.idePessoaJuridica.pessoa.desEmail}" 
+						style="width: 290px;" 
+						maxlength="70" 
+						disabled="#{lacTransporteController.blockForm}">
+						<p:ajax event="blur" process="@this" global="false"/>
+						<f:validator validatorId="emailValidator" />
+					</p:inputText>
+					<p:spacer/>
+				</h:panelGrid>
+
+	       		<h:panelGrid id="gridTelefone">
+			    	<h:panelGroup id="formtelefonepj" >
+			    	<br /><br />
+						<p:commandLink id="linkDialogTelefone" 
+							action="#{lacTransporteController.inicializarTelefone()}" 
+							disabled="#{lacTransporteController.blockForm}"
+							oncomplete="dialogTelefoneLac.show()" 
+							update="frmDialogTelefone" 
+							global="false" 
+							process="@this"> 
+							<h:outputText value="Incluir Telefone" />
+							<h:graphicImage title="Adicionar telefone" value="/resources/img/ico-adicionar.png"  />				
+						</p:commandLink>
+					</h:panelGroup>
+					
+					<h:panelGroup id="formconteudotelefonepj">
+						<!-- DATATABLE TELEFONE -->
+						<p:dataTable id="tabelaTelefone" 
+							widgetVar="tabelaTelefone" 
+							var="telefone" 
+							value="#{lacTransporteController.lacTransporte.idePessoaJuridica.pessoa.telefoneCollection}" 
+							style="width:400px;" 
+							rendered="#{lacTransporteController.temTelefoneTerceiro}">
+							<f:facet name="header">  
+								<h:outputText value="Lista de Telefones" />
+							</f:facet>
+							<p:column headerText="Tipo">
+								<h:outputText value="#{telefone.ideTipoTelefone.nomTipoTelefone}" />
+							</p:column>
+			
+							<p:column headerText="Número" style="text-align: center;">
+								<h:outputText value="#{telefone.numTelefone}" />
+							</p:column>
+							
+							<p:column style="text-align: center;" headerText="Ações">	
+								<p:commandLink update="dialogTelefoneLac:frmDialogTelefone" 
+									process="@this" 
+									oncomplete="dialogTelefoneLac.show()" 
+									title="Visualizar" 
+									disabled="#{lacTransporteController.blockForm}">
+									<h:graphicImage title="Consultar" value="/resources/img/ico-pesquisa.png" />
+									<f:setPropertyActionListener target="#{lacTransporteController.telefone}" value="#{telefone}"/>
+									<f:setPropertyActionListener target="#{lacTransporteController.telefone.visualizacao}" value="#{true}"/>
+								</p:commandLink>
+								
+								<p:commandLink update=":formconteudotelefone:tabelaTelefone dialogTelefoneLac:frmDialogTelefone" 
+									process="@this" 
+									oncomplete="dialogTelefoneLac.show()" 
+									title="Editar" 
+									disabled="#{lacTransporteController.blockForm}">
+									<h:graphicImage title="Editar" value="/resources/img/ico-editar.png" />
+									<f:setPropertyActionListener target="#{lacTransporteController.telefone}" value="#{telefone}" />
+									<f:setPropertyActionListener target="#{lacTransporteController.telefone.visualizacao}" value="#{false}" />
+								</p:commandLink>
+
+								<p:commandLink update="tabAbasId:formDadosGerais:panelTerceiros" 
+									process="@this" 
+									oncomplete="confirmationTelefone.show()" 
+									title="Remover" 
+									disabled="#{lacTransporteController.blockForm}">
+									<h:graphicImage title="Excluir" value="/resources/img/ico-excluir.png" />
+									<f:setPropertyActionListener target="#{lacTransporteController.telefone}" value="#{telefone}"/>
+								</p:commandLink>
+							</p:column>
+						</p:dataTable>
+						<!-- FIM DATATABLE TELEFONE -->
+			       		<br /><br />
+					</h:panelGroup> 
+	       		</h:panelGrid>
+
+				<h:panelGrid id="gridEndereco" style="width:90%;">
+					<ui:include src="/paginas/manter-endereco/endereco.xhtml" />
+				</h:panelGrid>
+				
+			</h:panelGroup>
+		</p:outputPanel>
+
+		<p:outputPanel id="panelPergunta">
+			<h:panelGrid id="gridPergunta">
+  				<h:panelGroup>
+   		        	<h:outputText styleClass="titulo-grupo" style="font-weight:bold;" value="* A Transportadora possui Base Operacional no estado da Bahia?"/>
+	        		<h:graphicImage title="#{bundle.lac_dadosGerais_ajuda004}" value="/resources/img/ico-ajuda.png" id="ajuda004" style="margin: 1px 1px 1px 4px;"/>
+		        </h:panelGroup>
+                <br />
+				<p:selectOneRadio value="#{lacTransporteController.lacTransporte.indBaseOperacional}" style="margin-left:10px;">  
+		            <f:selectItem itemLabel="Sim" itemValue="true" />  
+		            <f:selectItem itemLabel="Não" itemValue="false" />
+		            <p:ajax update="tabAbasId gridBotoes" global="false"/>
+	       		</p:selectOneRadio>
+			</h:panelGrid>
+		</p:outputPanel>
+
+		<h:panelGrid id="gridBotoes" columns="2" style="margin-top:40px;">
+			<p:commandButton id="btnVoltar" value="Voltar" style="width:90px;" oncomplete="confirmationVoltarLAC.show()" global="false"/>
+			<p:commandButton id="btnFinalizar" value="Finalizar" style="width:90px;" action="#{lacTransporteController.finalizarLacTransporte()}" rendered="#{lacTransporteController.lacTransporte.indBaseOperacional == false}" update="documento"/>
+		 	<p:commandButton id="btnAvancar" value="Avançar" style="width:90px;" action="#{lacTransporteController.avancarAba()}" global="false" rendered="#{lacTransporteController.lacTransporte.indBaseOperacional}" update="tabAbasId" process="@form" />
+		</h:panelGrid>
+
+	</h:form>
+</ui:composition>

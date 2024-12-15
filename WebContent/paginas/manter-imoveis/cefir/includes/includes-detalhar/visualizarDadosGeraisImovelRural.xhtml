@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui">
+	<h:panelGrid columns="3">
+		<h:outputText value="#{bundle.requerimentoUnicoLabelRequerente}"
+			style="font-size: 11px;font-weight: bold;" rendered="#{!detalharImovelRuralController.showPCT}"/>
+		<h:outputText value="Representante da comunidade"
+			style="font-size: 11px;font-weight: bold;" rendered="#{detalharImovelRuralController.showPCT}"/>	
+		<p:spacer width="20" height="10" />
+		<h:outputText value="#{bundle.requerimentoUnicoLabelCNPJCPF}"
+			style="font-size: 11px;font-weight: bold;" />		
+
+		<h:outputText value="#{detalharImovelRuralController.requerenteVisualizacao.nomeRazao}" />
+		<p:spacer width="20" height="10" />
+		<h:panelGrid>
+			<h:outputText 
+				value="#{detalharImovelRuralController.requerenteVisualizacao.pessoaJuridica.numCnpj}">
+				<f:converter converterId="cnpjConverter" />
+			</h:outputText>
+			<h:outputText 
+				value="#{detalharImovelRuralController.requerenteVisualizacao.pessoaFisica.numCpf}">
+				<f:converter converterId="cpfConverter" />
+			</h:outputText>
+		</h:panelGrid>
+	</h:panelGrid>
+	<hr style="width: 770px; margin-left: 0px;"></hr>
+	<h3>
+		<h:outputText
+			value="#{bundle.requerimentoUnicoLabelHeaderContratoAssuntoRelacionadoRequerimento}"
+			styleClass="titulo-grupo" style="font-size: 12px; font-weight: bold;" />
+	</h3>
+	<h:panelGrid columns="5">
+		<h:outputText value="#{bundle.requerimentoUnicoLabelNome}"
+			style="font-size: 11px;font-weight: bold;" />
+		<p:spacer width="20" height="10" />
+		<h:outputText value="#{bundle.requerimentoUnicoLabelTelefone}"
+			style="font-size: 11px;font-weight: bold;" />
+		<p:spacer width="20" height="10" />
+		<h:outputText value="#{bundle.requerimentoUnicoLabelEmail}"
+			style="font-size: 11px;font-weight: bold;" />
+
+
+		<h:outputText value="#{detalharImovelRuralController.nomContato}" />
+		<p:spacer width="20" height="10" />
+		<h:outputText value="#{detalharImovelRuralController.numTelefone}" />
+		<p:spacer width="20" height="10" />
+		<h:outputText value="#{detalharImovelRuralController.desEmail}" />
+	</h:panelGrid>
+		<br />
+	<h:panelGrid columns="3" rendered="#{detalharImovelRuralController.procuradorCadastro != null}">
+		<h:outputText value="#{bundle.procuradorLabelCabecalho}/Representante Legal"
+					  style="font-size: 11px;font-weight: bold;" />
+		<p:spacer width="20" height="10" />
+		<h:outputText value="#{bundle.requerimentoUnicoLabelCNPJCPF}"
+			style="font-size: 11px;font-weight: bold;" />	
+			
+		<h:outputText value="#{detalharImovelRuralController.procuradorCadastro.nomeRazao}" />
+		<p:spacer width="20" height="10" />
+		<h:panelGrid>
+			<h:outputText 
+				value="#{detalharImovelRuralController.procuradorCadastro.pessoaJuridica.numCnpj}">
+				<f:converter converterId="cnpjConverter" />
+			</h:outputText>
+			<h:outputText 
+				value="#{detalharImovelRuralController.procuradorCadastro.pessoaFisica.numCpf}">
+				<f:converter converterId="cpfConverter" />
+			</h:outputText>
+		</h:panelGrid>
+	</h:panelGrid>
+	
+	<h:panelGrid columns="3" rendered="#{detalharImovelRuralController.procuradorCadastro != null}">
+		<h:outputText value="#{bundle.requerimentoUnicoLabelTelefone}"
+					  style="font-size: 11px;font-weight: bold;" />
+	 	<p:spacer width="20" height="10" />
+		<h:outputText value="#{bundle.requerimentoUnicoLabelEmail}"
+					  style="font-size: 11px;font-weight: bold;" />
+						
+			<h:outputText value="#{detalharImovelRuralController.telefoneProcurador}" />
+			<p:spacer width="20" height="10" />
+			<h:outputText value="#{detalharImovelRuralController.procuradorCadastro.desEmail}" />	
+	</h:panelGrid>
+	<br />
+	
+	<hr style="width: 770px; margin-left: 0px;"></hr>
+	<h:panelGrid columns="1" rendered="${security.temAcesso('3.33.52')}">
+		<h:outputText style="font-size: 11px;font-weight: bold;"
+			value="#{bundle.cefir_lbl_tipo_cadastro_imovel_rural}" />
+		<h:outputText value="#{detalharImovelRuralController.imovelRural.ideTipoCadastroImovelRural.dscTipoCadastroImovelRural}" />
+	</h:panelGrid>
+	<h:panelGrid columns="2">
+		<h:panelGrid columns="1">
+			<h:outputText style="font-size: 11px;font-weight: bold;" value="#{bundle.empreendimento_lbl_itr_receita_federal}" />
+			<h:outputText value="#{detalharImovelRuralController.imovelRural.numItr}" />
+		</h:panelGrid>
+		<h:panelGrid columns="1" rendered="#{detalharImovelRuralController.imovelRural.imovelINCRA}">
+			<h:outputText style="font-size: 11px;font-weight: bold;" value="#{bundle.cefir_lbl_codico_sipra}" />
+			<h:outputText value="#{detalharImovelRuralController.imovelRural.codSipra}" />
+		</h:panelGrid>
+	</h:panelGrid>
+	<br />
+	<h:panelGrid columns="1">
+		<h:outputText style="font-size: 11px;font-weight: bold;"
+			value="#{bundle.empreendimento_lbl_denominacao}" rendered="#{!detalharImovelRuralController.showPCT}"/>
+		<h:outputText style="font-size: 11px;font-weight: bold;"
+			value="Nome do território" rendered="#{detalharImovelRuralController.showPCT}"/>
+			
+		<h:outputText value="#{detalharImovelRuralController.imovelRural.desDenominacao}" />
+	</h:panelGrid>
+	<br />
+	<h:panelGrid columns="1" rendered="#{!detalharImovelRuralController.showPCT}">
+		<h:outputText style="font-size: 11px;font-weight: bold;"
+			value="#{bundle.empreendimento_lbl_forma_vinculo_titular}" />
+		<h:outputText
+			value="#{detalharImovelRuralController.retornaTipoVinculoImovel.nomTipoVinculoImovel}" />
+	</h:panelGrid>
+	<br />
+	<h:panelGrid columns="1" rendered="#{detalharImovelRuralController.showPCT}">
+		<h:outputText style="font-size: 11px;font-weight: bold;"
+			value="Tipo de território" />
+		<h:outputText
+			value="#{detalharImovelRuralController.pctImovelRural.ideTipoTerritorioPct.dscTipoTerritorioPct}" />
+	</h:panelGrid>
+	<br />
+	<h:panelGrid columns="1" rendered="#{detalharImovelRuralController.showPCT}">
+		<h:outputText style="font-size: 11px;font-weight: bold;" value="Tipos de segmentos do PCT" />
+		<h:dataTable var="tipoSeguimentoPct" value="#{detalharImovelRuralController.pctImovelRural.tipoSeguimentoPctCollection}" >
+			<h:column>
+				<h:outputText rendered="#{tipoSeguimentoPct.dscTipoSeguimentoPct ne 'Outros'}" value="#{tipoSeguimentoPct.dscTipoSeguimentoPct}" />
+				<h:outputText rendered="#{tipoSeguimentoPct.dscTipoSeguimentoPct eq 'Outros'}" value="#{imovelRuralControllerNew.pctImovelRural.dscTipoSeguimentoPctOutros}"/>
+			</h:column>
+		</h:dataTable>
+	</h:panelGrid>
+	<br />
+	<h:panelGrid columns="1" rendered="#{detalharImovelRuralController.showPCT}">
+		<h:outputText style="font-size: 11px;font-weight: bold;"
+			value="Capacidade do PCT (nº de famílias)" />
+		<h:outputText
+			value="#{detalharImovelRuralController.pctImovelRural.numFamilias}" />
+	</h:panelGrid>
+	<br />
+	<h:panelGrid columns="2">
+		<h:outputText value="#{bundle.cefir_msg_area_cartorio}" style="font-size: 11px;font-weight: bold;"
+					   rendered="#{detalharImovelRuralController.retornaTipoVinculoImovel.ideTipoVinculoImovel == 1 and !detalharImovelRuralController.showPCT}"/>
+		<h:outputText value="Área do território (ha)" style="font-size: 11px;font-weight: bold;"
+					   rendered="#{detalharImovelRuralController.showPCT}"/>			   
+		<h:outputText value="#{bundle.cefir_lbl_area_documento_imovel}" style="font-size: 11px;font-weight: bold;"
+					   rendered="#{detalharImovelRuralController.retornaTipoVinculoImovel.ideTipoVinculoImovel != 1}"/>
+		<h:outputText value="Quantidade de módulos fiscais" style="font-size: 11px;font-weight: bold;"/>		
+					   
+					   
+		<h:outputText value="#{detalharImovelRuralController.imovelRural.valArea}">
+			<f:converter converterId="doubleQuatroCasasDecimaisConverter" />
+		</h:outputText>
+		<h:outputText value="#{detalharImovelRuralController.imovelRural.qtdModuloFiscal}">
+			<f:converter converterId="doubleQuatroCasasDecimaisConverter" />
+		</h:outputText>
+	</h:panelGrid>	
+	<br />
+	<ui:include src="/paginas/manter-imoveis/cefir/includes/includes-detalhar/visualizarEnderecoImovelRural.xhtml" />
+	<!-- <h:panelGrid columns="1">
+		<h:outputText style="font-size: 11px;font-weight: bold;"
+			value="#{bundle.empreendimento_lbl_itr_receita_federal}" />
+		<h:outputText value="#{detalharImovelRuralController.imovelRural.numItr}" />
+			value="#{detalharImovelRuralController.retornaLabelValorArea}" />
+		<h:outputText value="#{detalharImovelRuralController.imovelRural.valArea}" />
+	</h:panelGrid>
+	<br />
+	<h:panelGrid columns="5">
+		<h:outputText style="font-size: 11px;font-weight: bold;"
+			value="#{bundle.empreendimento_lbl_folhas}" />
+		<p:spacer width="20" height="10" />
+		<h:outputText style="font-size: 11px;font-weight: bold;"
+			value="#{bundle.empreendimento_lbl_livro}" />
+		<p:spacer width="20" height="10" />
+		<h:outputText value="#{bundle.empreendimento_lbl_numero_matricula}" style="font-size: 11px;font-weight: bold;"
+					  rendered="#{detalharImovelRuralController.retornaTipoVinculoImovel.ideTipoVinculoImovel == 1}" />
+		<h:outputText value="#{bundle.cefir_lbl_documento_posse_cartorio}" style="font-size: 11px;font-weight: bold;"
+		  		      rendered="#{detalharImovelRuralController.retornaTipoVinculoImovel.ideTipoVinculoImovel != 1}" />
+		<h:outputLabel value="#{bundle.empreendimento_lbl_numero_matricula}" style="font-size: 11px;font-weight: bold;"
+					   rendered="#{detalharImovelRuralController.retornaTipoVinculoImovel.ideTipoVinculoImovel == 1}" />
+		<h:outputLabel value="#{bundle.cefir_lbl_documento_posse_cartorio}" style="font-size: 11px;font-weight: bold;"
+					   rendered="#{detalharImovelRuralController.retornaTipoVinculoImovel.ideTipoVinculoImovel != 1}" />
+
+		<h:outputText value="#{detalharImovelRuralController.imovelRural.numFolha}" />
+		<p:spacer width="20" height="10" />
+		<h:outputText value="#{detalharImovelRuralController.imovelRural.desLivro}" />
+		<p:spacer width="20" height="10" />
+		<h:outputText
+			value="#{detalharImovelRuralController.imovelRural.numMatricula}" rendered="#{detalharImovelRuralController.retornaTipoVinculoImovel.ideTipoVinculoImovel == 1}"/>
+		<h:outputText
+			value="#{detalharImovelRuralController.imovelRural.numRegistro}" rendered="#{detalharImovelRuralController.retornaTipoVinculoImovel.ideTipoVinculoImovel != 1}" />				
+			value="#{detalharImovelRuralController.imovelRural.numMatricula}" rendered="#{detalharImovelRuralController.retornaTipoVinculoImovel.ideTipoVinculoImovel == 1}"/>
+		<h:outputText
+			value="#{detalharImovelRuralController.imovelRural.numRegistro}" rendered="#{detalharImovelRuralController.retornaTipoVinculoImovel.ideTipoVinculoImovel != 1}" />						
+	</h:panelGrid>
+	<br />
+	<h:panelGrid columns="5">
+		<h:outputText value="#{bundle.empreendimento_lbl_cartorio}"
+			style="font-size: 11px;font-weight: bold;" />
+		<p:spacer width="20" height="10" />
+		<h:outputText value="#{bundle.empreendimento_lbl_comarca}"
+			style="font-size: 11px;font-weight: bold;" />
+		<p:spacer width="20" height="10" />
+		<h:outputText value="#{bundle.empreendimento_lbl_ccir_incra}"
+			style="font-size: 11px;font-weight: bold;" />
+
+		<h:outputText value="#{detalharImovelRuralController.imovelRural.desCartorio}" />
+		<p:spacer width="20" height="10" />
+		<h:outputText value="#{detalharImovelRuralController.imovelRural.desComarca}" />
+		<p:spacer width="20" height="10" />
+		<h:outputText value="#{detalharImovelRuralController.imovelRural.numCcir}" />
+	</h:panelGrid> -->
+</ui:composition>

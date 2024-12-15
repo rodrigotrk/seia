@@ -1,0 +1,428 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="relatorio_questionario_aba_lancamento_efluentes_caractericazacao" language="java" pageWidth="545" pageHeight="802" columnWidth="545" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="f0ec1dae-6c60-4c4b-85b0-81d816203604">
+	<property name="ireport.zoom" value="1.4641000000000008"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="330"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="IDE_CERH_LOCALIZACAO_GEOGRAFICA" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[select
+
+	clec.*
+	nom_corpo_hidrico,
+	tch.nom_tipo_corpo_hidrico,
+	sp_get_bacia(clg.ide_localizacao_geografica) as bacia,
+	sp_get_municipio(clg.ide_localizacao_geografica) as municipio,
+	sp_get_rpga(clg.ide_localizacao_geografica) as rpga,
+	cstu.dsc_situacao_tipo_uso,
+	ctf.dsc_tratamento_efluente,
+
+	(Select
+		cou.dsc_outros_usos
+	from cerh_lancamento_caracterizacao_origem clco
+		Inner join cerh_lancamento_outros_usos clou on clou.ide_cerh_lancamento_caracterizacao_origem = clco.ide_cerh_lancamento_caracterizacao_origem
+		Inner join cerh_outros_usos cou on cou.ide_cerh_outros_usos = clou.ide_cerh_outros_usos
+	where clco.ide_cerh_lancamento_efluente_caracterizacao = clec.ide_cerh_lancamento_efluente_caracterizacao
+	) as outros,
+
+	(select
+		ctps.dsc_tipo_prestador_servico
+	from cerh_lancamento_caracterizacao_origem clco
+		inner join cerh_lancamento_abastecimento_publico clap on clap.ide_cerh_lancamento_caracterizacao_origem = clco.ide_cerh_lancamento_caracterizacao_origem
+		inner join cerh_tipo_prestador_servico ctps on ctps.ide_cerh_tipo_prestador_servico =  clap.ide_cerh_tipo_prestador_servico
+	where clco.ide_cerh_lancamento_efluente_caracterizacao = clec.ide_cerh_lancamento_efluente_caracterizacao
+	)
+	as tipo_prestador_servico
+
+
+
+from
+
+cerh_lancamento_efluente_caracterizacao  clec
+inner join tipo_corpo_hidrico tch on tch.ide_tipo_corpo_hidrico =  clec.ide_tipo_corpo_hidrico
+inner join cerh_localizacao_geografica clg on clg.ide_cerh_localizacao_geografica = clec.ide_cerh_localizacao_geografica
+left join cerh_situacao_tipo_uso cstu on cstu.ide_cerh_situacao_tipo_uso = clec.ide_cerh_situacao_tipo_uso
+left join cerh_tratamento_efluente ctf on ctf.ide_cerh_tratamento_efluente  = clec.ide_cerh_tratamento_efluente
+
+where clg.ide_cerh_localizacao_geografica = $P{IDE_CERH_LOCALIZACAO_GEOGRAFICA}]]>
+	</queryString>
+	<field name="ide_cerh_lancamento_efluente_caracterizacao" class="java.lang.Integer"/>
+	<field name="nom_corpo_hidrico" class="java.lang.String"/>
+	<field name="dsc_observacao" class="java.lang.String"/>
+	<field name="dt_inicio_lancamento" class="java.sql.Date"/>
+	<field name="ind_efluente_recebe_tratamento" class="java.lang.Boolean"/>
+	<field name="val_dbo_efluente_bruto" class="java.math.BigDecimal"/>
+	<field name="val_dbo_efluente_tratado" class="java.math.BigDecimal"/>
+	<field name="val_dbo_eficiencia_tratamento" class="java.math.BigDecimal"/>
+	<field name="val_coliformes_efluente_bruto" class="java.math.BigDecimal"/>
+	<field name="val_coliformes_efluente_tratado" class="java.math.BigDecimal"/>
+	<field name="val_coliformes_eficiencia_tratamento" class="java.math.BigDecimal"/>
+	<field name="val_vazao_efluente_maxima_instantanea" class="java.math.BigDecimal"/>
+	<field name="val_vazao_diluicao_outorgada" class="java.math.BigDecimal"/>
+	<field name="ide_cerh_localizacao_geografica" class="java.lang.Integer"/>
+	<field name="ide_cerh_situacao_tipo_uso" class="java.lang.Integer"/>
+	<field name="ide_cerh_tratamento_efluente" class="java.lang.Integer"/>
+	<field name="ide_tipo_corpo_hidrico" class="java.lang.Integer"/>
+	<field name="nom_tipo_corpo_hidrico" class="java.lang.String"/>
+	<field name="bacia" class="java.lang.String"/>
+	<field name="municipio" class="java.lang.String"/>
+	<field name="rpga" class="java.lang.String"/>
+	<field name="dsc_situacao_tipo_uso" class="java.lang.String"/>
+	<field name="dsc_tratamento_efluente" class="java.lang.String"/>
+	<field name="outros" class="java.lang.String"/>
+	<field name="tipo_prestador_servico" class="java.lang.String"/>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<subreport>
+				<reportElement uuid="48d120d5-de79-4e54-ad17-18ec742838e7" x="0" y="0" width="545" height="20"/>
+				<subreportParameter name="IDE_CERH_LOCALIZACAO_GEOGRAFICA">
+					<subreportParameterExpression><![CDATA[$F{ide_cerh_localizacao_geografica}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "relatorio_questionario_corpo_hidrico.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+		<band height="40">
+			<textField>
+				<reportElement uuid="912c1d86-d811-405d-9c64-739b93f38b26" x="0" y="0" width="430" height="20"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA["Data de início do lançamento: "
++
+
+new SimpleDateFormat("dd 'de' MMMMM 'de' yyyy", new Locale("pt", "BR")).format($F{dt_inicio_lancamento})+ "."]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="f0eac636-9254-4d16-aca1-0e5ec909975c" x="0" y="20" width="268" height="20"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA["Situação da interferência: " + $F{dsc_situacao_tipo_uso}]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="40">
+			<textField>
+				<reportElement uuid="8ca9f9e1-edc1-43e3-a2ac-3302f903872f" x="0" y="8" width="268" height="12"/>
+				<box leftPadding="0"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Origem do lançamento"]]></textFieldExpression>
+			</textField>
+			<subreport>
+				<reportElement uuid="8fefdea6-5437-4db8-8c93-140ba430107a" x="0" y="20" width="545" height="20"/>
+				<subreportParameter name="IDE_CERH_LANCAMENTO_EFLUENTE_CARACTERIZACAO">
+					<subreportParameterExpression><![CDATA[$F{ide_cerh_lancamento_efluente_caracterizacao}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "relatorio_questionario_aba_lancamento_efluentes_caractericazacao_origem.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+		<band height="21">
+			<printWhenExpression><![CDATA[$F{tipo_prestador_servico}!=null]]></printWhenExpression>
+			<line>
+				<reportElement uuid="9a1405cc-a61b-4c25-b97e-afa8968e4598" mode="Transparent" x="1" y="10" width="539" height="1" backcolor="#45FF00"/>
+			</line>
+			<textField>
+				<reportElement uuid="96891326-fab5-433f-8a2d-a4e4d95559bb" mode="Opaque" x="20" y="1" width="248" height="19"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA["Esgotamento Sanitário(Abastecimento Público)"]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement uuid="1c49de0f-fcfe-434b-b667-73a999f042b7" mode="Transparent" x="0" y="10" width="1" height="11" backcolor="#45FF00"/>
+			</line>
+			<line>
+				<reportElement uuid="d3e40af5-e159-40d0-8eb5-1a3156fa8c62" mode="Transparent" x="540" y="10" width="1" height="11" backcolor="#45FF00"/>
+			</line>
+		</band>
+		<band height="20">
+			<printWhenExpression><![CDATA[$F{tipo_prestador_servico}!=null]]></printWhenExpression>
+			<subreport>
+				<reportElement uuid="2733d04b-ae8c-4ddc-a324-70109c538493" x="10" y="0" width="500" height="20"/>
+				<subreportParameter name="IDE_CERH_LANCAMENTO_EFLUENTE_CARACTERIZACAO">
+					<subreportParameterExpression><![CDATA[$F{ide_cerh_lancamento_efluente_caracterizacao}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "relatorio_questionario_aba_lancamento_efluentes_caractericazacao_prestador_servico.jasper"]]></subreportExpression>
+			</subreport>
+			<line>
+				<reportElement uuid="1c49de0f-fcfe-434b-b667-73a999f042b7" mode="Transparent" x="0" y="0" width="1" height="20" backcolor="#45FF00"/>
+			</line>
+			<line>
+				<reportElement uuid="d3e40af5-e159-40d0-8eb5-1a3156fa8c62" mode="Transparent" x="540" y="0" width="1" height="20" backcolor="#45FF00"/>
+			</line>
+		</band>
+		<band height="21">
+			<printWhenExpression><![CDATA[$F{tipo_prestador_servico}!=null]]></printWhenExpression>
+			<line>
+				<reportElement uuid="f0cefcc0-4fe8-4fbd-9ac0-cad2c7e9ea57" x="1" y="10" width="539" height="1"/>
+			</line>
+			<line>
+				<reportElement uuid="9c1a7e6a-55fc-4e29-8d35-d1c37f35cae2" mode="Transparent" x="540" y="0" width="1" height="11" backcolor="#45FF00"/>
+			</line>
+			<line>
+				<reportElement uuid="e0afe180-3907-4a0c-be08-040a3214e5c1" mode="Transparent" x="0" y="0" width="1" height="10" backcolor="#45FF00"/>
+			</line>
+		</band>
+		<band height="21">
+			<printWhenExpression><![CDATA[$F{outros}!=null]]></printWhenExpression>
+			<line>
+				<reportElement uuid="9a1405cc-a61b-4c25-b97e-afa8968e4598" mode="Transparent" x="1" y="10" width="539" height="1" backcolor="#45FF00"/>
+			</line>
+			<textField>
+				<reportElement uuid="96891326-fab5-433f-8a2d-a4e4d95559bb" mode="Opaque" x="20" y="0" width="76" height="20"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA["Outros Usos"]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement uuid="1c49de0f-fcfe-434b-b667-73a999f042b7" mode="Transparent" x="0" y="10" width="1" height="11" backcolor="#45FF00"/>
+			</line>
+			<line>
+				<reportElement uuid="d3e40af5-e159-40d0-8eb5-1a3156fa8c62" mode="Transparent" x="540" y="10" width="1" height="11" backcolor="#45FF00"/>
+			</line>
+		</band>
+		<band height="20">
+			<printWhenExpression><![CDATA[$F{outros}!=null]]></printWhenExpression>
+			<subreport>
+				<reportElement uuid="e700ff71-df66-4b0b-a95d-3c68bf42b875" x="10" y="0" width="500" height="20"/>
+				<subreportParameter name="SUBREPORT_DIR">
+					<subreportParameterExpression><![CDATA[$P{SUBREPORT_DIR}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="IDE_CERH_LANCAMENTO_EFLUENTE_CARACTERIZACAO">
+					<subreportParameterExpression><![CDATA[$F{ide_cerh_lancamento_efluente_caracterizacao}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "relatorio_questionario_aba_lancamento_efluentes_caractericazacao_outros_usos.jasper"]]></subreportExpression>
+			</subreport>
+			<line>
+				<reportElement uuid="1c49de0f-fcfe-434b-b667-73a999f042b7" mode="Transparent" x="0" y="0" width="1" height="20" backcolor="#45FF00"/>
+			</line>
+			<line>
+				<reportElement uuid="d3e40af5-e159-40d0-8eb5-1a3156fa8c62" mode="Transparent" x="540" y="0" width="1" height="20" backcolor="#45FF00"/>
+			</line>
+		</band>
+		<band height="21">
+			<printWhenExpression><![CDATA[$F{outros}!=null]]></printWhenExpression>
+			<line>
+				<reportElement uuid="f0cefcc0-4fe8-4fbd-9ac0-cad2c7e9ea57" x="1" y="10" width="539" height="1"/>
+			</line>
+			<line>
+				<reportElement uuid="9c1a7e6a-55fc-4e29-8d35-d1c37f35cae2" mode="Transparent" x="540" y="0" width="1" height="11" backcolor="#45FF00"/>
+			</line>
+			<line>
+				<reportElement uuid="e0afe180-3907-4a0c-be08-040a3214e5c1" mode="Transparent" x="0" y="0" width="1" height="10" backcolor="#45FF00"/>
+			</line>
+		</band>
+		<band height="20">
+			<textField>
+				<reportElement uuid="65843ad3-4537-437d-8dd6-4c8f38af1c36" x="0" y="0" width="545" height="20"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA["Antes do lançamento, o efluente recebe tratamento ? " +
+
+($F{ind_efluente_recebe_tratamento} ? "Sim, " : "Não.") +
+
+($F{ind_efluente_recebe_tratamento} ? $F{dsc_tratamento_efluente}+".":"")]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="93">
+			<elementGroup>
+				<staticText>
+					<reportElement uuid="758119c8-a222-40ef-8d5c-5ca596b3e654" mode="Opaque" x="200" y="22" width="115" height="30" backcolor="#DDDDDD"/>
+					<box topPadding="5" leftPadding="5">
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement/>
+					<text><![CDATA[Efluente bruto]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="fc2ae395-2cba-4cfd-b53e-9cd9be4210c9" mode="Opaque" x="315" y="22" width="115" height="30" backcolor="#DDDDDD">
+						<printWhenExpression><![CDATA[$F{val_dbo_efluente_tratado} != null]]></printWhenExpression>
+					</reportElement>
+					<box topPadding="5" leftPadding="5">
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement/>
+					<text><![CDATA[Efluente tratado]]></text>
+				</staticText>
+				<textField>
+					<reportElement uuid="84187085-d12d-449b-8cc4-6246878895ff" x="315" y="72" width="115" height="20">
+						<printWhenExpression><![CDATA[$F{val_dbo_efluente_tratado} != null]]></printWhenExpression>
+					</reportElement>
+					<box topPadding="3" leftPadding="5">
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement/>
+					<textFieldExpression><![CDATA[$F{val_coliformes_efluente_tratado}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement uuid="75ac38d4-812b-4c49-ba9c-291ef84ad773" x="315" y="52" width="115" height="20">
+						<printWhenExpression><![CDATA[$F{val_dbo_efluente_tratado} != null]]></printWhenExpression>
+					</reportElement>
+					<box topPadding="3" leftPadding="5">
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement/>
+					<textFieldExpression><![CDATA[$F{val_dbo_efluente_tratado}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement uuid="b892d0bc-cc8f-49b5-a7df-cf438ed2ddc5" x="200" y="52" width="115" height="20"/>
+					<box topPadding="3" leftPadding="5">
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement/>
+					<textFieldExpression><![CDATA[$F{val_dbo_efluente_bruto}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement uuid="8bc142cf-1dfb-4862-b9d9-4caf56057b3a" x="0" y="52" width="200" height="20"/>
+					<box topPadding="5" leftPadding="5">
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement/>
+					<text><![CDATA[DBO (5 dias 20º C) (mg/L)]]></text>
+				</staticText>
+				<textField>
+					<reportElement uuid="97aa4ab9-5413-4fe5-abff-b85c0d336a28" x="200" y="72" width="115" height="20"/>
+					<box topPadding="3" leftPadding="5">
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement/>
+					<textFieldExpression><![CDATA[$F{val_coliformes_efluente_bruto}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement uuid="01273557-da34-4d58-8db7-47577f4a436c" mode="Opaque" x="430" y="22" width="115" height="30" backcolor="#DDDDDD">
+						<printWhenExpression><![CDATA[$F{val_dbo_eficiencia_tratamento} != null]]></printWhenExpression>
+					</reportElement>
+					<box topPadding="5" leftPadding="5">
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement/>
+					<text><![CDATA[Eficiência do tratamento (%)]]></text>
+				</staticText>
+				<textField>
+					<reportElement uuid="5fde69c0-f82b-4bb8-a9eb-2db43c36cb25" x="430" y="52" width="115" height="20">
+						<printWhenExpression><![CDATA[$F{val_dbo_eficiencia_tratamento} != null]]></printWhenExpression>
+					</reportElement>
+					<box topPadding="3" leftPadding="5">
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement/>
+					<textFieldExpression><![CDATA[$F{val_dbo_eficiencia_tratamento}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement uuid="9d9ce9ff-f1fd-47e1-a89c-e099f8f07cd0" x="430" y="72" width="115" height="20">
+						<printWhenExpression><![CDATA[$F{val_dbo_eficiencia_tratamento} != null]]></printWhenExpression>
+					</reportElement>
+					<box topPadding="3" leftPadding="5">
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement/>
+					<textFieldExpression><![CDATA[$F{val_coliformes_eficiencia_tratamento}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement uuid="ebb2bdf6-c3ca-4a67-a117-8fdaf43180ad" mode="Opaque" x="0" y="22" width="200" height="30" backcolor="#DDDDDD"/>
+					<box topPadding="5" leftPadding="5">
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement/>
+					<text><![CDATA[Parâmetro]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="5ee4d791-2a07-4c90-b2e2-4a686e9f7724" x="0" y="72" width="200" height="20"/>
+					<box topPadding="5" leftPadding="5">
+						<topPen lineWidth="0.5"/>
+						<leftPen lineWidth="0.5"/>
+						<bottomPen lineWidth="0.5"/>
+						<rightPen lineWidth="0.5"/>
+					</box>
+					<textElement/>
+					<text><![CDATA[Coliformes Termotolerantes (UFC/100ml)]]></text>
+				</staticText>
+			</elementGroup>
+			<textField>
+				<reportElement uuid="deb0e19c-df3c-46ed-8305-62996947d651" x="0" y="10" width="268" height="12"/>
+				<box leftPadding="0"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Parâmetros do efluente:"]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="30">
+			<textField>
+				<reportElement uuid="b74ecff0-4307-4362-af1b-bb2fd55467cb" x="0" y="10" width="268" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Dados da operação (Efluente)"]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="20" splitType="Prevent">
+			<subreport>
+				<reportElement uuid="c9f3f2c4-5d17-477d-99c6-6d2b4bdc8011" x="0" y="0" width="545" height="20"/>
+				<subreportParameter name="IDE_CERH_LANCAMENTO_EFLUENTE_CARACTERIZACAO">
+					<subreportParameterExpression><![CDATA[$F{ide_cerh_lancamento_efluente_caracterizacao}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "relatorio_questionario_aba_lancamento_efluentes_caractericazacao_dados_operacao.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+		<band height="39">
+			<textField>
+				<reportElement uuid="c18807fc-37c5-4812-b742-522d03d19923" x="1" y="0" width="544" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA["Vazão de diluição outorgada (m³/dia): " + $F{val_vazao_diluicao_outorgada}]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="46">
+			<textField>
+				<reportElement uuid="9cac9f58-48c6-4957-af1e-d5a4daefa068" x="77" y="0" width="468" height="39" isPrintWhenDetailOverflows="true">
+					<printWhenExpression><![CDATA[$F{dsc_observacao}!=null]]></printWhenExpression>
+				</reportElement>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{dsc_observacao}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="1d210f1e-fec5-41a6-8e3d-38ccc162b5a8" x="1" y="0" width="77" height="20">
+					<printWhenExpression><![CDATA[$F{dsc_observacao}!=null]]></printWhenExpression>
+				</reportElement>
+				<textElement/>
+				<text><![CDATA[Observações: ]]></text>
+			</staticText>
+		</band>
+		<band height="17"/>
+	</detail>
+</jasperReport>

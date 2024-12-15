@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="relatorio_subreport_caracterizacao_ambiental_silos_armazens_destinacao_final" language="java" pageWidth="514" pageHeight="752" columnWidth="514" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="97b8e366-101e-4587-8072-cbf220087314">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="ide_caracterizacao_ambiental_silos_armazens" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[select df.* from caracterizacao_ambiental_silos_armazens casa
+inner join caracterizacao_ambiental_destinacao_final cadf
+on casa.ide_caracterizacao_ambiental_silos_armazens = cadf.ide_caracterizacao_ambiental_silos_armazens
+inner join destinacao_final df
+on cadf.ide_destinacao_final = df.ide_destinacao_final
+where casa.ide_caracterizacao_ambiental_silos_armazens = $P{ide_caracterizacao_ambiental_silos_armazens}]]>
+	</queryString>
+	<field name="ide_destinacao_final" class="java.lang.Integer"/>
+	<field name="ind_ativo" class="java.lang.Boolean"/>
+	<field name="nom_destinacao_final" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<columnHeader>
+		<band height="20" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="f262dd62-e93b-4dae-bd10-efb66f7e77fa" x="0" y="0" width="514" height="20"/>
+				<box>
+					<bottomPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Destinação Final]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement uuid="c112b2d8-f7fb-40c9-a638-238e23a7becb" x="0" y="0" width="259" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nom_destinacao_final}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

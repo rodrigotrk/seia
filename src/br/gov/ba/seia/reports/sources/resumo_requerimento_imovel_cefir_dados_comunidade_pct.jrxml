@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="resumo_requerimento_imovel_cefir_dados_comunidade_pct" language="groovy" pageWidth="540" pageHeight="752" columnWidth="540" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="131e1854-5c16-40a8-a7ad-5f20ec549e6c">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="ide_pct" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[null]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT pf.nom_pessoa, overlay(overlay(overlay(pf.num_cpf placing '-' from 10 for 0) placing '.' from 7 for 0) placing '.' from 4 for 0) as num_documento
+from pct_familia pcf inner join pct_imovel_rural pir
+on pcf.ide_pct = pir.ide_pct
+inner join pessoa_fisica pf
+on pf.ide_pessoa_fisica = pcf.ide_pessoa
+where pcf.ide_pct = $P{ide_pct} and pcf.ind_excluido = false order by pf.nom_pessoa asc;]]>
+	</queryString>
+	<field name="nom_pessoa" class="java.lang.String"/>
+	<field name="num_documento" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement uuid="b261f963-e7fd-467e-b98f-4b79c0ba36b7" x="340" y="0" width="200" height="20"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{num_documento}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="9c9ac649-fc4c-44e8-9c09-706ef146eb1b" x="0" y="0" width="252" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nom_pessoa}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="5a52da34-7cc0-4b94-a30a-92cac5f2c497" x="0" y="0" width="33" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Nome:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="20439106-bde9-4d93-804d-72632056a7a7" x="308" y="0" width="32" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[CPF:]]></text>
+			</staticText>
+		</band>
+	</detail>
+</jasperReport>

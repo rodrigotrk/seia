@@ -1,0 +1,539 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+
+	<script type="text/javascript" language="JavaScript">
+		var $ = jQuery;
+		$(document).ready(function() {
+			$("input[id*='dataDocumento']").mask('99/99/9999');
+		});
+		function addMaskDataDocumento() {
+			var $ = jQuery;
+			$("input[id*='dataDocumento']").mask('99/99/9999');
+		}
+		function updateCount() {
+	        $("[id$='counter']").html($("[id$='textarea']").val().length + "/" + $("[id$='textarea']").attr('maxlength') + " caracteres usados");
+	    }
+	</script>
+	
+	<h:panelGrid id="opcoesPct" columns="1">
+		
+		<h:panelGrid id="panelTipoDocumentoImovelRuralPct" columns="1">
+			<h:outputLabel value="* Tipo de Documento" />
+			<p:selectOneMenu id="tipoDocumentoImovelRuralPct" value="#{imovelRuralControllerNew.imovelRural.documentoImovelRuralPosse.ideTipoDocumentoImovelRural}"
+				onchange="desabilitarBotaoProximoMesmoFinalizado()" valueChangeListener="#{imovelRuralControllerNew.limparCamposDocumento}"
+				required="true" requiredMessage="#{func:messageFormat('javax.faces.component.UISelectOne.REQUIRED', 'Tipo de Documento')}">
+				<f:selectItem itemLabel="#{bundle.geral_lbl_selecione}" />
+				<f:selectItems value="#{imovelRuralControllerNew.listTipoDocumentoImovelRural}" var="tiposDocumento" itemLabel="#{tiposDocumento.dscTipoDocumentoImovelRural}" itemValue="#{tiposDocumento}" />
+				<f:converter converterId="tipoDocumentoImovelRuralConverter" />
+				<p:ajax event="change" update="gruposPCT" process="@this" oncomplete="addMaskDataDocumento();" />
+			</p:selectOneMenu>
+		</h:panelGrid>
+		
+		<h:panelGrid id="gruposPCT">
+		
+			<!--INICIO GRID PROPRIEDADE -->
+			<h:panelGrid rendered="#{imovelRuralControllerNew.pctImovelRural.ideTipoTerritorioPct.ideTipoTerritorioPct == 1}">
+			
+				<!--Data do documento -->
+				<h:panelGrid id="grupo1Propriedade" columns="1"
+					rendered="#{imovelRuralControllerNew.habilitaVisualizacaoGrupo(1)}">
+					<h:outputLabel value="* Data do documento" />
+					<p:calendar id="dataDocumento1Propriedade" widgetVar="dataDocumento1"
+						label="Data do documento" size="15" showOn="button" locale="pt"
+						pattern="dd/MM/yyyy" navigator="true" readOnlyInputText="false"
+						value="#{imovelRuralControllerNew.imovelRural.documentoImovelRuralPosse.dtcDocumento}"
+						required="true"
+						requiredMessage="O campo Data do Documento é obrigatório!"
+						yearRange="c-500:c+10">
+						<f:validator validatorId="dataMinMaxValidator" />
+					</p:calendar>
+				</h:panelGrid>
+				
+				<!-- INCRA ou SNCR -->
+				<h:panelGrid columns="3">
+					<h:outputLabel value="#{bundle.empreendimento_lbl_ccir_incra}" />
+					<h:outputLabel value="#{bundle.cefir_lbl_codigo_imovel}"/>
+					<h:outputLabel value="#{bundle.empreendimento_lbl_itr_receita_federal}" />
+					<p:inputText value="#{imovelRuralControllerNew.imovelRural.numCcir}" maxlength="15" onkeypress="SomenteNumero(this);desabilitarBotaoProximo();" onkeyup="SomenteNumero(this);" />
+					<p:inputText value="#{imovelRuralControllerNew.imovelRural.numSncr}" maxlength="15" onkeypress="SomenteNumero(this);desabilitarBotaoProximo();" onkeyup="SomenteNumero(this);" />
+					<p:inputText value="#{imovelRuralControllerNew.imovelRural.numItr}" maxlength="15" />
+				</h:panelGrid>
+				
+				<h:panelGrid>
+					<h:outputLabel value="NIRF" />
+					<p:inputText value="#{imovelRuralControllerNew.imovelRural.numNirf}"
+						maxlength="50"
+						onkeypress="SomenteNumero(this);"
+						onkeyup="SomenteNumero(this);"/>
+				</h:panelGrid>
+				
+				<h:outputLabel styleClass="titulo-grupo" value="CARTÓRIO" />
+				
+				<!--Número da matrícula ou documento -->
+				<h:panelGrid id="opcoes1Propriedade" columns="1">
+					<h:outputLabel value="* #{bundle.empreendimento_lbl_numero_matricula}" />  
+					<p:inputText
+						value="#{imovelRuralControllerNew.imovelRural.numMatricula}"
+						id="numMatriculaProprietarioPropriedade" maxlength="9"
+						onkeypress="SomenteNumero(this);desabilitarBotaoProximo();"
+						onkeyup="SomenteNumero(this);"
+						required="true"	
+						requiredMessage="O campo Número de Matrícula é obrigatório!"
+						title="#{bundle.empreendimento_lbl_numero_matricula}" />
+				</h:panelGrid>
+				
+				<!-- UF e Município  -->
+				<h:panelGrid id="opcoes3Propriedade" columns="2">
+				
+					<h:outputLabel value="UF" />
+					
+					<h:outputLabel value="* Município/Comarca" />
+					
+					<p:selectOneMenu id="idcomboufcartorioPropriedade"
+						value="#{imovelRuralControllerNew.estadoSelecionado}" disabled="true"
+						required="false"
+						onchange="desabilitarBotaoProximo()"
+						requiredMessage="#{func:messageFormat('javax.faces.component.UISelectOne.REQUIRED', bundle.empreendimento_lbl_uf)}">
+						<f:selectItem itemLabel="#{bundle.geral_lbl_selecione}" />
+						<f:selectItems value="#{imovelRuralControllerNew.listEstados}"
+							var="estado" itemLabel="#{estado.desSigla}" itemValue="#{estado}" />
+						<f:converter converterId="estadoConverter" />
+						<p:ajax update="idcombomunicipiocartorioPropriedade" />
+					</p:selectOneMenu>
+					
+					<p:selectOneMenu id="idcombomunicipiocartorioPropriedade"
+						value="#{imovelRuralControllerNew.imovelRural.ideMunicipioCartorio}"
+						required="true"
+						onchange="desabilitarBotaoProximo()"
+						requiredMessage="O campo Município/Comarca é obrigatório!">
+						<f:selectItem itemLabel="#{bundle.geral_lbl_selecione}" />
+						<f:selectItems value="#{imovelRuralControllerNew.listMunicipios}"
+							var="municipios" itemLabel="#{municipios.nomMunicipio}"
+							itemValue="#{municipios}" />
+						<f:converter converterId="municipioConverter" />
+					</p:selectOneMenu>
+				</h:panelGrid>
+				
+				<!--Livro / Folha / UF do cartório -->
+				<h:panelGrid id="opcoes4Propriedade" columns="3">
+					<h:outputLabel value="#{bundle.empreendimento_lbl_cartorio}" />
+					<h:outputLabel value="* #{bundle.empreendimento_lbl_livro}" />
+					<h:outputLabel value="* #{bundle.empreendimento_lbl_folhas}" />
+					<p:inputText id="cartorioPropriedade"
+						value="#{imovelRuralControllerNew.imovelRural.desCartorio}"
+						required="false"
+						onchange="desabilitarBotaoProximo()"
+						requiredMessage="#{func:messageFormat('javax.faces.component.UISelectOne.REQUIRED', bundle.empreendimento_lbl_cartorio)}"
+						maxlength="60" />
+					<p:inputText id="livroPropriedade"
+						value="#{imovelRuralControllerNew.imovelRural.desLivro}"
+						required="true"
+						requiredMessage="O campo Livro é obrigatório!"
+						maxlength="9" onchange="desabilitarBotaoProximo()" />
+					<p:inputText id="folhasPropriedade"
+						value="#{imovelRuralControllerNew.imovelRural.numFolha}"
+						required="true"
+						requiredMessage="O campo Folhas é obrigatório!"
+						maxlength="15"
+						onchange="desabilitarBotaoProximo()" />
+				</h:panelGrid>
+				
+			</h:panelGrid>
+			<!--FIM GRID PROPRIEDADE -->
+			
+			<!--INICIO GRID POSSE -->		
+			<h:panelGrid  rendered="#{not empty imovelRuralControllerNew.imovelRural.documentoImovelRuralPosse.ideTipoDocumentoImovelRural and (imovelRuralControllerNew.pctImovelRural.ideTipoTerritorioPct.ideTipoTerritorioPct == 2
+			or imovelRuralControllerNew.pctImovelRural.ideTipoTerritorioPct.ideTipoTerritorioPct == 4)}">
+			
+				<!--Emissor / Data do documento -->
+				<h:panelGrid id="grupo2Pct" columns="2"
+					rendered="#{imovelRuralControllerNew.habilitaVisualizacaoGrupo(2)}">
+					<h:outputLabel value="* Data do documento" />
+					<h:outputLabel value="* Emissor do documento" />
+					<p:calendar id="dataDocumento2Pct" widgetVar="dataDocumento2Pct"
+						label="Data do documento" size="15" showOn="button" locale="pt"
+						pattern="dd/MM/yyyy" navigator="true" readOnlyInputText="false"
+						value="#{imovelRuralControllerNew.imovelRural.documentoImovelRuralPosse.dtcDocumento}"
+						required="true"
+						requiredMessage="O campo Data do Documento é obrigatório!"
+						yearRange="c-500:c+10">
+						<f:validator validatorId="dataMinMaxValidator" />
+					</p:calendar>
+					<p:inputText
+						value="#{imovelRuralControllerNew.imovelRural.documentoImovelRuralPosse.dscEmissorDocumento}"
+						maxlength="100" title="Emissor do Documento" required="true"
+						requiredMessage="O campo Emissor do Documento é obrigatório!" />
+				</h:panelGrid>
+				
+				<h:panelGrid id="grupo3Posse" columns="3" rendered="#{imovelRuralControllerNew.habilitaVisualizacaoGrupo(3)}">
+					<h:outputLabel value="* Data do documento" />
+					<h:outputLabel value="* CPF do Vendedor" />
+					<h:outputLabel value="* Nome do Vendedor" />
+					<p:calendar id="dataDocumento3Posse" widgetVar="dataDocumento3"
+						label="Data do documento" size="15" showOn="button" locale="pt"
+						pattern="dd/MM/yyyy" navigator="true" readOnlyInputText="false"
+						value="#{imovelRuralControllerNew.imovelRural.documentoImovelRuralPosse.dtcDocumento}"
+						required="true"
+						requiredMessage="O campo Data do Documento é obrigatório!"
+						yearRange="c-500:c+10">
+						<f:validator validatorId="dataMinMaxValidator" />
+					</p:calendar>
+					<p:inputMask
+						value="#{imovelRuralControllerNew.imovelRural.documentoImovelRuralPosse.numCpfVendedor}"
+						mask="#{bundle.consultapf_msk_cpf}" converter="cpfConverter"
+						validator="cpfValidator" style="width: 160px;" required="true"
+						requiredMessage="O campo CPF do Vendedor é obrigatório!">
+					</p:inputMask>
+					<p:inputText
+						value="#{imovelRuralControllerNew.imovelRural.documentoImovelRuralPosse.nomVendedor}"
+						maxlength="100" title="Nome do Vendedor" required="true"
+						requiredMessage="O campo Nome do Vendedor é obrigatório!" />
+				</h:panelGrid>
+				
+				<h:panelGrid id="grupo4Posse" columns="1"
+					rendered="#{imovelRuralControllerNew.habilitaVisualizacaoGrupo(4)}">
+					<h:outputLabel styleClass="titulo-grupo" value="DECLARANTE" />
+					<h:panelGrid>
+						<h:selectOneRadio
+							value="#{imovelRuralControllerNew.imovelRural.documentoImovelRuralPosse.pjDeclarante}"
+							valueChangeListener="#{imovelRuralControllerNew.limparCpfCnpjDocumento}">
+							<f:selectItem itemLabel="#{bundle.acionistaLabelPessoaFisica}"
+								itemValue="#{false}" />
+							<f:selectItem itemLabel="#{bundle.acionistaLabelPessoaJuridica}"
+								itemValue="#{true}" />
+							<p:ajax event="change" process="@this"
+								update="@this panelDeclarantePosse" />
+						</h:selectOneRadio>
+					</h:panelGrid>
+					<h:panelGrid id="panelDeclarantePosse" columns="2">
+						<h:outputLabel value="* CPF do declarante"
+							rendered="#{!imovelRuralControllerNew.imovelRural.documentoImovelRuralPosse.pjDeclarante}" />
+						<h:outputLabel value="* CNPJ do declarante"
+							rendered="#{imovelRuralControllerNew.imovelRural.documentoImovelRuralPosse.pjDeclarante}" />
+						<h:outputLabel value="* Nome do declarante" />
+						<p:inputMask
+							value="#{imovelRuralControllerNew.imovelRural.documentoImovelRuralPosse.numCpfCnpjDeclarante}"
+							mask="#{bundle.consultapf_msk_cpf}" converter="cpfConverter"
+							validator="cpfValidator" style="width: 160px;" required="true"
+							requiredMessage="O campo CPF do Declarante é obrigatório!"
+							rendered="#{!imovelRuralControllerNew.imovelRural.documentoImovelRuralPosse.pjDeclarante}">
+							<p:ajax event="blur" process="@this" update="@this" />
+						</p:inputMask>
+						<p:inputMask
+							value="#{imovelRuralControllerNew.imovelRural.documentoImovelRuralPosse.numCpfCnpjDeclarante}"
+							mask="#{bundle.consultapj_msk_cnpj}" style="width: 140px;"
+							rendered="#{imovelRuralControllerNew.imovelRural.documentoImovelRuralPosse.pjDeclarante}"
+							required="true"
+							requiredMessage="O campo CNPJ do Declarante é obrigatório!">
+							<f:converter converterId="cnpjConverter" />
+							<f:validator validatorId="cnpjValidator" />
+							<p:ajax event="blur" process="@this" update="@this" />
+						</p:inputMask>
+						<p:inputText
+							value="#{imovelRuralControllerNew.imovelRural.documentoImovelRuralPosse.nomDeclarante}"
+							maxlength="100" title="Nome do Declarante" required="true"
+							requiredMessage="O campo Nome do Declarante é obrigatório!" />
+					</h:panelGrid>
+					<h:panelGrid>
+						<p:remoteCommand
+							actionListener="#{imovelRuralControllerNew.filtrarEnderecoDeclarantePorCep()}"
+							process="formCadImovelRural:idtxtcepDeclarantePosse" update="panelEnderecoDeclarantePosse"
+							name="filtrarCepDeclarantePosse" />
+						<h:outputLabel value="* CEP" />
+						<br />
+						<p:inputMask id="idtxtcepDeclarantePosse"
+							value="#{imovelRuralControllerNew.logradouroPesquisa.numCep}"
+							onblur="filtrarCepDeclarantePosse();"
+							onkeypress="blurOnEnter(event,this);" mask="99.999-999"
+							required="true" requiredMessage="O campo CEP deve ser preenchido.">
+							<f:converter converterId="cepConverter" />
+						</p:inputMask>
+					</h:panelGrid>
+					
+					<h:panelGrid id="panelEnderecoDeclarantePosse">
+						<h:panelGrid columns="2">
+							<h:outputText value="#{bundle.geral_lbl_endereco_bairro}" />
+							<h:outputText />
+							<p:selectOneMenu id="idcombobairroDeclarantePosse"
+								value="#{imovelRuralControllerNew.bairroDeclarante}"
+								valueChangeListener="#{imovelRuralControllerNew.changeLogradouroMunicipioDeclarante}"
+								disabled="#{!imovelRuralControllerNew.enableEnderecoDeclarante}"
+								required="true"
+								converter="simpleEntityConverter"
+								requiredMessage="O campo Bairro deve ser preenchido.">
+								<f:selectItems
+									value="#{imovelRuralControllerNew.valuesComboBairroDeclarante}" />
+								<f:validator validatorId="bairroComboValidator" />
+								<p:ajax update="panelEnderecoDeclarantePosse" />
+							</p:selectOneMenu>
+							<p:inputText
+								value="#{imovelRuralControllerNew.bairroDeclarante.nomBairro}"
+								required="true"
+								requiredMessage="O campo Bairro deve ser preenchido."
+								rendered="#{imovelRuralControllerNew.showInputs}" />
+						</h:panelGrid>
+						
+						<h:panelGrid columns="2">
+							<h:outputLabel value="* Logradouro" />
+							<h:outputText />
+							
+							<p:selectOneMenu id="idcombotipologradouroDeclaranteinputPosse"
+								value="#{imovelRuralControllerNew.tipoLogradouroDeclarante}"
+								disabled="false"
+								rendered="#{imovelRuralControllerNew.showInputs
+		 							or imovelRuralControllerNew.showInputLogradouro}"
+								required="true"
+								requiredMessage="O campo Tipo do Logradouro deve ser preenchido.">
+								<f:selectItems value="#{imovelRuralControllerNew.listTipoLogradouro}" var="tipoLogradouro" itemLabel="#{tipoLogradouro.nomTipoLogradouro}" itemValue="#{tipoLogradouro}"  />
+								<f:converter converterId="tipoLogradouroConverter" />
+							</p:selectOneMenu>
+							
+							<p:inputText
+								value="#{imovelRuralControllerNew.logradouroDeclarante.nomLogradouro}"
+								maxlength="185"
+								rendered="#{imovelRuralControllerNew.showInputs
+		 							or imovelRuralControllerNew.showInputLogradouro}"
+								required="true"
+								requiredMessage="O campo Logradouro deve ser preenchido." />
+							
+							<p:selectOneMenu id="idcombotipologradouroDeclarantePosse"
+								value="#{imovelRuralControllerNew.tipoLogradouroDeclarante}"
+								disabled="true"
+								rendered="#{!imovelRuralControllerNew.showInputs
+		 							and !imovelRuralControllerNew.showInputLogradouro}"
+								required="true"
+								requiredMessage="O campo Tipo do Logradouro deve ser preenchido.">
+								<f:selectItems value="#{imovelRuralControllerNew.listTipoLogradouro}" var="tipoLogradouro" itemLabel="#{tipoLogradouro.nomTipoLogradouro}" itemValue="#{tipoLogradouro}" />
+								<f:converter converterId="tipoLogradouroConverter" />
+							</p:selectOneMenu>
+							
+							<p:selectOneMenu id="idcombologradouroDeclarantePosse"
+								value="#{imovelRuralControllerNew.logradouroDeclarante}"
+								rendered="#{!imovelRuralControllerNew.showInputs
+		 							and !imovelRuralControllerNew.showInputLogradouro}"
+								valueChangeListener="#{imovelRuralControllerNew.changeLogradouroDeclarante}"
+								disabled="#{imovelRuralControllerNew.desabilitarLogradouroDeclarante}"
+								required="true"
+								requiredMessage="O campo Logradouro deve ser preenchido.">
+								<f:selectItems
+									value="#{imovelRuralControllerNew.valuesComboLogradouroDeclarante}" />
+								<f:converter converterId="logradouroConverter" />
+								<f:validator validatorId="logradouroComboValidator" />
+								<p:ajax update="panelEnderecoDeclarantePosse" />
+							</p:selectOneMenu>
+						</h:panelGrid>
+						
+						<h:panelGrid columns="2" id="panelnumerocomplementoDeclarantePosse"
+							width="100%">
+							<h:outputText id="idlblnumeroDeclarantePosse" value="* Número" />
+							<h:outputLabel id="idlblcomplementoDeclarantePosse" value="Complemento" />
+							<p:inputText style="width: 70%"
+								disabled="#{!imovelRuralControllerNew.enableEnderecoDeclarante}"
+								value="#{imovelRuralControllerNew.enderecoDeclarante.numEndereco}"
+								maxlength="5" size="5" required="true"
+								requiredMessage="O campo Número do endereço do declarante deve ser preenchido." />
+							<p:inputText style="width: 100%"
+								value="#{imovelRuralControllerNew.enderecoDeclarante.desComplemento}"
+								disabled="#{!imovelRuralControllerNew.enableEnderecoDeclarante}" />
+						</h:panelGrid>
+						
+						<h:panelGrid columns="2">
+						
+							<h:outputText value="* UF" />
+							<h:outputLabel value="* Município" />
+							
+							<p:selectOneMenu id="idcomboufDeclarantePosse"
+								value="#{imovelRuralControllerNew.estadoDeclarante}"
+								disabled="true" required="true"
+								requiredMessage="O campo UF do endereço do declarante deve ser selecionado.">
+								<f:selectItems value="#{estadoMunicipioController.valuesComboBoxEstado}" />
+								<f:converter converterId="estadoConverter" />
+								<f:validator validatorId="estadoValidator" />
+								<p:ajax update="idcombomunicipioDeclarantePosse"
+									listener="#{imovelRuralControllerNew.changeEstadoDeclarante}" />
+							</p:selectOneMenu>
+							
+							<p:selectOneMenu id="idcombomunicipioDeclarantePosse"
+								value="#{imovelRuralControllerNew.municipioDeclarante}"
+								disabled="true" required="true"
+								requiredMessage="O campo Município do endereço do declarante deve ser selecionado.">
+								<f:selectItems
+									value="#{imovelRuralControllerNew.listMunicipios}" var="municipios" itemLabel="#{municipios.nomMunicipio}" itemValue="#{municipios}" />
+								<f:converter converterId="municipioConverter" />
+								<f:validator validatorId="municipioValidator" />
+							</p:selectOneMenu>
+						</h:panelGrid>
+					</h:panelGrid>
+				</h:panelGrid>
+				
+				<h:panelGrid rendered="#{not empty imovelRuralControllerNew.imovelRural.documentoImovelRuralPosse.ideTipoDocumentoImovelRural 
+					and imovelRuralControllerNew.imovelRural.documentoImovelRuralPosse.ideTipoDocumentoImovelRural.ideTipoDocumentoImovelRural == 30}">
+					<h:outputLabel value="* Termo de autodeclaração" />
+    				<p:inputTextarea id="textarea" 
+    				maxlength="1000" 
+    				onfocus="updateCount()" 
+    				onkeyup="updateCount()"  
+    				rows="5" cols="100" 
+    				value="#{imovelRuralControllerNew.imovelRural.dscTermoAutodeclaracao}" 
+    				autoResize="false" 
+    				required="true"
+					requiredMessage="#{func:messageFormat('javax.faces.component.UISelectOne.REQUIRED', 'Termo de autorização')}"/>
+					<div id="counter"/>
+				</h:panelGrid>
+				
+				<h:panelGrid id="opcoes2Posse" columns="3" rendered="#{imovelRuralControllerNew.notRenderCamposPct}">
+					<h:outputLabel value="#{bundle.empreendimento_lbl_ccir_incra}" />
+					<h:outputLabel value="#{bundle.cefir_lbl_codigo_imovel}"/>
+					<h:outputLabel value="#{bundle.empreendimento_lbl_itr_receita_federal}" />
+					<p:inputText value="#{imovelRuralControllerNew.imovelRural.numCcir}" maxlength="15" onkeypress="SomenteNumero(this);desabilitarBotaoProximo();" onkeyup="SomenteNumero(this);" />
+					<p:inputText value="#{imovelRuralControllerNew.imovelRural.numSncr}" maxlength="15" onkeypress="SomenteNumero(this);desabilitarBotaoProximo();" onkeyup="SomenteNumero(this);" />
+					<p:inputText value="#{imovelRuralControllerNew.imovelRural.numItr}" maxlength="15" />
+				</h:panelGrid>
+				
+				<h:panelGrid id="opcoes2PossePct" columns="1" rendered="#{!imovelRuralControllerNew.notRenderCamposPct}">
+					<h:outputLabel value="#{bundle.empreendimento_lbl_ccir_incra}" rendered="#{!imovelRuralControllerNew.imovelRural.imovelINCRA}" />
+					<h:outputLabel value="#{bundle.cefir_lbl_codigo_imovel}" rendered="#{imovelRuralControllerNew.imovelRural.imovelINCRA}" />
+					<p:inputText id="CCIRINCRAPossePct" value="#{imovelRuralControllerNew.imovelRural.numCcir}"
+						maxlength="15" onkeypress="SomenteNumero(this);desabilitarBotaoProximo();" onkeyup="SomenteNumero(this);" />
+				</h:panelGrid>
+				
+				<h:panelGrid>
+					<h:outputLabel value="NIRF" />
+					<p:inputText value="#{imovelRuralControllerNew.imovelRural.numNirf}" maxlength="50" onkeypress="SomenteNumero(this);" onkeyup="SomenteNumero(this);"/>
+				</h:panelGrid>
+				
+				<h:panelGrid>
+					<h:outputLabel value="#{bundle.cefir_lbl_documento_posse_cartorio}"
+						rendered="#{imovelRuralControllerNew.pctImovelRural.ideTipoTerritorioPct.ideTipoTerritorioPct == 2 and imovelRuralControllerNew.notRenderCamposPct}" /> 
+					<p:inputText id="numRegPosse" value="#{imovelRuralControllerNew.imovelRural.numRegistro}" title="#{bundle.cefir_lbl_documento_posse_cartorio}"
+						rendered="#{imovelRuralControllerNew.pctImovelRural.ideTipoTerritorioPct.ideTipoTerritorioPct == 2 and imovelRuralControllerNew.notRenderCamposPct}" 
+						maxlength="9" onkeypress="SomenteNumero(this);desabilitarBotaoProximo();" onkeyup="SomenteNumero(this);" />
+				</h:panelGrid>
+			
+			</h:panelGrid>
+			<!--FIM GRID POSSE -->
+			
+			<!--INICIO GRID CONCESSAO -->
+			<h:panelGrid rendered="#{imovelRuralControllerNew.pctImovelRural.ideTipoTerritorioPct.ideTipoTerritorioPct == 3}">
+				
+				<!--Data do documento -->
+				<h:panelGrid columns="1"
+					rendered="#{imovelRuralControllerNew.renderedCamposConcessao}">
+					<h:outputLabel value="Data do documento" />
+					<p:calendar widgetVar="dataDocumento1"
+						label="Data do documento" size="15" showOn="button" locale="pt"
+						pattern="dd/MM/yyyy" navigator="true" readOnlyInputText="false"
+						value="#{imovelRuralControllerNew.imovelRural.documentoImovelRuralPosse.dtcDocumento}"
+						required="false"
+						requiredMessage="O campo Data do Documento é obrigatório!"
+						yearRange="c-500:c+10">
+						<f:validator validatorId="dataMinMaxValidator" />
+					</p:calendar>
+				</h:panelGrid>
+				
+				<h:panelGrid columns="3">
+					<h:outputLabel value="#{bundle.empreendimento_lbl_ccir_incra}" />
+					<h:outputLabel value="#{bundle.cefir_lbl_codigo_imovel}"/>
+					<h:outputLabel value="#{bundle.empreendimento_lbl_itr_receita_federal}" />
+					<p:inputText value="#{imovelRuralControllerNew.imovelRural.numCcir}" maxlength="15" onkeypress="SomenteNumero(this);desabilitarBotaoProximo();" onkeyup="SomenteNumero(this);" />
+					<p:inputText value="#{imovelRuralControllerNew.imovelRural.numSncr}" maxlength="15" onkeypress="SomenteNumero(this);desabilitarBotaoProximo();" onkeyup="SomenteNumero(this);" />
+					<p:inputText value="#{imovelRuralControllerNew.imovelRural.numItr}" maxlength="15" />
+				</h:panelGrid>
+				
+				<h:panelGrid>
+					<h:outputLabel value="NIRF" />
+					<p:inputText value="#{imovelRuralControllerNew.imovelRural.numNirf}" maxlength="50" onkeypress="SomenteNumero(this);" onkeyup="SomenteNumero(this);"/>
+				</h:panelGrid>
+				
+				<h:outputLabel styleClass="titulo-grupo" value="CARTÓRIO" rendered="#{imovelRuralControllerNew.renderedCamposConcessao}" />
+				
+				<!--Número da matrícula ou documento -->
+				<h:panelGrid columns="1" rendered="#{imovelRuralControllerNew.renderedCamposConcessao}">
+					<h:outputLabel value="#{bundle.empreendimento_lbl_numero_matricula}" />  
+					<p:inputText title="#{bundle.empreendimento_lbl_numero_matricula}" value="#{imovelRuralControllerNew.imovelRural.numMatricula}"
+						maxlength="9" onkeypress="SomenteNumero(this);desabilitarBotaoProximo();" onkeyup="SomenteNumero(this);" />
+				</h:panelGrid>
+				
+				<!--Livro / Folha / UF do cartório -->
+				<h:panelGrid columns="3" rendered="#{imovelRuralControllerNew.renderedCamposConcessao}">
+					<h:outputLabel value="#{bundle.empreendimento_lbl_cartorio}" />
+					<h:outputLabel value="#{bundle.empreendimento_lbl_livro}" />
+					<h:outputLabel value="#{bundle.empreendimento_lbl_folhas}" />
+					<p:inputText 
+						value="#{imovelRuralControllerNew.imovelRural.desCartorio}"
+						required="false"
+						onchange="desabilitarBotaoProximo()"
+						requiredMessage="#{func:messageFormat('javax.faces.component.UISelectOne.REQUIRED', bundle.empreendimento_lbl_cartorio)}"
+						maxlength="60" />
+					<p:inputText 
+						value="#{imovelRuralControllerNew.imovelRural.desLivro}"
+						maxlength="9" onchange="desabilitarBotaoProximo()" />
+					<p:inputText 
+						value="#{imovelRuralControllerNew.imovelRural.numFolha}"
+						maxlength="15"
+						onchange="desabilitarBotaoProximo()" />
+				</h:panelGrid>
+				
+				<!-- UF e Município  -->
+				<h:panelGrid columns="2" rendered="#{imovelRuralControllerNew.renderedCamposConcessao}">
+					<h:outputLabel value="UF" />
+					<h:outputLabel value="Município/Comarca" />
+					
+					<p:selectOneMenu value="#{imovelRuralControllerNew.estadoSelecionado}" disabled="true"
+						required="false"
+						onchange="desabilitarBotaoProximo()"
+						requiredMessage="#{func:messageFormat('javax.faces.component.UISelectOne.REQUIRED', bundle.empreendimento_lbl_uf)}">
+						<f:selectItem itemLabel="#{bundle.geral_lbl_selecione}" />
+						<f:selectItems value="#{imovelRuralControllerNew.listEstados}"
+							var="estado" itemLabel="#{estado.desSigla}" itemValue="#{estado}" />
+						<f:converter converterId="estadoConverter" />
+					</p:selectOneMenu>
+					
+					<p:selectOneMenu value="#{imovelRuralControllerNew.imovelRural.ideMunicipioCartorio}"
+						required="false"
+						onchange="desabilitarBotaoProximo()"
+						requiredMessage="O campo Município/Comarca é obrigatório!">
+						<f:selectItem itemLabel="#{bundle.geral_lbl_selecione}" />
+						<f:selectItems value="#{imovelRuralControllerNew.listMunicipios}"
+							var="municipios" itemLabel="#{municipios.nomMunicipio}"
+							itemValue="#{municipios}" />
+						<f:converter converterId="municipioConverter" />
+					</p:selectOneMenu>
+				</h:panelGrid>
+				
+			</h:panelGrid>	
+			<!--FIM GRID CONCESSAO -->
+			
+			<br />
+			
+<!-- 			<p:commandButton value="#{bundle.geral_lbl_salvar}" action="#{imovelRuralControllerNew.salvarDocumentacao()}" process="@this opcoesPct" ajax="true"
+			oncomplete="habilitarBotaoProximo()" />	 -->			
+			
+			<p:commandButton value="#{bundle.geral_lbl_salvar}" action="#{imovelRuralControllerNew.salvarDocumentacao()}" process="@this opcoesPct" ajax="true"
+				 oncomplete="habilitarBotaoProximo()" />			
+			
+<!-- 			<p:commandButton value="#{bundle.geral_lbl_salvar}" action="#{imovelRuralControllerNew.salvarDocumentacao()}" process="@this opcoesPct" ajax="true" -->
+<!-- 			rendered="#{!imovelRuralControllerNew.imovelRural.isFinalizado or isEdicaoDocumentacao}" oncomplete="habilitarBotaoProximo()" />				 -->
+		
+		</h:panelGrid>	
+	</h:panelGrid>
+	
+
+
+	<br />
+	
+	<p:confirmDialog widgetVar="dlgExistenciaProprietariosPct" header="Aviso" severity="alert" width="520">
+		<f:facet name="message">
+			<h:panelGrid>
+				<h:outputText escape="false" value="#{bundle.cefir_msg_alerta_proprietarios_vinculo_justo_possuidor}" />
+			</h:panelGrid>
+		</f:facet>
+		<p:commandButton  process="@this" value="#{bundle.btn_ok}" ajax="true" onclick="dlgExistenciaProprietariosPct.hide()" />
+	</p:confirmDialog>
+	
+</html>

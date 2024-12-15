@@ -1,0 +1,294 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui">
+
+	<h:form id="formDeclaracao">
+		
+		<h:outputLabel value="Dados do gerador do resíduo" style="font-weight: bold; font-size: 12px;"/>
+		<br/><br/>
+		<p:outputPanel id="pnlRequerente" autoUpdate="true">
+			<h:panelGrid columns="2">
+				<h:outputLabel value="Nome/Razão Social:" />
+				<h:outputText value="#{declaracaoTransporteResiduoPerigosoController.geradorResiduo.nomeRazao}" />
+				<h:outputLabel value="CPF/CNPJ:" />
+				<h:outputText value="#{declaracaoTransporteResiduoPerigosoController.geradorResiduo.cpfCnpjFormatado}" />
+			</h:panelGrid>
+		</p:outputPanel>
+		
+		<br/>
+		<h:outputLabel value="*Endereço(s) de geração dos resíduos" style="font-weight: bold; font-size: 12px;"/>
+		<br/><br/>
+		<p:commandLink oncomplete="dialogselecionarEnderecoResiduo.show()" actionListener="#{declaracaoEnderecoGeradorResiduoController.limparEndereco}" 
+			update="formEndereco formEnderecoPesquisaCep" process="@this"
+			disabled="#{!declaracaoTransporteResiduoPerigosoController.permiteEditar}">
+			<h:graphicImage title="Incluir endereço de geração dos resíduos" value="/resources/img/ico-expandir.png" />
+			<f:setPropertyActionListener target="#{declaracaoEnderecoGeradorResiduoController.cepAnterior}" value="0"/>
+			<h:outputText value="Incluir endereço de geração dos resíduos" />
+		</p:commandLink>
+		<br/><br/>
+		<p:dataTable id="dtEnderecoResiduo" value="#{declaracaoTransporteResiduoPerigosoController.listaEnderecoGeradorResiduoModel}" var="dtrpEnd"
+			paginator="true" rows="10" paginatorPosition="bottom" paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}" 
+			emptyMessage="#{bundle.consultapf_msg_empty_list}"
+			lazy="true">
+			<p:column headerText="CEP">
+				<h:outputText value="#{dtrpEnd.endereco.ideLogradouro.numCepFormatado}" />
+			</p:column>
+			<p:column headerText="Logradouro">
+				<h:outputText value="#{dtrpEnd.endereco.ideLogradouro.nomLogradouro}" />
+			</p:column>
+			<p:column headerText="Bairro">
+				<h:outputText value="#{dtrpEnd.endereco.ideLogradouro.ideBairro.nomBairro}" />
+			</p:column>
+			<p:column headerText="Localidade">
+				<h:outputText value="#{dtrpEnd.endereco.ideLogradouro.ideBairro.ideMunicipio.nomMunicipio}" />
+			</p:column>
+			<p:column headerText="UF">
+				<h:outputText value="#{dtrpEnd.endereco.ideLogradouro.ideBairro.ideMunicipio.ideEstado.desSigla}" />
+			</p:column>
+			<p:column headerText="Licença/Autorização">
+				<h:outputText value="#{dtrpEnd.possuiLicencaAutorizacao}" />
+			</p:column>
+			<p:column headerText="Ações">
+				<p:commandLink title="Visualizar endereço geração resíduo" prpermiteEditarocess="@this" update="formEndereco formEnderecoPesquisaCep formEndereco:pnlEndereco" 
+					actionListener="#{declaracaoEnderecoGeradorResiduoController.visualizarEnderecoGeradorResiduo(dtrpEnd)}" 
+					oncomplete="dialogselecionarEnderecoResiduo.show()">
+          			 <h:graphicImage title="Visualizar endereço geração resíduo" value="/resources/img/ico-pesquisa.png" />
+	            </p:commandLink>
+				<p:commandLink title="Editar endereço geração resíduo" process="@this" update="formEnderecoPesquisaCep formEndereco" 
+					actionListener="#{declaracaoEnderecoGeradorResiduoController.editarEnderecoGeradorResiduo(dtrpEnd)}" oncomplete="dialogselecionarEnderecoResiduo.show()"
+					disabled="#{!declaracaoTransporteResiduoPerigosoController.permiteEditar}">
+          			 <h:graphicImage title="Editar endereço geração resíduo" value="/resources/img/ico-editar.png" />
+     			     <f:setPropertyActionListener target="#{declaracaoEnderecoGeradorResiduoController.endereco}" value="#{dtrpEnd.endereco}"/>
+     			     <f:setPropertyActionListener target="#{declaracaoEnderecoGeradorResiduoController.cepAnterior}" value="#{declaracaoEnderecoGeradorResiduoController.logradouroPesquisa.numCep}"/>
+	            </p:commandLink>
+	          	<p:commandLink oncomplete="confirmaExclusaoEnderecoResiduo.show()" title="Excluir endereço geração resíduo" process="@this"
+	          		disabled="#{!declaracaoTransporteResiduoPerigosoController.permiteEditar}">
+          			 <h:graphicImage title="Excluir endereço geração resíduo" value="/resources/img/ico-excluir.png" />
+     			     <f:setPropertyActionListener target="#{declaracaoTransporteResiduoPerigosoController.enderecoSelecionado}" value="#{dtrpEnd}"/>
+	            </p:commandLink>
+			</p:column>
+		</p:dataTable>
+		
+		<br/><br/>
+		<h:outputLabel value="Entidade destinatária" style="font-weight: bold; font-size: 12px;"/>
+		<br/>
+		<h:outputLabel value="* CNPJ" />
+		<p:outputPanel id="pnlEntidadeDestinataria" autoUpdate="true">
+		<h:panelGrid columns="2">
+			<p:inputText id="cnpjEntidadeDestinataria" value="#{declaracaoTransporteResiduoPerigosoController.destinatario.cpfCnpjFormatado}" disabled="true"/>
+			
+			<p:commandLink oncomplete="dialogselecionarDestinatario.show()" actionListener="#{entidadeDeclaracaoTransporteController.limpar}" 
+				process="@this" update="form_dialog_destinatario"
+				disabled="#{!declaracaoTransporteResiduoPerigosoController.permiteEditar}">
+				<f:setPropertyActionListener value="1" target="#{entidadeDeclaracaoTransporteController.tipoPessoa}"/>
+				<h:graphicImage title="Selecionar Entidade Destinatária" value="/resources/img/ico-pesquisa.png" />
+			</p:commandLink>
+			
+		</h:panelGrid>
+		<h:outputText value="Razão Social: #{declaracaoTransporteResiduoPerigosoController.destinatario.nomeRazao}" />
+		</p:outputPanel>
+		
+		<br/>
+		<!-- Endereço de destinação dos resíduos -->
+		<h:outputLabel value="Endereço de destinação dos resíduos" style="font-weight: bold; font-size: 12px;"/>
+		<h:graphicImage value="/resources/img/ico-ajuda.png" id="titEndGerRes" style="margin: 3px 1px 2px 4px;" />
+			<p:tooltip for="titEndGerRes"
+						value="#{declaracaoTransporteResiduoPerigosoController.hintEnderecoGeracaoResiduo}"
+						showEffect="fade" hideEffect="fade" />
+		<!-- <h:form id="formEnderecoDestinacaoResiduo"> -->
+		
+		<h:panelGrid>
+		
+			<p:layoutUnit position="center" resizable="false"  style="border-color: green;">
+	            <table style="width:100%;font-size: 11px; background-color: #E6F9E6;">
+	                <tr>
+	                    <td />
+	                    <td colspan="2">
+	                        <h:outputText value="Informe o endereço conforme consta na licença da empresa destinatária." style="line-height: 150%;"/>
+	                    </td>
+	                </tr>
+	            </table>
+	        </p:layoutUnit>
+		
+			<h:outputText value="* CEP: " />
+			<p:inputMask value="#{declaracaoEnderecoDestinacaoResiduoController.logradouroPesquisa.numCep}" mask="99.999-999"
+				disabled="#{!declaracaoTransporteResiduoPerigosoController.permiteEditar}">
+				<p:ajax event="blur" listener="#{declaracaoEnderecoDestinacaoResiduoController.filtrarPorCep()}"  
+					update="tabViewDTRP:formDeclaracao tabViewDTRP:formDeclaracao:pnlEndereco"/>
+				<f:converter converterId="cepConverter" />
+			</p:inputMask>
+			
+			<p:outputPanel id="pnlEndereco">
+				<h:panelGrid columns="2">
+					<h:outputText id="idlblbairro" value="#{bundle.geral_lbl_endereco_bairro}"/>
+					<h:outputText />
+					
+					<p:selectOneMenu id="idcombobairro" value="#{declaracaoEnderecoDestinacaoResiduoController.bairro}" 
+						disabled="#{!declaracaoEnderecoDestinacaoResiduoController.enableFormEndereco or !declaracaoTransporteResiduoPerigosoController.permiteEditar}">
+						<f:selectItems value="#{declaracaoEnderecoDestinacaoResiduoController.listaBairroSelectItem}" />
+						<f:converter converterId="simpleEntityConverter" />
+						<p:ajax event="change" listener="#{declaracaoEnderecoDestinacaoResiduoController.carregarMunicipio()}" 
+							update="@form tabViewDTRP:formEndereco:pnlEndereco"/>
+					</p:selectOneMenu>
+					
+					<p:inputText id="inputBairro" value="#{declaracaoEnderecoDestinacaoResiduoController.bairro.nomBairro}" 
+						rendered="#{declaracaoEnderecoDestinacaoResiduoController.showInputs}"
+						disabled="#{!declaracaoTransporteResiduoPerigosoController.permiteEditar}">
+						<p:ajax event="blur" process="@form"/>
+						</p:inputText>
+				</h:panelGrid>
+		
+				<h:panelGrid columns="3">
+					<h:outputLabel id="idlbllogradouro" value="* Logradouro" />
+		
+				</h:panelGrid>
+				<h:panelGrid columns="3">
+					<p:selectOneMenu  id="idcombotipologradouroinput" value="#{declaracaoEnderecoDestinacaoResiduoController.tipoLogradouro}"
+						disabled="#{!declaracaoEnderecoDestinacaoResiduoController.enableTipoLogradouro}">
+						<f:selectItems value="#{declaracaoEnderecoDestinacaoResiduoController.listaTipoLogradouroSelectItem}" />
+						<p:ajax event="change" update="@this tabViewDTRP:formDeclaracao:pnlEndereco"/>
+						<f:converter converterId="tipoLogradouroConverter" />
+					</p:selectOneMenu>
+					
+					<p:selectOneMenu id="idcombologradouro"
+						value="#{declaracaoEnderecoDestinacaoResiduoController.logradouro}"
+						disabled="#{declaracaoEnderecoDestinacaoResiduoController.desabilitarLogradouro}">
+						<f:selectItems value="#{declaracaoEnderecoDestinacaoResiduoController.listaLogradouroSelectItem}" />
+						<f:converter converterId="logradouroConverter" />
+						<p:ajax event="change" update="@this, tabViewDTRP:formDeclaracao:pnlEndereco, tabViewDTRP:formDeclaracao:pnlEndereco:idcombotipologradouroinput" 
+							process="@this"	listener="#{declaracaoEnderecoDestinacaoResiduoController.changeLogradouro}"/>
+					</p:selectOneMenu>
+					
+					<p:inputText value="#{declaracaoEnderecoDestinacaoResiduoController.logradouro.nomLogradouro}" 
+						rendered="#{declaracaoEnderecoDestinacaoResiduoController.showInputs or declaracaoEnderecoDestinacaoResiduoController.showInputLogradouro}" 
+						disabled="#{!declaracaoTransporteResiduoPerigosoController.permiteEditar}"/>
+		
+				</h:panelGrid>
+				
+				<h:panelGrid columns="2" id="panelmunicipioestado" width="100%">
+					<h:outputText id="idlblnumero" value="* Número"/>
+					<h:outputLabel id="idlblcomplemento" value="Complemento" />
+					<p:inputText style="width: 100px" disabled="#{!declaracaoEnderecoDestinacaoResiduoController.enableFormEndereco or !declaracaoTransporteResiduoPerigosoController.permiteEditar}" 
+						value="#{declaracaoEnderecoDestinacaoResiduoController.endereco.numEndereco}" maxlength="5" size="5" />
+					<p:inputText style="width: 300px" value="#{declaracaoEnderecoDestinacaoResiduoController.endereco.desComplemento}" 
+						disabled="#{!declaracaoEnderecoDestinacaoResiduoController.enableFormEndereco or !declaracaoTransporteResiduoPerigosoController.permiteEditar}" />
+				</h:panelGrid>
+					
+				<h:panelGrid columns="2">
+					<h:outputText id="idlbluf" value="* UF"/>
+					<h:outputLabel id="idlblmunicipio" value="* Localidade" />
+									
+					<p:selectOneMenu id="idcombouf" value="#{declaracaoEnderecoDestinacaoResiduoController.estado}" 
+						valueChangeListener="#{declaracaoTransporteResiduoPerigosoController.changeEstado}" 
+						disabled="true" >
+						<f:selectItem itemLabel="Selecione..."  />
+						<f:selectItems value="#{estadoMunicipioController.valuesComboBoxEstado}" />
+						<f:converter converterId="estadoConverter" />
+						<f:validator validatorId="estadoValidator"/>
+						<p:ajax update="idcombomunicipio" event="change" />
+					</p:selectOneMenu>
+					
+					<p:selectOneMenu id="idcombomunicipio" value="#{declaracaoEnderecoDestinacaoResiduoController.municipio}" 
+						disabled="true" >
+						<f:selectItems value="#{declaracaoEnderecoDestinacaoResiduoController.valuesComboBoxMunicipio}" />
+						<f:converter converterId="municipioConverter" />
+						<f:validator validatorId="municipioValidator"/>
+					</p:selectOneMenu>
+				</h:panelGrid>
+				
+				<h:panelGrid columns="1">
+					<h:outputText id="idlblNumProcesso" value="* Nº do processo da licença/autorização em vigor" />
+					<p:inputText id="txtNumProcesso" size="33" maxlength="35" 
+					value="#{declaracaoEnderecoDestinacaoResiduoController.enderecoSelecionado.numProcessoLicencaAutorizacao}"
+					disabled="#{!declaracaoTransporteResiduoPerigosoController.permiteEditar}"/>
+		
+				</h:panelGrid>
+				
+				<!-- <h:panelGrid columns="2">	
+					<p:commandButton value="Salvar" actionListener="#{declaracaoTransporteResiduoPerigosoController.salvarEnderecoDestinacaoResiduo()}" process="@form" 
+					disabled="#{!declaracaoTransporteResiduoPerigosoController.permiteSalvar() or !declaracaoTransporteResiduoPerigosoController.permiteEditar}"/>
+				</h:panelGrid> -->
+				
+			</p:outputPanel>
+			
+		</h:panelGrid>
+		
+		<br/>
+		<h:outputLabel value="* Entidade(s) transportadora(s)" style="font-weight: bold; font-size: 12px;"/>
+		<br/><br/>
+		<p:layoutUnit position="center" resizable="false"  style="border-color: green;">
+            <table style="width:100%;font-size: 11px; background-color: #E6F9E6;">
+                <tr>
+                    <td />
+                    <td colspan="2">
+                        <h:outputText value="Conforme disposto no parágrafo segundo do artigo 156 do decreto 14.024/2012, a alteração ou acréscimo de resíduos perigosos, bem como alteração relativa ao transportador, objeto da DTRP concedida, dependerá de novo requerimento." 
+                        	style="line-height: 150%;"/>
+                    </td>
+                </tr>
+            </table>
+        </p:layoutUnit>
+        
+        <br/>
+		<p:commandLink
+			actionListener="#{entidadeTransportadoraController.limpar}" 
+			oncomplete="dialogselecionarTransportadora.show()"
+			process="@this" 
+			update="form_dialog_transportadora"
+			disabled="#{!declaracaoTransporteResiduoPerigosoController.permiteEditar}">
+			<h:graphicImage title="Incluir entidade transportadora" value="/resources/img/ico-expandir.png" />
+			<h:outputText value="Incluir entidade transportadora" />
+			<f:setPropertyActionListener value="true" target="#{entidadeTransportadoraController.permiteEditar}" />
+			<f:setPropertyActionListener value="#{declaracaoTransporteResiduoPerigosoController.declaracaoTransporte}" target="#{entidadeTransportadoraController.declaracaoTransporte}" />
+		</p:commandLink>
+		<br/><br/>
+		<p:dataTable id="dtEntidadesTransportadoras"
+		value="#{declaracaoTransporteResiduoPerigosoController.listaEntidadeTransportadoraModel}" var="ent"	paginator="true" 
+		rows="10" paginatorPosition="bottom" paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}" 
+		emptyMessage="#{bundle.consultapf_msg_empty_list}"
+		lazy="true">
+			<p:column headerText="CPF/CNPJ">
+				<h:outputText value="#{ent.pessoa.cpfCnpjFormatado}" />
+			</p:column>
+			<p:column headerText="Nome/Razão Social">
+				<h:outputText value="#{ent.pessoa.nomeRazao}" />
+			</p:column>
+			<p:column headerText="Localidade">
+				<h:outputText value="#{ent.pessoa.endereco.ideLogradouro.municipio.nomMunicipio} / #{ent.pessoa.endereco.ideLogradouro.municipio.ideEstado.desSigla}" />
+			</p:column>
+			<p:column headerText="Ações">
+				<p:commandLink title="Visualizar Entidade Transportadora" process="@this" update="form_dialog_transportadora form_dialog_transportadora:pnlDadosPessoa" 
+					actionListener="#{entidadeTransportadoraController.visualizarEntidadeTransportadora(ent)}" oncomplete="dialogselecionarTransportadora.show()">
+          			 <h:graphicImage title="Visualizar Entidade Transportadora" value="/resources/img/ico-pesquisa.png" />
+	            </p:commandLink>
+				<p:commandLink title="Editar Entidade Transportadora" process="@this" update="form_dialog_transportadora" 
+					actionListener="#{entidadeTransportadoraController.editarEntidadeTransportadora(ent)}" oncomplete="dialogselecionarTransportadora.show()"
+					disabled="#{!declaracaoTransporteResiduoPerigosoController.permiteEditar}">
+          			 <h:graphicImage title="Editar Entidade Transportadora" value="/resources/img/ico-editar.png" />
+     			     <f:setPropertyActionListener target="#{entidadeTransportadoraController.permiteEditarNumProcesso}" value="true"/>
+	            </p:commandLink>
+	          	<p:commandLink oncomplete="confirmaExclusaoEntidadeTransportadora.show()" title="Excluir Entidade Transportadora" process="@this"
+	          		disabled="#{!declaracaoTransporteResiduoPerigosoController.permiteEditar}">
+          			 <h:graphicImage title="Excluir Entidade Transportadora" value="/resources/img/ico-excluir.png" />
+     			     <f:setPropertyActionListener target="#{declaracaoTransporteResiduoPerigosoController.entidadeTransportadoraSelecionada}" value="#{ent}"/>
+	            </p:commandLink>
+			</p:column>
+		</p:dataTable>
+		<br/>
+		
+
+		<h:panelGrid columns="2" style="float:right;">
+			<p:commandButton actionListener="#{declaracaoTransporteResiduoPerigosoController.salvar}" value="Salvar" image="ui-icon-disk"
+				disabled="#{!declaracaoTransporteResiduoPerigosoController.permiteSalvar() or !declaracaoTransporteResiduoPerigosoController.permiteEditar}"/>
+			<p:commandButton action="#{declaracaoTransporteResiduoPerigosoController.avancar}" value="Avançar" 
+				image="ui-icon-arrowthick-1-e" style="margin-left:5px;"
+				disabled="#{!declaracaoTransporteResiduoPerigosoController.permiteSalvar()}"/>
+		</h:panelGrid>
+		
+		<br/><br/>
+	</h:form>
+	
+</ui:composition>

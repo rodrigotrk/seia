@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="fce_linha_energia_localizacao_geografica_principal" language="java" pageWidth="495" pageHeight="802" columnWidth="495" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="0b0ea8d7-c72b-41d9-ba3e-2d8dced996e2">
+	<property name="ireport.zoom" value="1.9487171000000019"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="ide_fce" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="ide_origem_fce" class="java.lang.Integer"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["/home/lesantos/workspace/seia/src/br/gov/ba/seia/reports/sources/"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="ide_fce_linha_energia" class="java.lang.Integer"/>
+	<queryString>
+		<![CDATA[select (case nom_classificacao_secao when 'Shapefile' then 'Arquivo Shape' end) as nom_classificacao_secao,
+sC.nom_sistema_coordenada as nom_sistema_coordenada,(sp_validacao_geom_tema_temporario1(dG.the_geom)) as area,
+(case fLELG.ind_objeto_concedido when true then 'Sim' else 'Não' end) as concedido
+from fce f inner join fce_linha_energia fLE on f.ide_fce = fLE.ide_fce inner join
+fce_linha_energia_localizacao_geografica fLELG on fLELG.ide_fce_linha_energia =  fLE.ide_fce_linha_energia inner join
+localizacao_geografica lG on lG.ide_localizacao_geografica =  fLELG.ide_localizacao_geografica inner join
+dado_geografico dG on dG.ide_localizacao_geografica = lG.ide_localizacao_geografica inner join
+classificacao_secao_geometrica cSG on cSG.ide_classificacao_secao = lG.ide_classificacao_secao inner join
+sistema_coordenada sC on sC.ide_sistema_coordenada = lG.ide_sistema_coordenada
+where f.ide_fce = $P{ide_fce} and fLELG.ind_preferencial = true]]>
+	</queryString>
+	<field name="nom_classificacao_secao" class="java.lang.String"/>
+	<field name="nom_sistema_coordenada" class="java.lang.String"/>
+	<field name="area" class="java.math.BigDecimal"/>
+	<field name="concedido" class="java.lang.String"/>
+	<columnHeader>
+		<band height="42">
+			<staticText>
+				<reportElement uuid="b0be946b-028a-43af-b760-27fd1456a3c1" positionType="Float" x="8" y="22" width="83" height="20"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Tipo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="bb9d6053-7f04-4394-8650-27afaa2673e1" positionType="Float" x="91" y="22" width="137" height="20"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Sistema de coordenadas]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="dc9f151c-bd3a-47c5-be9f-a5567c31d017" mode="Opaque" x="0" y="0" width="495" height="17" backcolor="#DDDDDD"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Poligonal do objeto da licença]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="adf713ff-4420-4cac-a2d8-7d116d0b23ac" x="228" y="22" width="100" height="20">
+					<printWhenExpression><![CDATA[$P{ide_origem_fce} == 2]]></printWhenExpression>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Concedido]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement uuid="e97349c9-1a25-40de-923a-cfb1cb3724b1" positionType="Float" x="8" y="0" width="83" height="20"/>
+				<box>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nom_classificacao_secao}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="ad927500-e756-42c3-af26-2b672e1c1340" positionType="Float" x="91" y="0" width="137" height="20"/>
+				<box>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nom_sistema_coordenada}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="2114ad3a-af67-4cc4-b039-ed152432474d" positionType="Float" x="228" y="0" width="100" height="20">
+					<printWhenExpression><![CDATA[$P{ide_origem_fce} == 2]]></printWhenExpression>
+				</reportElement>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{concedido}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

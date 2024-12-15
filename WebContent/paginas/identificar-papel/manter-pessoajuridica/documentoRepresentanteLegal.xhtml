@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui">	
+	
+<h3><h:outputLabel styleClass="titulo-grupo" value="DOCUMENTO" /></h3>
+	
+		<h:form id="formExpandirDoc" prependId="false" >
+			<h:outputLabel value="Incluir Documento" />
+			<p:commandLink id="linkDialogTelefone" oncomplete="dialogdocumentos.show()" actionListener="#{documentoIdentificacaoController.limparObjetosDocumento}" update=":formdocumentos">
+				<h:graphicImage title="Incluir Documento" value="/resources/img/ico-expandir.png"  />
+				<f:setPropertyActionListener target="#{documentoIdentificacaoController.editModeDocumento}" value="#{true}" />
+			</p:commandLink>
+		</h:form>
+		
+		<h:form id="formdocumentosLst">
+			<h:panelGrid id="paneltabledocreplegal">
+		<!-- DATATABLE DOCUMENTOS -->
+			<p:dataTable id="tabeladocumentos" widgetVar="tabeladocumentos" var="documento" style="width:615px;"
+				value="#{documentoIdentificacaoController.modelDocumentosIdentificacaoPessoaRepresentanteLegal}" 
+				paginator="true" rows="5" paginatorPosition="bottom"
+                paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}" rendered="#{documentoIdentificacaoController.mostraListaRepresentanteLegal}"  >
+				<f:facet name="header">  
+					<h:outputText value="Lista de Documentos" />
+				</f:facet>
+				<p:column headerText="Tipo de Documento">
+					<h:outputText value="#{documento.ideTipoIdentificacao.nomTipoIdentificacao}" />
+				</p:column>
+				
+				<p:column headerText="Número Documento">
+					<h:outputText value="#{documento.numDocumento}" />
+				</p:column>
+				
+				<p:column headerText="Data Emissão">
+					<h:outputText value="#{documento.dtcEmissao}">
+						<f:convertDateTime pattern="dd/MM/yyyy" locale="pt,BR" timeZone="Brazil/East"/>
+					</h:outputText>
+				</p:column>
+				
+				<p:column headerText="Data Validade">
+					<h:outputText value="#{documento.dtcValidade}">
+						<f:convertDateTime pattern="dd/MM/yyyy" locale="pt,BR" timeZone="Brazil/East"/>
+					</h:outputText>
+				</p:column>
+
+				<p:column style="text-align: center;width: 56px;" headerText="Açoes" >	
+						
+						<p:commandLink update=":formdocumentos" oncomplete="limparMsgErro();dialogdocumentos.show();"
+						 action="${documentoIdentificacaoController.carregarItensOrgaoExpedidor()}" title="Visualizar" process="@this">
+							<h:graphicImage title="Visualizar" value="/resources/img/ico-pesquisa.png" />
+							<f:setPropertyActionListener value="#{documento}" target="#{documentoIdentificacaoController.documentoIdentificacaoSelecionado}" />
+							<f:setPropertyActionListener value="#{false}" target="#{documentoIdentificacaoController.editModeDocumento}" />
+							<f:setPropertyActionListener value="#{true}" target="#{documentoIdentificacaoController.desabCombOrg}" />
+						</p:commandLink>
+						
+						<p:commandLink update=":formdocumentos" action="${documentoIdentificacaoController.carregarItensOrgaoExpedidor()}"
+							oncomplete="limparMsgErro();dialogdocumentos.show()" title="Editar" process="@this">
+							<h:graphicImage title="Editar" value="/resources/img/ico-editar.png" />
+							<f:setPropertyActionListener value="#{documento}" target="#{documentoIdentificacaoController.documentoIdentificacaoSelecionado}" />
+							<f:setPropertyActionListener value="#{true}" target="#{documentoIdentificacaoController.editModeDocumento}" />
+							<f:setPropertyActionListener value="#{false}" target="#{documentoIdentificacaoController.desabCombOrg}" />
+							<p:ajax onstart="javascript:$('.ui-messages-error').remove();" />
+						</p:commandLink>
+						
+						<p:commandLink update=":formdocumentos" oncomplete="confirmationDocumento.show()" title="Remover">
+							<h:graphicImage title="Remover" value="/resources/img/ico-excluir.png" />
+							<f:setPropertyActionListener value="#{true}" target="#{documentoIdentificacaoController.editModeDocumento}" />
+							<f:setPropertyActionListener value="#{documento}" target="#{documentoIdentificacaoController.documentoIdentificacaoSelecionado}" />
+						</p:commandLink>
+				</p:column>
+			</p:dataTable>
+			</h:panelGrid>
+			<!-- FIM DATATABLE DOCUMENTOS -->
+		</h:form>
+</ui:composition>

@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="fce_outorga_aquicultura_aba_captacao" pageWidth="480" pageHeight="802" whenNoDataType="AllSectionsNoDetail" columnWidth="480" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="80b78396-35cc-4e26-aaf9-1207b1892468">
+	<property name="ireport.zoom" value="2.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="ide_fce" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[$P{ide_fce}]]></defaultValueExpression>
+	</parameter>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String"/>
+	<parameter name="ide_tipo_aquicultura" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[1]]></defaultValueExpression>
+	</parameter>
+	<parameter name="ide_requerimento" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[$P{ide_requerimento}]]></defaultValueExpression>
+	</parameter>
+	<parameter name="ide_origem_fce" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[$P{ide_origem_fce}]]></defaultValueExpression>
+	</parameter>
+	<parameter name="cap_superficial" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[302]]></defaultValueExpression>
+	</parameter>
+	<parameter name="cap_subterranea" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[303]]></defaultValueExpression>
+	</parameter>
+	<parameter name="finalidade_uso_agua" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[25]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[select fa.ide_fce_aquicultura
+from fce_aquicultura fa
+where fa.ide_fce = $P{ide_fce} and fa.ide_tipo_aquicultura = $P{ide_tipo_aquicultura}]]>
+	</queryString>
+	<field name="ide_fce_aquicultura" class="java.lang.Integer"/>
+	<title>
+		<band height="20" splitType="Stretch">
+			<printWhenExpression><![CDATA[$F{ide_fce_aquicultura} != null]]></printWhenExpression>
+			<staticText>
+				<reportElement uuid="490f0746-4146-4307-8e5c-75379a4020be" positionType="Float" mode="Opaque" x="0" y="0" width="480" height="20" backcolor="#DDDDDD"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Verdana" isBold="true"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<text><![CDATA[Captação para fins de Aquicultura em Viveiro – Escavado, Raceway Ou Similares]]></text>
+			</staticText>
+		</band>
+	</title>
+	<detail>
+		<band height="140" splitType="Stretch">
+			<printWhenExpression><![CDATA[$F{ide_fce_aquicultura} != null]]></printWhenExpression>
+			<subreport>
+				<reportElement uuid="57b6be84-ddd5-45b7-8272-039c2b06619f" positionType="Float" isPrintRepeatedValues="false" x="30" y="130" width="450" height="10" isRemoveLineWhenBlank="true"/>
+				<subreportParameter name="SUBREPORT_DIR">
+					<subreportParameterExpression><![CDATA[$P{SUBREPORT_DIR}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="ide_tipo_aquicultura">
+					<subreportParameterExpression><![CDATA[$P{ide_tipo_aquicultura}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="ide_fce_aquicultura">
+					<subreportParameterExpression><![CDATA[$F{ide_fce_aquicultura}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} +"fce_outorga_aquicultura_dados_gerais.jasper"]]></subreportExpression>
+			</subreport>
+			<subreport>
+				<reportElement uuid="57b6be84-ddd5-45b7-8272-039c2b06619f" positionType="Float" isPrintRepeatedValues="false" x="30" y="110" width="450" height="10" isRemoveLineWhenBlank="true"/>
+				<subreportParameter name="SUBREPORT_DIR">
+					<subreportParameterExpression><![CDATA[$P{SUBREPORT_DIR}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="ide_fce_aquicultura">
+					<subreportParameterExpression><![CDATA[$F{ide_fce_aquicultura}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} +"fce_outorga_aquicultura_especies.jasper"]]></subreportExpression>
+			</subreport>
+			<subreport>
+				<reportElement uuid="57b6be84-ddd5-45b7-8272-039c2b06619f" positionType="Float" isPrintRepeatedValues="false" x="0" y="70" width="480" height="10" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$P{ide_origem_fce} == 1]]></printWhenExpression>
+				</reportElement>
+				<subreportParameter name="SUBREPORT_DIR">
+					<subreportParameterExpression><![CDATA[$P{SUBREPORT_DIR}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="ide_fce_aquicultura">
+					<subreportParameterExpression><![CDATA[$F{ide_fce_aquicultura}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} +"fce_outorga_aquicultura_localizacao_sirgas.jasper"]]></subreportExpression>
+			</subreport>
+			<subreport>
+				<reportElement uuid="57b6be84-ddd5-45b7-8272-039c2b06619f" positionType="Float" isPrintRepeatedValues="false" x="0" y="19" width="480" height="10" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$P{ide_origem_fce} == 1]]></printWhenExpression>
+				</reportElement>
+				<subreportParameter name="SUBREPORT_DIR">
+					<subreportParameterExpression><![CDATA[$P{SUBREPORT_DIR}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="ide_fce_aquicultura">
+					<subreportParameterExpression><![CDATA[$F{ide_fce_aquicultura}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} +"fce_outorga_aquicultura_coordenadas_pontos_cap_sup.jasper"]]></subreportExpression>
+			</subreport>
+			<subreport>
+				<reportElement uuid="57b6be84-ddd5-45b7-8272-039c2b06619f" positionType="Float" isPrintRepeatedValues="false" x="0" y="40" width="480" height="10" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$P{ide_origem_fce} == 1]]></printWhenExpression>
+				</reportElement>
+				<subreportParameter name="SUBREPORT_DIR">
+					<subreportParameterExpression><![CDATA[$P{SUBREPORT_DIR}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="ide_requerimento">
+					<subreportParameterExpression><![CDATA[$P{ide_requerimento}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} +"fce_outorga_aquicultura_coordenadas_pontos_cap_sub.jasper"]]></subreportExpression>
+			</subreport>
+			<subreport>
+				<reportElement uuid="57b6be84-ddd5-45b7-8272-039c2b06619f" positionType="Float" isPrintRepeatedValues="false" x="0" y="90" width="480" height="10" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$P{ide_origem_fce} == 1]]></printWhenExpression>
+				</reportElement>
+				<subreportParameter name="SUBREPORT_DIR">
+					<subreportParameterExpression><![CDATA[$P{SUBREPORT_DIR}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="ide_requerimento">
+					<subreportParameterExpression><![CDATA[$P{ide_requerimento}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} +"fce_outorga_aquicultura_localizacao_sirgas_cap_sub.jasper"]]></subreportExpression>
+			</subreport>
+			<subreport runToBottom="false">
+				<reportElement uuid="52d05743-e9ad-4c7b-a242-8d1e54daf297" positionType="Float" isPrintRepeatedValues="false" x="0" y="19" width="480" height="15" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$P{ide_origem_fce} == 2]]></printWhenExpression>
+				</reportElement>
+				<subreportParameter name="SUBREPORT_DIR">
+					<subreportParameterExpression><![CDATA[$P{SUBREPORT_DIR}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="ide_fce">
+					<subreportParameterExpression><![CDATA[$P{ide_fce}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="ide_tipo_finalidade_uso_agua">
+					<subreportParameterExpression><![CDATA[$P{finalidade_uso_agua}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="ide_tipologia">
+					<subreportParameterExpression><![CDATA[$P{cap_superficial}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "fce_outorga_loc_geo.jasper"]]></subreportExpression>
+			</subreport>
+			<subreport runToBottom="false">
+				<reportElement uuid="41da3033-8cb3-40f0-a71a-14affa83bc75" positionType="Float" isPrintRepeatedValues="false" x="0" y="40" width="480" height="15" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$P{ide_origem_fce} == 2]]></printWhenExpression>
+				</reportElement>
+				<subreportParameter name="SUBREPORT_DIR">
+					<subreportParameterExpression><![CDATA[$P{SUBREPORT_DIR}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="ide_fce">
+					<subreportParameterExpression><![CDATA[$P{ide_fce}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="ide_tipo_finalidade_uso_agua">
+					<subreportParameterExpression><![CDATA[$P{finalidade_uso_agua}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="ide_tipologia">
+					<subreportParameterExpression><![CDATA[$P{cap_subterranea}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "fce_outorga_loc_geo.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+	</detail>
+</jasperReport>

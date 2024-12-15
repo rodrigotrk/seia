@@ -1,0 +1,408 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="termo_de_compromisso_cefir" language="java" pageWidth="595" pageHeight="842" columnWidth="495" leftMargin="50" rightMargin="50" topMargin="20" bottomMargin="20" uuid="704a577f-3f8a-49aa-98db-47c51dea6c6d">
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="240"/>
+	<parameter name="LOGO_INEMA" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="LOGO_SEIA" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="ide_requerimento" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="ide_imovel" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="TERMO" class="java.lang.String"/>
+	<parameter name="MARCA_DAGUA" class="java.lang.String"/>
+	<parameter name="ENDERECO" class="java.lang.String"/>
+	<parameter name="IMOVEL" class="java.lang.String"/>
+	<parameter name="ind_sobreposicao_app" class="java.lang.String"/>
+	<parameter name="isRlMenorQueVintePorCento" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[select irs.ide_imovel_rural,
+	c.num_certificado, irs.num_sicar,
+c.dtc_emissao_certificado,c.num_token,ind_tem_prad,ind_outorga,ind_supressao_vegetacao,ind_passivo_ambiental,
+array_to_string( array(
+	select coalesce(nom_pessoa,nom_razao_social) as nom_pessoa from pessoa p
+    	left join pessoa_fisica pf on pf.ide_pessoa_fisica = p.ide_pessoa
+        left join pessoa_juridica pj on pj.ide_pessoa_juridica = p.ide_pessoa
+        inner join pessoa_imovel pi on pi.ide_pessoa = p.ide_pessoa
+    where pi.ide_imovel = irs.ide_imovel_rural and pi.ide_tipo_vinculo_imovel in (1,2)
+),', ') as proprietarios,ir.prazo_validade,dtc_emissao_certificado + interval '2 year' as prazo_atualizacao
+	from imovel_rural ir
+	inner join imovel i on i.ide_imovel = ir.ide_imovel_rural
+	inner join endereco e on e.ide_endereco = i.ide_endereco
+	inner join logradouro l on e.ide_logradouro = l.ide_logradouro
+	inner join municipio m on m.ide_municipio = l.ide_municipio
+	left join requerimento_imovel ri on ri.ide_imovel = i.ide_imovel and ri.ide_tipo_imovel_requerimento = 2
+	left join requerimento r on r.ide_requerimento = ri.ide_requerimento
+	left join certificado c on c.ide_requerimento = r.ide_requerimento
+	left join imovel_rural_sicar irs on ir.ide_imovel_rural = irs.ide_imovel_rural
+where irs.ide_imovel_rural = $P{ide_imovel}
+order by c.ide_certificado desc
+limit 1]]>
+	</queryString>
+	<field name="ide_imovel_rural" class="java.lang.Integer"/>
+	<field name="num_certificado" class="java.lang.String"/>
+	<field name="dtc_emissao_certificado" class="java.sql.Timestamp"/>
+	<field name="num_token" class="java.lang.String"/>
+	<field name="ind_tem_prad" class="java.lang.Boolean"/>
+	<field name="ind_outorga" class="java.lang.Boolean"/>
+	<field name="ind_supressao_vegetacao" class="java.lang.Boolean"/>
+	<field name="ind_passivo_ambiental" class="java.lang.Boolean"/>
+	<field name="proprietarios" class="java.lang.String"/>
+	<field name="prazo_validade" class="java.sql.Date"/>
+	<field name="prazo_atualizacao" class="java.sql.Timestamp"/>
+	<field name="num_sicar" class="java.lang.String"/>
+	<background>
+		<band height="50" splitType="Stretch">
+			<image scaleImage="RealHeight" onErrorType="Blank">
+				<reportElement uuid="0c5820f5-3397-4ba5-a5f2-0d72295c5827" positionType="Float" x="2" y="0" width="493" height="50" isRemoveLineWhenBlank="true" isPrintWhenDetailOverflows="true">
+					<printWhenExpression><![CDATA[$P{MARCA_DAGUA} != null && !$P{MARCA_DAGUA}.isEmpty()]]></printWhenExpression>
+				</reportElement>
+				<imageExpression><![CDATA[$P{MARCA_DAGUA}]]></imageExpression>
+			</image>
+		</band>
+	</background>
+	<title>
+		<band height="85" splitType="Stretch">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="0cbec6cc-a144-4de5-ab85-34213b86ba9b" positionType="Float" stretchType="RelativeToTallestObject" x="336" y="0" width="159" height="81"/>
+				<textElement textAlignment="Justified" markup="html">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA["<b>TERMO DE COMPROMISSO QUE ENTRE SI CELEBRAM, O INSTITUTO DO MEIO AMBIENTE E RECURSOS HÍDRICOS - INEMA, "+$F{proprietarios}.toUpperCase()+" E OS ASSENTADOS INFRACITADOS PARA OS FINS QUE NELE SE DECLARAM.</b>"]]></textFieldExpression>
+			</textField>
+			<image isLazy="true" onErrorType="Blank">
+				<reportElement uuid="ee4dbec8-ce13-43eb-8896-5fd840c0f779" x="0" y="0" width="99" height="41" forecolor="#FFFFFF"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<graphicElement>
+					<pen lineWidth="1.0" lineStyle="Solid" lineColor="#FFFFFF"/>
+				</graphicElement>
+				<imageExpression><![CDATA[$P{LOGO_INEMA}]]></imageExpression>
+			</image>
+			<textField>
+				<reportElement uuid="69929c92-8ef3-416e-93dc-45f0690f0b3b" x="99" y="1" width="237" height="27"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Termo de Compromisso \nn° "+$F{num_certificado}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="69929c92-8ef3-416e-93dc-45f0690f0b3b" x="99" y="28" width="237" height="43">
+					<printWhenExpression><![CDATA[$F{num_sicar} != null]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA["CAR \nn° "+$F{num_sicar}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="12" splitType="Stretch">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="0cbec6cc-a144-4de5-ab85-34213b86ba9b" positionType="Float" stretchType="RelativeToTallestObject" x="0" y="0" width="495" height="12" isRemoveLineWhenBlank="true" isPrintWhenDetailOverflows="true"/>
+				<textElement textAlignment="Justified" markup="html">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{TERMO}]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="12">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="a49ed57b-1b66-4c22-a9af-3058827679de" positionType="Float" stretchType="RelativeToTallestObject" x="2" y="0" width="495" height="12" isRemoveLineWhenBlank="true" isPrintWhenDetailOverflows="true"/>
+				<textElement textAlignment="Justified" markup="html">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA["<b>CONSIDERANDO</b> que o INEMA é o órgão executor da política estadual de Meio Ambiente do Estado da Bahia, competente para exercer o controle ambiental em todo o território do Estado, nos termos da Lei Estadual 12.212, de 04 de maio de 2011 c/c a Lei Estadual n° 10.431, de 20 de dezembro de 2006, e do seu regulamento, aprovado pelo Decreto Estadual n° 14.024 de 06 de junho de 2012 e suas alterações;<br>"]]></textFieldExpression>
+			</textField>
+		</band>
+		<band/>
+		<band height="12">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="a53f069a-3efd-4df1-833a-20f444b99790" positionType="Float" stretchType="RelativeToTallestObject" x="0" y="0" width="495" height="12" isRemoveLineWhenBlank="true" isPrintWhenDetailOverflows="true"/>
+				<textElement textAlignment="Justified" markup="html">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA["<b>CONSIDERANDO</b> que a Reserva Legal é uma área com cobertura vegetal nativa de uso restrito que deverá corresponder a no mínimo 20% da área de toda propriedade ou posse rural no Estado da Bahia, destinada ao uso sustentável dos recursos naturais, à conservação e reabilitação dos processos ecológicos, à conservação da biodiversidade e ao abrigo e proteção da fauna e flora nativas, não sendo permitido o corte raso da vegetação;"]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="12">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="a53f069a-3efd-4df1-833a-20f444b99790" positionType="Float" stretchType="RelativeToTallestObject" x="0" y="0" width="495" height="12" isRemoveLineWhenBlank="true" isPrintWhenDetailOverflows="true"/>
+				<textElement textAlignment="Justified" markup="html">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA["<b>CONSIDERANDO</b> os termos da Lei Federal n° 12.651, de 25 de maio de 2012, dito Novo Código Florestal, e do Decreto Federal n° 7.830/2012, que dispõe sobre a regulamentação do Cadastro Ambiental Rural e do Programa de Regularização Ambiental e do Decreto Estadual n° 15.180, de 02 de junho de 2014;<br><br>" +
+"<b>CONSIDERANDO</b> que o Cadastro Estadual Florestal de Imóveis Rurais - CEFIR, é um registro eletrônico, de âmbito estadual, obrigatório para todos os imóveis rurais, com a finalidade de integrar as informações ambientais das propriedades e posses rurais, compondo base de dados para controle, monitoramento, planejamento ambiental e econômico e combate ao desmatamento;<br>"]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="12">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="a53f069a-3efd-4df1-833a-20f444b99790" positionType="Float" stretchType="RelativeToTallestObject" x="0" y="0" width="495" height="12" isRemoveLineWhenBlank="true" isPrintWhenDetailOverflows="true"/>
+				<textElement textAlignment="Justified" markup="html">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA["<b>CONSIDERANDO</b> o propósito dos <b>COMPROMISSADOS</b> de atender às restrições de uso da Reserva Legal e das Áreas de Preservação Permanente, conforme legislação vigente;<br>"]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="12">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="a53f069a-3efd-4df1-833a-20f444b99790" positionType="Float" stretchType="RelativeToTallestObject" x="0" y="0" width="495" height="12" isRemoveLineWhenBlank="true" isPrintWhenDetailOverflows="true"/>
+				<textElement textAlignment="Justified" markup="html">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA["<b>CONSIDERANDO</b> que o imóvel rural "+$P{IMOVEL}+", está inscrito no Cadastro Estadual Florestal de Imóveis Rurais – CEFIR;<br>"]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="12">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="a53f069a-3efd-4df1-833a-20f444b99790" positionType="Float" stretchType="RelativeToTallestObject" x="0" y="0" width="495" height="12" isRemoveLineWhenBlank="true" isPrintWhenDetailOverflows="true"/>
+				<textElement textAlignment="Justified" markup="html">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Os <b>COMPROMISSADOS</b> e o <b>COMPROMITENTE ou INEMA</b> firmam o presente Termo de Compromisso, conforme as cláusulas e condições abaixo estipuladas, suspendendo, no tempo de sua vigência, a aplicação de sanções administrativas contra os <b>COMPROMISSADOS</b>, para os passivos ambientais materiais e/ou formais, declarados no CEFIR e constantes neste Termo de Compromisso.<br>"]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="12">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="a53f069a-3efd-4df1-833a-20f444b99790" positionType="Float" stretchType="RelativeToTallestObject" x="0" y="0" width="495" height="12" isRemoveLineWhenBlank="true" isPrintWhenDetailOverflows="true"/>
+				<textElement textAlignment="Justified" markup="html">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA["<b>CLÁUSULA PRIMEIRA - DO OBJETO</b><br><br>"+
+
+"<b>1.1</b> Constitui objeto do presente Termo de Compromisso o fiel e integral cumprimento pelos <b>COMPROMISSADOS</b> dos deveres e obrigações assumidos, nas formas e prazos definidos na Cláusula Segunda, visando à implantação de ações de Regularização Ambiental do Imóvel Rural.<br><br>" +
+
+"<b>1.2</b> Este Termo de Compromisso confere regularidade ambiental às atividades e empreendimentos descritas no âmbito deste ajuste, nos termos e prazos previstos nas cláusulas seguintes.<br>"]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="48">
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="a53f069a-3efd-4df1-833a-20f444b99790" positionType="Float" isPrintRepeatedValues="false" x="0" y="0" width="495" height="12" isRemoveLineWhenBlank="true"/>
+				<textElement textAlignment="Justified" markup="html">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA["<b>CLÁUSULA SEGUNDA - DAS OBRIGAÇÕES DOS COMPROMISSADOS</b><br><br>"+
+
+"Constituem obrigações dos <b>COMPROMISSADOS</b>:<br><br>"]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="a53f069a-3efd-4df1-833a-20f444b99790" positionType="Float" isPrintRepeatedValues="false" x="0" y="12" width="495" height="12" isRemoveLineWhenBlank="true"/>
+				<textElement textAlignment="Justified" markup="html">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA["<br><b>2.1</b> Manter a área de Reserva Legal cadastrada no CEFIR com cobertura vegetal nativa, obedecendo a todas as limitações de uso previstas na legislação, em especial a proibição de corte raso."]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="a53f069a-3efd-4df1-833a-20f444b99790" positionType="Float" isPrintRepeatedValues="false" x="0" y="24" width="495" height="12" isRemoveLineWhenBlank="true"/>
+				<textElement textAlignment="Justified" markup="html">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA["<br><b>2.2</b> Na ocasião em que obtiver o documento de propriedade do imóvel rural em questão, atualizar os dados no CEFIR."]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="a53f069a-3efd-4df1-833a-20f444b99790" positionType="Float" isPrintRepeatedValues="false" x="0" y="36" width="495" height="12" isRemoveLineWhenBlank="true"/>
+				<textElement textAlignment="Justified" markup="html">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA["<br><b>2.3</b> Atualizar o cadastro, no prazo máximo de 02 (dois) anos, com o preenchimento das informações complementares eventualmente não declaradas, inclusive as relativas às atividades passíveis de licença ou autorizações ambientais."]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="26">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="a53f069a-3efd-4df1-833a-20f444b99790" positionType="Float" x="0" y="0" width="495" height="12" isRemoveLineWhenBlank="true" isPrintWhenDetailOverflows="true">
+					<printWhenExpression><![CDATA[$P{ind_sobreposicao_app}.equals("true")]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Justified" markup="html">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA["<br><b>&bull;</b> Não realizar nova conversão de áreas para o uso alternativo do solo, devido ao cômputo de APP no cálculo do percentual da Reserva Legal, conforme o inciso I do Art. 15 da Lei Federal n° 12.651 de 25/05/2012."]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="a53f069a-3efd-4df1-833a-20f444b99790" positionType="Float" x="0" y="12" width="495" height="12" isRemoveLineWhenBlank="true" isPrintWhenDetailOverflows="true">
+					<printWhenExpression><![CDATA[$P{isRlMenorQueVintePorCento}.equals("true")]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Justified" markup="html">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA["<b>&bull;</b> Não realizar nova conversão de áreas para o uso alternativo do solo, devido à área da Reserva Legal ser inferior ao percentual mínimo de 20% estabelecido para o Estado da Bahia, conforme o inciso II do Art. 12 e o Art. 67 da Lei Federal n° 12.651 de 25/05/2012."]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="12">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="a53f069a-3efd-4df1-833a-20f444b99790" positionType="Float" stretchType="RelativeToTallestObject" x="0" y="0" width="495" height="12" isRemoveLineWhenBlank="true" isPrintWhenDetailOverflows="true"/>
+				<textElement textAlignment="Justified" markup="html">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA["<br><b>CLÁUSULA TERCEIRA – DAS ATRIBUIÇÕES DO COMPROMITENTE</b><br><br>"+
+
+"Constituem atribuições do INEMA:<br>"+
+
+"<br><b>3.1</b> Acompanhar e fiscalizar o pleno e fiel cumprimento por parte dos <b>COMPROMISSADOS</b> das obrigações assumidas no presente Termo de Compromisso, sem prejuízo das demais ações de controle desenvolvidas no âmbito de suas competências e atribuições legais e da aplicação das sanções administrativas delas decorrentes, bem como adoção de medidas judiciais atinentes à matéria."+
+
+"<br><br><b>3.2</b> Analisar os Planos de Recuperação Ambiental referente aos passivos de APP e RL, quando existentes."+
+
+"<br><br><b>3.3</b> Emitir o Certificado de Regularidade Ambiental, após a comprovação do fiel, pleno e integral cumprimento pelos <b>COMPROMISSADOS</b> de todas as obrigações assumidas pelo mesmo, estabelecidas na Cláusula Segunda.<br>"]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="12">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="a53f069a-3efd-4df1-833a-20f444b99790" positionType="Float" stretchType="RelativeToTallestObject" x="0" y="0" width="495" height="12" isRemoveLineWhenBlank="true" isPrintWhenDetailOverflows="true"/>
+				<textElement textAlignment="Justified" markup="html">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA["<b>CLÁUSULA QUARTA - DAS PENALIDADES</b><br><br>"+
+
+"O não cumprimento pelos <b>COMPROMISSADOS</b> das obrigações, condições e prazos estabelecidos neste Termo de Compromisso implicará na aplicação da penalidade de multa, correspondente à classe da infração relacionada ao passivo ambiental existente na propriedade ou posse rural, conforme legislação vigente:<br>"+
+
+"<br><b>4.1</b> A rescisão do presente Termo se dará pelo descumprimento de quaisquer uma das obrigações, condições e prazos por parte dos <b>COMPROMISSADOS</b> e suspenderá os efeitos da concessão de regularidade formal ambiental dos empreendimentos/atividades sob responsabilidade dos <b>COMPROMISSADOS</b>."+
+
+"<br><br><b>4.2</b> A eventual inobservância, pelos <b>COMPROMISSADOS</b>, de qualquer dos prazos estabelecidos no presente Termo de Compromisso, resultante de caso fortuito ou força maior, na forma do Art. 393 do Código Civil Brasileiro, deverá ser imediatamente comunicada e justificada ao <b>COMPROMITENTE</b> que fixará novo prazo para adimplemento da obrigação."+
+
+"<br><br><b>4.3</b> As informações apresentadas pelos <b>COMPROMISSADOS</b>, no momento da inscrição no Cadastro Estadual Florestal de Imóveis Rurais – CEFIR, serão contrapostas com as imagens e arquivos do banco de dados do INEMA, sujeitando os <b>COMPROMISSADOS</b>, quando caracterizada a prestação de informações falsas, às sanções penais cabíveis, além da imputação de multa pelas infrações cometidas."]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="12">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="a53f069a-3efd-4df1-833a-20f444b99790" positionType="Float" stretchType="RelativeToTallestObject" x="0" y="0" width="495" height="12" isRemoveLineWhenBlank="true" isPrintWhenDetailOverflows="true"/>
+				<textElement textAlignment="Justified" markup="html">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA["<b>CLÁUSULA QUINTA – DO PRAZO DE VIGÊNCIA</b><br><br>"+
+
+"A vigência do presente Termo de Compromisso terá início a partir da data da sua geração no âmbito do Cadastro Estadual Florestal de Imóveis Rurais – CEFIR e considerar-se-á encerrado após o cumprimento pelos <b>COMPROMISSADOS</b> de todas as obrigações assumidas pelo mesmo, estabelecidas na Cláusula Segunda, desde que o cadastro do imóvel rural seja atualizado pelos <b>COMPROMISSADOS</b>, a cada 2 (dois) anos.<br>"]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="12">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="a53f069a-3efd-4df1-833a-20f444b99790" positionType="Float" stretchType="RelativeToTallestObject" x="0" y="0" width="495" height="12" isRemoveLineWhenBlank="true" isPrintWhenDetailOverflows="true"/>
+				<textElement textAlignment="Justified" markup="html">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA["<b>CLÁUSULA SEXTA - DO TÍTULO EXECUTIVO EXTRAJUDICIAL</b><br><br>"+
+
+"O presente Termo de Compromisso terá eficácia de título executivo extrajudicial, na forma do Art. 5°, § 6°, da Lei Federal n° 7.347, de 24 de julho de 1985, com a redação que lhe foi dada pela Lei Federal n° 8.078, de 11 de setembro de 1990, do Art. 380 do Decreto Estadual n° 11.235/2008, do § 1° do Art. 191 da Lei Estadual n° 10.431 de 20 de dezembro de 2006 e do Art. 585, VII do CPC.<br>"]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="13">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="a53f069a-3efd-4df1-833a-20f444b99790" positionType="Float" stretchType="RelativeToTallestObject" x="0" y="0" width="495" height="12" isRemoveLineWhenBlank="true" isPrintWhenDetailOverflows="true"/>
+				<textElement textAlignment="Justified" markup="html">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA["<b>CLÁUSULA SÉTIMA – DO FORO</b><br><br>"+
+
+"Para dirimir as dúvidas e conflitos oriundos deste Termo de Compromisso, fica eleito o Foro da Comarca da Capital do Estado da Bahia, com renúncia de qualquer outro por mais privilegiado que seja ou venha a ser.<br>"+
+"E por estarem assim certos e ajustados, firmam o presente Termo de Compromisso, dando tudo por bom, firme e valioso. Este Termo de Compromisso refere-se exclusivamente à situação da regulação ambiental no âmbito da atividade descrita, não abrangendo outros empreendimentos ou atividades do mesmo requerente."]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="14">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="0e70b801-7468-4fc6-8333-5ca636e596c8" positionType="Float" isPrintRepeatedValues="false" x="1" y="0" width="494" height="13" isRemoveLineWhenBlank="true"/>
+				<textElement textAlignment="Justified" markup="none">
+					<font fontName="SansSerif" size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA["A cópia deste Termo de Compromisso deve ser mantida na propriedade para efeito de fiscalização.\n"+
+"A autenticidade deste Termo de Compromisso pode ser atestada na internet, no endereço: http://www.seia.ba.gov.br em Serviços On-line/Atestar Certificado,  utilizando a chave de segurança deste Termo de Compromisso:\n"]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="13">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="0e70b801-7468-4fc6-8333-5ca636e596c8" positionType="Float" isPrintRepeatedValues="false" x="2" y="0" width="494" height="12" isRemoveLineWhenBlank="true" isPrintInFirstWholeBand="true"/>
+				<textElement textAlignment="Center" markup="none">
+					<font fontName="SansSerif" size="9" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{num_token}]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="25">
+			<textField isStretchWithOverflow="true">
+				<reportElement uuid="0e70b801-7468-4fc6-8333-5ca636e596c8" positionType="Float" isPrintRepeatedValues="false" x="1" y="0" width="495" height="25"/>
+				<textElement textAlignment="Justified" markup="none"/>
+				<textFieldExpression><![CDATA["\n\nTermo de Compromisso emitido às "+new SimpleDateFormat("HH:mm:ss").format($F{dtc_emissao_certificado})+" do dia "+new SimpleDateFormat("dd/MM/yyyy").format($F{dtc_emissao_certificado})+" <hora e data de Brasília>"]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="40" splitType="Stretch">
+			<textField>
+				<reportElement uuid="de5894e4-8761-4994-9f40-2b9192410784" positionType="Float" x="450" y="0" width="16" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Top">
+					<font fontName="Arial" size="6"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement uuid="289b569a-eb79-4a74-95fd-c4af99775ca2" x="123" y="27" width="263" height="12"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Chave de Segurança: "+$F{num_token}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="51197f20-d21d-44a5-8544-552b6758f65b" x="123" y="0" width="309" height="9"/>
+				<textElement textAlignment="Center" verticalAlignment="Top">
+					<font fontName="Arial" size="6"/>
+				</textElement>
+				<text><![CDATA[INEMA/CAB: Av. Luís Viana Filho, 6ª Avenida, n° 600, CAB - CEP 41745-900 - Salvador - Bahia - Brasil]]></text>
+			</staticText>
+			<textField pattern="EEEEE dd MMMMM yyyy">
+				<reportElement uuid="09aa0c8c-8236-408c-b878-8c2f77339633" positionType="Float" x="0" y="0" width="123" height="12"/>
+				<textElement verticalAlignment="Top">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Impresso em: "+new SimpleDateFormat("dd/MM/yyyy").format(new java.util.Date())]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="199af036-0438-4705-8f8d-9fda771a58a1" positionType="Float" x="466" y="0" width="14" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Top">
+					<font fontName="Arial" size="6"/>
+				</textElement>
+				<text><![CDATA[de]]></text>
+			</staticText>
+			<textField evaluationTime="Report">
+				<reportElement uuid="64f04528-a5e8-4c0a-8667-ee63ba59333a" positionType="Float" x="480" y="0" width="13" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Top">
+					<font fontName="Arial" size="6"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="4b2bc0a1-cadb-43b4-b524-421bc8589db1" positionType="Float" x="432" y="0" width="18" height="19"/>
+				<textElement textAlignment="Center" verticalAlignment="Top">
+					<font fontName="Arial" size="6"/>
+				</textElement>
+				<text><![CDATA[Pág.]]></text>
+			</staticText>
+			<textField pattern="EEEEE dd MMMMM yyyy">
+				<reportElement uuid="09aa0c8c-8236-408c-b878-8c2f77339633" positionType="Float" x="0" y="12" width="205" height="15"/>
+				<textElement verticalAlignment="Top">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Válido por 90 dias contados da data de impressão."]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

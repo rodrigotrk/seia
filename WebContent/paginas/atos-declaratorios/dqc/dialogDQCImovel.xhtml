@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui"
+	xmlns:s="http://java.sun.com/jsf/composite/seia">
+	
+	<p:dialog widgetVar="dialogDQCImovel" header="Dados da queima controlada por imóvel" width="450" height="400" dynamic="true" modal="true" 
+		position="center" resizable="false" draggable="true">
+		
+		<h:form id="formDqcImovel">
+			<h:panelGrid>
+				<h:outputText value="Imóvel: #{dqcController.dqcImovel.ideImovel.imovelRural.desDenominacao}" />
+				
+				<p:spacer width="0" height="10"/>
+				
+				<h:outputText value="Coordenada Geográfica" />
+				
+				<s:inputLocGeo ideLocalizacaoGeografica="#{dqcController.dqcImovel.ideLocalizacaoGeografica}" ideRequerimento="#{dqcController.requerimento}"
+					ideTipoSecaoGeometrica="#{seiaController.classificacaoSecaoEnum('CLASSIFICACAO_SECAO_SHAPEFILE')}" update="formDqcImovel"
+					ideObjetoLocalizacao="#{dqcController.dqcImovel}" disabled="#{dqcController.dqcImovel.visualizar}"
+					titulo="Incluir Localização Geográfica da Queima" 
+					rendered="#{dqcController.dqcImovel.indArrendado and (empty dqcController.dqcImovel.ideLocalizacaoGeografica.ideLocalizacaoGeografica)}" /> 
+				
+				<p:dataTable value="#{dqcController.dqcImovel}" var="dqcI" emptyMessage="Nenhum registro encontrado" style="width: 400px;"
+					rendered="#{not empty dqcController.dqcImovel.ideLocalizacaoGeografica.ideLocalizacaoGeografica}">
+					
+					<p:column headerText="Sistema de coordenada">
+						<h:outputText value="#{dqcI.ideLocalizacaoGeografica.ideSistemaCoordenada.nomSistemaCoordenada}" />
+					</p:column>
+					
+					<p:column headerText="Fonte da Coordenada">
+						<h:outputText value="#{dqcI.ideLocalizacaoGeografica.ideClassificacaoSecaoToString}" />
+					</p:column>
+					
+					<p:column headerText="Ações">
+
+						<p:commandLink oncomplete="confirmDialogExcluirLocGeo.show()" disabled="#{dqcController.dqcImovel.visualizar}"
+							rendered="#{dqcController.dqcImovel.indArrendado}">
+							
+							<f:setPropertyActionListener value="#{dqcI}" target="#{localizacaoGeograficaGenericController.objetoLocalizacao}" />
+							<f:setPropertyActionListener value="formDqcImovel" target="#{localizacaoGeograficaGenericController.idDoComponenteParaSerAtualizado}" />
+							<h:graphicImage title="Excluir" value="/resources/img/ico-excluir.png" />
+						</p:commandLink>
+							
+						<s:linkGeoBahia ideLocalizacaoGeografica="#{dqcI.ideLocalizacaoGeografica}"/>
+					</p:column>
+				</p:dataTable>
+				
+				<p:spacer width="0" height="10"/>
+				
+				<h:outputText value="Objetivo(s) da queima:" />
+				
+				<ui:repeat value="#{dqcController.dqcImovel.declaracaoQueimaControladaImovelObjetivoQueimaControladaCollection}" var="dqciOqc">
+					<h:panelGrid columns="3">
+						<p:selectBooleanCheckbox value="#{dqciOqc.checked}" disabled="#{dqcController.dqcImovel.visualizar}">
+							<p:ajax update="formDqcImovel" listener="#{dqcController.verificaObjetivoSelecionadoOutros(dqciOqc)}"/>
+						</p:selectBooleanCheckbox>
+						
+						<h:outputText value="#{dqciOqc.ideObjetivoQueimaControlada.desObjetivoQueimaControlada}" style="line-height:2; margin-left: 5px;"/>
+						
+						<h:panelGroup rendered="#{dqciOqc.ideObjetivoQueimaControlada.ideObjetivoQueimaControlada == 1}" layout="block" id="panelAjudaASV">
+							<h:graphicImage value="/resources/img/ico-ajuda.png" id="ajuda" style="margin: 0px 0px -4px 5px;" />
+							<p:tooltip for="ajuda" showEffect="fade" hideEffect="fade"
+								value="Entende-se como resíduo de ASV restos de material vegetal não passível de destinação socioeconômica, 
+									resultante de autorização de supressão de vegetação nativa. Ex.: Galhos, Folhas, Resíduos resultantes da destoca e similares."/>
+						</h:panelGroup>
+					</h:panelGrid>
+						
+					<!-- <h:panelGrid rendered="#{dqcController.exibeAreaPrevistaParaQueima(dqciOqc)}" style="margin-left: 50px;"> Retirado conforme ticket 35912 -->
+					<h:panelGrid rendered="false" style="margin-left: 50px;">
+						<h:outputText value="* Área prevista para a queima"/>
+						
+						<h:panelGrid columns="2">
+							<p:inputText value="#{dqciOqc.valAreaPrevistaQueima}" disabled="#{dqcController.dqcImovel.visualizar}" 
+		                    	maxlength="16" styleClass="campoNumericoComDecimal-4">
+                    	
+                    			<f:convertNumber maxIntegerDigits="9" maxFractionDigits="4" pattern="###,##0.0000" locale="pt_BR"/>
+                    			<p:ajax process="@this" event="blur"/>
+                    		</p:inputText>
+		                    <h:outputText value="ha" />
+						</h:panelGrid>
+					</h:panelGrid>
+				</ui:repeat>
+			</h:panelGrid>
+				
+			<p:spacer width="0" height="20"/>
+		
+			<div style="text-align: right; margin-right: 10px;">
+				<p:commandButton title="Voltar" value="Voltar" onclick="dialogDQCImovel.hide();" immediate="true" />
+				
+				<p:spacer width="10" height="0"/>
+				
+				<p:commandButton title="Salvar" value="Salvar" disabled="#{dqcController.dqcImovel.visualizar}" 
+					actionListener="#{dqcController.salvarDQCIObjetivoQueimaControlada(dqcController.dqcImovel)}"/>
+			</div>
+		</h:form>
+	</p:dialog>
+	
+	<p:confirmDialog widgetVar="confirmarExclusaoDqcImovel" message="#{bundle.consultapf_msg_confimrexclusao}" header="Mensagem" severity="alert">
+		<h:form style="text-align: center;">
+	        <p:commandButton value="Sim" actionListener="#{dqcController.excluirDqcImovel()}" style="margin-right:30px;" />
+	        <p:commandButton value="Não" onclick="confirmarExclusaoDqcImovel.hide();" />
+	    </h:form>
+    </p:confirmDialog>
+	
+	<p:confirmDialog widgetVar="confirmDialogExcluirLocGeo" message="#{bundle.consultapf_msg_confimrexclusao}" header="Mensagem" severity="alert">
+		<h:form style="text-align: center;">
+	        <p:commandButton value="Sim" action="#{dqcController.salvarAtoDeclaratorioComBooleanosFalsos()}" style="margin-right:30px;"
+	        	actionListener="#{localizacaoGeograficaGenericController.excluirLocGeo()}" oncomplete="confirmDialogExcluirLocGeo.hide();" />
+	        	
+	        <p:commandButton value="Não" onclick="confirmDialogExcluirLocGeo.hide();" />
+	    </h:form>
+    </p:confirmDialog>
+</ui:composition>

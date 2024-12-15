@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+				xmlns:h="http://java.sun.com/jsf/html"
+				xmlns:f="http://java.sun.com/jsf/core"
+				xmlns:ui="http://java.sun.com/jsf/facelets"
+				xmlns:p="http://primefaces.prime.com.tr/ui">	
+		
+		<h3> <h:outputLabel id="idlblendereco" styleClass="titulo-grupo" value="ENDEREÇO" /> </h3>
+		
+		<h:form id="formEnderecoPesquisaCep">
+			<h:outputLabel id="lblCep" value="#{bundle.geral_lbl_endereco_cep}" /><br/>
+			<p:inputMask id="cep" 
+				value="#{enderecoGenericoController.cepConsultado}"
+				mask="99.999-999"
+				disabled="#{enderecoGenericoController.visualizacao}" >
+				<p:ajax event="blur" 
+					listener="#{enderecoGenericoController.buscarEnderecoPorCep()}" 
+					process="@this" />
+			</p:inputMask>
+		</h:form>
+		
+		<h:form id="formEndereco" prependId="false">
+			
+			<!-- BAIRRO -->
+			<h:panelGrid id="gridbairro" columns="2">
+				<h:outputText id="idlblbairro" value="#{bundle.geral_lbl_endereco_bairro}"/>
+				<h:outputText />
+				
+				<p:selectOneMenu id="idcombobairro" 
+					value="#{enderecoGenericoController.bairro}"
+					valueChangeListener="#{enderecoGenericoController.changeBairro()}"  
+					rendered="#{!enderecoGenericoController.outroBairro}"
+					disabled="#{enderecoGenericoController.desabilitaGeral}"
+					converter="simpleEntityConverter">
+					<f:selectItem itemLabel="Selecione..." />
+					<f:selectItems value="#{enderecoGenericoController.listaBairro}" var="bairro" itemValue="#{bairro}" itemLabel="#{bairro.nomBairro}"/>
+					<p:ajax event="change" process="@this"/>
+				</p:selectOneMenu>
+				
+				<p:inputText id="inputBairro" 
+					value="#{enderecoGenericoController.bairro.nomBairro}" 
+					rendered="#{enderecoGenericoController.outroBairro}"
+					disabled="#{enderecoGenericoController.desabilitaGeral}" />
+			</h:panelGrid>
+			
+			<!-- LOGRADOURO -->
+			<h:panelGrid id="gridlogradouro" columns="2">
+				<h:outputLabel id="idlbllogradouro" value="#{bundle.geral_lbl_endereco_logradouro}" />
+				<h:outputText />
+				
+				<p:selectOneMenu id="idcombotipologradouroinput" 
+					value="#{enderecoGenericoController.tipoLogradouro}"
+					disabled="#{enderecoGenericoController.desabilitaTipoLogradouro}"
+					converter="simpleEntityConverter">
+					<f:selectItem itemLabel="Selecione..." />
+					<f:selectItems value="#{enderecoGenericoController.listaTipoLogradouro}" var="tipoLogradouro" itemValue="#{tipoLogradouro}" itemLabel="#{tipoLogradouro.nomTipoLogradouro}"/>
+				</p:selectOneMenu>
+				
+				<p:inputText id="inputnomlogradouro"
+					value="#{enderecoGenericoController.logradouro.nomLogradouro}" 
+					maxlength="180" 
+					rendered="#{enderecoGenericoController.outroBairro or enderecoGenericoController.outroLogradouro}"
+					disabled="#{enderecoGenericoController.desabilitaGeral}" />
+				
+				<p:selectOneMenu id="idcombologradouro" 
+					value="#{enderecoGenericoController.logradouro}" 
+					valueChangeListener="#{enderecoGenericoController.changeLogradouro()}"
+					rendered="#{!enderecoGenericoController.outroBairro and !enderecoGenericoController.outroLogradouro}"
+					disabled="#{enderecoGenericoController.desabilitaGeral or enderecoGenericoController.bairroNaoSelecionado}"
+					converter="simpleEntityConverter">
+					<f:selectItem itemLabel="Selecione..." />
+					<f:selectItems value="#{enderecoGenericoController.listaLogradouro}" var="logradouro" itemValue="#{logradouro}" itemLabel="#{logradouro.nomLogradouro}" />
+					<p:ajax event="change" process="@this"/>
+				</p:selectOneMenu>
+				
+			</h:panelGrid>
+			
+			<!-- NUMERO E COMPLEMENTO -->
+			<h:panelGrid columns="2" id="panelmunicipioestado" width="100%">	
+				<h:outputText id="idlblnumero" value="#{bundle.geral_lbl_endereco_numero}"/>
+				<h:outputLabel id="idlblcomplemento" value="Complemento" />
+				
+				<p:inputText id="txtNumEndereco" style="width: 70%"  
+					value="#{enderecoGenericoController.endereco.numEndereco}" 
+					maxlength="5" 
+					size="5" 
+					disabled="#{enderecoGenericoController.desabilitaGeral}"/>
+				<p:inputText id="txtDesComplemento" style="width: 100%" 
+					value="#{enderecoGenericoController.endereco.desComplemento}"  
+					disabled="#{enderecoGenericoController.desabilitaGeral}"/>
+			</h:panelGrid>
+			
+			<!-- UF E LOCALIDADE -->
+			<h:panelGrid columns="2">
+				<h:outputText id="idlbluf" value="#{bundle.geral_lbl_endereco_uf}"/>
+				<h:outputLabel id="idlblmunicipio" value="#{bundle.geral_lbl_endereco_localidade}" />					
+				
+				<p:selectOneMenu id="idcombouf" 
+					value="#{enderecoGenericoController.estado}" 
+					valueChangeListener="#{enderecoGenericoController.changeEstado()}"
+					converter="simpleEntityConverter"
+					disabled="#{enderecoGenericoController.bloqueioUfLocalidade}">
+					<f:selectItems value="#{enderecoGenericoController.listaEstado}" var="estado" itemValue="#{estado}" itemLabel="#{estado.nomEstado}"/>
+					<p:ajax event="change" process="@this"/>
+				</p:selectOneMenu>
+					
+				<p:selectOneMenu id="idcombomunicipio" 
+					value="#{enderecoGenericoController.municipio}"
+					valueChangeListener="#{enderecoGenericoController.changeLocalidade()}" 
+					converter="simpleEntityConverter"
+					disabled="#{enderecoGenericoController.bloqueioUfLocalidade or enderecoGenericoController.estadoNaoSelecionado}">
+					<f:selectItems value="#{enderecoGenericoController.listaMunicipio}"  var="municipio" itemValue="#{municipio}" itemLabel="#{municipio.nomMunicipio}" />
+				</p:selectOneMenu>
+			</h:panelGrid>
+			<!-- <f:selectItem itemLabel="Selecione..." /> -->
+			
+			<h:panelGrid columns="1" width="100%">
+				<h:outputText id="idlblpontoreferencia" value="#{bundle.geral_lbl_endereco_ponto_referencia}"  />
+				<p:inputText id="txtDesPontoReferencia" style="width: 100%" value="#{enderecoGenericoController.endereco.desPontoReferencia}" disabled="#{enderecoGenericoController.desabilitaGeral}"/>
+			</h:panelGrid>
+			
+			<h:panelGrid columns="2">
+				<p:commandButton
+					id="btnSalvar" 
+					value="Salvar" 
+					actionListener="#{enderecoGenericoController.salvarEndereco()}"
+					process="@form" 
+					rendered="#{!enderecoGenericoController.visualizacao}"
+					disabled="#{enderecoGenericoController.desabilitaGeral}"/>
+			</h:panelGrid>
+			<h:outputLabel value="#{bundle.lbl_preench_obrig_asterisc}" style="float: left;" />
+		</h:form>	
+</ui:composition>

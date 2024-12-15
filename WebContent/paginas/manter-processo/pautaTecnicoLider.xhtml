@@ -1,0 +1,448 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui"
+	template="../../layout/template.xhtml">
+
+	<ui:define name="titulo-pagina">
+		<h3>Pauta Técnica</h3>
+
+		<script>
+			//função bloqueia o tab
+			$(document).ready(function() {
+				$(this).delegate('#notificacaoParcialForm\\:texto_parcial','keyup',function() { 
+					var texto = $('#notificacaoParcialForm\\:texto_parcial').val();
+					texto = texto.replace(/\t+/g, ' ');
+					$('#notificacaoParcialForm\\:texto_parcial').val(texto);
+				});
+			});
+		       
+			$(document).ready(function() {
+				$(this).delegate('#notificacaoFinalForm\\:texto_final','keyup',function() { 
+					var texto = $('#notificacaoFinalForm\\:texto_final').val();
+					texto = texto.replace(/\t+/g, ' ');
+					$('#notificacaoFinalForm\\:texto_final').val(texto);
+				});
+			});
+	
+			//bloqueio de caracteres no campo qtdDiasValidade da notificacao
+			$(document).ready(function() {
+				$(this).delegate('#notificacaoFinalForm\\:qtdDiasValidade','keyup',function() { 
+					var texto = $('#notificacaoFinalForm\\:qtdDiasValidade').val();
+					texto = texto.replace(/[^0-9]/gi,'');
+					$('#notificacaoFinalForm\\:qtdDiasValidade').val(texto);			    	 
+				});
+			});
+		</script>
+	</ui:define>
+
+	<ui:define name="conteudo-principal">
+		<p:confirmDialog header="Confirmação" 
+			id="dialogExcluirSubterraneaCnae"  
+			widgetVar="dialogExcluirSubterraneaCnae" 
+			appendToBody="true" 
+			message="Deseja excluir definitivamente este Cnae?" 
+			severity="alert">
+			<h:form>
+				<p:commandButton value="Sim" 
+					onclick="dialogExcluirSubterraneaCnae.hide()"
+					actionListener="#{cnaeController.excluirItemListaSubterranea()}"
+					process="@this" 
+					update=":formCaracteristicaPoco:pnlTableSubterraneaCnae">
+				</p:commandButton>
+				<p:commandButton value="Não" 
+					onclick="dialogExcluirSubterraneaCnae.hide();" 
+					type="button" 
+					global="false" />
+			</h:form>
+		</p:confirmDialog>	
+		
+		<p:confirmDialog header="Confirmação" 
+				id="dialogExcluirCnae"  
+				widgetVar="dialogExcluirCnae" 
+				appendToBody="true" 
+				message="Deseja excluir definitivamente este Cnae?" 
+				severity="alert">
+				<h:form>
+					<p:commandButton value="Sim" 
+						onclick="dialogExcluirCnae.hide()"
+						actionListener="#{cnaeController.excluirItemLista()}"
+						process="@this" 
+						update=":capSuperAbas:formCapSuperCaptacao:pnlTableCnae">
+					</p:commandButton>
+					<p:commandButton value="Não" 
+						onclick="dialogExcluirCnae.hide();" 
+						type="button" 
+						global="false" />
+				</h:form>
+			</p:confirmDialog>	
+		
+		<p:dialog id="dialogCnae" dynamic="true" header="Cnae" widgetVar="dialogCnae" modal="true" 
+			appendToBody="true" width="800" height="350" 
+			position="center" resizable="false" draggable="false" >
+			<ui:include src="/paginas/manter-fce/outorga/captacao/superficial/modalAtividadeCnae.xhtml" />
+		</p:dialog>
+		
+		<p:dialog id="dialogSubterraneaCnae" dynamic="true" header="Cnae"
+			widgetVar="dialogSubterraneaCnae" modal="true" appendToBody="true"
+			width="800" height="350" position="center" resizable="false"
+			draggable="false">
+			<ui:include
+				src="/paginas/manter-fce/outorga/captacao/subterranea/modalAtividadeCnae.xhtml" />
+		</p:dialog>
+		<ui:include src="/paginas/manter-processo/cronograma.xhtml" />
+
+		<ui:include src="/paginas/manter-processo/notificacao.xhtml" />
+
+		<ui:include src="/paginas/manter-processo/analise-tecnica/analiseTecnica.xhtml" />
+
+		<ui:include src="/paginas/manter-processo/visualizarEquipe.xhtml" />
+
+		<ui:include src="/paginas/manter-fce/include-fce.xhtml" />
+		<ui:include src="/paginas/manter-processo/detalhe-processo/detalharProcesso.xhtml" />
+
+		<ui:include src="/paginas/manter-processo/fluxoAlternativo.xhtml" />
+		<ui:include	src="/paginas/manter-processo/dlgApensarDocumento.xhtml" />
+		<ui:include	src="/paginas/manter-processo/relocacao-reserva-legal/relocacaoReservaLegal.xhtml" />
+		<ui:include	src="/paginas/manter-processo/dado-concedido/asv/dadoConcedidoAsv.xhtml" />
+
+		<p:dialog id="_dialogAnalisarProcesso" closable="true"
+			draggable="true" resizable="false" position="center"
+			header="Imóveis Rurais do Empreendimento" widgetVar="dialogAnalisarProcesso"
+			width="985" modal="true">
+			<ui:include src="/paginas/manter-processo/analisarProcesso.xhtml" />
+		</p:dialog>
+		
+		<p:dialog id="dialogAprovarRL" closable="true" draggable="true"
+			resizable="false" header="Aprovação de Reserva Legal"
+			widgetVar="dialogAprovarRL" position="center" modal="false"
+			onShow="dialogAprovarRL.initPosition();">
+			<ui:include
+				src="/paginas/manter-imoveis/cefir/modalAprovarReservaLegal.xhtml" />
+		</p:dialog>
+		
+		<p:dialog id="dialogDetalharImovelRural" closable="true"
+			draggable="true" resizable="false" header="Detalhes do Imóvel Rural"
+			widgetVar="dialogDetalharImovelRural" position="center" modal="false"
+			height="600" width="850">
+			<ui:include
+				src="/paginas/manter-imoveis/cefir/detalharImovelRural.xhtml" />
+		</p:dialog>
+		
+		<p:dialog id="dialogPendenciaCadastro" closable="true" modal="true" draggable="true" resizable="false" position="center"
+			header="Pendência(s) no(s) Cadastro(s)" widgetVar="dialogPendenciaCadastro">
+			
+			<h:panelGrid id="panelPendenciaCadastro">
+				<ui:include src="/paginas/manter-imoveis/cefir/suspensao-cadastro/visualizarPendenciaCadastro.xhtml" />
+			</h:panelGrid>
+		</p:dialog>
+		
+		
+		<!--  Finalidade  -->
+		
+		<p:dialog id="dialogExcluirFinalidade" closable="true"
+			draggable="true" resizable="false" header="Alterar Finalidades"
+			widgetVar="dialogExcluirFinalidade" position="center" modal="false">
+			<ui:include src="/paginas/manter-fce/outorga/dialogFinalidade.xhtml" />
+		</p:dialog>
+		
+		<p:confirmDialog 
+			id="confimarExcluirFinalidade"
+			widgetVar="confimarExcluirFinalidade"
+			header="#{bundle.geral_lbl_mensagem}"
+			message="Deseja realmente excluir a finalidade ?"
+			draggable="true"
+			closable="true"
+			severity="alert"> 
+			<h:form id="formConfimarExcluirFinalidade">
+				<p:commandButton 
+					value="#{bundle.btn_sim}"
+					actionListener="#{fceOutorgaLocalizacaoGeograficaFinalidadeController.excluirFceOutorgaLocalizacaoGeograficaFinalidade()}"
+					oncomplete="confimarExcluirFinalidade.hide()"
+					update=":dialogExcluirFinalidade"
+					process="@this" />
+				<p:commandButton 
+					value="#{bundle.btn_nao}"
+					onclick="confimarExcluirFinalidade.hide()" />
+			</h:form>
+		</p:confirmDialog>
+		<!--  Finalidade  -->
+		
+		<h:form id="formConfirmacaoAprovacaoRl">
+			<p:confirmDialog id="confirmacaoAprovacaoRl"
+				widgetVar="confirmacaoAprovacaoRl"
+				header="#{bundle.geral_lbl_mensagem}"
+				message="Confirma a aprovação da localização da reserva Legal?"
+				severity="alert">
+				
+				<p:commandButton value="#{bundle.btn_sim}"
+					action="#{analiseTecnicaController.salvarAprovacao()}"
+					process="@form">
+				</p:commandButton>
+				<p:commandButton value="#{bundle.btn_nao}"
+					onclick="confirmacaoAprovacaoRl.hide()" />
+			
+			</p:confirmDialog>
+		</h:form>
+
+		<h3>
+			<h:outputLabel styleClass="titulo-grupo" value="INSTRUÇÕES"  style="font-weight:bold;"/>
+		</h3>
+		<br />
+		<p class="titulo-grupo">
+			<h:outputText value="#{bundle.processo_lbl_consulta}" />
+		</p>
+		<br />
+		<br />
+		<h3>
+			<h:outputLabel styleClass="titulo-grupo" style="font-weight:bold;"	value="PARÂMETROS DA CONSULTA" />
+		</h3>
+
+		<h:form id="formPautaTecnico">
+			<p:remoteCommand name="atualizarPauta" actionListener="#{pautaTecnicoController.consultarProcesso()}" update=":formPautaTecnico"/>
+			<h:panelGrid id="panel" columns="1">
+				<h:panelGrid id="pnlGridConsulta">
+					<br />
+					<h:panelGrid columns="3">
+						<h:panelGrid columns="1">
+							<h:outputText value="Nº do Processo:" />
+							<p:inputText value="#{pautaTecnicoController.numProcesso}" />
+						</h:panelGrid>
+
+						<h:panelGrid columns="1">
+							<h:outputText value="Localidade:" />
+							<p:selectOneMenu id="comboMunicipio"
+								value="#{pautaTecnicoController.municipioSelecionado}"
+								converter="municipioConverter"
+								styleClass="form-input form-select">
+								<f:selectItem itemLabel="Selecione..." />
+								<f:selectItems value="#{pautaTecnicoController.listaMunicipios}"
+									var="municipio" itemValue="#{municipio}"
+									itemLabel="#{municipio.nomMunicipio}" />
+							</p:selectOneMenu>
+						</h:panelGrid>
+						
+						<h:panelGrid columns="3">
+							<h:outputText value="Período de Formação:" />
+							<h:outputText />
+							<h:outputText />
+	
+							<h:panelGroup>
+								<h:outputText value="De   " />
+								<p:calendar showOn="button" size="10"
+									value="#{pautaTecnicoController.periodoInicio}" locale="pt"
+									pattern="dd/MM/yyyy" navigator="true" yearRange="c-50:c+10" />
+							</h:panelGroup>
+							<h:outputText value="Até" />
+							<p:calendar showOn="button" size="10"
+								value="#{pautaTecnicoController.periodoFim}" locale="pt"
+								pattern="dd/MM/yyyy" navigator="true" yearRange="c-50:c+10" />
+						</h:panelGrid>
+					</h:panelGrid>
+
+					<h:panelGrid columns="4" id="gridComboFiltro">
+					<h:outputText value="Categoria:" />
+					<h:outputText value="Ato:" />
+					<h:outputText value="Tipologia:" />
+					<h:outputText value="Finalidade:" />
+					
+					<p:selectOneMenu 
+						id="comboTipoAto"
+						value="#{pautaTecnicoController.tipoAto}"
+						valueChangeListener="#{pautaTecnicoController.changeCategoria()}"
+						converter="simpleEntityConverter"
+						styleClass="form-input form-select">
+						<f:selectItem itemLabel="Selecione..." />
+						<f:selectItems value="#{pautaTecnicoController.tiposAto}" var="tipoAto" itemValue="#{tipoAto}" itemLabel="#{tipoAto.nomTipoAto}" />
+						<p:ajax event="change" update="gridComboFiltro" />
+					</p:selectOneMenu>
+					
+					<p:selectOneMenu 
+						id="comboAto"
+						value="#{pautaTecnicoController.atoAmbiental}"
+						converter="simpleEntityConverter"
+						valueChangeListener="#{pautaTecnicoController.changeAtoAmbiental()}" 
+						styleClass="form-input form-select"
+						style="max-width:262px;"
+						disabled="#{pautaTecnicoController.comboAtoBlocked}">
+						<f:selectItem itemLabel="Selecione..." />
+						<f:selectItems value="#{pautaTecnicoController.atos}" var="ato" itemValue="#{ato}" itemLabel="#{ato.nomAtoAmbiental}" />
+						<p:ajax event="change" update="gridComboFiltro" process="@this"/>
+					</p:selectOneMenu>
+				
+					<p:selectOneMenu 
+						id="lstTipologia" 
+						value="#{pautaTecnicoController.tipologia}"
+						converter="tipologiaConverter" 
+						valueChangeListener="#{pautaTecnicoController.changeTipologia()}"
+						styleClass="form-input form-select"
+						style="max-width:180px;"
+						disabled="#{pautaTecnicoController.comboTipologiaBlocked}">	
+						<f:selectItem itemLabel="Selecione..."/>
+						<f:selectItems value="#{pautaTecnicoController.listaTipologia}" var="tipologia" itemLabel="#{tipologia.desTipologia}" itemValue="#{tipologia}"/>
+						<p:ajax event="change" update="gridComboFiltro" process="@this"/> 
+					</p:selectOneMenu>
+				
+					<p:selectOneMenu 
+						id="lstFinalidade" 
+						value="#{pautaTecnicoController.finalidadeUsoAgua}"
+						converter="simpleEntityConverter" 
+						styleClass="form-input form-select"
+						style="max-width:190px;"
+						disabled="#{pautaTecnicoController.comboFinalidadeBlocked}">
+						<f:selectItem itemLabel="Selecione..."/>
+						<f:selectItems value="#{pautaTecnicoController.listaFinalidadeUsoAgua}" var="finalidade" itemLabel="#{finalidade.nomTipoFinalidadeUsoAgua}" itemValue="#{finalidade}"/>
+						<p:ajax event="change" process="@this"/> 
+					</p:selectOneMenu>
+				</h:panelGrid>
+					<br />
+
+					<h:panelGroup style="float:left">
+						<p:commandButton value="Consultar" actionListener="#{pautaTecnicoController.consultarProcesso()}" process="@form"
+							update="formPautaTecnico:tabelaProcessos" />
+						<p:commandButton value="Limpar" actionListener="#{pautaTecnicoController.limparTela()}" process="@this"
+							update=":formPautaTecnico" />
+					</h:panelGroup>
+				</h:panelGrid>
+				<br />
+				<hr></hr>
+				<h:panelGrid id="tabelaProcessos" columns="1">
+					<p:dataTable id="gridProcessos" paginator="true" rows="8"
+						paginatorPosition="bottom" lazy="true"
+						value="#{pautaTecnicoController.dataModelProcessos}"
+						var="vwProcesso" style="width:780px;"
+						rendered="#{pautaTecnicoController.dataModelProcessos != null}"
+						emptyMessage="Nenhum registro encontrado."
+						paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}"
+						currentPageReportTemplate="Registro(s) {startRecord}/{endRecord} de {totalRecords} registro(s)">
+						<p:column>
+							<f:facet name="header">Nº do Processo</f:facet>
+							<p:commandLink
+								action="#{detalharProcessoController.visualizarProcesso()}"
+								update=":formDetalharProcesso:tabviewprocesso"
+								process="@this" oncomplete="dialogdetalharProcesso.show()"
+								type="button">
+								<f:ajax execute="@this" />
+								<h:outputText value="#{vwProcesso.numProcesso}" />
+								
+								<f:setPropertyActionListener value="#{vwProcesso}"
+									target="#{detalharProcessoController.vwProcesso}" />
+								<f:setPropertyActionListener value="#{vwProcesso}"
+									target="#{historicoTramitacaoProcessoController.vwProcesso}" />
+									
+							</p:commandLink>
+							<h:graphicImage value="/resources/imagens/emergencia.png"
+								rendered="#{vwProcesso.indEstadoEmergencia}" />
+						</p:column>
+						<p:column>
+							<f:facet name="header">Requerente</f:facet>
+							<h:outputText value="#{vwProcesso.nomRequerente}" />
+						</p:column>
+						<p:column>
+							<f:facet name="header">Data Formação</f:facet>
+							<h:outputText value="#{vwProcesso.dtcFormacao}">
+								<f:convertDateTime pattern="dd/MM/yyyy" locale="pt,BR"
+									timeZone="Brazil/East" />
+							</h:outputText>
+						</p:column>
+						<p:column>
+							<f:facet name="header">Equipe</f:facet>
+							<h:panelGrid style="width:50px;color:white;text-align:center;">
+								<p:commandLink title="Visualizar Equipe"
+									oncomplete="dialogVisualizarEquipe.show()"
+									action="#{visualizarEquipeController.load(vwProcesso)}"
+									process="@this" update=":formVisualizarEquipe">
+									<h:graphicImage title="Consultar"
+										value="/resources/img/ico-pesquisa-lider.png"
+										rendered="#{vwProcesso.indLiderEquipe}" />
+									<h:graphicImage title="Consultar"
+										value="/resources/img/ico-pesquisa.png"
+										rendered="#{!vwProcesso.indLiderEquipe}" />
+								</p:commandLink>
+							</h:panelGrid>
+						</p:column>
+						<p:column>
+							<f:facet name="header">Cronograma</f:facet>
+							<h:panelGrid style="width:80px;color:white;text-align:center;">
+								<p:commandLink action="#{cronogramaController.load(2)}"
+									title="Cronograma"
+									update="formCronograma:panelCronograma formCronograma:panelCombos :formAtividadesCronograma:painelAtividadesCronograma :panelFormIncluirNovaAtividade"
+									onclick="dlgCronograma.show()" process="@this">
+									<h:graphicImage title="Cronograma"
+										value="/resources/img/ico-alterar.png" />
+									<f:setPropertyActionListener value="#{vwProcesso}"
+										target="#{cronogramaController.vwProcesso}" />
+									<f:setPropertyActionListener value="#{vwProcesso.dtcFormacao}"
+										target="#{cronogramaController.minDataPrevista}" />
+								</p:commandLink>
+							</h:panelGrid>
+						</p:column>
+						<p:column>
+							<f:facet name="header">Status</f:facet>
+							<h:outputText value="#{vwProcesso.statusFluxo.dscStatusFluxo}" />
+						</p:column>
+						<p:column style="text-align: center;">
+							<f:facet name="header">Ações</f:facet>
+							
+							<!-- ENCAMINHAR -->
+							<p:commandLink actionListener="#{fluxoAlternativoController.verificarDadoConcedidoECarregarFluxoAlternativo(false,true,vwProcesso)}" 
+								rendered="#{vwProcesso.podeEncaminhar}" process="@this" global="true">
+								
+								<h:graphicImage style="margin: 2px;" title="Encaminhar" value="/resources/img/ico-encaminhar.png" />
+							</p:commandLink>
+							
+							<p:commandLink global="true"
+								rendered="#{vwProcesso.podeEncaminhar and !contextoController.usuarioLogado.usuarioCTGA}"
+								actionListener="#{pautaTecnicoController.carregarNotificacaoPrazo(vwProcesso)}"
+								oncomplete="dialogNotificacar.show();" process="@this"
+								update=":pnlNotificacao">
+								<h:graphicImage style="margin: 2px;"
+									title="Emitir notificação de prazo"
+									value="/resources/img/ico-notificar.png" />
+							</p:commandLink>
+							<p:commandLink global="true"
+								rendered="#{vwProcesso.podeEncaminhar and !contextoController.usuarioLogado.usuarioCTGA}"
+								actionListener="#{pautaTecnicoController.carregarNotificacaoComunicacao(vwProcesso)}"
+								oncomplete="dialogNotificacar.show();" process="@this"
+								update=":pnlNotificacao">
+								<h:graphicImage style="margin: 2px;"
+									title="Emitir notificação de comunicação"
+									value="/resources/img/ico_notc.png" />
+							</p:commandLink>
+							
+							<p:commandLink global="true"
+								actionListener="#{apensarDocumentoController.load()}"
+								rendered="#{vwProcesso.podeApensarDocumento}"
+								oncomplete="dlgApensarDocumento.show()"
+								update="formUploadDocumento:tableUpload localizacaoGeografica"
+								process="@this">
+								<f:attribute name="vwProcesso" value="#{vwProcesso}" /> 
+								<h:graphicImage style="margin: 2px;" title="Apensar Documento Interno" value="/resources/img/ico-upload.gif" />
+							</p:commandLink>
+							
+							<p:commandLink global="true" actionListener="#{processoAnaliseTecnicaController.load(vwProcesso)}" process="@this" update=":formAnalisarProcesso">
+								<h:graphicImage style="margin: 2px; height:16px; width: 16px;" title="Análise Técnica" value="/resources/img/prototipo/icon_pauta.png" />
+							</p:commandLink>
+							
+							<p:spacer width="5" height="10" />
+							
+							<p:commandLink
+								action="#{analiseTecnicaController.analisarProcesso()}"
+								update=":formAnalisarProcesso"
+								oncomplete="dialogAnalisarProcesso.show()" process="@this"
+								rendered="${security.temAcesso('5.19.45') and vwProcesso.podeExibirAnaliseTecnicaImovelRural}">
+								<h:graphicImage title="Listar Imóveis Vinculados"
+									value="/resources/img/ico-rl-verde.png" />
+								<f:setPropertyActionListener value="#{vwProcesso}"
+									target="#{analiseTecnicaController.vwProcesso}" />
+							</p:commandLink>
+						</p:column>
+					</p:dataTable>
+				</h:panelGrid>
+			</h:panelGrid>
+		</h:form>
+	</ui:define>
+</ui:composition>

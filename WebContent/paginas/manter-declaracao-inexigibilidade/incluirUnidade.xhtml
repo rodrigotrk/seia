@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui">	
+	
+		<h:form id="formUnidade">
+			<h:panelGrid>
+				<h:outputLabel value="Nome:" style="font-weight:bold;"/>
+				<p:inputText id="txtNomeUnidade" value="#{unidadeEnderecoController.declaracaoInfoUnidade.nomUnidade}" 
+						maxlength="1000" disabled="#{!unidadeEnderecoController.permiteEditar}">
+					<p:ajax event="change" process="@this"/>
+				</p:inputText>
+				
+				<h:outputLabel value="Área: " rendered="#{not declaracaoInexigibilidadeController.atividadeAreaInundada()}"  style="font-weight:bold;"/>
+				<h:panelGrid columns="2" rendered="#{not declaracaoInexigibilidadeController.atividadeAreaInundada()}">
+					<p:inputText id="txtArea" value="#{unidadeEnderecoController.declaracaoInfoUnidade.valArea}"
+								disabled="#{!unidadeEnderecoController.permiteEditar}" onkeyup="maskIt(this, event, '999.999.999,99', true)" maxlength="14">
+						<f:convertNumber integerOnly="false" maxFractionDigits="2" maxIntegerDigits="9" pattern="#,##0.00" locale="pt_BR"/>
+						<p:ajax event="change" process="@this"/>
+					</p:inputText>
+					<h:outputLabel value="(m²)" rendered="#{not declaracaoInexigibilidadeController.atividadeAreaInundada() and not declaracaoInexigibilidadeController.atividadeRecuperacaoEstrada()}"  style="font-weight:bold;"/>
+					<h:outputLabel value="(km)" rendered="#{declaracaoInexigibilidadeController.atividadeRecuperacaoEstrada()}"  style="font-weight:bold;"/>
+					<h:outputLabel value="(ha)" rendered="#{declaracaoInexigibilidadeController.atividadeAreaInundada()}"  style="font-weight:bold;"/>
+				</h:panelGrid>
+				
+				<h:outputLabel value="Área Inundada: " rendered="#{declaracaoInexigibilidadeController.atividadeAreaInundada}"  style="font-weight:bold;"/>
+				<h:panelGrid columns="2" rendered="#{declaracaoInexigibilidadeController.atividadeAreaInundada}">
+					<p:inputText id="txtAreaInundada" value="#{unidadeEnderecoController.declaracaoInfoUnidade.valAreaInundada}" 
+								disabled="#{!unidadeEnderecoController.permiteEditar}" onkeyup="maskItQuatro(this, event, '99.999.999,9999')">
+						<f:converter converterId="bigConverterQuatroDecimais"/>
+						<p:ajax event="change" process="@this"/>
+					</p:inputText>
+					<h:outputLabel value="(m²)" rendered="#{not declaracaoInexigibilidadeController.atividadeAreaInundada() and not declaracaoInexigibilidadeController.atividadeRecuperacaoEstrada()}"  style="font-weight:bold;"/>
+					<h:outputLabel value="(km)" rendered="#{declaracaoInexigibilidadeController.atividadeRecuperacaoEstrada()}"  style="font-weight:bold;"/>
+					<h:outputLabel value="(ha)" rendered="#{declaracaoInexigibilidadeController.atividadeAreaInundada()}"  style="font-weight:bold;"/>
+				</h:panelGrid>
+			</h:panelGrid>
+			<br/>
+			
+			<h:panelGrid rendered="#{!declaracaoInexigibilidadeController.atividadeRecuperacaoEstrada()}">
+				<h:outputLabel value="Endereço" style="font-weight:bold;"/>
+				<h:outputLabel id="idlblcep" value="* CEP"  style="font-weight:bold;"/>
+				
+			<p:inputMask id="cep" 
+				value="#{enderecoGenericoController.cepConsultado}"
+				mask="99.999-999"
+				disabled="#{!unidadeEnderecoController.permiteEditar}"  styleClass="notSubmit">
+  				<p:ajax event="blur"
+					listener="#{unidadeEnderecoController.filtrarPorCep() }" 
+					process="@this" update="pnlEndereco" />
+			</p:inputMask>						
+						
+			<p:outputPanel autoUpdate="true" id="pnlEndereco">
+				<h:panelGrid id="gridbairro" columns="2">
+                    <h:outputText id="idlblbairro" value="#{bundle.geral_lbl_endereco_bairro}"/>
+                    <h:outputText />
+
+                    <p:selectOneMenu id="idcombobairro" 
+                        value="#{unidadeEnderecoController.bairro}"
+                        valueChangeListener="#{unidadeEnderecoController.changeLogradouroMunicipio()}"
+                        rendered="#{unidadeEnderecoController.bairro.ideBairro!=-1}"
+                        disabled="#{enderecoGenericoController.desabilitaGeral or !unidadeEnderecoController.enableFormEndereco}"
+                        converter="simpleEntityConverter">
+                        <f:selectItem itemLabel="Selecione..." />
+                        <f:selectItems value="#{unidadeEnderecoController.listaBairro}" var="bairro" itemValue="#{bairro}" itemLabel="#{bairro.nomBairro}"/>
+                        <p:ajax event="change" process="@this" update="formUnidade"/>
+                    </p:selectOneMenu>
+
+                    <p:inputText id="inputBairro" 
+                        value="#{unidadeEnderecoController.bairro.nomBairro}" 
+                        rendered="#{unidadeEnderecoController.bairro.ideBairro==-1}"
+                        disabled="#{!unidadeEnderecoController.permiteEditar}"/>
+                </h:panelGrid>
+
+			<h:outputLabel id="idlbllogradouro" value="* Logradouro" style="font-weight:bold;"/>
+			<h:outputText />
+			<h:panelGrid columns="3" id="gridlogradouro">
+			
+				<p:selectOneMenu id="idcombotipologradouroinput" 
+					value="#{unidadeEnderecoController.tipoLogradouro}"
+					disabled="#{enderecoGenericoController.desabilitaTipoLogradouro or !unidadeEnderecoController.enableFormEndereco}"
+					converter="simpleEntityConverter">
+					<f:selectItem itemLabel="Selecione..." />
+					<f:selectItems value="#{enderecoGenericoController.listaTipoLogradouro}" var="tipoLogradouro" itemValue="#{tipoLogradouro}" itemLabel="#{tipoLogradouro.nomTipoLogradouro}"/>
+				</p:selectOneMenu>
+				
+				<p:inputText id="inputnomlogradouro"
+					value="#{unidadeEnderecoController.logradouro.nomLogradouro}" 
+					maxlength="180" 
+					rendered="#{unidadeEnderecoController.showInputLogradouro}"
+					disabled="#{enderecoGenericoController.desabilitaGeral or !unidadeEnderecoController.enableFormEndereco}" />
+				
+				<p:selectOneMenu id="idcombologradouro" 
+					value="#{unidadeEnderecoController.logradouro}" 
+					valueChangeListener="#{unidadeEnderecoController.changeLogradouro()}"
+					rendered="#{!unidadeEnderecoController.showInputLogradouro}"
+					disabled="#{enderecoGenericoController.desabilitaGeral or enderecoGenericoController.bairroNaoSelecionado or !unidadeEnderecoController.enableFormEndereco}"
+					converter="simpleEntityConverter">
+					<f:selectItem itemLabel="Selecione..." />
+					<f:selectItems value="#{unidadeEnderecoController.listaLogradouro}" var="logradouro" itemValue="#{logradouro}" itemLabel="#{logradouro.nomLogradouro}" />
+					<p:ajax event="change" process="@this" update="inputnomlogradouro, idcombologradouro"/>
+				</p:selectOneMenu>
+			</h:panelGrid>
+			
+			<h:panelGrid columns="2" id="panelmunicipioestado" width="100%">
+				<h:outputText id="idlblnumero" value="* Número" style="font-weight:bold;"/>
+				<h:outputLabel id="idlblcomplemento" value="Complemento" style="font-weight:bold;"/>
+				
+				<p:inputText style="width: 70%"  
+					value="#{unidadeEnderecoController.endereco.numEndereco}" 
+					maxlength="5" 
+					size="5" 
+					disabled="#{!unidadeEnderecoController.enableFormEndereco}"/>				
+				
+				
+			<p:inputText style="width: 100%" 
+					value="#{unidadeEnderecoController.endereco.desComplemento}"  
+					disabled="#{!unidadeEnderecoController.enableFormEndereco}"/>	
+			</h:panelGrid>
+				
+			<h:panelGrid columns="2">
+				<h:outputText id="idlbluf" value="* UF" style="font-weight:bold;"/>
+				<h:outputLabel id="idlblmunicipio" value="* Localidade" style="font-weight:bold;"/>
+												
+				<p:selectOneMenu id="idcombouf" 
+					value="#{enderecoGenericoController.estado}" 
+					valueChangeListener="#{enderecoGenericoController.changeEstado()}"
+					converter="simpleEntityConverter"
+					disabled="#{enderecoGenericoController.bloqueioUfLocalidade or !unidadeEnderecoController.permiteEditar}">
+					<f:selectItems value="#{enderecoGenericoController.listaEstado}" var="estado" itemValue="#{estado}" itemLabel="#{estado.nomEstado}"/>
+					<p:ajax event="change" process="@this" update="idcombomunicipio"/>
+				</p:selectOneMenu>				
+								
+				<p:selectOneMenu id="idcombomunicipio" 
+					value="#{enderecoGenericoController.municipio}"
+					valueChangeListener="#{enderecoGenericoController.changeLocalidade()}" 
+					converter="simpleEntityConverter"
+					disabled="#{(!unidadeEnderecoController.showInputs and !unidadeEnderecoController.showInputLogradouro) or !unidadeEnderecoController.permiteEditar}">
+					<f:selectItems value="#{enderecoGenericoController.listaMunicipio}"  var="municipio" itemValue="#{municipio}" itemLabel="#{municipio.nomMunicipio}" />
+				</p:selectOneMenu>				
+				
+			</h:panelGrid>
+			
+			<h:outputLabel value="#{bundle.lbl_preench_obrig_asterisc}" style="float: left;" />
+			</p:outputPanel>
+			</h:panelGrid>
+			
+			<br/>
+			<h:panelGrid columns="2" style="float:right;">	
+				<p:commandButton value="Salvar" 
+					actionListener="#{declaracaoInexigibilidadeController.salvarEnderecoUnidade}" 
+					process="@form" 
+					update="tabViewDI:formInfoAdicional:dtUnidade" 
+					disabled="#{!unidadeEnderecoController.permiteEditar}"/>
+			</h:panelGrid>
+		</h:form>
+	
+</ui:composition>

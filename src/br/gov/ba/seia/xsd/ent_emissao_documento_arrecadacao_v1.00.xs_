@@ -1,0 +1,438 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="ent_emissao_documento"
+    targetNamespace="http://www.sefaz.ba.gov.br/warr"
+    elementFormDefault="qualified"
+    xmlns="http://www.sefaz.ba.gov.br/warr"
+    xmlns:mstns="http://www.sefaz.ba.gov.br/warr"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+  <xs:element name="ent_emissao_documento_arrecadacao">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="tpAmb" type="TipoAmbiente" minOccurs="1" maxOccurs="1"/>
+        <xs:element name="verAplic" type="TipoVerAplic" minOccurs="1" maxOccurs="1"/>
+        <xs:element name="cod_usuario" type="TipoAlfanumerico" minOccurs="0" maxOccurs="1"/>
+        <xs:element name="str_senha" type="TipoAlfanumerico" minOccurs="0" maxOccurs="1"/>
+        <xs:element name="emissao_documento_arrecadacao" minOccurs="0" maxOccurs="1">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="documento_arrecadacao" minOccurs="1" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="seq_documento_arrecadacao" type="TipoInteiro18" minOccurs="1" maxOccurs="1"/>
+                    <xs:element name="cod_receita" type="TipoInteiro4" minOccurs="1" maxOccurs="1"/>
+                    <xs:element name="cod_identificacao_emitente" type="TipoIdentificacaoEmitente" minOccurs="0" maxOccurs="1"/>
+                    <xs:element name="num_identificacao_emitente" type="TipoNumIdentificacaoEmitente" minOccurs="0" maxOccurs="1"/>
+                    <xs:element name="cod_tipo_documento_origem" type="TipoDocumentoOrigem" minOccurs="0" maxOccurs="1"/>
+                    <xs:element name="num_documento_origem" type="TipoNumDocumentoOrigem" minOccurs="0" maxOccurs="1"/>
+                    <xs:element name="dtc_vencimento" type="TipoData" minOccurs="1" maxOccurs="1"/>
+                    <xs:element name="dtc_max_pagamento" type="TipoData" minOccurs="1" maxOccurs="1"/>
+                    <xs:element name="referencia" type="TipoReferencia" minOccurs="0" maxOccurs="1"/>
+                    <xs:element name="num_placa_ipva" type="TipoPlacaIpva" minOccurs="0" maxOccurs="1"/>
+                    <xs:element name="num_cota_ipva" type="TipoInteiro4" minOccurs="0" maxOccurs="1"/>
+                    <xs:element name="val_principal" type="TipoValDae" minOccurs="0" maxOccurs="1"/>
+                    <xs:element name="val_correcao" type="TipoValDae" minOccurs="0" maxOccurs="1"/>
+                    <xs:element name="val_acrescimo" type="TipoValDae" minOccurs="0" maxOccurs="1"/>
+                    <xs:element name="val_multa" type="TipoValDae" minOccurs="0" maxOccurs="1"/>
+                    <xs:element name="nom_razao_social" type="TipoRazaoSocial" minOccurs="0" maxOccurs="1"/>
+                    <xs:element name="des_tipo_logradouro" type="TipoLogradouro" minOccurs="0" maxOccurs="1"/>
+                    <xs:element name="des_endereco" type="TipoEndereco" minOccurs="0" maxOccurs="1"/>
+                    <xs:element name="des_bairro" type="TipoBairro" minOccurs="0" maxOccurs="1"/>
+                    <xs:element name="num_cep" type="TipoCep" minOccurs="0" maxOccurs="1"/>
+                    <xs:element name="cod_municipio_ibge" type="TipoMunicipioIbge" minOccurs="0" maxOccurs="1"/>
+                    <xs:element name="des_informacoes_complementares" type="TipoInformacoesComplementares" minOccurs="0" maxOccurs="1"/>
+                    <xs:element name="lst_nota_fiscal" type="TipoListaNotafiscal" minOccurs="0" maxOccurs="1"/>
+                    <xs:element name="qtd_nota_fiscal" type="TipoInteiro3" minOccurs="0" maxOccurs="1"/>
+                    <xs:element name="tipo_dae" type="TipoDae" minOccurs="0" maxOccurs="1"/>
+                    <xs:element name="cod_unidade_orcamentaria_origem" type="TipoInteiro5" minOccurs="0" maxOccurs="1"/>
+                    <xs:element name="cod_unidade_gestora_origem" type="TipoInteiro5" minOccurs="0" maxOccurs="1"/>
+                    <xs:element name="cod_unidade_orcamentaria_destino" type="TipoInteiro5" minOccurs="0" maxOccurs="1"/>
+                    <xs:element name="cod_unidade_gestora_destino" type="TipoInteiro5" minOccurs="0" maxOccurs="1"/>
+                    <xs:element name="cod_tipo_retorno_documento" type="TipoRetornoDocumento" minOccurs="1" maxOccurs="1"/>
+                    <xs:element name="sts_retornar_barra" type="TipoRetornarBarra" minOccurs="1" maxOccurs="1"/>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+          <xs:unique name="SeqUnique">
+            <xs:selector xpath="mstns:documento_arrecadacao"/>
+            <xs:field xpath="mstns:seq_documento_arrecadacao"/>
+          </xs:unique>
+        </xs:element>
+        <xs:element name="cod_tipo_processamento" type="TipoProcessamento" minOccurs="1" maxOccurs="1"/>
+      </xs:sequence>
+      <xs:attribute name="versao" use="optional"/>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:simpleType name="TipoAmbiente">
+    <xs:restriction base="xs:integer">
+      <xs:enumeration value="1"/>
+      <xs:enumeration value="2"/>
+      <xs:enumeration value="3"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="TipoVerAplic">
+    <xs:restriction base="xs:string">
+      <xs:pattern value="WARR_SEFAZBA_v\d.\d\d"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="TipoPlacaIpva">
+    <xs:annotation>
+      <xs:documentation>Tipo Placa Ipva</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:whiteSpace value="preserve" />
+      <xs:pattern value="[A-Za-z][A-Za-z][A-Za-z][0-9][0-9][0-9][0-9]" />
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="TipoInteiro3">
+    <xs:restriction base="xs:integer">
+      <xs:minInclusive value="1"/>
+      <xs:maxInclusive value="999"/>
+      <xs:pattern value="\d{1,3}"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="TipoInteiro4">
+    <xs:restriction base="xs:integer">
+      <xs:minInclusive value="1"/>
+      <xs:maxInclusive value="9999"/>
+      <xs:pattern value="\d{1,4}"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="TipoIdentificacaoEmitente">
+    <xs:annotation>
+      <xs:documentation>
+        0 - CNPJ
+        1 - CPF
+      </xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:integer">
+      <xs:enumeration value="0"/>
+      <xs:enumeration value="1"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:complexType name="TipoNumIdentificacaoEmitente">
+    <xs:choice>
+      <xs:element name="num_inscricao_estad" type="TipoIE">
+        <xs:annotation>
+          <xs:documentation>
+            Número da Inscrição Estadual do Contribuinte
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element name="num_cnpj_cpf" type="TipoCNPJCPF">
+        <xs:annotation>
+          <xs:documentation>
+            Número do CNPJ/CPF do Contribuinte
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:choice>
+  </xs:complexType>
+
+  <xs:simpleType name="TipoCNPJCPF">
+    <xs:annotation>
+      <xs:documentation>Tipo Número do CNPJ/CPF</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:whiteSpace value="preserve"/>
+      <xs:pattern value="[0-9]{11,14}"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="TipoIE">
+    <xs:annotation>
+      <xs:documentation>Tipo Inscrição Estadual</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:whiteSpace value="preserve"/>
+      <xs:pattern value="[0-9]{2,16}"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="TipoDocumentoOrigem">
+    <xs:annotation>
+      <xs:documentation>
+        1 - Auto Infração/Denúncia/Notific
+        2 - Número do Parcelamento
+        3 - Intimação Fiscal
+        4 - Notificação Agente Arrecadador
+        5 - Número da DI/DSI
+        6 - Termo de Depósito
+        8 - Contribuição Previdenciária
+        9 - Número da DIRE
+        10 - Número da Nota Fiscal
+      </xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:integer">
+      <xs:enumeration value="1"/>
+      <xs:enumeration value="2"/>
+      <xs:enumeration value="3"/>
+      <xs:enumeration value="4"/>
+      <xs:enumeration value="5"/>
+      <xs:enumeration value="6"/>
+      <xs:enumeration value="8"/>
+      <xs:enumeration value="9"/>
+      <xs:enumeration value="10"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name= "TipoNumDocumentoOrigem">
+    <xs:restriction base="xs:string">
+      <xs:whiteSpace value="preserve"/>
+      <xs:pattern value="[0-9]{1,18}"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="TipoData">
+    <xs:restriction base="xs:string">
+      <xs:whiteSpace value="preserve"/>
+      <xs:pattern value="(((20(([02468][048])|([13579][26]))-02-29))|(20[0-9][0-9])-((((0[1-9])|(1[0-2]))-((0[1-9])|(1\d)|(2[0-8])))|((((0[13578])|(1[02]))-31)|(((0[1,3-9])|(1[0-2]))-(29|30)))))"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:complexType name="TipoReferencia">
+    <xs:sequence>
+      <xs:element name="cod_tipo_referencia" type="TipoCodReferencia">
+        <xs:annotation>
+          <xs:documentation>
+            Indicador de Referencia:
+            1 – Mês / Ano de Referência
+            2 – Parcela / Total de Parcelas
+            3 – Ano Exercício
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element minOccurs="0" name="num_mes" type="TipoMes">
+        <xs:annotation>
+          <xs:documentation>
+            Mês de referência da Apuração
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element minOccurs="0" name="num_ano" type="TipoAno">
+        <xs:annotation>
+          <xs:documentation>
+            Ano de referência da Apuração
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element minOccurs="0" name="num_parcela" type="TipoParcela">
+        <xs:annotation>
+          <xs:documentation>
+            Parcela de referência da Apuração
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+      <xs:element minOccurs="0" name="num_total_parcela" type="TipoTotalParcela">
+        <xs:annotation>
+          <xs:documentation>
+            Total Parcela de referência da Apuração
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:simpleType name="TipoCodReferencia">
+    <xs:restriction base="xs:string">
+      <xs:whiteSpace value="preserve"/>
+      <xs:enumeration value="1"/>
+      <xs:enumeration value="2"/>
+      <xs:enumeration value="3"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+
+  <xs:simpleType name="TipoMes">
+    <xs:restriction base="xs:string">
+      <xs:whiteSpace value="preserve"/>
+      <xs:enumeration value="01"/>
+      <xs:enumeration value="02"/>
+      <xs:enumeration value="03"/>
+      <xs:enumeration value="04"/>
+      <xs:enumeration value="05"/>
+      <xs:enumeration value="06"/>
+      <xs:enumeration value="07"/>
+      <xs:enumeration value="08"/>
+      <xs:enumeration value="09"/>
+      <xs:enumeration value="10"/>
+      <xs:enumeration value="11"/>
+      <xs:enumeration value="12"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="TipoAno">
+    <xs:restriction base="xs:string">
+      <xs:whiteSpace value="preserve"/>
+      <xs:pattern value="[1-9]{1}[0-9]{1}[0-9]{1}[0-9]{1}"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="TipoParcela">
+    <xs:restriction base="xs:string">
+      <xs:whiteSpace value="preserve"/>
+      <xs:pattern value="[1-9]{1}[0-9]{0,2}"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="TipoTotalParcela">
+    <xs:restriction base="xs:string">
+      <xs:whiteSpace value="preserve"/>
+      <xs:pattern value="[1-9]{1}[0-9]{0,2}"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="TipoValDae">
+    <xs:restriction base="xs:decimal">
+      <xs:minInclusive value="-999999999999999.99"/>
+      <xs:maxInclusive value="999999999999999.99"/>
+      <xs:pattern value="-?\d{1,15}(.)\d{1,2}"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="TipoInteiro9">
+    <xs:restriction base="xs:integer">
+      <xs:minInclusive value="1"/>
+      <xs:maxInclusive value="999999999"/>
+      <xs:pattern value="\d{1,9}"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="TipoRazaoSocial">
+    <xs:restriction base="TString">
+      <xs:maxLength value="150"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="TipoLogradouro">
+    <xs:restriction base="TString">
+      <xs:maxLength value="10"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="TipoEndereco">
+    <xs:restriction base="TString">
+      <xs:maxLength value="50"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="TipoBairro">
+    <xs:restriction base="TString">
+      <xs:maxLength value="40"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="TipoCep">
+    <xs:restriction base="xs:string">
+      <xs:whiteSpace value="preserve"/>
+      <xs:pattern value="[0-9]{8}"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="TipoMunicipioIbge">
+    <xs:restriction base="xs:string">
+      <xs:whiteSpace value="preserve"/>
+      <xs:pattern value="[0-9]{6,7}"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="TipoInformacoesComplementares">
+    <xs:restriction base="TString">
+      <xs:maxLength value="100"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="TString">
+    <xs:annotation>
+      <xs:documentation>Tipo string genérico</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:whiteSpace value="preserve"/>
+      <xs:pattern value="[!-ÿ]{1}[ -ÿ]{0,}[!-ÿ]{1}|[!-ÿ]{1}"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="TipoDae">
+    <xs:annotation>
+      <xs:documentation>
+        0 - BAIXA DE ESTOQUE PP
+        1 - BAIXA DE ESTOQUE ME
+        2 - DAE COMPLEMENTAR
+      </xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="0"/>
+      <xs:enumeration value="1"/>
+      <xs:enumeration value="2"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="TipoInteiro5">
+    <xs:restriction base="xs:integer">
+      <xs:minInclusive value="1"/>
+      <xs:maxInclusive value="99999"/>
+      <xs:pattern value="\d{1,5}"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:complexType name="TipoListaNotafiscal">
+    <xs:sequence>
+      <xs:element name="nota_fiscal" type="TipoInteiro9" minOccurs="0" maxOccurs="15"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:simpleType name="TipoRetornoDocumento">
+    <xs:annotation>
+      <xs:documentation>0 - Não retornar documento / 1 - url</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:integer">
+      <xs:enumeration value="0"/>
+      <xs:enumeration value="1"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="TipoRetornarBarra">
+    <xs:annotation>
+      <xs:documentation>0 - Não retornar / 1 - Retornar</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:integer">
+      <xs:enumeration value="0"/>
+      <xs:enumeration value="1"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="TipoProcessamento">
+    <xs:annotation>
+      <xs:documentation>1 - validar / 2 - emitir</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:integer">
+      <xs:enumeration value="1"/>
+      <xs:enumeration value="2"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="TipoInteiro18">
+    <xs:restriction base="xs:long">
+      <xs:minInclusive value="1"/>
+      <xs:maxInclusive value="999999999999999999"/>
+      <xs:pattern value="\d{1,18}"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="TipoAlfanumerico">
+    <xs:annotation>
+      <xs:documentation>Valor inválido! Parâmetro do tipo alfanumérico.</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string" />
+  </xs:simpleType>
+
+</xs:schema>

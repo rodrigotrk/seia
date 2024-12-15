@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+	
+	<script type="text/javascript">
+		$(document).ready(function() {
+				$('table[id="formDetalharImovelRural:tabviewimovelrural:paginaCefir:tabAbasCefir:conteudoAp"]').hide();  
+			});
+		
+		function exibirDetalhesAreaProdutiva() {
+			$('table[id*="formDetalharImovelRural:tabviewimovelrural:paginaCefir:tabAbasCefir:conteudoAp"]').show();
+		}
+	</script>
+		<h:panelGrid>
+			<p:dataTable id="dataTableAreaProdutiva" var="ap" value="#{detalharImovelRuralController.imovelRural.areaProdutivaCollection}" lazy="true" paginator="true" rows="10"
+				paginatorPosition="bottom" paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}" emptyMessage="#{bundle.cefir_msg_A012}"
+				style="width: 650px;" widgetVar="ap">
+				<f:facet name="header">
+					<h:outputText value="#{bundle.cefir_lbl_atividades_desenvolvidas}" />
+				</f:facet>
+				<p:column>
+					<f:facet name="header">
+						<h:outputText value="#{bundle.cefir_lbl_tipo_atividade_desenvolvida}" />
+					</f:facet>
+					<h:outputText value="#{detalharImovelRuralController.getLabelAtividadesDesenvolvidas(ap)}" />
+				</p:column>
+				<p:column >
+					<f:facet name="header">
+						<h:outputText value="Área" />
+					</f:facet>
+					<h:outputText value="#{ap.valArea}">
+						<f:converter converterId="doubleQuatroCasasDecimaisConverter" />
+					</h:outputText>
+				</p:column>
+				<p:column>
+					<f:facet name="header">
+						<h:outputText value="Ações" />
+					</f:facet>
+					
+					<p:commandLink id="visualizarAp" action="#{detalharImovelRuralController.montarObjetoAreaProdutiva()}" title="Visualizar" process="@this"						
+						oncomplete="exibirDetalhesAreaProdutiva()">
+						<h:graphicImage title="Visualizar" value="/resources/img/ico-pesquisa.png" />
+						<f:setPropertyActionListener value="#{ap}" target="#{detalharImovelRuralController.areaProdutivaSelecionada}" />
+					</p:commandLink>
+					
+				    <h:outputLink value="#{detalharImovelRuralController.caminhoGeoBahia}" title="GEOBAHIA" rendered="#{detalharImovelRuralController.existeTheGeomByIdeLocGeo(ap.ideLocalizacaoGeografica.ideLocalizacaoGeografica)}" target="_blank">  
+						<h:graphicImage title="Shapefile" value="/resources/img/ico-arl-relocacao.png" />
+						<f:param name="secao" value="cefir" />
+						<f:param name="acao" value="view" />
+						<f:param name="id" value="#{detalharImovelRuralController.imovelRural.ideImovelRural}"/>
+						<f:param name="tema" value="4" />
+						<f:param name="id_loc" value="#{ap.ideLocalizacaoGeografica.ideLocalizacaoGeografica}"/>
+						<f:param name="token" value="#{detalharImovelRuralController.token}"/>	
+				    </h:outputLink>
+				</p:column>
+			</p:dataTable>			
+		</h:panelGrid>		
+	
+	<h:panelGrid id="conteudoAp">
+	<p:outputPanel autoUpdate="true">
+	<h:panelGrid columns="1">
+		<h3><h:outputLabel value="INFORMAÇÕES DA ATIVIDADE DESENVOLVIDA" styleClass="titulo-grupo" /></h3>
+		<h:panelGrid columns="2">	
+			<h:outputText value="Divisão da atividade:" style="font-size: 11px;font-weight: bold;" />
+			<h:outputText value="#{detalharImovelRuralController.areaProdutivaSelecionada.ideTipologia.ideTipologiaPai.desTipologia}" />
+			<h:outputText value="Grupo da atividade:" style="font-size: 11px;font-weight: bold;" />			
+			<h:outputText value="#{detalharImovelRuralController.areaProdutivaSelecionada.ideTipologia.desTipologia}" />
+			<h:outputText value="Subgrupo da atividade:" style="font-size: 11px;font-weight: bold;" rendered="#{detalharImovelRuralController.areaProdutivaSelecionada.ideTipologiaSubgrupo != null and detalharImovelRuralController.areaProdutivaSelecionada.ideTipologiaSubgrupo.desTipologia != null}"/>	
+			<h:outputText value="#{detalharImovelRuralController.areaProdutivaSelecionada.ideTipologiaSubgrupo.desTipologia}" rendered="#{detalharImovelRuralController.areaProdutivaSelecionada.ideTipologiaSubgrupo != null and detalharImovelRuralController.areaProdutivaSelecionada.ideTipologiaSubgrupo.desTipologia != null}" />
+		</h:panelGrid>	
+		<h:panelGrid rendered="#{not empty detalharImovelRuralController.areaProdutivaSelecionada.areaProdutivaTipologiaAtividadeCollection and (!detalharImovelRuralController.imovelRural.imovelINCRA or (detalharImovelRuralController.imovelRural.imovelINCRA and detalharImovelRuralController.areaProdutivaSelecionada.ideTipologia.ideTipologia != 6 and detalharImovelRuralController.areaProdutivaSelecionada.ideTipologia.ideTipologia != 5))}">
+			<p:dataTable  var="tpa" value="#{detalharImovelRuralController.areaProdutivaSelecionada.areaProdutivaTipologiaAtividadeCollection}" lazy="true" paginator="true" rows="10"
+				paginatorPosition="bottom" paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}" emptyMessage="#{bundle.cefir_msg_A012}"
+				style="width: 300px;" widgetVar="tpa" rendered="#{detalharImovelRuralController.areaProdutivaSelecionada.ideTipologiaSubgrupo.ideTipologia != 6 and detalharImovelRuralController.areaProdutivaSelecionada.ideTipologiaSubgrupo.ideTipologia != 10 and detalharImovelRuralController.areaProdutivaSelecionada.ideTipologiaSubgrupo.ideTipologia != 8 and detalharImovelRuralController.areaProdutivaSelecionada.ideTipologiaSubgrupo.ideTipologia != 16}">
+				<p:column>
+					<f:facet name="header">
+						<h:outputText value="Tipo de Atividade" />
+					</f:facet>
+					<h:outputText value="#{tpa.ideTipologiaAtividade.dscTipologiaAtividade}" />
+				</p:column>				
+			</p:dataTable>
+			<p:dataTable  var="tpaAgricultura" value="#{detalharImovelRuralController.areaProdutivaSelecionada.areaProdutivaTipologiaAtividadeCollection}" lazy="true" paginator="true" rows="10"
+				paginatorPosition="bottom" paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}" emptyMessage="#{bundle.cefir_msg_A012}"
+				style="width: 500px;" widgetVar="tpaAgricultura" rendered="#{detalharImovelRuralController.areaProdutivaSelecionada.ideTipologiaSubgrupo.ideTipologia == 6}">
+				<p:column>
+					<f:facet name="header">
+						<h:outputText value="Tipo de Atividade" />
+					</f:facet>
+					<h:outputText value="#{tpaAgricultura.ideTipologiaAtividade.dscTipologiaAtividade}" />
+				</p:column>
+				<p:column>
+					<f:facet name="header">
+						<h:outputText value="Método Irrigação" />
+					</f:facet>
+					<h:outputText value="#{tpaAgricultura.ideAreaProdutivaTipologiaAtividadeAgricultura.ideMetodoIrrigacao.dscMetodoIrrigacao}" />
+				</p:column>
+				<p:column>
+					<f:facet name="header">
+						<h:outputText value="Meses" />
+					</f:facet>
+					<h:outputText value="#{detalharImovelRuralController.retornaDscMesesIrrigacao(tpaAgricultura.ideAreaProdutivaTipologiaAtividadeAgricultura.meses)}" />
+				</p:column>				
+			</p:dataTable>
+			<p:dataTable  var="tpaAnimal" value="#{detalharImovelRuralController.areaProdutivaSelecionada.areaProdutivaTipologiaAtividadeCollection}" lazy="true" paginator="true" rows="10"
+				paginatorPosition="bottom" paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}" emptyMessage="#{bundle.cefir_msg_A012}"
+				style="width: 600px;" widgetVar="tpaAnimal" rendered="#{detalharImovelRuralController.areaProdutivaSelecionada.ideTipologiaSubgrupo.ideTipologia == 8 or detalharImovelRuralController.areaProdutivaSelecionada.ideTipologiaSubgrupo.ideTipologia == 10}">
+				<p:column>
+					<f:facet name="header">
+						<h:outputText value="Tipo de Atividade" />
+					</f:facet>
+					<h:outputText value="#{tpaAnimal.ideTipologiaAtividade.dscTipologiaAtividade}" />
+				</p:column>
+				<p:column>
+					<f:facet name="header">
+						<h:outputText value="Capacidade Instalada" />
+					</f:facet>
+					<h:outputText value="#{tpaAnimal.ideAreaProdutivaTipologiaAtividadeAnimal.qtdCabeca}" />
+				</p:column>
+				<p:column>
+					<f:facet name="header">
+						<h:outputText value="Uso da água" />
+					</f:facet>
+					<h:outputText value="#{detalharImovelRuralController.retornaDscTipoUsoAgua(tpaAnimal.ideAreaProdutivaTipologiaAtividadeAnimal.tipoUsoAgua)}" />
+				</p:column>
+				<p:column>
+					<f:facet name="header">
+						<h:outputText value="Manejo" />
+					</f:facet>
+					<h:outputText value="#{detalharImovelRuralController.retornaDscManejo(tpaAnimal.ideAreaProdutivaTipologiaAtividadeAnimal)}" />
+				</p:column>				
+			</p:dataTable>
+			<p:dataTable  var="tpaPiscicultura" value="#{detalharImovelRuralController.areaProdutivaSelecionada.areaProdutivaTipologiaAtividadeCollection}" lazy="true" paginator="true" rows="10"
+				paginatorPosition="bottom" paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}" emptyMessage="#{bundle.cefir_msg_A012}"
+				style="width: 600px;" widgetVar="tpaPiscicultura" rendered="#{detalharImovelRuralController.areaProdutivaSelecionada.ideTipologiaSubgrupo.ideTipologia == 16}">
+				<p:column>
+					<f:facet name="header">
+						<h:outputText value="Tipo de Atividade" />
+					</f:facet>
+					<h:outputText value="#{tpaPiscicultura.ideTipologiaAtividade.dscTipologiaAtividade}" />
+				</p:column>
+				<p:column>
+					<f:facet name="header">
+						<h:outputText value="Volume (m³)" />
+					</f:facet>
+					<h:outputText value="#{tpaPiscicultura.ideAreaProdutivaTipologiaAtividadePiscicultura.volume}" converter="doubleQuatroCasasDecimaisConverter" />
+				</p:column>				
+			</p:dataTable>
+		</h:panelGrid>
+		<br />
+		<h:panelGrid columns="2">
+			<h:outputText value="#{bundle.cefir_lbl_val_area_produtiva} :" style="font-size: 11px;font-weight: bold;" />
+			<h:outputText value="#{detalharImovelRuralController.areaProdutivaSelecionada.valArea}">
+				<f:converter converterId="doubleQuatroCasasDecimaisConverter" />
+			</h:outputText>
+		</h:panelGrid>
+		<h:panelGrid columns="2" rendered="#{detalharImovelRuralController.manejoSustentavel}">
+			<h:outputLabel value="Número de unidades de produção (talhões):" rendered="#{detalharImovelRuralController.manejoSustentavel}" style="font-size: 11px;font-weight: bold;" /> 
+			<h:outputText value="#{detalharImovelRuralController.areaProdutivaSelecionada.numUnidadeProducao}"
+						  rendered="#{detalharImovelRuralController.manejoSustentavel}">
+				<f:convertNumber integerOnly="true"/>
+			</h:outputText>
+		</h:panelGrid>							 
+		<h:panelGrid columns="2" rendered="#{detalharImovelRuralController.manejoSustentavel || detalharImovelRuralController.manejoCabruca}">
+			<h:outputLabel value="Número do processo de Autorização de Manejo da Cabruca(AMC):" rendered="#{detalharImovelRuralController.manejoCabruca}" style="font-size: 11px;font-weight: bold;"/>
+			<h:outputLabel value="Número do processo:" rendered="#{detalharImovelRuralController.manejoSustentavel}" style="font-size: 11px;font-weight: bold;" /> 
+			<h:outputText value="#{detalharImovelRuralController.areaProdutivaSelecionada.numProcessoAmc}"
+						 rendered="#{detalharImovelRuralController.manejoCabruca}" /> 										 
+			<h:outputText value="#{detalharImovelRuralController.areaProdutivaSelecionada.numProcesso}" 
+					     rendered="#{detalharImovelRuralController.manejoSustentavel}" />
+		</h:panelGrid>
+		
+		<h:panelGrid rendered="#{detalharImovelRuralController.manejoSustentavel}">
+			<p:dataTable rendered="#{detalharImovelRuralController.listaDocumentoPlanoManejo != null and not empty detalharImovelRuralController.listaDocumentoPlanoManejo}"
+						 value="#{detalharImovelRuralController.listaDocumentoPlanoManejo}"
+						 var="arquivoPlanoManejo" lazy="true" emptyMessage="#{bundle.cefir_msg_A012}">
+		         <p:column>  
+					<h:outputText value="#{arquivoPlanoManejo.nomDocumentoObrigatorio}"/>
+		         </p:column>	
+		         <p:column>
+		         	<h:commandLink ajax="false">
+						<h:graphicImage value="/resources/img/ico-download.png" />
+						<f:setPropertyActionListener
+							target="#{detalharImovelRuralController.arquivoSelecionado}"
+							value="#{arquivoPlanoManejo.dscCaminhoArquivo}" />
+						<p:fileDownload value="#{detalharImovelRuralController.arquivoBaixar}" />
+					</h:commandLink>
+		         </p:column>	
+    		</p:dataTable>
+   		</h:panelGrid>	
+   			
+		<h:panelGrid rendered="#{detalharImovelRuralController.renderedPerguntaLicenca()}">
+			<h:panelGrid columns="2">
+				<h:outputText value="#{bundle.cefir_lbl_atividade_desenvolvida_possui_licenca}?" style="font-size: 11px;font-weight: bold;" />
+				<h:outputText value="SIM"
+					rendered="${detalharImovelRuralController.areaProdutivaSelecionada.licenciada}" />
+				<h:outputText value="NÃO"
+					rendered="${detalharImovelRuralController.areaProdutivaSelecionada.licenciada != null and !detalharImovelRuralController.areaProdutivaSelecionada.licenciada}" />				
+			</h:panelGrid>
+			<h:panelGrid columns="2" rendered="#{detalharImovelRuralController.areaProdutivaSelecionada.licenciada}">
+				<h:outputText value="Número da licença:" style="font-size: 11px;font-weight: bold;" />
+				<h:outputText value="#{detalharImovelRuralController.areaProdutivaSelecionada.numProcesso}" />				
+			</h:panelGrid>
+		</h:panelGrid>
+		
+		<h:panelGrid columns="1" >
+			<h3><h:outputLabel value="POLIGONAL DA ATIVIDADE DESENVOLVIDA" styleClass="titulo-grupo" /></h3>
+	        <p:outputPanel>
+		        <h:panelGrid columns="5">
+					<h:outputText value="#{bundle.empreendimento_lbl_secao_geometrica}" style="font-size: 11px;font-weight: bold;" />
+						<p:spacer width="20" height="10" />
+					<h:outputText value="#{bundle.empreendimento_lbl_datum}" style="font-size: 11px;font-weight: bold;" />
+						<p:spacer width="20" height="10" />
+					<h:outputText value="Descrição" style="font-size: 11px;font-weight: bold;" />
+					<h:outputText value="#{detalharImovelRuralController.areaProdutivaSelecionada.ideLocalizacaoGeografica.ideClassificacaoSecao.nomClassificacaoSecao}" />
+						<p:spacer width="20" height="10" />
+						<h:outputText value="#{detalharImovelRuralController.areaProdutivaSelecionada.ideLocalizacaoGeografica.ideSistemaCoordenada.nomSistemaCoordenada}" />
+						<p:spacer width="20" height="10" />
+						<h:outputText value="#{detalharImovelRuralController.areaProdutivaSelecionada.ideLocalizacaoGeografica.desLocalizacaoGeografica}" />	
+				</h:panelGrid>
+			</p:outputPanel>
+		</h:panelGrid>
+	</h:panelGrid>
+	
+	<h:panelGrid id="pnlTheGeomAp" rendered="#{detalharImovelRuralController.existeTheGeomByIdeLocGeo(detalharImovelRuralController.areaProdutivaSelecionada.ideLocalizacaoGeografica.ideLocalizacaoGeografica)}" columns="2">
+		<h:panelGrid id="pnlAcoesVisualizarShapesAp" columns="3">
+		    <h:outputLink value="#{detalharImovelRuralController.caminhoGeoBahia}" title="GEOBAHIA" target="_blank">  
+		        <h:outputText value="VISUALIZAR SHAPE DA ATIVIDADE DESENVOLVIDA"/>
+				<f:param name="secao" value="cefir" />
+				<f:param name="acao" value="view" />
+				<f:param name="id" value="#{detalharImovelRuralController.imovelRural.ideImovelRural}"/>
+				<f:param name="tema" value="4" />
+				<f:param name="id_loc" value="#{detalharImovelRuralController.areaProdutivaSelecionada.ideLocalizacaoGeografica.ideLocalizacaoGeografica}"/>
+				<f:param name="token" value="#{detalharImovelRuralController.token}"/>
+		    </h:outputLink>
+		    
+		    <h:outputLink value="#{detalharImovelRuralController.caminhoGeoBahia}" title="GEOBAHIA" target="_blank">  
+		        <h:graphicImage title="Visualizar" value="/resources/img/ico-arl-relocacao.png" /> 
+				<f:param name="secao" value="cefir" />
+				<f:param name="acao" value="view" />
+				<f:param name="id" value="#{detalharImovelRuralController.imovelRural.ideImovelRural}"/>
+				<f:param name="tema" value="4" />
+				<f:param name="id_loc" value="#{detalharImovelRuralController.areaProdutivaSelecionada.ideLocalizacaoGeografica.ideLocalizacaoGeografica}"/>
+				<f:param name="token" value="#{detalharImovelRuralController.token}"/>
+		    </h:outputLink>
+    	</h:panelGrid>
+	</h:panelGrid>
+		</p:outputPanel>
+	</h:panelGrid>	
+</ui:composition>

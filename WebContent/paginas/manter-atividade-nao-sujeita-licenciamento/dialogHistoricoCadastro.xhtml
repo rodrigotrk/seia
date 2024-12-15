@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+			
+	<p:dialog header="#{bundle.lbl_cansla_historico_tramitacao}" 
+		id="dialogHistorico"
+		widgetVar="dialogHistorico"  
+		width="800"
+		modal="true" 
+		position="center"
+		resizable="false"
+		style="max-height:500;">
+
+		<h:form id="formHistorico">
+			
+			<h:outputText value="#{bundle.lbl_cansla_dados_cadastro}:" styleClass="titulo-grupo" style="margin-top:15px;"/>
+			<h:panelGrid columns="1">
+				<h:outputText value="#{bundle.lbl_cansla_consulta_atividade}: #{historicoAtividadeSemLicenciamentoController.cadastro.tipoAtividadeNaoSujeitaLicenciamento.nomAtividade}"/>
+			</h:panelGrid>
+			
+			<h:panelGrid columns="2" style="width:750px; margin-top: -2px; margin-bottom: 15px;">
+				<h:panelGroup layout="block" style="width:300px;">
+					<h:outputText value="#{bundle.lbl_cansla_consulta_num_cadastro}:" />
+					<h:outputText value="#{historicoAtividadeSemLicenciamentoController.cadastro.numCadastro}" style="width: 295px;" />
+				</h:panelGroup>
+				
+				<h:panelGroup>
+					<h:outputText value="#{bundle.consulta_empree_nome_empreendimento}:"  />
+					<h:outputText value="#{historicoAtividadeSemLicenciamentoController.cadastro.ideEmpreendimento.nomEmpreendimento}"  />
+				</h:panelGroup>
+
+				<h:panelGroup>
+					<h:outputText value="#{bundle.lbl_cansla_cpf_cnpj}:"  />
+					<h:outputText value="#{historicoAtividadeSemLicenciamentoController.cadastro.idePessoaRequerente.cpfCnpjFormatado}"  />
+				</h:panelGroup>
+				
+				<h:panelGroup>
+					<h:outputText value="#{bundle.lbl_cansla_nome_requerente}:"  />
+					<h:outputText value="#{historicoAtividadeSemLicenciamentoController.cadastro.idePessoaRequerente.nomeRazao}"  />
+				</h:panelGroup>
+			</h:panelGrid>			
+			
+			<h:outputText value="#{bundle.lbl_cansla_historico_comunicacao}" styleClass="titulo-grupo"/>
+			<p:dataTable id="tableComunicacao"
+				widgetVar="tableComunicacao"
+				value="#{historicoAtividadeSemLicenciamentoController.cadastro.cadastroAtividadeNaoSujeitaLicComunicacaos}"
+				var="comunicacao"
+				emptyMessage="#{bundle.msg_lista_vazia}"
+				style="width:750px; margin: 10px; margin-bottom: 15px;"
+				>
+				<p:column headerText="#{bundle.lbl_cansla_data}" style="width: 80px;">
+					<h:outputText value="#{comunicacao.dtcComunicacao}" >
+						<f:convertDateTime  pattern="dd/MM/yyyy" locale="pt,BR" timeZone="Brazil/East"/>
+					</h:outputText>
+				</p:column>
+				
+				<p:column headerText="#{bundle.lbl_cansla_mensagem}">
+					<h:outputText value="#{fn:substring(comunicacao.dscMensagem,0,116)}" />
+				</p:column>
+				
+				<p:column headerText="#{bundle.geral_lbl_acoes}" style="width: 45px; text-align: center;">
+					<p:commandLink oncomplete="dialogMensagemEmail.show();" process="@this" update="dialogMensagemEmail, formEmail">
+						<f:setPropertyActionListener value="#{comunicacao}" target="#{efetuarValidacaoPreviaAtividadeController.comunicacao}"/>
+						<f:setPropertyActionListener value="#{true}" target="#{efetuarValidacaoPreviaAtividadeController.comunicacao.visualizar}"/>
+						<h:graphicImage title="Visualizar" value="/resources/img/ico-pesquisa.png" />
+					</p:commandLink>
+				</p:column>
+			</p:dataTable>
+			
+			<h:outputText value="#{bundle.lbl_cansla_historico_tramitacao}" styleClass="titulo-grupo" rendered="#{contextoController.usuarioLogado.indTipoUsuario}"/>
+			<p:dataTable id="tableStatus"
+				var="status"
+				value="#{historicoAtividadeSemLicenciamentoController.cadastro.cadastroAtividadeNaoSujeitaLicStatus}"
+				emptyMessage="#{bundle.msg_lista_vazia}"
+				rendered="#{contextoController.usuarioLogado.indTipoUsuario}"
+				style="width:750px; margin: 10px;">
+				<p:column headerText="#{bundle.lbl_cansla_data}" style="width: 80px;">
+					<h:outputText value="#{status.dtcStatus}">
+						<f:convertDateTime  pattern="dd/MM/yyyy" locale="pt,BR" timeZone="Brazil/East"/>
+					</h:outputText>
+				</p:column>
+		
+				<p:column headerText="#{bundle.lbl_cansla_consulta_status_cadastro}" style="width: 180px;">
+					<h:outputText value="#{status.cadastroAtividadeNaoSujeitaLicTipoStatus.nomTipoStatus}" />
+				</p:column>
+		
+				<p:column headerText="Usuário" style="width: 420px;">
+					<h:outputText value="#{status.idePessoaFisica.nomPessoa}" />
+				</p:column>
+			</p:dataTable>
+		</h:form>
+	</p:dialog>
+</ui:composition>

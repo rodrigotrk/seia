@@ -1,0 +1,788 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui">
+<h:head>	
+	<title>Relatório CEFIR</title>
+	<link rel="stylesheet" href="/resources/css/style-form.css" />
+	<link rel="stylesheet" href="/resources/css/stylebasics.css" />
+	<script type="text/javascript" src="/resources/js/jquery-1.9.1.js">
+		
+	</script>
+	<script type="text/javascript" src="/resources/js/javascriptMenu.js">
+		
+	</script>
+</h:head>
+
+
+<h:body>
+	<f:view encoding="UTF-8">
+		<h:form id="formImprimirImovelRural" style="background-color: white;">
+			<h:panelGrid style="width: 800px;text-align: center;">
+				<p:commandButton value="Imprimir" title="Imprimir" process="@this"
+					onclick="parent.self.print()" />
+			</h:panelGrid>
+			<br />
+			<p:outputPanel autoUpdate="true">
+				<h:panelGrid width="800px">
+					<hr
+						style="width: 795px; margin-left: 0px; margin-top: 2px; margin-bottom: 2px;"></hr>
+					<h:outputText value="DADOS GERAIS" styleClass="titulo-grupo"
+						style="font-size: 20px; font-weight: bold;" />
+					<hr
+						style="width: 795px; margin-left: 0px; margin-top: 2px; margin-bottom: 2px;"></hr>
+					<br />
+					<ui:include
+						src="/paginas/manter-imoveis/cefir/includes/includes-detalhar/visualizarDadosGeraisImovelRural.xhtml" />
+
+					<br />
+					<br />					
+					<hr
+						style="width: 795px; margin-left: 0px; margin-top: 2px; margin-bottom: 2px;"></hr>
+					<h:outputText value="DOCUMENTAÇÃO" styleClass="titulo-grupo"
+						style="font-size: 20px; font-weight: bold;" />
+					<hr
+						style="width: 795px; margin-left: 0px; margin-top: 2px; margin-bottom: 2px;"></hr>
+					<br />
+					<ui:include
+						src="/paginas/manter-imoveis/cefir/includes/includes-detalhar/visualizarDocumentacaoImovelRural.xhtml" />
+
+					<br />
+					<br />
+					<h:panelGrid rendered="#{detalharImovelRuralController.respondeCefir}">
+						<hr style="width: 795px; margin-left: 0px; margin-top: 2px; margin-bottom: 2px;"></hr>
+						<h:outputText value="QUESTIONÁRIO" styleClass="titulo-grupo"
+							style="font-size: 20px; font-weight: bold;" />
+						<hr
+							style="width: 795px; margin-left: 0px; margin-top: 2px; margin-bottom: 2px;"></hr>
+						<br />
+						<ui:include
+							src="/paginas/manter-imoveis/cefir/includes/includes-detalhar/visualizarQuestionarioCefirImovelRural.xhtml" />
+					</h:panelGrid>
+
+					<br />
+					<br />
+					
+					<h:panelGrid rendered="#{detalharImovelRuralController.respondeCefir}">
+						<hr	style="width: 795px; margin-left: 0px; margin-top: 2px; margin-bottom: 2px;"></hr>
+						<h:outputText value="Dados Específicos" styleClass="titulo-grupo"
+							style="font-size: 20px; font-weight: bold;" />
+						<hr
+							style="width: 795px; margin-left: 0px; margin-top: 2px; margin-bottom: 2px;"></hr>
+						<br />
+						<h:panelGrid style="padding-left: 27px;">
+	
+							<h:panelGrid
+								rendered="#{not empty detalharImovelRuralController.listaResponsaveis and detalharImovelRuralController.habilitaCadastroAmbiental}">
+								<hr
+									style="width: 700px; margin-left: 0px; margin-top: 2px; margin-bottom: 2px;"></hr>
+								<h:outputText value="RESPONSÁVEL TÉCNICO"
+									styleClass="titulo-grupo"
+									style="font-size: 13px; font-weight: bold;" />
+								<hr
+									style="width: 700px; margin-left: 0px; margin-top: 2px; margin-bottom: 2px;"></hr>
+								<h:panelGrid columns="2">
+									<p:dataTable
+										value="#{detalharImovelRuralController.listaResponsaveis}"
+										emptyMessage="#{bundle.cefir_msg_A012}" rowIndexVar="index"
+										var="responsavelTecnico" style="width:670px;">
+										<f:facet name="header">Responsáveis Técnicos Cadastrados</f:facet>
+										<p:column headerText="Número do CPF" style="width: 95px;">
+											<h:outputText
+												value="#{responsavelTecnico.idePessoaFisica.numCpf}" />
+										</p:column>
+										<p:column headerText="Nome" style="width: 150px;">
+											<h:outputText
+												value="#{responsavelTecnico.idePessoaFisica.nomPessoa}" />
+										</p:column>
+										<p:column headerText="Escolaridade" style="width: 130px;">
+											<h:outputText
+												value="#{responsavelTecnico.idePessoaFisica.ideEscolaridade.nomEscolaridade}" />
+										</p:column>
+									</p:dataTable>
+								</h:panelGrid>
+							</h:panelGrid>
+	
+<!-- 	Reserva Legal Inicio -->
+							<h:panelGrid
+								rendered="#{detalharImovelRuralController.habilitaCadastroAmbiental}">
+								<h:panelGrid
+					rendered="#{reservaLegalController.imovelRural.reservaLegal != null and reservaLegalController.imovelRural.reservaLegal.ideTipoArl != null}">
+					<hr
+						style="width: 700px; margin-left: 0px; margin-top: 2px; margin-bottom: 2px;"></hr>
+					<h:outputText value="RESERVA LEGAL" styleClass="titulo-grupo"
+						style="font-size: 13px; font-weight: bold;" />
+					<hr
+						style="width: 700px; margin-left: 0px; margin-top: 2px; margin-bottom: 2px;"></hr>
+					<h:panelGrid columns="2">
+						<h:outputText
+							value="Tipo de Reserva legal (regularizada ou pretendida):"
+							style="font-size: 11px;font-weight: bold;" />
+						<h:outputText rendered="#{reservaLegalController.listTipoArl.indexOf(reservaLegalController.imovelRural.reservaLegal.ideTipoArl) ne -1}" value="#{reservaLegalController.listTipoArl.get(reservaLegalController.listTipoArl.indexOf(reservaLegalController.imovelRural.reservaLegal.ideTipoArl)).dscTipoArl}" />
+						<h:outputText rendered="#{reservaLegalController.listTipoArl.indexOf(reservaLegalController.imovelRural.reservaLegal.ideTipoArl) eq -1}" value="-" />
+					</h:panelGrid>
+					<h:panelGrid columns="2">
+						<h:outputText value="Área de Reserva Legal (ha):"
+							style="font-size: 11px;font-weight: bold;" />
+						<h:outputText value="#{reservaLegalController.imovelRural.reservaLegal.valArea}" converter="doubleQuatroCasasDecimaisConverter"/>
+					</h:panelGrid>
+					
+					<h:panelGrid columns="2">
+						<h:outputText value="O imóvel possui reserva legal averbada?" style="font-size: 11px;font-weight: bold;" />
+						<h:outputText value="SIM"
+							rendered="${reservaLegalController.imovelRural.reservaLegal.indAverbada}" />
+						<h:outputText value="NÃO"
+							rendered="${reservaLegalController.imovelRural.reservaLegal.indAverbada != null and !reservaLegalController.imovelRural.reservaLegal.indAverbada}" />				
+					</h:panelGrid>
+					
+					<h:panelGrid rendered="#{reservaLegalController.imovelRural.reservaLegal.indAverbada}">
+			  			<h:panelGrid columns="2">
+							<h:outputLabel value="Número da averbação" style="font-size: 11px;font-weight: bold;" />
+							<h:outputText value="#{reservaLegalController.imovelRural.reservaLegal.ideReservaLegalAverbada.numAverbacao}" />
+						</h:panelGrid>
+						<h:panelGrid columns="2">
+							<h:outputLabel value="Matrícula"  style="font-size: 11px;font-weight: bold;" />
+							<h:outputText value="#{reservaLegalController.imovelRural.reservaLegal.ideReservaLegalAverbada.numMatricula}" />
+						</h:panelGrid>
+						<h:panelGrid id="tblDocumentoReservaAverbadaVisualizar">
+							<h:outputText value="Documento que comprova a averbação:" style="font-size: 11px;font-weight: bold;" />
+							<p:dataTable  widgetVar="dtTbDocumentosReservaAverbada" 
+								 value="#{reservaLegalController.listaArquivoReservaAverbada}"   var="arquivo"
+								 lazy="true" emptyMessage="#{bundle.cefir_msg_A012}" style="width:472px;">
+						        <p:column>  
+						            <h:outputText value="#{arquivo.nomDocumentoObrigatorio}"/>
+						        </p:column>	
+				  			</p:dataTable>		    
+					    </h:panelGrid>				
+					</h:panelGrid>
+					
+					<h:panelGrid columns="2">
+						<h:outputText value="O imóvel possui reserva legal aprovada?"
+							style="font-size: 11px;font-weight: bold;" />
+						<h:outputText value="SIM"
+							rendered="${reservaLegalController.imovelRural.indReservaLegal}" />
+						<h:outputText value="NÃO"
+							rendered="${reservaLegalController.imovelRural.indReservaLegal != null and !reservaLegalController.imovelRural.indReservaLegal}" />
+					</h:panelGrid>
+		
+					<h:panelGrid columns="2"
+						rendered="#{!reservaLegalController.imovelRural.indReservaLegal and reservaLegalController.imovelRural.indReservaLegal != null}">
+						<h:outputText
+							value="O imóvel possui processo de regularização de reserva legal em trâmite no INEMA?"
+							style="font-size: 11px;font-weight: bold;" />
+						<h:outputText value="SIM"
+							rendered="#{reservaLegalController.imovelRural.reservaLegal.indProcessoTramite}" />
+						<h:outputText value="NÃO"
+							rendered="#{reservaLegalController.imovelRural.reservaLegal.indProcessoTramite != null and !reservaLegalController.imovelRural.reservaLegal.indProcessoTramite}" />
+					</h:panelGrid>
+		
+					<h:panelGrid columns="2"
+						rendered="#{reservaLegalController.exibePerguntasRLAprovada}">
+						<h:outputText value="Origem do certificado:"
+							style="font-size: 11px;font-weight: bold;" />
+						<h:outputText rendered="#{reservaLegalController.imovelRural.reservaLegal.ideTipoOrigemCertificado != null and reservaLegalController.imovelRural.reservaLegal.ideTipoOrigemCertificado.ideTipoOrigemCertificado > 0}"
+							value="#{reservaLegalController.listTipoOrigemCertificado.get(reservaLegalController.listTipoOrigemCertificado.indexOf(reservaLegalController.imovelRural.reservaLegal.ideTipoOrigemCertificado)).dscTipoOrigemCertificado}" />
+					</h:panelGrid>
+		
+					<h:panelGrid columns="2"
+						rendered="#{reservaLegalController.exibePerguntasRLAprovada}">
+						<h:outputText value="Número do certificado:"
+							style="font-size: 11px;font-weight: bold;" />
+						<h:outputText value="#{reservaLegalController.imovelRural.reservaLegal.numCertificado}" />
+					</h:panelGrid>
+		
+					<h:panelGrid columns="2"
+						rendered="#{reservaLegalController.exibePerguntasRLAprovada or reservaLegalController.imovelRural.reservaLegal.indProcessoTramite}">
+						<h:outputText value="Número do Processo:"
+							style="font-size: 11px;font-weight: bold;" />
+						<h:outputText value="#{reservaLegalController.imovelRural.reservaLegal.numProcesso}" />
+					</h:panelGrid>
+					<h:panelGrid columns="1"
+						rendered="#{reservaLegalController.exibePerguntasRLAprovada}">
+						<h:outputText value="Documento que comprova a aprovação:" style="font-size: 11px;font-weight: bold;" />
+						<p:dataTable  widgetVar="dtTbDocumentosReservaRegularizada" 
+							 value="#{reservaLegalController.listaArquivoReservaAprovada}"   var="arquivo"
+							 lazy="true" emptyMessage="#{bundle.cefir_msg_A012}" style="width:472px;">
+					        <p:column>  
+					            <h:outputText value="#{arquivo.nomDocumentoObrigatorio}"/>
+					        </p:column>	
+			  			</p:dataTable>
+			  		</h:panelGrid>
+					<h:panelGrid columns="1" rendered="#{reservaLegalController.imovelRural.reservaLegal.ideTipoArl.ideTipoArl == 2 or reservaLegalController.imovelRural.reservaLegal.ideTipoArl.ideTipoArl == 3}">
+						<h:panelGrid columns="2" rendered="#{reservaLegalController.imovelRural.reservaLegal.ideTipoArl.ideTipoArl == 3}">
+							<h:outputText value="#{bundle.cefir_lbl_num_car_imovel_compensacao}" style="font-size: 11px;font-weight: bold;" />				
+							<h:outputText value="#{reservaLegalController.imovelRural.reservaLegal.numSicarCompensacao}" />	
+						</h:panelGrid>
+						<h:panelGrid columns="2">
+							<h:outputText value="Estado de conservação"
+								style="font-size: 11px;font-weight: bold;" />
+							<h:outputText
+								value="#{reservaLegalController.imovelRural.reservaLegal.ideTipoEstadoConservacao.dscTipoEstadoConservacao}" />
+						</h:panelGrid>
+						
+						<h:panelGrid rendered="#{reservaLegalController.mostraDesejaCadastrarCronogramaRl}">
+							<h:outputText value="Deseja cadastrar o Plano de Recuperação de Áreas Degradadas?"
+								rendered="#{!reservaLegalController.rlCdaOuBndes}"  style="font-size: 11px;font-weight: bold;"/>
+							<h:outputText value="SIM"
+								rendered="${reservaLegalController.reservaLegal.indDesejaCadPrad}" />
+							<h:outputText value="NÃO"
+								rendered="${reservaLegalController.reservaLegal.indDesejaCadPrad != null and !reservaLegalController.reservaLegal.indDesejaCadPrad}" />	
+						</h:panelGrid>							
+						
+						<h:panelGrid
+							rendered="#{reservaLegalController.cadastrarCronogramaRl}">
+							<h3>
+								<h:outputText
+									value="CRONOGRAMA DE RECUPERAÇÃO DAS ÁREAS DEGRADADAS"
+									styleClass="titulo-grupo" />
+							</h3>
+	
+							<h:panelGrid columns="3">
+								<a href="#">Condições para recuperação de áreas degradadas</a>
+								<h:selectBooleanCheckbox id="chkAceitoConf"
+									value="#{not empty reservaLegalController.imovelRural.reservaLegal.cronogramaRecuperacao.cronogramaEtapaCollection}"
+									disabled="true" />
+								<h:outputText value="Aceito" />
+							</h:panelGrid>
+							<h:panelGrid>
+								<p:dataTable var="cronogramaRl"
+									value="#{reservaLegalController.imovelRural.reservaLegal.cronogramaRecuperacao.cronogramaEtapaCollection}"
+									lazy="true"
+									emptyMessage="#{bundle.cefir_msg_A012}"
+									style="width:600px;" widgetVar="dataTableCronogramaRl">
+									<f:facet name="header">Cronogramas</f:facet>
+									<p:column headerText="Atividade">
+										<h:outputText
+											value="#{(cronogramaRl.ideTipoRecuperacao.ideTipoRecuperacao == 9) ? cronogramaRl.dscOutroTipoRecuperacao : cronogramaRl.ideTipoRecuperacao.dscTipoRecuperacao}" />
+									</p:column>
+									<p:column headerText="Início">
+										<h:outputText
+											value="#{cronogramaRl.mesInicio}/#{cronogramaRl.anoInicio}" />
+									</p:column>
+									<p:column headerText="Fim">
+										<h:outputText
+											value="#{cronogramaRl.mesFim}/#{cronogramaRl.anoFim}" />
+									</p:column>
+									<p:column headerText="Realizado">
+										<h:outputText value="#{cronogramaRl.percentual}%" />
+									</p:column>
+								</p:dataTable>
+							</h:panelGrid>
+	
+							<h:panelGrid columns="2">
+								<h:outputText
+									value=" O PRAD é o mesmo do importado anteriormente?"
+									style="font-size: 11px;font-weight: bold;" />
+								<h:outputText value="SIM"
+									rendered="${reservaLegalController.imovelRural.reservaLegal.cronogramaRecuperacao.indPradImportada}" />
+								<h:outputText value="NÃO"
+									rendered="${reservaLegalController.imovelRural.reservaLegal.cronogramaRecuperacao.indPradImportada !=null and !reservaLegalController.imovelRural.reservaLegal.cronogramaRecuperacao.indPradImportada}" />
+							</h:panelGrid>
+						</h:panelGrid>
+	
+						<h:panelGrid columns="2"
+							rendered="#{reservaLegalController.imovelRural.reservaLegal.cronogramaRecuperacao.indPradImportada != null and reservaLegalController.imovelRural.reservaLegal.cronogramaRecuperacao.indPradImportada}">
+							<h:outputText value="PRAD:"
+								style="font-size: 11px;font-weight: bold;" />
+							<h:outputText 
+								value="#{reservaLegalController.listaPradImportadosRl.get(reservaLegalController.listaPradImportadosRl.indexOf(reservaLegalController.imovelRural.reservaLegal.cronogramaRecuperacao.ideDocumentoObrigatorio)).nomDocumentoObrigatorio}" />
+						</h:panelGrid>
+	
+						<h:panelGrid>
+							<p:dataTable
+								rendered="#{reservaLegalController.imovelRural.reservaLegal.cronogramaRecuperacao.ideDocumentoObrigatorio != null and reservaLegalController.imovelRural.reservaLegal.cronogramaRecuperacao.indPradImportada != null and !reservaLegalController.imovelRural.reservaLegal.cronogramaRecuperacao.indPradImportada}"
+								widgetVar="dtTbArquivoPradRl"
+								value="#{reservaLegalController.listaPradRl}"
+								var="arquivo" lazy="true"
+								emptyMessage="#{bundle.cefir_msg_A012}" style="width:472px;">
+								<p:column>
+									<h:outputText value="#{arquivo.nomDocumentoObrigatorio}" />
+								</p:column>
+							</p:dataTable>
+						</h:panelGrid>
+						<h:panelGrid columns="1">
+							<h3>
+								<h:outputLabel value="POLIGONAL DA RESERVA LEGAL"
+									styleClass="titulo-grupo" />
+							</h3>
+							<p:outputPanel>
+								<h:panelGrid columns="5">
+									<h:outputText
+										value="#{bundle.empreendimento_lbl_secao_geometrica}"
+										style="font-size: 11px;font-weight: bold;" />
+									<p:spacer width="20" height="10" />
+									<h:outputText value="#{bundle.empreendimento_lbl_datum}"
+										style="font-size: 11px;font-weight: bold;" />
+									<p:spacer width="20" height="10" />
+									<h:outputText value="Descrição"
+										style="font-size: 11px;font-weight: bold;" />
+									<h:outputText
+										value="#{reservaLegalController.listaSecaoGeometrica.get(reservaLegalController.listaSecaoGeometrica.indexOf(reservaLegalController.imovelRural.reservaLegal.ideLocalizacaoGeografica.ideClassificacaoSecao)).nomClassificacaoSecao}" />
+									<p:spacer width="20" height="10" />
+									<h:outputText
+										value="#{reservaLegalController.listaDatums.get(reservaLegalController.listaDatums.indexOf(reservaLegalController.imovelRural.reservaLegal.ideLocalizacaoGeografica.ideSistemaCoordenada)).nomSistemaCoordenada}" />
+									<p:spacer width="20" height="10" />
+									<h:outputText
+										value="#{reservaLegalController.imovelRural.reservaLegal.ideLocalizacaoGeografica.desLocalizacaoGeografica}" />
+								</h:panelGrid>
+							</p:outputPanel>
+						</h:panelGrid>
+					</h:panelGrid>
+				</h:panelGrid>
+							</h:panelGrid>
+	
+<!-- 	Reserva Legal Fim -->
+	
+							<h:panelGrid
+								rendered="#{detalharImovelRuralController.imovelRural.indApp and detalharImovelRuralController.habilitaCadastroAmbiental}">
+								<hr
+									style="width: 700px; margin-left: 0px; margin-top: 2px; margin-bottom: 2px;"></hr>
+								<h:outputText value="APP" styleClass="titulo-grupo"
+									style="font-size: 13px; font-weight: bold;" />
+								<hr
+									style="width: 700px; margin-left: 0px; margin-top: 2px; margin-bottom: 2px;"></hr>
+								<h:panelGrid id="pngDataTableApps">
+									<p:dataTable id="dataTableApps" var="app"
+										value="#{detalharImovelRuralController.imovelRural.appCollection}"
+										lazy="true" emptyMessage="#{bundle.cefir_msg_A012}"
+										style="width: 650px; border: 1px;" widgetVar="app">
+										<f:facet name="header">
+											<h:outputText value="Apps Cadastrados" />
+										</f:facet>
+										<p:column>
+											<f:facet name="header">
+												<h:outputText value="Tipo APP" />
+											</f:facet>
+											<h:outputText value="#{app.ideTipoApp.dscTipoApp}" />
+										</p:column>
+										<p:column>
+											<f:facet name="header">
+												<h:outputText value="Área" />
+											</f:facet>
+											<h:outputText value="#{app.valArea}">
+												<f:converter converterId="doubleQuatroCasasDecimaisConverter" />
+											</h:outputText>
+										</p:column>
+										<p:column>
+											<f:facet name="header">
+												<h:outputText value="Estado de conservação" />
+											</f:facet>
+											<h:outputText
+												value="#{app.ideTipoEstadoConservacao.dscTipoEstadoConservacao}" />
+										</p:column>
+									</p:dataTable>
+								</h:panelGrid>
+							</h:panelGrid>
+	
+							<h:panelGrid
+								rendered="#{detalharImovelRuralController.imovelRural.indAreaProdutiva and detalharImovelRuralController.habilitaCadastroAmbiental}">
+								<hr
+									style="width: 700px; margin-left: 0px; margin-top: 2px; margin-bottom: 2px;"></hr>
+								<h:outputText value="ATIVIDADES DESENVOLVIDAS" styleClass="titulo-grupo"
+									style="font-size: 13px; font-weight: bold;" />
+								<hr
+									style="width: 700px; margin-left: 0px; margin-top: 2px; margin-bottom: 2px;"></hr>
+								<h:panelGrid>
+									<p:dataTable id="dataTableAreaProdutiva" var="ap"
+										value="#{detalharImovelRuralController.imovelRural.areaProdutivaCollection}"
+										lazy="true" emptyMessage="#{bundle.cefir_msg_A012}"
+										style="width: 650px;" widgetVar="ap">
+										<f:facet name="header">
+											<h:outputText value="#{bundle.cefir_lbl_atividades_desenvolvidas}" />
+										</f:facet>
+										<p:column>
+											<f:facet name="header">
+												<h:outputText value="#{bundle.cefir_lbl_tipo_atividade_desenvolvida}" />
+											</f:facet>
+											<h:outputText value="#{detalharImovelRuralController.getLabelAtividadesDesenvolvidas(ap)}" />
+										</p:column>
+										<p:column >
+											<f:facet name="header">
+												<h:outputText value="Área" />
+											</f:facet>
+											<h:outputText value="#{ap.valArea}">
+												<f:converter converterId="doubleQuatroCasasDecimaisConverter" />
+											</h:outputText>
+										</p:column>										
+									</p:dataTable>
+								</h:panelGrid>
+							</h:panelGrid>
+	
+							<h:panelGrid
+								rendered="#{detalharImovelRuralController.imovelRural.indVegetacaoNativa and detalharImovelRuralController.habilitaCadastroAmbiental}">
+								<hr
+									style="width: 700px; margin-left: 0px; margin-top: 2px; margin-bottom: 2px;"></hr>
+								<h:outputText value="VEGETAÇÃO NATIVA"
+									styleClass="titulo-grupo"
+									style="font-size: 13px; font-weight: bold;" />
+								<hr
+									style="width: 700px; margin-left: 0px; margin-top: 2px; margin-bottom: 2px;"></hr>
+								<h:panelGrid columns="1">
+									<h:panelGrid>
+										<h:outputText value="Área de Vegetação Nativa (ha):"
+											style="font-size: 11px;font-weight: bold;" />
+										<h:outputText
+											value="#{detalharImovelRuralController.imovelRural.vegetacaoNativa.valArea}">
+											<f:converter converterId="doubleQuatroCasasDecimaisConverter" />	
+										</h:outputText>
+									</h:panelGrid>
+									
+									<h:panelGrid columns="1">
+										<h:outputText value="#{bundle.cefir_lbl_pergunta_area_excedente}" style="font-size: 11px;font-weight: bold;"/>
+								        <p:selectManyCheckbox  value="#{detalharImovelRuralController.imovelRural.vegetacaoNativa.tipoFinalidadeVegetacaoNativaCollection}" layout="pageDirection" disabled="true">
+								            <f:selectItems value="#{detalharImovelRuralController.listTipoFinalidadeVegetacaoNativa}" var="tipoFinalidade" itemLabel="#{tipoFinalidade.dscTipoFinalidadeVegetacaoNativa}" itemValue="#{tipoFinalidade}" />
+								            <f:converter converterId="tipoFinalidadeVegetacaoNativaConverter" />
+								        </p:selectManyCheckbox>
+									</h:panelGrid>
+	
+									<h:panelGrid>
+										<h3>
+											<h:outputLabel value="POLIGONAL DA VEGETAÇÃO NATIVA"
+												styleClass="titulo-grupo" />
+										</h3>
+										<p:outputPanel>
+											<h:panelGrid columns="5">
+												<h:outputText
+													value="#{bundle.empreendimento_lbl_secao_geometrica}"
+													style="font-size: 11px;font-weight: bold;" />
+												<p:spacer width="20" height="10" />
+												<h:outputText value="#{bundle.empreendimento_lbl_datum}"
+													style="font-size: 11px;font-weight: bold;" />
+												<p:spacer width="20" height="10" />
+												<h:outputText value="Descrição"
+													style="font-size: 11px;font-weight: bold;" />
+												<h:outputText
+													value="#{detalharImovelRuralController.imovelRural.vegetacaoNativa.ideLocalizacaoGeografica.ideClassificacaoSecao.nomClassificacaoSecao}" />
+												<p:spacer width="20" height="10" />
+												<h:outputText
+													value="#{detalharImovelRuralController.imovelRural.vegetacaoNativa.ideLocalizacaoGeografica.ideSistemaCoordenada.nomSistemaCoordenada}" />
+												<p:spacer width="20" height="10" />
+												<h:outputText
+													value="#{detalharImovelRuralController.imovelRural.vegetacaoNativa.ideLocalizacaoGeografica.desLocalizacaoGeografica}" />
+											</h:panelGrid>
+										</p:outputPanel>
+									</h:panelGrid>
+								</h:panelGrid>
+							</h:panelGrid>
+	
+							<h:panelGrid rendered="#{detalharImovelRuralController.imovelRural.indRppn}">		
+								<hr style="width: 700px; margin-left: 0px; margin-top: 2px; margin-bottom: 2px;"/>
+								<h:outputText value="RESERVA PARTICULAR DO PATRIMÔNIO NATURAL" styleClass="titulo-grupo"
+									style="font-size: 13px; font-weight: bold;" />
+								<hr style="width: 700px; margin-left: 0px; margin-top: 2px; margin-bottom: 2px;"/>
+								<ui:include src="/paginas/manter-imoveis/cefir/includes/includes-detalhar/visualizarImovelRuralRppn.xhtml" />
+							</h:panelGrid>
+	
+							<h:panelGrid
+								rendered="#{detalharImovelRuralController.imovelRural.indSubterraneo or detalharImovelRuralController.imovelRural.indSuperficial or detalharImovelRuralController.imovelRural.indLancamentoManancial or detalharImovelRuralController.imovelRural.indIntervencao}">
+								<hr
+									style="width: 700px; margin-left: 0px; margin-top: 2px; margin-bottom: 2px;"></hr>
+								<h:outputText value="USO DA ÁGUA" styleClass="titulo-grupo"
+									style="font-size: 13px; font-weight: bold;" />
+								<hr
+									style="width: 700px; margin-left: 0px; margin-top: 2px; margin-bottom: 2px;"></hr>
+								<h:panelGrid style="padding-left: 40px;">
+									<p:outputPanel autoUpdate="true"
+										rendered="#{detalharImovelRuralController.imovelRural.indSuperficial}">
+										<h:outputText value="Ponto de Captação Superficial"
+											styleClass="titulo-grupo"
+											style="font-size: 11px; font-weight: bold;" />
+										<br />
+										<h:panelGrid columns="2">
+											<p:dataTable style="width:520px;"
+												value="#{detalharImovelRuralController.listaPontoCaptacaoSuperficial}"
+												widgetVar="tableParticipacaoAcionaria" var="capSuperficial"
+												emptyMessage="#{bundle.cefir_msg_A012}">
+	
+												<p:column headerText="Localização Geográfica">
+													<h:outputText
+														value="#{detalharImovelRuralController.obterPontoFormatado(capSuperficial.ideLocalizacaoGeografica)}" />
+												</p:column>
+												<p:column headerText="Vazão">
+													<h:outputText value="#{capSuperficial.valVazao}">
+														<f:converter converterId="doubleQuatroCasasDecimaisConverter" />
+													</h:outputText>
+												</p:column>
+											</p:dataTable>
+										</h:panelGrid>
+									</p:outputPanel>
+									<br />
+	
+									<p:outputPanel autoUpdate="true"
+										rendered="#{detalharImovelRuralController.imovelRural.indSubterraneo}">
+										<h:outputText value="Ponto de Captação Subterrânea"
+											styleClass="titulo-grupo"
+											style="font-size: 11px; font-weight: bold;" />
+										<br />
+										<h:panelGrid columns="2">
+											<p:dataTable style="width:520px;"
+												value="#{detalharImovelRuralController.listaPontoCaptacaoSubterranea}"
+												widgetVar="tableParticipacaoAcionaria" var="capSubterranea"
+												emptyMessage="#{bundle.cefir_msg_A012}">
+	
+												<p:column>
+													<f:facet name="header">
+														<h:outputText value="Localização Geográfica" />
+													</f:facet>
+													<h:outputText
+														value="#{detalharImovelRuralController.obterPontoFormatado(capSubterranea.ideLocalizacaoGeografica)}" />
+												</p:column>
+	
+												<p:column>
+													<f:facet name="header">
+														<h:outputText value="Vazão" />
+													</f:facet>
+													<h:outputText value="#{capSubterranea.valVazao}">
+														<f:converter converterId="doubleQuatroCasasDecimaisConverter" />
+													</h:outputText>
+												</p:column>
+											</p:dataTable>
+										</h:panelGrid>
+									</p:outputPanel>
+									<br />
+	
+									<p:outputPanel autoUpdate="true"
+										rendered="#{detalharImovelRuralController.imovelRural.indLancamentoManancial}">
+										<h:outputText
+											value="Ponto do Receptor de Resíduos Líquidos em Manancial/Corpo Hídrico"
+											styleClass="titulo-grupo"
+											style="font-size: 11px; font-weight: bold;" />
+										<br />
+										<h:panelGrid columns="2">
+											<p:dataTable style="width:520px;"
+												value="#{detalharImovelRuralController.listaPontoReceptorResiduos}"
+												widgetVar="tableParticipacaoAcionaria"
+												var="capCaptacaoResiduos"
+												emptyMessage="#{bundle.cefir_msg_A012}">
+	
+												<p:column>
+													<f:facet name="header">
+														<h:outputText value="Localização Geográfica" />
+													</f:facet>
+													<h:outputText
+														value="#{detalharImovelRuralController.obterPontoFormatado(capCaptacaoResiduos.ideLocalizacaoGeografica)}" />
+												</p:column>
+	
+												<p:column>
+													<f:facet name="header">
+														<h:outputText value="Vazão" />
+													</f:facet>
+													<h:outputText value="#{capCaptacaoResiduos.valVazao}">
+														<f:converter converterId="doubleQuatroCasasDecimaisConverter" />
+													</h:outputText>
+												</p:column>
+											</p:dataTable>
+										</h:panelGrid>
+									</p:outputPanel>
+									<br />
+	
+									<p:outputPanel autoUpdate="true"
+										rendered="#{detalharImovelRuralController.imovelRural.indIntervencao}">
+										<h:outputText value="Ponto de Intervenção"
+											styleClass="titulo-grupo"
+											style="font-size: 11px; font-weight: bold;" />
+										<br />
+										<h:panelGrid columns="2">
+											<p:dataTable style="width:520px;"
+												value="#{detalharImovelRuralController.listaPontoIntervencao}"
+												widgetVar="tableParticipacaoAcionaria" var="capIntervencao"
+												emptyMessage="#{bundle.cefir_msg_A012}">
+	
+												<p:column>
+													<f:facet name="header">
+														<h:outputText value="Localização Geográfica" />
+													</f:facet>
+													<h:outputText
+														value="#{detalharImovelRuralController.obterPontoFormatado(capIntervencao.ideLocalizacaoGeografica)}" />
+													<br />
+													<h:outputText
+														value="#{detalharImovelRuralController.obterPontoFormatado(capIntervencao.ideLocalizacaoGeograficaFinal)}" />
+												</p:column>
+	
+												<p:column>
+													<f:facet name="header">
+														<h:outputText value="Tipo" />
+													</f:facet>
+													<h:outputText
+														value="#{detalharImovelRuralController.buscarNomeTipoIntervencao(capIntervencao)}" />
+												</p:column>
+											</p:dataTable>
+										</h:panelGrid>
+									</p:outputPanel>
+									<br />
+								</h:panelGrid>
+							</h:panelGrid>
+	
+							<h:panelGrid
+								rendered="#{detalharImovelRuralController.imovelRural.indOutrosPassivos and detalharImovelRuralController.habilitaCadastroAmbiental}">
+								<hr
+									style="width: 700px; margin-left: 0px; margin-top: 2px; margin-bottom: 2px;"></hr>
+								<h:outputText value="OUTROS PASSIVOS" styleClass="titulo-grupo"
+									style="font-size: 13px; font-weight: bold;" />
+								<hr
+									style="width: 700px; margin-left: 0px; margin-top: 2px; margin-bottom: 2px;"></hr>
+								<ui:include
+									src="/paginas/manter-imoveis/cefir/includes/includes-detalhar/visualizarOutrosPassivosImovelRural.xhtml" />
+	
+							</h:panelGrid>
+							
+							<h:panelGrid rendered="#{detalharImovelRuralController.imovelRural.faseAssentamentoImovelRuralImplantado}">
+								
+								<hr style="width: 700px; margin-left: 0px; margin-top: 2px; margin-bottom: 2px;"/>
+															
+								<h:outputText value="ASSOCIAÇÃO" styleClass="titulo-grupo" style="font-size: 13px; font-weight: bold;" />
+								<hr style="width: 700px; margin-left: 0px; margin-top: 2px; margin-bottom: 2px;"/>
+									
+								<p:dataTable style="width:150px;" value="#{detalharImovelRuralController.listAssociacoesIncra}"
+									widgetVar="tableAssociacaoIncra" var="associacaoIncra" emptyMessage="#{bundle.cefir_msg_A012}">
+	
+									<p:column style="width: 445px;">
+										<f:facet name="header">
+											<h:outputText value="#{bundle.lbl_nome}" />
+										</f:facet>
+										
+										<h:outputText value="#{associacaoIncra.idePessoaJuridica.nomRazaoSocial}" />
+									</p:column>
+									
+									<p:column style="width: 126px;">
+										<f:facet name="header">
+											<h:outputText value="#{bundle.consultapj_lbl_cnpj}" />
+										</f:facet>
+										
+										<h:outputText value="#{associacaoIncra.idePessoaJuridica.numCnpj}">
+											<f:converter converterId="cnpjConverter" />
+										</h:outputText>
+									</p:column>
+								</p:dataTable>
+							</h:panelGrid>
+							
+							<h:panelGrid rendered="#{detalharImovelRuralController.imovelRural.faseAssentamentoImovelRuralImplantado}">
+								<hr style="width: 700px; margin-left: 0px; margin-top: 2px; margin-bottom: 2px;"/>
+								
+								<h:outputText value="ASSENTADOS" styleClass="titulo-grupo" style="font-size: 13px; font-weight: bold;" />
+								
+								<hr style="width: 700px; margin-left: 0px; margin-top: 2px; margin-bottom: 2px;"/>	
+								
+								<p:dataTable id="tableAssentadoIncraImpressao" style="width:150px;" emptyMessage="#{bundle.cefir_msg_A012}"
+									 value="#{detalharImovelRuralController.listAssentadoIncraImovelRural}"
+									 widgetVar="tableAssentadoIncraImpressao" var="assentadoIncraImovelRural">
+								
+									<p:column style="width: 445px;">
+										<f:facet name="header">
+											<h:outputText value="#{bundle.lbl_nome}" />
+										</f:facet>
+										
+										<h:outputText value="#{assentadoIncraImovelRural.ideAssentadoIncra.idePessoaFisica.nomPessoa}"/>
+									</p:column>
+									
+									<p:column style="width: 126px;">
+										<f:facet name="header">
+											<h:outputText value="#{bundle.consultapf_lbl_cpf}" />
+										</f:facet>
+										
+										<h:outputText value="#{assentadoIncraImovelRural.ideAssentadoIncra.idePessoaFisica.numCpf}">
+											<f:converter converterId="cnpjConverter" />
+										</h:outputText>
+									</p:column>								
+								</p:dataTable>
+							</h:panelGrid>
+							
+							<h:panelGrid
+								rendered="#{detalharImovelRuralController.imovelRural.indAreaRuralConsolidada != null and detalharImovelRuralController.imovelRural.indAreaRuralConsolidada}">
+								<hr
+									style="width: 700px; margin-left: 0px; margin-top: 2px; margin-bottom: 2px;"></hr>
+								<h:outputText value="ÁREA RURAL CONSOLIDADA"
+									styleClass="titulo-grupo"
+									style="font-size: 13px; font-weight: bold;" />
+								<hr
+									style="width: 700px; margin-left: 0px; margin-top: 2px; margin-bottom: 2px;"></hr>
+								<h:panelGrid columns="1">
+									<h:panelGrid>
+										<h:outputText value="#{bundle.cefir_msg_area_consolidada} (ha):"
+											style="font-size: 11px;font-weight: bold;" />
+										<h:outputText
+											value="#{detalharImovelRuralController.imovelRural.ideAreaRuralConsolidada.valArea}" />
+									</h:panelGrid>
+									<h:panelGrid>
+										<h3>
+											<h:outputLabel value="POLIGONAL DA ÁREA RURAL CONSOLIDADA"
+												styleClass="titulo-grupo" />
+										</h3>
+										<p:outputPanel>
+											<h:panelGrid columns="5">
+												<h:outputText
+													value="#{bundle.empreendimento_lbl_secao_geometrica}"
+													style="font-size: 11px;font-weight: bold;" />
+												<p:spacer width="20" height="10" />
+												<h:outputText value="#{bundle.empreendimento_lbl_datum}"
+													style="font-size: 11px;font-weight: bold;" />
+												<p:spacer width="20" height="10" />
+												<h:outputText value="Descrição"
+													style="font-size: 11px;font-weight: bold;" />
+												<h:outputText
+													value="#{detalharImovelRuralController.imovelRural.ideAreaRuralConsolidada.ideLocalizacaoGeografica.ideClassificacaoSecao.nomClassificacaoSecao}" />
+												<p:spacer width="20" height="10" />
+												<h:outputText
+													value="#{detalharImovelRuralController.imovelRural.ideAreaRuralConsolidada.ideLocalizacaoGeografica.ideSistemaCoordenada.nomSistemaCoordenada}" />
+												<p:spacer width="20" height="10" />
+												<h:outputText
+													value="#{detalharImovelRuralController.imovelRural.ideAreaRuralConsolidada.ideLocalizacaoGeografica.desLocalizacaoGeografica}" />
+											</h:panelGrid>
+										</p:outputPanel>
+									</h:panelGrid>
+								</h:panelGrid>
+							</h:panelGrid>
+							<h:panelGrid
+								rendered="#{detalharImovelRuralController.showPCT}">
+								<hr style="width: 700px; margin-left: 0px; margin-top: 2px; margin-bottom: 2px;"></hr>
+								<h:outputText value="POVOS E COMUNIDADES TRADICIONAIS" styleClass="titulo-grupo" style="font-size: 13px; font-weight: bold;" />
+								<hr style="width: 700px; margin-left: 0px; margin-top: 2px; margin-bottom: 2px;"></hr>
+								<h:panelGroup layout="block">
+									<ui:include src="/paginas/manter-imoveis/cefir/includes/includes-detalhar/visualizarPctImovelRural.xhtml" />
+								</h:panelGroup>
+							</h:panelGrid>
+						</h:panelGrid>
+					</h:panelGrid>
+
+					<h:panelGrid
+						rendered="#{detalharImovelRuralController.existeTheGeom}">
+						<hr
+							style="width: 795px; margin-left: 0px; margin-top: 2px; margin-bottom: 2px;"></hr>
+						<h:outputText value="LOCALIZAÇÃO GEOGRÁFICA"
+							styleClass="titulo-grupo"
+							style="font-size: 20px; font-weight: bold;" />
+						<hr
+							style="width: 795px; margin-left: 0px; margin-top: 2px; margin-bottom: 2px;"></hr>
+						<br />
+						<br />
+						<h:panelGrid style="width: 800px;text-align: center;">
+							<img
+								src="#{detalharImovelRuralController.getLinkGeobahia(detalharImovelRuralController.imovelRural.ideImovelRural)}" />
+						</h:panelGrid>
+						<br />
+						<br />
+					</h:panelGrid>
+
+					<h:panelGrid
+						rendered="#{detalharImovelRuralController.existeTheGeomByIdeLocGeo(detalharImovelRuralController.imovelRural.reservaLegal.ideLocalizacaoGeografica.ideLocalizacaoGeografica)}">
+						<hr
+							style="width: 795px; margin-left: 0px; margin-top: 2px; margin-bottom: 2px;"></hr>
+						<h:outputText value="RESERVA LEGAL" styleClass="titulo-grupo"
+							style="font-size: 20px; font-weight: bold;" />
+						<hr
+							style="width: 795px; margin-left: 0px; margin-top: 2px; margin-bottom: 2px;"></hr>
+						<br />
+						<br />
+						<h:panelGrid style="width: 800px;text-align: center;">
+							<img
+								src="#{detalharImovelRuralController.getLinkGeobahiaRL(detalharImovelRuralController.imovelRural.ideImovelRural)}" />
+						</h:panelGrid>
+					</h:panelGrid>
+				</h:panelGrid>
+			</p:outputPanel>
+		</h:form>
+	</f:view>
+</h:body>
+</html>

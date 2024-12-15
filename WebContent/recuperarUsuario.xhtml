@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui">
+
+	<h:form id="formRecuperarUsuario" >
+		<h:panelGrid id="panelRecuperarUsuario" columns="1">
+			<h:outputLabel value="* CPF:" />
+			<p:inputMask id="inputMaskCpf" value="#{esquecimentoSenhaController.cpf}" mask="#{bundle.consultapf_msk_cpf}" converter="cpfConverter" validator="cpfValidator" style="width: 140px;">
+			</p:inputMask>
+			
+			<h:outputLabel value="* Email:" />
+			<p:inputText id="inputTxtEmail" value="#{esquecimentoSenhaController.usuarioExterno.pessoaFisica.pessoa.desEmail}" maxlength="70" validator="emailValidator" style="width: 310px;"  />
+			
+			<h:panelGroup>
+				<p:commandButton action="#{esquecimentoSenhaController.enviarLoginUsuario}" value="Enviar" oncomplete="validaTela(xhr, status, args, dlgEsqueciSenha)" style="float: right;" update="panelRecuperarUsuario"  />
+				<p:commandButton value="#{bundle.btn_cancelar}" onclick="dlgEsqueciUsuario.hide()" style="float: right;" />
+			</h:panelGroup>
+		</h:panelGrid>
+	</h:form>
+
+</ui:composition>
+
+<!-- binding="#{esquecimentoSenhaController.formularioASerLimpo}" -->
+
+<!-- <h:outputLabel value="* #{bundle.lbl_email}:" /> -->
+<!-- <p:inputText id="inputTxtLogin" value="#{esquecimentoSenhaController.login}" maxlength="20" style="width: 140px;" required="true" requiredMessage="O campo Email é de preenchimento obrigatório." /> -->

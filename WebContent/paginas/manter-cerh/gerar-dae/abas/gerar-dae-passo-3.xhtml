@@ -1,0 +1,119 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.prime.com.tr/ui">
+	<ui:include src="/paginas/manter-cerh/gerar-dae/abas/fragment/dados-gerais.xhtml" />
+	<p:spacer width="0" height="20" />
+	<h:panelGroup rendered="#{!cerhCobrancaController.usuarioExterno}">
+		<h:panelGroup layout="block" id="panelAjudaElementos">
+        	<h:outputText value="Serão Gerados as parcelas abaixo: " />
+			<h:graphicImage value="/resources/img/ico-ajuda.png" id="ajuda" style="margin: 0px 0px -4px 5px;" />
+			<p:tooltip for="ajuda" value="A cobrança pelo uso de recursos hídricos é feita considerando a quantidade de RPGAs onde o empreendimento se localiza e os tipos de uso da água: Captação superficial ou captação subterrânea. Cada categoria desta irá gerar um DAE separadamente" showEffect="fade" hideEffect="fade"/>
+		</h:panelGroup>
+		<br/>
+		<p:spacer width="0" height="10" />
+		<br/>
+		<p:dataTable value="#{cerhCobrancaController.daes}" var="dae">
+			<p:column headerText="Nº Parcela">
+				#{cerhCobrancaController.opcaoPagamento.desc.equals('Parcelado') ? (''.concat(dae.numParcelaReferencia).concat('/').concat(dae.numTotalParcelaReferencia)) : 'Única'}
+			</p:column>
+			<p:column headerText="Data Vencimento" style="white-space : normal ; width: 70px">
+				<h:outputText value="#{dae.dtVencimento}">
+					<f:convertDateTime pattern="dd/MM/yyyy" />
+				</h:outputText>
+			</p:column>
+			<p:column headerText="Valor">
+				<h:outputText value="#{dae.valorDae}" >
+					 <f:convertNumber  pattern="###,##0.00" locale="pt_BR" />
+				</h:outputText>
+			</p:column>
+			<p:column headerText="valor com multa - envio pelos correios" rendered="#{cerhCobrancaController.receberCorreio}" style="white-space : normal ; width: 120px">
+				<h:outputText value="#{dae.valorTotal}" rendered="#{cerhCobrancaController.receberCorreio}">
+					 <f:convertNumber  pattern="###,##0.00" locale="pt_BR" />
+				</h:outputText>
+			</p:column>
+			<p:column headerText="RPGA">
+				#{dae.rpga}
+			</p:column>
+			<p:column headerText="Tipo de Uso">
+				#{dae.tiposUsoRecusroHidrico}
+			</p:column>
+		</p:dataTable>
+	</h:panelGroup>
+	<h:panelGroup rendered="#{cerhCobrancaController.usuarioExterno}">
+		<h:outputText rendered="#{cerhCobrancaController.usuarioExterno}"
+			value="Caso os DAEs sejam disponibilizados online, no momento em que forem gerados, os valores a serem pagos correspondem ao quadro abaixo:" />
+		<p:spacer width="0" height="10" />
+		<p:dataTable value="#{cerhCobrancaController.getDaes(false)}" var="dae">
+			<f:facet name="header">
+		        Valor dos DAEs se disponibilizados para impressão
+		    </f:facet>
+			<p:column headerText="Nº Parcela">
+				#{cerhCobrancaController.opcaoPagamento.desc.equals('Parcelado') ? (''.concat(dae.numParcelaReferencia).concat('/').concat(dae.numTotalParcelaReferencia)) : 'Única'}
+			</p:column>
+			<p:column headerText="Data Vencimento">
+				<h:outputText value="#{dae.dtVencimento}">
+					<f:convertDateTime pattern="dd/MM/yyyy" />
+				</h:outputText>
+			</p:column>
+			<p:column headerText="Valor">
+				<h:outputText value="#{dae.valorTotal}" >
+					 <f:convertNumber  pattern="###,##0.00" locale="pt_BR" />
+				</h:outputText>
+			</p:column>
+			<p:column headerText="RPGA">
+				#{dae.rpga}
+			</p:column>
+			<p:column headerText="Tipo de Uso">
+				#{dae.tiposUsoRecusroHidrico}
+			</p:column>
+		</p:dataTable>
+		<p:spacer width="0" height="10" />
+		<p>Optando por receber os DAEs pelos Correio, os valores que vencem
+			em um prazo menor que 20 dias (prazo nescessário para envio dos DAEs)
+			serão considerados como pagamento atrasado, uma vez que não há tempo
+			hábil para pagamento dentro do prazo inicial. Por esse motivo, é
+			possivel que DAEs tenha seu valor acrescido de multa e juros.</p>
+		<p>Os valores dos DAEs caso sejam enviados via correios
+			correspondem aos da tabela abaixa.</p>
+		<p:spacer width="0" height="10" />
+		<p:dataTable value="#{cerhCobrancaController.getDaes(true)}"
+			var="dae">
+			<f:facet name="header">
+		        Valor dos DAEs se enviados via Correios
+		    </f:facet>
+			<p:column headerText="Parcelas">
+				#{cerhCobrancaController.opcaoPagamento.desc.equals('Parcelado') ? (''.concat(dae.numParcelaReferencia).concat('/').concat(dae.numTotalParcelaReferencia)) : 'Única'}
+			</p:column>
+			<p:column headerText="Valor Original">
+				<h:outputText value="#{dae.valorDae}" >
+					<f:convertNumber  pattern="###,##0.00" locale="pt_BR" />
+				</h:outputText>
+			</p:column>
+			<p:column headerText="Nova Data Vencimento">
+				<h:outputText value="#{dae.dtVencimento}" style="color: red">
+					<f:convertDateTime pattern="dd/MM/yyyy" />
+				</h:outputText>
+			</p:column>
+			<p:column headerText="Valor com multa">
+				<h:outputText value="#{dae.valorTotal}" style="#{(dae.valorAcrescimo > 0) ? 'color:red': null}">
+					 <f:convertNumber  pattern="###,##0.00" locale="pt_BR" />
+				</h:outputText>
+			</p:column>
+			<p:column headerText="RPGA">
+				#{dae.rpga}
+			</p:column>
+			<p:column headerText="Tipo de Uso">
+				#{dae.tiposUsoRecusroHidrico}
+			</p:column>
+		</p:dataTable>
+		<p:spacer width="0" height="10" />
+		<p>
+			<h:outputText value="Você deseja receber algum DAE pelos Correios?" />
+		</p>
+	</h:panelGroup>
+	<br/>
+	<p:spacer width="0" height="10" />
+</html>

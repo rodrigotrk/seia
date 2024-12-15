@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui"
+    xmlns:s="http://java.sun.com/jsf/composite/seia">
+	
+	
+	<h:form id="formAbaGeral">
+		<h:outputText styleClass="titulo-grupo" style="font-weight:bold;" value="Informações do empreendimento" />
+		<div class="line"/>
+		<br/>
+		<h:outputText value="Identificação do empreendimento"/>
+		<p:inputText value="#{fceGeracaoEnergiaController.fceEnergia.desIdentificacaoEmpreendimento}" size="40" disabled="#{fceGeracaoEnergiaController.desabilitarTudo}" style="margin-left: 5px;" maxlength="100"/>
+		<br/><br/><br/>
+		<h:outputText value="Poligonal do objeto da licença" style="font-weight: bold;"/>
+		<div class="line"/>
+		<br/>
+		<p:outputPanel id="pnlFceLocalizacao">
+				 
+		<s:inputLocGeo
+			ideObjetoLocalizacao="#{fceGeracaoEnergiaController.fceEnergia}" 
+		    titulo="Incluir poligonal do objeto da licença"
+		    update="tabAbasGeracaoEnergia:formAbaGeral:pnlFceLocalizacao"
+			ideTipoSecaoGeometrica="#{seiaController.classificacaoSecaoEnum('CLASSIFICACAO_SECAO_SHAPEFILE')}"
+			ideRequerimento="#{fceGeracaoEnergiaController.requerimento}" 
+			ideLocalizacaoGeografica="#{fceGeracaoEnergiaController.fceEnergia.ideLocalizacaoGeografica}"
+			disabled="#{!empty fceGeracaoEnergiaController.fceEnergia.ideLocalizacaoGeografica.ideLocalizacaoGeografica || fceGeracaoEnergiaController.desabilitarTudo}"
+			metodo="#{fceGeracaoEnergiaController.metodoAtualizarExterno}" />
+		<br/>
+		<p:dataTable id="dataTableLocalizacao" value="#{fceGeracaoEnergiaController.fceEnergia.ideLocalizacaoGeografica}" var="loc" emptyMessage="Não existe nunhum Poligonal cadastrado" rendered="#{!empty fceGeracaoEnergiaController.fceEnergia.ideLocalizacaoGeografica.ideLocalizacaoGeografica}">
+			<p:column headerText="Tipo">
+				<h:outputText value="#{loc.ideClassificacaoSecao.nomClassificacaoSecao}" />
+			</p:column>
+			<p:column headerText="Sistema de coordenadas">
+				<h:outputText value="#{loc.nomeSistemaCoordenadas}" />
+			</p:column>
+			<p:column headerText="Área(ha)">
+				<h:outputText value="#{loc.vlrArea}">
+						<f:convertNumber maxFractionDigits="4"/>
+				</h:outputText>
+			</p:column>
+			<p:column headerText="Ações" style="text-align: center;">
+				<s:linkGeoBahia ideLocalizacaoGeografica="#{loc}" />
+				<p:commandLink  oncomplete="excluirPoligonalDadosGerais.show()" update="tabAbasGeracaoEnergia:formAbaGeral" rendered="#{!fceGeracaoEnergiaController.desabilitarTudo}">
+                     <f:setPropertyActionListener value="#{fceGeracaoEnergiaController.fceEnergia}" target="#{localizacaoGeograficaGenericController.objetoLocalizacao}" />
+                     <f:setPropertyActionListener value="tabAbasGeracaoEnergia:formAbaGeral" target="#{localizacaoGeograficaGenericController.idDoComponenteParaSerAtualizado}" />
+                     <h:graphicImage title="Excluir" value="/resources/img/ico-excluir.png" />
+                 </p:commandLink>
+			</p:column>
+		</p:dataTable>
+		
+		<br/><br/>
+		<h:outputText value="Município do objeto da licença: "/>
+		<h:outputText value="#{fceGeracaoEnergiaController.municipioAbaGeral}" style="font-weight: bold;"/>
+		</p:outputPanel>
+		
+		<br/><br/><br/>
+		
+		<h:outputText value="Informações da captação" style="font-weight: bold;"/>
+		<div class="line"/>
+		<br/><br/>
+		<p:outputPanel id="opCaptacao">
+			<h:outputText value="O empreendimento faz captação de água? "/>
+			<p:selectOneRadio value="#{fceGeracaoEnergiaController.fceEnergia.indCaptacao}" disabled="#{fceGeracaoEnergiaController.desabilitaCaptacaoAgua || fceGeracaoEnergiaController.desabilitarTudo}">
+				<f:selectItem itemLabel="Sim" itemValue="true"/>
+				<f:selectItem itemLabel="Não" itemValue="false"/>
+				<p:ajax event="change" listener="#{fceGeracaoEnergiaController.validaCaptacao}" update="tabAbasGeracaoEnergia:formAbaGeral:opCaptacao tabAbasGeracaoEnergia:formAbaGeral:pnlNumOutorga"/>
+			</p:selectOneRadio>
+			<br/>
+			<p:outputPanel id="pnlNumOutorga" rendered="#{fceGeracaoEnergiaController.fceEnergia.indCaptacao}">
+				<h:outputText value="Número do processo de Outorga"/>
+				<p:inputText value="#{fceGeracaoEnergiaController.fceEnergia.numProcessoOutorga}" size="35" style="margin-left: 5px;" maxlength="50" disabled="#{fceGeracaoEnergiaController.desabilitarTudo}"/>
+			</p:outputPanel>
+		</p:outputPanel>
+		<br/><br/>
+		
+		<h:outputText value="Informações de ASV" style="font-weight: bold;"/>
+		<div class="line"/>
+		<br/><br/>
+		<p:outputPanel id="opASV">
+			<h:outputText value="Existe processo de Autorização de Supressão de Vegetação (ASV)?"/>
+			<p:selectOneRadio value="#{fceGeracaoEnergiaController.fceEnergia.indASV}" disabled="#{fceGeracaoEnergiaController.desabilitaASV || fceGeracaoEnergiaController.desabilitarTudo}">
+				<f:selectItem itemLabel="Sim" itemValue="true"/>
+				<f:selectItem itemLabel="Não" itemValue="false"/>
+				<p:ajax event="change" listener="#{fceGeracaoEnergiaController.validaASV}" update="tabAbasGeracaoEnergia:formAbaGeral:opASV tabAbasGeracaoEnergia:formAbaGeral:pnlFinalidade tabAbasGeracaoEnergia:formAbaGeral:pnlNumASV"/>
+			</p:selectOneRadio>
+			<br/>
+			<p:outputPanel id="pnlNumASV" rendered="#{fceGeracaoEnergiaController.fceEnergia.indASV}">
+				<h:outputText value="Número do processo de ASV"/>
+				<p:inputText value="#{fceGeracaoEnergiaController.fceEnergia.numProcessoASV}" size="35" style="margin-left: 5px;" maxlength="50" 
+				disabled="#{fceGeracaoEnergiaController.desabilitaASV || fceGeracaoEnergiaController.desabilitarTudo}"/>
+			</p:outputPanel>
+		<br/><br/>
+			<p:outputPanel id="pnlFinalidade" rendered="#{fceGeracaoEnergiaController.fceEnergia.indASV}">
+			<h:outputText value="Selecione a(s) finalidade(s)" style="font-weight: bold;"/>
+			<br/>
+			<p:selectManyCheckbox layout="grid" value="#{fceGeracaoEnergiaController.listaFinalidadeGeracaoEnergiaSelecionado}" 
+				id="listaFinalidade" converter="simpleEntityConverter" disabled="#{fceGeracaoEnergiaController.desabilitarTudo}">
+				<f:selectItems value="#{fceGeracaoEnergiaController.listFinalidadeGeracaoEnergia}" var="finalidade" itemLabel="#{finalidade.desFinalidadeGeracaoEnergia}" itemValue="#{finalidade}"/>
+				<p:ajax event="change" process="@this" listener="#{fceGeracaoEnergiaController.validaCheckOutros}"/>
+			</p:selectManyCheckbox>
+			</p:outputPanel>
+		</p:outputPanel>
+		<br/>
+		<p:commandButton value="Avançar" action="#{fceGeracaoEnergiaController.avancar}" rendered="#{!fceGeracaoEnergiaController.desabilitarTudo}" style="float:right" update="tabAbasGeracaoEnergia">
+			<f:setPropertyActionListener value="1" target="#{fceGeracaoEnergiaController.numeroAba}"/>
+		</p:commandButton>
+		<p:commandButton value="Salvar" action="#{fceGeracaoEnergiaController.salvar}" rendered="#{!fceGeracaoEnergiaController.desabilitarTudo}" style="float:right; margin-right: 5px;">
+			<f:setPropertyActionListener value="1" target="#{fceGeracaoEnergiaController.numeroAba}"/>
+		</p:commandButton>
+		<br/><br/>
+	</h:form>	
+		
+					
+</ui:composition>

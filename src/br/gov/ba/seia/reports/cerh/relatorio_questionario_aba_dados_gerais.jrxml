@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="relatorio_questionario_aba_dados_gerais" language="java" pageWidth="555" pageHeight="802" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="9fb75051-40ca-4b9c-8687-0783a636e976">
+	<property name="ireport.zoom" value="1.6105100000000014"/>
+	<property name="ireport.x" value="4"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="IDE_CERH" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[select
+	coalesce (
+		(select
+			(case ctu_.ide_tipo_uso_recurso_hidrico when 1 then true end)  from
+			cerh c_
+			inner join cerh_tipo_uso ctu_ on ctu_.ide_cerh = c_.ide_cerh
+			where ctu_.ide_tipo_uso_recurso_hidrico = 1
+			and ctu_.ide_cerh_resposta_dados_gerais is not null
+			and c_.ide_cerh = $P{IDE_CERH}
+			group by c_.ide_cerh, ctu_.ide_tipo_uso_recurso_hidrico
+		), false )
+	 as ind_barragem,
+
+	coalesce (
+		(select
+			(case ctu_.ide_tipo_uso_recurso_hidrico when 2 then true end)  from
+			cerh c_
+			inner join cerh_tipo_uso ctu_ on ctu_.ide_cerh = c_.ide_cerh
+			where ctu_.ide_tipo_uso_recurso_hidrico = 2
+			and ctu_.ide_cerh_resposta_dados_gerais is not null
+			and c_.ide_cerh = $P{IDE_CERH}
+			group by c_.ide_cerh, ctu_.ide_tipo_uso_recurso_hidrico
+		), false )
+	 as ind_captacao_subterranea,
+
+	coalesce (
+		(select
+			(case ctu_.ide_tipo_uso_recurso_hidrico when 3 then true end)  from
+			cerh c_
+			inner join cerh_tipo_uso ctu_ on ctu_.ide_cerh = c_.ide_cerh
+			where ctu_.ide_tipo_uso_recurso_hidrico = 3
+			and ctu_.ide_cerh_resposta_dados_gerais is not null
+			and c_.ide_cerh = $P{IDE_CERH}
+			group by c_.ide_cerh, ctu_.ide_tipo_uso_recurso_hidrico
+		), false )
+	 as ind_captacao_superficial,
+
+	coalesce (
+		(select
+			(case ctu_.ide_tipo_uso_recurso_hidrico when 4 then true end)  from
+			cerh c_
+			inner join cerh_tipo_uso ctu_ on ctu_.ide_cerh = c_.ide_cerh
+			where ctu_.ide_tipo_uso_recurso_hidrico = 4
+			and ctu_.ide_cerh_resposta_dados_gerais is not null
+			and c_.ide_cerh = $P{IDE_CERH}
+			group by c_.ide_cerh, ctu_.ide_tipo_uso_recurso_hidrico
+		), false )
+	 as ind_outros_tipos_intervencao,
+
+	coalesce((select ind_resposta from cerh_resposta_dados_gerais ci where ci.ide_cerh = c.ide_cerh  and ide_cerh_pergunta_dados_gerais = 1),false) as associado_cadastro_convenio,
+	coalesce((select ind_resposta from cerh_resposta_dados_gerais ci where ci.ide_cerh = c.ide_cerh  and ide_cerh_pergunta_dados_gerais = 2),false) as possui_outorga_inema,
+	coalesce((select ind_resposta from cerh_resposta_dados_gerais ci where ci.ide_cerh = c.ide_cerh  and ide_cerh_pergunta_dados_gerais = 3),false) as outros_usos,
+	coalesce((select ind_resposta from cerh_resposta_dados_gerais ci where ci.ide_cerh = c.ide_cerh  and ide_cerh_pergunta_dados_gerais = 4),false) as intervencao_corpo_hidrico,
+	coalesce((select ind_resposta from cerh_resposta_dados_gerais ci where ci.ide_cerh = c.ide_cerh  and ide_cerh_pergunta_dados_gerais = 5),false) as captacao_agua,
+	coalesce((select ind_resposta from cerh_resposta_dados_gerais ci where ci.ide_cerh = c.ide_cerh  and ide_cerh_pergunta_dados_gerais = 6),false) as lancamento_efluentes
+from
+	cerh c
+where c.ide_cerh = $P{IDE_CERH}]]>
+	</queryString>
+	<field name="ind_barragem" class="java.lang.Boolean"/>
+	<field name="ind_captacao_subterranea" class="java.lang.Boolean"/>
+	<field name="ind_captacao_superficial" class="java.lang.Boolean">
+		<fieldDescription><![CDATA[Indica se o imóvel possui captação superficial.]]></fieldDescription>
+	</field>
+	<field name="ind_outros_tipos_intervencao" class="java.lang.Boolean"/>
+	<field name="associado_cadastro_convenio" class="java.lang.Boolean"/>
+	<field name="possui_outorga_inema" class="java.lang.Boolean"/>
+	<field name="outros_usos" class="java.lang.Boolean"/>
+	<field name="intervencao_corpo_hidrico" class="java.lang.Boolean"/>
+	<field name="captacao_agua" class="java.lang.Boolean"/>
+	<field name="lancamento_efluentes" class="java.lang.Boolean"/>
+	<detail>
+		<band height="40" splitType="Stretch">
+			<textField>
+				<reportElement uuid="3204f4bc-59a7-41fd-abae-ece78f309f6e" x="0" y="0" width="555" height="20"/>
+				<box leftPadding="10"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA["Este cadastro está associado a um Contrato/Convênio ? "
++ ( $F{associado_cadastro_convenio} == true ? "Sim" : "Não")
++ "."]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="67e31bd3-a343-4de4-8e78-67cf194f7393" x="0" y="20" width="555" height="20"/>
+				<box leftPadding="10"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA["O empreendimento possui processo(s) de outorga em trâmite ou concluído no INEMA ? " +
+($F{possui_outorga_inema}  == true ? "Sim" : "Não")
++ "."]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="20">
+			<printWhenExpression><![CDATA[$F{possui_outorga_inema}]]></printWhenExpression>
+			<subreport>
+				<reportElement uuid="969b4d6e-8db8-4420-883c-c00704c0767b" x="0" y="0" width="555" height="20"/>
+				<subreportParameter name="SUBREPORT_DIR">
+					<subreportParameterExpression><![CDATA[$P{SUBREPORT_DIR}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="IDE_CERH">
+					<subreportParameterExpression><![CDATA[$P{IDE_CERH}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "relatorio_questionario_cerh_processo.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+		<band height="80">
+			<textField isStretchWithOverflow="true">
+				<reportElement uuid="7d417b93-a971-4cdb-a054-b29af6705a1d" x="0" y="20" width="555" height="20" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$F{outros_usos} == true]]></printWhenExpression>
+				</reportElement>
+				<box leftPadding="25"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA["O empreendimento faz intervenção em corpo hídrico ?  " +
+($F{intervencao_corpo_hidrico}  == true ? "Sim" : "Não")
++
+(
+    ($F{intervencao_corpo_hidrico} && $F{ind_barragem} ? ", Barragem": "") +
+    ($F{intervencao_corpo_hidrico} && $F{ind_outros_tipos_intervencao} ? ", Outros tipos de intervenção": "")
+)
++ "."]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement uuid="b2af65de-11a3-4050-9e6b-6dc10aef66ed" x="0" y="40" width="555" height="20" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$F{outros_usos} == true]]></printWhenExpression>
+				</reportElement>
+				<box leftPadding="25"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA["O empreendimento faz captação de água ? " +
+($F{captacao_agua} ? "Sim" : "Não" )
++
+(
+    ($F{ind_captacao_subterranea} ? ", Captação Subterrânea": "") +
+    ($F{ind_captacao_superficial} ? ", Captação Superficial": "")
+)
++ "."]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement uuid="0e788691-ccb1-4c2b-b52a-19e545b62be6" x="0" y="60" width="555" height="20" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$F{outros_usos} == true]]></printWhenExpression>
+				</reportElement>
+				<box leftPadding="25"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA["O empreendimento faz lançamento de efluentes em corpo hídrico ? " +
+
+( $F{lancamento_efluentes} == true ? "Sim" : "Não")
++ "."]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="341b3dbc-3567-4e27-ad10-42f2d7ebb91b" x="0" y="0" width="555" height="20"/>
+				<box leftPadding="10"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA["O empreendimento faz outros usos além dos contemplados no(s) processos informado(s) ?  " +
+($F{outros_usos}  == true ? "Sim" : "Não")+ "."]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

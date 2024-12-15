@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="resumoRequerimento_subreportListaPessoas" pageWidth="555" pageHeight="802" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0">
+	<property name="ireport.zoom" value="1.6105100000000008"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="ide_pessoa" class="java.lang.Integer"/>
+	<queryString>
+		<![CDATA[SELECT pfp.nom_pessoa as nom_pessoa_procurador_pessoa_fisica,
+	pfrl.nom_pessoa as nom_pessoa_representante_legal,
+	pfr.nom_pessoa as nom_pessoa_procurador_representante
+from pessoa pe
+LEFT JOIN pessoa_fisica pf ON pf.ide_pessoa_fisica = pe.ide_pessoa
+LEFT JOIN pessoa_juridica pj ON pj.ide_pessoa_juridica = pe.ide_pessoa
+LEFT JOIN procurador_pessoa_fisica ppf on ppf.ide_pessoa_fisica = pf.ide_pessoa_fisica
+LEFT JOIN pessoa_fisica pfp on pfp.ide_pessoa_fisica = ppf.ide_procurador
+LEFT JOIN procurador_representante pr on pr.ide_pessoa_juridica = pj.ide_pessoa_juridica
+LEFT JOIN pessoa_fisica pfr on pfr.ide_pessoa_fisica = pr.ide_procurador
+LEFT JOIN representante_legal rl on rl.ide_pessoa_juridica = pj.ide_pessoa_juridica
+LEFT JOIN pessoa_fisica pfrl on pfrl.ide_pessoa_fisica = rl.ide_pessoa_fisica
+WHERE pe.ide_pessoa = $P{ide_pessoa}
+AND   pfp.ide_pessoa_fisica is not null]]>
+	</queryString>
+	<field name="nom_pessoa_procurador_pessoa_fisica" class="java.lang.String"/>
+	<field name="nom_pessoa_representante_legal" class="java.lang.String"/>
+	<field name="nom_pessoa_procurador_representante" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="28">
+			<printWhenExpression><![CDATA[$F{nom_pessoa_procurador_pessoa_fisica} != null]]></printWhenExpression>
+			<frame>
+				<reportElement x="0" y="0" width="555" height="28"/>
+				<line>
+					<reportElement x="0" y="15" width="290" height="1"/>
+					<graphicElement>
+						<pen lineWidth="0.5" lineStyle="Solid"/>
+					</graphicElement>
+				</line>
+				<textField>
+					<reportElement x="0" y="16" width="555" height="12"/>
+					<textElement verticalAlignment="Middle">
+						<font size="9" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{nom_pessoa_procurador_pessoa_fisica}]]></textFieldExpression>
+				</textField>
+			</frame>
+		</band>
+		<band height="28">
+			<printWhenExpression><![CDATA[$F{nom_pessoa_representante_legal} != null && !$F{nom_pessoa_representante_legal}.equals($F{nom_pessoa_procurador_pessoa_fisica})]]></printWhenExpression>
+			<frame>
+				<reportElement x="0" y="0" width="555" height="28"/>
+				<textField>
+					<reportElement x="0" y="16" width="555" height="12"/>
+					<textElement verticalAlignment="Middle">
+						<font size="9" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{nom_pessoa_representante_legal}]]></textFieldExpression>
+				</textField>
+				<line>
+					<reportElement x="0" y="15" width="290" height="1"/>
+					<graphicElement>
+						<pen lineWidth="0.5" lineStyle="Solid"/>
+					</graphicElement>
+				</line>
+			</frame>
+		</band>
+		<band height="28">
+			<printWhenExpression><![CDATA[$F{nom_pessoa_procurador_representante} != null && !$F{nom_pessoa_procurador_representante}.equals($F{nom_pessoa_representante_legal}) && !$F{nom_pessoa_procurador_representante}.equals($F{nom_pessoa_procurador_pessoa_fisica})]]></printWhenExpression>
+			<frame>
+				<reportElement x="0" y="0" width="555" height="28"/>
+				<textField>
+					<reportElement x="0" y="16" width="555" height="12"/>
+					<textElement verticalAlignment="Middle">
+						<font size="9" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{nom_pessoa_procurador_representante}]]></textFieldExpression>
+				</textField>
+				<line>
+					<reportElement x="0" y="15" width="290" height="1"/>
+					<graphicElement>
+						<pen lineWidth="0.5" lineStyle="Solid"/>
+					</graphicElement>
+				</line>
+			</frame>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

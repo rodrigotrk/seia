@@ -1,0 +1,56 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+	<h3><h:outputLabel styleClass="titulo-grupo" value="PROPRIETÁRIO(S) DO IMÓVEL" /></h3>
+	<h:form id="form-pagina-compacionaria">
+		<h:panelGrid id="paneltablecompacionaria" columns="1" >
+			<p:dataTable id="tableParticipacaoAcionaria" emptyMessage="Nenhum proprietário cadastrado para este Imóvel"
+						style="width:520px;" widgetVar="tableParticipacaoAcionaria" value="#{imoveisController.listaPessoaImoveis}" var="proprietario"  paginator="true" rows="10" paginatorAlwaysVisible="false" paginatorPosition="bottom">
+			<f:facet name="header">
+				<h:outputText value="Proprietários do Imóvel" />					
+			</f:facet>
+			
+			<p:column headerText="Nome">				
+				<h:outputText value="#{proprietario.idePessoa.nomeRazao}" />
+				
+			</p:column>
+			<p:column headerText="CPF/CNPJ">				
+				<h:outputText value="#{proprietario.idePessoa.cpfCnpj}" />
+			</p:column>
+			
+			<p:column headerText="#{bundle.cnaeLabelTabAtividadeAcoes}" rendered="${!imoveisController.novaDenominacao}">
+				<p:commandLink oncomplete="dialogCompAcionaria.show()" title="Visualizar" update=":tabAbas:paginaImovel:formProprietario:paneldiaglogCompAcionaria" 
+				actionListener="#{imoveisController.prepararParaEdicao()}" disabled="#{empreendimentoController.visualizarEmpreendimento}">
+						<f:setPropertyActionListener target="#{imoveisController.pessoaPersist}" value="#{proprietario.idePessoa}" />
+						<f:setPropertyActionListener target="#{imoveisController.editModeProprietario}" value="#{false}" />
+						<f:setPropertyActionListener target="#{imoveisController.enableFormPessoaFisica}" value="#{false}" />
+						<f:setPropertyActionListener target="#{imoveisController.enableFormPessoaJuridica}" value="#{false}" />					
+						<f:setPropertyActionListener target="#{imoveisController.enableBotaoPesquisa}" value="#{false}" />
+						<h:graphicImage title="Consultar" value="/resources/img/ico-pesquisa.png" />
+						<f:ajax execute="@this"/>
+				</p:commandLink>
+				<p:commandLink oncomplete="dialogCompAcionaria.show()" title="Editar" update=":tabAbas:paginaImovel:formProprietario:paneldiaglogCompAcionaria" 
+				actionListener="#{imoveisController.prepararParaEdicao()}" disabled="#{empreendimentoController.visualizarEmpreendimento}">
+						<f:setPropertyActionListener target="#{imoveisController.pessoaPersist}" value="#{proprietario.idePessoa}" />
+						<f:setPropertyActionListener target="#{imoveisController.editModeProprietario}" value="#{true}" />	
+						<f:setPropertyActionListener target="#{imoveisController.enableFormPessoaFisica}" value="#{true}" />
+						<f:setPropertyActionListener target="#{imoveisController.enableFormPessoaJuridica}" value="#{true}" />
+						<f:setPropertyActionListener target="#{imoveisController.enableBotaoPesquisa}" value="#{true}" />
+						<h:graphicImage title="Editar" value="/resources/img/ico-editar.png" />
+						<f:ajax execute="@this"/>
+				</p:commandLink>
+				<p:commandLink oncomplete="confirmationCompAcionaria.show()" title="Remover" disabled="#{empreendimentoController.visualizarEmpreendimento}" >
+						<f:setPropertyActionListener target="#{imoveisController.pessoaiMovel}" value="#{proprietario}" />			
+						<h:graphicImage title="Excluir" value="/resources/img/ico-excluir.png" />
+						<f:ajax execute="@this"/>
+				</p:commandLink>	
+			</p:column>				
+		</p:dataTable>
+		</h:panelGrid>
+	</h:form>
+
+</html>

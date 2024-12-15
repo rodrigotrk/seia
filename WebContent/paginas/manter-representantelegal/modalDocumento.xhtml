@@ -1,0 +1,79 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:c="http://java.sun.com/jsp/jstl/core"> 
+<h:form>
+	
+	<p:dataTable id="tableDocumento" widgetVar="tableDocumento" value="#{cnaeController.cnaeData}" var="pjcnae" rendered="#{cnaeController.flagTableCnae}" emptyMessage="#{bundle.cnaeLabelTabRegitrosNaoEncontrados}">
+				<f:facet name="header">
+					<h:outputText value="#{bundle.cnaeLabelTabHeader}" />					
+				</f:facet>
+				<p:column headerText="#{bundle.cnaeLabelTabCodigo}">
+					<h:outputText value="#{pjcnae.ideCnae.codCnae}" />
+				</p:column>
+				<p:column headerText="#{bundle.cnaeLabelTabDescricao}">
+					<h:outputText value="#{pjcnae.ideCnae.desCnae}" />
+				</p:column>
+				<p:column headerText="#{bundle.cnaeLabelTabAtividadePrincipal}">
+					<h:outputText value="#{cnae.indCnaePrincipal}" />				
+				</p:column>				
+				<p:column headerText="#{bundle.cnaeLabelTabAtividadeAcoes}">
+					<h:commandButton image="/resources/img/ico-editar.png" actionListener="#{cnaeController.editar(pjcnae)}" type="button">
+						<f:ajax execute="@this"/>
+					</h:commandButton>
+					<h:commandButton image="/resources/img/ico-excluir.png" actionListener="#{cnaeController.excluir(pjcnae)}" type="button">
+						<f:ajax execute="@this"/>
+					</h:commandButton>	
+				</p:column>				
+			</p:dataTable>
+	
+	<p:dialog id="dialogDocumento" header="#{bundle.cnaeLabelCabecalho}" widgetVar="dialogDocumento" height="350" width="750">
+		<h:panelGrid columns="1">
+			<h:panelGrid columns="2">
+				<h:outputText value="*Tipo de Documento" />
+				<h:outputText value="*Número de Documento" />
+				<h:selectOneMenu style="width: 260px;" id="tipoDocumento">
+					<f:selectItems value="#{tipoIdentificacaoController.valuesComboBox}" />
+					<f:converter converterId="tipoIdentificacaoConverter"
+						for="tipoDocumento" />
+				</h:selectOneMenu>
+	
+				<p:inputText style="width: 136px;" id="numDocumento" />
+			</h:panelGrid>
+	
+			<h:panelGrid columns="1">
+				<h:outputText value="*Orgão Emissor" />
+				<p:inputText style="width: 404px;" id="orgaoEmissor" />
+			</h:panelGrid>
+	
+			<h:panelGrid columns="2">
+				<h:outputText value="*Data de Emissão" />
+				<h:outputText value="Data de Validade" />
+	
+				<p:calendar showOn="button" id="dataEmissao" label="Data de Emissão" validator="dataPosteriorValidator" />
+				<p:calendar showOn="button" id="dataValidade" />
+	
+				<h:outputText value="*Cópia do Documento (.pdf.jpg - Máximo 5MB)" />
+				<h:outputText value="" />
+	
+	
+				<p:fileUpload value="#{someUpload.file}" mode="simple" id="documento" invalidFileMessage="Tipo de arquivo inválido." allowTypes="/(\.|\/)(pdf|gif|jpeg|png|jpg)$/"  />
+				<h:outputText value="" />
+	
+				<p:commandButton value="Carregar" ajax="false"
+					actionListener="#{someUpload.upload}" id="botaoCarregar" />
+				<h:outputText value="" />
+			</h:panelGrid>
+	
+			<h:panelGrid columns="3">
+				<h:outputText value="* Campo de preenchimento obrigatório" />
+				<p:button value="Limpar" id="botaoLimpar" />
+				<p:button value="Salvar" id="botaoSalvar" />
+			</h:panelGrid>
+		</h:panelGrid>
+	</p:dialog>
+</h:form>					
+</html>

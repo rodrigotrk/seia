@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui"
+	template="../../layout/template.xhtml">
+		
+	<ui:define name="titulo-pagina">		
+		<h3> Relatório Quantitativo</h3>		
+	</ui:define>
+	
+	<ui:define name="conteudo-principal">
+		
+		<h3><h:outputLabel styleClass="titulo-grupo" value="INSTRUÇÕES" /></h3><br />
+		- Para elaborar um relatório quantitativo, Informe os parâmetros de consulta desejados e clique no botão "Gerar".<br /><br />
+		<strong>- A geração do relatório pode demorar um pouco pois dados georreferenciais estarão sendo processados.</strong><br /><br /><br />
+		<h3><h:outputLabel styleClass="titulo-grupo" value="PARÂMETROS DA CONSULTA" /></h3>
+		<h:form id="formRelatorioQuantitativo">
+			<h:panelGrid columns="1">
+				<br/>
+				<h:panelGrid columns="2">
+					<h:panelGrid columns="1">
+						<h:outputText value="Áreas" style="font-weight:bold;" />
+						<h:selectManyCheckbox id="chkArea" value="#{relatorioQuantitativoImovelController.listArea}" layout="pageDirection">
+				            <f:selectItem itemValue="1" itemLabel="Propriedade" />
+   							<f:selectItem itemValue="2" itemLabel="Reserva Legal (RL)" />
+						   	<f:selectItem itemValue="3" itemLabel="Área de Preservação Permanente (APP)" />
+						   	<f:selectItem itemValue="4" itemLabel="Área Produtiva" />
+						   	<f:selectItem itemValue="5" itemLabel="Remanescente de Vegetação Nativa" />
+							<p:ajax event="change" update="chkArea" />
+				        </h:selectManyCheckbox>
+				        <br />
+					</h:panelGrid>
+					<h:panelGrid columns="1">
+						<h:outputText value="Status do Imóvel" style="font-weight:bold;" />
+						<h:selectOneRadio id="chkStatus" value="#{relatorioQuantitativoImovelController.listStatus}" layout="pageDirection">  
+							<f:selectItem itemValue="0" itemLabel="Registro incompleto" />
+   							<f:selectItem itemValue="1" itemLabel="Registrado" />
+						   	<f:selectItem itemValue="2" itemLabel="Cadastrado com TC" />
+						   	<f:selectItem itemValue="3" itemLabel="Cadastrado com CI" />
+						   	<f:selectItem itemValue="4" itemLabel="Cadastrado com TC/CI" />
+						</h:selectOneRadio>
+						<br/>				       
+					</h:panelGrid>
+				</h:panelGrid>
+
+				<h:panelGrid columns="1">
+					<h:outputText value="Período de Cadastro" style="font-weight:bold;" />
+  			   	   	<h:panelGrid id="tblFiltroDataVencimento" columns="2">
+					   <h:panelGroup>
+						   <p:calendar showOn="button" id="dataVencimento1" size="13"
+									   value="#{relatorioQuantitativoImovelController.dtCadastroInicio}" locale="pt" pattern="dd/MM/yyyy" navigator="true"
+									   readOnlyInputText="true" yearRange="c-100" />
+							<h:outputText value="   a" />
+						</h:panelGroup>
+						<h:panelGroup>
+							<p:calendar showOn="button" id="dataVencimento2" size="13"
+										value="#{relatorioQuantitativoImovelController.dtCadastroFim}" locale="pt" pattern="dd/MM/yyyy" readOnlyInputText="true" navigator="true" 
+										yearRange="c-100:c+100" />
+						</h:panelGroup>
+						<br/>
+			   		</h:panelGrid>
+				</h:panelGrid>
+
+				<h:panelGrid columns="1">
+					<h:outputText id="lblFilter" value="Tipo de Consulta" style="font-weight:bold;" />
+					<h:panelGrid columns="2">
+						<p:selectOneRadio id="tipoConsulta" value="#{relatorioQuantitativoImovelController.tipoConsulta}">
+							<f:selectItem itemValue="1" itemLabel="Interseção"/>
+							<f:selectItem itemValue="2" itemLabel="União"/>
+						</p:selectOneRadio>
+					</h:panelGrid>						
+					<h:panelGrid columns="3">
+						<h:panelGrid columns="1">
+							<h:outputText value="Território de Identidade" />
+							<p:selectManyMenu id="comboTerritorio" value="#{relatorioQuantitativoImovelController.listaGidTerSelect}" styleClass="form-input form-select" style="width:300px;height:200px" showCheckbox="true">
+								<f:selectItems value="#{relatorioQuantitativoImovelController.listaTerritorioIdentidade}" var="t" itemValue="#{t.gid}" itemLabel="#{t.nome}"/>
+							</p:selectManyMenu>
+						</h:panelGrid>
+						<h:panelGrid columns="1">
+							<h:outputText value="Município" />							
+							<p:selectManyMenu id="comboMunicipio" value="#{relatorioQuantitativoImovelController.listaGidMunSelect}" styleClass="form-input form-select" style="width:300px;height:200px" showCheckbox="true">
+								<f:selectItems value="#{relatorioQuantitativoImovelController.listaMunicipios}" var="m" itemValue="#{m.gid}" itemLabel="#{m.nome}"/>
+							</p:selectManyMenu>							
+						</h:panelGrid>
+					</h:panelGrid>
+					<h:panelGrid columns="3">
+						<h:panelGrid columns="1">
+							<h:outputText value="RPGA" />
+							<p:selectManyMenu id="comboRpga" value="#{relatorioQuantitativoImovelController.listaGidRpgaSelect}" styleClass="form-input form-select" style="width:300px;height:200px" showCheckbox="true">
+								<f:selectItems value="#{relatorioQuantitativoImovelController.listaRpga}" var="g" itemValue="#{g.gid}" itemLabel="#{g.nome}"/>
+							</p:selectManyMenu>
+						</h:panelGrid>
+						<h:panelGrid columns="1">
+							<h:outputText value="Bacia Hidrográfica" />
+							<p:selectManyMenu id="comboBacia" value="#{relatorioQuantitativoImovelController.listaGidBaciaSelect}" styleClass="form-input form-select" style="width:300px;height:200px" showCheckbox="true">
+								<f:selectItems value="#{relatorioQuantitativoImovelController.listaBacia}" var="g" itemValue="#{g.gid}" itemLabel="#{g.nome}"/>
+							</p:selectManyMenu>
+						</h:panelGrid>
+					</h:panelGrid>
+					<h:panelGrid columns="3">
+						<h:panelGrid columns="1">
+							<h:outputText value="Unidade de Conservação" />
+							<p:selectManyMenu id="comboUnidade" value="#{relatorioQuantitativoImovelController.listaGidUniSelect}" styleClass="form-input form-select" style="width:300px;height:200px" showCheckbox="true">
+								<f:selectItems value="#{relatorioQuantitativoImovelController.listaUnidadeConservacao}" var="g" itemValue="#{g.gid}" itemLabel="#{g.nome}"/>
+							</p:selectManyMenu>
+						</h:panelGrid>
+						<h:panelGrid columns="1" >
+							<h:outputText value="Bioma" />
+							<p:selectManyMenu id="comboBioma" value="#{relatorioQuantitativoImovelController.listaGidBiomaSelect}" styleClass="form-input form-select" style="width:300px;height:200px" showCheckbox="true">
+								<f:selectItems value="#{relatorioQuantitativoImovelController.listaBioma}" var="g" itemValue="#{g.gid}" itemLabel="#{g.nome}"/>
+							</p:selectManyMenu>
+						</h:panelGrid>
+					</h:panelGrid>
+				</h:panelGrid>
+
+				<h:panelGrid columns="1">
+					<h:outputText value="Filtros Extras" style="font-weight:bold;" />
+					<h:selectManyCheckbox value="#{relatorioQuantitativoImovelController.listExtra}" layout="pageDirection">  
+			            <!-- >f:selectItem itemValue="1" itemLabel="Passivo de Outorga" itemDisabled="true" /-->
+						<!-- f:selectItem itemValue="2" itemLabel="Passivo de Dispensa de Outorga" itemDisabled="true" /-->
+					   	<f:selectItem itemValue="3" itemLabel="Outro Passivo Ambiental Fora de APP e RL" />
+					   	<f:selectItem itemValue="4" itemLabel="PRAD Cadastrado" />
+					   	<!-- f:selectItem itemValue="5" itemLabel="Uso de Agrotóxico" itemDisabled="true" /-->
+			            <!-- f:selectItem itemValue="6" itemLabel="Captação de Concessionária Pública" itemDisabled="true" /-->
+			            <!-- f:selectItem itemValue="7" itemLabel="Captação de Precipitação Meteorológica/Pluvial" itemDisabled="true" /-->
+			            <!-- f:selectItem itemValue="8" itemLabel="Captação de Subterrânea" itemDisabled="true" /-->
+			            <!-- f:selectItem itemValue="9" itemLabel="Captação de Superficial" itemDisabled="true" /-->
+			        </h:selectManyCheckbox>
+				</h:panelGrid>
+
+				<br/>
+
+				<h:panelGroup layout="div" style="float:right">
+					<p:commandButton value="Gerar" update="formRelatorioQuantitativo:panel2" ajax="false">
+						<p:fileDownload value="#{relatorioQuantitativoImovelController.gerarRelatorioQuantitativo}" />
+					</p:commandButton>
+				</h:panelGroup>
+				<br />
+				<hr ></hr>
+			</h:panelGrid>
+		</h:form>
+	</ui:define>	 
+</ui:composition>

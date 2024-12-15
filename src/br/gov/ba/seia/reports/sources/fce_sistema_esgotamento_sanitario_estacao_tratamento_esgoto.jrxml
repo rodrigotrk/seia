@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="fce_sistema_esgotamento_sanitario_dados_elevatoria" pageWidth="495" pageHeight="817" whenNoDataType="AllSectionsNoDetail" columnWidth="495" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="80b78396-35cc-4e26-aaf9-1207b1892468">
+	<property name="ireport.zoom" value="1.6500000000000028"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String"/>
+	<parameter name="ide_fce_ses" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="ide_requerimento" class="java.lang.Integer"/>
+	<queryString>
+		<![CDATA[select * from fce_ses_dados_estacao_tratam_esgoto
+	where ide_fce_ses = $P{ide_fce_ses}]]>
+	</queryString>
+	<field name="ide_fce_ses_dados_estacao_tratam_esgoto" class="java.lang.Integer"/>
+	<field name="nom_estacao" class="java.lang.String">
+		<fieldDescription><![CDATA[Corresponde ao campo "Identificação da estação"]]></fieldDescription>
+	</field>
+	<field name="val_vazao_med_tratamento" class="java.math.BigDecimal"/>
+	<field name="ide_fce_ses" class="java.lang.Integer"/>
+	<field name="ide_localizacao_geografica" class="java.lang.Integer">
+		<fieldDescription><![CDATA[Identificar da localização geográfica da Área de Preservação Permanente]]></fieldDescription>
+	</field>
+	<title>
+		<band height="23" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="a9bc1f7b-2831-4626-a0d9-766c22f99fbd" positionType="Float" mode="Opaque" x="0" y="2" width="494" height="20" backcolor="#DDDDDD"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif" isBold="true"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<text><![CDATA[Estação de tratamento de esgoto (ETA)]]></text>
+			</staticText>
+		</band>
+	</title>
+	<detail>
+		<band height="73">
+			<staticText>
+				<reportElement uuid="6bc33be4-fcbb-4076-89b6-7ed2ef5580f7" x="0" y="7" width="333" height="20"/>
+				<box topPadding="3" leftPadding="2"/>
+				<textElement>
+					<font fontName="SansSerif" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Dados da Estação de Tratamento de Esgoto]]></text>
+			</staticText>
+			<line>
+				<reportElement uuid="cf7e0220-df7b-411b-a8bc-e7aceb23a521" x="0" y="26" width="495" height="1"/>
+			</line>
+			<staticText>
+				<reportElement uuid="60feb993-ff40-444b-a2ba-ebfbfe626179" x="2" y="32" width="148" height="20"/>
+				<textElement/>
+				<text><![CDATA[Identificação da estação:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="941f8b54-0102-46b5-aecb-f3ff899ff0f5" x="2" y="52" width="148" height="20"/>
+				<textElement/>
+				<text><![CDATA[Vazão (m³/dia):]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="812454be-8e13-422f-949a-5edfaf9b8f64" x="150" y="32" width="148" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{nom_estacao}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00">
+				<reportElement uuid="29f74810-6fba-4a48-ba25-03aa89d4d3a8" x="150" y="52" width="148" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{val_vazao_med_tratamento}]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="34" splitType="Prevent">
+			<subreport runToBottom="false">
+				<reportElement uuid="42ce1884-9b66-4fe4-9b82-999648865baf" positionType="Float" isPrintRepeatedValues="false" x="0" y="10" width="494" height="24" isRemoveLineWhenBlank="true" isPrintWhenDetailOverflows="true"/>
+				<subreportParameter name="SUBREPORT_DIR">
+					<subreportParameterExpression><![CDATA[$P{SUBREPORT_DIR}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="ide_requerimento">
+					<subreportParameterExpression><![CDATA[$P{ide_requerimento}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="ide_fce_ses">
+					<subreportParameterExpression><![CDATA[$P{ide_fce_ses}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="ide_fce_ses_dados_estacao_tratam_esgoto">
+					<subreportParameterExpression><![CDATA[$F{ide_fce_ses_dados_estacao_tratam_esgoto}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "fce_sistema_saneamento_sanitario_localizacao_estacao.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+		<band height="35" splitType="Prevent">
+			<subreport runToBottom="false">
+				<reportElement uuid="01724821-7151-48c2-8f70-797d32f5e169" positionType="Float" isPrintRepeatedValues="false" x="0" y="2" width="494" height="24" isRemoveLineWhenBlank="true" isPrintWhenDetailOverflows="true"/>
+				<subreportParameter name="ide_requerimento">
+					<subreportParameterExpression><![CDATA[$P{ide_requerimento}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="ide_fce_ses_dados_estacao_tratam_esgoto">
+					<subreportParameterExpression><![CDATA[$F{ide_fce_ses_dados_estacao_tratam_esgoto}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "fce_sistema_saneamento_sanitario_composicoes.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+	</detail>
+</jasperReport>

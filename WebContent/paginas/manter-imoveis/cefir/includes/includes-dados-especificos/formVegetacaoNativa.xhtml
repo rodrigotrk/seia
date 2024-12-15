@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui">
+		
+	<h:panelGrid id="panelVegetacaoNativa">
+		<br />
+		<h:panelGrid columns="1">
+			<h:panelGrid>
+				<h:outputLabel value="#{bundle.cefir_lbl_area_vegetacao_nativa}" />
+				<p:inputText id="valAreaVegetacaoNativa" value="#{imovelRuralControllerNew.imovelRural.vegetacaoNativa.valArea}" maxlength="15" 
+							 onkeypress="mascararNumeroLR(this, event, 10, 4, '.', ',', 3);"
+			 				 onkeyup="mascararNumeroLR(this, event, 10, 4, '.', ',', 3); desabilitarBotaoProximoMesmoFinalizado();"			 				 
+			 			 	 converter="doubleQuatroCasasDecimaisConverter"
+					 		 required="#{!imovelRuralControllerNew.showPCT}" requiredMessage="O campo Área de Vegetação Nativa é de preenchimento obrigatório." >
+				</p:inputText>
+			</h:panelGrid>
+		</h:panelGrid>
+		<h:panelGrid columns="1">
+			<h:outputText value="* #{bundle.cefir_lbl_pergunta_area_excedente}" />
+	        <p:selectManyCheckbox onchange="desabilitarBotaoProximoMesmoFinalizado()"  id="areaExcedente" value="#{imovelRuralControllerNew.imovelRural.vegetacaoNativa.tipoFinalidadeVegetacaoNativaCollection}" layout="pageDirection">
+	            <f:selectItems value="#{imovelRuralControllerNew.listTipoFinalidadeVegetacaoNativa}" var="tipoFinalidade" itemLabel="#{tipoFinalidade.dscTipoFinalidadeVegetacaoNativa}" itemValue="#{tipoFinalidade}" />
+	            <f:converter converterId="tipoFinalidadeVegetacaoNativaConverter" />
+	        </p:selectManyCheckbox>
+		</h:panelGrid>
+
+		<h:panelGrid id="localizacaoGeograficaVn" columns="1" >
+			<h3><h:outputLabel value="POLIGONAL DA VEGETAÇÃO NATIVA" styleClass="titulo-grupo" /></h3>	        
+	        <h:panelGrid columns="3">
+				<h:outputLabel styleClass="form-label" value="*#{bundle.empreendimento_lbl_secao_geometrica}" />
+				
+				<h:outputLabel id="datumLabelVn" styleClass="form-label"
+						value="* #{bundle.empreendimento_lbl_datum}"
+						rendered="#{imovelRuralControllerNew.renderedLabelSRID(imovelRuralControllerNew.imovelRural.vegetacaoNativa.ideLocalizacaoGeografica)}"/>
+		
+				<p:spacer width="10px" 
+						rendered="#{!imovelRuralControllerNew.renderedLabelSRID(imovelRuralControllerNew.imovelRural.vegetacaoNativa.ideLocalizacaoGeografica)}" />
+				
+				<h:outputLabel styleClass="form-label" value="Descrição" />
+				<p:selectOneMenu id="tipoSecaoGeometricaShapeVn" value="#{imovelRuralControllerNew.imovelRural.vegetacaoNativa.ideLocalizacaoGeografica.ideClassificacaoSecao}" disabled="#{imovelRuralControllerNew.existeTheGeomVn() or (imovelRuralControllerNew.imovelRural.vegetacaoNativa != null and not empty imovelRuralControllerNew.imovelRural.vegetacaoNativa.ideLocalizacaoGeografica.listArquivosShape)}" 
+					required="#{!imovelRuralControllerNew.showPCT}" requiredMessage="O campo Tipo de Inserção é de preenchimento obrigatório." style="width: 160px;" onchange="desabilitarBotaoProximoMesmoFinalizado()">
+					<f:selectItem itemLabel="Selecione..." />
+					<f:selectItems value="#{imovelRuralControllerNew.listaSecaoGeometrica}" var="secaoGeometrica" itemLabel="#{secaoGeometrica.nomClassificacaoSecao}" itemValue="#{secaoGeometrica}" />
+					<f:converter converterId="secaoGeometricaConverter" />
+					<p:ajax event="change" update="localizacaoGeograficaVn" listener="${imovelRuralControllerNew.verificaTipoSecaoGeometricaShape(5)}" />
+				</p:selectOneMenu>
+				
+				<h:outputLabel id="datumValueVn" 
+						style="margin-left:10px;"
+						value="#{imovelRuralControllerNew.imovelRural.vegetacaoNativa.ideLocalizacaoGeografica.ideSistemaCoordenada.nomSistemaCoordenada}"
+						rendered="#{imovelRuralControllerNew.renderedLabelSRID(imovelRuralControllerNew.imovelRural.vegetacaoNativa.ideLocalizacaoGeografica)}" />
+
+				<p:spacer width="10px" 
+						rendered="#{!imovelRuralControllerNew.renderedLabelSRID(imovelRuralControllerNew.imovelRural.vegetacaoNativa.ideLocalizacaoGeografica)}" />
+				
+				<p:inputText id="descLocGeoShapeVn" value="#{imovelRuralControllerNew.imovelRural.vegetacaoNativa.ideLocalizacaoGeografica.desLocalizacaoGeografica}" maxlength="150" onchange="desabilitarBotaoProximoMesmoFinalizado()"
+					title="Descrição da Localização" disabled="#{imovelRuralControllerNew.existeTheGeomVn() or (imovelRuralControllerNew.imovelRural.vegetacaoNativa != null and not empty imovelRuralControllerNew.imovelRural.vegetacaoNativa.ideLocalizacaoGeografica.listArquivosShape)}" />	
+			</h:panelGrid>
+			
+			<h:panelGrid id="uplShapefileVn" 
+						rendered="#{imovelRuralControllerNew.imovelRural.vegetacaoNativa.ideLocalizacaoGeografica.ideClassificacaoSecao.ideClassificacaoSecao == 2 and !imovelRuralControllerNew.existeTheGeomVn()}" columns="1" style="width:370px">
+				<h:panelGrid rendered="#{imovelRuralControllerNew.mostrarBotaoUploadShapeVn}">
+					<p:commandButton id="btnUploadShapeVn" value="+ Upload dos Shapes"
+						onclick="dlgUploadShapeVn.show(); desabilitarBotaoProximoMesmoFinalizado()" 
+				   		title="Upload dos Shapes" process="panelVegetacaoNativa">
+					</p:commandButton>
+				</h:panelGrid>
+				<h:panelGrid rendered="#{(imovelRuralControllerNew.imovelRural.vegetacaoNativa != null and not empty imovelRuralControllerNew.imovelRural.vegetacaoNativa.ideLocalizacaoGeografica.listArquivosShape)}">						
+					<h:outputLabel value="#{bundle.cefir_lbl_localizacao_geografica_shp}" style="float:left; width:330px;" />					
+				</h:panelGrid>
+				<h:panelGrid id="tblDocumentoVn" style="float:right;">
+					<p:dataTable id="dataTableDocumentosVn" rendered="#{(imovelRuralControllerNew.imovelRural.vegetacaoNativa != null and not empty imovelRuralControllerNew.imovelRural.vegetacaoNativa.ideLocalizacaoGeografica.listArquivosShape)}"
+						widgetVar="dtTbDocumentosVn" value="#{imovelRuralControllerNew.imovelRural.vegetacaoNativa.ideLocalizacaoGeografica.listArquivosShape}"
+						var="arquivoVn" lazy="true" emptyMessage="#{bundle.cefir_msg_A012}" style="width:472px;">
+				         <p:column>  
+							<h:outputText value="#{arquivoVn}"/>
+				         </p:column>	
+				         <p:column rendered="#{imovelRuralControllerNew.habilitaCadastroAmbiental}">  						
+				         	<p:commandLink onclick="confirmaExclusaoArquivoShapeFileLocGeoVn.show(); confirmaExclusaoArquivoShapeFileLocGeoVn.content.parent().css('top',  '80px'); confirmaExclusaoArquivoShapeFileLocGeoVn.content.parent().css('left',  '500px'); desabilitarBotaoProximoMesmoFinalizado()" process="@this">
+								<f:setPropertyActionListener value="${arquivoVn}" target="#{imovelRuralControllerNew.arquivoShapeExcluir}"></f:setPropertyActionListener>
+								<h:graphicImage title="Excluir" value="/resources/img/ico-excluir.png" />
+							</p:commandLink>
+				         </p:column>	
+		    		</p:dataTable>	    		
+	    		</h:panelGrid>
+			</h:panelGrid>
+			
+			<br /><br />
+			
+			<h:panelGrid id="uplDesenhoVn" rendered="#{imovelRuralControllerNew.imovelRural.vegetacaoNativa.ideLocalizacaoGeografica.ideClassificacaoSecao.ideClassificacaoSecao == 3 and !imovelRuralControllerNew.existeTheGeomVn()}" columns="1" style="width:370px">
+			    <h:outputLink value="#{imovelRuralControllerNew.caminhoGeoBahia}" title="GEOBAHIA" target="_blank" onclick="desabilitarBotaoProximoMesmoFinalizado()">  
+			        <h:outputText value="DESENHAR NO GEOBAHIA"/>
+					<f:param name="secao" value="cefir" />
+					<f:param name="acao" value="draw" />
+					<f:param name="id" value="#{imovelRuralControllerNew.imovelRural.ideImovelRural}" />
+					<f:param name="tema" value="5" />
+					<f:param name="token" value="#{imovelRuralControllerNew.token}" />
+			    </h:outputLink>
+			</h:panelGrid>
+			
+			<h:panelGrid id="pnlTheGeomVn" rendered="#{imovelRuralControllerNew.existeTheGeomVn}" columns="1">
+	    		<h:panelGrid id="pnlAcoesVisualizarShapesVn" columns="3">
+				    <h:outputLink value="#{imovelRuralControllerNew.caminhoGeoBahia}" title="GEOBAHIA" target="_blank">  
+				        <h:outputText value="VISUALIZAR SHAPE DA VEGETAÇÃO NATIVA"/>  
+						<f:param name="secao" value="cefir" />
+						<f:param name="acao" value="view" />
+						<f:param name="id" value="#{imovelRuralControllerNew.imovelRural.ideImovelRural}" />
+						<f:param name="tema" value="5" />
+						<f:param name="token" value="#{imovelRuralControllerNew.token}" />
+				    </h:outputLink>
+				    
+				    <h:outputLink value="#{imovelRuralControllerNew.caminhoGeoBahia}" title="GEOBAHIA" target="_blank">  
+				        <h:graphicImage title="Visualizar" value="/resources/img/ico-arl-relocacao.png" />
+					  	<f:param name="secao" value="cefir" />
+						<f:param name="acao" value="view" />
+						<f:param name="id" value="#{imovelRuralControllerNew.imovelRural.ideImovelRural}" />
+						<f:param name="tema" value="5" />
+						<f:param name="token" value="#{imovelRuralControllerNew.token}" />	
+				    </h:outputLink>
+				    
+					<p:commandLink process="formCadImovelRural:tabAbasDadosEspecificos:panelVegetacaoNativa" onclick="confirmaExclusaoShapeFileLocGeoVn.show(); confirmaExclusaoShapeFileLocGeoVn.content.parent().css('top',  '80px'); confirmaExclusaoShapeFileLocGeoVn.content.parent().css('left',  '500px')" >
+						<h:graphicImage title="Excluir" value="/resources/img/ico-excluir.png" />
+					</p:commandLink>
+		    	</h:panelGrid>
+			</h:panelGrid>
+		</h:panelGrid>	
+		<p:commandButton id="cefir_vg_btn_salvar" value="#{bundle.btn_salvar}" actionListener="#{imovelRuralControllerNew.salvarVegetacaoNativa()}" oncomplete="habilitarBotaoProximo()"
+		 	update="formCadImovelRural:tabAbasDadosEspecificos:panelVegetacaoNativa" process="formCadImovelRural:tabAbasDadosEspecificos:panelVegetacaoNativa">
+		</p:commandButton>
+		<p:confirmDialog id="confirmaExclusaoArquivoShapeFileLocGeoVn" widgetVar="confirmaExclusaoArquivoShapeFileLocGeoVn" header="#{bundle.geral_lbl_mensagem}"  
+			message="#{bundle.msg_confirma_exclusao}" severity="alert">		
+			<p:commandButton id="btnConfirmaExclusaoArquivoShapeFileLocGeoVn" actionListener="${imovelRuralControllerNew.excluirArquivo(5)}" 
+				 process="formCadImovelRural:tabAbasDadosEspecificos:panelVegetacaoNativa" update="formCadImovelRural:tabAbasDadosEspecificos:panelVegetacaoNativa" onclick="confirmaExclusaoArquivoShapeFileLocGeoVn.hide()" value="#{bundle.btn_sim}"/>
+			<p:commandButton value="#{bundle.btn_nao}" type="button" onclick="confirmaExclusaoArquivoShapeFileLocGeoVn.hide()" />		
+		</p:confirmDialog>
+	
+		<p:confirmDialog id="confirmaExclusaoShapeFileLocGeoVn" widgetVar="confirmaExclusaoShapeFileLocGeoVn" header="#{bundle.geral_lbl_mensagem}"  
+			message="#{bundle.msg_confirma_exclusao}" severity="alert">
+				<p:commandButton actionListener="#{imovelRuralControllerNew.excluirShape(imovelRuralControllerNew.imovelRural.vegetacaoNativa.ideLocalizacaoGeografica, 5)}" 
+					 process="formCadImovelRural:tabAbasDadosEspecificos:panelVegetacaoNativa" update="formCadImovelRural:tabAbasDadosEspecificos:panelVegetacaoNativa" onclick="confirmaExclusaoShapeFileLocGeoVn.hide()" value="#{bundle.btn_sim}"/>
+				<p:commandButton value="#{bundle.btn_nao}" type="button" onclick="confirmaExclusaoShapeFileLocGeoVn.hide()" />
+		</p:confirmDialog>
+	</h:panelGrid>
+	
+</ui:composition>

@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+
+	<p:dialog header="#{bundle.lbl_cansla_efetuar_validacao}" 
+		widgetVar="dialogEfetuarValidacao" 
+		id="dialogEfetuarValidacao" 
+		width="825"
+		height="500"
+		modal="true" 
+		position="center"
+		resizable="false">
+		
+		<!-- <p:ajax event="close" update="formAtividadesSemLicenciamento:dataTableCadastro" listener="#{efetuarValidacaoPreviaAtividadeController.limpar()}" /> -->
+		
+		<h:form id="formDialogEfetuarValidacao">
+			
+			<h:outputText value="#{bundle.lbl_cansla_efetuar_validacao}" styleClass="titulo-grupo" style="text-transform: uppercase;" />
+			
+			<h:panelGrid columns="1" style="margin-top:15px;">
+				<h:outputText value="#{bundle.lbl_cansla_dados_cadastro}:" styleClass="titulo-grupo" />
+				<h:outputText value="#{bundle.lbl_cansla_consulta_atividade}: #{efetuarValidacaoPreviaAtividadeController.cadastro.tipoAtividadeNaoSujeitaLicenciamento.nomAtividade}"/>
+			</h:panelGrid>
+			<h:panelGrid columns="2" style="width:750px; margin-top: -2px; margin-bottom: 15px;">
+				<h:panelGroup layout="block" style="width:300px;">
+					<h:outputText value="#{bundle.lbl_cansla_consulta_num_cadastro}:" />
+					<h:outputText value="#{efetuarValidacaoPreviaAtividadeController.cadastro.numCadastro}" style="width: 295px;" />
+				</h:panelGroup>
+				
+				<h:panelGroup>
+					<h:outputText value="#{bundle.consulta_empree_nome_empreendimento}:"  />
+					<h:outputText value="#{efetuarValidacaoPreviaAtividadeController.cadastro.ideEmpreendimento.nomEmpreendimento}"  />
+				</h:panelGroup>
+
+				<h:panelGroup>
+					<h:outputText value="#{bundle.lbl_cansla_cpf_cnpj}:"  />
+					<h:outputText value="#{efetuarValidacaoPreviaAtividadeController.cadastro.idePessoaRequerente.cpfCnpjFormatado}"  />
+				</h:panelGroup>
+				
+				<h:panelGroup>
+					<h:outputText value="#{bundle.lbl_cansla_nome_requerente}:"  />
+					<h:outputText value="#{efetuarValidacaoPreviaAtividadeController.cadastro.idePessoaRequerente.nomeRazao}"  />
+				</h:panelGroup>
+			</h:panelGrid>			
+			
+			<h:outputText value="#{bundle.lbl_cansla_historico_comunicacao}" styleClass="titulo-grupo" />
+			<p:dataTable id="tableComunicacao"
+				widgetVar="tableComunicacao"
+				value="#{efetuarValidacaoPreviaAtividadeController.cadastro.cadastroAtividadeNaoSujeitaLicComunicacaos}"
+				var="comunicacao"
+				emptyMessage="#{bundle.msg_lista_vazia}"
+				style="width:750px; margin: 10px; margin-bottom: 15px;" 
+				>
+				<p:column headerText="#{bundle.lbl_cansla_data}" style="width: 80px;">
+					<h:outputText value="#{comunicacao.dtcComunicacao}" >
+						<f:convertDateTime  pattern="dd/MM/yyyy" locale="pt,BR" timeZone="Brazil/East"/>
+					</h:outputText>
+				</p:column>
+				
+				<p:column headerText="#{bundle.lbl_cansla_mensagem}">
+					<h:outputText value="#{fn:substring(comunicacao.dscMensagem,0,100)}" />
+				</p:column>
+				
+				<p:column headerText="#{bundle.geral_lbl_acoes}" style="width: 45px; text-align: center;">
+					<p:commandLink oncomplete="dialogMensagemEmail.show();" process="@this" update="dialogMensagemEmail, formEmail">
+						<f:setPropertyActionListener value="#{comunicacao}" target="#{efetuarValidacaoPreviaAtividadeController.comunicacao}"/>
+						<f:setPropertyActionListener value="#{true}" target="#{efetuarValidacaoPreviaAtividadeController.comunicacao.visualizar}"/>
+						<h:graphicImage title="Visualizar" value="/resources/img/ico-pesquisa.png" />
+					</p:commandLink>
+				</p:column>
+			</p:dataTable>
+			
+			<h:outputText value="#{bundle.lbl_cansla_documentos_estudos}" styleClass="titulo-grupo" />
+			<p:dataTable id="tableDocumentos" 
+				widgetVar="tableDocumentos"
+				value="#{efetuarValidacaoPreviaAtividadeController.cadastro.cadastroAtividadeNaoSujeitaLicDocApensados}"
+				var="doc"
+				lazy="true" paginator="false" 
+				style="width:750px; margin: 10px;">
+
+				<p:column headerText="#{bundle.lbl_cpm_documento}">
+					<h:outputText
+						value="#{doc.ideDocumentoObrigatorio.nomDocumentoObrigatorio}" />
+				</p:column>
+
+				<p:column headerText="#{bundle.validacao_previa_lbl_nome_arquivo}"
+					style="word-wrap: break-word; width:200px;">
+					<h:outputText value="#{doc.nomeDocEnviado}" />
+				</p:column>
+
+				<p:column headerText="#{bundle.validacao_previa_lbl_tamanho_kb}">
+					<h:outputText value="#{doc.tamanhoDoc}" />
+				</p:column>
+
+				<p:column headerText="#{bundle.lbl_cansla_validado}"
+					style="vertical-align: middle; text-align: center;">
+					<p:selectBooleanCheckbox value="#{doc.indValidado}" style="margin-left: 15px;">
+						<p:ajax event="change" global="true" />
+					</p:selectBooleanCheckbox>
+				</p:column>
+
+				<p:column headerText="#{bundle.geral_lbl_acoes}"
+					style="text-align: center; width: 45px;">
+
+					<h:panelGrid columns="2">
+
+						<!-- Download -->
+						<h:commandButton title="Download do Arquivo"
+							image="/resources/img/ico-download.png"
+							style="vertical-align: middle;"
+							immediate="true">
+							<p:fileDownload value="#{efetuarValidacaoPreviaAtividadeController.getArquivoBaixar(doc.urlDocumento)}" />
+						</h:commandButton>
+					</h:panelGrid>
+				</p:column>
+			</p:dataTable>
+			
+			<h:outputText value="#{bundle.lbl_cansla_documentos_identificacao}" styleClass="titulo-grupo" />
+			<p:dataTable id="tableIdentificacao"
+				widgetVar="tableIdentificacao"
+				value="#{efetuarValidacaoPreviaAtividadeController.listaDocIdentificacao}"
+				var="docIdentificacao"
+				emptyMessage="#{bundle.msg_lista_vazia}"
+				style="width:750px; margin: 10px;"
+				>
+				<p:column headerText="#{bundle.lbl_cpm_documento}" >
+					<h:outputText value="#{docIdentificacao.descricao}" />
+				</p:column>
+				
+				<p:column headerText="#{bundle.validacao_previa_lbl_nome_arquivo}"
+					style="word-wrap: break-word; width:200px;">
+					<h:outputText value="#{docIdentificacao.fileName}" />
+				</p:column>
+				
+				<p:column headerText="#{bundle.validacao_previa_lbl_tamanho_kb}" >
+					<h:outputText value="#{docIdentificacao.fileSize}" />
+				</p:column>
+				
+				<p:column headerText="#{bundle.lbl_cansla_validado}"
+					style="vertical-align: middle; text-align: center;">
+					<p:selectBooleanCheckbox value="#{docIdentificacao.indDocumentoValidado}" style="margin-left: 15px;" >
+						<p:ajax event="change" global="true" />
+					</p:selectBooleanCheckbox>
+				</p:column>
+				
+				<p:column headerText="#{bundle.geral_lbl_acoes}" style="width: 45px; text-align: center;">
+				
+					<h:commandButton title="Download do Arquivo"
+						image="/resources/img/ico-download.png"
+						immediate="true" style="vertical-align:middle; margin-left:5px;">
+						<p:fileDownload value="#{efetuarValidacaoPreviaAtividadeController.getArquivoBaixar(docIdentificacao)}" />
+					</h:commandButton>
+				</p:column>
+			</p:dataTable>
+			
+			<h:outputText value="#{bundle.lbl_cansla_documentos_representacao}" styleClass="titulo-grupo" />
+			<p:dataTable id="tableRepresentacao"
+				widgetVar="tableRepresentacao"
+				value="#{efetuarValidacaoPreviaAtividadeController.listaDocRepresentacao}"
+				var="docRepresentacao"
+				emptyMessage="#{bundle.msg_lista_vazia}"
+				style="width:750px; margin: 10px;"
+				>
+				<p:column  headerText="#{bundle.lbl_cpm_documento}" style="width:248px;">
+					<h:outputText value="#{docRepresentacao.descricao}"  />
+				</p:column>
+				
+				<p:column headerText="#{bundle.validacao_previa_lbl_nome_arquivo}"
+					style="word-wrap: break-word; width:200px;">
+					<h:outputText value="#{docRepresentacao.fileName}" />
+				</p:column>
+				
+				<p:column headerText="#{bundle.validacao_previa_lbl_tamanho_kb}">
+					<h:outputText value="#{docRepresentacao.fileSize}" />
+				</p:column>
+				
+				<p:column headerText="#{bundle.lbl_cansla_validado}"
+					style="vertical-align: middle; text-align: center;">
+					<p:selectBooleanCheckbox value="#{docRepresentacao.indDocumentoValidado}" style="margin-left: 15px;" >
+						<p:ajax event="change" global="true" />
+					</p:selectBooleanCheckbox>
+				</p:column>
+				
+				<p:column headerText="#{bundle.geral_lbl_acoes}" style="width: 45px; text-align: center;">
+				
+					<h:commandButton title="Download do Arquivo"
+						image="/resources/img/ico-download.png"
+						immediate="true" style="vertical-align:middle; margin-left:5px;">
+						<p:fileDownload value="#{efetuarValidacaoPreviaAtividadeController.getArquivoBaixar(docRepresentacao)}" />
+					</h:commandButton>
+				</p:column>
+			</p:dataTable>
+
+			<h:panelGroup id="groupBotao" layout="block" style="margin-top:30px;">
+				<p style="text-align:right; margin-right: 26px;">
+					<p:commandButton value="#{bundle.geral_lbl_voltar}"
+						onclick="dialogEfetuarValidacao.hide();"
+						style="width:90px;"	/>
+					<p:commandButton value="#{bundle.geral_lbl_salvar}" 
+						actionListener="#{efetuarValidacaoPreviaAtividadeController.salvar()}"
+						global="false" 
+						style="width:90px; margin-left:20px;"/>
+				</p>
+			</h:panelGroup>
+		
+		</h:form>
+	</p:dialog>
+</ui:composition>

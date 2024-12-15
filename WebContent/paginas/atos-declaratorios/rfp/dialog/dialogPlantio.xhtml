@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition 
+	xmlns="http://www.w3.org/1999/xhtml" 
+	xmlns:h="http://java.sun.com/jsf/html" 
+	xmlns:f="http://java.sun.com/jsf/core" 
+	xmlns:ui="http://java.sun.com/jsf/facelets" 
+    xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:p="http://primefaces.prime.com.tr/ui"
+	xmlns:s="http://java.sun.com/jsf/composite/seia">
+	
+	<h:form id="formPlantio" styleClass="col-12">
+		
+		<h:panelGrid styleClass="col-12">
+		
+			<h:outputText value="Situação atual da floresta" />
+
+			<p:selectOneMenu 
+				disabled="#{registroFlorestaPlantadaController.ideRegistroFlorestaProducaoImovelPlantio.visualizar or registroFlorestaPlantadaController.ideRegistroFlorestaProducaoImovelPlantio.editar}"	
+				converter="simpleEntityConverter"
+			 	value="#{registroFlorestaPlantadaController.ideRegistroFlorestaProducaoImovelPlantio.ideSituacaoAtualFlorestaProducao}" 
+			 	valueChangeListener="#{registroFlorestaPlantadaController.valueChangeSituacao()}" >
+				<p:ajax event="change" process="@this" update="formPlantio:periodo"/>
+				<f:selectItem itemLabel="Selecione..."/>
+				<f:selectItems value="#{registroFlorestaPlantadaController.situacaoAtualFlorestaProducaoList}" var="situacao" itemValue="#{situacao}" itemLabel="#{situacao.desSituacaoFlorestaProducao}" />
+			</p:selectOneMenu>
+			
+		</h:panelGrid>
+	
+		<h:panelGrid id="periodo" styleClass="col-12" >
+		
+			<h:panelGrid id="previsto"  rendered="#{registroFlorestaPlantadaController.visivelPeriodoPrevisto}"  styleClass="col-12" >
+				<h:outputText value="Período previsto da implantação"/>
+				<h:panelGrid columns="2">
+					<p:calendar disabled="#{registroFlorestaPlantadaController.ideRegistroFlorestaProducaoImovelPlantio.visualizar}" value="#{registroFlorestaPlantadaController.ideRegistroFlorestaProducaoImovelPlantio.dtInicioPrevistaImplantacao}" locale="pt" showOn="button" size="20"  pattern="dd/MM/yyyy"  readOnlyInputText="true"  />
+					<p:calendar disabled="#{registroFlorestaPlantadaController.ideRegistroFlorestaProducaoImovelPlantio.visualizar}" value="#{registroFlorestaPlantadaController.ideRegistroFlorestaProducaoImovelPlantio.dtFimPrevistaImplantacao}" locale="pt" showOn="button" size="20"  pattern="dd/MM/yyyy"  readOnlyInputText="true"  />
+				</h:panelGrid>
+			</h:panelGrid>
+	
+			<h:panelGrid id="implantacao" rendered="#{registroFlorestaPlantadaController.visivelPeriodoImplantacao}" styleClass="col-12">
+				<h:outputText value="Período da implantação" />
+				<h:panelGrid columns="2">
+					<p:calendar disabled="#{registroFlorestaPlantadaController.ideRegistroFlorestaProducaoImovelPlantio.visualizar}" value="#{registroFlorestaPlantadaController.ideRegistroFlorestaProducaoImovelPlantio.dtInicioPeriodoImplantacao}" locale="pt" showOn="button" size="20"  pattern="dd/MM/yyyy"  readOnlyInputText="true" />
+					<p:calendar disabled="#{registroFlorestaPlantadaController.ideRegistroFlorestaProducaoImovelPlantio.visualizar}" value="#{registroFlorestaPlantadaController.ideRegistroFlorestaProducaoImovelPlantio.dtFimPeriodoImplantacao}" locale="pt" showOn="button" size="20"  pattern="dd/MM/yyyy"  readOnlyInputText="true" />
+				</h:panelGrid>
+			</h:panelGrid>
+		
+		</h:panelGrid>
+		
+		<h:panelGrid styleClass="col-12">
+
+			<s:inputLocGeo
+				ideObjetoLocalizacao="#{registroFlorestaPlantadaController.ideRegistroFlorestaProducaoImovelPlantio}"
+				ideLocalizacaoGeografica="#{registroFlorestaPlantadaController.ideRegistroFlorestaProducaoImovelPlantio.ideLocalizacaoGeografica}"
+				ideRequerimento="#{registroFlorestaPlantadaController.ideRequerimento}"
+				ideTipoSecaoGeometrica="#{seiaController.classificacaoSecaoEnum('CLASSIFICACAO_SECAO_SHAPEFILE')}"
+				disabled="#{registroFlorestaPlantadaController.ideRegistroFlorestaProducaoImovelPlantio.visualizar}"
+				update="formPlantio:dtImovelPlantio"/>
+			
+			<h:panelGrid id="dtImovelPlantio" styleClass="col-12">
+			
+				<p:dataTable
+					rendered="#{not empty registroFlorestaPlantadaController.ideRegistroFlorestaProducaoImovelPlantio.ideLocalizacaoGeografica.ideLocalizacaoGeografica}"
+					value="#{registroFlorestaPlantadaController.ideRegistroFlorestaProducaoImovelPlantio}" var="ip" styleClass="col-12"
+					emptyMessage="Nenhum registro encontrado">
+					
+					<p:column headerText="Tipo">
+						<h:outputText value="#{ip.ideLocalizacaoGeografica.ideClassificacaoSecao.nomClassificacaoSecao}" />
+					</p:column>
+				
+					<p:column headerText="Sistema de coordenada">
+						<h:outputText value="#{ip.ideLocalizacaoGeografica.ideSistemaCoordenada.nomSistemaCoordenada}" />
+					</p:column>
+			
+					<p:column headerText="Área (ha)">
+						<h:outputText value="#{ip.valAreaPlantio}" >
+							<f:convertNumber maxIntegerDigits="9" maxFractionDigits="4" pattern="###,##0.0000" locale="pt_BR"/>
+						</h:outputText>
+					</p:column>
+				
+					<p:column headerText="Ações">
+
+						<p:commandLink oncomplete="confirmExcluirGeo.show()" disabled="#{registroFlorestaPlantadaController.ideRegistroFlorestaProducaoImovelPlantio.visualizar}">
+							<f:setPropertyActionListener value="#{ip}" target="#{localizacaoGeograficaGenericController.objetoLocalizacao}" />
+							<f:setPropertyActionListener value="formPlantio" target="#{localizacaoGeograficaGenericController.idDoComponenteParaSerAtualizado}" />
+							<h:graphicImage title="Excluir" value="/resources/img/ico-excluir.png" />
+						</p:commandLink>
+							
+						<s:linkGeoBahia ideLocalizacaoGeografica="#{ip.ideLocalizacaoGeografica}"/>
+			    		
+					</p:column>
+					
+				</p:dataTable>
+			</h:panelGrid>
+		
+		</h:panelGrid>
+
+		
+		<h:panelGrid  columns="2">
+			<p:commandButton title="Voltar" value="Voltar" styleClass="btn-medio right" onclick="dialogPlantio.hide()"/>
+			<p:commandButton title="Salvar" disabled="#{registroFlorestaPlantadaController.ideRegistroFlorestaProducaoImovelPlantio.visualizar}" value="Salvar" styleClass="btn-medio right" actionListener="#{registroFlorestaPlantadaController.adicionarPlantio()}"/>
+		</h:panelGrid>
+	
+	</h:form>
+
+</ui:composition>

@@ -1,0 +1,295 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="resumoRequerimento_subreportEmpreendimento" language="java" pageWidth="453" pageHeight="800" columnWidth="453" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="9e740d08-3418-4146-8f0a-d135fa3b8492">
+	<property name="ireport.zoom" value="2.3579476910000023"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="table">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<subDataset name="Tipologias Empreendimento" uuid="32b67bb1-6fa6-423c-931b-f0e8d9fe58d0">
+		<parameter name="ide_empreendimento" class="java.lang.Integer"/>
+		<queryString>
+			<![CDATA[select t.cod_tipologia,
+	t.des_tipologia,
+	et.ind_permanente
+from tipologia t
+INNER JOIN tipologia_grupo tg on tg.ide_tipologia = t.ide_tipologia
+INNER JOIN empreendimento_tipologia et on et.ide_tipologia_grupo = tg.ide_tipologia_grupo
+WHERE et.ide_empreendimento = $P{ide_empreendimento}]]>
+		</queryString>
+		<field name="cod_tipologia" class="java.lang.String"/>
+		<field name="des_tipologia" class="java.lang.String"/>
+		<field name="ind_permanente" class="java.lang.Boolean"/>
+	</subDataset>
+	<parameter name="ide_empreendimento" class="java.lang.Integer"/>
+	<parameter name="nom_tipo_imovel" class="java.lang.String"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT distinct emp.ide_empreendimento,
+	emp.nom_empreendimento,
+	emp.val_investimento,
+	emp.ind_correspondencia,
+	coalesce(emp.des_email, p.des_email) as des_email,
+	l.nom_logradouro,
+	e.num_endereco,
+	b.nom_bairro,
+	e.des_complemento,
+	m.nom_municipio,
+	est.des_sigla,
+	e.des_ponto_referencia,
+	coalesce(m.num_cep, l.num_cep) as num_cep,
+	iu.num_inscricao_iptu
+FROM empreendimento emp
+INNER JOIN endereco_empreendimento ee ON ee.ide_empreendimento = emp.ide_empreendimento
+INNER JOIN endereco e on e.ide_endereco = ee.ide_endereco
+INNER JOIN logradouro l ON l.ide_logradouro = e.ide_logradouro
+INNER JOIN bairro b ON b.ide_bairro = l.ide_bairro
+INNER JOIN municipio m ON m.ide_municipio = l.ide_municipio
+INNER JOIN estado est on est.ide_estado = m.ide_estado
+LEFT JOIN imovel_empreendimento ie on emp.ide_empreendimento = ie.ide_empreendimento
+LEFT JOIN imovel i on ie.ide_imovel = i.ide_imovel
+LEFT JOIN imovel_urbano iu on iu.ide_imovel_urbano = i.ide_imovel
+LEFT JOIN pessoa p on p.ide_pessoa = emp.ide_pessoa
+WHERE emp.ide_empreendimento = $P{ide_empreendimento}
+AND ee.ide_tipo_endereco = 4]]>
+	</queryString>
+	<field name="ide_empreendimento" class="java.lang.Integer"/>
+	<field name="nom_empreendimento" class="java.lang.String"/>
+	<field name="val_investimento" class="java.math.BigDecimal"/>
+	<field name="ind_correspondencia" class="java.lang.Boolean"/>
+	<field name="des_email" class="java.lang.String"/>
+	<field name="nom_logradouro" class="java.lang.String"/>
+	<field name="num_endereco" class="java.lang.String"/>
+	<field name="nom_bairro" class="java.lang.String"/>
+	<field name="des_complemento" class="java.lang.String"/>
+	<field name="nom_municipio" class="java.lang.String"/>
+	<field name="des_sigla" class="java.lang.String"/>
+	<field name="des_ponto_referencia" class="java.lang.String"/>
+	<field name="num_cep" class="java.math.BigDecimal"/>
+	<field name="num_inscricao_iptu" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="113" splitType="Stretch">
+			<frame>
+				<reportElement uuid="d6b740a9-06a2-4ceb-9a58-e56966bb2de9" x="0" y="0" width="453" height="113"/>
+				<staticText>
+					<reportElement uuid="6d91ebba-854c-429b-9617-a7cd08878e98" x="0" y="90" width="453" height="12"/>
+					<textElement verticalAlignment="Middle" markup="none">
+						<font size="9" isBold="true" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<text><![CDATA[Tipologias das Atividades]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="4471e7cf-ad9c-47a6-bb07-d0d39d2dce0c" x="0" y="68" width="453" height="12"/>
+					<textElement verticalAlignment="Middle" markup="none">
+						<font size="9" isBold="true" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<text><![CDATA[E-mail]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="c4821995-47a7-4f3d-84af-69a8fd7afd7c" x="235" y="46" width="218" height="12">
+						<printWhenExpression><![CDATA[$P{nom_tipo_imovel}.equalsIgnoreCase("Urbano")]]></printWhenExpression>
+					</reportElement>
+					<textElement verticalAlignment="Middle" markup="none">
+						<font size="9" isBold="true" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<text><![CDATA[IPTU]]></text>
+				</staticText>
+				<textField pattern="¤ #,##0.00">
+					<reportElement uuid="21b56977-eff5-4425-bfea-fd3c9c16bcbd" x="0" y="57" width="235" height="12"/>
+					<textElement verticalAlignment="Middle">
+						<font size="9" isBold="false"/>
+						<paragraph leftIndent="5"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{val_investimento}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement uuid="fe16ff79-d5cc-4023-9128-d1c99188579b" x="0" y="46" width="235" height="12"/>
+					<textElement verticalAlignment="Middle" markup="none">
+						<font size="9" isBold="true" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<text><![CDATA[Valor do Investimento]]></text>
+				</staticText>
+				<line>
+					<reportElement uuid="30bb715f-9b42-4f49-95c6-7fc65b7ff4a6" x="0" y="0" width="453" height="1"/>
+				</line>
+				<textField pattern="dd/MM/yyyy">
+					<reportElement uuid="9b0396e3-ce6e-459c-b072-0c4e1deefeb4" x="0" y="79" width="453" height="12"/>
+					<textElement verticalAlignment="Middle">
+						<font size="9" isBold="false"/>
+						<paragraph leftIndent="5"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{des_email}]]></textFieldExpression>
+				</textField>
+				<textField pattern="">
+					<reportElement uuid="571a1d1c-bbbf-4d07-965d-6962a31f9748" x="235" y="57" width="218" height="12">
+						<printWhenExpression><![CDATA[$P{nom_tipo_imovel}.equalsIgnoreCase("Urbano")]]></printWhenExpression>
+					</reportElement>
+					<textElement verticalAlignment="Middle">
+						<font size="9" isBold="false"/>
+						<paragraph leftIndent="5"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{num_inscricao_iptu}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement uuid="09a6f58d-04a6-4025-96fc-898fdc6aca72" x="0" y="1" width="453" height="16"/>
+					<textElement verticalAlignment="Middle" markup="none">
+						<font size="11" isBold="true" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<text><![CDATA[Empreendimento]]></text>
+				</staticText>
+				<textField>
+					<reportElement uuid="797dd164-1f83-4831-ad0d-b427b1f79f7c" x="0" y="35" width="235" height="12"/>
+					<textElement verticalAlignment="Middle">
+						<font size="9" isBold="false"/>
+						<paragraph leftIndent="5"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{nom_empreendimento}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement uuid="9dd5c8bc-d1c8-4090-9430-0345c36a4ad3" x="0" y="24" width="235" height="12"/>
+					<textElement verticalAlignment="Middle" markup="none">
+						<font size="9" isBold="true" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<text><![CDATA[Nome do Empreendimento]]></text>
+				</staticText>
+				<textField pattern="###0.00">
+					<reportElement uuid="a3f7551c-3484-4b1d-9b66-6d78110ea2ad" x="235" y="35" width="218" height="12"/>
+					<textElement verticalAlignment="Middle">
+						<font size="9" isBold="false"/>
+						<paragraph leftIndent="5"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$P{nom_tipo_imovel}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement uuid="82837d57-30ff-4fa1-8705-03efc35ad37d" x="235" y="24" width="218" height="12"/>
+					<textElement verticalAlignment="Middle" markup="none">
+						<font size="9" isBold="true" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<text><![CDATA[Tipo de Imóvel]]></text>
+				</staticText>
+				<componentElement>
+					<reportElement uuid="44db6336-ae80-41dc-abb0-367ea9deb5f5" key="table" x="0" y="101" width="453" height="12" isRemoveLineWhenBlank="true" isPrintInFirstWholeBand="true" isPrintWhenDetailOverflows="true"/>
+					<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
+						<datasetRun subDataset="Tipologias Empreendimento" uuid="aa8bae7f-9947-4543-9c38-fca3aa33e3fd">
+							<datasetParameter name="ide_empreendimento">
+								<datasetParameterExpression><![CDATA[$F{ide_empreendimento}]]></datasetParameterExpression>
+							</datasetParameter>
+							<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+						</datasetRun>
+						<jr:column uuid="4c01fa38-c3a9-41a0-b938-5cb96bb4d3cb" width="386">
+							<jr:tableHeader style="table_TH" height="20" rowSpan="1">
+								<staticText>
+									<reportElement uuid="fc5810e4-c6f8-455d-b7ed-a2d019d12f1c" style="table_CH" x="0" y="0" width="386" height="20"/>
+									<textElement textAlignment="Center" verticalAlignment="Middle">
+										<font size="9" isBold="true"/>
+									</textElement>
+									<text><![CDATA[Descrição]]></text>
+								</staticText>
+							</jr:tableHeader>
+							<jr:detailCell style="table_TD" height="15" rowSpan="1">
+								<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+									<reportElement uuid="fbe95b02-db26-4180-a8e6-31d84fbbb776" x="0" y="0" width="386" height="15" isRemoveLineWhenBlank="true" isPrintWhenDetailOverflows="true"/>
+									<textElement verticalAlignment="Top">
+										<font isBold="false"/>
+										<paragraph leftIndent="5"/>
+									</textElement>
+									<textFieldExpression><![CDATA[new String($F{cod_tipologia} + " " + $F{des_tipologia})]]></textFieldExpression>
+								</textField>
+							</jr:detailCell>
+						</jr:column>
+						<jr:column uuid="3789c937-e516-4ccf-9f95-e5b2dde26495" width="77">
+							<jr:tableHeader style="table_TH" height="20" rowSpan="1">
+								<staticText>
+									<reportElement uuid="24ce869f-1451-4ede-bd37-95807a87430c" style="table_CH" x="0" y="0" width="77" height="20"/>
+									<textElement textAlignment="Center" verticalAlignment="Middle">
+										<font size="9" isBold="true"/>
+									</textElement>
+									<text><![CDATA[Permanente?]]></text>
+								</staticText>
+							</jr:tableHeader>
+							<jr:detailCell style="table_TD" height="15" rowSpan="1">
+								<textField>
+									<reportElement uuid="f5d7c97b-5d87-474d-94b4-57ca9cdc2f5c" x="0" y="0" width="77" height="15"/>
+									<textElement textAlignment="Center" verticalAlignment="Middle">
+										<font size="9"/>
+									</textElement>
+									<textFieldExpression><![CDATA[$F{ind_permanente} == false ? "Não" : "Sim"]]></textFieldExpression>
+								</textField>
+							</jr:detailCell>
+						</jr:column>
+					</jr:table>
+				</componentElement>
+			</frame>
+		</band>
+		<band height="23">
+			<frame>
+				<reportElement uuid="383f176a-b4e9-4335-a5da-4f247a17cf0c" x="0" y="0" width="453" height="23"/>
+				<staticText>
+					<reportElement uuid="62155b2d-d1ed-4743-9fb6-e71195a39b6f" x="0" y="0" width="453" height="12"/>
+					<textElement verticalAlignment="Middle" markup="none">
+						<font size="9" isBold="true" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<text><![CDATA[Endereço]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement uuid="fbe95b02-db26-4180-a8e6-31d84fbbb776" x="0" y="11" width="453" height="12" isRemoveLineWhenBlank="true" isPrintWhenDetailOverflows="true"/>
+					<textElement verticalAlignment="Top">
+						<font size="9" isBold="false"/>
+						<paragraph leftIndent="5"/>
+					</textElement>
+					<textFieldExpression><![CDATA[new String($F{nom_logradouro}.concat(", ").concat($F{num_endereco} != null ? "N° " + $F{num_endereco} + ", " : "").concat($F{nom_bairro} + ", ").concat($F{des_complemento} != null ? $F{des_complemento} + ", " : "").concat($F{nom_municipio} + ", ").concat($F{des_sigla} + ". ").concat($F{des_ponto_referencia} != null ? $F{des_ponto_referencia} + ". " : "").concat("CEP " + $F{num_cep}.toString().substring(0,2).concat("." + $F{num_cep}.toString().substring(2,5)).concat("-" + $F{num_cep}.toString().substring(5,8)) + "."))]]></textFieldExpression>
+				</textField>
+			</frame>
+		</band>
+		<band height="10">
+			<subreport isUsingCache="false" runToBottom="false">
+				<reportElement uuid="24081a5a-44be-4698-b870-469296c83bf2" x="0" y="0" width="453" height="10" isRemoveLineWhenBlank="true" isPrintInFirstWholeBand="true" isPrintWhenDetailOverflows="true"/>
+				<subreportParameter name="ide_empreendimento">
+					<subreportParameterExpression><![CDATA[$P{ide_empreendimento}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "resumoRequerimento_subreportEmpreendimento_subreportEnderecoCorrespondencia.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

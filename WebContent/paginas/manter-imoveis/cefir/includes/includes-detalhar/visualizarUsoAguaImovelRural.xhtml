@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui">
+	
+	<script type="text/javascript">
+		$(document).ready(function() {
+				$('table[id*="formDetalharImovelRural:tabviewimovelrural:paginaCefir:tabAbasCefir:tabAbasUsoAgua:conteudoPc"]').hide();
+				$('table[id*="formDetalharImovelRural:tabviewimovelrural:paginaCefir:tabAbasCefir:tabAbasUsoAgua:conteudoPcSub"]').hide();
+				$('table[id*="formDetalharImovelRural:tabviewimovelrural:paginaCefir:tabAbasCefir:tabAbasUsoAgua:conteudoPr"]').hide();
+				$('table[id*="formDetalharImovelRural:tabviewimovelrural:paginaCefir:tabAbasCefir:tabAbasUsoAgua:conteudoPi"]').hide();  
+			});
+		
+		function exibirDetalhesCaptacaoSuperficial() {
+			$('table[id*="formDetalharImovelRural:tabviewimovelrural:paginaCefir:tabAbasCefir:tabAbasUsoAgua:conteudoPc"]').show();
+			$('table[id*="formDetalharImovelRural:tabviewimovelrural:paginaCefir:tabAbasCefir:tabAbasUsoAgua:conteudoPcSub"]').hide();
+			$('table[id*="formDetalharImovelRural:tabviewimovelrural:paginaCefir:tabAbasCefir:tabAbasUsoAgua:conteudoPr"]').hide();
+			$('table[id*="formDetalharImovelRural:tabviewimovelrural:paginaCefir:tabAbasCefir:tabAbasUsoAgua:conteudoPi"]').hide();											
+		}	
+
+		function exibirDetalhesCaptacaoSubterranea() {
+			$('table[id*="formDetalharImovelRural:tabviewimovelrural:paginaCefir:tabAbasCefir:tabAbasUsoAgua:conteudoPc"]').hide();
+			$('table[id*="formDetalharImovelRural:tabviewimovelrural:paginaCefir:tabAbasCefir:tabAbasUsoAgua:conteudoPcSub"]').show();			
+			$('table[id*="formDetalharImovelRural:tabviewimovelrural:paginaCefir:tabAbasCefir:tabAbasUsoAgua:conteudoPr"]').hide();
+			$('table[id*="formDetalharImovelRural:tabviewimovelrural:paginaCefir:tabAbasCefir:tabAbasUsoAgua:conteudoPi"]').hide();			
+		}
+
+		function exibirDetalhesPontoReceptorResiduos() {
+			$('table[id*="formDetalharImovelRural:tabviewimovelrural:paginaCefir:tabAbasCefir:tabAbasUsoAgua:conteudoPcSub"]').hide();
+			$('table[id*="formDetalharImovelRural:tabviewimovelrural:paginaCefir:tabAbasCefir:tabAbasUsoAgua:conteudoPc"]').hide();
+			$('table[id*="formDetalharImovelRural:tabviewimovelrural:paginaCefir:tabAbasCefir:tabAbasUsoAgua:conteudoPr"]').show();
+			$('table[id*="formDetalharImovelRural:tabviewimovelrural:paginaCefir:tabAbasCefir:tabAbasUsoAgua:conteudoPi"]').hide();			
+		}
+
+		function exibirDetalhesPontoIntervencao() {
+			$('table[id*="formDetalharImovelRural:tabviewimovelrural:paginaCefir:tabAbasCefir:tabAbasUsoAgua:conteudoPcSub"]').hide();
+			$('table[id*="formDetalharImovelRural:tabviewimovelrural:paginaCefir:tabAbasCefir:tabAbasUsoAgua:conteudoPc"]').hide();
+			$('table[id*="formDetalharImovelRural:tabviewimovelrural:paginaCefir:tabAbasCefir:tabAbasUsoAgua:conteudoPr"]').hide();
+			$('table[id*="formDetalharImovelRural:tabviewimovelrural:paginaCefir:tabAbasCefir:tabAbasUsoAgua:conteudoPi"]').show();			
+		}
+	
+	</script>
+	<p:accordionPanel id="tabAbasUsoAgua" style="width: 610px; padding-left: 60px;" cache="true" dynamic="false" widgetVar="accUsoAgua">				
+		<p:tab id="abaPontoCapSup" title="Ponto de Captação Superficial" rendered="#{detalharImovelRuralController.imovelRural.indSuperficial}">
+			<ui:include src="/paginas/manter-imoveis/cefir/includes/includes-detalhar/visualizarPontoCaptacaoSuperficial.xhtml" />
+		</p:tab>
+	
+		<p:tab id="abaPontoCapSub" title="Ponto de Captação Subterrânea" rendered="#{detalharImovelRuralController.imovelRural.indSubterraneo}">
+			<ui:include src="/paginas/manter-imoveis/cefir/includes/includes-detalhar/visualizarPontoCaptacaoSubterranea.xhtml" />
+		</p:tab>
+	
+		<p:tab id="abaPontoRecRes" title="Ponto do Receptor de Resíduos Líquidos em Manancial/Corpo Hídrico" rendered="#{detalharImovelRuralController.imovelRural.indLancamentoManancial}">
+			<ui:include src="/paginas/manter-imoveis/cefir/includes/includes-detalhar/visualizarPontoReceptorResiduos.xhtml" />
+		</p:tab>
+	
+		<p:tab id="abaPontoInterv" title="Ponto de Intervenção" rendered="#{detalharImovelRuralController.imovelRural.indIntervencao}">
+			<ui:include src="/paginas/manter-imoveis/cefir/includes/includes-detalhar/visualizarPontoIntervencao.xhtml" />
+		</p:tab> -->
+	</p:accordionPanel>
+	
+</ui:composition>

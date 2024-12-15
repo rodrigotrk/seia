@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="relatorio_questionario_aba_intervencao_caracterizacao" pageWidth="545" pageHeight="802" columnWidth="545" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="be3556b6-f353-4cd4-907a-caa6e3fff9f5">
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="IDE_CERH_LOCALIZACAO_GEOGRAFICA" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[select
+
+	case (cic.ide_cerh_obras_hidraulicas is not null)
+		when true then 'Obras Hidráulicas'
+		else
+		(
+			case (cic.ide_cerh_intervencao_servico is not null)
+			when true then 'Serviços'
+			else 'Aquicultura em tanque rede'
+			end
+		)
+	end as tipo_intervencao,
+
+	cic.dsc_observacao,
+	clg.ide_cerh_localizacao_geografica,
+	cstu.dsc_situacao_tipo_uso,
+	cic.IDE_CERH_INTERVENCAO_CARACTERIZACAO
+
+from
+	cerh_localizacao_geografica clg
+	INNER join cerh_intervencao_caracterizacao cic on cic.ide_cerh_localizacao_geografica = clg.ide_cerh_localizacao_geografica
+	left join cerh_obras_hidraulicas coh on coh.ide_cerh_obras_hidraulicas = cic.ide_cerh_obras_hidraulicas
+	left join cerh_intervencao_servico cis on cis.ide_cerh_intervencao_servico = cic.ide_cerh_intervencao_servico
+	left join cerh_situacao_tipo_uso cstu on cstu.ide_cerh_situacao_tipo_uso = cic.ide_cerh_situacao_tipo_uso
+where clg.ide_cerh_localizacao_geografica = $P{IDE_CERH_LOCALIZACAO_GEOGRAFICA}]]>
+	</queryString>
+	<field name="tipo_intervencao" class="java.lang.String"/>
+	<field name="dsc_observacao" class="java.lang.String"/>
+	<field name="ide_cerh_localizacao_geografica" class="java.lang.Integer"/>
+	<field name="dsc_situacao_tipo_uso" class="java.lang.String"/>
+	<field name="ide_cerh_intervencao_caracterizacao" class="java.lang.Integer"/>
+	<variable name="VAZAO_ANUAL" class="java.lang.Double"/>
+	<detail>
+		<band height="20" splitType="Prevent">
+			<subreport>
+				<reportElement uuid="db858836-b4bb-4706-be78-0fcadaa5d101" x="0" y="0" width="545" height="20"/>
+				<subreportParameter name="SUBREPORT_DIR">
+					<subreportParameterExpression><![CDATA[$P{SUBREPORT_DIR}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="IDE_CERH_LOCALIZACAO_GEOGRAFICA">
+					<subreportParameterExpression><![CDATA[$F{ide_cerh_localizacao_geografica}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "relatorio_questionario_corpo_hidrico.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+		<band height="30">
+			<textField>
+				<reportElement uuid="29deaf81-8f19-40a7-bf9b-9cfdf3b80c81" x="0" y="10" width="270" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Tipo de Intervenção: " +$F{tipo_intervencao}+"."]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="013271d1-6648-42fb-a05d-e2940b0791c4" x="275" y="10" width="270" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Situação da Intervenção: " + $F{dsc_situacao_tipo_uso} + "."]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="20">
+			<printWhenExpression><![CDATA[!$F{tipo_intervencao}.equals("Aquicultura em tanque rede")]]></printWhenExpression>
+			<subreport>
+				<reportElement uuid="4e70fd7c-1707-4572-aa22-7e53c53d8bc9" x="0" y="0" width="545" height="20"/>
+				<subreportParameter name="SUBREPORT_DIR">
+					<subreportParameterExpression><![CDATA[$P{SUBREPORT_DIR}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="tipo_intervencao">
+					<subreportParameterExpression><![CDATA[$F{tipo_intervencao}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="IDE_CERH_INTERVENCAO_CARACTERIZACAO">
+					<subreportParameterExpression><![CDATA[$F{ide_cerh_intervencao_caracterizacao}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "relatorio_questionario_aba_intervencao_caracterizacao_informacoes_uso.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+		<band height="39">
+			<printWhenExpression><![CDATA[$F{dsc_observacao} != null && $F{dsc_observacao}.isEmpty() == false]]></printWhenExpression>
+			<textField>
+				<reportElement uuid="aa2f9677-cbe5-45d7-b122-73aa7f63c8be" x="0" y="0" width="77" height="20"/>
+				<textElement verticalAlignment="Top">
+					<font isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Observação:"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="f8689570-05ac-4572-8201-b9dd68480349" x="77" y="0" width="468" height="39" isPrintWhenDetailOverflows="true"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{dsc_observacao}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

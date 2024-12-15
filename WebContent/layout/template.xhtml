@@ -1,0 +1,317 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:p="http://primefaces.prime.com.tr/ui">
+
+<h:head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<link rel="shortcut icon" href="/resources/img/favicon.ico"
+		type="image/x-icon" />
+
+	<title><h:outputText value="#{bundle.lbl_versao_seia}" /></title>
+
+	<link rel="stylesheet" href="/resources/css/style-form.css" />
+	<link rel="stylesheet" href="/resources/css/stylebasics.css" />
+	<link rel="stylesheet" href="/resources/css/seia.css" />
+	<link rel="stylesheet" href="/resources/css/jquery.modal.css" />
+	<c:if test='#{contextoController.visualizado eq true}'>
+		<script type="text/javascript">
+		window.onload = function(){
+			$('.pulse').removeClass('pulse');
+			}
+	
+	</script>
+	</c:if>
+
+	<script type="text/javascript">
+	
+			var _gaq = _gaq || [];
+			_gaq.push(['_setAccount', 'UA-40192590-1']);
+			_gaq.push(['_trackPageview']);
+			
+			(function() {
+				var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+				ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+				var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+			})();
+			
+			<!-- Piwik -->
+			 var _paq = _paq || [];
+			_paq.push(["trackPageView"]);
+			_paq.push(["enableLinkTracking"]);
+
+  (function() {
+		var url = window.location.protocol + '//' + window.location.host;
+		if (url == 'https://sistema.seia.ba.gov.br' || url == 'http://sistema.seia.ba.gov.br') {
+    		var u = "http://programas.inema.ba.gov.br/piwik/";
+    		_paq.push(["setTrackerUrl", u+"piwik.php"]);
+    		_paq.push(["setSiteId", "37"]);
+    		var d=document, g=d.createElement("script"), s=d.getElementsByTagName("script")[0]; g.type="text/javascript";
+    		g.defer=true; g.async=true; g.src=u+"piwik.js"; s.parentNode.insertBefore(g,s);
+		}
+  })();
+			<!-- End Piwik Code -->
+		</script>
+
+	<script src="https://www.google.com/recaptcha/api.js"></script>
+</h:head>
+
+<h:body>
+	<ui:include
+		src="/paginas/comunicacao/dlgVisualizarNotificacaoUsuario.xhtml" />
+	<p:dialog id="dlgFaleConosco" widgetVar="dlgFaleConosco" modal="true"
+		closable="true" style="text-align:center; border-radius: 10px;"
+		resizable="false" draggable="true" position="center">
+		<ui:include src="../dialogFaleConosco.xhtml" />
+	</p:dialog>
+
+	<f:view encoding="UTF-8" contentType="text/html">
+	
+	<f:metadata>
+        <!-- Força a chamada ao método getCsrfToken -->
+        <f:viewParam name="forceToken" value="#{csrfBean.csrfToken}" />
+    </f:metadata>
+
+		<!-- js usados no seia -->
+		<h:outputScript library="js" name="calendar-locales.js" target="head" />
+		<h:outputScript library="js" name="seia.js" target="head" />
+		<h:outputScript library="js" name="javascriptMenu.js" target="head" />
+		<h:outputScript library="js" name="jquery.modal.js" target="head" />
+		<h:outputScript library="js" name="jquery-seia.js" target="head" />
+		<!-- js usados no seia -->
+
+		<div id="header">
+			<!--<img src="resources/imagens/bgtopo.png" />  -->
+			<div id="logo"></div>
+			<div id="tema"></div>
+		</div>
+		<p:dialog header="Comunicação" id="_dialogMsg" widgetVar="dialogMsg"
+			visible="#{contextoController.painelVisivel}" position="top"
+			resizable="false" style="margin-top: 150px;"
+			rendered="#{contextoController.renderedComunicacaoTemporaria()}"
+			modal="true" closable="false" width="600">
+			<h:panelGrid>
+
+				<h:outputText
+					value="#{contextoController.comunicacaoTemporaria.dscTitulo}" />
+				<div align="justify">
+					<h:outputText
+						value="#{contextoController.comunicacaoTemporaria.txtConteudo}" 
+						style="white-space: pre-wrap;" />
+				</div>
+			</h:panelGrid>
+			<h:panelGrid style="float:right;">
+
+				<h:form>
+					<p:commandButton value="Voltar"
+						actionListener="#{contextoController.mensagemExibida()}"
+						oncomplete="dialogMsg.hide();" />
+				</h:form>
+			</h:panelGrid>
+		</p:dialog>
+		<div id="borda_top">
+			<div id="login">
+				<h:form>
+					<script>
+							var expandAll = function(){
+								$('.ui-row-toggler').each(function(el){ $(this).click();});
+							}
+						</script>
+
+					<h:panelGrid columns="7" rendered="#{not empty request.remoteUser}"
+						styleClass="middle">
+
+						<h:inputHidden value="#{request.remoteUser}" />
+
+						<h:panelGroup id="groupUserInterno"
+							rendered="#{contextoController.usuarioLogado.indTipoUsuario}">
+							<h:graphicImage value="/resources/img/ico-pdf.png"
+								style="vertical-align: middle;" />
+							<a href="/resources/Manual_SEIA_UI.pdf" target="_blanck"
+								title="Manual do SEIA - Usuário Interno"> Manual do Seia</a>
+						</h:panelGroup>
+
+						<h:panelGroup id="groupUserExterno"
+							rendered="#{!contextoController.usuarioLogado.indTipoUsuario}">
+							<h:graphicImage value="/resources/img/ico-pdf.png"
+								style="vertical-align: middle;" />
+							<a href="/resources/Manual_SEIA_UE.pdf" target="_blanck"
+								title="Manual do SEIA - Usuário Externo"> Manual do Seia</a>
+						</h:panelGroup>
+
+						<h:panelGroup>
+							<h:graphicImage value="/resources/img/ico-ajuda.png"
+								style="vertical-align: middle;" />
+
+							<h:outputLink onclick="dlgFaleConosco.show();" value=""
+								title="Fale conosco">
+								<h:outputText value="Fale conosco" />
+							</h:outputLink>
+						</h:panelGroup>
+
+						<h:panelGroup>
+							<h:graphicImage value="/resources/img/ico-usuario.png"
+								style="vertical-align: middle;" />
+							<h:outputText value=" #{request.remoteUser}" />
+							<h:inputHidden value="#{contextoController.pessoa.idePessoa}" />
+						</h:panelGroup>
+						<h:panelGroup>
+							<div class="dropdown" onmouseout="$('.pulse').removeClass('pulse');">
+							<h:graphicImage title="Comunicações" class="pulse" id="imgSino"
+									value="#{contextoController.urlIcoComunicacao}"
+									style="vertical-align: middle;" />
+								<c:if test="#{contextoController.qtNovaComunicacao ge 1 and contextoController.visualizado eq false}">
+									<span id="qtComunicacaoBadge" class="badge pulse"> 
+									<h:outputText value="#{contextoController.qtNovaComunicacao}" style="font-size:6pt"/>
+									</span>
+								</c:if>
+
+								<span>Notificações</span>
+								
+
+								<div class="dropdown-content">
+									<div>
+										<table style="width: 450px; border: 0px none #CCFFCC;"
+											cellspacing="0"  >
+											<ui:repeat value="#{contextoController.comunicacaoList}"
+												var="comunicacao">
+												<tr class="comunicacao" style=" height:50px " >
+
+													<td style="width: 30px;"><h:graphicImage
+															value="/resources/img/ico-ler-mensagem.png" /></td>
+
+
+													<td style="width: 420px; text-align: left;">
+														<div style="margin-left: 10px;">
+															<p:commandLink
+																actionListener="#{comunicacaoController.exibirComunicacao(comunicacao)}"
+																process="@this"
+																update="_dlgVisualizarNotificacaoUsuario2">
+
+																<h:outputText value="#{comunicacao.dscTitulo}" />
+															</p:commandLink>
+														</div>
+													</td>
+												</tr>
+											</ui:repeat>
+											<tr class="comunicacao" style=" height:50px " >
+													<td style="width: 30px;"></td>
+													<td style="width: 420px; text-align: center;">
+														<div style="margin-left: 10px;">
+															<h:outputLink
+																value="/paginas/comunicacao/consulta-usuario.xhtml">
+
+																<h:outputText value="#{bundle.comunicacao_lbl_ver_todas_mensagens}" />
+															</h:outputLink>
+														</div>
+													</td>
+												</tr>
+										</table>
+									</div>
+								</div>
+
+							</div>
+						</h:panelGroup>
+
+						<h:panelGroup>
+							<h:outputLink value="/alterarSenha.xhtml" title="Alterar senha"
+								disabled="#{security.alteracaoSenhaExpirada  or security.usuarioInativado}">
+								<h:graphicImage title="Alterar senha"
+									value="/resources/img/ico-alterar.png"
+									style="vertical-align: middle;" />
+								<h:outputText value=" Alterar senha" />
+							</h:outputLink>
+						</h:panelGroup>
+
+						<h:panelGroup>
+							<a href="#{request.contextPath}/j_spring_security_logout"
+								title="Sair"> <h:graphicImage title="Sair"
+									value="/resources/img/ico-sair.png"
+									style="vertical-align: middle;" /> <h:outputText value=" Sair" />
+							</a>
+						</h:panelGroup>
+					</h:panelGrid>
+				</h:form>
+			</div>
+		</div>
+
+		<div id="body_geral">
+			<div id="menu">
+				<ui:include src="/layout/menu.xhtml" />
+			</div>
+
+			<div id="cont_princ">
+				<p:growl id="growMsg" autoUpdate="true" sticky="true" rendered="true" />
+
+				<!-- Titulo Pagina -->
+				<div class="titulo">
+					<ui:insert name="titulo-pagina" />
+				</div>
+				<!-- Fim Titulo Pagina -->
+
+				<br />
+
+				<!-- Modal loading... -->
+				<p:ajaxStatus onstart="abrirModal('#statusDialog');"
+					onsuccess="fecharModal('#statusDialog');" />
+				<div id="statusDialog" style="width: 32px;" class="modal">
+					<p:graphicImage value="/resources/img/loading5.gif" />
+				</div>
+				<!-- Modal loading... -->
+
+				<!-- Conteudo Principal -->
+				<ui:insert name="conteudo-principal" />
+				<!-- Fim Conteudo Principal -->
+			</div>
+			<p:captcha secure="true" />
+			<div style="clear: both;"></div>
+		</div>
+
+		<div id="footer">
+			<ul class="Logos">
+				<!--li>
+						<a href="http://www.cerb.ba.gov.br" target="_blank" class="logoCERB">
+							<span>CERB</span>
+						</a>
+					</li-->
+
+				<li><a href="http://www.inema.ba.gov.br" target="_blank"
+					class="logoINEMA"> <span>INEMA</span>
+				</a></li>
+
+				<li><a href="http://www.sema.ba.gov.br" target="_blank"
+					class="logoSEMA"> <span>SEMA</span>
+				</a></li>
+			</ul>
+
+			<div style="clear: both;"></div>
+
+			<div class="endereco">
+				<p>Avenida Luis Viana Filho, 6° Avenida n° 600 - CAB - CEP
+					41.745-900. Salvador - BA</p>
+			</div>
+
+			<br />
+
+			<div>
+				<p class="versao">
+					<h:outputLabel value="#{bundle.lbl_versao_seia}" />
+				</p>
+			</div>
+
+			<hr></hr>
+
+			<ul class="recomenda">
+				<li class="textoRecomenda">Para exibição correta do portal
+					recomendamos o uso do Mozilla Firefox 5+ ou Google Chrome 16+</li>
+				<li class="logoFirefox"><span>Mozilla Firefox</span></li>
+				<li class="logoChrome"><span>Google Chrome</span></li>
+			</ul>
+		</div>
+	</f:view>
+</h:body>
+
+</html>

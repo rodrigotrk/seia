@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+xmlns:h="http://java.sun.com/jsf/html" 
+xmlns:f="http://java.sun.com/jsf/core" 
+xmlns:ui="http://java.sun.com/jsf/facelets" 
+xmlns:p="http://primefaces.prime.com.tr/ui">
+
+	<p:dialog id="dialogLancamentoEfluentes" widgetVar="dialogLancamentoEfluentes" header="Lançamento de efluentes" dynamic="true" modal="true" resizable="false" height="380" width="640" position="center"  >
+		<h:form id="formDialogResiduosLiquidos" >
+			<h:panelGrid columns="3" width="100%" id="panelDialogResiduosLiquidos">
+				<h:panelGroup>
+					<br/>
+					<h:panelGrid columns="3">
+						
+						<h:panelGrid>
+							<h:panelGroup style="width:250px">
+								<h:outputText value="* 1. Informe a coordenada geográfica:" />
+							</h:panelGroup>	
+							<p:outputPanel autoUpdate="true">
+								<p:commandLink  
+									oncomplete="dlgLocalizacaoGeograficaGeneric.show();" 
+									action="#{localizacaoGeograficaGenericController.carregarTelaSistemaCoordenadasSirgas2000()}" 
+									style="margin-left:45px;" 
+									actionListener="#{localizacaoGeograficaGenericController.limparLocalizacaoGeografSelecionada()}" 
+									process="@this" 
+									disabled="#{!empty lancamentoEfluentesController.outorgaLocalizacaoGeografica.ideLocalizacaoGeografica.dadoGeograficoCollection or novoRequerimentoController.desabilitarTudo}" >
+									<f:setPropertyActionListener target="#{localizacaoGeograficaGenericController.tipoSecaoGeometrica}" value="#{lancamentoEfluentesController.classificacaoPonto}" />
+									<f:setPropertyActionListener target="#{localizacaoGeograficaGenericController.localizacaoGeograficaSelecionada}" value="#{lancamentoEfluentesController.outorgaLocalizacaoGeografica.ideLocalizacaoGeografica}" />									
+									<f:setPropertyActionListener target="#{localizacaoGeograficaGenericController.objetoLocalizacao}" value="#{lancamentoEfluentesController.outorgaLocalizacaoGeografica}" />
+									<f:setPropertyActionListener target="#{localizacaoGeograficaGenericController.empreendimento}" value="#{novoRequerimentoController.empreendimento}" />
+									<h:graphicImage title="Incluir Vertice" value="/resources/img/ico-expandir.png" style="margin-right: 2px;"/>
+									<h:outputText value="Incluir Localização Geográfica" />
+								</p:commandLink>
+							</p:outputPanel>
+						</h:panelGrid>
+						
+						<p:spacer width="30" height="0"/>
+						
+						<h:panelGroup rendered="#{!novoRequerimentoController.empreendimento.indCessionario and novoRequerimentoController.imovelSelecionado.imovelUrbano == null}">
+							<h:panelGrid id='pnl1211'>
+								<h:panelGroup>
+									<h:outputText value="* Selecione o(s) imóvel(is) que usará(ão) a água:" />
+								</h:panelGroup>	
+								<h:panelGroup layout="block" style="height:75px; width:200px; overflow:auto; border:1px solid gray;margin-top:5px;">
+									
+									<p:selectManyCheckbox converter="simpleEntityConverter" value="#{lancamentoEfluentesController.outorgaLocalizacaoGeografica.listaImovel}" 
+										layout="pageDirection" disabled="#{novoRequerimentoController.modoEdicaoDialog or novoRequerimentoController.imovelUnico or novoRequerimentoController.desabilitarTudo}">
+										
+										<f:selectItems value="#{lancamentoEfluentesController.imoveis}" var="imovel" itemValue="#{imovel}"
+											itemLabel="#{imovel.imovelRural != null ? imovel.imovelRural.desDenominacao : imovel.imovelRural != null 
+												? imovel.imovelUrbano.numInscricaoIptu : novoRequerimentoController.empreendimento.nomEmpreendimento}" />
+									</p:selectManyCheckbox>
+								</h:panelGroup>
+							</h:panelGrid>
+						</h:panelGroup>		
+					</h:panelGrid>
+					
+					<h:panelGrid id="pngTb1412">
+						<p:outputPanel autoUpdate="true">
+							<p:dataTable 
+							var="localizacao" 
+							value="#{lancamentoEfluentesController.outorgaLocalizacaoGeografica.ideLocalizacaoGeografica}" 
+							rendered="#{lancamentoEfluentesController.outorgaLocalizacaoGeografica.ideLocalizacaoGeografica.ideLocalizacaoGeografica != null}">
+							<!-- rendered="#{localizacaoGeograficaGenericController.mostraLista}"> -->
+								<p:column headerText="Ponto de Referência">
+									<h:outputText value="${localizacao.desLocalizacaoGeografica}" />
+								</p:column>
+								<p:column headerText="Fonte da Coordenada">
+									<h:outputText value="${localizacao.ideClassificacaoSecaoToString()}" />
+								</p:column>
+								<p:column headerText="Sistema de Coordenadas">
+									<h:outputText value="${localizacao.nomeSistemaCoordenadas()}" />
+								</p:column>
+								<p:column headerText="Ações">
+							
+									<p:commandLink oncomplete="dlgLocalizacaoGeograficaGeneric.show();" process="@this" action="#{localizacaoGeograficaGenericController.visualizarLocalizacaoGeografica()}" >
+										<f:setPropertyActionListener target="#{localizacaoGeograficaGenericController.localizacaoGeograficaSelecionada}" value="#{lancamentoEfluentesController.outorgaLocalizacaoGeografica.ideLocalizacaoGeografica}" />
+										<f:setPropertyActionListener target="#{localizacaoGeograficaGenericController.objetoLocalizacao}" value="#{lancamentoEfluentesController.outorgaLocalizacaoGeografica}" />
+										<h:graphicImage title="Visualizar localização no GeoBahia" value="/resources/img/ico-pesquisa.png" />
+									</p:commandLink>
+									
+									<p:commandLink oncomplete="dlgLocalizacaoGeograficaGeneric.show();" process="@this" disabled="#{novoRequerimentoController.desabilitarTudo}"
+									action="#{localizacaoGeograficaGenericController.editarLocalizacaoGeografica()}"  >
+										<f:setPropertyActionListener target="#{localizacaoGeograficaGenericController.localizacaoGeograficaSelecionada}" value="#{lancamentoEfluentesController.outorgaLocalizacaoGeografica.ideLocalizacaoGeografica}" />
+										<f:setPropertyActionListener target="#{localizacaoGeograficaGenericController.objetoLocalizacao}" value="#{lancamentoEfluentesController.outorgaLocalizacaoGeografica}" />
+										<h:graphicImage title="Editar localização geográfica" value="/resources/img/ico-editar.png" />
+									</p:commandLink>
+								</p:column>
+							</p:dataTable>
+						</p:outputPanel>
+					</h:panelGrid>
+				</h:panelGroup>
+			</h:panelGrid>
+			
+			<h:panelGrid columns="2">
+				<h:outputText value="* 1.1. informe a vazão média do efluente a ser outorgada:"/>
+				<h:panelGroup>
+					<p:inputText onkeyup="maskIt(this, event, '99.999.999,99', true)" onblur= "maskIt(this, event, '99.999.999,99', true)" value="#{lancamentoEfluentesController.outorgaLocalizacaoGeografica.numVazao}" 
+						style="width: 100px" disabled="#{novoRequerimentoController.desabilitarTudo}">
+						<f:converter converterId="bigConverter"/>
+					</p:inputText>
+					<h:outputText value=" m3/dia" />
+				</h:panelGroup>
+			</h:panelGrid>
+			<h:panelGrid>
+				<h:panelGroup>
+					<h:outputText value="* #{lancamentoEfluentesController.perguntaNR_A4_DCHID_P3.idePergunta.dscPergunta}"/>
+				</h:panelGroup>
+				<p:selectOneRadio id="oneRadioOutorgaPreventiva" value="#{lancamentoEfluentesController.perguntaNR_A4_DCHID_P3.indResposta}" disabled="#{novoRequerimentoController.desabilitarTudo}">  
+					<f:selectItem itemLabel="Sim" itemValue="true" />  
+					<f:selectItem itemLabel="Não" itemValue="false" />  
+				</p:selectOneRadio>  
+			</h:panelGrid>
+		
+			<p:outputPanel id="pngFinalidade">
+				<h:panelGrid id="png13">
+					<h:panelGroup>
+						<h:outputText value="* 1.3. Informe a(s) origem(ns) do(s) efluente(s):" />
+					</h:panelGroup>
+		
+					<p:commandLink ajax="true" global="false" update="formselFinalidade:pnlFinalidade"  oncomplete="dialogFinalidadeUsoAgua.show()" disabled="#{novoRequerimentoController.desabilitarTudo}"
+						action="#{finalidadeController.loadLancamentosEfluentes()}">
+						<h:graphicImage title="Selecionar finalidades" value="/resources/img/ico-expandir.png" style="margin-right: 2px;"/>
+						<h:outputText value="Selecione uma ou mais origens" />
+						<f:setPropertyActionListener target="#{finalidadeController.outorgaLocalizacaoGeografica}" value="#{lancamentoEfluentesController.outorgaLocalizacaoGeografica}"/>
+					</p:commandLink>
+				</h:panelGrid>
+						
+				<h:panelGrid id="png131">
+					<p:dataTable id="tabelaFinalidade" style="width:350px" var="finalidade" value="#{lancamentoEfluentesController.outorgaLocalizacaoGeografica.listaFinalidadeUsoAgua}"  emptyMessage="#{bundle.consultapf_msg_empty_list}">
+						<p:column headerText="Origem" style="text-align: left;">
+							<h:outputText  value="#{finalidade.nomTipoFinalidadeUsoAgua}"/>
+						</p:column>
+						<p:column style="text-align:center;" headerText="Ação">
+							<p:commandLink id="apagar" update="formDialogResiduosLiquidos:tabelaFinalidade" process="@this" disabled="#{novoRequerimentoController.desabilitarTudo}">
+								<h:graphicImage title="Apagar" value="/resources/img/ico-excluir.png" />
+								<p:collector value="#{finalidade}" removeFrom="#{lancamentoEfluentesController.outorgaLocalizacaoGeografica.listaFinalidadeUsoAgua}"/>
+							</p:commandLink>
+						</p:column>
+					</p:dataTable>
+				</h:panelGrid>
+			</p:outputPanel>
+		
+			<h:panelGrid style="float:right">
+				<p:commandButton id="btnSalvar" value="Salvar" actionListener="#{lancamentoEfluentesController.salvar()}" disabled="#{novoRequerimentoController.desabilitarTudo}"
+				update="formDialogResiduosLiquidos subViewAbas:tabAbasId:formAbaOutorga:tableLancamento" process="@form" global ="false"/>
+			</h:panelGrid>
+			
+		</h:form>
+	</p:dialog>
+
+</ui:composition>

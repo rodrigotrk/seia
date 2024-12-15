@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui"
+	template="../../layout/template.xhtml">
+
+	<ui:define name="titulo-pagina">		
+		<h3>Cadastrar Usuários Internos</h3>		
+	</ui:define>	
+
+	<ui:define name="conteudo-principal">
+		<h3>
+			<h:outputLabel styleClass="titulo-grupo" style="font-weight:bold;" value="INSTRUÇÕES" />
+		</h3>
+		<p class="titulo-grupo">
+			- Para consultar um ou mais usuários, informe o(s) parâmetro(s) de consulta desejado(s) e clique no botão "Consultar".<br />
+		</p>
+		<br />
+		<h3>
+			<h:outputLabel styleClass="titulo-grupo" style="font-weight:bold;" value="PARÂMETROS DA CONSULTA" />
+		</h3>
+
+		<h:form id="formFiltroUsuarioInterno">
+			
+			<h:outputFormat value="#{bundle.lbl_cpf}:"/><p:inputMask id="inpCpfFiltro" mask="#{bundle.consultapf_msk_cpf}" value="#{usuarioInternoController.cpf}" converter="cpfConverter" validator="cpfValidator" />
+			&nbsp;
+			<h:outputFormat value="#{bundle.lbl_nome}:"/><p:inputText id="inpNomePessoaFiltro" value="#{usuarioInternoController.nome}" />
+			&nbsp;
+			<p:commandButton value="#{bundle.consultapf_btn_consultar}" actionListener="#{usuarioInternoController.pesquisarPessoasFisica}" process="@form" update=":formListaUsuariosInterno" />
+			&nbsp;
+			<p:commandButton rendered="#{security.temAcesso('1.8.1')}" action="#{usuarioInternoController.novoUsuarioInterno}" update=":formUsuarioInterno:panelUsuarioInterno" value="#{bundle.btn_incluir_usuario_interno}" oncomplete="dlgUsuarioInterno.show()">
+			    <f:setPropertyActionListener target="${usuarioInternoController.desabilitaForm}" value="#{true}" />
+			</p:commandButton>
+		</h:form>
+		<br />
+		<h:form id="formListaUsuariosInterno">
+			<p:dataTable id="dataTableUsuariosInterno" widgetVar="dtTbUsuariosInterno" value="#{usuarioInternoController.modelPessoasFisica}" var="usuarioInterno" rendered="#{usuarioInternoController.modelPessoasFisica != null}"
+			lazy="true" paginator="true" rows="10" paginatorPosition="bottom" paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}" rowsPerPageTemplate="5,10,15" emptyMessage="#{bundle.msg_lista_vazia}" style="width: 700px;">
+
+        		<f:facet name="header">
+					<h:outputText value="#{bundle.lst_usuarios_interno}" />
+				</f:facet>
+				<p:column style="width: 100px;">  
+					<f:facet name="header">
+						<h:outputText value="#{bundle.lbl_cpf}" />  
+					</f:facet>
+					<h:outputText value="#{usuarioInterno.numCpf}" />
+				</p:column>
+				<p:column style="width: 100px;">  
+					<f:facet name="header">
+						<h:outputText value="#{bundle.lbl_login}" />  
+					</f:facet>
+					<h:outputText value="#{usuarioInterno.usuario.dscLogin}" />
+				</p:column>
+				<p:column style="width: 265px;">  
+					<f:facet name="header">
+						<h:outputText value="#{bundle.lbl_nome}" />  
+					</f:facet>
+					<h:outputText value="#{usuarioInterno.nomPessoa}" />
+				</p:column>
+				<p:column>
+					<f:facet name="header">  
+						<h:outputText value="#{bundle.msg_acoes}" />  
+					</f:facet>
+					
+					<p:commandLink disabled="${!security.temAcesso('1.8.3')}" actionListener="#{usuarioInternoController.limparTela}" title="#{bundle.btn_editar}" update="formUsuarioInterno:panelUsuarioInterno" onclick="dlgUsuarioInterno.show()" process="@this">
+						<h:graphicImage title="Editar" value="/resources/img/ico-alterar.png" />
+						<f:setPropertyActionListener value="#{usuarioInterno}" target="#{usuarioInternoController.usuarioInterno.pessoaFisica}" />
+						<f:setPropertyActionListener target="${usuarioInternoController.desabilitaForm}" value="#{false}" />
+            		</p:commandLink>
+					
+					<p:commandLink disabled="${!security.temAcesso('1.8.2')}" id="excluir" title="#{bundle.btn_excluir}" onclick="confirmDlgExclusaoUsuarioInterno.show()" process="excluir">
+						<h:graphicImage title="Excluir" value="/resources/img/ico-excluir.png" />
+						<f:setPropertyActionListener value="#{usuarioInterno}" target="#{usuarioInternoController.usuarioInterno.pessoaFisica}" />
+            		</p:commandLink>
+        		</p:column>
+    		</p:dataTable>
+
+			<p:confirmDialog id="confirmDialogExclusaoUsuarioInterno" widgetVar="confirmDlgExclusaoUsuarioInterno" header="#{bundle.hdr_confirma_exclusao}" message="#{bundle.msg_confirma_exclusao}" severity="alert">
+				<p:commandButton id="confirmarExclusao" value="#{bundle.btn_sim}" 
+								 actionListener="#{usuarioInternoController.excluirUsuarioInterno}"
+								 process="@this, formFiltroUsuarioInterno"
+								 update=":formListaUsuariosInterno:dataTableUsuariosInterno"
+								 oncomplete="confirmDlgExclusaoUsuarioInterno.hide()"/>
+				<p:commandButton value="#{bundle.btn_nao}" type="button" onclick="confirmDlgExclusaoUsuarioInterno.hide()" />
+			</p:confirmDialog>
+	   	</h:form>
+
+		<p:dialog dynamic="true" id="dialogUsuarioInterno" header="#{bundle.btn_incluir_usuario_interno}" closable="true" draggable="true" resizable="false" width="420" widgetVar="dlgUsuarioInterno" modal="true" height="480">	
+			<ui:include src="/paginas/controle-acesso/usuarioInterno.xhtml" />
+		</p:dialog>
+
+	</ui:define>
+</ui:composition>

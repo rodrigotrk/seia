@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+				xmlns:h="http://java.sun.com/jsf/html" 
+				xmlns:f="http://java.sun.com/jsf/core" 
+				xmlns:ui="http://java.sun.com/jsf/facelets" 
+				xmlns:p="http://primefaces.prime.com.tr/ui">
+	
+	<h:form id="formAbaCaracterizacaoAtividade">
+		
+		<ui:include src="/paginas/manter-atividade-nao-sujeita-licenciamento/pesquisa-mineral/pesquisaMineralSubstanciaMineral.xhtml" />
+		
+		<ui:include src="/paginas/manter-atividade-nao-sujeita-licenciamento/pesquisa-mineral/pesquisaMineralProcessoDnpm.xhtml" />
+		
+		<ui:include src="/paginas/manter-atividade-nao-sujeita-licenciamento/pesquisa-mineral/pesquisaMineralUsoAgua.xhtml" />
+		
+		<h:panelGroup id="groupBotao" layout="block" style="margin-top:20px;">
+			<p style="text-align:right">
+				<p:commandButton value="#{bundle.geral_lbl_voltar}" 
+					update="tabCadastroPesquisaMineral" 
+					action="#{pesquisaMineralController.voltarAba()}" 
+					style="width:90px;" 
+					rendered="#{!pesquisaMineralController.cadastro.visualizar}"/>
+				<p:commandButton value="#{bundle.geral_lbl_avancar}" 
+					update="tabCadastroPesquisaMineral" 
+					action="#{pesquisaMineralController.avancarAba()}" 
+					style="width:90px;" 
+					rendered="#{!pesquisaMineralController.cadastro.visualizar}"/>
+			</p>
+		</h:panelGroup>
+		
+	</h:form>
+</ui:composition>

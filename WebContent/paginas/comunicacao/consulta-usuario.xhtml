@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui"
+	template="../../layout/template.xhtml">
+	<ui:define name="titulo-pagina">
+		<h3>Consultar Comunicação</h3>
+	</ui:define>
+	<ui:define name="conteudo-principal">
+		<ui:include
+			src="/paginas/comunicacao/dlgVisualizarComunicacaoUsuario.xhtml" />
+		<br />
+		<h3>
+			<h:outputLabel styleClass="titulo-grupo" style="font-weight:bold;"
+				value="PARÂMETROS DA CONSULTA" />
+		</h3>
+		<h:form id="formConsultarComunicacao">
+			<h:panelGroup layout="block">
+				<h:panelGrid columns="1" id="panel" width="800">
+					<h:panelGrid columns="2">
+						<h:panelGrid columns="4">
+							<h:outputLabel id="lblTitulo"
+								value="#{bundle.comunicacao_lbl_titulo}" />
+
+
+							<p:inputText value="#{comunicacaoController.descTitulo}" />
+
+
+
+							<h:outputText value="Data:" />
+
+							<h:panelGroup>
+								<p:calendar showOn="button" size="10" readOnlyInputText="true"
+									value="#{comunicacaoController.dtPeriodoInicial}" locale="pt"
+									pattern="dd/MM/yyyy" navigator="true" yearRange="c-50:c+10" />
+							</h:panelGroup>
+
+
+						</h:panelGrid>
+
+						<h:panelGrid columns="1" style="float: left;">
+							<p:commandButton value="Consultar"
+								actionListener="#{comunicacaoController.consultarComUsuario()}"
+								update="formConsultarComunicacao:tabelaComunicacoes" />
+						</h:panelGrid>
+					</h:panelGrid>
+
+
+
+
+
+					<h:panelGrid id="tabelaComunicacoes" columns="1">
+						<p:dataTable id="dataTableComunicacoes" var="comunicacao"
+							value="#{comunicacaoController.comunicacaoList}" lazy="true"
+							paginator="true" rows="8" paginatorPosition="bottom"
+							paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}"
+							currentPageReportTemplate="Registro(s) {startRecord}/{endRecord} de {totalRecords} registro(s)"
+							emptyMessage="#{bundle.msg_lista_vazia}"
+							widgetVar="dataTableComunicacao" style="width:700px">
+
+							<p:column>
+								<f:facet name="header">Título</f:facet>
+								<h:outputText value="#{comunicacao.dscTitulo}" />
+							</p:column>
+							<p:column>
+								<f:facet name="header">Recebida em</f:facet>
+								<h:outputText value="#{comunicacao.dtcPeriodoInicio}">
+									<f:convertDateTime for="dtcFormacao" pattern="dd/MM/yyyy"
+										locale="pt,BR" timeZone="Brazil/East" />
+								</h:outputText>
+							</p:column>
+							<p:column>
+								<f:facet name="header">Ação</f:facet>
+								<h:panelGroup layout="block" style="text-align:center">
+									<p:commandLink
+										action="#{comunicacaoController.carregarComunicacao(comunicacao)}"
+										update="formVisualizar2"
+										oncomplete="dlgVisualizarComunicacaoUsuario.show();">
+										<h:graphicImage style="margin: 2.5px;"
+											title="Visualizar Comunicação"
+											value="/resources/img/ico-pesquisa.png" />
+									</p:commandLink>
+								</h:panelGroup>
+							</p:column>
+
+						</p:dataTable>
+					</h:panelGrid>
+				</h:panelGrid>
+			</h:panelGroup>
+		</h:form>
+
+
+
+
+	</ui:define>
+</ui:composition>

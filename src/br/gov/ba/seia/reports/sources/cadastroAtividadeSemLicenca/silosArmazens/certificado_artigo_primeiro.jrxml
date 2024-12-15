@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="certificado_caepog_artigo_primeiro" language="java" pageWidth="525" pageHeight="802" columnWidth="525" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="82ecd246-fe4b-419d-a659-8875da7513b7">
+	<property name="ireport.zoom" value="1.2100000000000006"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="ide_cadastro" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[1]]></defaultValueExpression>
+	</parameter>
+	<parameter name="ide_tipo_endereco" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[4]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[select pf.num_cpf, pj.num_cnpj,
+
+COALESCE ( pj.nom_razao_social, pf.nom_pessoa ) as nome_razao,
+	case
+	   when COALESCE ( pf.num_cpf, pj.num_cnpj) <> ''
+	      then formatar_cpf_cnpj(COALESCE ( pf.num_cpf, pj.num_cnpj  ))
+	   else ''
+	end cpf_cnpj,
+
+ (tl.nom_tipo_logradouro ||' '|| l.nom_logradouro ||' '|| enpj.num_endereco ||', '|| b.nom_bairro ||', '|| m.nom_municipio ||' - '|| es.nom_estado ) as logradouro,
+
+ (select array_to_string(ARRAY( SELECT sm.nom_substancia_mineral from substancia_mineral sm
+ inner join pesquisa_mineral_substancia_mineral pmsm on sm.ide_substancia_mineral = pmsm.ide_substancia_mineral
+ inner join pesquisa_mineral pm on pmsm.ide_pesquisa_mineral = pm.ide_pesquisa_mineral
+ where pm.ide_cadastro_atividade_nao_sujeita_lic = c.ide_cadastro_atividade_nao_sujeita_lic
+), ', '::text)) AS subs,
+(tle.nom_tipo_logradouro ||' '|| le.nom_logradouro ||' '|| en.num_endereco ||', '|| be.nom_bairro ||', '|| me.nom_municipio ||' - '|| ese.nom_estado ) as endereco
+
+from cadastro_atividade_nao_sujeita_lic c
+inner join pessoa p on p.ide_pessoa = c.ide_pessoa_requerente
+left join pessoa_juridica pj on pj.ide_pessoa_juridica = p.ide_pessoa
+left join pessoa_fisica pf on pf.ide_pessoa_fisica = p.ide_pessoa
+left join endereco_pessoa ep on ep.ide_pessoa = p.ide_pessoa
+left join endereco enpj on enpj.ide_endereco = ep.ide_endereco
+left join logradouro l on l.ide_logradouro = enpj.ide_logradouro
+left join tipo_logradouro tl on tl.ide_tipo_logradouro = l.ide_tipo_logradouro
+left join bairro b on b.ide_bairro = l.ide_bairro
+left join municipio m on m.ide_municipio = l.ide_municipio
+left join estado es on es.ide_estado = m.ide_estado
+
+inner join endereco_empreendimento endemp on endemp.ide_empreendimento = c.ide_empreendimento
+inner join endereco en on endemp.ide_endereco = en.ide_endereco
+left join logradouro le on le.ide_logradouro = en.ide_logradouro
+left join tipo_logradouro tle on tle.ide_tipo_logradouro = le.ide_tipo_logradouro
+left join bairro be on be.ide_bairro = le.ide_bairro
+left join municipio me on me.ide_municipio = le.ide_municipio
+left join estado ese on ese.ide_estado = me.ide_estado
+
+where c.ide_cadastro_atividade_nao_sujeita_lic = $P{ide_cadastro}
+limit 1]]>
+	</queryString>
+	<field name="num_cpf" class="java.lang.String"/>
+	<field name="num_cnpj" class="java.lang.String"/>
+	<field name="nome_razao" class="java.lang.String"/>
+	<field name="cpf_cnpj" class="java.lang.String"/>
+	<field name="logradouro" class="java.lang.String"/>
+	<field name="subs" class="java.lang.String"/>
+	<field name="endereco" class="java.lang.String"/>
+	<variable name="cpf_cnpj" class="java.lang.String">
+		<variableExpression><![CDATA[$F{num_cpf} != null ? "CPF: " : "" + $F{num_cnpj} != null ? "CNPJ: " : ""]]></variableExpression>
+	</variable>
+	<detail>
+		<band height="58" splitType="Stretch">
+			<textField isStretchWithOverflow="true">
+				<reportElement uuid="36d6e9f7-6ec3-490e-9c75-7b7a5a2699a7" stretchType="RelativeToBandHeight" x="50" y="10" width="475" height="48"/>
+				<textElement textAlignment="Justified">
+					<font fontName="SansSerif"/>
+					<paragraph lineSpacing="1_1_2"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Certificar à "+ $F{nome_razao} +" inscrita no  " + $V{cpf_cnpj} + $F{cpf_cnpj} +
+", com sede no  endereço "+ $F{logradouro} +
+", que encontra(m)-se cadastrado(s) perante o INEMA a(s) seguinte(s) unidade(s) armazenadora(s), com as seguintes especificações:"]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="3a033732-e781-42d5-b9a7-9e0cf92724d0" x="0" y="10" width="37" height="13"/>
+				<textElement textAlignment="Center">
+					<font fontName="SansSerif" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Art. 1.º]]></text>
+			</staticText>
+		</band>
+	</detail>
+</jasperReport>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="fce_licenciamento_mineracao_residuo_gerado" pageWidth="480" pageHeight="817" whenNoDataType="AllSectionsNoDetail" columnWidth="480" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="80b78396-35cc-4e26-aaf9-1207b1892468">
+	<property name="ireport.zoom" value="1.5000000000000007"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="ide_fce_licenciamento_mineral" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[$P{ide_fce_licenciamento_mineral}]]></defaultValueExpression>
+	</parameter>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[SELECT trg.dsc_tipo_residuo_gerado FROM fce_licenciamento_mineral_tipo_residuo  flm
+join tipo_residuo_gerado trg on trg.ide_tipo_residuo_gerado = flm.ide_tipo_residuo_gerado
+where ide_fce_licenciamento_mineral  = $P{ide_fce_licenciamento_mineral}]]>
+	</queryString>
+	<field name="dsc_tipo_residuo_gerado" class="java.lang.String"/>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement uuid="d3021233-c695-47a4-ae49-2322f86b9fea" x="0" y="0" width="307" height="20"/>
+				<box topPadding="3" leftPadding="2"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dsc_tipo_residuo_gerado}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

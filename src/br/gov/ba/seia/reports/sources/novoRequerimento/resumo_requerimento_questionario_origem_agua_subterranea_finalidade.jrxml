@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="resumo_requerimento_questionario_origem_agua_subterranea_finalidade" pageWidth="191" pageHeight="802" columnWidth="191" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="7a9331d8-af5a-48a5-96d6-d9ec6e96c9de">
+	<property name="ireport.zoom" value="4.594972986357222"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="ide_requerimento" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="ide_outorga_localizacao_geografica" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT distinct tfua.ide_tipo_finalidade_uso_agua,tfua.nom_tipo_finalidade_uso_agua, olg.num_area_dessedentacao_animal, olg.num_area_empreendimento, olg.ind_abastecimento_em_distrito_industrial,
+case when nom_tipo_finalidade_uso_agua='Dessedentação animal' then olg.num_area_dessedentacao_animal
+when nom_tipo_finalidade_uso_agua='Irrigação' then olg.num_area_irrigada_captacao
+when nom_tipo_finalidade_uso_agua='Pulverização agrícola' then olg.num_area_pulverizada else null end valor
+FROM outorga_localizacao_geografica_finalidade olgf
+inner join outorga_localizacao_geografica olg on olg.ide_outorga_localizacao_geografica = olgf.ide_outorga_localizacao_geografica
+inner join outorga_tipo_captacao otc on otc.ide_outorga = olg.ide_outorga
+inner join outorga o on o.ide_outorga = olg.ide_outorga
+inner join tipo_finalidade_uso_agua tfua on tfua.ide_tipo_finalidade_uso_agua = olgf.ide_tipo_finalidade_uso_agua
+where o.ide_requerimento = $P{ide_requerimento}
+and otc.ide_tipo_captacao = 4
+and olg.ide_outorga_localizacao_geografica=$P{ide_outorga_localizacao_geografica}
+order by tfua.nom_tipo_finalidade_uso_agua]]>
+	</queryString>
+	<field name="ide_tipo_finalidade_uso_agua" class="java.lang.Integer"/>
+	<field name="nom_tipo_finalidade_uso_agua" class="java.lang.String"/>
+	<field name="num_area_dessedentacao_animal" class="java.math.BigDecimal"/>
+	<field name="valor" class="java.math.BigDecimal"/>
+	<field name="num_area_empreendimento" class="java.math.BigDecimal"/>
+	<field name="ind_abastecimento_em_distrito_industrial" class="java.lang.Boolean"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="12" splitType="Stretch">
+			<textField isStretchWithOverflow="true">
+				<reportElement uuid="70f29bb5-130d-4a77-ae03-8d83eb7df7a3" positionType="Float" stretchType="RelativeToTallestObject" mode="Opaque" x="0" y="0" width="150" height="12" isRemoveLineWhenBlank="true" isPrintWhenDetailOverflows="true" backcolor="#FFFFFF"/>
+				<box leftPadding="3"/>
+				<textElement verticalAlignment="Middle" markup="none">
+					<font fontName="Arial" size="8" isBold="false" isUnderline="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nom_tipo_finalidade_uso_agua}
++
+( $F{ide_tipo_finalidade_uso_agua} == 3 ? ( $F{ind_abastecimento_em_distrito_industrial} ? "\n(Situada em distrito industrial)" : "\n(Unidade industrial isolada)" ) : "" )]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00">
+				<reportElement uuid="6c84569c-3ca5-4e75-bf23-ba31195aab84" x="151" y="0" width="40" height="12" isRemoveLineWhenBlank="true"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{valor}==null ? "-" : $F{valor} )]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

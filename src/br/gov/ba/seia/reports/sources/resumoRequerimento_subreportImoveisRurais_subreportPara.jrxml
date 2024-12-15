@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="resumoRequerimento_subreportImoveisRurais_subreportPara" pageWidth="453" pageHeight="802" columnWidth="453" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" whenResourceMissingType="Empty">
+	<property name="ireport.zoom" value="1.610510000000001"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="ind_passivo_ambiental" class="java.lang.Boolean"/>
+	<parameter name="ind_para_aderido" class="java.lang.Boolean"/>
+	<parameter name="ind_aderir_para" class="java.lang.Boolean"/>
+	<parameter name="num_processo_para" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="45" splitType="Stretch">
+			<frame>
+				<reportElement x="0" y="0" width="453" height="45"/>
+				<staticText>
+					<reportElement x="0" y="22" width="453" height="12"/>
+					<textElement verticalAlignment="Middle">
+						<font size="9" isBold="true" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<text><![CDATA[Tem passivo ambiental?]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="0" y="0" width="453" height="16"/>
+					<textElement verticalAlignment="Middle">
+						<font size="11" isBold="true" isUnderline="false" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<text><![CDATA[PARA - Plano de Adequação de Regularização Ambiental
+]]></text>
+				</staticText>
+				<textField>
+					<reportElement x="0" y="33" width="453" height="12"/>
+					<textElement>
+						<font size="9"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$P{ind_passivo_ambiental} ? "Sim" : "Não"]]></textFieldExpression>
+				</textField>
+			</frame>
+		</band>
+		<band height="23">
+			<printWhenExpression><![CDATA[!$P{ind_passivo_ambiental}]]></printWhenExpression>
+			<frame>
+				<reportElement x="0" y="0" width="453" height="23"/>
+				<staticText>
+					<reportElement x="0" y="0" width="453" height="12"/>
+					<textElement verticalAlignment="Middle">
+						<font size="9" isBold="true" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<text><![CDATA[Deseja aderir ao PARA (Plano de Adequação de Regularização Ambiental)?]]></text>
+				</staticText>
+				<textField>
+					<reportElement x="0" y="11" width="453" height="12"/>
+					<textElement>
+						<font size="9"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$P{ind_aderir_para} ? "Sim" : "Não"]]></textFieldExpression>
+				</textField>
+			</frame>
+		</band>
+		<band height="23">
+			<printWhenExpression><![CDATA[$P{ind_passivo_ambiental}]]></printWhenExpression>
+			<frame>
+				<reportElement x="0" y="0" width="453" height="23"/>
+				<staticText>
+					<reportElement x="0" y="0" width="453" height="12"/>
+					<textElement verticalAlignment="Middle">
+						<font size="9" isBold="true" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<text><![CDATA[Já aderiu ao PARA?]]></text>
+				</staticText>
+				<textField>
+					<reportElement x="0" y="11" width="453" height="12"/>
+					<textElement>
+						<font size="9"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$P{ind_para_aderido} ? "Sim" : "Não"]]></textFieldExpression>
+				</textField>
+			</frame>
+		</band>
+		<band height="23">
+			<printWhenExpression><![CDATA[$P{ind_para_aderido}]]></printWhenExpression>
+			<frame>
+				<reportElement x="0" y="0" width="453" height="23"/>
+				<staticText>
+					<reportElement x="0" y="0" width="453" height="12"/>
+					<textElement verticalAlignment="Middle">
+						<font size="9" isBold="true" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<text><![CDATA[Número do Processo]]></text>
+				</staticText>
+				<textField isBlankWhenNull="true">
+					<reportElement x="0" y="11" width="453" height="12"/>
+					<textElement>
+						<font size="9"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$P{num_processo_para}]]></textFieldExpression>
+				</textField>
+			</frame>
+		</band>
+		<band height="23">
+			<printWhenExpression><![CDATA[!$P{ind_para_aderido} && $P{num_processo_para} == null]]></printWhenExpression>
+			<frame>
+				<reportElement x="0" y="0" width="453" height="23"/>
+				<staticText>
+					<reportElement x="0" y="0" width="453" height="12"/>
+					<textElement verticalAlignment="Middle">
+						<font size="9" isBold="true" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<text><![CDATA[Deseja aderir ao PARA (Plano de Adequação de Regularização Ambiental)?]]></text>
+				</staticText>
+				<textField>
+					<reportElement x="0" y="11" width="453" height="12"/>
+					<textElement>
+						<font size="9"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$P{ind_aderir_para} ? "Sim" : "Não"]]></textFieldExpression>
+				</textField>
+			</frame>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

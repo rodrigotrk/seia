@@ -1,0 +1,352 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui">
+
+	
+	 	<p:confirmDialog widgetVar="dlgAlteracaoAba"
+         	id="_dlgAlteracaoAba"
+	 		message="As alterações realizadas neste requerimento não serão salvas. Deseja continuar?" 
+	 		resizable="false" modal="true" width="600" position="center" 	 style="top: -100%; left: 20%; "> 
+	 		<h:form> 
+	 			<p:commandButton value="Sim" 
+	 				onclick="dlgNaoConcordo.show();dlgAlteracaoAba.hide();" 
+	 				styleClass="ui-confirmdialog-yes" icon="pi pi-check"
+	 			/> 
+	 			<p:commandButton value="Não" 
+	 				onclick="dlgAlteracaoAba.hide();" 
+	 				type="button" styleClass="ui-confirmdialog-no" icon="pi pi-times" /> 
+	 		</h:form> 
+	 	</p:confirmDialog>
+	<p:layoutUnit position="center" resizable="false" size="100"
+		style="border-color: green;"
+		rendered="#{abaFinalizarRequerimentoController.renderedAutorizacaoOuLicenca}">
+		<table style="font-size: 11px; background-color: #E6F9E6;">
+			<tr>
+				<td />
+				<td colspan="2"><h:outputText
+						value="Atenção! Caso a solicitação identificada na resposta ao item 1 atenda a todas as necessidades do empreendimento, a pergunta 2 não deve ser respondida. 
+						Caso a pergunta 1 não se aplique ao empreendimento, responder apenas à pergunta 2."
+						style="font-weight: bold; line-height: 150%;" /></td>
+			</tr>
+		</table>
+	</p:layoutUnit>
+	<p:layoutUnit position="center" resizable="false" size="100" style="border-color: green;" rendered="#{abaFinalizarRequerimentoController.projetoLicenciadoComImpactoAdicionalNDA}">
+		<table style="font-size: 11px; background-color: #E6F9E6;">
+			<tr>
+				<td />
+				<td colspan="2">
+					<h:outputText value="Preencha a tabela abaixo apenas se a alteração proposta puder ser enquadrada nas tipologias
+								 de empreendimentos e atividades sujeitos a licenciamento ambiental, constantes no Anexo IV do Decreto nº 14.024/2012." style="font-weight: bold; line-height: 150%;"/>
+				</td>
+			</tr>
+		</table>
+	</p:layoutUnit>
+	
+	<h:form id="formFinalizarRequerimento">
+		<p:outputPanel id="panel01" rendered="#{abaFinalizarRequerimentoController.renderedAutorizacaoOuLicenca}">
+			
+			<h:panelGrid id="grid01" >
+				<h:outputText value="* 1. Caracterizar as atividades do empreendimento passíveis de Autorização Ambiental(AA), conforme art. 155 do Regulamento da Lei 10.431/06 aprovada pelo Decreto n° 14.024/2012 e suas devidas atualizações."/>
+				<p:commandLink  process="@this" disabled="#{novoRequerimentoController.desabilitarTudo}" action="#{tipologiaController.load(true)}" oncomplete="dlgTipologia.show()"
+					update="formTipologia">
+					<h:graphicImage title="Incluir atividade" value="/resources/img/ico-expandir.png" />
+					<h:outputText value="Incluir atividade" />
+				</p:commandLink>
+			</h:panelGrid>
+			
+			<p:dataTable id="listaAutorizacao" var="atividade" value="#{abaFinalizarRequerimentoController.atividadesAutorizacao}" rendered="#{!empty abaFinalizarRequerimentoController.atividadesAutorizacao}">
+				<p:column headerText="Atividade" style="width:350px">
+					<h:outputText value="#{atividade.desTipologia}" />
+				</p:column>
+				<p:column headerText="Ações"  style="width:50px">
+					<p:commandLink  oncomplete="excluirAtividadeAutorizacao.show()" process="@this" rendered="#{!novoRequerimentoController.desabilitarTudo}">
+						<f:setPropertyActionListener target="#{abaFinalizarRequerimentoController.atividadeAExcluir}" value="#{atividade}"/>
+						<h:graphicImage title="Excluir" value="/resources/img/ico-excluir.png" />
+					</p:commandLink>
+				</p:column>
+			</p:dataTable>
+		</p:outputPanel>
+		
+		<br/>
+		
+		<p:outputPanel rendered="#{abaFinalizarRequerimentoController.renderedCaracterizacaoAtividadesEmpreendimento}">
+			<h:panelGroup rendered="#{(not abaFinalizarRequerimentoController.alteracaoLicenca and  abaFinalizarRequerimentoController.autorizacaoOuLicenca) or abaRenovacaoAlteracaoProrrogacaoController.renovacaoLicenca}">
+				<h:outputText value="2. Caracterizar as atividades do empreendimento passíveis de licença:" rendered="#{!empty abaFinalizarRequerimentoController.atividadesLicenca}"/>
+				
+				<p:dataTable rendered="#{!empty abaFinalizarRequerimentoController.atividadesLicenca}" var="atividade" value="#{abaFinalizarRequerimentoController.atividadesLicenca}">
+					<p:column headerText="Atividade">
+						<h:outputText value="#{atividade.desTipologia}" />
+					</p:column>
+					<p:column headerText="Capacidade/produção/área/volume">
+						<p:cellEditor>
+	        				<f:facet name="output">  
+	                    		<h:outputText value="#{atividade.valAtividadeFormatada}"/>
+	                		</f:facet>  
+			                <f:facet name="input">  
+			                      <p:inputText value="#{atividade.valAtividade}" onkeyup="maskIt(this, event, '999.999.999,99', true)"
+				                      	required="false" disabled="#{novoRequerimentoController.desabilitarTudo}"
+			                       		style="width:100%"/><!-- requiredMessage="Para o cálculo do porte informe o valor das atividades corretamente. Não é permitido valor vazio ou menor ou igual a 0." -->
+			                </f:facet>
+	        			</p:cellEditor>
+					</p:column>
+					<p:column headerText="Unidade de medida">
+						<h:outputText value="#{atividade.tipologiaGrupo.unidadeMedidaTipologiaGrupo.ideUnidadeMedida.codUnidadeMedida}" />
+					</p:column>
+					<p:column headerText="Ações" style="width:40px" rendered="#{!novoRequerimentoController.desabilitarTudo}">
+						<p:rowEditor rendered="#{!novoRequerimentoController.desabilitarTudo or !empty atividade.tipologiaGrupo.unidadeMedidaTipologiaGrupo.ideUnidadeMedida}">
+						</p:rowEditor>
+					</p:column>
+					<p:ajax event="rowEdit" listener="#{abaFinalizarRequerimentoController.validarCaracterizacaoAtividadesEmpreendimento()}" update=":subViewAbas:tabAbasId:formFinalizarRequerimento:porteIdentificado :subViewAbas:tabAbasId:formFinalizarRequerimento:classeIdentificada" />
+				</p:dataTable>
+				
+			</h:panelGroup>
+			<br/>		
+			<h:panelGrid style="width: 100%;" rendered="#{abaFinalizarRequerimentoController.alteracaoLicenca and !abaFinalizarRequerimentoController.impactoAdicional}">
+				<h:outputText value="2. Caracterizar as atividades do empreendimento que serão incluídas ou alteradas:" />
+				
+				<h:panelGrid columns="2">
+					<h:outputText value="a) Selecionar a(s) tipologia(s) que deseja incluir" />
+					<h:outputText value=" " />
+					<p:commandLink  process="@this" disabled="#{novoRequerimentoController.desabilitarTudo}" oncomplete="dlgTipologia.show()"
+						action="#{tipologiaController.load(!abaFinalizarRequerimentoController.alteracaoLicenca)}" update="formTipologia">
+						<h:graphicImage title="Incluir..." value="/resources/img/ico-expandir.png" />
+						<h:outputText value="Incluir tipologia" />
+					</p:commandLink>
+				</h:panelGrid>
+				
+				<p:dataTable rendered="#{!empty abaFinalizarRequerimentoController.atividadesLicenca}" var="atividade" value="#{abaFinalizarRequerimentoController.atividadesLicenca}">
+					<p:column headerText="Atividade" style="width:260px">
+						<h:outputText value="#{atividade.desTipologia}" />
+					</p:column>
+					<p:column headerText="Valor" style="width:80px">
+						<p:cellEditor>
+	        				<f:facet name="output">  
+	                    		<h:outputText value="#{atividade.valAtividadeFormatada}"/>
+	                		</f:facet>  
+			                <f:facet name="input">  
+			                      <p:inputText value="#{atividade.valAtividade}" onkeyup="maskIt(this, event, '999.999.999,99', true)" required="false"
+			                       		style="width:100%" /><!-- requiredMessage="Para o cálculo do porte informe o valor das atividades corretamente. Não é permitido valor vazio ou menor ou igual a 0." -->
+			                </f:facet>
+	        			</p:cellEditor>
+					</p:column>
+					<p:column headerText="Unidade de medida">
+						<h:outputText value="#{atividade.tipologiaGrupo.unidadeMedidaTipologiaGrupo.ideUnidadeMedida.codUnidadeMedida}" />
+					</p:column>
+					<p:column headerText="Ações" style="width:40px" rendered="#{!novoRequerimentoController.desabilitarTudo}">
+						<p:rowEditor rendered="#{!empty atividade.tipologiaGrupo.unidadeMedidaTipologiaGrupo.ideUnidadeMedida}"/>
+						<p:commandLink  oncomplete="excluirAtividadeEmpreendLicenca.show()" process="@this">
+							<f:setPropertyActionListener target="#{abaFinalizarRequerimentoController.atividadeAExcluir}" value="#{atividade}"/>
+							<f:setPropertyActionListener target="#{abaFinalizarRequerimentoController.empreend}" value="#{false}"/>
+							<h:graphicImage title="Excluir" value="/resources/img/ico-excluir.png" />
+						</p:commandLink>
+					</p:column>
+				</p:dataTable>
+				<br/>
+				<h:outputText value="b) Selecionar a(s) tipologia(s) do empreendimento que deseja alterar" title="Tipologias do Empreendimento"/>
+				<h:panelGrid columns="3" width="100%">
+					<h:outputText value=" " />
+					
+					<p:selectOneMenu id="selectAtivEmpreend" disabled="#{empty abaFinalizarRequerimentoController.atividadesEmpreendimento or novoRequerimentoController.desabilitarTudo}" 
+									 valueChangeListener="#{abaFinalizarRequerimentoController.changeTipologiaEmpreendimentoSelecionada()}" converter="tipologiaConverter"
+									 value="#{abaFinalizarRequerimentoController.tipologiaEmpreendSelecionada}">
+						<f:selectItem itemValue="" itemLabel="Selecione..."/>
+						<p:ajax   process="@this"/>
+						<f:selectItems value="#{abaFinalizarRequerimentoController.atividadesEmpreendimento}" var="atividadeEmpreend" itemLabel="#{atividadeEmpreend.desTipologia}" itemValue="#{atividadeEmpreend}" />
+					</p:selectOneMenu>
+					<h:outputText value=" " />
+					
+					<h:outputText value=" " />
+					<p:commandButton value="Incluir atividade do Empreendimento" actionListener="#{abaFinalizarRequerimentoController.adicionarAtividadeDoEmpreendimento()}" update="subViewAbas:tabAbasId:formFinalizarRequerimento"
+									 disabled="#{empty abaFinalizarRequerimentoController.atividadesEmpreendimento or novoRequerimentoController.desabilitarTudo}" process="@this"/>
+				</h:panelGrid>
+				
+				<p:dataTable var="atividade" value="#{abaFinalizarRequerimentoController.atividadesLicencaEmprendSelected}" rendered="#{abaFinalizarRequerimentoController.atividadesLicencaEmprendSelected != null and not empty abaFinalizarRequerimentoController.atividadesLicencaEmprendSelected}">
+					<p:column headerText="Atividade" style="width:260px">
+						<h:outputText value="#{atividade.desTipologia}" />
+					</p:column>
+					<p:column headerText="Valor" style="width:80px">
+						<p:cellEditor>
+	        				<f:facet name="output">  
+	                    		<h:outputText value="#{atividade.valAtividadeFormatada}"/>
+	                		</f:facet>  
+			                <f:facet name="input">  
+								<p:inputText value="#{atividade.valorAtividade}" onkeyup="maskIt(this, event, '999.999.999,99', true)" converter="newBigConverter" required="false"
+			                       		style="width:100%"><!-- requiredMessage="Para o cálculo do porte informe o valor das atividades corretamente. Não é permitido valor vazio ou menor ou igual a 0." -->
+									<f:convertNumber maxFractionDigits="2" minFractionDigits="2" integerOnly="false" />
+								</p:inputText>
+			                </f:facet>
+	        			</p:cellEditor>
+					</p:column>
+					<p:column headerText="Unidade de medida">
+						<h:outputText value="#{atividade.tipologiaGrupo.unidadeMedidaTipologiaGrupo.ideUnidadeMedida.codUnidadeMedida}" />
+					</p:column>
+					<p:column headerText="Opções" style="width:130px">
+						<p:cellEditor>
+	        				<f:facet name="output">  
+	                    		<h:outputText value="#{atividade.opcao.descricao}"/>
+	                		</f:facet>  
+			                <f:facet name="input">  
+		                      <p:selectOneMenu value="#{atividade.opcao}" required="true"
+		                      	converterMessage="O campo opção é de preenchimento obrigatório.">
+									<f:selectItem itemValue="#{null}" itemLabel="Selecione..."/>
+									<f:selectItems value="#{abaFinalizarRequerimentoController.opcoes}" var="opcao" itemLabel="#{opcao.descricao}" itemValue="#{opcao}" />
+								</p:selectOneMenu>
+			                </f:facet>
+	        			</p:cellEditor>
+					</p:column>
+					<p:column headerText="Ações" style="width:40px" rendered="#{!novoRequerimentoController.desabilitarTudo}">
+						<p:rowEditor rendered="#{!empty atividade.tipologiaGrupo.unidadeMedidaTipologiaGrupo.ideUnidadeMedida}"/>
+						<p:commandLink  oncomplete="excluirAtividadeEmpreendLicenca.show()" process="@this" rendered="#{!novoRequerimentoController.desabilitarTudo}">
+							<f:setPropertyActionListener target="#{abaFinalizarRequerimentoController.atividadeAExcluir}" value="#{atividade}"/>
+							<f:setPropertyActionListener target="#{abaFinalizarRequerimentoController.empreend}" value="#{true}"/>
+							<h:graphicImage title="Excluir" value="/resources/img/ico-excluir.png" />
+						</p:commandLink>
+					</p:column>
+				</p:dataTable>
+			</h:panelGrid>
+			<h:panelGrid style="float:right;" 
+						 rendered="#{(!empty abaFinalizarRequerimentoController.atividadesLicenca or !empty abaFinalizarRequerimentoController.atividadesLicencaEmprendSelected) and (abaFinalizarRequerimentoController.alteracaoLicenca or abaRenovacaoAlteracaoProrrogacaoController.renovacaoLicenca or abaFinalizarRequerimentoController.autorizacaoOuLicenca) and !abaFinalizarRequerimentoController.impactoAdicional}">
+				<p:commandButton id="btnCalcular" value="Calcular Porte" action="#{abaFinalizarRequerimentoController.calcularPorte()}" disabled="#{novoRequerimentoController.desabilitarTudo}" 
+								 update="panelPorteIdentificado panelPorteIdentificado_ subViewAbas:tabAbasId:formFinalizarRequerimento subViewAbas:tabAbasId:formFinalizarRequerimento:panelPorteIdentificado subViewAbas:tabAbasId:formFinalizarRequerimento:panelPorteIdentificado_"/>
+			</h:panelGrid>
+		</p:outputPanel>
+		
+		<br/><br/><br/>
+		
+		<p:outputPanel id="panel02" rendered="#{abaFinalizarRequerimentoController.renderPorteEFase}" autoUpdate="true">
+			<h:panelGrid id="panelPorteIdentificado" columns="3">
+				<h:outputText value="* 2.1. Porte identificado:" />
+				<h:outputText value="* 2.2. Classe do Empreendimento:" style="margin: 40px" />
+				<p:spacer width="50" height="5"/>			
+				<h:outputText id="porteIdentificadoDla" rendered="#{abaFinalizarRequerimentoController.porteIdentificado.ni}" value="#{abaFinalizarRequerimentoController.porteIdentificado.nomPorte}"
+							  style="color:red;text-transform:uppercase;font-size: 11px;" />
+				<h:outputText id="porteIdentificado" rendered="#{!abaFinalizarRequerimentoController.porteIdentificado.ni}" value="#{abaFinalizarRequerimentoController.porteIdentificado.nomPorte}"
+							  style="font-size: 11px;" />
+				<h:outputText id="classeIdentificada" value="#{abaFinalizarRequerimentoController.classe.nomClasse}" style="font-size: 11px; margin: 40px" />
+			    <p:spacer width="110" height="5" rendered="#{!abaFinalizarRequerimentoController.escolherTipologiaPrincipal or !abaFinalizarRequerimentoController.porteIdentificado.ni}"/> 
+			</h:panelGrid>
+			<h:panelGrid id="panelPorteIdentificado_" columns="3" rendered="#{abaFinalizarRequerimentoController.escolherTipologiaPrincipal and abaFinalizarRequerimentoController.tipologiasMaiorQueUm()}" >
+			<!-- <p:spacer width="110" height="5" rendered="#{abaFinalizarRequerimentoController.escolherTipologiaPrincipal}"/> -->	
+				<h:outputText value="* 2.3. Informe a atividade principal:" rendered="#{abaFinalizarRequerimentoController.escolherTipologiaPrincipal and abaFinalizarRequerimentoController.tipologiasMaiorQueUm()}" />
+				<p:selectOneMenu  converter="tipologiaConverter" style="width: 454px;"
+							rendered="#{abaFinalizarRequerimentoController.escolherTipologiaPrincipal and abaFinalizarRequerimentoController.tipologiasMaiorQueUm()}" 
+							value="#{abaFinalizarRequerimentoController.atividadePrincipal}" disabled="#{novoRequerimentoController.desabilitarTudo}">
+					<f:selectItem itemValue="#{null}" itemLabel="Selecione..."/>
+					<f:selectItems value="#{abaFinalizarRequerimentoController.tipologiasPrincipais}" var="tipologia" itemLabel="#{tipologia.desTipologia}" itemValue="#{tipologia}" />
+					<p:ajax event="change" listener="#{abaFinalizarRequerimentoController.changeTipologiaPrincipal}" update="subViewAbas:tabAbasId:formFinalizarRequerimento:classeIdentificada" global="true" process="@this"/>
+				</p:selectOneMenu>
+			</h:panelGrid>
+		</p:outputPanel>
+		
+		<p:outputPanel id="panel03" rendered="#{abaFinalizarRequerimentoController.renderPorteEFase}">
+			<h:panelGrid id="grid03" rendered="#{abaFinalizarRequerimentoController.renderAbaFinalizarRequerimentoPerguntaTres}">
+				<h:panelGroup id="pergunta2">
+					<h:outputText value="* 3. Em que fase o empreendimento se encontra?" />
+				</h:panelGroup>
+	
+				<p:selectOneRadio value="#{abaFinalizarRequerimentoController.faseEmpreendimentoSelecionado}" layout="horizontal" converter="simpleEntityConverter"
+								  valueChangeListener="#{abaFinalizarRequerimentoController.changeEmpreendimentos()}" disabled="#{novoRequerimentoController.desabilitarTudo}">
+					<f:selectItems value="#{abaFinalizarRequerimentoController.listaFaseEmpreendimento}" var="faseEmpreendimento"
+								   itemLabel="#{faseEmpreendimento.nomFaseEmpreendimento}" itemValue="#{faseEmpreendimento}" />
+					<p:ajax update="panel03"  />
+				</p:selectOneRadio>
+			</h:panelGrid>
+			
+			<h:panelGrid id="pnlDataPergunta21" rendered="#{abaFinalizarRequerimentoController.renderAbaFinalizarRequerimentoPerguntaTresPontoUm}">
+				<h:outputText value="* 3.1. Informe a data da previsão para Localização ou Implantação:" rendered="#{abaFinalizarRequerimentoController.faseEmpreendimentoSelecionado.ideFaseEmpreendimento == 1 || abaFinalizarRequerimentoController.faseEmpreendimentoSelecionado.ideFaseEmpreendimento == 2}" />
+				<h:outputText value="* 3.1. Informe a data da previsão para início da Operação:" rendered="#{abaFinalizarRequerimentoController.faseEmpreendimentoSelecionado.ideFaseEmpreendimento == 3}" />
+				<p:calendar value="#{abaFinalizarRequerimentoController.dtcPrevistaFaseEmpreendimento}" id="dtPrevLoc" size="7" showOn="button" locale="pt"
+							pattern="dd/MM/yyyy" readOnlyInputText="true" rendered="#{abaFinalizarRequerimentoController.faseEmpreendimentoSelecionado != null}" disabled="#{novoRequerimentoController.desabilitarTudo}">
+					<p:ajax event="dateSelect"  process="@this" />
+				</p:calendar>
+			</h:panelGrid>
+	
+		</p:outputPanel>
+		
+		
+		<h:panelGroup rendered="#{abaFinalizarRequerimentoController.renderedPnlAutorizacaoEspecial}">
+			<h:outputText value="2. Caracterizar as atividades do empreendimento passíveis de licença:" rendered="#{!empty abaFinalizarRequerimentoController.atividadesLicenca}"/>
+			
+			<p:dataTable rendered="#{!empty abaFinalizarRequerimentoController.atividadesLicenca}" var="atividade" value="#{abaFinalizarRequerimentoController.atividadesLicenca}">
+				<p:column headerText="Atividade">
+					<h:outputText value="#{atividade.desTipologia}" />
+				</p:column>
+				<p:column headerText="Capacidade/produção/área/volume">
+					<p:cellEditor>
+        				<f:facet name="output">  
+                    		<h:outputText value="#{atividade.valAtividadeFormatada}"/>
+                		</f:facet>  
+		                <f:facet name="input">  
+		                      <p:inputText value="#{atividade.valAtividade}" onkeyup="maskIt(this, event, '999.999.999,99', true)"
+			                      	required="false" disabled="#{novoRequerimentoController.desabilitarTudo}"
+		                       		style="width:100%"/><!-- requiredMessage="Para o cálculo do porte informe o valor das atividades corretamente. Não é permitido valor vazio ou menor ou igual a 0." -->
+		                </f:facet>
+        			</p:cellEditor>
+				</p:column>
+				<p:column headerText="Unidade de medida">
+					<h:outputText value="#{atividade.tipologiaGrupo.unidadeMedidaTipologiaGrupo.ideUnidadeMedida.codUnidadeMedida}" />
+				</p:column>
+				<p:column headerText="Ações" style="width:40px" rendered="#{!novoRequerimentoController.desabilitarTudo}">
+					<p:rowEditor rendered="#{!novoRequerimentoController.desabilitarTudo or !empty atividade.tipologiaGrupo.unidadeMedidaTipologiaGrupo.ideUnidadeMedida}">
+					</p:rowEditor>
+				</p:column>
+				<p:ajax event="rowEdit" listener="#{abaFinalizarRequerimentoController.validarCaracterizacaoAtividadesEmpreendimento()}" update=":subViewAbas:tabAbasId:formFinalizarRequerimento:porteIdentificado :subViewAbas:tabAbasId:formFinalizarRequerimento:classeIdentificada" />
+			</p:dataTable>
+			
+		</h:panelGroup>
+		
+		<br />
+		
+        <h:panelGrid columns="1">
+			<h3><h:outputText value="#{bundle.requerimentoUnicoLabelDeclaracao}" styleClass="titulo-grupo" style="font-size: 12px; font-weight: bold;"/></h3>
+		
+			<h:panelGrid id="pnlAutorizacaoEspecial" rendered="#{abaFinalizarRequerimentoController.renderedPnlAutorizacaoEspecial}">
+				<h:outputText styleClass="font-req-declaracao" value="* Declaro para os devidos fins que assumo o compromisso de:" />
+				<h:panelGrid columns="2">
+					<p:selectBooleanCheckbox value="#{novoRequerimentoController.declaracaoAutorizacaoEspecial}" required="true" disabled="#{novoRequerimentoController.desabilitarTudo}"
+					requiredMessage="O campo Declaração é de preenchimento obrigatório.">
+						<p:ajax process="@this"/>
+					</p:selectBooleanCheckbox>
+					<h:panelGroup layout="block">
+						<ul class="lista-roman">
+							<li class="lista-roman font-req-declaracao">
+								 <h:outputText value="Realizar a correta utilização de agrotóxicos e destinação adequada das respectivas embalagens e dos demais resíduos agrossilvopastoris;"/> 
+							</li>
+							<li class="lista-roman font-req-declaracao">
+								<h:outputText  value="Exercer práticas de conservação do solo, água e biota, inclusive de adoção de sistema de integração lavoura-pecuária-floresta e suas variações, cultivos orgânicos, de adoção de boas práticas de produção agropecuária ou outros sistemas agroecológicos;"/>
+							</li>
+							<li class="lista-roman font-req-declaracao">
+								<h:outputText  value="Não introduzir espécies geneticamente modificadas previamente identificadas pela CTNBio como Classe de Risco 4, potencialmente causadoras de significativa degradação do meio ambiente."/>
+							</li>
+						</ul>
+					</h:panelGroup>
+				</h:panelGrid>
+			</h:panelGrid>
+			<h:panelGrid columns="2">						
+				<p:selectBooleanCheckbox value="#{novoRequerimentoController.declaracao}" required="true" disabled="#{novoRequerimentoController.desabilitarTudo}"
+					requiredMessage="O campo Declaração é de preenchimento obrigatório.">
+					<p:ajax process="@this"/>
+				</p:selectBooleanCheckbox>
+				<h:outputText styleClass="font-req-declaracao" value="* Declaro serem verdadeiras as informações constantes deste documento, estando ciente de que a falsidade de quaisquer dados constitui prática de crime e resultará na aplicação das sanções penais cabíveis, nos termos dispostos no Código Penal (Decreto-Lei nº 2.848/40), na lei de Crimes Ambientais (Lei nº 9.605/98) e nas suas normas regulamentadoras." />
+			</h:panelGrid>
+		</h:panelGrid>
+		
+		 <h:panelGrid columns="5" style="margin-top:40px;">
+			<p:commandButton id="btnVoltar" value="Voltar" action="#{novoRequerimentoController.voltarAbas()}" update="subViewAbas:tabAbasId"  style="width:90px;" />
+			<p:commandButton id="btnAvancar" value="Avançar" disabled="true" style="width:90px;"  />
+		    <p:commandButton rendered="#{novoRequerimentoController.requerimentoDTO.reenquadramento}" disabled="#{novoRequerimentoController.desabilitarTudo}" value="Finalizar Edição" onclick="dlgFinalizarEdicaoParaReenquadramento.show();"  />	
+			
+			<h:panelGroup layout="block" style="float:right; width:355px;" rendered="#{!novoRequerimentoController.requerimentoDTO.reenquadramento}">  
+				<p:commandButton value="Finalizar Requerimento" update=":subViewAbas:tabAbasId" 
+					actionListener="#{abaFinalizarRequerimentoController.finalizarNovoRequerimento()}" immediate="true" disabled="#{novoRequerimentoController.desabilitarTudo}"/>
+			</h:panelGroup>
+		</h:panelGrid>
+		
+		
+	</h:form>
+
+</ui:composition>

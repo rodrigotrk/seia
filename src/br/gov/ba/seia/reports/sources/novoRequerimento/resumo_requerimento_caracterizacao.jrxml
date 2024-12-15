@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="resumo_requerimento_caracterizacao" pageWidth="479" pageHeight="792" columnWidth="479" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="77ab2e08-ffe6-4a10-8a91-713a4d74baed">
+	<property name="ireport.zoom" value="2.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="ide_requerimento" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[select r.ide_requerimento
+ from
+requerimento r
+left join requerimento_tipologia rt on rt.ide_requerimento = r.ide_requerimento
+left join unidade_medida_tipologia_grupo umtg on rt.ide_unidade_medida_tipologia_grupo = umtg.ide_unidade_medida_tipologia_grupo
+left join tipologia_grupo tg on tg.ide_tipologia_grupo = umtg.ide_tipologia_grupo
+left join tipologia t on t.ide_tipologia = tg.ide_tipologia
+left join licenca l on r.ide_requerimento = l.ide_requerimento
+
+where t.ide_tipologia != 292 --tipologia x
+and t.ide_tipologia   != 293 --tipologia y
+and (l.ide_tipo_solicitacao in (1,2,3) OR l.ide_tipo_solicitacao IS NULL) -- nova licenca, renovacao, alteracao, vazio(APE)
+and r.ide_requerimento = $P{ide_requerimento}
+
+group by r.ide_requerimento
+]]>
+	</queryString>
+	<field name="ide_requerimento" class="java.lang.Integer"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="72" splitType="Stretch">
+			<subreport>
+				<reportElement uuid="406b1a32-2ef8-4ba0-ad66-dcdf26bf0100" x="0" y="0" width="479" height="72"/>
+				<subreportParameter name="SUBREPORT_DIR">
+					<subreportParameterExpression><![CDATA[$P{SUBREPORT_DIR}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="ide_requerimento">
+					<subreportParameterExpression><![CDATA[$P{ide_requerimento}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "resumo_requerimento_caracterizacao_titulo.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

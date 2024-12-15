@@ -1,0 +1,307 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+	
+	<h:panelGrid columns="2">
+		<h:outputText
+			value="Tipo de Reserva legal (regularizada ou pretendida):"
+			style="font-size: 11px;font-weight: bold;" />
+		<h:outputText value="#{detalharImovelRuralController.imovelRural.reservaLegal.ideTipoArl.dscTipoArl}" />
+	</h:panelGrid>
+	
+	<h:panelGrid columns="2">
+		<h:outputText value="Área de Reserva Legal (ha):"
+			style="font-size: 11px;font-weight: bold;" />
+		<h:outputText value="#{detalharImovelRuralController.imovelRural.reservaLegal.valArea}">
+			<f:converter converterId="doubleQuatroCasasDecimaisConverter" />
+		</h:outputText>
+	</h:panelGrid>
+	
+	<h:panelGrid rendered="#{detalharImovelRuralController.imovelRural.reservaLegal == null or detalharImovelRuralController.imovelRural.reservaLegal.ideStatus == null or detalharImovelRuralController.imovelRural.reservaLegal.ideStatus.ideStatusReservaLegal != 1}">
+ 		<h:panelGrid columns="2">
+			<h:outputText value="O imóvel possui reserva legal averbada?" style="font-size: 11px;font-weight: bold;" />
+			<h:outputText value="SIM" rendered="${detalharImovelRuralController.imovelRural.reservaLegal.indAverbada}" />
+			<h:outputText value="NÃO" rendered="${detalharImovelRuralController.imovelRural.reservaLegal.indAverbada != null and !detalharImovelRuralController.imovelRural.reservaLegal.indAverbada}" />				
+		</h:panelGrid>
+		
+		<h:panelGrid columns="2" rendered="${detalharImovelRuralController.imovelRural.reservaLegal.indAverbada}">
+			<h:outputLabel value="#{bundle.cefir_lbl_numero_averbacao}" />
+			<h:outputText value="#{detalharImovelRuralController.reservalegalAverbada.numAverbacao}" />			
+		</h:panelGrid>
+		
+		<h:panelGrid columns="2" rendered="${detalharImovelRuralController.imovelRural.reservaLegal.indAverbada}">
+			<h:outputLabel value="Matrícula"  style="font-size: 11px;font-weight: bold;" />
+			<h:outputText value="#{detalharImovelRuralController.reservalegalAverbada.numMatricula}" />
+		</h:panelGrid>
+		
+		<h:panelGrid columns="2" rendered="${detalharImovelRuralController.imovelRural.reservaLegal.indAverbada}">
+			<h:outputText value="* #{bundle.cefir_lbl_data_averbacao}" />
+			<h:outputText value= "#{detalharImovelRuralController.reservalegalAverbada.dtcAverbacao}" >
+				<f:convertDateTime attern="dd/MM/yyyy" locale="pt,BR" timeZone="Brazil/East" />
+			</h:outputText>
+		</h:panelGrid>
+		
+		<h:panelGrid id="tblDocumentoReservaAverbadaVisualizar" rendered="${detalharImovelRuralController.imovelRural.reservaLegal.indAverbada}">
+			<h:outputText value="Documento que comprova a averbação:" style="font-size: 11px;font-weight: bold;" />
+			<p:dataTable id="dataTableDocumentosReservaAverbadaVisualizar" widgetVar="dtTbDocumentosReservaAverbada" 
+			 	value="#{detalharImovelRuralController.listaArquivoReservaAverbada}"   var="arquivo"
+			 	lazy="true" emptyMessage="#{bundle.cefir_msg_A012}" style="width:472px;">
+		        <p:column>  
+		            <h:outputText value="#{arquivo.nomDocumentoObrigatorio}"/>
+		        </p:column>	
+	         	<p:column> 
+		         	<h:commandLink ajax="false">
+						<h:graphicImage value="/resources/img/ico-download.png" />
+						<f:setPropertyActionListener
+							target="#{detalharImovelRuralController.arquivoSelecionado}"
+							value="#{arquivo.dscCaminhoArquivo}" />
+						<p:fileDownload value="#{detalharImovelRuralController.arquivoBaixar}" />
+					</h:commandLink>
+		        </p:column>	
+ 			</p:dataTable>		    
+	    </h:panelGrid>				
+	</h:panelGrid>
+
+	<h:panelGrid columns="2">
+		<h:outputText value="O imóvel possui reserva legal aprovada?"
+			style="font-size: 11px;font-weight: bold;" />
+		<h:outputText value="SIM"
+			rendered="${detalharImovelRuralController.imovelRural.indReservaLegal}" />
+		<h:outputText value="NÃO"
+			rendered="${detalharImovelRuralController.imovelRural.indReservaLegal != null and !detalharImovelRuralController.imovelRural.indReservaLegal}" />
+	</h:panelGrid>
+
+	<h:panelGrid columns="2"
+		rendered="#{!detalharImovelRuralController.imovelRural.indReservaLegal and detalharImovelRuralController.imovelRural.indReservaLegal != null}">
+		<h:outputText
+			value="O imóvel possui processo de regularização de reserva legal em trâmite no INEMA?"
+			style="font-size: 11px;font-weight: bold;" />
+		<h:outputText value="SIM"
+			rendered="#{detalharImovelRuralController.imovelRural.reservaLegal.indProcessoTramite}" />
+		<h:outputText value="NÃO"
+			rendered="#{detalharImovelRuralController.imovelRural.reservaLegal.indProcessoTramite != null and !detalharImovelRuralController.imovelRural.reservaLegal.indProcessoTramite}" />
+	</h:panelGrid>
+
+	<h:panelGrid columns="2"
+		rendered="#{detalharImovelRuralController.exibePerguntasRLAprovada}">
+		<h:outputText value="Origem do certificado:"
+			style="font-size: 11px;font-weight: bold;" />
+		<h:outputText
+			value="#{detalharImovelRuralController.imovelRural.reservaLegal.ideTipoOrigemCertificado.dscTipoOrigemCertificado}" />
+	</h:panelGrid>
+
+	<h:panelGrid columns="2"
+		rendered="#{detalharImovelRuralController.exibePerguntasRLAprovada}">
+		<h:outputText value="Número do certificado:"
+			style="font-size: 11px;font-weight: bold;" />
+		<h:outputText value="#{detalharImovelRuralController.imovelRural.reservaLegal.numCertificado}" />
+	</h:panelGrid>
+
+	<h:panelGrid columns="2"
+		rendered="#{detalharImovelRuralController.exibePerguntasRLAprovada or detalharImovelRuralController.imovelRural.reservaLegal.indProcessoTramite}">
+		<h:outputText value="Número do Processo:"
+			style="font-size: 11px;font-weight: bold;" />
+		<h:outputText value="#{detalharImovelRuralController.imovelRural.reservaLegal.numProcesso}" />
+	</h:panelGrid>
+	
+	<h:panelGrid columns="1" rendered="#{detalharImovelRuralController.exibePerguntasRLAprovada}">
+		<h:outputText value="Documento que comprova a aprovação:" style="font-size: 11px;font-weight: bold;" />
+		<p:dataTable id="dataTableDocumentosReservaRegularizadaVisualizacao" widgetVar="dtTbDocumentosReservaRegularizada" 
+		 	value="#{detalharImovelRuralController.listaArquivoReservaAprovada}"   var="arquivo"
+		 	lazy="true" emptyMessage="#{bundle.cefir_msg_A012}" style="width:472px;">
+	       <p:column>  
+	           <h:outputText value="#{arquivo.nomDocumentoObrigatorio}"/>
+	       </p:column>	
+	       <p:column> 
+	        	<h:commandLink ajax="false">
+					<h:graphicImage value="/resources/img/ico-download.png" />
+					<f:setPropertyActionListener
+						target="#{detalharImovelRuralController.arquivoSelecionado}"
+						value="#{arquivo.dscCaminhoArquivo}" />
+					<p:fileDownload value="#{detalharImovelRuralController.arquivoBaixar}" />
+				</h:commandLink>
+	       	</p:column>	
+		</p:dataTable>
+	</h:panelGrid>
+		
+	<h:panelGrid columns="1" rendered="#{detalharImovelRuralController.imovelRural.reservaLegal.ideTipoArl.ideTipoArl == 3 or detalharImovelRuralController.imovelRural.reservaLegal.ideTipoArl.ideTipoArl == 2}">
+		<h:panelGrid columns="2" rendered="#{detalharImovelRuralController.imovelRural.reservaLegal.ideTipoArl.ideTipoArl == 3}">
+			<h:outputText value="#{bundle.cefir_lbl_num_car_imovel_compensacao}" style="font-size: 11px;font-weight: bold;" />				
+			<h:outputText value="#{detalharImovelRuralController.imovelRural.reservaLegal.numSicarCompensacao}" />	
+		</h:panelGrid>
+		
+		<h:panelGrid columns="2">
+			<h:outputText value="Estado de conservação" style="font-size: 11px;font-weight: bold;" />
+			<h:outputText value="#{detalharImovelRuralController.imovelRural.reservaLegal.ideTipoEstadoConservacao.dscTipoEstadoConservacao}" />
+		</h:panelGrid>
+		
+		<h:panelGrid rendered="#{not empty detalharImovelRuralController.listaCronogramaEtapaRl}">
+			<h3><h:outputLabel value="CRONOGRAMA DE RECUPERAÇÃO DAS ÁREAS DEGRADADAS" styleClass="titulo-grupo" /></h3>
+			<h:panelGrid columns="3">
+				Condições para recuperação de áreas degradadas			
+				<h:selectBooleanCheckbox id="chkAceitoviewRl" value="#{not empty detalharImovelRuralController.listaCronogramaEtapaRl}" disabled="true"/>
+				<h:outputText value="Aceito"/>	
+			</h:panelGrid>
+			
+			<h:panelGrid>
+				<p:dataTable  var="cronogramaRl" value="#{detalharImovelRuralController.listaCronogramaEtapaRl}" lazy="true" paginator="true" rows="10"
+					paginatorPosition="bottom" paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}" emptyMessage="#{bundle.cefir_msg_A012}"
+					style="width:700px;" widgetVar="dataTableCronogramaRl">
+					<f:facet name="header">
+						<h:outputText value="Cronogramas" />
+					</f:facet>
+					<p:column>
+						<f:facet name="header">
+							<h:outputText value="Atividade" />
+						</f:facet>
+						<h:outputText value="#{(cronogramaRl.ideTipoRecuperacao.ideTipoRecuperacao == 9) ? cronogramaRl.dscOutroTipoRecuperacao : cronogramaRl.ideTipoRecuperacao.dscTipoRecuperacao}" />
+					</p:column>
+					<p:column style="width:70px; text-align: center;">
+						<f:facet name="header">
+							<h:outputText value="Início" />
+						</f:facet>
+						<h:outputText value="#{cronogramaRl.mesInicio}/#{cronogramaRl.anoInicio}" />
+					</p:column>
+					<p:column style="width:70px; text-align: center;">
+						<f:facet name="header">
+							<h:outputText value="Fim" />
+						</f:facet>
+						<h:outputText value="#{cronogramaRl.mesFim}/#{cronogramaRl.anoFim}" />
+					</p:column>
+					<p:column>
+						<f:facet name="header">
+							<h:outputText value="Realizado" />
+						</f:facet>
+						<h:outputText value="#{cronogramaRl.percentual}%" />
+					</p:column>					
+				</p:dataTable>
+			</h:panelGrid>
+			
+			<h:panelGrid columns="2">
+				<h:outputText value=" O PRAD é o mesmo do importado anteriormente?" style="font-size: 11px;font-weight: bold;" />
+						<h:outputText value="SIM"
+							rendered="${detalharImovelRuralController.cronogramaRecuperacaoRl.indPradImportada}" />
+						<h:outputText value="NÃO"
+							rendered="${detalharImovelRuralController.cronogramaRecuperacaoRl.indPradImportada != null and !detalharImovelRuralController.cronogramaRecuperacaoRl.indPradImportada}" />				
+			</h:panelGrid>
+		</h:panelGrid>
+			
+		<h:panelGrid columns="2" rendered="#{detalharImovelRuralController.cronogramaRecuperacaoRl.indPradImportada != null and detalharImovelRuralController.cronogramaRecuperacaoRl.indPradImportada}">
+			<h:outputText value="PRAD:"  style="font-size: 11px;font-weight: bold;" />
+			<h:outputText id="idPrads" value="#{detalharImovelRuralController.cronogramaRecuperacaoRl.ideDocumentoObrigatorio.nomDocumentoObrigatorio}" />
+		</h:panelGrid>
+			
+		<h:panelGrid>
+			<p:dataTable rendered="#{detalharImovelRuralController.cronogramaRecuperacaoRl.ideDocumentoObrigatorio != null and detalharImovelRuralController.cronogramaRecuperacaoRl.indPradImportada != null and !detalharImovelRuralController.cronogramaRecuperacaoRl.indPradImportada}" widgetVar="dtTbArquivoPradRl" value="#{detalharImovelRuralController.listaArquivoPradRl}" 
+				var="arquivo" lazy="true" emptyMessage="#{bundle.cefir_msg_A012}" style="width:472px;">
+				<p:column>  
+				    <h:outputText value="#{arquivo.nomDocumentoObrigatorio}"/>
+				</p:column>	
+				<p:column>  
+					<h:commandLink ajax="false">
+						<h:graphicImage value="/resources/img/ico-download.png" />
+							<f:setPropertyActionListener
+								target="#{detalharImovelRuralController.arquivoSelecionado}"
+								value="#{arquivo.dscCaminhoArquivo}" />
+							<p:fileDownload value="#{detalharImovelRuralController.arquivoBaixar}" />
+					</h:commandLink>
+				</p:column>	
+		    </p:dataTable>		    
+	    </h:panelGrid>
+	    
+	    <h:panelGrid id="localizacaoGeograficaPradRl" columns="1" 
+	    	rendered="#{detalharImovelRuralController.imovelRural.reservaLegal.ideTipoEstadoConservacao.ideTipoEstadoConservacao != 1 
+	    		and detalharImovelRuralController.cronogramaRecuperacaoRl != null}">
+	    		
+			<h3><h:outputLabel value="POLIGONAL DA ÁREA A SER RECUPERADA NA RESERVA LEGAL" styleClass="titulo-grupo" /></h3>
+			<p:outputPanel>
+		        <h:panelGrid columns="5">
+					<h:outputText value="#{bundle.empreendimento_lbl_secao_geometrica}" style="font-size: 11px;font-weight: bold;" />
+					<p:spacer width="20" height="10" />
+					<h:outputText value="#{bundle.empreendimento_lbl_datum}" style="font-size: 11px;font-weight: bold;" />
+					<p:spacer width="20" height="10" />
+					<h:outputText value="Descrição" style="font-size: 11px;font-weight: bold;" />
+					<h:outputText value="#{detalharImovelRuralController.imovelRural.reservaLegal.cronogramaRecuperacao.localizacaoGeografica.ideClassificacaoSecao.nomClassificacaoSecao}" />
+					<p:spacer width="20" height="10" />
+					<h:outputText value="#{detalharImovelRuralController.imovelRural.reservaLegal.cronogramaRecuperacao.localizacaoGeografica.ideSistemaCoordenada.nomSistemaCoordenada}" />
+					<p:spacer width="20" height="10" />
+					<h:outputText value="#{detalharImovelRuralController.imovelRural.reservaLegal.cronogramaRecuperacao.localizacaoGeografica.desLocalizacaoGeografica}" />	
+				</h:panelGrid>
+			</p:outputPanel>
+		</h:panelGrid>
+		
+		<h:panelGrid id="pnlTheGeomPradRl" columns="1"
+			rendered="#{detalharImovelRuralController.cronogramaRecuperacaoRl != null 
+				and detalharImovelRuralController.existeTheGeomByIdeLocGeo(detalharImovelRuralController.imovelRural.reservaLegal.cronogramaRecuperacao.localizacaoGeografica.ideLocalizacaoGeografica)}">
+			
+    		<h:panelGrid id="pnlAcoesVisualizarShapesPradRl" columns="3">
+			    <h:outputLink value="#{detalharImovelRuralController.caminhoNovoGeoBahia}" title="NOVO GEOBAHIA" target="_blank">  
+			        <h:outputText value="VISUALIZAR SHAPE DO PRAD DA RESERVA LEGAL"/>
+					<f:param name="action" value="view" />
+					<f:param name="id_imovel" value="#{detalharImovelRuralController.imovelRural.ideImovelRural}" />
+					<f:param name="type" value="rl" />
+					<f:param name="id_loc" value="#{detalharImovelRuralController.imovelRural.reservaLegal.cronogramaRecuperacao.localizacaoGeografica.ideLocalizacaoGeografica}" />
+					<f:param name="token" value="#{detalharImovelRuralController.token}" />
+			    </h:outputLink>
+			    
+			    <h:outputLink value="#{detalharImovelRuralController.caminhoNovoGeoBahia}" title="NOVO GEOBAHIA" target="_blank">  
+			        <h:graphicImage title="Visualizar" value="/resources/img/ico-arl-relocacao.png" /> 
+					<f:param name="action" value="view" />
+					<f:param name="id_imovel" value="#{detalharImovelRuralController.imovelRural.ideImovelRural}" />
+					<f:param name="type" value="rl" />
+					<f:param name="id_loc" value="#{detalharImovelRuralController.imovelRural.reservaLegal.cronogramaRecuperacao.localizacaoGeografica.ideLocalizacaoGeografica}" />
+					<f:param name="token" value="#{detalharImovelRuralController.token}" />
+			    </h:outputLink>  
+	    	</h:panelGrid>
+		</h:panelGrid>
+
+		<h:panelGrid id="localizacaoGeograficaRl" columns="1" >
+			<h3><h:outputLabel value="POLIGONAL DA RESERVA LEGAL" styleClass="titulo-grupo" /></h3>
+			<p:outputPanel>
+		        <h:panelGrid columns="5">
+					<h:outputText value="#{bundle.empreendimento_lbl_secao_geometrica}" style="font-size: 11px;font-weight: bold;" />
+					<p:spacer width="20" height="10" />
+					<h:outputText value="#{bundle.empreendimento_lbl_datum}" style="font-size: 11px;font-weight: bold;" />
+					<p:spacer width="20" height="10" />
+					<h:outputText value="Descrição" style="font-size: 11px;font-weight: bold;" />
+					<h:outputText value="#{detalharImovelRuralController.imovelRural.reservaLegal.ideLocalizacaoGeografica.ideClassificacaoSecao.nomClassificacaoSecao}" />
+					<p:spacer width="20" height="10" />
+					<h:outputText value="#{detalharImovelRuralController.imovelRural.reservaLegal.ideLocalizacaoGeografica.ideSistemaCoordenada.nomSistemaCoordenada}" />
+					<p:spacer width="20" height="10" />
+					<h:outputText value="#{detalharImovelRuralController.imovelRural.reservaLegal.ideLocalizacaoGeografica.desLocalizacaoGeografica}" />	
+				</h:panelGrid>
+			</p:outputPanel>
+		</h:panelGrid>		
+		
+		<h:panelGrid id="pnlTheGeomRl"
+			rendered="#{detalharImovelRuralController.existeTheGeomByIdeLocGeo(detalharImovelRuralController.imovelRural.reservaLegal.ideLocalizacaoGeografica.ideLocalizacaoGeografica)}" columns="1">
+			
+    		<h:panelGrid id="pnlAcoesVisualizarShapesRl" columns="3">
+			    <h:outputLink value="#{detalharImovelRuralController.caminhoGeoBahia}" title="GEOBAHIA" target="_blank">  
+			        <h:outputText value="VISUALIZAR SHAPE DA RESERVA LEGAL"/>  
+					<f:param name="secao" value="cefir" />
+					<f:param name="acao" value="view" />
+					<f:param name="id" value="#{detalharImovelRuralController.imovelRural.ideImovelRural}"/>
+					<f:param name="tema" value="2" />
+					<f:param name="id_loc" value="#{detalharImovelRuralController.imovelRural.reservaLegal.ideLocalizacaoGeografica.ideLocalizacaoGeografica}" />
+					<f:param name="token" value="#{detalharImovelRuralController.token}"/>
+			    </h:outputLink>
+			    
+			    <h:outputLink value="#{detalharImovelRuralController.caminhoGeoBahia}" title="GEOBAHIA" target="_blank">  
+			        <h:graphicImage title="Visualizar" value="/resources/img/ico-arl-relocacao.png" /> 
+					<f:param name="secao" value="cefir" />
+					<f:param name="acao" value="view" />
+					<f:param name="id" value="#{detalharImovelRuralController.imovelRural.ideImovelRural}"/>
+					<f:param name="tema" value="2" />
+					<f:param name="id_loc" value="#{detalharImovelRuralController.imovelRural.reservaLegal.ideLocalizacaoGeografica.ideLocalizacaoGeografica}" />
+					<f:param name="token" value="#{detalharImovelRuralController.token}"/>
+			    </h:outputLink>  
+	    	</h:panelGrid>
+		</h:panelGrid>
+	</h:panelGrid>
+</ui:composition>

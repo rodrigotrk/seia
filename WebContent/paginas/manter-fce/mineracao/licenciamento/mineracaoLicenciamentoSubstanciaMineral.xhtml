@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui">
+	<h:form id="formIncluirSubstancia">
+		
+		<p:tree value="#{fceLicenciamentoMineracaoController.root}" 
+			var="node" 
+			selectionMode="single" 
+			selection="#{fceLicenciamentoMineracaoController.selectedNode}" 
+			style="width: 680px; height:200px; overflow: scroll; overflow-x: hidden;"
+			styleClass="quebra-de-linha-node-substancia-mineral"
+			>
+			
+			<p:treeNode type="tipologia" >
+				<h:outputText value="#{node.desTipologia}"/>
+			</p:treeNode>
+			
+			<p:treeNode type="substancia">
+				<h:outputText value="#{node.ideSubstanciaMineral.nomSubstanciaMineral}"/>
+			</p:treeNode> 
+		</p:tree>	
+		
+		<div style="width: 100%; display: table;" >
+			<div style="display: table-cell; text-align: center;  vertical-align: middle;">
+				<p:commandButton value="Salvar e Fechar" action="#{fceLicenciamentoMineracaoController.salvarSubstanciaMineralFechar()}" />
+				<p:commandButton value="Salvar e Continuar" action="#{fceLicenciamentoMineracaoController.salvarSubstanciaMineralContinuar()}" />
+			</div>
+		</div>
+	</h:form>
+</ui:composition>

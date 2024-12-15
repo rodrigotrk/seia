@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui">
+
+	<h:form id="formUploadShapeArc">		
+		<h:panelGrid width="400">
+			<h:panelGrid>						
+				<h:outputLabel value="#{bundle.cefir_lbl_localizacao_geografica_shp}" style="float:left; width:330px;" />					
+			</h:panelGrid>			
+			<p:fileUpload id="uplArqShapeVn" 
+						  uploadLabel="false" 
+						  label="Selecione o(s) arquivo(s)"
+						  fileUploadListener="#{imovelRuralControllerNew.importarShapeArc()}" 
+						  fileLimit="4" 
+						  invalidFileMessage="Tipo de arquivo inválido." 
+						  mode="advanced"
+						  update="formCadImovelRural:tabAbasDadosEspecificos:panelAreaConsolidada" 
+						  auto="true" 
+						  required="true" 
+						  requiredMessage="Arquivo é Obrigatório!" 
+						  allowTypes="/(\.|\/)(shp|dbf|shx|prj|SHP|DBF|SHX|PRJ)$/" 
+						  immediate="true"
+						  multiple="true"/>
+		</h:panelGrid>
+	</h:form>
+</ui:composition>

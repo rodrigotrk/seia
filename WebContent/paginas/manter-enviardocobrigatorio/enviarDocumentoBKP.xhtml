@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui">
+	<div>
+		<h3>
+			<h:outputLabel styleClass="titulo-grupo"
+				value="Enviar Documentação Obrigatória" />
+		</h3>
+		<p:outputPanel style="float:left;width:300px%">
+			<h:form id="formulariosSistema">
+				<h:panelGrid columns="1">
+					<br />
+					<h:outputLabel styleClass="titulo-grupo"
+						value="Formulários a preencher" />
+					<p:separator style="width:300px;" />
+					<br />
+					<p:commandLink oncomplete="lac.show();"
+						action="${lacErbController.novo}" update="form_lac" value="LAC ERB">
+						<f:setPropertyActionListener
+							target="${lacErbController.lacErb.ideRequerimento.ideRequerimento}"
+							value="${enviarDocumentoController.requerimentoUnico.ideRequerimentoUnico}" />
+						<f:setPropertyActionListener
+							target="${lacErbController.lacErb.ideDocumentoObrigatorio.ideDocumentoObrigatorio}"
+							value="15" />
+						<h:graphicImage title="Preencher Lac de ERB"
+							value="/resources/img/cicon.png" />
+					</p:commandLink>
+				</h:panelGrid>
+			</h:form>
+		</p:outputPanel>
+		<p:outputPanel autoUpdate="true" style="float:left;width:300px">
+			<h:form id="formulariosdownload" enctype="multipart/form-data">
+				<h:panelGrid columns="1">
+					<br />
+					<h:outputLabel styleClass="titulo-grupo"
+						value="Formulários Download" />
+					<p:separator style="width:300px;" />
+					<br />
+					<ui:repeat var="docObrigatorio"
+						value="#{enviarDocumentoController.arqvsObrigatorios}">
+						<h:commandLink value="#{docObrigatorio.nomDocumentoObrigatorio}">
+							<p:fileDownload value="#{docObrigatorio.file}" />
+						</h:commandLink>
+						<br />
+					</ui:repeat>
+				</h:panelGrid>
+			</h:form>
+		</p:outputPanel>
+		<p:outputPanel autoUpdate="true" style="float:left;width:430px">
+			<h:form id="formulariosUpload" enctype="multipart/form-data">
+				<h:panelGrid columns="1">
+					<br />
+					<br />
+					<p:separator style="width:300px;" />
+					<h:outputLabel styleClass="titulo-grupo" value="Formulários Upload" />
+					<p:selectOneMenu
+						value="#{enviarDocumentoController.docObrigatorioFormSelected}"
+						converter="documentoObrigatorioConverter"
+						valueChangeListener="#{enviarDocumentoController.mudaFormulario}">
+						<f:selectItems
+							value="#{enviarDocumentoController.listaDocumentos}"
+							var="docObrigatorio"
+							itemLabel="#{docObrigatorio.nomDocumentoObrigatorio}"
+							itemValue="#{docObrigatorio}" />
+						<f:ajax event="change" execute="@form" />
+					</p:selectOneMenu>
+				</h:panelGrid>
+				<h:panelGrid columns="1" id="uploadFormulario">
+					<p:fileUpload uploadLabel="false" label="Upload Formulários"
+						fileUploadListener="#{enviarDocumentoController.handleFileUploadFormularioObrigatorio}"
+						mode="advanced" update="formulariosdownload"
+						auto="true" allowTypes="/(\.|\/)(pdf|gif|jpeg|png|jpg)$/"
+						invalidFileMessage="Tipo de arquivo inválido." />
+					<p:dataTable id="tabelaFormulariosDowload"
+						widgetVar="tabelaFormulariosDowload"
+						value="#{enviarDocumentoController.arqvsFormsObrigatorios}"
+						var="formularios">
+						<f:facet name="header">
+							<h:outputText value="Formulários" />
+						</f:facet>
+						<p:column headerText="Formulário">
+							<h:outputText value="#{formularios.nomDocumentoObrigatorio}" />
+						</p:column>
+						<p:column headerText="Nome Arquivo">
+							<h:outputText value="#{formularios.file.name}" />
+						</p:column>
+						<p:column headerText="Tamanho(KB)">
+							<h:outputText value="#{formularios.fileSizeFormated}" />
+						</p:column>
+						<p:column headerText="Ações">
+							<h:link>
+								<h:graphicImage title="Excluir" value="/resources/img/ico-excluir.png" />
+							</h:link>
+						</p:column>
+					</p:dataTable>
+				</h:panelGrid>
+			</h:form>
+		</p:outputPanel>
+		<p:outputPanel autoUpdate="true" style="float:left;width:430px">
+			<h:form id="documentosdownload" enctype="multipart/form-data">
+				<h:panelGrid columns="1">
+					<br />
+					<br />
+					<p:separator style="width:300px;" />
+					<h:outputLabel styleClass="titulo-grupo" value="Documentos Upload" />
+					<p:selectOneMenu
+						value="#{enviarDocumentoController.docObrigatorioDocSelected}"
+						converter="documentoObrigatorioConverter"
+						valueChangeListener="#{enviarDocumentoController.mudaDocumento}">
+						<f:selectItems
+							value="#{enviarDocumentoController.listaDocumentos}"
+							var="docObrigatorio"
+							itemLabel="#{docObrigatorio.nomDocumentoObrigatorio}"
+							itemValue="#{docObrigatorio}" />
+						<f:ajax event="change" execute="@form" />
+					</p:selectOneMenu>
+				</h:panelGrid>
+				<h:panelGrid columns="1" id="uploadDocumento">
+					<p:fileUpload uploadLabel="false" label="Upload Documentos"
+						fileUploadListener="#{enviarDocumentoController.handleFileUploadDocumentoObrigatorio}"
+						mode="advanced" update="documentosdownload"
+						auto="true" allowTypes="/(\.|\/)(pdf|gif|jpeg|png|jpg)$/"/>
+					<p:dataTable id="tabelaDocsDowload" widgetVar="tabelaDocsDowload"
+						value="#{enviarDocumentoController.arqvsDocsObrigatorios}"
+						var="documentos">
+						<f:facet name="header">
+							<h:outputText value="Documentos" />
+						</f:facet>
+						<p:column headerText="Formulário">
+							<h:outputText value="#{documentos.nomDocumentoObrigatorio}" />
+						</p:column>
+						<p:column headerText="Nome Arquivo">
+							<h:outputText value="#{documentos.file.name}" />
+						</p:column>
+						<p:column headerText="Tamanho(KB)">
+							<h:outputText value="#{documentos.fileSizeFormated}" />
+						</p:column>
+						<p:column headerText="Ações">
+							<p:commandLink update="documentosdownload"
+								oncomplete="confirmationDocument.show()" title="Remover">
+								<h:graphicImage title="Excluir" value="/resources/img/ico-excluir.png" />
+								<f:setPropertyActionListener value="#{documentos}"
+									target="#{enviarDocumentoController.docObrigatorioDel}" />
+							</p:commandLink>
+						</p:column>
+					</p:dataTable>
+				</h:panelGrid>
+				<br />
+				<p:separator style="width:300px;" />
+				<br />
+				<p:commandButton value="Voltar" onclick="confirmationVoltar.show()" />
+				<p:commandButton value="Salvar"
+					actionListener="#{enviarDocumentoController.salvarDocumentoObrigatorios}"/>
+			</h:form>
+		</p:outputPanel>
+	</div>
+</ui:composition>

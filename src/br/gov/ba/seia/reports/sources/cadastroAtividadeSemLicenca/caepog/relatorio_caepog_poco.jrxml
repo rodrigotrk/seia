@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="relatorio_caepog_poco" pageWidth="515" pageHeight="802" columnWidth="515" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="264b0cc4-7ec7-4ee0-9502-5d23401f9f03">
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["/home/eduardo/workspace/seia_caepog/src/br/gov/ba/seia/reports/sources/caepog/"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="ide_caepog" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[0]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[select
+	cl.ide_caepog_locacao,
+	 upper(cc.nom_caepog_campo ||' - '||cl.prefix_poco_caepog_locacao) as nome_poco
+from caepog c
+	inner join caepog_definicao_campo cdc on cdc.ide_caepog = c.ide_caepog
+	inner join caepog_campo cc on cc.ide_caepog_campo = cdc.ide_caepog_campo
+	inner join caepog_locacao cl on cl.ide_caepog_definicao_campo = cdc.ide_caepog_definicao_campo
+where c.ide_caepog = $P{ide_caepog}]]>
+	</queryString>
+	<field name="ide_caepog_locacao" class="java.lang.Integer">
+		<fieldDescription><![CDATA[Chave primária da tabela CAEPOG_LOCACAO]]></fieldDescription>
+	</field>
+	<field name="nome_poco" class="java.lang.String"/>
+	<title>
+		<band height="40">
+			<staticText>
+				<reportElement x="0" y="0" width="515" height="20" uuid="42afdd61-0750-458d-ac4c-c09d8de6610e"/>
+				<box leftPadding="5">
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="9" isBold="false"/>
+				</textElement>
+				<text><![CDATA[POÇO]]></text>
+			</staticText>
+		</band>
+	</title>
+	<detail>
+		<band height="40" splitType="Stretch">
+			<textField>
+				<reportElement x="20" y="0" width="495" height="20" uuid="6914fd60-9a67-4158-a805-379ed66a9de2"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nome_poco}]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="20">
+			<subreport>
+				<reportElement x="0" y="0" width="495" height="20" uuid="be78fe50-1032-4599-9e08-e78605488ca0"/>
+				<subreportParameter name="SUBREPORT_DIR">
+					<subreportParameterExpression><![CDATA[$P{SUBREPORT_DIR}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="ide_caepog_locacao">
+					<subreportParameterExpression><![CDATA[$F{ide_caepog_locacao}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "relatorio_caepog_poco_detalhe.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+	</detail>
+</jasperReport>

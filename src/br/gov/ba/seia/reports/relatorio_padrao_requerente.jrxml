@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="relatorio_padrao_requerente" language="java" pageWidth="555" pageHeight="802" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="0da882b3-208d-4900-ac8e-c9fce41c8b25">
+	<property name="ireport.zoom" value="1.3310000000000004"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="IDE_REQUERENTE" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[select
+	p.ide_pessoa,
+	ep.ide_endereco,
+	pf.ide_pessoa_fisica,
+	pj.ide_pessoa_juridica
+from pessoa p
+	LEFT JOIN pessoa_fisica pf on pf.ide_pessoa_fisica = p.ide_pessoa
+	left join pessoa_juridica pj on pj.ide_pessoa_juridica = p.ide_pessoa
+	LEFT JOIN endereco_pessoa ep on ep.ide_pessoa = p.ide_pessoa
+WHERE p.ide_pessoa = $P{IDE_REQUERENTE}]]>
+	</queryString>
+	<field name="ide_pessoa" class="java.lang.Integer"/>
+	<field name="ide_endereco" class="java.lang.Integer"/>
+	<field name="ide_pessoa_fisica" class="java.lang.Integer"/>
+	<field name="ide_pessoa_juridica" class="java.lang.Integer">
+		<fieldDescription><![CDATA[Identificador da pessoa jurídica da associação INCRA]]></fieldDescription>
+	</field>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement uuid="cb7dd142-5f28-494c-99b7-a1454c181dad" mode="Opaque" x="0" y="0" width="555" height="20" backcolor="#DDDDDD"/>
+				<box leftPadding="10"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Pessoa " +
+
+($F{ide_pessoa_fisica} != null ?  "Física" : "Juridíca")]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="30">
+			<subreport>
+				<reportElement uuid="475a58d8-0de4-4c90-b13f-d6298fcd3334" x="10" y="10" width="545" height="20"/>
+				<subreportParameter name="SUBREPORT_DIR">
+					<subreportParameterExpression><![CDATA[$P{SUBREPORT_DIR}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="IDE_PESSOA">
+					<subreportParameterExpression><![CDATA[$P{IDE_REQUERENTE}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "relatorio_padrao_pessoa.jasper"]]></subreportExpression>
+			</subreport>
+			<textField>
+				<reportElement uuid="5862111c-d4e7-4210-9114-4959a4aa146a" x="290" y="10" width="265" height="20">
+					<printWhenExpression><![CDATA[false]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Left" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA["PESSOA"]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="30">
+			<subreport>
+				<reportElement uuid="003fa3db-fe95-476c-9ba2-3c5d954ed61c" x="10" y="10" width="545" height="20"/>
+				<subreportParameter name="SUBREPORT_DIR">
+					<subreportParameterExpression><![CDATA[$P{SUBREPORT_DIR}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="IDE_PESSOA">
+					<subreportParameterExpression><![CDATA[$F{ide_pessoa}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "relatorio_padrao_contato.jasper"]]></subreportExpression>
+			</subreport>
+			<textField>
+				<reportElement uuid="0109de39-7edd-49f2-ae82-a96405852ff9" x="290" y="10" width="265" height="20">
+					<printWhenExpression><![CDATA[false]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Left" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA["CONTATO"]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="42">
+			<subreport>
+				<reportElement uuid="6d105c07-9780-4cf3-9ca7-f5d2d84541c4" x="10" y="22" width="545" height="20"/>
+				<subreportParameter name="SUBREPORT_DIR">
+					<subreportParameterExpression><![CDATA[$P{SUBREPORT_DIR}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="IDE_ENDERECO">
+					<subreportParameterExpression><![CDATA[$F{ide_endereco}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "relatorio_padrao_empreendimento_endereco.jasper"]]></subreportExpression>
+			</subreport>
+			<textField>
+				<reportElement uuid="cf7faff8-a168-4120-a19c-4e300b12a711" x="290" y="22" width="265" height="20">
+					<printWhenExpression><![CDATA[false]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Left" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA["ENDERECO"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="26663262-c08a-44cf-bbb0-a94b14fa2dbd" x="10" y="10" width="545" height="12"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Endereço:"]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

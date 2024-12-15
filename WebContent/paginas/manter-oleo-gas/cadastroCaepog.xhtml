@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui"	>
+	
+	<ui:composition template="/layout/template.xhtml">
+		<ui:define name="titulo-pagina">
+			<h3>Cadastro de Perfuração de Poços de Óleo e Gás</h3>
+		</ui:define>
+		
+		<ui:define name="conteudo-principal">
+		
+			<!-- INCLUDE DOS DIALOGS -->
+			<ui:include src="/paginas/manter-oleo-gas/includeDialogCadastroCaepog.xhtml" />
+			
+			<p:tabView id="tabViewOleoGas" activeIndex="#{caepogController.tabAtual}" dynamic="true">
+				<p:ajax event="tabChange" listener="#{caepogController.onTabChange}" update="tabViewOleoGas formBotoesNavegacao " />
+				
+				<p:tab title="Dados Básicos" id="tabDadosBasicos">
+					<ui:include src="/paginas/manter-oleo-gas/abaDadosBasicos.xhtml" />
+				</p:tab>
+				
+				<p:tab title="Dados do Campo" id="tabDadosCampo" disabled="#{!caepogController.habilitaAbaCampo}">
+					<ui:include src="/paginas/manter-oleo-gas/abaDadosCampo.xhtml" />
+				</p:tab>
+
+				<p:tab title="Locação" id="tabLocacao" disabled="#{!caepogController.habilitaAbaLocacao}">
+					<ui:include src="/paginas/manter-oleo-gas/abaLocacao.xhtml" />
+				</p:tab>
+				
+				<p:tab title="Poço" id="tabPoco" disabled="#{!caepogController.habilitaAbaPoco}">
+					<ui:include src="/paginas/manter-oleo-gas/abaPoco.xhtml" />
+				</p:tab>
+	
+				<p:tab title="Documentos e Estudos" id="tabDocumentos" disabled="#{!caepogController.habilitaAbaDocumento}">
+					<ui:include src="/paginas/manter-oleo-gas/abaDocumentosEstudos.xhtml" />
+				</p:tab>
+			</p:tabView>
+			 
+			<h:form id="formBotoesNavegacao">
+				<p:outputPanel autoUpdate="true" rendered="#{caepogController.responsavelEmpreendimento != null}">
+					<div style="text-align: right;">
+						<p:commandButton value="Voltar" update="tabViewOleoGas, formBotoesNavegacao" action="#{caepogController.decrementaIndexAba}" 
+							rendered="#{caepogController.visualizaAnterior}" />
+						
+						<p:spacer width="10" height="0"/>
+						
+						<p:commandButton value="Avançar" update="tabViewOleoGas, formBotoesNavegacao" action="#{caepogController.incrementaIndexAba}" 
+							rendered="#{caepogController.visualizaProximo}" />
+							
+						<p:commandButton value="Finalizar" actionListener="#{caepogController.finalizaAtividade}" 
+							disabled="#{caepogController.caepog.visualizando and !caepogController.caepog.validando}" rendered="#{caepogController.visualizaFinalizar}" />
+					</div>
+				</p:outputPanel>
+			</h:form>
+		</ui:define>
+	</ui:composition>
+</html>

@@ -1,0 +1,516 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui"
+	template="../../layout/template.xhtml">
+	
+	<ui:define name="titulo-pagina">
+		<h3><h:outputLabel value="#{bundle.consulta_boleto_titulo}" /></h3>
+	</ui:define>
+	
+	<ui:define name="conteudo-principal">
+		<h3>
+			<h:outputLabel styleClass="titulo-grupo" style="font-weight:bold;" value="#{bundle.geral_lbl_parametros_consulta}" />
+		</h3>
+		
+		<!-- FILTRO -->
+		<h:form id="formBoleto">
+			<!-- FILTROS NORMAIS -->
+			<h:panelGrid columns="5" id="filtrosNormais">
+				<h:outputLabel value="#{bundle.consulta_boleto_requerente}"/>
+				<h:outputLabel />
+				<h:outputLabel value="#{bundle.consulta_boleto_num_requerimento}" />
+				<h:outputLabel value="#{bundle.consulta_boleto_num_processo}" />
+				<h:outputLabel value="#{bundle.consulta_boleto_num_boleto}" />
+				
+				<h:panelGrid id="pessoas">
+					<p:inputText id="pessoaFisica" value="#{boletoComplementarController.filter.requerente.pessoaFisica.nomPessoa}" rendered="#{boletoComplementarController.pessoaFisica}" style="width: 120px;" disabled="true"/>
+					<p:inputText id="pessoaJuridica" value="#{boletoComplementarController.filter.requerente.pessoaJuridica.nomRazaoSocial}" rendered="#{!boletoComplementarController.pessoaFisica}" style="width: 120px;" disabled="true"/>
+				</h:panelGrid>
+				
+				<p:commandLink type="button" oncomplete="dialogSelecionarRequerente.show()" update="form_dialog_requerente" action="#{boletoComplementarController.limpar()}" >
+					<h:graphicImage title="#{bundle.geral_lbl_selecionar_requerente}" value="/resources/img/ico-pesquisa.png" style="padding-right: 20px !important;"/>
+				</p:commandLink>
+					
+				<p:inputText value="#{boletoComplementarController.filter.numRequerimento}" style="width: 120px;" />
+				<p:inputText value="#{boletoComplementarController.filter.numProcesso}" style="width: 120px;" />
+				<p:inputText value="#{boletoComplementarController.filter.numBoleto}" style="width: 120px;" />
+			</h:panelGrid>
+			
+			<!-- ESPECIAL STATUS -->
+			<p:spacer width="0px" height="10px" />
+			
+			<h:panelGrid columns="3" id="panelPeriodoStatus">
+				<h:outputLabel value="#{bundle.status_boleto_atual}"/>
+				
+				<p:spacer width="35px" height="0px" />
+				
+				<h:outputLabel value="#{bundle.geral_lbl_periodo}" rendered="#{boletoComplementarController.datas}"/>
+			</h:panelGrid>
+			
+			<h:panelGrid columns="3" id="panelStatus">
+			
+				<!-- EM PROCESSAMENTO -->
+				<h:panelGrid columns="2">
+					<p:selectBooleanCheckbox value="#{boletoComplementarController.filter.emProcessamento}">
+						<p:ajax update=":formBoleto:panelPeriodoStatus, :formBoleto:statusEmProcessamento" event="change" listener="#{boletoComplementarController.limparDatas(event, 0)}" immediate="true" process="filtrosNormais, @this" />
+					</p:selectBooleanCheckbox>
+					
+					<h:outputLabel value="#{bundle.status_boleto_em_processamento}" />
+				</h:panelGrid>
+					
+				<p:spacer width="35px" height="0px" />
+					
+				<h:panelGrid columns="2" id="statusEmProcessamento">
+					<ui:fragment rendered="#{boletoComplementarController.filter.emProcessamento and !boletoComplementarController.usuarioExterno}">
+						<p:calendar value="#{boletoComplementarController.filter.dtEmProcessamentoInicial}" showOn="button" readOnlyInputText="true" pattern="dd/MM/yyyy" size="9" locale="pt">
+							<h:outputLabel value="#{bundle.geral_lbl_periodo_de}" />
+						</p:calendar>
+						
+						<p:calendar value="#{boletoComplementarController.filter.dtEmProcessamentoFinal}" showOn="button" readOnlyInputText="true" pattern="dd/MM/yyyy" size="9" locale="pt">
+							<h:outputLabel value="#{bundle.geral_lbl_periodo_ate}" />
+						</p:calendar>
+					</ui:fragment>
+				</h:panelGrid>
+			
+				<!-- EMITIDO -->
+				<h:panelGrid columns="2">
+					<p:selectBooleanCheckbox value="#{boletoComplementarController.filter.emitido}">
+						<p:ajax update=":formBoleto:panelPeriodoStatus, :formBoleto:statusEmitido" event="change" listener="#{boletoComplementarController.limparDatas(event, 1)}" immediate="true" process="filtrosNormais, @this" />
+					</p:selectBooleanCheckbox>
+					
+					<h:outputLabel value="#{bundle.status_boleto_emitido}" />
+				</h:panelGrid>
+					
+				<p:spacer width="35px" height="0px" />
+					
+				<h:panelGrid columns="2" id="statusEmitido">
+					<ui:fragment rendered="#{boletoComplementarController.filter.emitido and !boletoComplementarController.usuarioExterno}">
+						<p:calendar value="#{boletoComplementarController.filter.dtEmitidoInicial}" showOn="button" readOnlyInputText="true" pattern="dd/MM/yyyy" size="9" locale="pt">
+							<h:outputLabel value="#{bundle.geral_lbl_periodo_de}" />
+						</p:calendar>
+						
+						<p:calendar value="#{boletoComplementarController.filter.dtEmitidoFinal}" showOn="button" readOnlyInputText="true" pattern="dd/MM/yyyy" size="9" locale="pt">
+							<h:outputLabel value="#{bundle.geral_lbl_periodo_ate}" />
+						</p:calendar>
+					</ui:fragment>
+				</h:panelGrid>
+				
+				<!-- CANCELAMENTO SOLICITADO -->
+				<h:panelGrid columns="2" width="130px" rendered="#{!boletoComplementarController.usuarioExterno}">
+					<p:selectBooleanCheckbox value="#{boletoComplementarController.filter.cancelamento}" style="padding-right: 6px;" >
+						<p:ajax update=":formBoleto:panelPeriodoStatus, :formBoleto:statusCancelamento" event="change" listener="#{boletoComplementarController.limparDatas(event, 2)}" immediate="true" process="filtrosNormais, @this" />
+					</p:selectBooleanCheckbox>
+					
+					<h:outputLabel value="#{bundle.status_boleto_cancelamento}"  style="white-space:pre-line !important;" />
+				</h:panelGrid>
+					
+				<p:spacer width="35px" height="0px" rendered="#{!boletoComplementarController.usuarioExterno}"/>
+				
+				<h:panelGrid columns="2" id="statusCancelamento" rendered="#{!boletoComplementarController.usuarioExterno}">
+					<ui:fragment rendered="#{boletoComplementarController.filter.cancelamento}">
+						<p:calendar value="#{boletoComplementarController.filter.dtCancelamentoInicial}" showOn="button" readOnlyInputText="true" pattern="dd/MM/yyyy" size="9" locale="pt">
+							<h:outputLabel value="#{bundle.geral_lbl_periodo_de}" />
+						</p:calendar>
+						
+						<p:calendar value="#{boletoComplementarController.filter.dtCancelamentoFinal}" showOn="button" readOnlyInputText="true" pattern="dd/MM/yyyy" size="9" locale="pt">
+							<h:outputLabel value="#{bundle.geral_lbl_periodo_ate}" />
+						</p:calendar>
+					</ui:fragment>
+				</h:panelGrid>
+				
+				<!-- COMPROVANTE ENVIADO -->
+				<h:panelGrid columns="2" width="130px">
+					<p:selectBooleanCheckbox value="#{boletoComplementarController.filter.comprovante}" style="padding-right: 6px;" >
+						<p:ajax update=":formBoleto:panelPeriodoStatus, :formBoleto:statusComprovante" event="change" listener="#{boletoComplementarController.limparDatas(event, 3)}" immediate="true" process="filtrosNormais, @this" />
+					</p:selectBooleanCheckbox>
+					
+					<h:outputLabel value="#{bundle.status_boleto_comprovante}"  style="white-space:pre-line !important;" />
+				</h:panelGrid>
+					
+				<p:spacer width="35px" height="0px" />
+				
+				<h:panelGrid columns="2" id="statusComprovante">
+					<ui:fragment rendered="#{boletoComplementarController.filter.comprovante and !boletoComplementarController.usuarioExterno}">
+						<p:calendar value="#{boletoComplementarController.filter.dtComprovanteInicial}" showOn="button" readOnlyInputText="true" pattern="dd/MM/yyyy" size="9" locale="pt">
+							<h:outputLabel value="#{bundle.geral_lbl_periodo_de}" />
+						</p:calendar>
+						
+						<p:calendar value="#{boletoComplementarController.filter.dtComprovanteFinal}" showOn="button" readOnlyInputText="true" pattern="dd/MM/yyyy" size="9" locale="pt">
+							<h:outputLabel value="#{bundle.geral_lbl_periodo_ate}" />
+						</p:calendar>
+					</ui:fragment>
+				</h:panelGrid>
+				
+				<!-- PAGO -->
+				<h:panelGrid columns="2">
+					<p:selectBooleanCheckbox value="#{boletoComplementarController.filter.pago}" >
+						<p:ajax update=":formBoleto:panelPeriodoStatus, :formBoleto:statusPago" event="change" listener="#{boletoComplementarController.limparDatas(event, 4)}" immediate="true" process="filtrosNormais, @this" />
+					</p:selectBooleanCheckbox>
+					
+					<h:outputLabel value="#{bundle.status_boleto_pago}" />
+				</h:panelGrid>
+					
+				<p:spacer width="35px" height="0px" />
+				
+				<h:panelGrid columns="2" id="statusPago">
+					<ui:fragment rendered="#{boletoComplementarController.filter.pago and !boletoComplementarController.usuarioExterno}">
+						<p:calendar value="#{boletoComplementarController.filter.dtPagoInicial}" showOn="button" readOnlyInputText="true" pattern="dd/MM/yyyy" size="9" locale="pt">
+							<h:outputLabel value="#{bundle.geral_lbl_periodo_de}" />
+						</p:calendar>
+						
+						<p:calendar value="#{boletoComplementarController.filter.dtPagoFinal}" showOn="button" readOnlyInputText="true" pattern="dd/MM/yyyy" size="9" locale="pt">
+							<h:outputLabel value="#{bundle.geral_lbl_periodo_ate}" />
+						</p:calendar>
+					</ui:fragment>
+				</h:panelGrid>
+				
+				<!-- CANCELADO -->
+				<h:panelGrid columns="2">
+					<p:selectBooleanCheckbox value="#{boletoComplementarController.filter.cancelado}" >
+						<p:ajax update=":formBoleto:panelPeriodoStatus, :formBoleto:statusCancelado" event="change" listener="#{boletoComplementarController.limparDatas(event, 5)}" immediate="true" process="filtrosNormais, @this" />
+					</p:selectBooleanCheckbox>
+					
+					<h:outputLabel value="#{bundle.status_boleto_cancelado}" />
+				</h:panelGrid>
+					
+				<p:spacer width="35px" height="0px" />
+				
+				<h:panelGrid columns="2" id="statusCancelado">
+					<ui:fragment rendered="#{boletoComplementarController.filter.cancelado and !boletoComplementarController.usuarioExterno}">
+						<p:calendar value="#{boletoComplementarController.filter.dtCanceladoInicial}" showOn="button" readOnlyInputText="true" pattern="dd/MM/yyyy" size="9" locale="pt">
+							<h:outputLabel value="#{bundle.geral_lbl_periodo_de}" />
+						</p:calendar>
+						
+						<p:calendar value="#{boletoComplementarController.filter.dtCanceladoFinal}" showOn="button" readOnlyInputText="true" pattern="dd/MM/yyyy" size="9" locale="pt">
+							<h:outputLabel value="#{bundle.geral_lbl_periodo_ate}" />
+						</p:calendar>
+					</ui:fragment>
+				</h:panelGrid>
+				
+				<!-- VENCIDO -->
+				<h:panelGrid columns="2">
+					<p:selectBooleanCheckbox value="#{boletoComplementarController.filter.vencido}" >
+						<p:ajax update=":formBoleto:panelPeriodoStatus, :formBoleto:statusVencido" event="change" listener="#{boletoComplementarController.limparDatas(event, 6)}" immediate="true" process="filtrosNormais, @this" />
+					</p:selectBooleanCheckbox>
+					
+					<h:outputLabel value="#{bundle.status_boleto_vencido}" />
+				</h:panelGrid>
+					
+				<p:spacer width="35px" height="0px" />
+				
+				<h:panelGrid columns="2" id="statusVencido">
+					<ui:fragment rendered="#{boletoComplementarController.filter.vencido and !boletoComplementarController.usuarioExterno}">
+						<p:calendar value="#{boletoComplementarController.filter.dtVencidoInicial}" showOn="button" readOnlyInputText="true" pattern="dd/MM/yyyy" size="9" locale="pt">
+							<h:outputLabel value="#{bundle.geral_lbl_periodo_de}" />
+						</p:calendar>
+						
+						<p:calendar value="#{boletoComplementarController.filter.dtVencidoInicial}" showOn="button" readOnlyInputText="true" pattern="dd/MM/yyyy" size="9" locale="pt">
+							<h:outputLabel value="#{bundle.geral_lbl_periodo_ate}" />
+						</p:calendar>
+					</ui:fragment>
+				</h:panelGrid>
+			</h:panelGrid>
+					
+			<!-- BOTOES -->
+			<h:panelGrid columns="2" style="margin-top: 10px;">
+				<p:commandButton value="#{bundle.geral_lbl_consultar}" title="#{bundle.geral_lbl_consultar}" actionListener="#{boletoComplementarController.consultar()}" 
+					update="formBoleto:tabelaBoletos, formBoleto:panelGrid" rendered="#{security.temAcesso('3.56.4') or security.temAcesso('3.57.4')}"/>
+				
+				<p:commandButton value="#{bundle.geral_lbl_limpar}" title="#{bundle.geral_lbl_limpar}" actionListener="#{boletoComplementarController.limpar()}" 
+					update="@form" />
+			</h:panelGrid>
+			
+			<h:panelGrid rendered="#{security.temAcesso('3.56.1')}">
+				<p:separator style="margin: 5px auto; float: left;"/>
+			</h:panelGrid>
+			
+			<h:panelGrid rendered="#{security.temAcesso('3.56.1')}">
+				<p:commandButton value="#{bundle.consulta_boleto_emitir_novo_boleto}" title="#{bundle.consulta_boleto_emitir_novo_boleto}"
+					oncomplete="dialogGerarNovoBoleto.show()" actionListener="#{boletoComplementarController.novoBoletoPopup()}" update=":form_dialog_boleto" />
+			</h:panelGrid>
+			
+			<!-- GRID -->
+			<h:panelGrid columns="1" id="panelGrid" style="margin-top: 10px;">
+				<p:dataTable id="tabelaBoletos" var="boleto" binding="#{boletoComplementarController.dataTableBoleto}" value="#{boletoComplementarController.boletoModel}" lazy="true" paginator="true" rows="10" 
+					paginatorPosition="bottom" paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}" widgetVar="boleto" emptyMessage="#{bundle.consultapf_msg_empty_list}"
+					currentPageReportTemplate="#{bundle.lbl_qtd_registros_grid}" style="width: 780px !important; padding-right: 13px;">
+			        
+			        <f:facet name="header">
+						<h:outputText value="#{bundle.consulta_boleto_boletos}" />
+					</f:facet>
+					
+					<!-- BOTAO DETALHAMENTO -->
+					<p:column style="text-align: center !important;">
+						<p:rowToggler />
+					</p:column>
+			        
+			        <!-- REQUERENTE -->
+			        <p:column style="text-align: center !important;">
+			        	<f:facet name="header">
+			        		<h:outputText value="#{bundle.consulta_boleto_requerente}" />
+			        	</f:facet>
+			            
+			            <h:outputText value="#{boleto.requerente}"/>
+			        </p:column>
+			        
+			        
+			        <!-- NUMERO DO REQUERIMENTO/PROCESSO -->
+			        <p:column style="text-align: center !important; min-width: 110px; max-width: 110px;">
+			        	<f:facet name="header">
+			        		<h:outputText value="#{bundle.geral_lbl_requerimento_processo}" style="white-space:pre-line !important;"/>
+			        	</f:facet>
+			        	
+			        	<h:outputText value="#{boleto.requerimento.numRequerimentoOrNull}" rendered="#{boleto.processo.numProcessoOrNull == null}"/>
+			        	<h:outputText value="#{boleto.processo.numProcessoOrNull}" rendered="#{boleto.processo.numProcessoOrNull != null}"/>
+			        </p:column>
+			        
+			        <!-- NUM DO BOLETO -->
+			        <p:column style="text-align: center !important; min-width: 120px; max-width: 120px;">
+			        	<f:facet name="header">
+			        		<h:outputText value="#{bundle.consulta_boleto_num_boleto}" />
+			        	</f:facet>
+			        
+			        	<h:commandLink id="downloadBoleto" ajax="false"
+							rendered="#{(security.temAcesso('3.56.5') or security.temAcesso('3.57.5')) and boletoComplementarController.exibeAcaoDownload(boleto.status)}">
+	            			<f:setPropertyActionListener target="#{boletoComplementarController.enviarComprovante_boleto}" value="#{boleto}" />
+					        <h:outputText value="#{boleto.numBoleto}" rendered="#{boletoComplementarController.exibeAcaoDownload(boleto.status)}"/>
+	            			<p:fileDownload value="#{boletoComplementarController.downloadBoleto()}"/>
+	            		</h:commandLink>
+	            		
+	            		<h:outputText value="#{boleto.numBoleto}" rendered="#{boletoComplementarController.exibeNumBoletoCanceladoOuCancelamentoSolicitado(boleto.status)}"/> 
+			        </p:column>
+			        
+			        <!-- DT DE VENCIMENTO -->
+			        <p:column style="text-align: center !important; min-width: 70px; max-width: 70px;">
+			        	<f:facet name="header">
+			        		<h:outputText value="#{bundle.consulta_boleto_dt_vencimento}" style="white-space:pre-line !important;"/>
+			        	</f:facet>
+			            
+			            <h:outputText value="#{boleto.dtVencimento}" >
+			            	<f:convertDateTime pattern="dd/MM/yyyy" locale="pt,BR" timeZone="Brazil/East" />
+						</h:outputText>
+			        </p:column>
+			        
+			        <!-- STATUS -->
+			        <p:column style="text-align: center !important; min-width: 80px; max-width: 80px;" >
+			        	<f:facet name="header">
+			        		<h:outputText value="#{bundle.consulta_boleto_status}" />
+			        	</f:facet>
+			            
+			            <h:outputText value="#{boleto.status}"/>
+			        </p:column>
+			        
+			        <!-- ACOES -->
+			        <p:column style="text-align: center; white-space: nowrap !important;">
+			            
+			            <f:facet name="header">
+			            	<h:outputText value="#{bundle.geral_lbl_acoes}"/>
+			            </f:facet>
+			            
+			            <!-- DOWNLOAD 
+						<h:commandLink id="downloadBoleto" ajax="false"
+							rendered="#{(security.temAcesso('3.56.5') or security.temAcesso('3.57.5')) and boletoComplementarController.exibeAcaoDownload(boleto.status)}">
+	            			
+	            			<f:setPropertyActionListener target="#{boletoComplementarController.enviarComprovante_boleto}" value="#{boleto}" />
+	            			<h:graphicImage title="#{bundle.geral_btn_download}" value="/resources/img/ico-download.png" style="margin-right: 5px;"/>
+	            			<p:fileDownload value="#{boletoComplementarController.downloadBoleto()}"/>
+	            		</h:commandLink>-->
+			            
+			            <!-- UPLOAD -->
+			            <p:commandLink id="uploadComprovante"  oncomplete="dialogEnviarComprovante.show()" update=":form_dialog_comprovante"
+			            	rendered="#{(security.temAcesso('3.57.12') or security.temAcesso('3.56.12')) 
+			            		and !boletoComplementarController.isBoletoRegistrado(boleto)}">
+							
+							<f:setPropertyActionListener target="#{boletoComplementarController.enviarComprovante_boleto}" value="#{boleto}" />
+							<h:graphicImage title="#{bundle.geral_lbl_enviar_comprovante}" value="/resources/img/ico-comprovante.png" style="margin-right: 5px;" />
+						</p:commandLink>
+			          	
+			          	<!-- CANCELAMENTO -->
+			          	<p:commandLink id="cancelarBoleto" title="Cancelar Boleto" rendered="#{(security.temAcesso('3.56.51') or security.temAcesso('3.56.52')) and boletoComplementarController.exibeAcaoCancelar(boleto.status) and not empty boleto.numBoleto and empty boleto.ideProcessoReenquadramento}" 
+			          		oncomplete="dialogCancelarBoleto.show()" update="dialogCancelarBoleto" action="#{boletoComplementarController.carregaValoresParaCancelarBoleto()}">
+			          		
+		          			 <h:graphicImage title="#{bundle.btn_cancelar} Boleto" value="/resources/img/ico-excluir.png" style="margin-right: 5px;"/>
+		     			     <f:setPropertyActionListener target="#{boletoComplementarController.boletoCancelar}" value="#{boleto}" />
+			            </p:commandLink>
+						 
+						 
+			            <p:commandLink id="cancelarBoletoDae" title="Cancelar Boleto" rendered="#{(security.temAcesso('3.56.51') or security.temAcesso('3.56.52')) and boletoComplementarController.exibeAcaoCancelar(boleto.status) and empty boleto.numBoleto and empty boleto.ideProcessoReenquadramento}" 
+			          		oncomplete="dialogCancelarDae.show()" action="#{boletoComplementarController.carregaValoresParaCancelarDae()}">
+			          		
+		          			 <h:graphicImage title="#{bundle.btn_cancelar} Boleto" value="/resources/img/ico-excluir.png" style="margin-right: 5px;"/>
+		     			     <f:setPropertyActionListener target="#{boletoComplementarController.boletoCancelar}" value="#{boleto}" />
+			            </p:commandLink>
+
+			          	<!-- VALIDACAO -->
+			          	<p:commandLink id="validarComprovante" oncomplete="dialogValidarComprovante.show()" action="#{boletoComplementarController.validarComprovantePopUp()}" 
+			          		rendered="#{security.temAcesso('3.56.13') and boletoComplementarController.exibeAcaoValidar(boleto.status) and not empty boleto.numBoleto}" update=":form_dialog_validacao">
+			          		
+			          		<f:setPropertyActionListener target="#{boletoComplementarController.validarComprovante_boletoComplementar}" value="#{boleto}" />
+		          			<h:graphicImage title="#{bundle.geral_btn_validar} Comprovante" value="/resources/img/ico-aprovar-notificacao.png" style="margin-right: 5px;" />
+			            </p:commandLink>
+			            
+			            <p:commandLink id="validarComprovanteDae" oncomplete="dialogValidarComprovanteDae.show()" action="#{boletoComplementarController.validarComprovantePopUpDae()}" 
+			          		rendered="#{security.temAcesso('3.56.13') and boletoComplementarController.exibeAcaoValidar(boleto.status) and empty boleto.numBoleto}" update=":form_dialog_validacao_dae">
+			          		
+			          		<f:setPropertyActionListener target="#{boletoComplementarController.validarComprovante_boletoComplementar}" value="#{boleto}" />
+		          			<h:graphicImage title="#{bundle.geral_btn_validar} Comprovante" value="/resources/img/ico-aprovar-notificacao.png" style="margin-right: 5px;" />
+			            </p:commandLink>
+			            	
+			          	<!-- HISTORICO -->
+			          	<p:commandLink id="historicoBoleto" oncomplete="dialogHistoricoBoleto.show()" action="#{boletoComplementarController.abreHistoricoPopUp()}" 
+			          		rendered="#{security.temAcesso('3.56.55') and boletoComplementarController.exibeAcaoHistorico(boleto.status) and not empty boleto.numBoleto}" update="dialogHistoricoBoleto">
+			          		
+			          		<f:setPropertyActionListener  target="#{boletoComplementarController.historicoBoleto_boletoComplementar}" value="#{boleto}" />
+		          			<h:graphicImage title="#{bundle.historico_boleto_lbl_titulo}" value="/resources/img/ico-mnp.gif" style="margin-right: 5px;" />
+			            </p:commandLink>
+			            
+			            <p:commandLink id="historicoBoletoDae" oncomplete="dialogHistoricoBoletoDae.show()" action="#{boletoComplementarController.abreHistoricoPopUpDae()}" 
+			          		rendered="#{security.temAcesso('3.56.55') and boletoComplementarController.exibeAcaoHistorico(boleto.status) and empty boleto.numBoleto}" update="dialogHistoricoBoletoDae">
+			          		
+			          		<f:setPropertyActionListener  target="#{boletoComplementarController.historicoBoleto_boletoComplementar}" value="#{boleto}" />
+		          			<h:graphicImage title="#{bundle.historico_boleto_lbl_titulo}" value="/resources/img/ico-mnp.gif" style="margin-right: 5px;" />
+			            </p:commandLink>
+			        </p:column>
+			        
+			        <!-- DETALHAMENTO -->
+			        <p:rowExpansion>
+						<p:dataTable id="tabelaDetalhamento" paginator="false" paginatorPosition="bottom" lazy="true" value="#{boleto.detalhado}" var="detalhamentoBoleto">
+							
+							<!-- TIPO DE BOLETO -->
+					        <p:column style="text-align: center !important;">
+					        	<f:facet name="header">
+					        		<h:outputText value="#{bundle.consulta_boleto_tipo_boleto}" />
+					        	</f:facet>
+					            
+					            <h:outputText value="#{detalhamentoBoleto.tipoBoleto}" />
+					        </p:column>
+							
+							<!-- DT DE GERACAO -->
+					        <p:column style="text-align: center !important;">
+					        	<f:facet name="header">
+					        		<h:outputText value="#{bundle.consulta_boleto_dt_geracao}" />
+					        	</f:facet>
+					            
+					            <h:outputText value="#{detalhamentoBoleto.dtGeracao}">
+									<f:convertDateTime pattern="dd/MM/yyyy" locale="pt,BR" timeZone="Brazil/East" />
+								</h:outputText>
+					        </p:column>
+					        
+					        <!-- DT DE PAGAMENTO CANCELAMENTO -->
+					        <p:column style="text-align: center !important;" >
+					        	<f:facet name="header">
+					        		<h:outputText value="#{bundle.consulta_boleto_dt_pagamento_cancelamento}" escape="false" />
+					        	</f:facet>
+					            
+					            <h:outputText value="#{detalhamentoBoleto.dtPagamentoCancelamento}">
+					            	<f:convertDateTime pattern="dd/MM/yyyy" locale="pt,BR" timeZone="Brazil/East" />
+								</h:outputText>
+					        </p:column>
+					        
+					        <!-- DT DE VALIDACAO -->
+					        <p:column style="text-align: center !important;">
+					        	<f:facet name="header">
+					        		<h:outputText value="#{bundle.consulta_boleto_dt_validacao}" />
+					        	</f:facet>
+					            
+					            <h:outputText value="#{detalhamentoBoleto.dtValidacao}" >
+					            	<f:convertDateTime pattern="dd/MM/yyyy" locale="pt,BR" timeZone="Brazil/East" />
+								</h:outputText>
+					        </p:column>
+					        
+					        <!-- VALOR -->
+					        <p:column style="text-align: center !important;" rendered="#{!empty boleto.numBoleto}">
+					        	<f:facet name="header">
+					        		<h:outputText value="#{bundle.consulta_boleto_valor}" />
+					        	</f:facet>
+					            
+					            <h:outputText value="#{bundle.geral_lbl_rs} #{detalhamentoBoleto.valBoletoFormatado}" />
+					        </p:column>
+					        
+					         <!-- VALOR TOTAL CERTIFICAÇÃO -->
+					        <p:column style="text-align: center !important;" rendered="#{empty boleto.numBoleto}">
+					        	<f:facet name="header">
+					        		<h:outputText value="#{bundle.consulta_boleto_valor_total_certificacao}" />
+					        	</f:facet>
+					            
+					            <h:outputText value="#{bundle.geral_lbl_rs} #{detalhamentoBoleto.vlrTotalCertificadoFormatado}" />
+					        </p:column>
+					        
+					         <!-- VALOR TOTAL VISTORIA -->
+					        <p:column style="text-align: center !important;" rendered="#{empty boleto.numBoleto}">
+					        	<f:facet name="header">
+					        		<h:outputText value="#{bundle.consulta_boleto_valor_total_vistoria}" />
+					        	</f:facet>
+					            
+					            <h:outputText value="#{bundle.geral_lbl_rs} #{detalhamentoBoleto.vlrTotalVistoriaFormatado}" />
+					        </p:column>
+					        
+						</p:dataTable>
+					</p:rowExpansion>
+		    	</p:dataTable>
+		    </h:panelGrid>
+	    </h:form>
+		
+	    <p:dialog id="dialogSelecionarRequerente" dynamic="true" header="#{bundle.geral_lbl_selecionar_requerente}" widgetVar="dialogSelecionarRequerente" modal="true" resizable="false" position="top" style="top: 20% !important; left: 35% !important;">
+			<ui:include src="/paginas/manter-boleto-complementar/selecionarRequerente.xhtml" />
+		</p:dialog>
+    	
+	    <p:dialog id="dialogGerarNovoBoleto" dynamic="true" header="#{bundle.gerar_novo_boleto_lbl_titulo}" widgetVar="dialogGerarNovoBoleto" modal="true" resizable="false" position="center center">
+			<ui:include src="/paginas/manter-boleto-complementar/gerarNovoBoleto.xhtml" />
+		</p:dialog>
+		
+		<p:dialog id="dialogCancelarBoleto" dynamic="true" header="#{bundle.cancelamento_de_boleto}" widgetVar="dialogCancelarBoleto" modal="true" resizable="false" position="top" style="top: 20% !important; left: 35% !important;">
+			<ui:include src="/paginas/manter-boleto-complementar/cancelarBoleto.xhtml" />
+		</p:dialog>
+		
+		<p:dialog id="dialogCancelarDae" dynamic="true" header="#{bundle.cancelamento_de_boleto}" widgetVar="dialogCancelarDae" modal="true" resizable="false" position="top" style="top: 20% !important; left: 35% !important;">
+			<ui:include src="/paginas/manter-boleto-complementar/cancelarDae.xhtml" />
+		</p:dialog>
+		
+		<p:dialog id="dialogEnviarComprovante" dynamic="true" header="#{bundle.enviar_comprovante_lbl_titulo}" widgetVar="dialogEnviarComprovante" modal="true" resizable="false" position="top" style="top: 20% !important; left: 35% !important;">
+			<ui:include src="/paginas/manter-boleto-complementar/enviarComprovante.xhtml" />
+		</p:dialog>
+		
+		<p:dialog id="dialogValidarComprovante" dynamic="true" header="#{bundle.validar_comprovante_lbl_titulo}" widgetVar="dialogValidarComprovante" modal="true" resizable="false" position="top" style="top: 20% !important; left: 35% !important;">
+			<ui:include src="/paginas/manter-boleto-complementar/validarComprovante.xhtml" />
+		</p:dialog>
+		
+		<p:dialog id="dialogValidarComprovanteDae" dynamic="true" header="#{bundle.validar_comprovante_lbl_titulo}" widgetVar="dialogValidarComprovanteDae" modal="true" resizable="false" position="top" style="top: 20% !important; left: 35% !important;">
+			<ui:include src="/paginas/manter-boleto-complementar/validarComprovanteDae.xhtml" />
+		</p:dialog>
+		
+		
+		<p:dialog id="dialogHistoricoBoleto" dynamic="true" header="#{bundle.historico_boleto_lbl_titulo}" widgetVar="dialogHistoricoBoleto" modal="true" resizable="false" position="top" style="top: 10% !important; left: 35% !important;">
+			<ui:include src="/paginas/manter-boleto-complementar/historicoBoleto.xhtml" />
+		</p:dialog>
+		
+		<p:dialog id="dialogHistoricoBoletoDae" dynamic="true" header="#{bundle.historico_boleto_lbl_titulo}" widgetVar="dialogHistoricoBoletoDae" modal="true" resizable="false" position="top" style="top: 10% !important; left: 35% !important;">
+			<ui:include src="/paginas/manter-boleto-complementar/historicoBoletoDae.xhtml" />
+		</p:dialog>
+		
+		<p:confirmDialog widgetVar="excluirComprovanteCertificado" appendToBody="true" header="Alerta" message="#{bundle.consulta_boleto_confirmar_exlusao_comprovante}" severity="alert">
+			<h:form>
+				<p:commandButton value="Sim" global="false" update="certificadoForm, vistoriaForm" oncomplete="excluirComprovanteCertificado.hide()" action="#{boletoComplementarController.excluirComprovanteDAE('certificado')}" />
+				<p:commandButton value="Não" global="false" oncomplete="excluirComprovanteCertificado.hide()" />
+			</h:form>
+		</p:confirmDialog>
+		
+		<p:confirmDialog widgetVar="excluirComprovanteVitoria" appendToBody="true" header="Alerta" message="#{bundle.consulta_boleto_confirmar_exlusao_comprovante}" severity="alert">
+			<h:form>
+				<p:commandButton value="Sim" global="false" update="certificadoForm, vistoriaForm" oncomplete="excluirComprovanteVitoria.hide()" action="#{boletoComplementarController.excluirComprovanteDAE('vistoria')}" />
+				<p:commandButton value="Não" global="false" oncomplete="excluirComprovanteVitoria.hide()" />
+			</h:form>
+		</p:confirmDialog>
+		
+		<p:confirmDialog widgetVar="excluirComprovanteBoleto" appendToBody="true" header="Alerta" message="#{bundle.consulta_boleto_confirmar_exlusao_comprovante}" severity="alert">
+			<h:form>
+				<p:commandButton value="Sim" global="false" update="formDialogComprovante" oncomplete="excluirComprovanteBoleto.hide()" action="#{boletoComplementarController.excluirComprovanteBoleto()}" />
+				<p:commandButton value="Não" global="false" oncomplete="excluirComprovanteBoleto.hide()" />
+			</h:form>
+		</p:confirmDialog>
+	</ui:define>
+</ui:composition>

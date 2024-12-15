@@ -1,0 +1,348 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui">
+
+	<h:form id="formCaracterizacaoSubterranea">
+	
+		<h:panelGrid id="gridLocalizacaoGeograficaSubterranea" style="width:100%;">
+
+			<p:dataTable id="tableGeobahiaSubterranea"
+				value="#{cerhController.abaCaptacaoSubterranea.dto.lista}" 
+				var="caracterizacaoDTO" >
+
+				<p:column headerText="#{bundle.geral_lbl_mun_captacao}" id="municipioSubterranea" style="text-align:center;">
+	 		    	<h:outputText value="#{cerhController.abaCaptacaoSubterranea.cerhCaracterizacao.ideCerhLocalizacaoGeografica.nomeMunicipio}" />
+	 		    </p:column>
+	 		    
+	   		    <p:column headerText="#{bundle.geral_lbl_rpga}" id="rpgaSubterranea" style="text-align:center;">
+	 		    	<h:outputText value="#{cerhController.abaCaptacaoSubterranea.cerhCaracterizacao.ideCerhLocalizacaoGeografica.ideLocalizacaoGeografica.rpga}" />
+	 		    </p:column>
+	 		    
+	  	 		<p:column headerText="#{bundle.geral_lbl_bacia}" id="baciaSubterranea" style="text-align:center;">
+	 		    	<h:outputText value="#{cerhController.abaCaptacaoSubterranea.cerhCaracterizacao.ideCerhLocalizacaoGeografica.ideLocalizacaoGeografica.baciaHidrografica}" />
+	 		    </p:column>
+	 		    
+	  	 		<p:column headerText="#{bundle.geral_lbl_sistema_aquifero}" id="aquifero" style="text-align:center;">
+	 		    	<h:outputText value="#{cerhController.abaCaptacaoSubterranea.cerhCaracterizacao.ideCerhLocalizacaoGeografica.ideLocalizacaoGeografica.sistemaAquifero}" />
+	 		    </p:column>
+	 		    
+			</p:dataTable>
+
+		</h:panelGrid>
+		
+		<h:panelGrid id="gridInicioCaptacaoSubterranea" columns="2" style="margin-top:15px;" rendered="#{!cerhController.abaCaptacaoSubterranea.naoExibeData}">
+			<h:outputText value="#{bundle.cerh_aba_cap_sup_data_incio_cap}:" /> 
+			
+			<p:calendar id="periodoInicioSubterranea" 
+				value="#{cerhController.abaCaptacaoSubterranea.cerhCaracterizacao.dtInicioCaptacao}"
+				navigator="true" 
+				showOn="button" 
+				locale="pt" 
+				pattern="dd/MM/yyyy" 
+				readOnlyInputText="true" 
+				mindate="01/01/1988" maxdate="#{cerhController.dataHoje}"
+				yearRange="c-30:c+40"
+				size="7"
+				disabled="#{cerhController.abaCaptacaoSubterranea.dto.caracterizacaoDTO.visualizacao}">
+				<p:ajax event="dateSelect" process="@this" />
+			</p:calendar>
+			
+		</h:panelGrid>
+
+		<h:panelGrid columns="2">
+			<h:outputText value="* #{bundle.cerh_aba_cap_sub_dados_poco}" style="font-weight: bold;"/>
+			<h:graphicImage value="/resources/img/ico-ajuda.png" title="#{bundle.cerh_aba_cap_sub_dados_poco_hint}" style="margin-left: 5px; margin-right: 2px;"/>
+		</h:panelGrid>
+		
+		<h:panelGrid id="gridPoco" columns="3">
+			<h:outputText value="#{bundle.cerh_aba_cap_sub_natureza_poco}:" /> 
+			<h:outputText value="#{bundle.cerh_aba_cap_sub_profundidade} #{bundle.geral_lbl_metro}:" /> 
+			<h:outputText value="#{bundle.cerh_aba_cap_sub_vazao_teste} #{bundle.geral_lbl_mcubico_hora}:" /> 
+		
+			<p:selectOneMenu 
+				id="naturezaPoco" 
+				value="#{cerhController.abaCaptacaoSubterranea.cerhCaracterizacao.ideCerhNaturezaPoco}"
+				converter="simpleEntityConverter"
+				disabled="#{cerhController.abaCaptacaoSubterranea.dto.caracterizacaoDTO.visualizacao}"
+				style="width:150px;">
+				<f:selectItem itemLabel="Selecione" itemValue="#{null}"/>
+				<f:selectItems value="#{cerhController.abaCaptacaoSubterranea.cerhNaturezaPocoCollection}" 
+					var="naturezaPoco"
+					itemValue="#{naturezaPoco}"
+					itemLabel="#{naturezaPoco.dscNaturezaPoco}"/>
+			</p:selectOneMenu>
+			
+			<p:inputText value="#{cerhController.abaCaptacaoSubterranea.cerhCaracterizacao.valProfundidade}" 
+				maxlength="13"
+				style="margin-left:5px; width:80px;" 
+				onblur="mascararNumeroAndAddZeros(this, event, 8, 2, '.', ',', 3);"
+				onkeyup="mascararNumeroAndAddZeros(this, event, 8, 2, '.', ',', 3);"
+				disabled="#{cerhController.abaCaptacaoSubterranea.dto.caracterizacaoDTO.visualizacao}">
+				<f:convertNumber integerOnly="false" maxIntegerDigits="8" maxFractionDigits="2" pattern="#,##0.00" locale="pt_BR"/>
+				<p:ajax event="blur"/>
+			</p:inputText>
+			
+			<p:inputText value="#{cerhController.abaCaptacaoSubterranea.cerhCaracterizacao.valVazaoTeste}" 
+				maxlength="13"
+				style="margin-left:5px; width:80px;" 
+				onblur="mascararNumeroAndAddZeros(this, event, 8, 2, '.', ',', 3);"
+				onkeyup="mascararNumeroAndAddZeros(this, event, 8, 2, '.', ',', 3);"
+				disabled="#{cerhController.abaCaptacaoSubterranea.dto.caracterizacaoDTO.visualizacao}">
+				<f:convertNumber integerOnly="false" maxIntegerDigits="8" maxFractionDigits="2" pattern="#,##0.00" locale="pt_BR"/>
+				<p:ajax event="blur"/>
+			</p:inputText>
+			
+			<h:outputText value="#{bundle.cerh_aba_cap_sub_nivel_estatico} #{bundle.geral_lbl_metro}:" /> 
+			<h:outputText value="#{bundle.cerh_aba_cap_sub_nivel_dinamico} #{bundle.geral_lbl_metro}:" />
+			<p:spacer width="15" height="15"/>
+			
+			<p:inputText value="#{cerhController.abaCaptacaoSubterranea.cerhCaracterizacao.valNivelEstatico}" 
+				maxlength="13"
+				style="margin-left:5px; width:80px;" 
+				onblur="mascararNumeroAndAddZeros(this, event, 8, 2, '.', ',', 3);"
+				onkeyup="mascararNumeroAndAddZeros(this, event, 8, 2, '.', ',', 3);"
+				disabled="#{cerhController.abaCaptacaoSubterranea.dto.caracterizacaoDTO.visualizacao}">
+				<f:convertNumber integerOnly="false" maxIntegerDigits="8" maxFractionDigits="2" pattern="#,##0.00" locale="pt_BR"/>
+				<p:ajax event="blur"/>
+			</p:inputText>
+			
+			<p:inputText value="#{cerhController.abaCaptacaoSubterranea.cerhCaracterizacao.valNivelDinamico}" 
+				maxlength="13"
+				style="margin-left:5px; width:80px;" 
+				onblur="mascararNumeroAndAddZeros(this, event, 8, 2, '.', ',', 3);"
+				onkeyup="mascararNumeroAndAddZeros(this, event, 8, 2, '.', ',', 3);"
+				disabled="#{cerhController.abaCaptacaoSubterranea.dto.caracterizacaoDTO.visualizacao}">
+				<f:convertNumber integerOnly="false" maxIntegerDigits="8" maxFractionDigits="2" pattern="#,##0.00" locale="pt_BR"/>
+				<p:ajax event="blur"/>
+			</p:inputText>
+			
+			<p:spacer width="15" height="15"/>
+		</h:panelGrid>
+		
+		
+		<h:panelGrid id="gridSituacaoCaptacaoSubterranea" style="margin-top:15px;">
+			<h:outputText value="* #{bundle.cerh_aba_cap_sup_situacao_captacao}:" /> 
+			<p:selectOneMenu 
+				id="situacao" 
+				value="#{cerhController.abaCaptacaoSubterranea.cerhCaracterizacao.ideCerhSituacaoTipoUso}"
+				converter="simpleEntityConverter"
+				disabled="#{cerhController.abaCaptacaoSubterranea.dto.caracterizacaoDTO.visualizacao}">
+				<f:selectItem itemLabel="Selecione" itemValue="#{null}"/>
+				<f:selectItems value="#{cerhController.abaCaptacaoSubterranea.cerhSituacaoTipoUsoCollection}" 
+					var="situacaoCap"
+					itemValue="#{situacaoCap}"
+					itemLabel="#{situacaoCap.dscSituacaoTipoUso}"/>
+			</p:selectOneMenu>
+		</h:panelGrid>
+		
+		<h:panelGrid id="gridFinalidadeSubterranea" style="width:100%; margin-top:15px;">
+			<h:outputText value="* #{bundle.cerh_finalidade}:" /> 
+		
+			<h:graphicImage value="/resources/img/ico-ajuda.png" title="#{bundle.cerh_aba_cap_hint_abastecimento_industrial}" style="position: absolute; margin-left: 655px; margin-top: 15px;"/>
+			
+	    	<h:panelGroup layout="block" styleClass="manyCheckColumns">
+			    <p:selectManyCheckbox id="finalidadeSubterranea" 
+			    	value="#{cerhController.abaCaptacaoSubterranea.dto.caracterizacaoDTO.tipoFinalidadeUsoAguaCollection}"
+			    	layout="pageDirection"
+			    	converter="simpleEntityConverter" 
+			    	valueChangeListener="#{cerhController.abaCaptacaoSubterranea.changeCerhCaptacaoCaracterizacaoFinalidadeCollection()}"
+			    	disabled="#{cerhController.abaCaptacaoSubterranea.dto.caracterizacaoDTO.visualizacao}">
+			    	<f:selectItems value="#{cerhController.abaCaptacaoSubterranea.tipoFinalidadeUsoAguaCollection}" 
+			    		var="finalidade"
+			    		itemValue="#{finalidade}"
+			    		itemLabel="#{finalidade.nomTipoFinalidadeUsoAgua}"/>
+					<p:ajax event="change" process="@this" update="formCaracterizacaoSubterranea:gridFinalidadeSubterranea formCaracterizacaoSubterranea:gridObservacaoSubterranea"/>
+			    </p:selectManyCheckbox>
+			</h:panelGroup>
+			
+			<h:panelGroup id="finalidadeSelecionadasSubterranea" rendered="#{cerhController.abaCaptacaoSubterranea.finalidadeNecessitaInformacoesDeUso}">
+				<h:dataTable var="finalidade" value="#{cerhController.abaCaptacaoSubterranea.cerhCaracterizacao.cerhCaptacaoCaracterizacaoFinalidadeCollection}" style="width:100%;">
+					<h:column>
+						<h:panelGroup rendered="#{cerhController.abaCaptacaoSubterranea.isFinalidadeNecessitaInformacoesDeUso(finalidade)}">
+							<fieldset id="finalidades">
+								<legend> #{cerhController.abaCaptacaoSubterranea.dto.caracterizacaoDTO.getHeader(finalidade)} </legend>
+
+								<h:panelGrid rendered="#{finalidade.ideTipoFinalidadeUsoAgua.finalidadeAbastecimentoPublico}" style="width:100%;">
+									<ui:include src="/paginas/manter-cerh/captacao-subterranea/incluirCaracterizacaoAbastecimentoPublico.xhtml" />
+								</h:panelGrid>
+	
+								<h:panelGrid id="gridCultura" rendered="#{finalidade.ideTipoFinalidadeUsoAgua.finalidadeIrrigacao}" style="width:100%;">
+									<ui:include src="/paginas/manter-cerh/captacao-subterranea/incluirCaracterizacaoIrrigacao.xhtml" />
+								</h:panelGrid>
+	
+								<h:panelGrid rendered="#{finalidade.ideTipoFinalidadeUsoAgua.finalidadeAbastecimentoIndustrial}" style="width:100%;">
+									<ui:include src="/paginas/manter-cerh/captacao-subterranea/incluirCaracterizacaoAbastecimentoIndustrial.xhtml" />
+								</h:panelGrid>
+	
+								<h:panelGrid rendered="#{finalidade.ideTipoFinalidadeUsoAgua.finalidadeMineracao}" style="width:100%;">
+									<ui:include src="/paginas/manter-cerh/captacao-subterranea/incluirCaracterizacaoMineracao.xhtml" />
+								</h:panelGrid>
+	
+								<h:panelGrid rendered="#{finalidade.ideTipoFinalidadeUsoAgua.finalidadeOutrosUsos}" style="width:100%;">
+									<ui:include src="/paginas/manter-cerh/captacao-subterranea/incluirCaracterizacaoOutros.xhtml" />
+								</h:panelGrid>
+							
+							</fieldset>
+						</h:panelGroup>
+					</h:column>
+				</h:dataTable>
+			</h:panelGroup>
+		
+		</h:panelGrid>
+		
+		
+		<h:panelGrid id="gridDadosDeclaradosSubterranea" style="width:85%;">
+		
+			<h:outputText value="#{bundle.cerh_aba_cap_sup_dados_declarados}:" style="font-weight: bold;"/>
+			
+			<p:dataTable id="tableDadosDeclaradosSubterranea"
+				value="#{cerhController.abaCaptacaoSubterranea.cerhCaracterizacao.cerhCaptacaoVazaoSazonalidadeCollection}"
+				var="sazonalidade" style="margin-top:15px;">
+				
+				<p:column headerText="#{bundle.geral_lbl_mes}" style="vertical-align: middle;">
+					<h:outputText value="#{sazonalidade.ideMes.nomMes}"/>
+				</p:column>
+
+				<p:column headerText="#{bundle.geral_lbl_vazao} #{bundle.geral_lbl_mcubico_hora}"  style="vertical-align: middle;">
+					<h:panelGrid id="inputVazao" columns="2">
+						
+						<p:inputText value="#{sazonalidade.valVazaoCaptacao}"
+							maxlength="13"
+							style="width:80px;"
+							onblur="mascararNumeroAndAddZeros(this, event, 8, 2, '.', ',', 3);"
+							onkeyup="mascararNumeroAndAddZeros(this, event, 8, 2, '.', ',', 3);"
+							disabled="#{cerhController.abaCaptacaoSubterranea.dto.caracterizacaoDTO.visualizacao}">
+							<f:convertNumber integerOnly="false" maxIntegerDigits="8" maxFractionDigits="2" pattern="#,##0.00" locale="pt_BR"/>
+							<f:attribute name="sazonalidade" value="#{sazonalidade}"/>
+							<p:ajax event="keyup" global="false"
+								listener="#{cerhController.abaCaptacaoSubterranea.calcularVazoes()}"/>
+						</p:inputText>
+						<p:commandLink actionListener="#{cerhController.abaCaptacaoSubterranea.replicarVazao()}"
+							process="@this"
+							update="formCaracterizacaoSubterranea:gridDadosDeclaradosSubterranea, formCaracterizacaoSubterranea:gridDadosDeclaradosMediaSubterranea"
+							rendered="#{sazonalidade.janeiro}"
+							disabled="#{cerhController.abaCaptacaoSubterranea.dto.caracterizacaoDTO.visualizacao}">
+							<h:graphicImage title="Replicar valor para todos os meses" value="/resources/img/ico-replicar-valores.png" />
+						</p:commandLink>
+						
+						
+					</h:panelGrid>
+				</p:column>
+
+				<p:column style="text-align:center; vertical-align: middle;">
+					<f:facet name="header">
+						#{bundle.cerh_aba_cap_sup_tempo_captacao}<br/>#{bundle.geral_lbl_horas_dia}
+					</f:facet>
+					<h:panelGrid columns="2" style="text-align:left; width:75px;">
+						<p:inputText id="inputTempo" value="#{sazonalidade.valTempoCaptacao}" 
+							style="width:20px;" 
+							maxlength="2"
+							disabled="#{cerhController.abaCaptacaoSubterranea.dto.caracterizacaoDTO.visualizacao}">
+							<f:convertNumber integerOnly="true" maxIntegerDigits="2"/>
+							<f:attribute name="sazonalidade" value="#{sazonalidade}"/>
+							<p:ajax event="keyup" global="false"
+								listener="#{cerhController.abaCaptacaoSubterranea.calcularVazoes()}"/>
+						</p:inputText>
+						<p:commandLink actionListener="#{cerhController.abaCaptacaoSubterranea.replicarTempo()}"
+							process="@this"
+							update="formCaracterizacaoSubterranea:gridDadosDeclaradosSubterranea, formCaracterizacaoSubterranea:gridDadosDeclaradosMediaSubterranea"
+							rendered="#{sazonalidade.janeiro}"
+							disabled="#{cerhController.abaCaptacaoSubterranea.dto.caracterizacaoDTO.visualizacao}">
+							<h:graphicImage title="Replicar valor para todos os meses" value="/resources/img/ico-replicar-valores.png" />
+						</p:commandLink>
+					</h:panelGrid>
+				</p:column>
+
+				<p:column headerText="#{bundle.cerh_aba_cap_sup_dias_mes}" style="text-align:center; vertical-align: middle;">
+					<h:panelGrid columns="2" style="text-align:left;">
+						<p:inputText id="inputMes" value="#{sazonalidade.valDiaMes}" 
+							style="width:20px;" 
+							maxlength="2"
+							disabled="#{cerhController.abaCaptacaoSubterranea.dto.caracterizacaoDTO.visualizacao}">
+							<f:convertNumber integerOnly="true" maxIntegerDigits="2"/>
+							<f:attribute name="sazonalidade" value="#{sazonalidade}"/>
+							<p:ajax event="keyup" global="false"
+								listener="#{cerhController.abaCaptacaoSubterranea.calcularVazoes()}"/>
+						</p:inputText>
+						<p:commandLink actionListener="#{cerhController.abaCaptacaoSubterranea.replicarDiasMes()}"
+							process="@this"
+							update="formCaracterizacaoSubterranea:gridDadosDeclaradosSubterranea, formCaracterizacaoSubterranea:gridDadosDeclaradosMediaSubterranea"
+							rendered="#{sazonalidade.janeiro}"
+							disabled="#{cerhController.abaCaptacaoSubterranea.dto.caracterizacaoDTO.visualizacao}">
+							<h:graphicImage title="Replicar valor para todos os meses" value="/resources/img/ico-replicar-valores.png" />
+						</p:commandLink>
+					</h:panelGrid>
+				</p:column>
+
+				<p:column headerText="#{bundle.geral_lbl_vazao} #{bundle.geral_lbl_mcubico_dia}" style="vertical-align: middle;">
+					<h:panelGrid style="text-align:center;">
+						<p:inputText id="vazaoDia" value="#{sazonalidade.vazaoDia}" style="width:80px;" disabled="true">
+							<f:convertNumber integerOnly="false" maxIntegerDigits="8" maxFractionDigits="2" pattern="#,##0.00" locale="pt_BR"/>
+						</p:inputText>
+					</h:panelGrid>
+				</p:column>
+
+				<p:column headerText="#{bundle.geral_lbl_vazao} #{bundle.geral_lbl_mcubico_mes}" style="vertical-align: middle;">
+					<h:panelGrid style="text-align:center;">
+						<p:inputText id="vazaoMes" value="#{sazonalidade.vazaoMes}" style="width:80px;" disabled="true">
+							<f:convertNumber integerOnly="false" maxIntegerDigits="8" maxFractionDigits="2" pattern="#,##0.00" locale="pt_BR"/>
+						</p:inputText>
+					</h:panelGrid>
+				</p:column>
+			</p:dataTable>
+			
+			<h:panelGrid id="gridDadosDeclaradosMediaSubterranea" columns="3" width="800" style="margin-top:15px;">
+				<h:outputText value="* #{bundle.cerh_aba_cap_sup_media_vazao_diaria} #{bundle.geral_lbl_mcubico_dia}" />
+				<h:outputText value="* #{bundle.cerh_aba_cap_sup_vazao_anual} #{bundle.geral_lbl_mcubico_ano}" />
+
+				<h:panelGroup>
+					<h:outputText value="* #{bundle.cerh_aba_cap_sup_vazao_maxima} #{bundle.geral_lbl_mcubico_dia}" />
+					<h:graphicImage id="hintvalVazaoMaximaInstantanea" value="/resources/img/ico-ajuda.png" style="margin: 0px 1px 1px 5px;" />
+					<p:tooltip for="hintvalVazaoMaximaInstantanea" 
+							value="#{bundle.cerh_aba_cap_sup_vazao_maxima_hint}"
+							showEffect="fade" hideEffect="fade" />
+				</h:panelGroup>
+				
+				<p:inputText value="#{cerhController.abaCaptacaoSubterranea.dto.caracterizacaoDTO.mediaVazaoDiaria}" disabled="true">
+					<f:convertNumber integerOnly="false" maxIntegerDigits="8" maxFractionDigits="2" pattern="#,##0.00" locale="pt_BR"/>
+				</p:inputText>
+				<p:inputText value="#{cerhController.abaCaptacaoSubterranea.dto.caracterizacaoDTO.vazaoAnual}" disabled="true">
+					<f:convertNumber integerOnly="false" maxIntegerDigits="8" maxFractionDigits="2" pattern="#,##0.00" locale="pt_BR"/>
+				</p:inputText>
+				<p:inputText value="#{cerhController.abaCaptacaoSubterranea.cerhCaracterizacao.valVazaoMaximaInstantanea}" disabled="true">
+					<f:convertNumber integerOnly="false" maxIntegerDigits="8" maxFractionDigits="2" pattern="#,##0.00" locale="pt_BR"/>
+				</p:inputText>
+				
+			</h:panelGrid>
+					
+		</h:panelGrid>
+		
+		<h:panelGrid id="gridObservacaoSubterranea" style="width:70%; margin-top:15px;" rendered="#{cerhController.abaCaptacaoSubterranea.usuarioInterno  and (cerhController.abaCaptacaoSubterranea.processoOutorgado or cerhController.abaCaptacaoSubterranea.processoDispensado)}">
+			<h:outputText value="#{bundle.geral_lbl_observacao}:" />
+			<p:inputTextarea id="inputObs" 
+				value="#{cerhController.abaCaptacaoSubterranea.cerhCaracterizacao.dscObservacao}" 
+				cols="9" 
+				autoResize="false"
+				maxLength="500" 
+				styleClass="maxlength500 limitedTextArea"
+				style="width:70%; height:130px;" 
+				disabled="#{cerhController.abaCaptacaoSubterranea.dto.caracterizacaoDTO.visualizacao}"/>
+		</h:panelGrid>
+		
+		<div align="right" style="margin-right: 25px; margin-top:25px;">
+			<p:commandButton id="btnSalvarCaracterizacaoSubterranea" 
+				value="#{bundle.geral_lbl_salvar}" 
+				actionListener="#{cerhController.abaCaptacaoSubterranea.salvarCaracterizacao()}"
+				style="width:90px;" 
+				update="formCaracterizacaoSubterranea" 
+				process="@form" 
+				rendered="#{!cerhController.abaCaptacaoSubterranea.dto.caracterizacaoDTO.visualizacao}"/> 
+		</div>			
+		
+	</h:form>
+
+</ui:composition>

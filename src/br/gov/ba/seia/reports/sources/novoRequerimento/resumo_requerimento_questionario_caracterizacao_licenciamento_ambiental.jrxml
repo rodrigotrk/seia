@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="resumo_requerimento_questionario_processos" pageWidth="480" pageHeight="802" columnWidth="480" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="8719f475-cd82-4e7d-beb9-997db22c6a9d">
+	<property name="ireport.zoom" value="1.6105100000000043"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="ide_requerimento" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[select *,
+ case
+  when rt.ind_acao_tipologia = 1 then 'Exclusão'
+  when rt.ind_acao_tipologia = 2 then 'Inclusão'
+  when rt.ind_acao_tipologia = 3 then 'Aumento'
+  when rt.ind_acao_tipologia = 4 then 'Redução'
+  when rt.ind_acao_tipologia is null then ' - '
+  end as acoes
+ from requerimento_tipologia  rt
+  left join licenca l on l.ide_requerimento = rt.ide_requerimento
+  left join unidade_medida_tipologia_grupo umt on umt.ide_unidade_medida_tipologia_grupo = rt.ide_unidade_medida_tipologia_grupo
+  left join unidade_medida um on um.ide_unidade_medida = umt.ide_unidade_medida
+  left join tipologia_grupo tg on tg.ide_tipologia_grupo = umt.ide_tipologia_grupo
+  left join tipologia t on t.ide_tipologia = tg.ide_tipologia
+WHERE
+t.ind_autorizacao = FALSE
+AND (l.ide_tipo_solicitacao in (1,2,3) OR l.ide_tipo_solicitacao IS NULL)
+AND rt.ide_requerimento = $P{ide_requerimento}
+AND (l.ind_excluido = FALSE OR l.ind_excluido IS NULL)
+-- and tg.ind_excluido = false -- #6707 18/03/2015]]>
+	</queryString>
+	<field name="ide_requerimento_tipologia" class="java.lang.Integer"/>
+	<field name="ide_unidade_medida_tipologia_grupo" class="java.lang.Integer"/>
+	<field name="ide_requerimento" class="java.lang.Integer"/>
+	<field name="val_atividade" class="java.math.BigDecimal"/>
+	<field name="ind_tipologia_principal" class="java.lang.Boolean"/>
+	<field name="ind_acao_tipologia" class="java.lang.Integer"/>
+	<field name="ide_requerimento_unico" class="java.lang.Integer"/>
+	<field name="ide_licenca" class="java.lang.Integer"/>
+	<field name="ide_tipo_solicitacao" class="java.lang.Integer"/>
+	<field name="num_processo_licenca" class="java.lang.String"/>
+	<field name="num_portaria_licenca" class="java.lang.String"/>
+	<field name="dtc_publicacao_portaria" class="java.sql.Timestamp"/>
+	<field name="dtc_validade_licenca" class="java.sql.Timestamp"/>
+	<field name="num_processo_licenca_municipal" class="java.lang.String"/>
+	<field name="dsc_atividade_processo_licenca_municipal" class="java.lang.String"/>
+	<field name="ide_unidade_medida" class="java.lang.Integer"/>
+	<field name="ide_tipologia_grupo" class="java.lang.Integer"/>
+	<field name="cod_unidade_medida" class="java.lang.String"/>
+	<field name="nom_unidadade_medida" class="java.lang.String"/>
+	<field name="ide_tipologia" class="java.lang.Integer">
+		<fieldDescription><![CDATA[Identificador da tipologia da área produtiva]]></fieldDescription>
+	</field>
+	<field name="ide_tipo_manejo" class="java.lang.Integer"/>
+	<field name="ide_potencial_poluicao" class="java.lang.Integer"/>
+	<field name="dtc_criacao" class="java.sql.Timestamp"/>
+	<field name="dtc_excluido" class="java.sql.Timestamp"/>
+	<field name="ind_excluido" class="java.lang.Boolean"/>
+	<field name="ide_nivel_tipologia" class="java.lang.Integer"/>
+	<field name="ide_tipologia_pai" class="java.lang.Integer"/>
+	<field name="cod_tipologia" class="java.lang.String"/>
+	<field name="des_tipologia" class="java.lang.String"/>
+	<field name="dtc_exclusao" class="java.sql.Timestamp"/>
+	<field name="ind_possui_filhos" class="java.lang.Boolean"/>
+	<field name="ind_autorizacao" class="java.lang.Boolean"/>
+	<field name="acoes" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="12" splitType="Stretch">
+			<textField>
+				<reportElement uuid="70f29bb5-130d-4a77-ae03-8d83eb7df7a3" positionType="Float" mode="Opaque" x="0" y="0" width="479" height="12" backcolor="#FFFFFF"/>
+				<textElement verticalAlignment="Middle" markup="none">
+					<font fontName="Arial" size="8" isBold="false" isUnderline="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Caracterização das atividades passíveis de licenciamento ambiental"]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="28" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="f43eab24-e7ad-41f9-aec7-ad5096e3f901" positionType="Float" mode="Opaque" x="10" y="0" width="175" height="28" backcolor="#EEECE1"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font fontName="Arial" size="8" isBold="false" isUnderline="false"/>
+				</textElement>
+				<text><![CDATA[Atividade]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="f43eab24-e7ad-41f9-aec7-ad5096e3f901" positionType="Float" mode="Opaque" x="185" y="0" width="81" height="28" backcolor="#EEECE1"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font fontName="Arial" size="8" isBold="false" isUnderline="false"/>
+				</textElement>
+				<text><![CDATA[Unidade de Medida]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="f43eab24-e7ad-41f9-aec7-ad5096e3f901" positionType="Float" mode="Opaque" x="266" y="0" width="88" height="28" backcolor="#EEECE1"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font fontName="Arial" size="8" isBold="false" isUnderline="false"/>
+				</textElement>
+				<text><![CDATA[Capacidade / Produção / Área / Volume]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="f43eab24-e7ad-41f9-aec7-ad5096e3f901" positionType="Float" mode="Opaque" x="354" y="0" width="38" height="28" backcolor="#EEECE1"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font fontName="Arial" size="8" isBold="false" isUnderline="false"/>
+				</textElement>
+				<text><![CDATA[Principal]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="28044694-0b67-43b5-8272-ef4f9baea5a1" positionType="Float" mode="Opaque" x="392" y="0" width="81" height="28" backcolor="#EEECE1">
+					<printWhenExpression><![CDATA[$F{ind_acao_tipologia} != null &&
+$F{ide_tipo_solicitacao} != 1]]></printWhenExpression>
+				</reportElement>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font fontName="Arial" size="8" isBold="false" isUnderline="false"/>
+				</textElement>
+				<text><![CDATA[Ações]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="12" splitType="Stretch">
+			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true">
+				<reportElement uuid="3919ef48-041a-4ace-b8d6-e555e875d58b" positionType="Float" stretchType="RelativeToBandHeight" x="10" y="0" width="175" height="12" isRemoveLineWhenBlank="true"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Arial" size="9"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{des_tipologia}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true">
+				<reportElement uuid="3919ef48-041a-4ace-b8d6-e555e875d58b" positionType="Float" stretchType="RelativeToTallestObject" x="185" y="0" width="81" height="12" isRemoveLineWhenBlank="true"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Arial" size="9"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{cod_unidade_medida}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="#,##0.00;-#,##0.00" isBlankWhenNull="true">
+				<reportElement uuid="3919ef48-041a-4ace-b8d6-e555e875d58b" positionType="Float" stretchType="RelativeToTallestObject" x="266" y="0" width="88" height="12"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Arial" size="9"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{val_atividade} == null ? '-' : $F{val_atividade}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="dd/MM/yyyy" isBlankWhenNull="true">
+				<reportElement uuid="3919ef48-041a-4ace-b8d6-e555e875d58b" positionType="Float" stretchType="RelativeToTallestObject" x="354" y="0" width="38" height="12" isRemoveLineWhenBlank="true"/>
+				<box leftPadding="3" rightPadding="3">
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="9"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ind_tipologia_principal} ? "SIM" : "NÃO"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="0d80fc04-0ba8-4be5-991d-372bd07ccb99" stretchType="RelativeToBandHeight" x="392" y="0" width="81" height="12">
+					<printWhenExpression><![CDATA[$F{ind_acao_tipologia} != null &&
+$F{ide_tipo_solicitacao} != 1]]></printWhenExpression>
+				</reportElement>
+				<box leftPadding="2">
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{acoes}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

@@ -1,0 +1,43 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.prime.com.tr/ui">
+    <ui:include src="/paginas/manter-cerh/gerar-dae/abas/fragment/dados-gerais.xhtml" />	
+	<p:spacer width="0" height="10"/>
+	<h:panelGroup>
+		<p:dataTable value="#{cerhCobrancaController.daes}" var="dae">
+		    <f:facet name="header">
+		        DAEs Gerados
+		    </f:facet>
+			<p:column headerText="Parcela">
+				#{dae.numParcelaReferencia} / #{dae.numTotalParcelaReferencia}
+			</p:column>
+			<p:column headerText="Vencimento">
+				<h:outputText value="#{dae.dtVencimento}">
+					<f:convertDateTime pattern="MM/dd/yyyy" />
+				</h:outputText>
+			</p:column>
+			<p:column headerText="Valor">
+				<h:outputText value="#{dae.valorTotal}" >
+					 <f:convertNumber  pattern="###,##0.00" locale="pt_BR" />
+				</h:outputText>
+			</p:column>
+			<p:column headerText="RPGA">
+				#{dae.rpga}
+			</p:column>
+			<p:column headerText="Tipo de Uso">
+				#{dae.tiposUsoRecusroHidrico}
+			</p:column>
+			<p:column >
+				<p:commandLink target="_blanck" ajax="false">
+					<p:graphicImage url="/resources/img/ico-impressao.png"/>
+					<p:fileDownload value="#{cerhCobrancaController.getImprimirDae(dae)}" />
+				</p:commandLink>
+			</p:column>
+		</p:dataTable>
+	</h:panelGroup>
+	<br/>
+	<p:spacer width="0" height="10"/>
+</html>

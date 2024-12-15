@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui"
+	xmlns:s="http://java.sun.com/jsf/composite/seia">
+
+<ui:composition template="/layout/template.xhtml">
+
+	<ui:define name="titulo-pagina">
+		<h3>Consultar Segmento</h3>
+	</ui:define>
+
+
+	<ui:define name="conteudo-principal">
+	   <h:panelGrid id="pnlInternoConsulta" style="width: 100%;">
+		<p:dialog header="Cadastrar Segmento" widgetVar="dialogSegmento"
+			modal="true" style="text-align:center;" resizable="false"
+			position="center" closable="true">
+			<ui:include src="/paginas/manter-segmento/segmento.xhtml" />
+		</p:dialog>
+
+		<h:form id="formDialogSegmentos">
+
+			<h:panelGrid columns="2">
+				<h:outputText value="#{bundle.lbl_segmento}" />
+				<p:inputText id="descricaoSegmento" value="#{segmentoController.filtroConsulta.nomSegmento}" style="width: 100%;" />
+				<p:spacer width="0" height="12" />
+			</h:panelGrid>
+			<h:panelGrid columns="2">
+				<h:panelGroup>
+					<p:commandButton value="#{bundle.geral_lbl_consultar}"
+						actionListener="#{segmentoController.consultar()}"
+						update="dataTableSegmentos"
+						id="consultaSegmento" process="@form"
+						style="float:left; margin-top:10px;" />
+				</h:panelGroup>
+				<h:panelGroup>
+					<p:commandButton value="#{bundle.lbl_incluir_segmento}"
+						oncomplete="dialogSegmento.show()"
+						action="#{segmentoController.incluir()}" ajax="true"
+						rendered="${security.temAcesso('13.84.1')}" 
+						process="@this" update="form_dialog"
+						style="float:right; margin-top:10px;" />
+				</h:panelGroup>
+
+			</h:panelGrid>
+			<h:panelGrid style="width:442px;">
+
+				<p:dataTable id="dataTableSegmentos" var="segmento"
+					value="#{segmentoController.dataTableSegmentos}" lazy="true"
+					paginator="true" rows="8" paginatorPosition="bottom"
+					paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}"
+					emptyMessage="#{bundle.geral_msg_empty_list}" widgetVar="segmento"
+					style="width: 100%;">
+
+					<p:column style="width: 300px;">
+						<f:facet name="header">
+							<h:outputText value="#{bundle.lbl_segmento}" />
+						</f:facet>
+						<h:outputText value="#{segmento.nomSegmento}" />
+					</p:column>
+
+					<p:column style="width: 100px; text-align:center;">
+						<f:facet name="header">
+							<h:outputText value="#{bundle.geral_lbl_acoes}" />
+						</f:facet>
+						<h:panelGroup style="width:10px;color:white;text-align:center;">
+							<p:commandLink action="#{segmentoController.editar(segmento)}"
+								oncomplete="dialogSegmento.show()" title="Segmento"
+								rendered="${security.temAcesso('13.84.3')}" 
+								update=":form_dialog" process="@this">
+								<h:graphicImage title="Editar"
+									value="/resources/img/ico-alterar.png" style="margin-right: 5px;"/>
+							</p:commandLink>
+
+							<p:commandLink id="btnExcluir" oncomplete="confirmation.show()"
+							    rendered="${security.temAcesso('13.84.2')}" 
+								title="Excluir" process="@this" update=":excluir">
+								<h:graphicImage title="Excluir"
+									value="/resources/img/ico-excluir.png" />
+								<f:setPropertyActionListener
+									target="#{segmentoController.novoSegmento}"
+									value="#{segmento}" />
+							</p:commandLink>
+
+						</h:panelGroup>
+					</p:column>
+
+				</p:dataTable>
+			</h:panelGrid>
+		</h:form>
+		
+        <p:confirmDialog message="#{bundle.consultapf_msg_confimrexclusao}" header="Mensagem" severity="alert" widgetVar="confirmation" id="confirmation">
+            <h:form id="excluir">
+                <p:commandButton id="confirmarExcluir"  value="#{bundle.consultapf_lbl_sim}" update=":formDialogSegmentos:dataTableSegmentos" actionListener="#{segmentoController.excluir()}" onsuccess="confirmation.hide()" process="@this" />
+                <p:commandButton value="#{bundle.consultapf_lbl_nao}" onclick="confirmation.hide()" type="button" />
+            </h:form>
+        </p:confirmDialog>
+        </h:panelGrid>
+	</ui:define>
+</ui:composition>
+</html>

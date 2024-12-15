@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="relatorio_questionario_aba_captacao_caracterizacao_finalidade_detalhe_abastecimento_publico" language="java" pageWidth="500" pageHeight="802" columnWidth="500" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="c18be6a3-2535-49fc-b3c9-f4e2892c45f5">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="IDE_CERH_CAPTACAO_CARACTERIZACAO" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[select
+	ccap.IDE_CERH_CAPTACAO_CARACTERIZACAO_FINALIDADE,
+	dsc_tipo_prestador_servico,
+	ind_perda_distribuicao,
+	val_indice_perda_distribuicao,
+	ind_incerto_desconhecido
+from cerh_captacao_abastecimento_publico ccap
+inner join cerh_tipo_prestador_servico ctps on ctps.ide_cerh_tipo_prestador_servico = ccap.ide_cerh_tipo_prestador_servico
+inner join cerh_captacao_caracterizacao_finalidade cccf on cccf.ide_cerh_captacao_caracterizacao_finalidade = ccap.ide_cerh_captacao_caracterizacao_finalidade
+where cccf.IDE_CERH_CAPTACAO_CARACTERIZACAO = $P{IDE_CERH_CAPTACAO_CARACTERIZACAO}]]>
+	</queryString>
+	<field name="ide_cerh_captacao_caracterizacao_finalidade" class="java.lang.Integer"/>
+	<field name="dsc_tipo_prestador_servico" class="java.lang.String"/>
+	<field name="ind_perda_distribuicao" class="java.lang.Boolean"/>
+	<field name="val_indice_perda_distribuicao" class="java.lang.Integer"/>
+	<field name="ind_incerto_desconhecido" class="java.lang.Boolean"/>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement uuid="45bd05d4-da58-4e34-9646-2a5f13bc27f9" x="0" y="0" width="500" height="20"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA["Tipo de prestador de serviço: " + $F{dsc_tipo_prestador_servico}]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="20">
+			<textField>
+				<reportElement uuid="985eb4d8-4c03-4fe1-a526-8529b644ef9c" x="0" y="0" width="500" height="20"/>
+				<textElement verticalAlignment="Middle" markup="html"/>
+				<textFieldExpression><![CDATA["Perda na distribuição?&#09;" +
+
+($F{ind_perda_distribuicao}?
+    ("Sim, " + $F{val_indice_perda_distribuicao} + " (%).") :
+    ($F{ind_incerto_desconhecido} ? "Incerto/Desconhecido." : "Não.")
+)]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

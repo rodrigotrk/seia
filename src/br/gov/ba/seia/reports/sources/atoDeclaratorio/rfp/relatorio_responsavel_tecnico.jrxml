@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="relatorio_responsavel_tecnico" language="java" pageWidth="555" pageHeight="802" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="3579ef72-68f9-420d-975e-3020547c3321">
+	<property name="ireport.zoom" value="1.771561000000001"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="ide_registro_floresta_producao" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[select
+pf.nom_pessoa,
+pf.num_cpf
+from
+registro_floresta_producao_responsavel_tecnico rfprt
+inner join pessoa_fisica pf on pf.ide_pessoa_fisica = rfprt.ide_pessoa_fisica
+where rfprt.ide_registro_floresta_producao = $P{ide_registro_floresta_producao}]]>
+	</queryString>
+	<field name="nom_pessoa" class="java.lang.String"/>
+	<field name="num_cpf" class="java.lang.String"/>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement uuid="1ca485ae-0ebb-422b-8ddc-5e207fcff50e" x="0" y="0" width="421" height="20"/>
+				<box topPadding="3"/>
+				<textElement markup="html"/>
+				<textFieldExpression><![CDATA["<b>Nome: </b>" +$F{nom_pessoa}]]></textFieldExpression>
+			</textField>
+			<textField pattern="###.###.###-##000.000.000-00">
+				<reportElement uuid="05bd869c-cd68-4f2c-b8c4-55438be5eaa0" x="421" y="0" width="134" height="20"/>
+				<box topPadding="3"/>
+				<textElement textAlignment="Right" markup="html">
+					<font isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA["<b>CPF: </b>" +
+
+($F{num_cpf}.substring(0, 3)+"."+
+$F{num_cpf}.substring(3, 6)+"."+
+$F{num_cpf}.substring(6, 9)+"-"+
+$F{num_cpf}.substring(9, 11))]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

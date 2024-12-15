@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+		<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+		<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+			xmlns:h="http://java.sun.com/jsf/html"
+			xmlns:f="http://java.sun.com/jsf/core"
+			xmlns:ui="http://java.sun.com/jsf/facelets"
+			xmlns:p="http://primefaces.prime.com.tr/ui">
+			<h:form id="formAtualizacaoShape">		
+				<p:tabView id="abasAtualizacaoShapes" dynamic="true"  activeIndex="#{atualizarShapesController.activeIndex}">
+					
+					<p:ajax event="tabChange" listener="#{atualizarShapesController.controlarAbas}" update="formAtualizarShape formAcao " />
+					
+					<p:tab id="abaLimitePropriedade" title="Limite da Propriedade" disabled="#{atualizarShapesController.tab0}">
+						<ui:include src="/paginas/manter-imoveis/cefir/includes/includes-atualizacao-shapes/atualizarShapeAbas.xhtml" />
+					</p:tab>
+
+					<p:tab id="abaReservaLegal" title="Reserva Legal" disabled="#{atualizarShapesController.tab1}">
+						<ui:include src="/paginas/manter-imoveis/cefir/includes/includes-atualizacao-shapes/atualizarShapeAbas.xhtml" />
+					</p:tab>
+					
+					<p:tab id="abaVegetacaoNativa" title="Vegetação Nativa" disabled="#{atualizarShapesController.tab2}">
+						<ui:include src="/paginas/manter-imoveis/cefir/includes/includes-atualizacao-shapes/atualizarShapeAbas.xhtml" />
+					</p:tab>
+					
+					<p:tab id="abaAPP" title="Área de Preservação Permanente" disabled="#{atualizarShapesController.tab3}">
+						<ui:include src="/paginas/manter-imoveis/cefir/includes/includes-atualizacao-shapes/atualizarShapeAbas.xhtml" />
+					</p:tab>			
+								
+					<p:tab id="abaRPPN" title="RPPN" disabled="#{atualizarShapesController.tab4}">
+						<ui:include src="/paginas/manter-imoveis/cefir/includes/includes-atualizacao-shapes/atualizarShapeAbas.xhtml" />
+					</p:tab>
+					
+					<p:tab id="abaAtividadeDesenvolvida" title="Atividade Desenvolvida" disabled="#{atualizarShapesController.tab5}">
+						<ui:include src="/paginas/manter-imoveis/cefir/includes/includes-atualizacao-shapes/atualizarShapeAbas.xhtml" />
+					</p:tab>
+					
+					<p:tab id="abaVisualizacao" title="Visualização"  disabled="#{atualizarShapesController.tab6}" >
+						<br/>
+						<h3>
+							<h:outputText styleClass="titulo-grupo" style="font-size: 12px; font-weight: bold;" value="LOCALIZAÇÃO GEOGRÁFICA DO IMÓVEL" />
+						</h3>
+						<br/>
+						
+						<h:panelGrid id="pnlTheGeom" columns="1" >
+							<h:panelGrid id="pnlAcoesVisualizarShapes" columns="2" columnClasses="margin-right: 10px;" >
+							
+								<!-- LIMITE DA PROPRIEDADE -->
+								<h:outputLink value="#{atualizarShapesController.caminhoDesenharGeoBahia}" title="GEOBAHIA" target="_blank" rendered="#{!atualizarShapesController.tab0}">
+									<h:outputText value="VISUALIZAR SHAPE DO LIMITE DA PROPRIEDADE" />
+									<f:param name="acao" value="view" />
+									<f:param name="idimov" value="#{atualizarShapesController.imovel.ideImovelRural}" />
+									<f:param name="tipo" value="1"/>
+								</h:outputLink>
+								<h:outputLink
+									value="#{atualizarShapesController.caminhoDesenharGeoBahia}"
+									title="GEOBAHIA" target="_blank" rendered="#{!atualizarShapesController.tab0}">
+									<h:graphicImage title="Visualizar" value="/resources/img/ico-arl-relocacao.png" />
+									<f:param name="acao" value="view" />
+									<f:param name="idimov" value="#{atualizarShapesController.imovel.ideImovelRural}" />
+									<f:param name="tipo" value="1"/>
+								</h:outputLink>
+								
+								<!-- RESERVA LEGAL -->
+								<h:outputLink value="#{atualizarShapesController.caminhoDesenharGeoBahia}" title="GEOBAHIA" target="_blank" rendered="#{!atualizarShapesController.tab1}">
+									<h:outputText value="VISUALIZAR SHAPE DA RESERVA LEGAL" />
+									<f:param name="acao" value="view" />
+									<f:param name="idimov" value="#{atualizarShapesController.imovel.ideImovelRural}" />
+									<f:param name="tipo" value="2"/>
+								</h:outputLink>
+								<h:outputLink
+									value="#{atualizarShapesController.caminhoDesenharGeoBahia}"
+									title="GEOBAHIA" target="_blank" rendered="#{!atualizarShapesController.tab1}">
+									<h:graphicImage title="Visualizar Reserva Legal" value="/resources/img/ico-arl-relocacao.png" />
+									<f:param name="acao" value="view" />
+									<f:param name="idimov" value="#{atualizarShapesController.imovel.ideImovelRural}" />
+									<f:param name="tipo" value="2"/>
+								</h:outputLink>
+								
+								<!-- VEGETAÇÃO NATIVA -->
+								<h:outputLink value="#{atualizarShapesController.caminhoDesenharGeoBahia}" title="GEOBAHIA" target="_blank" rendered="#{!atualizarShapesController.tab2}">
+									<h:outputText value="VISUALIZAR SHAPE DA VEGETAÇÃO NATIVA" />
+									<f:param name="acao" value="view" />
+									<f:param name="idimov" value="#{atualizarShapesController.imovel.ideImovelRural}" />
+									<f:param name="tipo" value="5"/>
+								</h:outputLink>
+								<h:outputLink
+									value="#{atualizarShapesController.caminhoDesenharGeoBahia}"
+									title="GEOBAHIA" target="_blank" rendered="#{!atualizarShapesController.tab2}">
+									<h:graphicImage title="Visualizar Vegetação Nativa" value="/resources/img/ico-arl-relocacao.png" />
+									<f:param name="acao" value="view" />
+									<f:param name="idimov" value="#{atualizarShapesController.imovel.ideImovelRural}" />
+									<f:param name="tipo" value="5"/>
+								</h:outputLink>
+								
+								<!-- APP -->
+								<ui:repeat var="app" value="#{atualizarShapesController.listaAppsAlterados}">
+									<h:outputLink 
+										value="#{atualizarShapesController.caminhoDesenharGeoBahia}" 
+										title="GEOBAHIA" 
+										target="_blank" 
+										rendered="#{!atualizarShapesController.tab3}" 
+										style="line-height: 19px !important;" >
+										
+										<h:outputText value="VISUALIZAR SHAPE DA APP" />
+										<f:param name="acao" value="view" />
+										<f:param name="idimov" value="#{atualizarShapesController.imovel.ideImovelRural}" />
+										<f:param name="tipo" value="3"/>
+										<f:param name="subtipo" value="#{app.ideTipoApp.ideTipoApp}" />
+										<f:param name="identificador" value="#{app.codigoPersistirShape}" />
+									</h:outputLink>
+								</ui:repeat>
+								
+								<ui:repeat var="app" value="#{atualizarShapesController.listaAppsAlterados}">
+									<h:outputLink 
+										value="#{atualizarShapesController.caminhoDesenharGeoBahia}"
+										title="GEOBAHIA" 
+										target="_blank" 
+										rendered="#{!atualizarShapesController.tab3}" 
+										style="line-height: 19px !important;">
+										
+										<h:graphicImage title="Visualizar APP" value="/resources/img/ico-arl-relocacao.png"/>
+										<f:param name="acao" value="view" />
+										<f:param name="idimov" value="#{atualizarShapesController.imovel.ideImovelRural}" />
+										<f:param name="tipo" value="3"/>
+										<f:param name="subtipo" value="#{app.ideTipoApp.ideTipoApp}" />
+										<f:param name="identificador" value="#{app.codigoPersistirShape}" />
+									</h:outputLink>
+								</ui:repeat>
+									
+								
+								<!-- RNPP -->
+								<h:outputLink value="#{atualizarShapesController.caminhoDesenharGeoBahia}" title="GEOBAHIA" target="_blank" rendered="#{!atualizarShapesController.tab4}">
+									<h:outputText value="VISUALIZAR SHAPE DA RNPP" />
+									<f:param name="acao" value="view"/>
+						        	<f:param name="idimov" value="#{atualizarShapesController.imovel.ideImovelRural}"/>
+						        	<f:param name="tipo" value="13"/>
+								</h:outputLink>
+								<h:outputLink
+									value="#{atualizarShapesController.caminhoDesenharGeoBahia}"
+									title="GEOBAHIA" target="_blank" rendered="#{!atualizarShapesController.tab4}">
+									<h:graphicImage title="Visualizar RNPP" style="vertical-align: middle;" value="/resources/img/ico-arl-relocacao.png" />
+									<f:param name="acao" value="view"/>
+						        	<f:param name="idimov" value="#{atualizarShapesController.imovel.ideImovelRural}"/>
+						        	<f:param name="tipo" value="13"/>
+								</h:outputLink>
+								
+								<!-- ATIVIDADE DESENVOLVIDA -->
+								<ui:repeat var="area" value="#{atualizarShapesController.listaAreasProdutivasAlterados}">
+									<h:outputLink value="#{atualizarShapesController.caminhoDesenharGeoBahia}" title="GEOBAHIA" target="_blank" 
+										rendered="#{!atualizarShapesController.tab5}" style="line-height: 19px !important;">
+										<h:outputText value="VISUALIZAR SHAPE DA ATIVIDADE DESENVOLVIDA" />
+										<f:param name="acao" value="view" />
+										<f:param name="idimov" value="#{atualizarShapesController.imovel.ideImovelRural}" />
+										<f:param name="tipo" value="4"/>
+										<f:param name="identificador" value="#{area.codigoPersistirShape}"/>
+									</h:outputLink>
+									<br />
+								</ui:repeat>
+							
+								<ui:repeat var="area" value="#{atualizarShapesController.listaAreasProdutivasAlterados}">
+									<h:outputLink
+										value="#{atualizarShapesController.caminhoDesenharGeoBahia}"
+										title="GEOBAHIA" target="_blank" rendered="#{!atualizarShapesController.tab5}" style="line-height: 22px !important;">
+										<h:graphicImage title="Visualizar Atividade Desenvolvida" value="/resources/img/ico-arl-relocacao.png" />
+										<f:param name="acao" value="view" />
+										<f:param name="idimov" value="#{atualizarShapesController.imovel.ideImovelRural}" />
+										<f:param name="tipo" value="4"/>
+										<f:param name="identificador" value="#{area.codigoPersistirShape}"/>
+									</h:outputLink>
+									<br />
+								</ui:repeat>
+							</h:panelGrid>
+						</h:panelGrid>
+					</p:tab>
+				<br />
+				</p:tabView>
+			</h:form>
+			
+		    <h:form id="formAcao" >
+				<h:panelGrid id="panelAcao" columns="2">
+					<p:commandButton value="Voltar"  update="formAtualizacaoShape formAcao:panelAcao" 
+							action="#{atualizarShapesController.voltarAbas}" rendered="#{atualizarShapesController.exibirBtnVoltar}">
+				   	</p:commandButton>
+				   
+				   <p:commandButton value="Avançar" update="formAtualizacaoShape formAcao:panelAcao"  
+						   		action="#{atualizarShapesController.avancarAbas}" 
+						   		rendered="#{!atualizarShapesController.exibirBtnSalvarOuAvancar and !atualizarShapesController.exibirBtnFinalizar}">
+			   		</p:commandButton>
+			   		
+			   		<!-- Botão avançar da aba Ativ.desenvol. -->
+			   		<p:commandButton value="Avançar"  update="formAtualizacaoShape formAcao:panelAcao"
+					   				action="#{atualizarShapesController.salvar}" 
+						   			rendered="#{atualizarShapesController.exibirBtnSalvarOuAvancar and !atualizarShapesController.exibirBtnFinalizar}">
+				   	</p:commandButton>
+				   	
+			   		<p:commandButton value="Finalizar"  update="formAtualizacaoShape formAcao:panelAcao"
+			   					action="#{atualizarShapesController.prepararParaFinalizar()}" 
+				   				rendered="#{atualizarShapesController.exibirBtnFinalizar}">
+				   	</p:commandButton>
+			   		
+				</h:panelGrid>
+			</h:form>
+			
+		</ui:composition>

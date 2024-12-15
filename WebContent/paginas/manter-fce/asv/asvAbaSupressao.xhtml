@@ -1,0 +1,625 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui">
+	<h:form id="asvFormAbaSupressao">
+	
+	<p:remoteCommand name="atualizarGridTableEspecieSupressao" update="asvFormAbaSupressao:gridTableEspecieSupressao" process="@this"/>
+		<!-- SUPRESSAO -->
+		<p:outputPanel id="panel01">
+			<h:panelGrid id="grid01">
+				<h:outputText styleClass="titulo-grupo" style="font-weight:bold;" value="* Supressão" />
+				<br />
+				<h:panelGroup id="group01" style="margin-left:10px;">
+					<h:outputText value="Área total da supressão (ha)" />
+					<p:inputText value="#{asvSupressaoController.fceAsv.numAreaSupressao}" converter="doubleConverterToDecimal" onkeyup="mascararNumeroAndAddZeros(this, event, 8, 4, '.', ',', 3);" maxlength="15" style="margin-left:5px; width:100px;" disabled="#{asvDadosGeraisController.desabilitarTudo}" 
+								 onblur="mascararNumeroAndAddZeros(this, event, 8, 4, '.',',', 3);">
+						<p:ajax global="false" event="blur" listener="#{asvSupressaoController.calcularPorcentagemBySupressao()}" update="grid02 panel04"/>
+					</p:inputText>
+				</h:panelGroup>
+				<br />
+				<h:outputText styleClass="titulo-grupo" style="font-weight:bold; margin-left:10px;" value="Haverá Supressão em Área de Preservação Permanente (APP)?"/>
+				<br />
+				<p:selectOneRadio value="#{asvSupressaoController.fceAsv.indApp}" style="margin-left:20px;" layout="pageDirection" valueChangeListener="#{asvSupressaoController.changeIndAPP()}" disabled="#{asvDadosGeraisController.desabilitarTudo}">
+					<f:selectItem itemLabel="Sim" itemValue="true" />
+					<f:selectItem itemLabel="Não" itemValue="false" />
+					<p:ajax event="change" update="grid02 panel04 tabAbasASVid:gridConversao tabAbasASVid:gridTableEspecieSupressao" global="false" />
+				</p:selectOneRadio>
+				<br />
+			</h:panelGrid>
+			
+			<h:panelGrid id="grid02">
+				<h:panelGroup id="group02" layout="block" style="width:680px; height:240px; overflow:auto; border:1px solid gray; margin-left:30px;" rendered="#{asvSupressaoController.supressaoAPP}">
+					<h:panelGrid columns="2" rendered="#{asvSupressaoController.supressaoAPP}">
+						<h:outputText value="Área total de APP a ser suprimida (ha)" />
+
+						<p:inputText onkeyup="mascararNumeroAndAddZeros(this, event, 8, 4, '.',',', 3);" maxlength="15" onblur="mascararNumeroAndAddZeros(this, event, 8, 4, '.', ',', 3);" converter="doubleConverterToDecimal"
+									 value="#{asvSupressaoController.fceAsv.numAreaApp}" style="margin-left:-220px; width:80px;" disabled="#{asvSupressaoController.finalizarComAviso or asvDadosGeraisController.desabilitarTudo}">
+							<p:ajax global="false" event="blur" listener="#{asvSupressaoController.calcularPorcentagemBySuprimida()}" update="grid02 panel04 tabAbasASVid:gridTableEspecieSupressao"/>
+						</p:inputText>
+
+						<p:spacer height="5px;"/>
+						<p:spacer height="5px;"/>
+						
+						<h:outputText value="% de APP a ser suprimida em relação à área total de APP do empreendimento" />
+						
+						<p:inputText value="#{asvSupressaoController.fceAsv.numAreaSuprimida}" converter="doubleConverter" onkeyup="maskIt(this, event, '999,99', true)" style="margin-left:5px; width:80px;" 
+									 disabled="#{asvSupressaoController.blockPorcentagemApp or asvDadosGeraisController.desabilitarTudo}" maxlength="6"/>
+						<p:spacer height="5px;"/>
+						<p:spacer height="5px;"/>
+						
+						<h:outputText value="Justificativa da supressão em APP:" />
+						<p:spacer height="10px;"/>
+						
+				        <p:selectManyCheckbox value="#{asvSupressaoController.listaJustificativaSupressaoSelecionadas}" layout="pageDirection" style="margin-left:30px;" converter="simpleEntityConverter" disabled="#{asvSupressaoController.finalizarComAviso or asvDadosGeraisController.desabilitarTudo}">
+	                    	<f:selectItems var="justificativa" value="#{asvSupressaoController.listaJustificativaSupressao}" itemLabel="#{justificativa.dscJustificativaSupressao}" itemValue="#{justificativa}"/>
+	                    	<p:ajax global="false"/>  
+				        </p:selectManyCheckbox>  
+				        
+    					<p:spacer height="10px;"/>
+					</h:panelGrid>
+					<br />
+					<div style="margin-left:30px; text-align:justify; width:602px;" >
+						<h:outputLabel value="#{bundle.fce_asv_RN033}" style="font-size:10px;" />
+					</div>
+				</h:panelGroup>
+			</h:panelGrid>
+		</p:outputPanel>
+		
+		<!-- OBJETIVO DA SUPRESSAO -->
+		<p:outputPanel id="panel02">
+			<br />
+			<h:outputText styleClass="titulo-grupo" style="font-weight:bold;" value="* Objetivo da Supressão" />
+			<!-- ATIVIDADE AGROSSILVOPASTORIL -->
+			<h:panelGrid id="gridAgro" style="width: 250px; margin-left:10px;">
+				<br />
+				<h:panelGroup id="atvAgro" >
+					<p:commandLink id="ADDatvAgro" actionListener="#{asvSupressaoController.changeAtividadeAgro()}" update="gridAgro" global="false" disabled="#{asvDadosGeraisController.desabilitarTudo}"> 
+						<h:graphicImage title="Adicionar Objetivo da Supressão de Atividade Agrossilvopastoril" value="/resources/img/ico-adicionar.png"  rendered="#{asvSupressaoController.indAtividadeAgro == false}"/>
+						<h:graphicImage title="Adicionar Objetivo da Supressão de Atividade Agrossilvopastoril" value="/resources/img/ico-retrair.png"  rendered="#{asvSupressaoController.indAtividadeAgro == true}"/>
+					</p:commandLink>
+					<h:outputText value="Atividade Agrossilvopastoril" style="margin-left:10px;"/>
+			    </h:panelGroup>
+			    
+			    <h:panelGroup id="groupAgro" rendered="#{asvSupressaoController.indAtividadeAgro}">
+			    	<p:selectManyCheckbox id="selectAtividadeAgro" layout="pageDirection" value="#{asvSupressaoController.listObjSupAgroSelecionados}" style="margin-left:20px;" converter="simpleEntityConverter" disabled="#{asvDadosGeraisController.desabilitarTudo}">
+	                	<f:selectItems value="#{asvSupressaoController.listObjSupAgro}" var="atividadeAgro" itemLabel="#{atividadeAgro.dscObjetoSupressao}" itemValue="#{atividadeAgro}"/>  
+	            		<p:ajax global="false"/>
+		        	</p:selectManyCheckbox>  
+			    </h:panelGroup>
+		    </h:panelGrid>
+		    
+		    <!-- ATIVIDADE DE MINERACAO -->
+		    <h:panelGrid id="gridAtividadeMiner" style="width:400px;  margin-left:10px;">
+			    <h:panelGroup id="atvMiner">
+			   		<p:commandLink id="ADDatvMiner" actionListener="#{asvSupressaoController.changeAtividadeMiner()}" update="@this gridAtividadeMiner" global="false" disabled="#{asvDadosGeraisController.desabilitarTudo}"> 
+						<h:graphicImage title="Adicionar Objetivo da Supressão de Atividade de Mineração" value="/resources/img/ico-adicionar.png"  rendered="#{asvSupressaoController.indAtividadeMiner == false}"/>
+						<h:graphicImage title="Adicionar Objetivo da Supressão de Atividade de Mineração" value="/resources/img/ico-retrair.png"  rendered="#{asvSupressaoController.indAtividadeMiner == true}"/>
+					</p:commandLink>
+					<h:outputText value="Atividade de Mineração" style="margin-left:10px;"/>
+			    </h:panelGroup>
+			    
+			    <h:panelGrid id="gridMiner" columns="2" rendered="#{asvSupressaoController.indAtividadeMiner}" style="width:400px; margin-left:20px;">
+			        <h:panelGroup style="width:250px;">
+					    <p:commandLink id="ADDatvMinerOleo" actionListener="#{asvSupressaoController.changeOleoGas()}" update="@this groupOleo" global="false" disabled="#{asvDadosGeraisController.desabilitarTudo}"> 
+							<h:graphicImage title="Adicionar Objetivo da Supressão de Óleo e Gás" value="/resources/img/ico-adicionar.png"  rendered="#{asvSupressaoController.indOleoGas == false}"/>
+							<h:graphicImage title="Adicionar Objetivo da Supressão de Óleo e Gás" value="/resources/img/ico-retrair.png"  rendered="#{asvSupressaoController.indOleoGas == true}"/>
+						</p:commandLink>
+						<h:outputText value="Óleo e Gás" style="margin-left:10px;"/>
+			    	</h:panelGroup>
+		    		
+		    		<h:panelGroup style="width:250px;">
+				        <p:commandLink id="ADDatvMinerMiner" actionListener="#{asvSupressaoController.changeMiner()}" update="@this groupMiner" global="false" disabled="#{asvDadosGeraisController.desabilitarTudo}"> 
+							<h:graphicImage title="Adicionar Objetivo da Supressão de Mineração" value="/resources/img/ico-adicionar.png"  rendered="#{asvSupressaoController.indMiner == false}"/>
+							<h:graphicImage title="Adicionar Objetivo da Supressão de Mineração" value="/resources/img/ico-retrair.png"  rendered="#{asvSupressaoController.indMiner == true}"/>
+						</p:commandLink>
+						<h:outputText value="Mineração" style="margin-left:10px;"/>
+				    </h:panelGroup>
+				    
+				    <!-- OLEO E GAS -->
+				    <h:panelGroup id="groupOleo" style="width:180px; height:70px;">
+    				    <p:spacer id="spcOleo" height="5px;" rendered="#{!asvSupressaoController.indOleoGas}" style="width:200px;"/>
+					    <p:selectManyCheckbox id="selectOleoGas" layout="pageDirection" value="#{asvSupressaoController.listObjSupOleoGasSelecionados}" style="width:180px; margin-left:20px;" rendered="#{asvSupressaoController.indOleoGas}" converter="simpleEntityConverter" disabled="#{asvDadosGeraisController.desabilitarTudo}">
+		                	<f:selectItems value="#{asvSupressaoController.listObjSupOleoGas}" var="oleoGas" itemLabel="#{oleoGas.dscObjetoSupressao}" itemValue="#{oleoGas}"/>
+		                	<p:ajax global="false"/>  
+			        	</p:selectManyCheckbox>
+				    </h:panelGroup>
+				    
+					<!-- MINERACAO -->
+				    <h:panelGroup id="groupMiner" style="width:280px; height:70px;">
+    				    <p:spacer id="spcMiner" height="5px;" rendered="#{!asvSupressaoController.indMiner}" style="width:320px;"/>
+					    <p:selectManyCheckbox id="selectMiner" layout="pageDirection" value="#{asvSupressaoController.listObjSupMinerSelecionados}" style="width:280px; margin-left:20px;" rendered="#{asvSupressaoController.indMiner}" converter="simpleEntityConverter" disabled="#{asvDadosGeraisController.desabilitarTudo}">
+		                	<f:selectItems value="#{asvSupressaoController.listObjSupMiner}" var="miner" itemLabel="#{miner.dscObjetoSupressao}" itemValue="#{miner}"/>  
+		                	<p:ajax global="false"/>
+			        	</p:selectManyCheckbox>
+		        	</h:panelGroup>
+			    </h:panelGrid>
+		    </h:panelGrid>
+
+			<!-- EMPREENDIMENTO INDUSTRIAL -->
+			<h:panelGrid id="gridEmpIndust" style="width: 250px; margin-left:10px;">
+				<h:panelGroup id="atvEmpIndust" >
+					<p:commandLink id="ADDatvEmpIndust" actionListener="#{asvSupressaoController.changeEmprendimentoIndustrial()}" update="gridEmpIndust" global="false" disabled="#{asvDadosGeraisController.desabilitarTudo}"> 
+						<h:graphicImage title="Adicionar Objetivo da Supressão de Empreendimento Industrial" value="/resources/img/ico-adicionar.png" rendered="#{asvSupressaoController.indEmpreendIndust == false}"/>
+						<h:graphicImage title="Adicionar Objetivo da Supressão de Empreendimento Industrial" value="/resources/img/ico-retrair.png" rendered="#{asvSupressaoController.indEmpreendIndust == true}"/>
+					</p:commandLink>
+					<h:outputText value="Empreendimento Industrial" style="margin-left:10px;"/>
+			    </h:panelGroup>
+			    
+			    <h:panelGroup id="groupEmpIndust" rendered="#{asvSupressaoController.indEmpreendIndust}">
+			    	<p:selectManyCheckbox id="selectEmpreendIndust" layout="pageDirection" value="#{asvSupressaoController.listObjSupEmpIndSelecionados}" style="margin-left:20px;" converter="simpleEntityConverter" disabled="#{asvDadosGeraisController.desabilitarTudo}">
+	                	<f:selectItems value="#{asvSupressaoController.listObjSupEmpInd}" var="empIndust" itemLabel="#{empIndust.dscObjetoSupressao}" itemValue="#{empIndust}"/>  
+		        		<p:ajax global="false"/>
+		        	</p:selectManyCheckbox>  
+			    </h:panelGroup>
+		    </h:panelGrid>
+		    
+		    <!-- EMPREENDIMENTO DE INFRAESTRUTURA E ENERGIA -->
+		    <h:panelGrid id="gridEmpInfra" style="width: 450px; margin-left:10px;">
+				<h:panelGroup id="atvEmpInfra" >			
+					<p:commandLink id="ADDatvEmpInfra" actionListener="#{asvSupressaoController.changeEmprendimentoInfraestrutura()}" update="gridEmpInfra" global="false" disabled="#{asvDadosGeraisController.desabilitarTudo}"> 
+						<h:graphicImage title="Adicionar Objetivo da Supressão de Empreendimento de Infraestrutura e Energia" value="/resources/img/ico-adicionar.png"  rendered="#{asvSupressaoController.indEmpreendInfraEner == false}"/>
+						<h:graphicImage title="Adicionar Objetivo da Supressão de Empreendimento de Infraestrutura e Energia" value="/resources/img/ico-retrair.png"  rendered="#{asvSupressaoController.indEmpreendInfraEner == true}"/>
+					</p:commandLink>
+				    <h:outputText value="Empreendimento de Infraestrutura e Energia" style="margin-left:10px;"/>
+			    </h:panelGroup>
+			    
+			    <h:panelGroup id="groupEmpInfra" rendered="#{asvSupressaoController.indEmpreendInfraEner}">
+			    	<p:selectManyCheckbox id="selectEmpreendIndfra" layout="pageDirection" value="#{asvSupressaoController.listObjSupEmpInfraSelecionados}" style="margin-left:20px;" converter="simpleEntityConverter" disabled="#{asvDadosGeraisController.desabilitarTudo}">
+	                	<f:selectItems value="#{asvSupressaoController.listObjSupEmpInfra}" var="empInfra" itemLabel="#{empInfra.dscObjetoSupressao}" itemValue="#{empInfra}"/>  
+	                	<p:ajax global="false"/>
+		        	</p:selectManyCheckbox>  
+			    </h:panelGroup>
+		    </h:panelGrid>
+		    
+		    <!-- EMPREENDIMENTO DE INTERESSE SOCIAL -->
+		    <h:panelGrid id="gridEmprIntSocial" style="width: 450px; margin-left:10px;">
+				<h:panelGroup id="atvEmprIntSocial" >			
+			    	<p:commandLink id="ADDatvEmprIntSocial" actionListener="#{asvSupressaoController.changeEmprendimentoInteresseSocial()}" update="gridEmprIntSocial" global="false" disabled="#{asvDadosGeraisController.desabilitarTudo}"> 
+						<h:graphicImage title="Adicionar Objetivo da Supressão de Empreendimento de Interesse social" value="/resources/img/ico-adicionar.png"  rendered="#{asvSupressaoController.indEmpreendInterSocial == false}"/>
+						<h:graphicImage title="Adicionar Objetivo da Supressão de Empreendimento de Interesse social" value="/resources/img/ico-retrair.png"  rendered="#{asvSupressaoController.indEmpreendInterSocial == true}"/>
+					</p:commandLink>
+				    <h:outputText value="Empreendimento de Interesse social" style="margin-left:10px;"/>
+			    </h:panelGroup>
+			    
+			    <h:panelGroup id="groupEmprIntSocial" rendered="#{asvSupressaoController.indEmpreendInterSocial}">
+			    	<p:selectManyCheckbox id="selectEmprIntSocial" layout="pageDirection" value="#{asvSupressaoController.listObjSupEmpInterSocialSelecionados}" style="margin-left:20px;" converter="simpleEntityConverter" disabled="#{asvDadosGeraisController.desabilitarTudo}">
+	                	<f:selectItems value="#{asvSupressaoController.listObjSupEmpInterSocial}" var="empSocial" itemLabel="#{empSocial.dscObjetoSupressao}" itemValue="#{empSocial}"/>  
+	                	<p:ajax global="false"/>
+		        	</p:selectManyCheckbox>  
+			    </h:panelGroup>
+		    </h:panelGrid>
+					    
+		    <!-- CONSTRUCAO CIVIL -->
+			<h:panelGrid id="gridConstrCivil" style="width: 450px; margin-left:10px;">
+				<h:panelGroup id="atvConstrCivil" >			
+			    	<p:commandLink id="ADDatvConstrCivilL" actionListener="#{asvSupressaoController.changeConstrucaoCivil()}" update="gridConstrCivil" global="false" disabled="#{asvDadosGeraisController.desabilitarTudo}"> 
+						<h:graphicImage title="Adicionar Objetivo da Supressão de Construção civil" value="/resources/img/ico-adicionar.png"  rendered="#{asvSupressaoController.indConstruCivil == false}"/>
+						<h:graphicImage title="Adicionar Objetivo da Supressão de Construção civil" value="/resources/img/ico-retrair.png"  rendered="#{asvSupressaoController.indConstruCivil == true}"/>
+					</p:commandLink>
+				    <h:outputText value="Construção civil" style="margin-left:10px;"/>
+			    </h:panelGroup>
+			    
+			    <h:panelGroup id="groupConstrCivil" rendered="#{asvSupressaoController.indConstruCivil}">
+			    	<p:selectManyCheckbox id="selectConstrCivil" layout="pageDirection" value="#{asvSupressaoController.listObjSupConstrucaoSelecionados}" style="margin-left:20px;" converter="simpleEntityConverter" disabled="#{asvDadosGeraisController.desabilitarTudo}">
+	                	<f:selectItems value="#{asvSupressaoController.listObjSupConstrucao}" var="objConstrCivil" itemLabel="#{objConstrCivil.dscObjetoSupressao}" itemValue="#{objConstrCivil}"/>  
+	                	<p:ajax global="false"/>
+		        	</p:selectManyCheckbox>  
+			    </h:panelGroup>
+		    </h:panelGrid>
+					    
+			<!-- EMPREENDIMENTOS URBANISTICOS, TURISTICOS E DE LAZER -->
+			<h:panelGrid id="gridEUTL" style="width: 450px; margin-left:10px;">
+				<h:panelGroup id="atvEUTL" >			
+			    	<p:commandLink id="ADDatvEUTL" actionListener="#{asvSupressaoController.changeEmpreendUrbanTuristicoLazer()}" update="gridEUTL" global="false" disabled="#{asvDadosGeraisController.desabilitarTudo}"> 
+						<h:graphicImage title="Adicionar Objetivo da Supressão de Empreendimentos Urbanísticos, Turísticos e de Lazer" value="/resources/img/ico-adicionar.png"  rendered="#{asvSupressaoController.indEmpreendUrbanTuristicoLazer == false}"/>
+						<h:graphicImage title="Adicionar Objetivo da Supressão de Empreendimentos Urbanísticos, Turísticos e de Lazer" value="/resources/img/ico-retrair.png"  rendered="#{asvSupressaoController.indEmpreendUrbanTuristicoLazer == true}"/>
+					</p:commandLink>
+				    <h:outputText value="Empreendimentos Urbanísticos, Turísticos e de Lazer" style="margin-left:10px;"/>
+			    </h:panelGroup>
+			    
+			    <h:panelGroup id="groupEUTL" rendered="#{asvSupressaoController.indEmpreendUrbanTuristicoLazer}">
+			    	<p:selectManyCheckbox id="selectEUTL" layout="pageDirection" value="#{asvSupressaoController.listObjSupEmpUrbanSelecionados}" style="margin-left:20px;" converter="simpleEntityConverter" disabled="#{asvDadosGeraisController.desabilitarTudo}">
+	                	<f:selectItems value="#{asvSupressaoController.listObjSupEmpUrban}" var="empUrbTur" itemLabel="#{empUrbTur.dscObjetoSupressao}" itemValue="#{empUrbTur}"/>  
+	                	<p:ajax global="false"/>
+		        	</p:selectManyCheckbox>  
+			    </h:panelGroup>
+		    </h:panelGrid>
+					    
+			<!-- OUTRO -->
+			<h:panelGrid id="gridOurto" style="width: 450px; margin-left:10px;">
+				<h:panelGroup id="atvOurto" >
+					<p:commandLink id="ADDoutro" actionListener="#{asvSupressaoController.changeOutroObjetivo()}" update="gridOurto" global="false" disabled="#{asvDadosGeraisController.desabilitarTudo}"> 
+						<h:graphicImage title="Adicionar Outro Objetivo da Supressão" value="/resources/img/ico-adicionar.png"  rendered="#{asvSupressaoController.indOutroEmpreendimento == false}"/>
+						<h:graphicImage title="Adicionar Outro Objetivo da Supressão" value="/resources/img/ico-retrair.png"  rendered="#{asvSupressaoController.indOutroEmpreendimento == true}"/>
+					</p:commandLink>
+				    <h:outputText value="Outro não especificado anteriormente" style="margin-left:10px;"/>
+			    </h:panelGroup>
+		    	<p:inputText id="outro" value="#{asvSupressaoController.outroEmpreendimento}" rendered="#{asvSupressaoController.indOutroEmpreendimento}" style="width:310px; margin-left:25px;" maxlength="50" disabled="#{asvDadosGeraisController.desabilitarTudo}"/>
+				<p:watermark for="outro" value="Informe o objetivo não especificado" />
+		    </h:panelGrid>					    
+		</p:outputPanel>
+		
+		<p:outputPanel id="panel03">
+			<br />
+			<h:outputText styleClass="titulo-grupo" style="font-weight:bold;" value="Informar a ocorrência de áreas no Empreendimento" />
+			<br /><br />
+			<h:panelGrid id="grid03" columns="2" style="width:680px; height:35px; margin-left:10px;">
+				<h:panelGroup style="width:430px;">
+					<p:selectBooleanCheckbox value="#{asvSupressaoController.indAbandonada}" valueChangeListener="#{asvSupressaoController.changeAreaAbandonada()}" disabled="#{asvDadosGeraisController.desabilitarTudo}">  
+		           		<p:ajax update="grid03 space01" global="false"/>  
+				    </p:selectBooleanCheckbox>
+					<h:outputText value="Abandonada/Subutilizadas/Utilizada de forma inadequada"/>
+				</h:panelGroup>
+				<p:spacer id="space01" rendered="#{!asvSupressaoController.indAbandonada}"/>
+				<h:panelGroup id="abandonada" rendered="#{asvSupressaoController.indAbandonada}">
+					<h:outputText value="Área (ha)" />
+					<p:inputText value="#{asvSupressaoController.areaAbandonada}" style="margin-left:5px; width:80px;" converter="doubleConverter" onkeyup="maskIt(this, event, '99.999.999,99', true)" maxlength="13" disabled="#{asvDadosGeraisController.desabilitarTudo}"/>
+				</h:panelGroup>
+			</h:panelGrid>
+				
+			<h:panelGrid id="grid04" columns="2" style="width:680px; height:35px; margin-left:10px;">
+				<h:panelGroup style="width:450px;">
+					<p:selectBooleanCheckbox value="#{asvSupressaoController.indInviavel}" valueChangeListener="#{asvSupressaoController.changeAreaInviavel()}" disabled="#{asvDadosGeraisController.desabilitarTudo}">  
+		           		<p:ajax update="grid04 space02" global="false"/>  
+				    </p:selectBooleanCheckbox>
+					<h:outputText value="Agronomicamente Inviável"/>
+				</h:panelGroup>
+				<p:spacer width="5px;" id="space02" rendered="#{!asvSupressaoController.indInviavel}"/>
+				<h:panelGroup id="inviavel" rendered="#{asvSupressaoController.indInviavel}" style="margin-left:282px;"> 
+					<h:outputText value="Área (ha)" />
+					<p:inputText value="#{asvSupressaoController.areaInviavel}" style="margin-left:5px; width:80px;" converter="doubleConverter" onkeyup="maskIt(this, event, '99.999.999,99', true)" maxlength="13" disabled="#{asvDadosGeraisController.desabilitarTudo}"/>
+				</h:panelGroup>
+			</h:panelGrid>
+		</p:outputPanel>
+		
+		<p:outputPanel id="plMaterialLenhoNovo" rendered="#{empty asvSupressaoController.fceAsv.indMaterialLenhoso}">
+		
+			<br />
+			<h:outputText styleClass="titulo-grupo" style="font-weight:bold;" value="Especificação do Produto da Supressão" />
+			<br /><br />			
+			<h:panelGrid id="produtosSupressao" columns="2">
+			  	<p:selectOneMenu value="#{asvSupressaoController.produtoSelecionadoSupressao}" style="width:230px;" disabled="#{asvSupressaoController.listProdutoEmpty or asvDadosGeraisController.desabilitarTudo}" converter="simpleEntityConverter">  
+            		<f:selectItem itemLabel="Selecione o Produto" itemValue="" />  
+            		<f:selectItems value="#{asvSupressaoController.listProduto}" var="produto" itemLabel="#{produto.dscProduto}" itemValue="#{produto}"/>
+            		<p:ajax event="change" listener="#{asvSupressaoController.changeProduto}" update="produtosSupressao, tituloEspecie, gridBusca, gridTableEspecie" global="false"/>  
+        		</p:selectOneMenu>
+				<p:commandLink title="Add" disabled="#{!asvSupressaoController.lenha}"
+					 action="#{asvSupressaoController.retornoEspecie()}" update="panel04" immediate="true" process="@this" global="false">
+					<h:graphicImage title="Adicionar Produto" value="/resources/img/ico-aprovar-notificacao.png"/>
+				</p:commandLink>
+			</h:panelGrid> 
+			<br/><br/>
+			<h:panelGrid id="tituloEspecie">
+				<h:outputText styleClass="titulo-grupo" rendered="#{!asvSupressaoController.lenha and asvSupressaoController.produtoSelecionadoSupressao != null }" style="font-weight:bold;" value="* Especies"/>
+				<br />
+				<p:layoutUnit position="center" resizable="false" rendered="#{!asvSupressaoController.lenha and asvSupressaoController.produtoSelecionadoSupressao != null }" style="border-color: green;width:63%;">
+		            <table style="width:100%;font-size: 11px; background-color: #E6F9E6;">
+		                <tr>
+		                    <td />
+		                    <td colspan="2">
+		                         <p>Caso espécie não esteja listada, encaminhe um email para atendimento.seia@inema.ba.gov.br com o 
+		                         nome cientifico da espécie e seu nome vulgar, solicitando a inclusão nesta lista. <b>A identificação da
+		                         espécie é condição necessária para a solicitação da supressão de vegetação!</b></p>
+		                    </td>
+		                </tr>
+		            </table>
+		        </p:layoutUnit>
+			</h:panelGrid>
+
+			<h:panelGrid id="gridBusca">
+				<br/>
+				<h:panelGroup style="margin-top:20px; margin-bottom:10px;" rendered="#{!asvSupressaoController.lenha and asvSupressaoController.produtoSelecionadoSupressao != null }">
+					<p:spacer width="5" height="0"/>
+					<h:outputText styleClass="titulo-grupo" style="font-weight:bold; margin-left:10px;" value="Nome"/>
+					<p:spacer width="10" height="0"/>
+					<p:inputText value="#{asvSupressaoController.nomEspecieSupressao}" onkeyup="pesq_especie();" style="width:250px;" disabled="#{asvDadosGeraisController.desabilitarTudo}">
+						<p:ajax process="@this" global="false"/>
+					</p:inputText>
+					<p:remoteCommand name="pesq_especie" actionListener="#{asvSupressaoController.pesquisarEspecieSupressao()}" global="false"
+					 update="gridTableEspecie tabAbasASVid:asvFormAbaDadosGerais:tblTipoClassificacao tabAbasASVid:asvFormAbaDadosGerais:gridTblClassSelecionados tabAbasASVid:asvFormAbaDadosGerais:tblTipoClassificacaoSelecionados" />
+				</h:panelGroup>
+			</h:panelGrid>
+			
+			<h:panelGrid id="gridTableEspecie">
+				<p:dataTable id="tblTipoClassificacao" rendered="#{!asvSupressaoController.lenha and asvSupressaoController.produtoSelecionadoSupressao != null }" value="#{asvSupressaoController.listaEspecieSupressao}" var="especieSupressao" lazy="true" paginator="true" rows="15"  
+					paginatorPosition="bottom" paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}" rowsPerPageTemplate="5,10,15" 
+					emptyMessage="Nenhuma especie supressão encontrado.">
+					<p:column style="text-align:justify; width:800px;">
+						<f:facet name="header">
+							<h:outputText value="Nome" />
+						</f:facet>
+						<h:outputText value="#{especieSupressao.nomEspecieSupressao}"/>
+					</p:column>
+					
+					<p:column style="width:40px; text-align:center;" headerText="Ações">
+						<p:commandLink title="Adicionar Classificação(ões)" process="@this" update="formNomeVulgar asvFormAbaSupressao:gridTableEspecieSupressao" 
+							 global="false" actionListener="#{asvSupressaoController.obterNovoNomePopular()}" action="#{nomePopularEspecieController.abrirNomePopular(especieSupressao)}">
+							 <f:setPropertyActionListener target="#{asvSupressaoController.especieSupressaoSelecionada}" value="#{especieSupressao}" />
+							 <f:setPropertyActionListener target="#{nomePopularEspecieController.metodoAtualizarExterno}" value="#{asvSupressaoController.metodoRetornoEspecie}" />
+							 <f:setPropertyActionListener target="#{nomePopularEspecieController.nomePopularEspecieSelecionado}" value="#{asvSupressaoController.nomePopularEspecieSelecionada}" />
+							 <f:setPropertyActionListener target="#{nomePopularEspecieController.idDoComponenteParaSerAtualizado}" value="tabAbasASVid:gridTableEspecieSupressao, asvFormAbaSupressao:gridTableEspecieSupressao" />
+							 <f:setPropertyActionListener target="#{nomePopularEspecieController.listaItemRemovidoNomePopularEspecie}" value="#{especieSupressao.removidosNomePopularEspecie}" /> 
+							<h:graphicImage title="Adicionar Classificação(ões)" value="/resources/img/ico-aprovar-notificacao.png" />
+						</p:commandLink>
+					</p:column>
+				</p:dataTable>
+				<br />
+				<h:panelGrid id="gridTableEspecieSupressao" rendered="#{not empty asvSupressaoController.listaEspecieSupressaoAutorizacao}">
+					<h:outputText styleClass="titulo-grupo" style="font-weight:bold; margin-left:10px; " value="Especies selecionadas (A lista das espécies deve ser cadastrada conforme consta no inventário florestal)"/>
+					<br />
+					<p:dataTable id="tableEspecie" var="especieSupressao" value="#{asvSupressaoController.listaEspecieSupressaoAutorizacao}" style="width:877px;">
+						
+						<p:column style="text-align:justify;">
+							<f:facet name="header">
+								<h:outputText value="Produto Gerado" />
+							</f:facet>
+							<h:outputText value="#{especieSupressao.ideProduto.dscProduto}" />
+						</p:column>
+						
+						<p:column style="text-align:justify;">
+							<f:facet name="header">
+								<h:outputText value="Nome cientifico" />
+							</f:facet>
+							<h:outputText value="#{especieSupressao.ideEspecieSupressao.nomEspecieSupressao}" />
+						</p:column>
+						<p:column style="text-align:justify;">
+							<f:facet name="header">
+								<h:outputText value="Nome vulgar" />
+							</f:facet>
+							<h:outputText value="#{especieSupressao.ideNomePopularEspecie.nomPopularEspecie}" />
+						</p:column>
+						<p:column style="text-align:justify;">
+							<f:facet name="header">
+								<h:outputText value="Volume total" /> <br /> <h:outputText value="fora de APP" />
+							</f:facet>
+							<h:panelGrid columns="3" id="pgVolumeForaAPP">
+								<h:outputText value="m³" />
+								<p:spacer height="15px;"/>
+								<p:inputText value="#{especieSupressao.volumeTotalForaApp}" style="width:80px;" converter="doubleConverterToDecimal" onkeyup="maskItQuatro(this, event, '99.999.999,9999', true)" onclick="maskItQuatro(this, event, '99.999.999,9999', true)" maxlength="15" disabled="#{asvSupressaoController.blockColunaForaApp or asvDadosGeraisController.desabilitarTudo or !especieSupressao.edicao}">
+			 		    			<p:ajax event="blur" process="@form" global="false" listener="#{asvSupressaoController.calcularVolumeForaAPP(especieSupressao)}" update="pgVolumeForaAPP"/>
+			 		    		</p:inputText>
+			 		    		<h:outputText value="st" />
+								<p:spacer height="15px;"/>
+								<h:outputText value="#{especieSupressao.volumeTotalForaEstereo}">
+									<f:convertNumber type="currency" currencySymbol="" locale="pt-br" />
+								</h:outputText>
+								
+								<h:outputText value="MDC" />
+								<p:spacer height="15px;"/>
+								<h:outputText value="#{especieSupressao.volumeTotalForaMDC}">
+									<f:convertNumber type="currency" currencySymbol="" locale="pt-br" />
+								</h:outputText>
+							</h:panelGrid>
+						</p:column>
+						<p:column style="text-align:justify;" rendered="#{asvSupressaoController.fceAsv.indApp}">
+							<f:facet name="header">
+								<h:outputText value="Volume total" /> <br /> <h:outputText value="em APP" />
+							</f:facet>
+							<h:panelGrid columns="3" id="pgVolumeEmAPP">
+								<h:outputText value="m³" />
+								<p:spacer height="15px;"/>
+								<p:inputText value="#{especieSupressao.volumeTotalEmApp}" style="width:80px;" converter="doubleConverterToDecimal" onkeyup="maskItQuatro(this, event, '99.999.999,9999', true)" onclick="maskItQuatro(this, event, '99.999.999,9999', true)" maxlength="15" disabled="#{asvDadosGeraisController.desabilitarTudo or !especieSupressao.edicao}">
+			 		    			<p:ajax event="blur" global="false" listener="#{asvSupressaoController.calcularVolumeEmAPP(especieSupressao)}" update="pgVolumeEmAPP"/>	
+			 		    		</p:inputText>
+			 		    		
+			 		    		<h:outputText value="st" />
+								<p:spacer height="15px;"/>
+								<h:outputText value="#{especieSupressao.volumeTotalEmEstereo}">
+									<f:convertNumber type="currency" currencySymbol="" locale="pt-br" />
+								</h:outputText>
+								
+								<h:outputText value="MDC" />
+								<p:spacer height="15px;"/>
+								<h:outputText value="#{especieSupressao.volumeTotalEmMDC}">
+									<f:convertNumber type="currency" currencySymbol="" locale="pt-br" />
+								</h:outputText>
+							</h:panelGrid>
+						</p:column>
+						<p:column style="text-align:justify;">
+							<f:facet name="header">
+								<h:outputText value="Destino socioeconêmico" /> <br /> <h:outputText value="do Produto" escape="false" />
+							</f:facet>
+							<h:panelGroup layout="block" style="overflow:auto;">		        
+			 		    		<p:selectManyCheckbox value="#{especieSupressao.listaDestinoSocioeconomicoSelecionado}" layout="pageDirection" converter="simpleEntityConverter" disabled="#{!especieSupressao.edicao}">
+			 		    			<f:selectItems var="destinoSocio" value="#{asvSupressaoController.listaDestinoSocioeconomico}" itemLabel="#{destinoSocio.dscDestinoSocioeconomico}" itemValue="#{destinoSocio}" />
+			 		    			<p:ajax global="false"/>
+			 		    		</p:selectManyCheckbox>
+		 		    		</h:panelGroup>
+						</p:column>
+						<p:column style="text-align:justify;width: 60px">
+							<f:facet name="header">
+								<h:outputText value="Ações" />
+							</f:facet>
+							
+							<h:panelGroup>
+								<p:commandLink title="Confirmar volumes e destino socioeconômico do produto" process="@this" global="false" rendered="#{especieSupressao.edicao}" action="#{asvSupressaoController.validarEspecie(especieSupressao)}"
+		 		    			update="tabAbasASVid:asvFormAbaSupressao:gridTableEspecieSupressao tabAbasASVid:asvFormAbaSupressao:gridTableEspecie asvFormAbaSupressao:gridTableEspecieSupressao" disabled="#{asvDadosGeraisController.desabilitarTudo}">
+									<h:graphicImage title="Confirmar" value="/resources/img/ico-aprovar-notificacao.png" />
+								</p:commandLink>
+								
+								<p:commandLink title="Editar" process="@this" update="tabAbasASVid:asvFormAbaSupressao:gridTableEspecieSupressao tabAbasASVid:asvFormAbaSupressao:gridTableEspecie asvFormAbaSupressao:gridTableEspecieSupressao" global="false" rendered="#{!especieSupressao.edicao}" disabled="#{asvDadosGeraisController.desabilitarTudo}">
+				          			 <h:graphicImage title="Editar" value="/resources/img/ico-editar.png" />
+				     			    <f:setPropertyActionListener target="#{especieSupressao.edicao}" value="#{true}"/>
+					            </p:commandLink>
+					          	
+					          	<p:commandLink title="Excluir" process="@this" global="false" disabled="#{asvDadosGeraisController.desabilitarTudo}" oncomplete="excluirEspecie.show();"
+					          		update="tabAbasASVid:gridTableEspecieSupressao tabAbasASVid:gridTableEspecie asvFormAbaSupressao:gridTableEspecieSupressao asvFormAbaSupressao:gridTableEspecie">
+				          			 <f:setPropertyActionListener target="#{asvSupressaoController.especieSupressaoAutorizacaoSelecionado}" value="#{especieSupressao}"/>
+				          			 <h:graphicImage title="Excluir" value="/resources/img/ico-excluir.png" />
+					            </p:commandLink>
+				            </h:panelGroup>
+						</p:column>
+						 
+				        <p:columnGroup type="footer">
+							<p:row>
+							    <p:column colspan="2" footerText="Total dos volumes" style="text-align:justify" />
+							    <p:column colspan="1" />
+								<p:column footerText="#{asvSupressaoController.retornarSomaVolumeForaTotal}" style="white-space:pre;text-align:justify" />
+								<p:column footerText="#{asvSupressaoController.retornarSomaVolumeEmTotal}" style="white-space:pre;text-align:justify" rendered="#{asvSupressaoController.fceAsv.indApp}" />
+								<p:column colspan="2" />
+							</p:row>
+						</p:columnGroup>
+					</p:dataTable>
+				</h:panelGrid>
+			</h:panelGrid>
+			
+			<h:panelGrid style="margin-left:30px;">
+				<br /> <br />
+				<h:panelGroup>
+			        <h:selectBooleanCheckbox value="#{asvSupressaoController.fceAsv.indAceite}" disabled="#{asvDadosGeraisController.desabilitarTudo}">  
+		           		<p:ajax global="false"/>  
+				    </h:selectBooleanCheckbox>
+					<h:outputText value="#{bundle.fce_asv_aceiteInventarioFlorestal}" style="margin-left:10px;"/>
+			    </h:panelGroup>
+
+			</h:panelGrid>
+		</p:outputPanel>
+		
+		<p:outputPanel id="panel04" rendered="#{asvSupressaoController.fceAsv.indMaterialLenhoso != null}">
+			<br />
+			<h:outputText styleClass="titulo-grupo" style="font-weight:bold;" value="* Especificação do Produto da Supressão" />
+			<br /><br />
+			<h:outputText styleClass="titulo-grupo" style="font-weight:bold; margin-left:10px;" value="Haverá rendimento de material lenhoso?"/>
+			<br />
+			<br />
+			<p:selectOneRadio value="#{asvSupressaoController.fceAsv.indMaterialLenhoso}" style="margin-left:30px;" layout="pageDirection" valueChangeListener="#{asvSupressaoController.changeMaterialLenhoso()}" disabled="#{asvSupressaoController.finalizarComAviso or asvDadosGeraisController.desabilitarTudo}">
+				<f:selectItem itemLabel="Sim" itemValue="true" />
+				<f:selectItem itemLabel="Não" itemValue="false" />
+				<p:ajax update="panel04" global="false" />
+			</p:selectOneRadio>
+			
+			<br />
+			
+			<h:panelGrid id="groupdProdutosSupressao" rendered="#{asvSupressaoController.fceAsv.indMaterialLenhoso}" columns="2" style="width:225px;">
+			  	<p:selectOneMenu value="#{asvSupressaoController.produtoSelecionado}" immediate="true" style="width:175px; margin-left:30px;" disabled="#{asvSupressaoController.listProdutoEmpty or asvDadosGeraisController.desabilitarTudo}" converter="simpleEntityConverter">  
+            		<f:selectItem itemLabel="Selecione o Produto" itemValue="" />  
+            		<f:selectItems value="#{asvSupressaoController.listProduto}" var="produto" itemLabel="#{produto.dscProduto}" itemValue="#{produto}"/>
+            		<p:ajax update="groupdProdutosSupressao" global="false"/>  
+        		</p:selectOneMenu>
+				<p:commandLink title="Add" style="margin-left:10px;" disabled="#{!asvSupressaoController.podeAdicionar or asvDadosGeraisController.desabilitarTudo}"   
+					 action="#{asvSupressaoController.adicionarProdutoSupressao()}" update="panel04" immediate="true" process="@this" global="false">
+					<h:graphicImage title="Adicionar Produto(s)" value="/resources/img/ico-aprovar-notificacao.png"/>
+				</p:commandLink>
+			</h:panelGrid> 
+			
+			<p:dataTable id="tableProdutosSupressao" var="produtoSupressao" value="#{asvSupressaoController.listProdutoSupressaoSelecionados}" rendered="#{asvSupressaoController.temProdutoAdicionado}" style="margin-left:30px;">
+				<p:columnGroup type="header">  
+		            <p:row>  
+		                <p:column rowspan="2" headerText="Produto Gerado" />
+		                <p:column id="grandeApp" colspan="2" headerText="Volume Médio (m³/ha)" style="width:300px;" rendered="#{asvSupressaoController.fceAsv.indApp}"/>
+		                <p:column rowspan="2" style="text-align:center;" rendered="#{!asvSupressaoController.fceAsv.indApp}">
+		                	<f:facet name="header"> Volume Médio  <br/> Fora de APP (m³/ha) </f:facet>
+		                </p:column>
+		                <p:column rowspan="2" headerText="Volume Total (m³)" />
+		                <p:column rowspan="2" >
+		                	<f:facet name="header"> Destino Socioeconômico <br/> do Produto </f:facet>      
+		             	</p:column>
+		                <p:column rowspan="2" headerText="Ações"/>
+		            </p:row>  
+		            <p:row>  
+		                <p:column headerText="Fora de APP (m³/ha)" style="text-align:center;" rendered="#{asvSupressaoController.fceAsv.indApp}"/>  
+		                <p:column headerText="Em APP (m³/ha)" rendered="#{asvSupressaoController.fceAsv.indApp}"/>  
+		            </p:row>  
+	 		    </p:columnGroup>
+	 		    	
+ 		    	<p:column>
+ 		    		<h:outputText value="#{produtoSupressao.produto.dscProduto}" />
+ 		    	</p:column>
+ 		    	
+ 		    	<p:column style="text-align:center;" id="cForaApp">
+ 		    		<p:inputText value="#{produtoSupressao.numForaApp}" style="width:80px;" converter="doubleConverter" onkeyup="maskIt(this, event, '99.999.999,99', true)" maxlength="13" disabled="#{produtoSupressao.desabilitaQtd or asvSupressaoController.blockColunaForaApp or asvDadosGeraisController.desabilitarTudo}">
+ 		    			<p:ajax event="blur" global="false"/>	
+ 		    		</p:inputText>
+ 		    	</p:column>
+ 		    	
+ 		    	<p:column style="width:150px; text-align:center;" rendered="#{asvSupressaoController.fceAsv.indApp}" id="cEmApp">
+ 		    		<p:inputText value="#{produtoSupressao.numEmApp}" style="width:80px;" converter="doubleConverter" onkeyup="maskIt(this, event, '99.999.999,99', true)" maxlength="13" disabled="#{produtoSupressao.desabilitaQtd or asvDadosGeraisController.desabilitarTudo}">
+ 		    			<p:ajax event="blur" global="false"/>	
+ 		    		</p:inputText>
+ 		    	</p:column>
+ 		    	
+ 		    	<p:column style="text-align:center;">
+		    		<p:inputText value="#{produtoSupressao.numVolumeTotal}" style="width:80px;" converter="doubleConverter" onchange="maskIt(this, event, '99.999.999,99', true)" maxlength="13" disabled="true" rendered="#{produtoSupressao.numVolumeTotal != null}"/>
+ 		    	</p:column>
+ 		    	
+ 		    	<p:column style="width:170px;" styleClass="ui-panelgrid">
+					<h:panelGroup layout="block" style="width:170px; overflow:auto;">		        
+	 		    		<p:selectManyCheckbox id="destinoSocio" value="#{produtoSupressao.destinoSocioeconomicoProdutosSelecionados}" layout="pageDirection" disabled="#{produtoSupressao.desabilitaQtd or asvDadosGeraisController.desabilitarTudo}" converter="simpleEntityConverter">
+	 		    			<f:selectItems var="destinoSocio" value="#{produtoSupressao.destinoSocioeconomicoProdutosBD}" itemLabel="#{destinoSocio.ideDestinoSocioeconomico.dscDestinoSocioeconomico}" itemValue="#{destinoSocio}" />
+	 		    			<p:ajax global="false"/>
+	 		    		</p:selectManyCheckbox>
+ 		    		</h:panelGroup>
+ 		    	</p:column>
+ 		    	
+ 		    	<p:column style="width:35px; text-align:center;">
+ 		    		<p:commandLink title="Confirmar" process="@this" global="false" actionListener="#{asvSupressaoController.calcularVolumetTotal(produtoSupressao)}" rendered="#{produtoSupressao.desabilitaQtd == false}"
+ 		    			update="asvFormAbaSupressao:tableProdutosSupressao 
+								asvFormAbaSupressao:gridConversao" disabled="#{asvDadosGeraisController.desabilitarTudo}">
+						<h:graphicImage title="Confirmar" value="/resources/img/ico-aprovar-notificacao.png" />
+	     			    <f:setPropertyActionListener target="#{asvSupressaoController.produtoSupressaoSelecionado}" value="#{produtoSupressao}"/>
+					</p:commandLink>
+					
+					<p:commandLink title="Editar" process="@this" update="asvFormAbaSupressao:tableProdutosSupressao" actionListener="#{asvSupressaoController.modificaStatusProduto(produtoSupressao)}" global="false" rendered="#{produtoSupressao.desabilitaQtd}" disabled="#{asvDadosGeraisController.desabilitarTudo}">
+	          			 <h:graphicImage title="Editar" value="/resources/img/ico-editar.png" />
+	     			    <f:setPropertyActionListener target="#{asvSupressaoController.produtoSupressaoSelecionado}" value="#{produtoSupressao}"/>
+		            </p:commandLink>
+		          	
+		          	<p:commandLink oncomplete="removerProduto.show()" title="Excluir" process="@this" global="false" disabled="#{asvDadosGeraisController.desabilitarTudo}">
+	          			 <h:graphicImage title="Excluir" value="/resources/img/ico-excluir.png" />
+	     			    <f:setPropertyActionListener target="#{asvSupressaoController.produtoSupressaoSelecionado}" value="#{produtoSupressao}"/>
+		            </p:commandLink>
+ 		    	</p:column>
+ 		    	
+	    	    <p:columnGroup type="footer">  
+		            <p:row>  
+		                <p:column footerText="Total dos Volumes" style="text-align:left"  />  
+		                <p:column footerText="#{asvSupressaoController.stringVolumeTotalForaApp}" />  
+		                <p:column footerText="#{asvSupressaoController.stringVolumeTotalEmApp}" rendered="#{asvSupressaoController.fceAsv.indApp}"/>
+		                <p:column footerText="#{asvSupressaoController.stringVolumeTotal}" />
+		                <p:column colspan="2" />
+		            </p:row>  
+		        </p:columnGroup> 
+			</p:dataTable>
+			
+			<h:panelGrid id="gridConversao" columns="2" style="margin-left:30px; border:1">
+				<p:spacer height="10px;"/>
+				<p:spacer height="10px;"/>
+
+				<h:outputText value="Conversão para Estéreo" style="font-weight:bold;" rendered="#{asvSupressaoController.temVolumeTotal}"/>
+	    		<h:panelGroup style="margin-left:5px;" rendered="#{asvSupressaoController.temVolumeTotal}">
+	    			<p:inputText value="#{asvSupressaoController.conversaoEstereo}" style="width:80px;" converter="doubleConverter" onchange="maskIt(this, event, '99.999.999,99', true)" maxlength="13" disabled="true" />
+	    			<p:spacer width="5px;"/>
+	    			<h:outputText value="st" />
+	    		</h:panelGroup>
+	    		
+				<h:outputText value="Conversão para  MDC" style="font-weight:bold;" rendered="#{asvSupressaoController.temVolumeTotal}"/>
+	    		<h:panelGroup style="margin-left:5px;" rendered="#{asvSupressaoController.temVolumeTotal}">
+	    			<p:inputText value="#{asvSupressaoController.conversaoMDC}" style="width:80px;" converter="doubleConverter" onchange="maskIt(this, event, '99.999.999,99', true)" maxlength="13" disabled="true"/>
+	    			<p:spacer width="5px;"/>
+	    			<h:outputText value="MDC" />
+	    		</h:panelGroup>
+			</h:panelGrid>
+
+			
+			<h:panelGrid id="aceite" rendered="#{asvSupressaoController.temProdutoAdicionado}" style="margin-left:30px;">
+				<br /> <br />
+				<h:panelGroup id="groupAceite">
+			        <h:selectBooleanCheckbox value="#{asvSupressaoController.fceAsv.indAceite}" disabled="#{asvDadosGeraisController.desabilitarTudo}">  
+		           		<p:ajax global="false"/>  
+				    </h:selectBooleanCheckbox>
+					<h:outputText value="#{bundle.fce_asv_aceiteInventarioFlorestal}" style="margin-left:10px;"/>
+			    </h:panelGroup>
+
+			</h:panelGrid>
+		</p:outputPanel>
+		
+		<h:panelGrid id="gridBotoes" columns="2" style="margin-top:40px;" rendered="#{!asvDadosGeraisController.desabilitarTudo and !asvDadosGeraisController.isNotFceASV}">
+			<p:commandButton id="btnVoltar" value="Voltar" actionListener="#{asvDadosGeraisController.voltarAba()}" style="width:90px;" update="tabAbasASVid" global="false"/>
+			<p:commandButton id="btnFinalizar" value="Finalizar" style="width:90px;" update="@form tabAbasASVid" actionListener="#{asvDadosGeraisController.finalizar()}" global="false" /> 
+		</h:panelGrid>
+	</h:form>
+</ui:composition>

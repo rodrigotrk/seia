@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="fce_licenciamento_mineracao_quadro_areas" pageWidth="495" pageHeight="817" whenNoDataType="AllSectionsNoDetail" columnWidth="495" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="80b78396-35cc-4e26-aaf9-1207b1892468">
+	<property name="ireport.zoom" value="2.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="ide_fce_licenciamento_mineral" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[$P{ide_fce_licenciamento_mineral}]]></defaultValueExpression>
+	</parameter>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[select ide_fce_licenciamento_mineral,
+ide_localizacao_geografica_lavra,
+(SELECT sp_get_area_localizacao_geografica(ide_localizacao_geografica_lavra)) AS area_lavra,
+ide_localizacao_geografica_servidao,
+(SELECT sp_get_area_localizacao_geografica(ide_localizacao_geografica_servidao)) AS area_servidao
+from fce_licenciamento_mineral where ide_fce_licenciamento_mineral = $P{ide_fce_licenciamento_mineral}]]>
+	</queryString>
+	<field name="ide_fce_licenciamento_mineral" class="java.lang.Integer"/>
+	<field name="ide_localizacao_geografica_lavra" class="java.lang.Integer"/>
+	<field name="area_lavra" class="java.math.BigDecimal"/>
+	<field name="ide_localizacao_geografica_servidao" class="java.lang.Integer"/>
+	<field name="area_servidao" class="java.math.BigDecimal"/>
+	<pageHeader>
+		<band height="27" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="4de182fd-6144-4851-8929-09bbe79102bd" positionType="Float" mode="Opaque" x="0" y="10" width="495" height="17" backcolor="#DDDDDD"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="9"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<text><![CDATA[Quadro de Áreas]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<detail>
+		<band height="45" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="a458437e-7127-48a4-9681-d9b19fd84d89" x="0" y="5" width="232" height="20"/>
+				<box topPadding="3" leftPadding="2"/>
+				<textElement>
+					<font size="9" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Informações sobre a área junto ao DNPM]]></text>
+			</staticText>
+			<subreport runToBottom="false">
+				<reportElement uuid="df869f5b-021e-408e-b6dc-24b439e30c6e" positionType="Float" stretchType="RelativeToTallestObject" isPrintRepeatedValues="false" x="15" y="25" width="480" height="20" isRemoveLineWhenBlank="true" isPrintWhenDetailOverflows="true"/>
+				<subreportParameter name="ide_fce_licenciamento_mineral">
+					<subreportParameterExpression><![CDATA[$P{ide_fce_licenciamento_mineral}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "fce_licenciamento_mineracao_processo_dnpm.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+		<band height="25">
+			<printWhenExpression><![CDATA[$F{ide_localizacao_geografica_lavra} != null]]></printWhenExpression>
+			<staticText>
+				<reportElement uuid="c71943aa-16d4-41ff-aa29-73d8a34a78f8" x="15" y="5" width="121" height="20"/>
+				<box topPadding="3" leftPadding="2"/>
+				<textElement>
+					<font size="9" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Área efetiva de lavra]]></text>
+			</staticText>
+			<textField pattern="#,##0.0000">
+				<reportElement uuid="c9d8e400-cf0e-45ff-8d9d-7ca126e99468" x="136" y="5" width="99" height="20"/>
+				<box topPadding="3" leftPadding="2"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{area_lavra}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="1a9a14f5-79f9-4f2f-87ff-5ae39b085f97" x="235" y="5" width="31" height="20"/>
+				<box topPadding="3" leftPadding="2"/>
+				<textElement>
+					<font size="9" isBold="false"/>
+				</textElement>
+				<text><![CDATA[(ha)]]></text>
+			</staticText>
+		</band>
+		<band height="25">
+			<printWhenExpression><![CDATA[$F{ide_localizacao_geografica_servidao} != null]]></printWhenExpression>
+			<staticText>
+				<reportElement uuid="15a63468-78e1-47e5-9035-b553cf3eb80b" x="15" y="5" width="101" height="20"/>
+				<box topPadding="3" leftPadding="2"/>
+				<textElement>
+					<font size="9" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Área de servidão]]></text>
+			</staticText>
+			<textField pattern="#,##0.0000">
+				<reportElement uuid="349d8eec-6cf9-4b86-bba6-51b12a7ae52c" x="116" y="5" width="99" height="20"/>
+				<box topPadding="3" leftPadding="2"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{area_servidao}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="2cd681e7-5d52-44db-88d9-b86570a6427e" x="215" y="5" width="31" height="20"/>
+				<box topPadding="3" leftPadding="2"/>
+				<textElement>
+					<font size="9" isBold="false"/>
+				</textElement>
+				<text><![CDATA[(ha)]]></text>
+			</staticText>
+		</band>
+	</detail>
+</jasperReport>

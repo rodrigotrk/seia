@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui">
+	
+	<h:panelGrid id="gridMineracaoAreia" columns="3" style="width:100%;" styleClass="grid-border-15">
+	
+		<h:outputText value="* #{bundle.cerh_finalidade_dados_mineracao_areia_producao_media} #{bundle.geral_lbl_mcubico_mes}" rendered="#{cerhController.abaCaptacaoSuperficial.usuarioExterno}"/>
+		<h:outputText value="#{bundle.cerh_finalidade_dados_mineracao_areia_producao_media} #{bundle.geral_lbl_mcubico_mes}" rendered="#{!cerhController.abaCaptacaoSuperficial.usuarioExterno}"/>
+		
+		<h:panelGroup>
+			<h:outputText value="* #{bundle.cerh_finalidade_dados_mineracao_areia_proporcao_polpa}" rendered="#{cerhController.abaCaptacaoSuperficial.usuarioExterno}"/>
+			<h:outputText value="#{bundle.cerh_finalidade_dados_mineracao_areia_proporcao_polpa}" rendered="#{!cerhController.abaCaptacaoSuperficial.usuarioExterno}"/>
+			<h:graphicImage id="hintMineracaoAreia" value="/resources/img/ico-ajuda.png" style="margin: 0px 1px 1px 5px;" />
+			<p:tooltip for="hintMineracaoAreia" 
+					value="#{bundle.cerh_finalidade_dados_mineracao_areia_hint}"
+					showEffect="fade" hideEffect="fade" />
+		</h:panelGroup>
+
+		<h:outputText value="* #{bundle.cerh_finalidade_dados_mineracao_areia_volume_medio} #{bundle.geral_lbl_mcubico}" rendered="#{cerhController.abaCaptacaoSuperficial.usuarioExterno}"/>
+		<h:outputText value="#{bundle.cerh_finalidade_dados_mineracao_areia_volume_medio} #{bundle.geral_lbl_mcubico}" rendered="#{!cerhController.abaCaptacaoSuperficial.usuarioExterno}"/>
+		
+		<p:inputText value="#{cerhController.abaCaptacaoSuperficial.cerhFinalidadeMineracaoExtracaoAreia.ideCerhCaptacaoMineracaoExtracaoAreia.valProducaoMaximaMensal}"
+			maxlength="13" 
+			style="width:80px;" 
+			onblur="mascararNumeroAndAddZeros(this, event, 8, 2, '.', ',', 3);"
+			onkeyup="mascararNumeroAndAddZeros(this, event, 8, 2, '.', ',', 3);"
+			disabled="#{cerhController.abaCaptacaoSuperficial.dto.caracterizacaoDTO.visualizacao}">
+			<f:convertNumber integerOnly="false" maxIntegerDigits="8" maxFractionDigits="2" pattern="#,##0.00" locale="pt_BR"/>
+			<p:ajax event="blur"/>
+		</p:inputText>
+		
+		<p:selectOneMenu value="#{cerhController.abaCaptacaoSuperficial.cerhFinalidadeMineracaoExtracaoAreia.ideCerhCaptacaoMineracaoExtracaoAreia.valProporcaoAguaPolpa}" 
+			disabled="#{cerhController.abaCaptacaoSuperficial.dto.caracterizacaoDTO.visualizacao}"
+			converter="bigDecimalDTOConverter">
+			<f:selectItem itemLabel="Selecione" itemValue="#{null}"/>
+			<f:selectItems value="#{cerhController.abaCaptacaoSuperficial.proporcaoAguaPolpaCollection}" var="proporcao" 
+				itemLabel="#{proporcao.label}"
+				itemValue="#{proporcao.value}"/>
+			<p:ajax event="change" process="@this"/>
+		</p:selectOneMenu>
+		
+		<p:inputText value="#{cerhController.abaCaptacaoSuperficial.cerhFinalidadeMineracaoExtracaoAreia.ideCerhCaptacaoMineracaoExtracaoAreia.valVolumeMedioAgua}"
+			maxlength="13" 
+			style="width:80px;" 
+			onblur="mascararNumeroAndAddZeros(this, event, 8, 2, '.', ',', 3);"
+			onkeyup="mascararNumeroAndAddZeros(this, event, 8, 2, '.', ',', 3);"
+			disabled="#{cerhController.abaCaptacaoSuperficial.dto.caracterizacaoDTO.visualizacao}">
+			<f:convertNumber integerOnly="false" maxIntegerDigits="8" maxFractionDigits="2" pattern="#,##0.00" locale="pt_BR"/>
+			<p:ajax event="blur"/>
+		</p:inputText>
+		
+		<h:outputText value="* #{bundle.cerh_finalidade_dados_mineracao_areia_teor_umidade}" rendered="#{cerhController.abaCaptacaoSuperficial.usuarioExterno}"/>
+		<h:outputText value="#{bundle.cerh_finalidade_dados_mineracao_areia_teor_umidade}" rendered="#{!cerhController.abaCaptacaoSuperficial.usuarioExterno}"/>
+		
+		<h:outputText value="* #{bundle.cerh_finalidade_dados_mineracao_areia_producao_maxima} #{bundle.geral_lbl_mcubico_ano}" rendered="#{cerhController.abaCaptacaoSuperficial.usuarioExterno}"/>
+		<h:outputText value="#{bundle.cerh_finalidade_dados_mineracao_areia_producao_maxima} #{bundle.geral_lbl_mcubico_ano}" rendered="#{!cerhController.abaCaptacaoSuperficial.usuarioExterno}"/>
+		<p:spacer width="20" height="20"/>
+		
+		<p:inputText value="#{cerhController.abaCaptacaoSuperficial.cerhFinalidadeMineracaoExtracaoAreia.ideCerhCaptacaoMineracaoExtracaoAreia.valTeorUmidade}"
+			maxlength="3" 
+			style="width:80px;" 
+			disabled="#{cerhController.abaCaptacaoSuperficial.dto.caracterizacaoDTO.visualizacao}">
+			<f:convertNumber integerOnly="true" maxIntegerDigits="3"/>
+			<p:ajax event="blur"/>
+		</p:inputText>
+		
+		<p:inputText value="#{cerhController.abaCaptacaoSuperficial.cerhFinalidadeMineracaoExtracaoAreia.ideCerhCaptacaoMineracaoExtracaoAreia.valProducaoMaximaAnual}"
+			maxlength="13" 
+			style="width:80px;" 
+			onblur="mascararNumeroAndAddZeros(this, event, 8, 2, '.', ',', 3);"
+			onkeyup="mascararNumeroAndAddZeros(this, event, 8, 2, '.', ',', 3);"
+			disabled="#{cerhController.abaCaptacaoSuperficial.dto.caracterizacaoDTO.visualizacao}">
+			<f:convertNumber integerOnly="false" maxIntegerDigits="8" maxFractionDigits="2" pattern="#,##0.00" locale="pt_BR"/>
+			<p:ajax event="blur"/>
+		</p:inputText>
+		
+		<p:spacer width="20" height="20"/>
+		
+	</h:panelGrid>
+	
+</ui:composition>

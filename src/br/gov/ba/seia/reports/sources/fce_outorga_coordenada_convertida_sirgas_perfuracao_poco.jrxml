@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="fce_outorga_coordenada_convertida_sirgas_perfuracao_poco" pageWidth="280" pageHeight="800" whenNoDataType="AllSectionsNoDetail" columnWidth="280" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="80b78396-35cc-4e26-aaf9-1207b1892468">
+	<property name="ireport.zoom" value="3.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String"/>
+	<parameter name="ide_fce" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[$P{ide_fce}]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT DISTINCT
+
+  loc.ide_localizacao_geografica
+
+FROM
+  fce
+
+
+  INNER JOIN requerimento req ON fce.ide_requerimento = req.ide_requerimento
+  INNER JOIN outorga out ON out.ide_requerimento = req.ide_requerimento AND out.ide_modalidade_outorga = 5
+  INNER JOIN outorga_localizacao_geografica olg ON olg.ide_outorga = out.ide_outorga
+  INNER JOIN localizacao_geografica loc ON olg.ide_localizacao_geografica = loc.ide_localizacao_geografica
+  INNER JOIN sistema_coordenada sis ON loc.ide_sistema_coordenada = sis.ide_sistema_coordenada
+
+
+WHERE
+  fce.ide_fce =  $P{ide_fce}
+
+
+UNION ALL
+
+
+SELECT DISTINCT
+
+  locg.ide_localizacao_geografica
+
+FROM
+  fce
+
+  INNER JOIN fce_localizacao_geografica flg ON flg.ide_fce = fce.ide_fce
+  INNER JOIN localizacao_geografica locg ON flg.ide_localizacao_geografica = locg.ide_localizacao_geografica
+  INNER JOIN sistema_coordenada stc ON locg.ide_sistema_coordenada = stc.ide_sistema_coordenada
+
+WHERE
+  fce.ide_fce =  $P{ide_fce}
+
+order by ide_localizacao_geografica]]>
+	</queryString>
+	<field name="ide_localizacao_geografica" class="java.lang.Integer"/>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="55">
+			<printWhenExpression><![CDATA[$F{ide_localizacao_geografica} != null]]></printWhenExpression>
+			<staticText>
+				<reportElement uuid="5cac7e76-5f44-4192-88d4-1eca16c15ad4" x="65" y="35" width="65" height="20"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Longitude]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="b2188a39-8db5-4b50-ab66-a01b1abed5ad" x="0" y="35" width="65" height="20"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Latitude]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="afa81cd0-3a04-4ce9-b5a1-034789f6eab1" x="130" y="35" width="125" height="20"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Sistema de Coordenada]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="86a1a79e-e9ed-4a89-a8db-2bfc7d4e78a3" x="0" y="0" width="280" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Coordendas Convertidas para Geográfica SIRGAS 2000]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<printWhenExpression><![CDATA[$F{ide_localizacao_geografica} != null]]></printWhenExpression>
+			<staticText>
+				<reportElement uuid="86a1a79e-e9ed-4a89-a8db-2bfc7d4e78a3" x="130" y="0" width="125" height="20"/>
+				<box>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Geográfica SIRGAS 2000]]></text>
+			</staticText>
+			<subreport>
+				<reportElement uuid="57b6be84-ddd5-45b7-8272-039c2b06619f" positionType="Float" isPrintRepeatedValues="false" x="0" y="0" width="130" height="20" isRemoveLineWhenBlank="true"/>
+				<subreportParameter name="SUBREPORT_DIR">
+					<subreportParameterExpression><![CDATA[$P{SUBREPORT_DIR}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="localizacaoGeografica">
+					<subreportParameterExpression><![CDATA[$F{ide_localizacao_geografica}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} +"fce_outorga_lat_long_convertida.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+	</detail>
+</jasperReport>

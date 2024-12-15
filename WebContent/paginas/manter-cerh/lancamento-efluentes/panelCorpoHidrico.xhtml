@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui">
+
+	<p:dataTable
+		id="dtColHidrico" value="#{cerhController.abaLancamentoEfluentes.dto.lista}" 
+		var="caracterizacaoDTO"
+		editable="true" style="width:100%">
+			
+		<p:column id="ColNomCorpoHidrico" headerText="Nome do corpo hídrico">
+			<p:inputText 
+			 id="nomCorpoHidrico"
+			 value="#{cerhController.abaLancamentoEfluentes.cerhCaracterizacao.nomCorpoHidrico}"
+			 disabled="#{cerhController.abaLancamentoEfluentes.dto.caracterizacaoDTO.visualizacao or cerhController.abaLancamentoEfluentes.dto.caracterizacaoDTO.confirmaNomeRio}"
+			 style="width:97%"/>
+		</p:column>
+				
+		<p:column id="colTipoCorpoHidrico" headerText="Tipo do corpo hídrico">
+			<p:selectOneMenu 
+				id="tipoCorpoHidrico" 
+				style="width:100%"
+				converter="simpleEntityConverter"
+				value="#{cerhController.abaLancamentoEfluentes.cerhCaracterizacao.ideTipoCorpoHidrico}"	
+				disabled="#{cerhController.abaLancamentoEfluentes.dto.caracterizacaoDTO.visualizacao or cerhController.abaLancamentoEfluentes.dto.caracterizacaoDTO.confirmaNomeRio}"> 
+				<f:selectItem itemLabel="Selecione"/>
+				<f:selectItems
+					value="#{cerhController.abaLancamentoEfluentes.tipoCorpoHidricoCollection}" 
+					var="tipoCorpoHidrico" itemValue="#{tipoCorpoHidrico}" 
+					itemLabel="#{tipoCorpoHidrico.nomTipoCorpoHidrico}" />
+			</p:selectOneMenu>
+		</p:column>
+	
+		<p:column headerText="RPGA">
+			<h:outputText value="#{cerhController.abaLancamentoEfluentes.cerhCaracterizacao.ideCerhLocalizacaoGeografica.ideLocalizacaoGeografica.rpga}" 	style="width:100%" />
+		</p:column>
+
+		<p:column headerText="Bacia">
+			<h:outputText value="#{cerhController.abaLancamentoEfluentes.cerhCaracterizacao.ideCerhLocalizacaoGeografica.ideLocalizacaoGeografica.baciaHidrografica}" style="width:100%" />
+
+		</p:column>
+		
+		<p:column headerText="Ação" style="width:32px">
+			
+			<p:commandLink 
+				actionListener="#{cerhController.abaLancamentoEfluentes.confirmarNomeRio()}"
+				process="formLancamentoEfluentes:panelDetalhesCorpoHidrico"
+				update="formLancamentoEfluentes:panelDetalhesCorpoHidrico"
+				rendered="#{!cerhController.abaLancamentoEfluentes.dto.caracterizacaoDTO.confirmaNomeRio}"
+				disabled="#{cerhController.abaLancamentoEfluentes.dto.caracterizacaoDTO.visualizacao}">
+				<h:graphicImage title="Confirmar" value="/resources/img/ico-aprovar-notificacao.png" />
+			</p:commandLink>
+			
+			<p:commandLink 
+				actionListener="#{cerhController.abaLancamentoEfluentes.editarNomeRio()}"
+				process="formLancamentoEfluentes:panelDetalhesCorpoHidrico" 
+				update="formLancamentoEfluentes:panelDetalhesCorpoHidrico"
+				rendered="#{cerhController.abaLancamentoEfluentes.dto.caracterizacaoDTO.confirmaNomeRio}"
+				disabled="#{cerhController.abaLancamentoEfluentes.dto.caracterizacaoDTO.visualizacao}">
+				<h:graphicImage title="Editar" value="/resources/img/ico-editar.png" />
+			</p:commandLink>
+			
+		
+		</p:column>
+
+	</p:dataTable>
+</ui:composition>

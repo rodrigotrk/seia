@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui">
+	
+		
+	<h:form id="formHistorico">
+		<h:panelGrid columns="4">
+			Comparação entre: 
+		
+			<h:outputText value="#{cerhHistoricoController.cerhAnterior.dtcCadastro}" >
+				<f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss" locale="pt,BR" timeZone="Brazil/East"/>
+			</h:outputText>
+			 e  
+			<h:outputText value="#{cerhHistoricoController.cerhAtual.dtcCadastro}" >
+				<f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss" locale="pt,BR" timeZone="Brazil/East"/>
+			</h:outputText>
+			
+			
+		</h:panelGrid>
+		
+		<p:tabView id="tabViewHistoricoCerh" widgetVar="tabViewHistoricoCerh" dynamic="true"  >
+			
+			<p:tab title="Dados Gerais" titleStyle="text-align: center;" >
+				<p:dataTable var="historico" value="#{cerhHistoricoController.historico.abaDadosGerais}" emptyMessage="nenhum diferença">
+					
+					<p:column headerText="Campo" style="width:300px;">
+						#{historico.nome}
+						<p:rowToggler rendered="#{historico.historicoObjeto ne null}"/>
+					</p:column>
+					
+					<p:column headerText="Valor Antigo" style="width:100px;">
+						#{historico.antigo}
+					</p:column>
+					
+					<p:column headerText="Valor novo" style="width:100px;">
+						#{historico.novo}
+					</p:column>
+					
+					<p:rowExpansion>
+						<p:dataTable var="subHist" value="#{historico.historicoObjeto}" emptyMessage="nenhum diferença" >
+							<p:column headerText="Campo" style="width:300px;">
+								#{subHist.nome}
+							</p:column>
+							
+							<p:column headerText="Valor Antigo" style="width:100px;">
+								#{subHist.antigo}
+							</p:column>
+							
+							<p:column headerText="Valor novo" style="width:100px;">
+								#{subHist.novo}
+							</p:column>
+						</p:dataTable>
+					</p:rowExpansion>
+
+				</p:dataTable>
+			</p:tab>
+			
+			<p:tab title="Barragem" titleStyle="text-align: center;">
+				<p:dataTable var="historico" value="#{cerhHistoricoController.historico.abaBarragem}"  emptyMessage="nenhum diferença">
+					
+					<p:column headerText="Campo">
+						#{historico.nome}
+						<p:rowToggler rendered="#{historico.historicoObjeto ne null}"/>
+					</p:column>
+					
+					<p:column headerText="Valor Antigo">
+						#{historico.antigo}
+					</p:column>
+					
+					<p:column headerText="Valor novo">
+						#{historico.novo}
+					</p:column>
+					<p:rowExpansion>
+						<p:dataTable var="subHist" value="#{historico.historicoObjeto}" emptyMessage="nenhum diferença">
+							<p:column headerText="Campo" style="width:300px;">
+								#{subHist.nome}
+							</p:column>
+							
+							<p:column headerText="Valor Antigo" style="width:100px;">
+								#{subHist.antigo}
+							</p:column>
+							
+							<p:column headerText="Valor novo" style="width:100px;">
+								#{subHist.novo}
+							</p:column>
+						</p:dataTable>
+					</p:rowExpansion>
+				</p:dataTable>
+			</p:tab>
+			
+			<p:tab title="Intervenção" titleStyle="text-align: center;">
+				<p:dataTable var="historico" value="#{cerhHistoricoController.historico.abaIntervencao}" emptyMessage="nenhum diferença">
+					<p:column headerText="Campo">
+						#{historico.nome}
+						<p:rowToggler rendered="#{historico.historicoObjeto ne null}"/>
+					</p:column>
+					
+					<p:column headerText="Valor Antigo">
+						#{historico.antigo}
+					</p:column>
+					
+					<p:column headerText="Valor novo">
+						#{historico.novo}
+					</p:column>
+					
+					<p:rowExpansion>
+						<p:dataTable var="subHist" value="#{historico.historicoObjeto}" emptyMessage="nenhum diferença">
+							<p:column headerText="Campo" style="width:300px;">
+								#{subHist.nome}
+							</p:column>
+							
+							<p:column headerText="Valor Antigo" style="width:100px;">
+								#{subHist.antigo}
+							</p:column>
+							
+							<p:column headerText="Valor novo" style="width:100px;">
+								#{subHist.novo}
+							</p:column>
+						</p:dataTable>
+					</p:rowExpansion>
+				</p:dataTable>
+			</p:tab>
+			
+			<p:tab title="Captação superficial" titleStyle="text-align: center;">
+				<p:dataTable var="historico" value="#{cerhHistoricoController.historico.abaCaptacaoSuperficial}" emptyMessage="nenhum diferença">
+					<p:column headerText="Campo">
+						#{historico.nome}
+						<p:rowToggler rendered="#{historico.historicoObjeto ne null}"/>
+					</p:column>
+					
+					<p:column headerText="Valor Antigo">
+						#{historico.antigo}
+					</p:column>
+					
+					<p:column headerText="Valor novo">
+						#{historico.novo}
+					</p:column>
+					
+					<p:rowExpansion>
+						<p:dataTable var="subHist" value="#{historico.historicoObjeto}" emptyMessage="nenhum diferença">
+							<p:column headerText="Campo" style="width:300px;">
+								#{subHist.nome}
+							</p:column>
+							
+							<p:column headerText="Valor Antigo" style="width:100px;">
+								#{subHist.antigo}
+							</p:column>
+							
+							<p:column headerText="Valor novo" style="width:100px;">
+								#{subHist.novo}
+							</p:column>
+						</p:dataTable>
+					</p:rowExpansion>
+				</p:dataTable>
+			</p:tab>
+			
+			<p:tab title="Captação subterrânea" titleStyle="text-align: center;">
+				<p:dataTable var="historico" value="#{cerhHistoricoController.historico.abaCaptacaoSubteranea}" emptyMessage="nenhum diferença">
+					<p:column headerText="Campo">
+						#{historico.nome}
+						<p:rowToggler rendered="#{historico.historicoObjeto ne null}"/>
+					</p:column>
+					
+					<p:column headerText="Valor Antigo">
+						#{historico.antigo}
+					</p:column>
+					
+					<p:column headerText="Valor novo">
+						#{historico.novo}
+					</p:column>
+					
+					<p:rowExpansion>
+						<p:dataTable var="subHist" value="#{historico.historicoObjeto}" emptyMessage="nenhum diferença">
+							<p:column headerText="Campo" style="width:300px;">
+								#{subHist.nome}
+							</p:column>
+							
+							<p:column headerText="Valor Antigo" style="width:100px;">
+								#{subHist.antigo}
+							</p:column>
+							
+							<p:column headerText="Valor novo" style="width:100px;">
+								#{subHist.novo}
+							</p:column>
+						</p:dataTable>
+					</p:rowExpansion>
+				</p:dataTable>
+			</p:tab>
+			
+			<p:tab title="Lançamento de efluentes" titleStyle="text-align: center;"> 
+				<p:dataTable var="historico" value="#{cerhHistoricoController.historico.abaLancamentoEfluente}" emptyMessage="nenhum diferença">
+					<p:column headerText="Campo">
+						#{historico.nome}
+						<p:rowToggler rendered="#{historico.historicoObjeto ne null}"/>
+					</p:column>
+					
+					<p:column headerText="Valor Antigo">
+						#{historico.antigo}
+					</p:column>
+					
+					<p:column headerText="Valor novo">
+						#{historico.novo}
+					</p:column>
+					
+					<p:rowExpansion>
+						<p:dataTable var="subHist" value="#{historico.historicoObjeto}" emptyMessage="nenhum diferença">
+							<p:column headerText="Campo" style="width:300px;">
+								#{subHist.nome}
+							</p:column>
+							
+							<p:column headerText="Valor Antigo" style="width:100px;">
+								#{subHist.antigo}
+							</p:column>
+							
+							<p:column headerText="Valor novo" style="width:100px;">
+								#{subHist.novo}
+							</p:column>
+						</p:dataTable>
+					</p:rowExpansion>
+				</p:dataTable>
+			</p:tab>
+		</p:tabView>
+	</h:form>
+	
+	
+</ui:composition>

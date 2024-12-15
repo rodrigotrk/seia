@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="fce_industria_substancia" pageWidth="350" pageHeight="802" whenNoDataType="AllSectionsNoDetail" columnWidth="350" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="80b78396-35cc-4e26-aaf9-1207b1892468">
+	<property name="ireport.zoom" value="1.9965000000000022"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String"/>
+	<parameter name="ide_fce_industria" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT DISTINCT
+	tp.dsc_substancia,
+	fceIS.num_media_armazenamento
+
+FROM fce_industria fceI
+INNER JOIN fce_industria_substancia fceIS ON fceIS.ide_fce_industria = fceI.ide_fce_industria
+INNER JOIN tipo_substancia tp ON tp.ide_tipo_substancia = fceIS.ide_tipo_substancia
+
+WHERE fceI.ide_fce_industria = $P{ide_fce_industria}]]>
+	</queryString>
+	<field name="dsc_substancia" class="java.lang.String"/>
+	<field name="num_media_armazenamento" class="java.math.BigDecimal"/>
+	<variable name="somatorio" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{num_media_armazenamento}]]></variableExpression>
+	</variable>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="40">
+			<staticText>
+				<reportElement uuid="066f856f-9f42-4e58-8dac-f0b85a1e71a3" x="0" y="0" width="169" height="40"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Substâncias]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="8f4c0a72-1701-41c3-9d10-abe0d89bda9e" x="169" y="0" width="101" height="40"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Média Armazenamento Mensal (t/mês)]]></text>
+			</staticText>
+			<line>
+				<reportElement uuid="88ed7cf8-270b-4686-b010-b8767c52286e" stretchType="RelativeToBandHeight" x="0" y="0" width="1" height="40"/>
+			</line>
+			<line>
+				<reportElement uuid="cab6495e-9607-42fe-9043-6b98607f7c07" x="1" y="0" width="269" height="1"/>
+			</line>
+			<line>
+				<reportElement uuid="88ed7cf8-270b-4686-b010-b8767c52286e" stretchType="RelativeToBandHeight" x="168" y="0" width="1" height="40"/>
+			</line>
+			<line>
+				<reportElement uuid="88ed7cf8-270b-4686-b010-b8767c52286e" stretchType="RelativeToBandHeight" x="270" y="0" width="1" height="40"/>
+			</line>
+			<line>
+				<reportElement uuid="cab6495e-9607-42fe-9043-6b98607f7c07" x="0" y="39" width="270" height="1"/>
+			</line>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField isStretchWithOverflow="true">
+				<reportElement uuid="9916345c-d0ca-4c6c-bfc9-6c2a35a5c50c" stretchType="RelativeToTallestObject" x="1" y="0" width="168" height="20"/>
+				<box>
+					<bottomPen lineWidth="1.0"/>
+				</box>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA["  "+$F{dsc_substancia}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="#,##0.00">
+				<reportElement uuid="9916345c-d0ca-4c6c-bfc9-6c2a35a5c50c" stretchType="RelativeToBandHeight" x="170" y="0" width="100" height="20"/>
+				<box>
+					<bottomPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{num_media_armazenamento}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement uuid="88ed7cf8-270b-4686-b010-b8767c52286e" stretchType="RelativeToTallestObject" x="0" y="0" width="1" height="20"/>
+			</line>
+			<line>
+				<reportElement uuid="547901e0-8f5b-4e3a-bcd8-5b11c28cf6f6" stretchType="RelativeToTallestObject" x="270" y="0" width="1" height="20"/>
+			</line>
+			<line>
+				<reportElement uuid="cffbab07-51f4-4d37-bc57-922700d5bfaf" stretchType="RelativeToTallestObject" x="168" y="0" width="1" height="20"/>
+			</line>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="20">
+			<staticText>
+				<reportElement uuid="76beff6a-a787-401d-8090-9bc79f52bf5e" x="0" y="0" width="169" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[  Total]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="56cee9cc-b13b-453d-832f-22ea561cc7ee" x="170" y="0" width="100" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$V{somatorio}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement uuid="88ed7cf8-270b-4686-b010-b8767c52286e" stretchType="RelativeToBandHeight" x="0" y="0" width="1" height="20"/>
+			</line>
+			<line>
+				<reportElement uuid="88ed7cf8-270b-4686-b010-b8767c52286e" stretchType="RelativeToBandHeight" x="270" y="0" width="1" height="20"/>
+			</line>
+			<line>
+				<reportElement uuid="cab6495e-9607-42fe-9043-6b98607f7c07" x="0" y="19" width="270" height="1"/>
+			</line>
+			<line>
+				<reportElement uuid="cffbab07-51f4-4d37-bc57-922700d5bfaf" stretchType="RelativeToBandHeight" x="168" y="0" width="1" height="20"/>
+			</line>
+		</band>
+	</columnFooter>
+</jasperReport>

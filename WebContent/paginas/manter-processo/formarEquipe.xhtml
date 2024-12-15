@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui">
+	
+	<p:confirmDialog id="confirmDialogExclusaoEquipeProcesso" widgetVar="confirmDlgExclusaoEquipeProcesso" header="#{bundle.hdr_confirma_exclusao}" message="#{bundle.msg_confirma_exclusao}" severity="alert" appendToBody="true">
+		<h:form>
+			<p:commandButton value="#{bundle.btn_sim}" update=":formEquipeProcesso:dataTableEquipe botaoSalvar panelCombos panelBotoes" actionListener="#{formarEquipeController.excluirIntegranteEquipe}" oncomplete="confirmDlgExclusaoEquipeProcesso.hide()" process="@this"/>
+			<p:commandButton value="#{bundle.btn_nao}" type="button" onclick="confirmDlgExclusaoEquipeProcesso.hide()" />
+		</h:form>
+	</p:confirmDialog>
+	
+	<p:dialog id="_dialogFormarEquipe" widgetVar="dlgFormarEquipe" header="Formar Equipe" 
+		closable="true" draggable="true" resizable="false" modal="true" width="650" height="650">	
+		
+		<h:form id="formEquipeProcesso" binding="#{formarEquipeController.formularioASerLimpo}">
+			<h:panelGrid id="panelFormacaoEquipe" columns="1">  
+				<h3><h:outputLabel styleClass="titulo-grupo" value="#{formarEquipeController.vwProcesso.numProcesso}" /></h3>
+				<br/>
+				<h:panelGrid id="panelCombos" columns="6">
+					<h:panelGroup>
+						<p:spacer width="15" height="10" />
+					</h:panelGroup>
+	
+					<h:outputText value="* Coordenação:" />
+					<h:selectOneMenu id="selectOneArea" value="#{formarEquipeController.pessoaFisica.funcionario.ideArea}" valueChangeListener="#{formarEquipeController.changeListenerArea}" style="width: 150px;" converter="areaConverter">
+					    <f:selectItem itemLabel="Selecione..." />
+					    <f:selectItems value="#{formarEquipeController.colAreas}" var="area" itemLabel="#{area.nomArea}" itemValue="#{area}"/>
+					    <f:ajax event="change" render="panelCombos"/>
+					</h:selectOneMenu>
+	
+					<p:spacer width="40" height="10" />
+	
+					<h:outputText value="Formação:" />
+					<h:selectOneMenu id="selectOneOcupacao" value="#{formarEquipeController.pessoaFisica.ideOcupacao}" valueChangeListener="#{formarEquipeController.changeListenerOcupacao}" style="width: 150px;" converter="ocupacaoConverter">
+					    <f:selectItem itemLabel="Selecione..." />
+					    <f:selectItems value="#{formarEquipeController.colOcupacoes}" var="ocupacao" itemLabel="#{ocupacao.nomOcupacao}" itemValue="#{ocupacao}"/>
+					    <f:ajax event="change" render="panelCombos"/>
+					</h:selectOneMenu>
+	
+					<p:spacer width="15" height="10" />
+	
+					<h:outputText value="* Técnico:" />
+					<h:selectOneMenu id="selectOnePessoaFisica" value="#{formarEquipeController.integranteEquipe.idePessoaFisica}" style="width: 150px;" converter="funcionarioConverter">
+					    <f:selectItem itemLabel="Selecione..." />
+					    <f:selectItems value="#{formarEquipeController.colFuncionarios}" var="funcionario" itemLabel="#{funcionario.pessoaFisica.nomPessoa}" itemValue="#{funcionario}"/>  
+					</h:selectOneMenu>
+	
+					<p:spacer width="40" height="10" />
+	
+					<h:panelGroup>
+						<p:selectBooleanCheckbox value="#{formarEquipeController.integranteEquipe.indLiderEquipe}" />
+						<h:outputText value=" Líder" />
+					</h:panelGroup> 
+				 </h:panelGrid>
+	
+				 <br />
+	
+				<h:panelGrid columns="1">
+					<p:pickList 
+						id="pickListAtos" value="#{formarEquipeController.listaProcessoAto}" 
+						var="ato" itemLabel="#{(ato.tipologia eq null) ? ato.nomAtoAmbiental : ato.nomAtoAmbiental.concat(' - '.concat(ato.tipologia.desTipologia))}" itemValue="#{ato}" addLabel="#{bundle.btn_adicionar}" addAllLabel="#{bundle.btn_adicionar_todos}" 
+						removeLabel="#{bundle.btn_remover}" removeAllLabel="#{bundle.btn_remover_todos}" 
+						converter="PickListConverter">
+		   				<f:facet name="sourceCaption">Atos</f:facet>  
+		       			<f:facet name="targetCaption">Atos Selecionados</f:facet>
+		   			</p:pickList>
+				</h:panelGrid>
+				
+				<br />
+				
+				<p:commandButton id="botaoSalvar" actionListener="#{formarEquipeController.salvarIntegranteEquipe}" 
+								 value="#{bundle.btn_salvar}" disabled="#{formarEquipeController.disabledBotaoSalvar}"
+								 update=":formEquipeProcesso:dataTableEquipe botaoSalvar panelCombos panelBotoes" process="@form" />
+				
+				<br />
+				
+				
+				
+				
+				<p:layoutUnit position="center" resizable="false"  style="border-color: green;" rendered="#{formarEquipeController.reenquadramento}">
+					<table style="width:100%;font-size: 11px; background-color: #E6F9E6;">
+						<tr>
+							<td />
+							<td colspan="2">
+								<h:outputText value="Atenção!" style="font-weight: bold;"/>
+								<br />
+								<h:outputText value="Atualize a lista da equipe conforme os atos reenquadrados." style="line-height: 150%;font-weight: bold;"/>
+							</td>
+						</tr>
+					</table>
+				</p:layoutUnit>
+				<br />
+				
+				
+				
+				<p:dataTable id="dataTableEquipe" var="integranteEquipe" value="#{formarEquipeController.listaIntegranteEquipe}"
+							 emptyMessage="#{bundle.msg_lista_vazia}" style="width: 560px;">
+				
+					<f:facet name="header">
+						<h:outputText value="Lista da equipe do processo cadastrado" />
+					</f:facet>
+					<p:column style="width: 200px;">  
+						<f:facet name="header">
+							<h:outputText value="Técnico" />  
+						</f:facet>
+						<h:outputText value="#{integranteEquipe.idePessoaFisica.pessoaFisica.nomPessoa}" />  
+					</p:column>
+					<p:column style="width: 200px;">  
+						<f:facet name="header">
+							<h:outputText value="Ato(s)" />  
+						</f:facet>
+						<ul class="lista">
+							<ui:repeat var="ato" value="#{integranteEquipe.listaAto}">
+								<li class="lista" style="padding: 2px;"><h:outputText value="#{ato}" /></li>
+							</ui:repeat>
+						</ul>
+					</p:column>
+					<p:column style="width: 30px;">  
+						<f:facet name="header">
+							<h:outputText value="Líder" />  
+						</f:facet>
+						<h:outputText value="#{integranteEquipe.indLiderEquipe ? 'Sim' : 'Não'}" />  
+					</p:column>
+					<p:column>
+						<f:facet name="header">  
+							<h:outputText value="#{bundle.msg_acoes}" />  
+						</f:facet>
+						<p:commandLink id="btnRemoverTecnico" disabled="#{formarEquipeController.isDisabledBtnRemoverTecnico(integranteEquipe)}"
+									   title="#{bundle.btn_excluir}" onclick="confirmDlgExclusaoEquipeProcesso.show()" process="@this">
+							<h:graphicImage title="Excluir" value="/resources/img/ico-excluir.png" />
+							<f:setPropertyActionListener value="#{integranteEquipe}" target="#{formarEquipeController.integranteEquipe}" />
+						</p:commandLink>
+					</p:column>
+		 		</p:dataTable>
+	
+				<br/>
+				
+				<h:panelGrid>
+					<h:outputText value="Observação:" />
+					<h:inputTextarea id="texto_observacao" value="#{formarEquipeController.observacao}" style="width:550px;height:50px;" styleClass="maxlength500 limitedTextArea"/>
+				</h:panelGrid>
+				
+				<br/>
+	
+				<h:panelGrid id="panelBotoes" columns="1" style="width:560px;text-align:center;">
+					<h:panelGroup>
+						<p:commandButton actionListener="#{formarEquipeController.distribuir}"
+						                 value="Distribuir" 
+						                 process="@this,formEquipeProcesso:texto_observacao,formEquipeProcesso:botaoSalvar,formEquipeProcesso:dataTableEquipe,panelBotoes"
+						                 update=":formEquipeProcesso:texto_observacao :formEquipeProcesso:dataTableEquipe :formEquipeProcesso:botaoSalvar panelBotoes" 
+						                 disabled="#{formarEquipeController.disabledBotaoDistribuir}"/>
+						&nbsp;
+						<p:commandButton value="Voltar" onclick="dlgFormarEquipe.hide()" immediate="true" />
+						&nbsp;
+						<p:commandButton value="Visualizar Matriz" action="#{matrizController.novoControleTramitacao}" update=":formMatriz:panelMatriz" onclick="dlgMatriz.show()" process="@this"/>
+						
+					</h:panelGroup>
+				</h:panelGrid>
+			</h:panelGrid>
+		</h:form>
+	</p:dialog>
+
+	<p:dialog id="dialogMatriz" header="Visualizar Matriz" closable="true" draggable="true" resizable="false" width="350" widgetVar="dlgMatriz" >
+		<ui:include src="/paginas/manter-processo/matriz.xhtml" />	
+	</p:dialog>
+
+</ui:composition>

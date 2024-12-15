@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="relatorio_questionario_aba_lancamento_efluentes_caractericazacao_corpo_hidrico" language="java" pageWidth="545" pageHeight="802" columnWidth="545" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="2cf377da-30ee-4d82-a489-c9a6691b90a3">
+	<property name="ireport.zoom" value="1.6500000000000004"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="ide_cerh_localizacao_geografica" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[select
+	coalesce(ccc.nom_corpo_hidrico,clec.nom_corpo_hidrico ) as nom_corpo_hidrico,
+	(select nom_tipo_corpo_hidrico from tipo_corpo_hidrico where ide_tipo_corpo_hidrico = coalesce (ccc.ide_tipo_corpo_hidrico, clec. ide_tipo_corpo_hidrico)) as nom_tipo_corpo_hidrico,
+	sp_get_bacia(clg.ide_localizacao_geografica) as bacia,
+	(select nom_municipio from municipio where cod_ibge_municipio = (select sp_get_municipio(637649))::numeric) as municipio,
+	sp_get_rpga(clg.ide_localizacao_geografica) as rpga
+from
+	cerh_localizacao_geografica clg
+	left join cerh_captacao_caracterizacao ccc on ccc.ide_cerh_localizacao_geografica = clg.ide_cerh_localizacao_geografica
+	left join cerh_lancamento_efluente_caracterizacao clec on clec.ide_cerh_localizacao_geografica =   clg.ide_cerh_localizacao_geografica
+	inner join cerh_tipo_uso ctu on ctu.ide_cerh_tipo_uso = clg.ide_cerh_tipo_uso
+where
+	clg.ide_cerh_localizacao_geografica = ($P{ide_cerh_localizacao_geografica})
+	and coalesce(ccc.nom_corpo_hidrico, clec.nom_corpo_hidrico) is not null]]>
+	</queryString>
+	<field name="nom_corpo_hidrico" class="java.lang.String"/>
+	<field name="nom_tipo_corpo_hidrico" class="java.lang.String"/>
+	<field name="bacia" class="java.lang.String"/>
+	<field name="municipio" class="java.lang.String"/>
+	<field name="rpga" class="java.lang.String"/>
+	<columnHeader>
+		<band height="20" splitType="Prevent">
+			<staticText>
+				<reportElement uuid="c9dfb37c-36f6-4e3a-bd08-2614063c107f" mode="Opaque" x="0" y="0" width="115" height="20" backcolor="#DDDDDD"/>
+				<box topPadding="3" leftPadding="5">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement/>
+				<text><![CDATA[Nome do corpo hídrico]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="d2da50ea-4420-4cd0-b54d-25d3536d92b3" mode="Opaque" x="115" y="0" width="115" height="20" backcolor="#DDDDDD"/>
+				<box topPadding="3" leftPadding="5">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement/>
+				<text><![CDATA[Tipo do corpo hídrico]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="8b3eea0a-8bf6-4c6e-9d70-0adb43146502" mode="Opaque" x="230" y="0" width="57" height="20" backcolor="#DDDDDD"/>
+				<box topPadding="3" leftPadding="5">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement/>
+				<text><![CDATA[RPGA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="61c93e88-fe17-4d47-80fe-9812e994ee2f" mode="Opaque" x="287" y="0" width="58" height="20" backcolor="#DDDDDD"/>
+				<box topPadding="3" leftPadding="5">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement/>
+				<text><![CDATA[Bacia]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="a9a57695-7e27-4283-935a-0c464ae61cc3" mode="Opaque" x="345" y="0" width="200" height="20" backcolor="#DDDDDD"/>
+				<box topPadding="3" leftPadding="5">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement/>
+				<text><![CDATA[Município da captação]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Prevent">
+			<textField isStretchWithOverflow="true">
+				<reportElement uuid="e8043761-8926-4079-8a9a-a0989e5d4713" stretchType="RelativeToBandHeight" x="0" y="0" width="115" height="20" isPrintWhenDetailOverflows="true"/>
+				<box topPadding="3" leftPadding="5">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{nom_corpo_hidrico}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement uuid="830b99ec-5611-446f-9b40-d4a8ea33910e" stretchType="RelativeToBandHeight" x="115" y="0" width="115" height="20" isPrintWhenDetailOverflows="true"/>
+				<box topPadding="3" leftPadding="5">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{nom_tipo_corpo_hidrico}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement uuid="4f3bbfd0-fb0d-4b44-8c08-c6f38cbcf748" stretchType="RelativeToBandHeight" x="230" y="0" width="57" height="20" isPrintWhenDetailOverflows="true"/>
+				<box topPadding="3" leftPadding="5">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{rpga}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement uuid="04829ce2-60b3-4c70-9e9e-f54ba3f995ae" stretchType="RelativeToBandHeight" x="287" y="0" width="58" height="20" isPrintWhenDetailOverflows="true"/>
+				<box topPadding="3" leftPadding="5">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{bacia}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement uuid="d516ee5f-2837-4fb1-985f-62ecb36f3cdc" stretchType="RelativeToBandHeight" x="345" y="0" width="200" height="20" isPrintWhenDetailOverflows="true"/>
+				<box topPadding="3" leftPadding="5">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{municipio}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

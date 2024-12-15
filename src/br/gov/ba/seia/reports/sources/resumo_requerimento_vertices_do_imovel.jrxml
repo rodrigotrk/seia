@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="dados_especificos_cefir" language="java" pageWidth="480" pageHeight="802" columnWidth="480" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="8f87fcd8-633f-4ebb-9c3f-b896e5072fa4">
+	<property name="ireport.zoom" value="1.771561000000001"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="ide_localizacao_geografica" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[select substring(
+	(select trim(replace(coord_geo_numerica,'POINT','')))
+	 from (strpos((select trim(replace(coord_geo_numerica,'POINT',''))), '(') + 1)
+	for(strpos((select 	trim(replace(coord_geo_numerica,'POINT',''))), ' -') - 2)) as latitude,
+
+	replace(substring((
+		select trim(replace(coord_geo_numerica,'POINT','')))
+		from (strpos((select trim(replace(coord_geo_numerica,'POINT',''))), ' -') + 1)
+		for (strpos((select trim(replace(coord_geo_numerica,'POINT',''))), ')') - 1)), ')', '') as longitude
+from dado_geografico
+where ide_localizacao_geografica = $P{ide_localizacao_geografica}]]>
+	</queryString>
+	<field name="latitude" class="java.lang.String"/>
+	<field name="longitude" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="18" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="6a780eeb-24e7-4788-b3bc-09684b46edec" x="4" y="4" width="51" height="12"/>
+				<textElement>
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<text><![CDATA[Latitude]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="ec0119ff-852a-48c2-975f-7441b1225c5e" x="55" y="4" width="100" height="12"/>
+				<textElement>
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{latitude}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="cb3e03a8-8633-401b-9c0e-de427b0b9178" x="164" y="4" width="51" height="12"/>
+				<textElement>
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<text><![CDATA[Longitude]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="490c0a4d-6a6f-4b25-946a-c440ad3d1e09" x="215" y="4" width="100" height="12"/>
+				<textElement>
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{longitude}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

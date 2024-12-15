@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+xmlns:h="http://java.sun.com/jsf/html" 
+xmlns:f="http://java.sun.com/jsf/core" 
+xmlns:ui="http://java.sun.com/jsf/facelets" 
+xmlns:p="http://primefaces.prime.com.tr/ui">
+	
+	<h:form id="formAbaFlorestal">
+		<p:outputPanel id="pnl1">
+			<h:panelGrid id="form1">	
+				<h:panelGroup>
+					<h:outputText value="* #{abaFlorestalController.perguntaNR_A5_P1.idePergunta.dscPergunta}" />
+				</h:panelGroup>
+				
+				<p:selectOneRadio label="#{abaFlorestalController.perguntaNR_A5_P1.indResposta}"
+				valueChangeListener="#{novoRequerimentoController.alteracaoResposta()}" 
+				value="#{abaFlorestalController.perguntaNR_A5_P1.indResposta}" required="true" disabled="#{novoRequerimentoController.desabilitarTudo}">  
+					<f:selectItem itemLabel="Sim" itemValue="true" />  
+					<f:selectItem itemLabel="Não" itemValue="false" />
+					<p:ajax update="panelGrid2" />
+				</p:selectOneRadio>
+			</h:panelGrid>
+			
+			<h:panelGrid id="panelGrid2">
+				<p:outputPanel autoUpdate="true">
+					<p:commandLink  oncomplete="dialogFlorestal.show()"  update="formDialogFlorestal" action="#{florestalController.load()}" 
+						rendered="#{abaFlorestalController.perguntaNR_A5_P1.indResposta}" disabled="#{novoRequerimentoController.desabilitarTudo or abaFlorestalController.todosImoveisPreenchidos}">
+						<h:graphicImage title="Incluir..." value="/resources/img/ico-expandir.png"  style="margin-right:2px;" />
+						<h:outputText value="Incluir novos dados para a solicitação do ato florestal por imóvel" />
+					</p:commandLink> 
+				</p:outputPanel>			
+		
+				<p:dataTable id="tbListaImovelFlorestal" var="imovelFlorestal" value="#{abaFlorestalController.florestais}" lazy="true" emptyMessage="#{bundle.consultapf_msg_empty_list}" style="width: 95%;" 
+							 rendered="#{abaFlorestalController.perguntaNR_A5_P1.indResposta}">
+	     		    <p:column style="text-align: left; width:200px;" headerText="Nome do Imóvel">
+			            <h:outputText value="#{imovelFlorestal.ideImovel.imovelRural != null ? imovelFlorestal.ideImovel.imovelRural.desDenominacao : novoRequerimentoController.empreendimento.nomEmpreendimento}"/>
+			        </p:column>
+			        
+			        <p:column style="text-align: center;" headerText="Ações">
+			       
+			            <p:commandLink oncomplete="dialogFlorestal.show()" action="#{florestalController.editar(imovelFlorestal)}" 
+			            			   title="Editar" process="@this" update="formDialogFlorestal formDialogFlorestal:tabelaRVFR" rendered="#{!novoRequerimentoController.desabilitarTudo}">
+		          			 <h:graphicImage title="Editar" value="/resources/img/ico-editar.png" />
+			            </p:commandLink>
+			       
+			          	<p:commandLink oncomplete="confirmacaoExclusaoFlorestal.show()" title="Excluir" process="@this" update="formDialogFlorestal" rendered="#{!novoRequerimentoController.desabilitarTudo}">
+		          			 <h:graphicImage title="Excluir" value="/resources/img/ico-excluir.png" />
+		     			     <f:setPropertyActionListener target="#{abaFlorestalController.florestalExcluido}" value="#{imovelFlorestal}"/>
+			            </p:commandLink>
+			       
+			            <p:commandLink oncomplete="dialogFlorestal.show()" action="#{florestalController.visualizar(imovelFlorestal)}" 
+			            			   title="Visualizar" process="@this" update="formDialogFlorestal formDialogFlorestal:tabelaRVFR" rendered="#{novoRequerimentoController.desabilitarTudo}">
+		          			 <h:graphicImage title="Visualizar" value="/resources/img/ico-pesquisa.png" />
+			            </p:commandLink>
+			            
+		     	   </p:column>
+		     	   
+	       	    </p:dataTable>
+	       	    
+			</h:panelGrid>
+			
+		</p:outputPanel>		
+		
+		<h:panelGrid columns="4" style="margin-top:40px;">
+			<p:commandButton id="btnVoltar" value="Voltar" action="#{novoRequerimentoController.voltarAbas()}" update="subViewAbas:tabAbasId"  style="width:90px;" />
+			<p:commandButton id="btnAvancar" value="Avançar" action="#{novoRequerimentoController.avancarAbas()}" update="subViewAbas:tabAbasId"  style="width:90px;"  />
+			<p:spacer width="400" height="10"/>
+			<p:commandButton style="float:right;" value="Salvar" action="#{abaFlorestalController.salvarAba()}" process="@form" update="formAbaFlorestal"  disabled="#{novoRequerimentoController.desabilitarTudo}"/>
+		</h:panelGrid>
+		
+	</h:form>
+</ui:composition>

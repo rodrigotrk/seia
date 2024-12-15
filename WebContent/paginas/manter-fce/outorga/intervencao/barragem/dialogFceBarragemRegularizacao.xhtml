@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui">
+	<h:form id="formBarragemRegularizacaoNovo">
+		<h:panelGrid columns="2">
+			<h:outputText value="Identificação do Barramento" />
+			<p:inputText value="#{fceIntervencaoBarragemController.intervencaoBarragem.ideOutorgaLocalizacaoGeografica.nomIntervencao}" disabled="#{fceIntervencaoBarragemController.desabilitarTudo}"/>
+		</h:panelGrid>
+		<h:panelGrid id="gridRegularizacao" columns="1"> 
+			<br />
+			<h:outputText style="margin-left:5px;font-weight: bold;" value="* Dados da Barragem de Regularização" />
+			<br />
+			<h:panelGrid id="colunas" columns="2">
+				<h:panelGrid id="coluna1" columns="3" style="margin-left:25px;">
+					<h:outputText value="Área de Drenagem da Bacia Hidrográfica" />
+					<p:inputText value="#{fceIntervencaoBarragemController.intervencaoBarragem.numBaciaHidrografica}" disabled="#{fceIntervencaoBarragemController.desabilitarTudo}"
+					converter="doubleConverter" onkeyup="maskIt(this, event, '99.999.999,99', true)" maxlength="13" style="margin-left:5px; width:80px;" 
+					onblur="maskIt(this, event, '99.999.999,99', true)"/>
+					
+					<h:outputText value="  (km²)" />
+					
+					<h:outputText value="Altura Máxima (da base à crista)" />
+					
+					<p:inputText value="#{fceIntervencaoBarragemController.intervencaoBarragem.numAlturaMaxima}" disabled="#{fceIntervencaoBarragemController.desabilitarTudo}"
+					converter="doubleConverter" onkeyup="maskIt(this, event, '99.999.999,99', true)" maxlength="13" style="margin-left:5px; width:80px;" 
+					onblur="maskIt(this, event, '99.999.999,99', true)"/>
+					
+					<h:outputText value="  (m)" />
+					
+					<h:outputText value="Comprimento Total" />
+					
+					<p:inputText value="#{fceIntervencaoBarragemController.intervencaoBarragem.numComprimentoTotal}" disabled="#{fceIntervencaoBarragemController.desabilitarTudo}"
+					converter="doubleConverter" onkeyup="maskIt(this, event, '99.999.999,99', true)" maxlength="13" style="margin-left:5px; width:80px;" 
+					onblur="maskIt(this, event, '99.999.999,99', true)"/>
+					
+					<h:outputText value="  (m)" />
+					
+					
+					<h:outputText value="Largura da Base" />
+					
+					<p:inputText value="#{fceIntervencaoBarragemController.intervencaoBarragem.numLarguraBase}" converter="doubleConverter" disabled="#{fceIntervencaoBarragemController.desabilitarTudo}"
+					onkeyup="maskIt(this, event, '99.999.999,99', true)" maxlength="13" style="margin-left:5px; width:80px;" 
+					onblur="maskIt(this, event, '99.999.999,99', true)"/>
+					
+					<h:outputText value="  (m)" />
+					
+					<h:outputText value="Largura do Coroamento" />
+					
+					<p:inputText value="#{fceIntervencaoBarragemController.intervencaoBarragem.numLarguraCoroamento}" disabled="#{fceIntervencaoBarragemController.desabilitarTudo}"
+					converter="doubleConverter" onkeyup="maskIt(this, event, '99.999.999,99', true)" maxlength="13" style="margin-left:5px; width:80px;" 
+					onblur="maskIt(this, event, '99.999.999,99', true)"/>
+				 	
+				 	<h:outputText value="  (m)" />			
+				</h:panelGrid><!-- Fim da grid coluna1 -->
+				
+				<h:panelGrid id="coluna2" columns="3" style="margin-left:20px;">
+					<h:outputText value="Nível d'água máximo operacional" />
+					<p:inputText value="#{fceIntervencaoBarragemController.intervencaoBarragem.numNivelAguaMaxima}" disabled="#{fceIntervencaoBarragemController.desabilitarTudo}"
+					converter="doubleConverter" onkeyup="maskIt(this, event, '99.999.999,99', true)" maxlength="13" style="margin-left:5px; width:80px;" 
+					onblur="maskIt(this, event, '99.999.999,99', true)"/>
+					<h:outputText value="  (m)" />
+					
+					<h:outputText value="Nível d'água mínimo operacional" />
+					<p:inputText value="#{fceIntervencaoBarragemController.intervencaoBarragem.numNivelAguaMinima}" disabled="#{fceIntervencaoBarragemController.desabilitarTudo}"
+					converter="doubleConverter" onkeyup="maskIt(this, event, '99.999.999,99', true)" maxlength="13" style="margin-left:5px; width:80px;" 
+					onblur="maskIt(this, event, '99.999.999,99', true)"/>
+					<h:outputText value="  (m)" />
+					
+					<h:outputText value="Nível d'água máximo maximorum" />
+					<p:inputText value="#{fceIntervencaoBarragemController.intervencaoBarragem.numNivelAguaMaximorum}" disabled="#{fceIntervencaoBarragemController.desabilitarTudo}"
+					converter="doubleConverter" onkeyup="maskIt(this, event, '99.999.999,99', true)" maxlength="13" style="margin-left:5px; width:80px;" 
+					onblur="maskIt(this, event, '99.999.999,99', true)"/>
+					<h:outputText value="  (m)" />
+					
+					<h:outputText value="Volume máximo acumulado" />
+					<p:inputText value="#{fceIntervencaoBarragemController.intervencaoBarragem.numVolumeMaximoAcumulado}" disabled="#{fceIntervencaoBarragemController.desabilitarTudo}"
+					converter="doubleConverter" onkeyup="maskIt(this, event, '99.999.999,99', true)" maxlength="13" style="margin-left:5px; width:80px;" 
+					onblur="maskIt(this, event, '99.999.999,99', true)"/>
+					<h:outputText value="  (m)" />
+					
+						
+				</h:panelGrid><!-- Fim da grid coluna2 -->
+			</h:panelGrid>
+			<br />
+			<h:panelGrid columns="3">
+				<h:outputText value="Informe a vazão para jusante do barramento" />
+				<p:inputText value="#{fceIntervencaoBarragemController.intervencaoBarragem.numVazaoRegularizada}" disabled="#{fceIntervencaoBarragemController.desabilitarTudo}"
+				converter="doubleConverter" onkeyup="maskIt(this, event, '99.999.999,99', true)" maxlength="13" style="margin-left:5px; width:80px;" 
+				onblur="maskIt(this, event, '99.999.999,99', true)"/>
+				<h:outputText value="  (m³/s)" />	
+			</h:panelGrid>
+			<br />
+			<h:outputText value="Período utilizado para definir a vazão máxima regularizada:" style="margin-left:35px;"/>
+			<br />
+			<h:panelGroup>
+				<h:panelGrid columns="4" style="margin-left:55px;">
+					<h:outputText value="Início" />
+	        		 <p:selectOneMenu value="#{fceIntervencaoBarragemController.intervencaoBarragem.dtcIniVazaoRegularizada}" disabled="#{fceIntervencaoBarragemController.desabilitarTudo}"
+	        		 converter="integerNewConverter">  
+			            <f:selectItem itemLabel="Selecione" itemValue="" />
+			            <f:selectItems value="#{fceIntervencaoBarragemController.listaAno}" var="ano" itemLabel="#{ano}" itemValue="#{ano}" />  
+	        		 	<p:ajax event="change" global="false" immediate="true"/>
+	        		 </p:selectOneMenu>  
+					<h:outputText value="Fim" />
+					<p:selectOneMenu value="#{fceIntervencaoBarragemController.intervencaoBarragem.dtcFimVazaoRegularizada}" disabled="#{fceIntervencaoBarragemController.desabilitarTudo}"
+					converter="integerNewConverter">  
+			            <f:selectItem itemLabel="Selecione" itemValue="" />
+			            <f:selectItems value="#{fceIntervencaoBarragemController.listaAno}" var="ano" itemLabel="#{ano}" itemValue="#{ano}" />  
+	        		 	<p:ajax event="change" global="false" immediate="true"/>
+	        		 </p:selectOneMenu>  
+				</h:panelGrid> <!-- grid 4 colunas -->
+			</h:panelGroup> <!-- group dos anos -->
+			<br />
+			<h:panelGroup style="margin-left:35px;">
+				<h:outputText value="Garantia de atendimento da vazão regularizada" />
+				<p:inputText value="#{fceIntervencaoBarragemController.intervencaoBarragem.numGarantiaAtendimentoVazao}" disabled="#{fceIntervencaoBarragemController.desabilitarTudo}"
+				style="margin-left:5px; width:45px;" maxlength="6" converter="doubleConverter" onkeyup="maskIt(this, event, '999,99', true)"/>
+				<h:outputText value="  (%)" />
+				<h:graphicImage title="#{bundle.fce_outorga_ajuda_006}" value="/resources/img/ico-ajuda.png" id="ajuda006" style="margin: 1px 1px 1px 4px; text-align:justify;"/>
+			</h:panelGroup> <!-- group da porcentagem -->
+			<!-- 
+			<br />
+			<h:outputText value="Possui descarga de fundo?" style="margin-left:35px;"/>
+			<p:selectOneRadio  value="#{fceIntervencaoBarragemController.intervencaoBarragem.indDescargaFundo}" disabled="#{fceIntervencaoBarragemController.desabilitarTudo}"
+			style="margin-left:55px;" layout="pageDirection">
+				<f:selectItem itemLabel="Sim" itemValue="true" />
+				<f:selectItem itemLabel="Não" itemValue="false" />
+				<p:ajax event="change" global="false" />
+			</p:selectOneRadio>-->
+			<br />				
+			<h:panelGroup style="margin-left:35px;">
+				<h:outputText value="Extrato do estudo hidrológico" />
+		        <h:graphicImage title="#{bundle.fce_outorga_ajuda_005}" value="/resources/img/ico-ajuda.png" id="ajuda005" style="margin: 1px 1px 1px 4px; text-align:justify;"/>
+	        </h:panelGroup>
+	        <br />
+			<p:commandButton value="Download" ajax="false" global="false" process="@this" disabled="#{fceIntervencaoBarragemController.desabilitarTudo}"
+				immediate="true" id="download"  style="margin-left:45px;">
+            	<p:fileDownload value="#{fceIntervencaoBarragemController.estudoHidrologico}"/>
+			</p:commandButton>		
+	        <br />
+    		
+    		<h:panelGrid id="tblDoc" style="width:333px; margin-left:40px;">
+	        	
+	        	<p:fileUpload id="btnUpload" widgetVar="btnUpload" label="Upload do extrato do estudo hidrológico" process="@this" 
+	        		fileUploadListener="#{uploadDocumentoAdicionalController.prepararUploadDocumentoAdicional}" invalidFileMessage="Tipo de arquivo inválido."
+					mode="advanced" oncomplete="updateDataTableDoc()" auto="true" allowTypes="/(\.|\/)(pdf|gif|jpeg|png|jpg)$/"
+					disabled="#{uploadDocumentoAdicionalController.uploadRealizado or fceIntervencaoBarragemController.desabilitarTudo}"/>
+				
+				<p:remoteCommand name="updateDataTableDoc" update="tblDoc btnUpload"/>
+				
+				<p:dataTable id="dtDocumentos" rendered="#{uploadDocumentoAdicionalController.uploadRealizado}" widgetVar="dtDocumentos" style="width:333px;"
+					value="#{uploadDocumentoAdicionalController.listaArquivo}" var="arquivo" lazy="true" emptyMessage="#{bundle.msg_lista_vazia}">
+			        
+			        <p:column style="width:252px;">
+			            <h:outputText value="#{arquivo}"/>
+			        </p:column>
+			        
+			        <p:column style="width:40px;">
+			        	<h:commandButton value="#{arquivo}" image="/resources/img/ico-download.png" immediate="true" title="Download do arquivo"
+			        		style="margin-right:5px;">
+			        		
+			        		<p:fileDownload value="#{uploadDocumentoAdicionalController.documentoObrigatorioRequerimentoUpado}" />
+		        		</h:commandButton>
+		        		
+		        		<p:commandLink oncomplete="confirmaExclusaoExtrato.show()" title="Excluir extrato do estudo hidrológico" 
+		        			disabled="#{fceIntervencaoBarragemController.desabilitarTudo or uploadDocumentoAdicionalController.documentoValidado}"
+			            	process="@this" global="false">
+			            	
+	          				<h:graphicImage title="Excluir" value="/resources/img/ico-excluir.png" />
+		            	</p:commandLink>
+			        </p:column>	
+		    	</p:dataTable>		    
+	    	</h:panelGrid><!-- Fim da grid com o Documento Upado -->
+		</h:panelGrid> <!-- Fim da gridRegularizacao -->
+		
+		<h:panelGrid id="gridBotoes" rendered="#{!fceIntervencaoBarragemController.desabilitarTudo}" columns="2">
+			<p:commandButton id="btnVoltar" value="Voltar" global="false" onclick="confirmationVoltarFCEbarragem.show();" style="width:90px;" update="@form formIntervencaoBarragem"/>
+			<p:commandButton id="btnSalvar" value="Salvar" style="width:90px;" update="@form" actionListener="#{fceIntervencaoBarragemController.salvarDialogFceBarragemRegularizacao()}" global="false"/> 
+		</h:panelGrid>
+	</h:form> <!-- Fim do formIntervencaoBarragem -->
+</ui:composition>

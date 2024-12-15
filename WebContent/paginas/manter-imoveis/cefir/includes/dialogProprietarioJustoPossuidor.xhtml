@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui">
+
+	<h:form id="form_dialog">
+	 <h:panelGrid columns="1">
+		  <p:selectOneRadio value="${empreendimentoController.tipoPessoa}" 
+		  					valueChangeListener="#{empreendimentoController.trocaTipoPessoa}">
+		    <f:selectItems value="#{empreendimentoController.itens}"/>
+		    <p:ajax event="change"		    		
+		    		update="form_dialog:panel_lista_pessoa, form_dialog:panel_lista_pessoa_juridica, form_dialog:consulta_dialog filtroImoveis:tblFiltroRequerente"/>	    		    		    
+		  </p:selectOneRadio>
+    	  
+    	  <h:panelGrid columns="1">
+		   <h:panelGroup>
+		    <h:panelGrid id="consulta_dialog" columns="2">
+		    	<h:outputLabel value="#{empreendimentoController.tipoPessoa == null or empreendimentoController.tipoPessoa == 0 ? 'Nome':'Razão Social'}" style="float:left;"/>
+   				<h:panelGroup>
+   					<h:outputFormat value="#{empreendimentoController.tipoPessoa != null and empreendimentoController.tipoPessoa == 1 ? 'CNPJ':'CPF'}" style="float:left;" />	
+   				</h:panelGroup>
+		     
+		      <p:inputText style="width:300px;" value="#{empreendimentoController.nome}"/>
+		      <h:panelGroup>
+		          <p:inputMask id="cpfcnpj" mask="#{empreendimentoController.mascara}"
+						value="#{empreendimentoController.documento}">
+						<f:converter converterId="numeroDocumentoConverter" />						
+					</p:inputMask>
+		      </h:panelGroup>
+		    </h:panelGrid>
+		    
+		   </h:panelGroup>
+		  <h:panelGroup>
+		    <h:panelGrid columns="1" style="float:right;">
+		      <p:commandButton actionListener="#{empreendimentoController.consultarRequerente}" 
+	      						update="form_dialog:panel_lista_pessoa,form_dialog:panel_lista_pessoa_juridica" 
+      							value="Consultar" />
+		    </h:panelGrid>
+		  </h:panelGroup> 
+		 </h:panelGrid>
+		 
+		 
+		  <!--  lista -->
+		  
+		  <!-- pessoa fisica -->  
+		  <h:panelGrid id="panel_lista_pessoa" columns="1" >
+			
+				
+				<p:dataTable var="pessoaFisica" value="#{empreendimentoController.pessoasFisicaModel}" lazy="true"
+		                 paginator="true" rows="10" paginatorPosition="bottom"
+		                 paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}"  
+		                 emptyMessage="#{bundle.cefir_msg_A012}"
+		                 style="width: 483px;" id="pessoas" widgetVar="pessoas"
+		                 rendered="#{not empty empreendimentoController.pessoasFisicaModel and empreendimentoController.pessoasFisicaModel != null}">
+		        <f:facet name="header">  
+						<h:outputText value="#{bundle.consultapf_lbl_lista}" />
+				</f:facet>  
+		        <p:column>  
+		            <f:facet name="header">  
+		                <h:outputText value="#{bundle.consultapf_lbl_nome}" />  
+		            </f:facet>
+		            <p:commandLink oncomplete="dlgBuscaProp.hide()" update=":formRelatorioImovelRural:tblFiltroProprietario" onclick="desabilitaBotaoImprimir();">		            
+		            	<h:outputText value="#{pessoaFisica.nomPessoa}" />
+		            	<f:setPropertyActionListener value="#{pessoaFisica.idePessoaFisica}" target="#{relatorioImovelRuralController.proprietario.idePessoa}" />
+		            	<f:setPropertyActionListener value="#{pessoaFisica}" target="#{relatorioImovelRuralController.proprietario.pessoaFisica}" />
+		            	<f:setPropertyActionListener value="#{null}" target="#{relatorioImovelRuralController.proprietario.pessoaJuridica}" />		            	
+		            </p:commandLink>
+		        </p:column>  
+		  
+		        <p:column style="text-align: center;">  
+		            <f:facet name="header">  
+		                <h:outputText value="#{bundle.consultapf_lbl_cpf}" />  
+		            </f:facet>  
+		            <h:outputText value="#{pessoaFisica.numCpf}" ><f:converter converterId="cpfConverter"/></h:outputText>
+		        </p:column>        
+		    </p:dataTable>
+		    
+		    </h:panelGrid>
+		   
+		   
+		  <!-- //fisica -->
+		  
+		  
+		  <!--  pessoa juridica -->
+		       <h:panelGrid id="panel_lista_pessoa_juridica" columns="1" >
+				
+				<p:dataTable var="pessoaJuridica" value="#{empreendimentoController.pessoasJuridicaModel}" lazy="true"
+		                 paginator="true" rows="10" paginatorPosition="bottom"
+		                 paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}"  
+		                 emptyMessage="#{bundle.cefir_msg_A012}"
+		                 style="width: 483px;" id="pessoas_juridica" widgetVar="pessoas"
+		                 rendered="#{not empty empreendimentoController.pessoasJuridicaModel and empreendimentoController.pessoasJuridicaModel != null}">
+		        <f:facet name="header">  
+						<h:outputText value="#{bundle.consultapf_lbl_lista}" />
+				</f:facet>  
+		        <p:column>  
+		            <f:facet name="header">  
+		                <h:outputText value="#{bundle.consultapj_lbl_razao}" />  
+		            </f:facet>
+		            <p:commandLink oncomplete="dlgBuscaProp.hide()" update=":formRelatorioImovelRural:tblFiltroProprietario" onclick="desabilitaBotaoImprimir();">		            
+		            <h:outputText value="#{pessoaJuridica.nomRazaoSocial}" />
+		            	<f:setPropertyActionListener value="#{pessoaJuridica.idePessoaJuridica}" target="#{relatorioImovelRuralController.proprietario.idePessoa}" />
+		            	<f:setPropertyActionListener value="#{pessoaJuridica}" target="#{relatorioImovelRuralController.proprietario.pessoaJuridica}" />
+		            	<f:setPropertyActionListener value="#{null}" target="#{relatorioImovelRuralController.proprietario.pessoaFisica}" />
+		            </p:commandLink> 
+		        </p:column>  
+		  
+		        <p:column style="text-align: center;">  
+		            <f:facet name="header">  
+		                <h:outputText value="#{bundle.consultapj_lbl_cnpj}" />  
+		            </f:facet>  
+		            <h:outputText value="#{pessoaJuridica.numCnpj}">		            	
+		            	<f:converter converterId="cnpjConverter" />						
+		            </h:outputText>
+		        </p:column>        
+		    </p:dataTable>
+		    
+		    </h:panelGrid>
+		       
+		  <!-- //juridica -->
+		  
+		  
+		  </h:panelGrid>  
+	
+	</h:form>
+
+</ui:composition>

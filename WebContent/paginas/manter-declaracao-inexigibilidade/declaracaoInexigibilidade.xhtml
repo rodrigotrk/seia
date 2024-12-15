@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	template="../../layout/template.xhtml">
+
+	<ui:define name="titulo-pagina">
+		<h3>Declaração de Inexigibilidade</h3>
+	</ui:define>
+
+	<ui:define name="conteudo-principal">
+		<p:tabView id="tabViewDI" activeIndex="#{declaracaoInexigibilidadeController.activeIndex}">
+			<p:ajax event="tabChange" listener="#{declaracaoInexigibilidadeController.onTabChange}" />
+			
+			<p:tab title="Atividade" id="tab01" disabled="#{declaracaoInexigibilidadeController.desabilitaTab01}">
+				<ui:include src="/paginas/manter-declaracao-inexigibilidade/abaAtividade.xhtml" />
+			</p:tab>
+			
+			<p:tab title="Informações Adicionais" id="tab02" disabled="#{declaracaoInexigibilidadeController.desabilitaTab02}">
+				<ui:include src="/paginas/manter-declaracao-inexigibilidade/abaInfoAdicional.xhtml" />
+			</p:tab>
+			
+			<p:tab title="Recomendações" id="tab03" disabled="#{declaracaoInexigibilidadeController.desabilitaTab03}">
+				<ui:include src="/paginas/manter-declaracao-inexigibilidade/abaRecomendacao.xhtml" />
+			</p:tab>
+		</p:tabView>
+		
+		<p:confirmDialog id="confirmExcluirGeo" widgetVar="confirmExcluirGeo" header="Excluir Localização Geografica " message="Excluir Localização Geografica?" severity="alert">
+	        <h:form>
+	            <p:commandButton value="Sim" actionListener="#{localizacaoGeograficaGenericController.excluirLocGeo()}" update="formSistema:pnlCoordenada" onsuccess="confirmExcluirGeo.hide()"/>
+	            <p:commandButton value="Não" type="button" onclick="confirmExcluirGeo.hide()" />
+	        </h:form>
+	    </p:confirmDialog>
+	    
+	    <p:confirmDialog id="confirmaExclusaoEnderecoRealizacaoAtividade" widgetVar="confirmaExclusaoEnderecoRealizacaoAtividade" header="#{bundle.geral_lbl_mensagem}" 
+				appendToBody="true" message="#{bundle.lac_dadosGerais_msg004}" severity="alert">
+			<h:form>
+				<p:commandButton id="excluirEnderecoResiduo" value="#{bundle.btn_sim}" 
+					actionListener="#{declaracaoInexigibilidadeController.excluirEnderecoRealizacaoAtividade()}" onclick="confirmaExclusaoEnderecoRealizacaoAtividade.hide()" 
+					update="tabViewDI, tabViewDI:formInfoAdicional" process="@this"/>
+				<p:commandButton value="#{bundle.btn_nao}" onclick="confirmaExclusaoEnderecoRealizacaoAtividade.hide()" type="button" />
+			</h:form>
+		</p:confirmDialog>
+		
+		<p:confirmDialog id="confirmaExclusaoEnderecoUnidade" widgetVar="confirmaExclusaoEnderecoUnidade" header="#{bundle.geral_lbl_mensagem}" 
+				appendToBody="true" message="#{bundle.lac_dadosGerais_msg004}" severity="alert">
+			<h:form>
+				<p:commandButton id="excluirEnderecoUnidade" value="#{bundle.btn_sim}" 
+					actionListener="#{declaracaoInexigibilidadeController.excluirEnderecoUnidade()}" onclick="confirmaExclusaoEnderecoUnidade.hide()" 
+					update="tabViewDI, tabViewDI:formInfoAdicional" process="@this"/>
+				<p:commandButton value="#{bundle.btn_nao}" onclick="confirmaExclusaoEnderecoUnidade.hide()" type="button" />
+			</h:form>
+		</p:confirmDialog>
+		
+		<p:confirmDialog id="confirmaExclusaoProjeto" widgetVar="confirmaExclusaoProjeto" header="#{bundle.geral_lbl_mensagem}" 
+			appendToBody="true" message="#{bundle.lac_dadosGerais_msg004}" severity="alert">
+			<h:form>
+				<p:commandButton id="excluirProjeto" value="#{bundle.btn_sim}" 
+					actionListener="#{declaracaoInexigibilidadeController.excluirEnderecoProjeto()}" onclick="confirmaExclusaoProjeto.hide()" 
+					update="tabViewDI, tabViewDI:formInfoAdicional" process="@this"/>
+				<p:commandButton value="#{bundle.btn_nao}" onclick="confirmaExclusaoProjeto.hide()" type="button" />
+			</h:form>
+		</p:confirmDialog>
+		
+		<p:confirmDialog id="confirmaExclusaoSistema" widgetVar="confirmaExclusaoSistema" header="#{bundle.geral_lbl_mensagem}" 
+			appendToBody="true" message="#{bundle.lac_dadosGerais_msg004}" severity="alert">
+			<h:form>
+				<p:commandButton id="excluirSistema" value="#{bundle.btn_sim}" 
+					actionListener="#{declaracaoInexigibilidadeController.excluirSistema()}" onclick="confirmaExclusaoSistema.hide()" 
+					update="tabViewDI, tabViewDI:formInfoAdicional" process="@this"/>
+				<p:commandButton value="#{bundle.btn_nao}" onclick="confirmaExclusaoSistema.hide()" type="button" />
+			</h:form>
+		</p:confirmDialog>
+	    
+	    <p:confirmDialog id="confirmaExclusaoPonte" widgetVar="confirmaExclusaoPonte" header="#{bundle.geral_lbl_mensagem}" 
+			appendToBody="true" message="#{bundle.lac_dadosGerais_msg004}" severity="alert">
+			<h:form>
+				<p:commandButton id="excluirPonte" value="#{bundle.btn_sim}" 
+					actionListener="#{declaracaoInexigibilidadeController.excluirPonte()}" onclick="confirmaExclusaoPonte.hide()" 
+					update="tabViewDI, tabViewDI:formInfoAdicional" process="@this"/>
+				<p:commandButton value="#{bundle.btn_nao}" onclick="confirmaExclusaoPonte.hide()" type="button" />
+			</h:form>
+		</p:confirmDialog>
+		
+		<p:dialog id="dialogEnderecoRealizacaoAtividade" dynamic="true" header="Incluir endereço" widgetVar="dialogEnderecoRealizacaoAtividade" modal="true" 
+				position="center" resizable="false">
+			<p:ajax event="close" process="@this" listener="#{enderecoRealizacaoAtividadeController.limparEndereco()}"/>	
+			<ui:include src="/paginas/manter-declaracao-inexigibilidade/enderecoRealizacaoAtividade.xhtml" />
+		</p:dialog>
+		
+		<p:dialog id="dialogEnderecoUnidade" dynamic="true" header="Incluir unidade" widgetVar="dialogEnderecoUnidade" 
+				modal="true" position="center" resizable="false">
+			<ui:include src="/paginas/manter-declaracao-inexigibilidade/incluirUnidade.xhtml" />
+		</p:dialog>
+		
+		<p:dialog id="dialogProjeto" dynamic="true" header="Incluir Projeto" widgetVar="dialogProjeto" modal="true" position="center" resizable="false">
+			<ui:include src="/paginas/manter-declaracao-inexigibilidade/incluirProjeto.xhtml" />
+		</p:dialog>
+		
+		<p:dialog id="dialogSistema" dynamic="true" header="Incluir Sistema" widgetVar="dialogSistema" 
+				modal="true" position="center" resizable="false">
+			<ui:include src="/paginas/manter-declaracao-inexigibilidade/incluirSistema.xhtml" />
+		</p:dialog>
+		
+		<p:dialog id="dialogPonte" dynamic="true" header="Incluir Ponte" widgetVar="dialogPonte" modal="true" position="center" resizable="false">
+			<ui:include src="/paginas/manter-declaracao-inexigibilidade/incluirPonte.xhtml" />
+		</p:dialog>
+		
+		<ui:include src="/paginas/manter-localizacao-geografica/localizacao-geografica-generic.xhtml" />
+		
+	</ui:define>
+</ui:composition>

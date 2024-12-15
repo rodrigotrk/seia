@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+xmlns:h="http://java.sun.com/jsf/html" 
+xmlns:f="http://java.sun.com/jsf/core" 
+xmlns:ui="http://java.sun.com/jsf/facelets" 
+xmlns:p="http://primefaces.prime.com.tr/ui" template="../../layout/template.xhtml">
+
+	<ui:define name="titulo-pagina">		
+			<h3> Cadastrar Tipologia</h3>		
+	</ui:define>
+	
+	<ui:define name="conteudo-principal">
+	
+	
+	<h:panelGrid id="panelGrid2" columns="1">
+	
+			<p:tabView id="tabAbas" dynamic="true" style="width: 700px;" activeIndex="#{tipologiaPaiController.indexAba}" >
+			
+				
+					<p:tab id="abaTipologia" title="Tipologia" >
+						<!-- Inclui a tela cadastro tipologia -->
+						<ui:include src="/paginas/manter-atividadelicenciamento/formCadastroTipologia.xhtml" />
+					</p:tab>	
+									
+					<!-- aba cnae -->
+					<p:tab id="abaCnae" title="CNAE"  >
+						
+							<h:panelGrid   id="pnlCNAE" columns="1" >
+								<h:panelGrid columns="1">
+										<ui:include src="/paginas/manter-atividadelicenciamento/modalCnae.xhtml" />
+								</h:panelGrid>
+								
+								
+								<h:form id="formAbaCnae" >
+									<h:panelGrid  columns="2"  rendered="#{tipologiaPaiController.disblePossuiFormas}" >
+										<h:outputText id="idtextformamanejo" value="Possui diferentes formas de manejo ?" />
+										<h:outputText />
+												
+										<p:selectOneRadio  value="#{tipologiaPaiController.isAtividade}"  valueChangeListener="#{tipologiaPaiController.habilitaAbaManejo}"  required="true" >
+										          <f:selectItem itemLabel="Sim" itemValue="1" />  
+										          <f:selectItem itemLabel="Não" itemValue="2" /> 
+										          <p:ajax update="tabAbas"/>
+										</p:selectOneRadio>
+										 
+									</h:panelGrid>
+								</h:form>
+							</h:panelGrid>
+							
+							
+							
+							
+					</p:tab>
+					
+					<!-- aba manejo -->
+					<p:tab id="abaManejo" title="Forma de Manejo"  disabled="#{tipologiaPaiController.habilitaManejo}"   >
+						<!-- Inclui a tela cadastro tipologia -->
+					 	<ui:include src="/paginas/manter-atividadelicenciamento/FormaManejo.xhtml" />					 	
+					</p:tab>
+					
+					
+					
+									
+				</p:tabView>
+		</h:panelGrid>
+			
+
+
+		<!-- Dialog Atos -->
+		<h:form id="formAtosouTipoDialog">
+			<p:dialog id="dialogAtoOuTipo" header="Atos" closable="true" draggable="false" resizable="false" width="440" widgetVar="dialogAtoOuTipo" modal="true">
+				<ui:include src="/paginas/manter-atividadelicenciamento/atooutipo.xhtml" />
+				<!-- Fim Include Dialog Telefone -->
+				<p:ajax listener="#{pessoaFisicaController.adicionaTelefone}" onstart="javascript:$('.ui-messages-error').remove();document.getElementById('formAtosouTipoDialog').reset();" update=":formModais3:tabelatelefones" />
+			</p:dialog>
+		</h:form>
+		
+		<!-- fim Dialog Atos -->
+		
+		<!-- Dialog de confirmação -->
+		<p:confirmDialog message="#{bundle.consultapf_msg_confimrexclusao}"
+				header="Mensagem" severity="alert"
+				widgetVar="confirmDlgExclusaoUsuarioExterno" id="confirmDlgExclusaoUsuarioExterno">
+			<h:form >	
+				<p:commandButton value="Sim" update=":tabAbas:formformamanejotabela:pnltabelaFormamanejo"
+					actionListener="#{tipologiaPaiController.excluirFormaManejo}"
+					oncomplete="confirmDlgExclusaoUsuarioExterno.hide()" />
+				<p:commandButton value="Não" onclick="confirmDlgExclusaoUsuarioExterno.hide()" 	type="button" />
+			</h:form>	
+		</p:confirmDialog>
+
+	</ui:define>
+</ui:composition>

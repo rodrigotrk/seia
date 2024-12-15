@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui">
+
+	<h:form id="formTipologiaEmpreendimento">
+		<h:panelGrid id="panelTipologiaEmpreendimento" columns="1">
+			<h:outputLabel value="* Divisão:" />
+			
+	        <p:selectOneMenu id="selectOneTipologia" value="#{selecionarAtoAmbientalController.tipologia}" style="width: 576px;" converter="tipologiaConverter" >
+	        	<f:selectItem itemLabel="Selecione..." />
+	            <f:selectItems value="#{selecionarAtoAmbientalController.colTipologias}" var="tipologia" itemLabel="#{tipologia.codigoDescricaoTipologia}" itemValue="#{tipologia}"/>
+	            <p:ajax event="change" update="panelTipologiaEmpreendimento" listener="#{selecionarAtoAmbientalController.changeListenerTipologia}" />
+	        </p:selectOneMenu>
+	        
+			<p:tree value="#{selecionarAtoAmbientalController.root}" var="node" selectionMode="single" selection="#{selecionarAtoAmbientalController.selectedNode}" 
+				style="width: 566px; height:200px; overflow: scroll; overflow-x: hidden;">
+				
+				<p:treeNode>
+					<h:outputText value="#{node.desTipologia}"/>
+				</p:treeNode>  
+			</p:tree>
+			
+			<h:panelGroup>
+				<p:commandButton value="#{bundle.btn_cancelar}" onclick="dlgTipologiaEmpreendimento.hide()" />
+				<p:commandButton actionListener="#{selecionarAtoAmbientalController.adicionaGrupoTipologia(true)}"  value="Salvar e Fechar" update="frmSelecionarAtoAmbiental:dataTableTipologias panelTipologiaEmpreendimento" />
+				<p:commandButton actionListener="#{selecionarAtoAmbientalController.adicionaGrupoTipologia(false)}" value="Salvar e Continuar" update="frmSelecionarAtoAmbiental:dataTableTipologias panelTipologiaEmpreendimento"/>
+			</h:panelGroup>
+		</h:panelGrid>
+	</h:form>
+</ui:composition>

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="relatorio_silos_armazens_tipo_combustivel_utilizado" language="java" pageWidth="514" pageHeight="752" columnWidth="514" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="2576d191-6a8a-4428-8339-f2a4c8aa658a">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="ide_silos_armazens" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[select tcsa.* from silos_armazens sa inner join silos_armazens_tipo_combustivel satc
+on sa.ide_silos_armazens = satc.ide_silos_armazens
+inner join tipo_combustivel_silo_armazens tcsa
+on satc.ide_tipo_combustivel_silo_armazens = tcsa.ide_tipo_combustivel_silo_armazens
+where sa.ide_silos_armazens = $P{ide_silos_armazens} and ide_tipo_combustivel_silo_armazens_pai is null]]>
+	</queryString>
+	<field name="ide_tipo_combustivel_silo_armazens" class="java.lang.Integer"/>
+	<field name="nom_tipo_combustivel" class="java.lang.String"/>
+	<field name="ide_tipo_madeira" class="java.lang.Integer"/>
+	<field name="ide_tipo_combustivel_silo_armazens_pai" class="java.lang.Integer"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<columnHeader>
+		<band height="20">
+			<staticText>
+				<reportElement uuid="110c14a6-e0b9-4d09-b74d-23df74a730cc" x="0" y="0" width="514" height="20"/>
+				<box>
+					<bottomPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Qual o tipo de combustível utilizado?]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="42" splitType="Stretch">
+			<textField>
+				<reportElement uuid="a29dcebe-a610-4fff-afcc-d15d59e0ee83" x="0" y="0" width="152" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nom_tipo_combustivel}]]></textFieldExpression>
+			</textField>
+			<subreport>
+				<reportElement uuid="bcc74bec-880c-4726-b887-611792fdb226" x="23" y="20" width="200" height="22" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$F{nom_tipo_combustivel}.equals("Madeira")]]></printWhenExpression>
+				</reportElement>
+				<subreportParameter name="SUBREPORT_DIR">
+					<subreportParameterExpression><![CDATA[$P{SUBREPORT_DIR}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="ide_silos_armazens">
+					<subreportParameterExpression><![CDATA[$P{ide_silos_armazens}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "relatorio_silos_armazens_tipo_combustivel_utilizado_filho.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+	</detail>
+</jasperReport>

@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui">
+
+	<h:form id="form_dialog">
+
+		<h:panelGrid id="descCondicionante" columns="1">
+			<h:outputText value="*#{bundle.lbl_desc_condicionante}" 
+				style="float:left;" />
+			<p:inputText style="width:300px;" required="true" requiredMessage="A descrição da condicionante é obrigatória" 
+			    disabled="#{condicionanteController.detalhar}"
+				value="#{condicionanteController.itemSelecionado.nomCondicionante}" />
+		</h:panelGrid>
+
+        <h:panelGrid id="segmento" columns="1">
+            <h:outputText value="*#{bundle.lbl_segmento}" 
+                style="float:left;" />
+                 <h:panelGroup>
+                       <h:selectOneMenu id="lstSegmentoCadastro"
+                            disabled="#{condicionanteController.detalhar}"
+                            converter="simpleEntityConverter" required="true"
+                            requiredMessage="O segmento é obrigatório"
+                            value="#{condicionanteController.itemSelecionado.ideSegmento}"
+                            style="width: 150px;">
+                            <f:selectItem itemValue="" itemLabel="Selecione..." />
+                            <f:selectItems value="#{condicionanteController.segmentos}"
+                                var="segmento" itemLabel="#{segmento.nomSegmento}"
+                                itemValue="#{segmento}" />
+                        </h:selectOneMenu>
+               </h:panelGroup>
+        </h:panelGrid>
+        <h:panelGrid>
+            <h:outputText value="#{bundle.lbl_atos_ambientais}" />
+        </h:panelGrid>
+
+        <h:panelGrid id="dataListAtosAmbientais" columns="1">
+           
+		    <p:dataList value="#{condicionanteController.dualListAtosAmbientais.target()}"  var="atoAmbiental" type="unordered" 
+		    rendered="#{condicionanteController.detalhar}"  paginatorTemplate=" {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {CurrentPageReport}"
+		    currentPageReportTemplate="{startRecord} of {totalRecords}"
+		    itemType="none" paginator="true" rows="10" >
+		      <f:facet name="header">
+		          Atos Ambientais
+		      </f:facet>
+              <h:outputText value="#{atoAmbiental.nomAtoAmbiental}" style="display:inline-block"/>
+		    </p:dataList>
+        </h:panelGrid>
+
+		<h:panelGrid>
+
+			<p:pickList id="pickListAtoAmbiental"
+			    rendered="#{not condicionanteController.detalhar}"
+				value="#{condicionanteController.dualListAtosAmbientais}" var="atoAmbiental"
+				itemLabel="#{atoAmbiental.nomAtoAmbiental}"
+				itemValue="#{atoAmbiental}"
+				converter="simpleEntityConverter" addLabel="Adicionar"
+				addAllLabel="Adicionar todos" removeLabel="Remover"
+				removeAllLabel="Remover Todos">
+				<f:facet name="sourceCaption">Atos ambientais  não <br /> selecionados</f:facet>
+				<f:facet name="targetCaption">Atos ambientais   <br />selecionados</f:facet>
+			</p:pickList>
+		</h:panelGrid>
+
+
+
+
+		<h:panelGrid columns="2" style="width:100%; margin-top:30px;" rendered="#{not condicionanteController.detalhar}">
+
+			<p:commandButton title="Cancelar" value="Cancelar"
+				oncomplete="dialogCondicionante.hide();" process="@form"
+				styleClass="left" />
+				
+            <p:commandButton title="Salvar" value="Salvar" 
+                actionListener="#{condicionanteController.salvarAtualizar()}" process="@form" update="formDialogSegmentos:dataTableCondicionantes"
+                styleClass="right" />
+		</h:panelGrid>
+	</h:form>
+</ui:composition>

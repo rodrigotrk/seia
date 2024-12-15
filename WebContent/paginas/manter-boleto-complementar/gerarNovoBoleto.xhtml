@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui">
+	
+	<h:form id="form_dialog_boleto" style="width: 380px;">
+		
+		<h:panelGrid columns="1" id="panel_boleto_geral" style="padding-left: 35px;">
+		
+			<!-- 
+			
+			MOTIVO 
+			
+			-->
+			<h:panelGrid columns="1">
+				<h:outputText value="#{bundle.geral_lbl_motivo}:" />
+				
+				<p:selectOneMenu value="#{boletoComplementarController.novoBoleto_tipo.ideTipoBoletoPagamento}" style="width: 299px;" onchange="carregarValores();"
+					disabled="#{not empty boletoComplementarController.processoReenquadramentoDTO}">
+					<f:selectItem itemLabel="#{bundle.geral_lbl_selecione}" itemValue="-1"/>
+					<f:selectItems value="#{boletoComplementarController.listTipoBoleto}" var="tipoBoleto" itemLabel="#{tipoBoleto.nomTipoBoletoPagamento}" itemValue="#{tipoBoleto.ideTipoBoletoPagamento}" />
+					
+					<p:ajax global="false" update=":form_dialog_boleto:panel_boleto_geral" process="@this" />
+	       		</p:selectOneMenu>
+	       	</h:panelGrid>
+       		
+       		<!-- 
+       		
+       		NUMERO REQUERIMENTO/PROCESSO 
+       		
+       		-->
+       		<h:panelGrid columns="1" id="panel_boleto_numero" 
+       			rendered="#{(boletoComplementarController.novoBoleto_tipo.ideTipoBoletoPagamento != null) and (boletoComplementarController.novoBoleto_tipo.ideTipoBoletoPagamento != -1)}">
+				
+				<h:panelGrid columns="3" style="margin-left: -4px;" rendered="#{boletoComplementarController.novoBoleto_tipo.ideTipoBoletoPagamento == 2}">
+					<h:outputText value="#{bundle.consulta_boleto_num_requerimento}" />
+					<h:graphicImage id="ajudaR" value="/resources/img/ico-ajuda.png" />
+					<p:tooltip for="ajudaR" value="#{bundle.gerar_novo_boleto_msg_erro_numero_requerimento}" showEffect="fade" hideEffect="fade" />
+				</h:panelGrid>
+				
+				<h:panelGrid columns="3" style="margin-left: -4px;" rendered="#{boletoComplementarController.novoBoleto_tipo.ideTipoBoletoPagamento != 2}">
+					<h:outputText value="#{bundle.consulta_boleto_num_processo}" />
+					<h:graphicImage id="ajudaP" value="/resources/img/ico-ajuda.png" />
+					<p:tooltip for="ajudaP" value="#{bundle.gerar_novo_boleto_msg_erro_numero_processo}" showEffect="fade" hideEffect="fade" />
+				</h:panelGrid>
+				
+				<p:inputText value="#{boletoComplementarController.novoBoleto_numero}" style="width: 290px;" onblur="carregarValores();" onkeydown="blurOnEnter(event,this);" disabled="#{not empty boletoComplementarController.processoReenquadramentoDTO}" />
+				<p:remoteCommand actionListener="#{boletoComplementarController.novoBoletoCarregaValores()}" name="carregarValores" update=":form_dialog_boleto:panel_boleto_geral" global="false" />
+			</h:panelGrid>
+			
+			<!-- 
+			
+			DADOS DO REQUERENTE 
+			
+			-->
+			<ui:fragment rendered="#{(boletoComplementarController.novoBoleto_renderizaPanelDados) and (boletoComplementarController.novoBoleto_tipo.ideTipoBoletoPagamento != -1)}">
+				<h:panelGrid columns="1" id="panel_boleto_dados" >
+					<h:outputText value="#{bundle.gerar_novo_boleto_lbl_dados_requerente}" style="font-weight: bold;"/>
+					
+					<p:spacer height="1px" />
+					
+					<h:outputText value="#{bundle.geral_lbl_nome} #{boletoComplementarController.novoBoleto_nomeRequerente}" />
+					<h:outputText value="#{bundle.geral_lbl_cpf_cnpj}: #{boletoComplementarController.novoBoleto_cpfCnpjRequerente}" />
+				</h:panelGrid>			
+				
+				<p:spacer height="15px" />
+				
+				
+				<!-- 
+				
+				CHECKBOX BOLETO/DAE 
+				
+				-->
+				<h:panelGroup rendered="#{boletoComplementarController.novoBoleto_tipo.ideTipoBoletoPagamento == 7}">
+					<div style="margin-left:4px;">
+						<div style="width:62%; float:left;">
+							<p:selectBooleanCheckbox value="#{boletoComplementarController.novoBoleto_boleto}"
+								valueChangeListener="#{boletoComplementarController.limparIsencao(this)}">
+		        				
+		        				<p:ajax event="change" update="form_dialog_boleto" />
+		        			</p:selectBooleanCheckbox>
+		        			
+							<h:outputText value="#{bundle.gerar_novo_boleto_lbl_boleto}" />
+						</div>
+						
+						<div style="width:38%; float:right;">
+							<p:selectBooleanCheckbox value="#{boletoComplementarController.novoBoleto_dae}"
+								valueChangeListener="#{boletoComplementarController.limparIsencao(this)}">
+								
+		        				<p:ajax event="change" update="form_dialog_boleto" />
+		        			</p:selectBooleanCheckbox>
+		        			<h:outputText value="#{bundle.gerar_novo_boleto_lbl_dae}" />
+						</div>
+					</div>
+				</h:panelGroup>
+				
+				<p:spacer width="10px" />
+				
+				<!-- 
+				
+				VALORES BOLETO 
+				
+				-->
+				<h:panelGroup id="pg_panel_valores_boleto" rendered="#{boletoComplementarController.novoBoleto_boleto or boletoComplementarController.novoBoleto_tipo.ideTipoBoletoPagamento ne 7}"> 
+					<p:separator style="width: 300px; margin-top: 10px;margin-bottom: 10px; margin-left:4px; margin-right:0px;" />
+					
+					<h:panelGroup rendered="#{boletoComplementarController.novoBoleto_tipo.ideTipoBoletoPagamento == 7}">
+						<div style="margin-left:4px;">
+							<p:selectBooleanCheckbox value="#{boletoComplementarController.novoBoleto_isencaoBoleto}"
+								valueChangeListener="#{boletoComplementarController.carregarMotivosIsencao(this)}">
+								
+		        				<p:ajax event="change" update="form_dialog_boleto" />
+		        			</p:selectBooleanCheckbox>
+		        			
+		        			<h:outputText value="Isentar cobrança - Boleto" />
+						</div>
+					
+						<p:spacer height="10" width="0"/>
+						
+						<h:panelGrid columns="1" rendered="#{boletoComplementarController.novoBoleto_isencaoBoleto}">
+							<h:outputText value="#{bundle.geral_lbl_motivo}:" />
+							
+							<p:selectOneMenu value="#{boletoComplementarController.novoBoleto_motivoIsencaoBoleto}" style="width: 299px;"
+								converter="simpleEntityConverter">
+								
+								<f:selectItem itemLabel="#{bundle.geral_lbl_selecione}"/>
+								<f:selectItems value="#{boletoComplementarController.listaMotivoIsencaoBoletoParaReenquadramento}" 
+									var="motivo" itemLabel="#{motivo.dscMotivoIsencaoBoleto}" itemValue="#{motivo}" />
+								
+								<p:ajax global="false" process="@this" />
+				       		</p:selectOneMenu>
+				       	</h:panelGrid>
+					</h:panelGroup>
+			       	
+			       	<p:spacer height="10" width="0"/>
+					
+					<h:panelGrid columns="3" id="panel_boleto_valores" style="text-align:center;">
+						<h:outputText value="#{bundle.gerar_novo_boleto_lbl_valor_boleto}:" style="margin-left:17px;"/>
+						<p:spacer width="1" height="1" />
+						Data do <br/>Vencimento:
+						
+						<ui:fragment>
+							<h:outputText value="#{bundle.geral_lbl_rs}"/>
+							<p:inputText style="width: 80px; margin-left: 5px;" value="#{boletoComplementarController.novoBoleto_valor}" 
+								converter="doubleConverter" disabled="#{boletoComplementarController.novoBoleto_isencaoBoleto}" maxlength="13"
+								onkeypress="mascararNumeroLR(this, event, 9, 2, '.', ',', 3);" onkeyup="mascararNumeroLR(this, event, 9, 2, '.', ',', 3);"/>
+						</ui:fragment>
+						
+						<p:spacer width="70" height="1"/>
+						
+						<p:calendar showOn="button" readOnlyInputText="true" pattern="dd/MM/yyyy" mindate="#{boletoComplementarController.dataAtual}" size="9" locale="pt"
+							value="#{boletoComplementarController.novoBoleto_dataVencimento}" disabled="#{boletoComplementarController.novoBoleto_isencaoBoleto}"
+							styleClass="#{boletoComplementarController.novoBoleto_isencaoBoleto==true?'ui-state-disabled':''}"/>
+					</h:panelGrid>
+				</h:panelGroup>
+				
+				<!-- 
+				
+				VALORES DAE
+				
+				 -->
+				<h:panelGroup id="pg_panel_valores_dae" rendered="#{boletoComplementarController.novoBoleto_dae}"> 
+					<p:separator style="width: 300px; margin-top: 10px;margin-bottom: 10px; margin-left:4px; margin-right:0px;" />
+					
+					<h:panelGroup rendered="#{boletoComplementarController.novoBoleto_tipo.ideTipoBoletoPagamento == 7}">
+						<div style="margin-left:4px;">
+							<p:selectBooleanCheckbox value="#{boletoComplementarController.novoBoleto_isencaoDae}"
+								valueChangeListener="#{boletoComplementarController.carregarMotivosIsencao(this)}">
+								
+		        				<p:ajax event="change" update="form_dialog_boleto" />
+		        			</p:selectBooleanCheckbox>
+		        			
+		        			<h:outputText value="Isentar cobrança - DAE" />
+						</div>
+						
+						<p:spacer height="10" width="0"/>
+						
+						<h:panelGrid columns="1" rendered="#{boletoComplementarController.novoBoleto_isencaoDae}">
+							<h:outputText value="#{bundle.geral_lbl_motivo}:" />
+							
+							<p:selectOneMenu value="#{boletoComplementarController.novoBoleto_motivoIsencaoDae}" style="width: 299px;" 
+								converter="simpleEntityConverter">
+								
+								<f:selectItem itemLabel="#{bundle.geral_lbl_selecione}"/>
+								<f:selectItems value="#{boletoComplementarController.listaMotivoIsencaoBoletoParaReenquadramento}" 
+									var="motivo" itemLabel="#{motivo.dscMotivoIsencaoBoleto}" itemValue="#{motivo}" />
+								
+								<p:ajax global="false" process="@this" />
+				       		</p:selectOneMenu>
+				       	</h:panelGrid>
+			       	</h:panelGroup>
+			       	
+			       	<p:spacer height="10" width="0"/>
+			       	
+			       	<h:panelGrid columns="3" id="panel_boleto_dae" width="300">
+						<ui:fragment>
+							<h:outputText value="Valor total do DAE" style="margin-left:10px;"/>
+							<br/>
+							<h:outputText value="Certificado:" style="margin-left:30px;"/>
+						</ui:fragment>
+						
+						<p:spacer width="1" height="1"/>
+						
+						<ui:fragment>
+							<h:outputText value="Valor total do DAE" style="margin-left:10px;"/>
+							<br/>
+							<h:outputText value="Vistoria:" style="margin-left:40px;"/>
+						</ui:fragment>
+						
+						<ui:fragment>
+							<h:outputText value="#{bundle.geral_lbl_rs}" />
+							<p:inputText style="width: 80px; margin-left: 5px;" value="#{boletoComplementarController.novoBoleto_vlrTotalCertificado}" 
+								converter="doubleConverter" disabled="#{boletoComplementarController.novoBoleto_isencaoDae}" maxlength="13"
+								onkeypress="mascararNumeroLR(this, event, 9, 2, '.', ',', 3);" onkeyup="mascararNumeroLR(this, event, 9, 2, '.', ',', 3);"/>
+						</ui:fragment>
+						
+						<p:spacer width="50" height="30"/>
+						
+						<ui:fragment>
+							<h:outputText value="#{bundle.geral_lbl_rs}" />
+							<p:inputText style="width: 80px; margin-left: 5px;" value="#{boletoComplementarController.novoBoleto_vlrTotalVistoria}" 
+								converter="doubleConverter" disabled="#{boletoComplementarController.novoBoleto_isencaoDae}" maxlength="13"
+								onkeypress="mascararNumeroLR(this, event, 9, 2, '.', ',', 3);" onkeyup="mascararNumeroLR(this, event, 9, 2, '.', ',', 3);"/>
+						</ui:fragment>
+					
+					</h:panelGrid>
+				</h:panelGroup>
+				
+				<p:separator style="width: 300px; margin-top: 10px;margin-bottom: 10px; margin-left:4px; margin-right:0px;" />
+				
+				<!-- 
+				
+				BOTOES
+				
+				 -->
+				<h:panelGrid columns="3" id="panel_boleto_botoes">
+				
+					<p:commandButton value="#{bundle.geral_lbl_voltar}" global="false" oncomplete="dialogGerarNovoBoleto.hide()" actionListener="#{boletoComplementarController.novoBoletoVoltar()}"/>
+					
+					<p:spacer width="130px" height="0px" />
+					
+					<p:commandButton value="Salvar" global="true" actionListener="#{boletoComplementarController.prepararParaSalvar()}"	update="formBoleto:tabelaBoletos"/>
+				</h:panelGrid>
+			</ui:fragment>
+		</h:panelGrid>
+	</h:form>	
+</ui:composition>

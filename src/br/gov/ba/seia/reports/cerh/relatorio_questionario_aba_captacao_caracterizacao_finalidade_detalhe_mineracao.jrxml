@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="relatorio_questionario_aba_captacao_caracterizacao_finalidade_detalhe_mineracao" language="java" pageWidth="500" pageHeight="802" columnWidth="500" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="14670bd9-68cd-4514-947f-5c1cba0e23e4">
+	<property name="ireport.zoom" value="1.2100000000000002"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="IDE_CERH_CAPTACAO_CARACTERIZACAO" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[select
+	ccdm.*,	un.*
+ from
+	cerh_captacao_dados_mineracao ccdm
+	inner join cerh_captacao_caracterizacao_finalidade cccf on cccf.ide_cerh_captacao_caracterizacao_finalidade = ccdm.ide_cerh_captacao_caracterizacao_finalidade
+	inner join cerh_captacao_caracterizacao ccc on ccc.ide_cerh_captacao_caracterizacao = cccf.ide_cerh_captacao_caracterizacao
+inner join unidade_medida un on un.ide_unidade_medida = ccdm.ide_unidade_medida
+where ccc.ide_cerh_captacao_caracterizacao = $P{IDE_CERH_CAPTACAO_CARACTERIZACAO}]]>
+	</queryString>
+	<field name="ide_cerh_captacao_dados_mineracao" class="java.lang.Integer"/>
+	<field name="nom_produto" class="java.lang.String"/>
+	<field name="val_consumo_agua" class="java.math.BigDecimal"/>
+	<field name="val_producao_maxima_mensal" class="java.math.BigDecimal"/>
+	<field name="val_producao_maxima_anual" class="java.math.BigDecimal"/>
+	<field name="ide_unidade_medida" class="java.lang.Integer"/>
+	<field name="ide_cerh_captacao_caracterizacao_finalidade" class="java.lang.Integer"/>
+	<field name="cod_unidade_medida" class="java.lang.String"/>
+	<field name="nom_unidadade_medida" class="java.lang.String"/>
+	<pageHeader>
+		<band height="65" splitType="Prevent">
+			<textField>
+				<reportElement uuid="e283665a-20c8-47e3-ad32-f50aa77cbb2c" mode="Opaque" x="0" y="0" width="100" height="65" isPrintWhenDetailOverflows="true" backcolor="#DDDDDD"/>
+				<box leftPadding="5">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement/>
+				<textFieldExpression><![CDATA["Produto"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="abd8b421-6ed2-4b80-85ca-b9d105e77a78" mode="Opaque" x="100" y="0" width="100" height="65" isPrintWhenDetailOverflows="true" backcolor="#DDDDDD"/>
+				<box leftPadding="5">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement/>
+				<textFieldExpression><![CDATA["Consumo de água por unidade de produto industrializado (m³/dia)"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="4b4cf45e-d8a6-41c4-b976-627cc2c8e4c2" mode="Opaque" x="200" y="0" width="100" height="65" isPrintWhenDetailOverflows="true" backcolor="#DDDDDD"/>
+				<box leftPadding="5">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement/>
+				<textFieldExpression><![CDATA["Consumo mensal"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="bd614331-2467-4e30-bac5-6868865d09a5" mode="Opaque" x="300" y="0" width="100" height="65" isPrintWhenDetailOverflows="true" backcolor="#DDDDDD"/>
+				<box leftPadding="5">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement/>
+				<textFieldExpression><![CDATA["Consumo anual"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="0cb183fd-dea2-4fa5-b37b-7634c44d5889" mode="Opaque" x="400" y="0" width="100" height="65" isPrintWhenDetailOverflows="true" backcolor="#DDDDDD"/>
+				<box leftPadding="5">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement/>
+				<textFieldExpression><![CDATA["Unidade"]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<detail>
+		<band height="20" splitType="Prevent">
+			<textField>
+				<reportElement uuid="8e796090-9b7a-4f58-b1f6-454fd2fd8448" x="0" y="0" width="100" height="20" isPrintWhenDetailOverflows="true"/>
+				<box leftPadding="5">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{nom_produto}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="7b2874f5-1867-4685-89c1-105edc61eece" x="200" y="0" width="100" height="20" isPrintWhenDetailOverflows="true"/>
+				<box leftPadding="5">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{val_producao_maxima_mensal}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="d8142fee-ce2f-4ece-8f18-4da7317294f2" x="300" y="0" width="100" height="20" isPrintWhenDetailOverflows="true"/>
+				<box leftPadding="5">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{val_producao_maxima_anual}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="578834c9-1d14-452e-9a75-fe27a83c13c1" x="100" y="0" width="100" height="20" isPrintWhenDetailOverflows="true"/>
+				<box leftPadding="5">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{val_consumo_agua}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="77e3940b-6398-4f68-b7a1-146e716128d5" x="400" y="0" width="100" height="20" isPrintWhenDetailOverflows="true"/>
+				<box leftPadding="5">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{nom_unidadade_medida}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

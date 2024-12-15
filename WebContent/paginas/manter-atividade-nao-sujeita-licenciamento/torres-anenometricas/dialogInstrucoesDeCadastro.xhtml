@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.prime.com.tr/ui">
+    
+    <p:dialog header="Instruções do cadastro " 
+        widgetVar="dialogInstrucoesCadastroTorres"
+        id="dialogInstrucoesCadastroTorres" 
+        modal="true" 
+        position="center"
+        resizable="false">    
+          <div style="width: 500px; text-align:justify">
+		    <h:form id="form_dialog">
+	           	<h:panelGrid>
+			        <h:panelGrid id="texto" columns="1">
+			            <h:outputText value="#{bundle.txt_instrucao_cadastro_torres_anenom_1}" 
+			                style="float:left;" />
+			             <h:outputText value="#{bundle.txt_instrucao_cadastro_torres_anenom_2}" 
+			                style="float:left;" />
+			             <h:outputText value="#{bundle.txt_instrucao_cadastro_torres_anenom_3}" 
+			             style="float:left;" />
+			        </h:panelGrid>
+			        
+			        <h:panelGrid id="aceiteDeTermo" columns="2">
+			             <p:selectBooleanCheckbox value="#{identificacaoAtividadeController.aceitaInstrucoes}" >
+			             <p:ajax event="change" process="@this"/>
+			             </p:selectBooleanCheckbox>
+	                     <h:outputText value="#{bundle.txt_instrucao_cadastro_torres_anenom_declaracao}" />
+	                </h:panelGrid>
+			
+			        <h:panelGrid columns="1" style="width:100%; margin-top:30px;text-align:center" >
+			
+			            <p:commandButton title="OK" value="OK" action="#{identificacaoAtividadeController.avancarTorresAnenometricas()}" 
+			            	process="@all" styleClass="center" />
+			        </h:panelGrid>
+		        </h:panelGrid>
+		    </h:form>
+		    </div>
+    </p:dialog>
+</ui:composition>

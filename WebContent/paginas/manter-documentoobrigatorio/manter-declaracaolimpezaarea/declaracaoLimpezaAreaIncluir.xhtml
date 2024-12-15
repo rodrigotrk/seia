@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+<ui:composition 
+	xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      template="/layout/template.xhtml">
+<ui:define name="conteudo-principal">
+	<h:form enctype="multipart/form-data">
+		<h:panelGrid columns="1">
+			<h3>Incluir Declaração de Limpeza de Área</h3>
+			
+		<h:panelGroup>
+			<h:commandLink value="Página inicial"/>
+			<h:outputText value=">" />
+			<h:commandLink value="Título da página 1"/>
+			<h:outputText value=">" />
+			<h:commandLink value="Título da página atual" />
+		</h:panelGroup>
+		
+		<h4>DADOS GERAIS</h4>
+		
+		<h:panelGrid columns="2">
+			<h:outputText value="Requerente" style="font-weight: bold;"/>
+			<h:outputText value="CNPJ/CPF" style="font-weight: bold;"/>
+			
+			<h:outputText value="Lenovo Computadores" />
+			<h:outputText value="00.000.000/0001-00" />
+		</h:panelGrid>
+		
+		<h:outputText value="* A limpeza de área realizada para um empreendimento?" style="font-weight: bold;"/>
+		
+		<p:selectOneRadio>  
+            <f:selectItem itemLabel="Sim" itemValue="Sim" />  
+            <f:selectItem itemLabel="Não" itemValue="Não" />
+        </p:selectOneRadio>
+        
+        <h:outputText value="* Empreendimento" style="font-weight: bold;"/>
+         
+       	<h:panelGrid columns="2">
+        	<p:selectOneMenu style="width: 200px;"/>
+        	<h:commandButton image="/resources/img/ico-expandir.png"/>
+        </h:panelGrid>
+		
+		<h:panelGrid columns="2">
+			<h:outputText value="* Incluir Imóvel" style="font-weight: bold;"/>
+			<h:commandButton image="/resources/img/ico-expandir.png"/>
+		</h:panelGrid>
+		
+		<h:panelGrid columns="1">
+			<p:dataTable id="tableImovel" widgetVar="tableImovel" value="#{declaracaoLimpezaArea.dataImovel}" var="imovel" emptyMessage="E agora José?" style="width: 750px;">
+			<p:column headerText="Denominação">
+				<h:outputText value="#{imovel.desDenominacao}" />			
+			</p:column>
+			
+			<p:column headerText="Endereço">
+				<h:outputText value="#{imovel.desDenominacao}" />
+			</p:column>
+			
+			<p:column headerText="Ações">
+				<h:commandButton image="/resources/img/ico-editar.png" type="button"/>
+				<h:commandButton image="/resources/img/ico-excluir.png" type="button"/>			
+			</p:column>
+		</p:dataTable>
+		</h:panelGrid>
+		
+		<h4>CONTATO PARA ASSUNTOS RELACIONADOS AO REQUERIMENTO</h4>
+		
+		<h:panelGrid columns="3">
+			<h:outputText value="* Nome"/>
+			<h:outputText value="* Telefone"/>
+			<h:outputText value="* E-mail"/>
+			
+			<p:inputText style="width: 200px;"/>
+			<p:inputText style="width: 200px;"/>
+			<p:inputText style="width: 300px;"/>		
+		</h:panelGrid>
+		
+		<p:selectManyCheckbox>  
+            <f:selectItem itemLabel="O endereço para contato é diferente do(s) endereço(s) do empreendimento, do requerente e possíveis procurador e representante legal?" itemValue="Option 1" />
+        </p:selectManyCheckbox>  
+		
+		<h4>QUESTIONÁRIO</h4>
+		
+		<h:outputText value="* Haverá intervenção em área de preservação permanente ou Reserva Legal ou outra com restrição legal?" />
+		<p:selectOneRadio>  
+            <f:selectItem itemLabel="Sim" itemValue="Sim" />  
+            <f:selectItem itemLabel="Não" itemValue="Não" />
+        </p:selectOneRadio>
+		
+		<h:outputText value="* Objetivo(s) da limpeza de área:" style="font-weight: bold;"/>
+		
+		<p:selectManyCheckbox layout="pageDirection">  
+            <f:selectItem itemLabel="Readequação de área à utilização agropecuária ou pastoreio" itemValue="1" />  
+            <f:selectItem itemLabel="Limpeza de área de sivicultura" itemValue="2" />  
+            <f:selectItem itemLabel="Limpeza de aceiro ou picadas" itemValue="3" />
+            <f:selectItem itemLabel="Manutenção de infraestrutura" itemValue="4" />
+            <f:selectItem itemLabel="Outros" itemValue="5" />  
+        </p:selectManyCheckbox>
+        
+        <h:outputText value="* Imóvel(eis) onde ocorrerá a intervenção:" style="font-weight: bold;"/>
+		
+		<p:selectManyCheckbox layout="pageDirection">  
+            <f:selectItem itemLabel="Denominação do imóvel 1" itemValue="1" />  
+            <f:selectItem itemLabel="Denominação do imóvel 2" itemValue="2" />  
+            <f:selectItem itemLabel="Denominação do imóvel 3" itemValue="3" />          
+        </p:selectManyCheckbox>
+        
+        <h:outputText value="* Valores declarados:" style="font-weight: bold;"/>
+        
+        <h:panelGrid columns="1">
+        	<p:dataTable id="tableEmpreendimentoImovel" widgetVar="tableEmpreendimentoImovel" value="#{declaracaoLimpezaArea.dataEmpreendimentoImovel}" var="dei" emptyMessage="Nenhum registro foi encontrado." style="width: 700px;">
+        		<p:column headerText="Denominação">
+        			<p:cellEditor>
+        				<f:facet name="output">  
+                    		<h:outputText value="#{dei.denominacao}" />  
+                	</f:facet>  
+	                <f:facet name="input">  
+	                    <p:inputText value="#{dei.denominacao}" style="width:100%"/>  
+	                </f:facet>
+        			</p:cellEditor>
+        		</p:column>
+        		<p:column headerText="Área de Intervenção">
+        			<p:cellEditor>
+        				<f:facet name="output">  
+                    		<h:outputText value="#{dei.areaIntervencao}" />  
+                	</f:facet>  
+	                <f:facet name="input">  
+	                    <p:inputText value="#{dei.areaIntervencao}" style="width:100%"/>  
+	                </f:facet>
+        			</p:cellEditor>
+        		</p:column>
+        		<p:column headerText="Latitude">
+        			<p:cellEditor>
+        				<f:facet name="output">  
+                    		<h:outputText value="#{dei.latitude}" />  
+                	</f:facet>  
+	                <f:facet name="input">  
+	                    <p:inputText value="#{dei.latitude}" style="width:100%"/>  
+	                </f:facet>
+        			</p:cellEditor>
+        		</p:column>
+        		<p:column headerText="Longitude">
+        			<p:cellEditor>
+        				<f:facet name="output">  
+                    		<h:outputText value="#{dei.longitude}" />  
+                	</f:facet>  
+	                <f:facet name="input">  
+	                    <p:inputText value="#{dei.longitude}" style="width:100%"/>  
+	                </f:facet>
+        			</p:cellEditor>
+        		</p:column>
+        		<p:column headerText="Ponto de Referência">
+        			<p:cellEditor>
+        				<f:facet name="output">  
+                    		<h:outputText value="#{dei.pontoReferencia}" />  
+                	</f:facet>  
+	                <f:facet name="input">  
+	                    <p:inputText value="#{dei.pontoReferencia}" style="width:100%"/>  
+	                </f:facet>
+        			</p:cellEditor>
+        		</p:column>
+        		<p:column headerText="Ponto de Referência">
+        			<p:cellEditor>
+        				<f:facet name="output">  
+                    		<h:outputText value="#{dei.data}">
+                    			<f:convertDateTime pattern="dd/MM/yyyy" locale="pt,BR" timeZone="Brazil/East"/>
+                    		</h:outputText>  
+                	</f:facet>  
+	                <f:facet name="input">  
+	                    <p:calendar value="#{dei.data}" style="width:100%" pattern="dd/MM/yyyy"/>	                      
+	                </f:facet>
+        			</p:cellEditor>
+        		</p:column>
+        		 <p:column headerText="Açoes" style="width:50px">  
+            		<p:rowEditor/>
+            		<p:cellEditor>
+        				<f:facet name="output">  
+                    		<h:graphicImage title="Excluir" value="/resources/img/ico-excluir.png" />  
+                		</f:facet>  
+		                <f:facet name="input">
+		                	<h:outputText/>		                    	                      
+		                </f:facet>
+        			</p:cellEditor>            		
+        		</p:column>
+        		<p:ajax event="rowEdit" listener="#{declaracaoLimpezaArea.onEditRow}"/>
+        	</p:dataTable>
+        </h:panelGrid>
+        
+        <h:outputText value="Área total da intervenção" style="font-weight: bold;" />
+        <h:outputText value="999.999 ha" />
+        
+        <h:outputText value="* Período de intervenção" style="font-weight: bold;" />
+        <h:panelGrid columns="3">
+        	<p:calendar showOn="button"/>
+        	<h:outputText value="á" />
+        	<p:calendar showOn="button"/>
+        </h:panelGrid>
+        
+        <h4>DOCUMENTOS</h4>
+        
+        <h:panelGrid columns="1">
+				<h:outputLabel styleClass="titulo-grupo" value="Formulários Upload" />
+				<h:selectOneMenu value="#{teste}">
+					<f:selectItem itemLabel="Selecione..." />
+					<f:selectItem itemLabel="Formulário 1" />
+					<f:selectItem itemLabel="Formulário 2" />
+					<f:selectItem itemLabel="Formulário 3" />
+					<f:selectItem itemLabel="Formulário 4" />
+					<f:selectItem itemLabel="Formulário 5" />
+				</h:selectOneMenu>
+			</h:panelGrid>
+        
+        <h:panelGrid columns="1">
+			<p:fileUpload uploadLabel="false" label="Upload Formulários" fileUploadListener="#{arquivosController.handleFileUpload}" value="#{enviarDocumentoController.arquivoUpload}" mode="advanced" update="formularios:tabelaformulariosdowload" auto="true"
+				allowTypes="/(\.|\/)(pdf|gif|jpeg|png|jpg)$/">
+			</p:fileUpload>
+
+			<p:dataTable id="tabelaformulariosdowload" widgetVar="tabelaformulariosdowload" value="#{enviarDocumentoController.listaFormularios}" var="formularios" style="width: 750px;">
+				<f:facet name="header">
+					<h:outputText value="Formulários" />
+				</f:facet>	
+				<p:column headerText="Formulário">
+					<h:outputText value="#{formularios}" />
+				</p:column>	
+				<p:column headerText="Tamanho(KB)">
+					<h:outputText value="20 Kb" />
+				</p:column>	
+				<p:column headerText="Ações">
+						<h:link  ><h:graphicImage title="Excluir" value="/resources/img/ico-excluir.png" /></h:link>
+				</p:column>
+			</p:dataTable>
+		</h:panelGrid>
+        
+        <h4>Declaração</h4>
+        
+        <p:selectManyCheckbox layout="pageDirection">  
+            <f:selectItem itemLabel="* Declaro serem verdadeiras as informações constantes deste documento, 
+            estando ciente de que a falsidade de quaisquer dados constitui prática de crime e resultará
+            na aplicação das sanções penais cabíveis, nos termos dispostos no Código Penal (Decreto-Lei
+            nº 2.848/40), na lei de Crimes Ambientais (Lei nº 9.605/98) e nas suas normas regulamentadoras." itemValue="1" />
+        </p:selectManyCheckbox>
+        
+        <h:panelGrid columns="2">
+        	<h:commandButton value="Voltar"/>
+        	<h:commandButton value="Salvar"/>
+        </h:panelGrid>
+		</h:panelGrid>
+	</h:form>
+</ui:define>
+</ui:composition>
+</html>

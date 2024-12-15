@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui"	>
+	
+	<f:metadata>  
+    	<f:event type="preRenderView" listener="#{pessoaFisicaController.validacaoUsuario}"/>  
+	</f:metadata> 
+	
+	
+	<h:form id="formpesquisacpf">
+		<h:panelGrid columns="1">
+			<h:outputLabel id="idlblcpf" value="* CPF" />
+			
+			<h:panelGrid columns="2">
+				<p:inputMask id="cpf" mask="#{bundle.consultapf_msk_cpf}"
+					value="#{pessoaFisicaController.pessoaPesquisa.numCpf}" required="true" requiredMessage="O campo CPF é de preenchimento obrigatório." 
+					disabled="#{pessoaFisicaController.userExterno}">
+					
+					<f:converter converterId="cpfConverter" />
+					<f:validator validatorId="cpfValidator" />
+				</p:inputMask>
+				
+				<p:commandLink actionListener="#{pessoaFisicaController.consultarPessoaFisicaPorCpf}" id="pesquisaPessoaFisicaCpf" update=":tabviewpf form_avancar" 
+					disabled="#{pessoaFisicaController.disabledCpf || pessoaFisicaController.userExterno}">
+					
+					<h:graphicImage title="Consultar" value="/resources/img/ico-pesquisa.png" />
+					<f:setPropertyActionListener target="#{procuradorPessoaFisicaController.donoDoProcurador}" value="#{pessoaFisicaController.pessoaSelecionada}" />
+				</p:commandLink>
+			</h:panelGrid>
+		</h:panelGrid>
+	</h:form>			
+		
+	<h:form id="formpessoafisica">
+		<h:panelGrid columns="1">
+			<h:panelGroup>
+				<h:panelGrid columns="2" >
+					<h:outputLabel id="idlblnome" value="* Nome"/>
+					
+					<h:outputLabel id="idlbldatnasc" value="* Data de Nascimento" />
+					
+					<p:inputText id="nomepessoafisica" disabled="#{pessoaFisicaController.disabledPerfil}"
+						value="#{pessoaFisicaController.pessoaSelecionada.nomPessoa}"
+						style="width: 300px; margin-top: 0px;" required="true" requiredMessage="O campo Nome é de preenchimento obrigatório."  />
+					
+					<p:calendar label="Data de Nascimento" value="#{pessoaFisicaController.pessoaSelecionada.dtcNascimento}" navigator="true" 
+						readOnlyInputText="true"  yearRange="c-200" mindate="01/01/1822" maxdate="#{pessoaFisicaController.dataAtual}" accesskey="true" showOn="button" 
+						locale="pt" required="true" requiredMessage="O campo Data de Nascimento é de preenchimento obrigatório."
+						disabled="#{pessoaFisicaController.disabledPerfil}" pattern="dd/MM/yyyy" style="padding-top: 100px;" id="txtDtcNascimento">
+					
+						<f:validator validatorId="dataNascimentoValidator"/>
+					</p:calendar>
+				</h:panelGrid>
+			</h:panelGroup>
+			
+			<h:panelGroup>
+				<h:panelGrid columns="2" >
+					<h:outputLabel id="idlblemail" value="* E-mail" />
+					
+					<h:outputLabel id="idlblNomeMae" value="* Nome da Mãe" />
+					
+					<p:inputText id="txtDesEmail" value="#{pessoaFisicaController.pessoa.desEmail}" required="#{!consultaAtividadeSemLicenciamentoController.usuarioAtendente}" validator="emailValidator" 
+						requiredMessage="O campo E-mail é de preenchimento obrigatório." 
+						disabled="#{pessoaFisicaController.disabledEmail}" style="width: 300px;"/>
+					
+					<p:inputText id="txtNomMae" value="#{pessoaFisicaController.pessoaSelecionada.nomMae}" required="true" requiredMessage="O campo Nome da Mãe é de preenchimento obrigatório." 
+						disabled="#{pessoaFisicaController.disabledPerfil}" style="width: 250px;"/>
+				</h:panelGrid>
+			</h:panelGroup>
+			
+			<h:panelGroup>
+				<h:panelGrid columns="2">
+					<h:outputLabel id="idlblnaturalidade" value="* Naturalidade" />
+					
+					<h:outputLabel id="idlblnacionalidade" value="* #{bundle.lbl_nacionalidade}" />
+					
+					<p:inputText maxlength="70" id="naturalidadePF" onkeyup="SomenteLetras(this.value);" 
+						disabled="#{pessoaFisicaController.disabledPerfil}" 
+						value="#{pessoaFisicaController.pessoaSelecionada.desNaturalidade}" required="#{!consultaAtividadeSemLicenciamentoController.usuarioAtendente}" 
+						requiredMessage="O campo Naturalidade é de preenchimento obrigatório." style="width: 300px;"/>
+					
+					<h:selectOneMenu id="idcombopais" value="#{pessoaFisicaController.pessoaSelecionada.idePais}" 
+						disabled="#{pessoaFisicaController.disabledPerfil}" required="#{!consultaAtividadeSemLicenciamentoController.usuarioAtendente}" 
+						requiredMessage="O campo Nacionalidade é de preenchimento obrigatório.">
+						
+						<f:selectItem itemLabel="Selecione..." />
+						<f:selectItems value="#{paisController.valuesComboBox}" />
+						<f:converter converterId="paisConverter" />
+					</h:selectOneMenu>
+				</h:panelGrid>
+			</h:panelGroup>
+			
+			<br />
+			
+			<h:panelGroup layout="div" style="dir: right;" >
+				<p:commandButton id="btnLimpar" value="Limpar" process="@this" action="#{pessoaFisicaController.limparObjetosPessoaFisicaAction()}" rendered="#{pessoaFisicaController.renderedBtnLimpar}"
+					disabled="#{!pessoaFisicaController.enableFormPessoaFisica or pessoaFisicaController.disableFormPessoaFisica}" update=":tabviewpf"  />
+				
+				<p:commandButton id="btnSalvar" value="Salvar" action="#{pessoaFisicaController.salvarPessoa()}" 
+					disabled="#{!pessoaFisicaController.enableFormPessoaFisica or pessoaFisicaController.disableFormPessoaFisica}" update=":tabviewpf"/>
+			</h:panelGroup>
+			
+			<h:outputLabel value="#{bundle.lbl_preench_obrig_asterisc}" style="float: left;" />
+		</h:panelGrid>
+	</h:form>
+</html>

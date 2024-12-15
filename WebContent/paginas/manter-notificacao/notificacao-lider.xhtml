@@ -1,0 +1,592 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+	
+	<h:form id="notificacaoFinalForm" style="font-size: 11px !important;" rendered="#{notificacaoFinalController.dto.usuarioLider or notificacaoFinalController.dto.usuarioCoordenador}">
+		
+		<h:panelGroup id="pnlTopo">
+			<p class="titulo-grupo">
+				<h:outputText rendered="#{notificacaoFinalController.notificacaoPrazo}" value="Notificação de prazo" />
+				<h:outputText rendered="#{notificacaoFinalController.notificacaoComunicacao}" value="Notificação de comunicação:" />
+			</p>
+			<h:panelGroup>
+				<h:outputText value="N° do Processo: " />
+				<h:outputText value="#{notificacaoFinalController.dto.vwProcesso.numProcesso}" disabled="true" />
+				<br />
+				<h:outputText value="Data de formação: " />
+				<h:outputText value="#{notificacaoFinalController.dto.vwProcesso.dtcFormacao}" disabled="true">
+					<f:convertDateTime pattern="dd/MM/yyyy" locale="pt,BR" timeZone="Brazil/East" />
+				</h:outputText>
+				<br />
+				<h:outputText value="Nome/Razão Social: " />
+				<h:outputText value="#{notificacaoFinalController.dto.vwProcesso.nomRequerente}" disabled="true" style="width:480px;" />
+				<br />
+				<h:outputText value="Email: " />
+				<h:outputText value="#{notificacaoFinalController.dto.vwProcesso.desEmail}" disabled="true" style="width:480px;" />
+			</h:panelGroup>
+		</h:panelGroup>
+		
+		<hr class="margin" style="width:100%; border: none; border-top: 1px solid #ccc;" />
+		
+		<h:panelGroup id="pnlTextoAlerta" layout="block">
+			<p:layoutUnit rendered="#{!notificacaoFinalController.renderedPnlReequadramentoProcesso}" position="center" resizable="false"  style="border-color: green;">
+				<table style="width:100%;font-size: 11px; background-color: #E6F9E6;">
+					<tr>
+						<td />
+						<td colspan="2">
+							<h:outputText value="Atenção!" style="font-weight: bold;"/>
+							<br />
+							<h:outputText value="A partir de terceira notificação será necessária a aprovação do DIRETOR imediato." style="line-height: 150%;"/>
+							
+						</td>
+					</tr>
+				</table>
+			</p:layoutUnit>
+			
+			<p:layoutUnit rendered="#{notificacaoFinalController.renderedPnlReequadramentoProcesso}" position="center" resizable="false"  style="border-color: green;">
+				<table style="width: 100%; font-size: 11px; background-color: #E6F9E6;">
+					<tr>
+						<td />
+						<td colspan="2"><h:outputText value="Atenção às seguintes orientações!" style="font-weight: bold;" /> <br />
+							<ul>
+								<li>1. A partir de terceira notificação será necessária a
+									aprovação do DIRETOR imediato.</li>
+								<li>2. Notificações de reenquadramento não deverão pedir
+									estudos nem documentos.</li>
+								<li>3. Notificações de reenquadramento não se aplicam caso
+									o processo deva ser convertido em ato de natureza declaratória.</li>
+							</ul>
+						</td>
+					</tr>
+				</table>
+			</p:layoutUnit>
+		</h:panelGroup>
+		
+		
+		<h:panelGroup layout="block" rendered="#{notificacaoFinalController.notificacaoComunicacao}">
+			<hr class="margin" style="width:100%; border: none; border-top: 1px solid #ccc;" />
+			<p><h:outputText value="Motivo:" /></p>
+			<p:selectOneMenu id="not_motivo"
+				value="#{notificacaoFinalController.dto.notificacaoMotivoNotificacaoSelecionado}"
+				converter="simpleEntityConverter" layout="pageDirection" style="width: 250px;">
+				<f:selectItem itemLabel="Selecione..." itemValue=""/>
+				<f:selectItems value="#{notificacaoFinalController.dto.listaNotificacaoMotivoNotificacao}"
+					           var="nmn" itemLabel="#{nmn.ideMotivoNotificacao.nomMotivoNotificacao}"
+					           itemValue="#{nmn}" />
+				<p:ajax event="change" listener="#{notificacaoFinalController.atualizarMotivoNotificacao()}" process="@this" 
+				update="notificacaoFinalForm:pnlReequadramentoProcesso, notificacaoFinalForm:pnlTextoAlerta, notificacaoFinalForm:pnlTextoNotificacao" />
+			</p:selectOneMenu>
+		</h:panelGroup>
+			
+		<h:panelGroup id="pnlReequadramentoProcesso" layout="block">
+		
+			<h:panelGroup layout="block" rendered="#{notificacaoFinalController.renderedPnlReequadramentoProcesso}">
+			<br></br>
+				
+				<p><h:outputText value="Finalidade(s) do reenquadramento" style="font-weight: bold" /></p>
+				
+				<h:panelGroup layout="block" class="margin" styleClass="manyCheckColumns">
+					<p:selectBooleanCheckbox value="#{notificacaoFinalController.dto.alterarAtoAutorizativo}">
+						<p:ajax event="change" listener="#{notificacaoFinalController.alterarAtosAutorizativos()}" update="notificacaoFinalForm:pnlReequadramentoProcesso,notificacaoFinalForm:pnlDocumentosNotificacao" />
+					</p:selectBooleanCheckbox>
+					<h:outputText value="Substituição de ato(s) autorizativo(s)" />
+				</h:panelGroup>
+				<h:panelGroup layout="block" class="margin" rendered="#{notificacaoFinalController.dto.alterarAtoAutorizativo}">
+					<h:panelGroup layout="block" class="margin">
+						<h:panelGrid>
+							<h:outputText value="* Selecione o ato a ser substituído:" />
+							<p:selectManyCheckbox value="#{notificacaoFinalController.dto.listaProcessoAtoParaReenquadramento}"
+							layout="pageDirection" 
+							converter="simpleEntityConverter">
+								<f:selectItems value="#{notificacaoFinalController.dto.vwProcesso.listProcessoAto}" var="pa" 
+								itemLabel="#{pa.atoAmbiental.nomAtoAmbiental} #{pa.tipologia.desTipologia == null?'':' - '} #{pa.tipologia.desTipologia}" 
+								itemValue="#{pa}" />
+								<p:ajax event="change" listener="#{notificacaoFinalController.onChangeAlteracaoProcessoAto()}" update="notificacaoFinalForm:pnlReequadramentoProcesso" />
+							</p:selectManyCheckbox>
+						</h:panelGrid>
+						<h:panelGroup layout="block" class="margin">
+							<p:dataTable var="rpa" value="#{notificacaoFinalController.dto.listaAlteracaoReenquadramentoProcessoAto}" emptyMessage="#{bundle.msg_lista_vazia}">
+
+								<p:column headerText="Ato original" style="width: 270px;">
+									<h:panelGroup layout="block" style="margin: 10px 0px; width: 100%">
+										<h:outputText value="Nome: " />
+										<h:outputText value="#{rpa.ideProcessoAto.atoAmbiental.nomAtoAmbiental}" />
+									</h:panelGroup>
+								</p:column>
+								<p:column headerText="Novo ato" style="width: 270px;">
+									<h:panelGroup layout="block" rendered="#{rpa.renderedNovoAto}" style="margin: 10px 0px; width: 100%">
+										<h:panelGroup layout="block" style="margin: 10px 0px; width: 100%">
+											<h:outputText value="Nome: " />
+											<h:outputText value="#{rpa.ideNovoAtoAmbiental.nomAtoAmbiental}" />
+										</h:panelGroup>
+										<h:panelGroup rendered="#{rpa.renderedTipologia}" layout="block" style="margin: 10px 0px; width: 100%">
+											<h:outputText value="Tipologia: " />
+											<h:outputText value="#{rpa.ideNovaTipologia.desTipologia}" />
+										</h:panelGroup>
+										<h:panelGroup rendered="#{rpa.renderedFinalidade}" layout="block" style="margin: 10px 0px; width: 100%">
+											<h:outputText value="Finalidade: " />
+											<h:panelGroup layout="block" rendered="#{rpa.ideNovoAtoAmbiental.AMF}">
+												<ul class="lista">
+													<ui:repeat value="#{rpa.reenquadramentoProcessoAtoObjetivoAtividadeManejoCollection}" var="finalidade">
+														<li class="lista" style="margin-left: 15px;">
+															<h:outputText  value="#{finalidade.ideObjetivoAtividadeManejo.nomObjetivoAtividadeManejo}"/>
+														</li>
+													</ui:repeat>
+												</ul>
+											</h:panelGroup>
+											<h:panelGroup layout="block" rendered="#{!rpa.ideNovoAtoAmbiental.AMF}">
+												<ul class="lista">
+													<ui:repeat value="#{rpa.reenquadramentoTipoFinalidadeUsoAguaCollection}" var="finalidade">
+														<li class="lista" style="margin-left: 15px;">
+															<h:outputText value="#{finalidade.ideTipoFinalidadeUsoAgua.nomTipoFinalidadeUsoAgua}"/>
+														</li>
+													</ui:repeat>
+												</ul>
+											</h:panelGroup>
+										</h:panelGroup>
+										<h:panelGroup rendered="#{rpa.renderedTipoPlano}" layout="block" style="margin: 10px 0px; width: 100%">
+											<h:outputText value="Tipo do plano: " />
+											<h:panelGroup layout="block">
+												<ul class="lista">
+													<ui:repeat value="#{rpa.reenquadramentoProcessoAtoTipoAtividadeFaunaCollection}" var="plano">
+														<li class="lista" style="margin-left: 15px;">
+															<h:outputText  value="#{plano.ideTipoAtividadeFauna.nomTipoAtividadeFauna}"/>
+														</li>
+													</ui:repeat>		
+												</ul>
+											</h:panelGroup>
+										</h:panelGroup>
+										<h:panelGroup rendered="#{rpa.renderedTipologiaEmpreendimento}" layout="block" style="margin: 10px 0px; width: 100%">
+											<h:outputText value="Tipologia do empreendimento: " />
+											<h:panelGroup layout="block">
+												<ul class="lista">
+													<ui:repeat value="#{rpa.reenquadramentoTipologiaEmpreendimentoCollection}" var="tipologia">
+														<li class="lista" style="margin-left: 15px;">
+															<h:outputText  value="#{tipologia.ideTipologia.desTipologia}"/>
+														</li>
+													</ui:repeat>		
+												</ul>
+											</h:panelGroup>
+										</h:panelGroup>
+									</h:panelGroup>
+								</p:column>
+								<p:column headerText="Ações" style="width: 53px;">
+									<h:panelGroup layout="block" style="text-align: center;">
+										<p:commandLink actionListener="#{selecionarAtoAmbientalController.load()}" process="@this" onclick="">
+											<h:graphicImage title="Selecionar novo ato ambiental..." value="/resources/img/ico-alterar-ato.png" />
+											<f:attribute name="reenquadramentoProcessoAto" value="#{rpa}" />
+											<f:attribute name="metodoSelecionarAtoAmbiental" value="#{notificacaoFinalController.metodoSelecionarAtoAmbiental}" />
+											<f:attribute name="metodoSelecionarReenquadramentoProcessoAto" value="#{notificacaoFinalController.metodoSelecionarReenquadramentoProcessoAto}" />
+											<f:attribute name="metodoListarAtosExistentes" value="#{notificacaoFinalController.metodoListarAtosExistentes}" />
+											<f:attribute name="alterarAtoAutorizativo" value="#{true}" />
+										</p:commandLink>
+									</h:panelGroup>
+								</p:column>
+							</p:dataTable>
+						</h:panelGroup>
+					</h:panelGroup>
+				</h:panelGroup>
+				
+				<h:panelGroup layout="block" class="margin">
+					<p:selectBooleanCheckbox value="#{notificacaoFinalController.dto.incluirNovoAtoAutorizativo}">
+						<p:ajax event="change" listener="#{notificacaoFinalController.incluirNovoAtoAutorizativo()}" update="notificacaoFinalForm:pnlReequadramentoProcesso" />
+					</p:selectBooleanCheckbox>
+					<h:outputText value="Inclusão de novo(s) ato(s) autorizativo(s)" />
+				</h:panelGroup>
+				<h:panelGroup layout="block" class="margin" rendered="#{notificacaoFinalController.dto.incluirNovoAtoAutorizativo}">
+					<h:panelGroup layout="block" class="margin">
+						<h:panelGroup layout="block" class="margin">
+							<p:commandLink actionListener="#{selecionarAtoAmbientalController.load()}" process="@this" update="notificacaoFinalForm, formPautaGestor">
+								<h:graphicImage value="/resources/img/ico-adicionar.png" />
+								<h:outputText value="Incluir novo ato" />
+								<f:attribute name="metodoSelecionarAtoAmbiental" value="#{notificacaoFinalController.metodoSelecionarAtoAmbiental}" />
+								<f:attribute name="metodoSelecionarReenquadramentoProcessoAto" value="#{notificacaoFinalController.metodoSelecionarReenquadramentoProcessoAto}" />
+								<f:attribute name="metodoAdicionarReenquadramentoProcessoAto" value="#{notificacaoFinalController.metodoAdicionarReenquadramentoProcessoAto}" />
+								<f:attribute name="metodoListarAtosExistentes" value="#{notificacaoFinalController.metodoListarAtosExistentes}" />
+								<f:attribute name="alterarAtoAutorizativo" value="#{false}" />
+							</p:commandLink>
+						</h:panelGroup>
+						<h:panelGroup layout="block" class="margin">
+							<p:dataTable var="rpa" value="#{notificacaoFinalController.dto.listaInclusaoReenquadramentoProcessoAto}" emptyMessage="#{bundle.msg_lista_vazia}">
+								<p:column>
+									<f:facet name="header">
+										<h:outputText value="Ato ambiental a ser incluido" />
+									</f:facet>
+									<h:outputText value="#{rpa.ideNovoAtoAmbiental.nomAtoAmbiental}" />
+								</p:column>
+								<p:column>
+									<f:facet name="header">
+										<h:outputText value="Tipologia" />
+									</f:facet>
+									<h:outputText value="#{rpa.ideNovaTipologia.desTipologia}" />
+								</p:column>
+								<p:column>
+									<f:facet name="header">
+										<h:outputText value="Finalidade" />
+									</f:facet>
+									<h:panelGroup layout="block" rendered="#{rpa.ideNovoAtoAmbiental.AMF or rpa.ideNovoAtoAmbiental.ARTA}">
+										<ul class="lista">
+											<ui:repeat value="#{rpa.reenquadramentoProcessoAtoObjetivoAtividadeManejoCollection}" var="finalidade">
+												<li class="lista" style="margin-left: 15px;">
+													<h:outputText  value="#{finalidade.ideObjetivoAtividadeManejo.nomObjetivoAtividadeManejo}"/><br/>
+												</li>
+											</ui:repeat>		
+										</ul>
+									</h:panelGroup>
+									<h:panelGroup layout="block" rendered="#{!rpa.ideNovoAtoAmbiental.AMF}">
+										<ul class="lista">
+											<ui:repeat value="#{rpa.reenquadramentoTipoFinalidadeUsoAguaCollection}" var="finalidade">
+												<li class="lista" style="margin-left: 15px;">
+													<h:outputText  value="#{finalidade.ideTipoFinalidadeUsoAgua.nomTipoFinalidadeUsoAgua}"/><br/>
+												</li>
+											</ui:repeat>		
+										</ul>
+									</h:panelGroup>
+								</p:column>
+								<p:column>
+									<f:facet name="header">
+										<h:outputText value="Tipo do plano" />
+									</f:facet>
+									<h:panelGroup layout="block" rendered="#{rpa.ideNovoAtoAmbiental.AMF or rpa.ideNovoAtoAmbiental.ARTA}">
+										<ul class="lista">
+											<ui:repeat value="#{rpa.reenquadramentoProcessoAtoTipoAtividadeFaunaCollection}" var="plano">
+												<li class="lista" style="margin-left: 15px;">
+											 		<h:outputText  value="#{plano.ideTipoAtividadeFauna.nomTipoAtividadeFauna}"/><br/>
+												</li>
+											</ui:repeat>		
+										</ul>
+									</h:panelGroup>
+								</p:column>
+								<p:column>
+									<f:facet name="header">
+										<h:outputText value="Ações" />
+									</f:facet>
+									<h:panelGroup layout="block" style="text-align: center;">
+										<p:commandLink actionListener="#{notificacaoFinalController.removerInclusaoAtoAmbiental(rpa)}">
+											<h:graphicImage title="Excluir" value="/resources/img/ico-excluir.png" />
+										</p:commandLink>
+									</h:panelGroup>
+								</p:column>
+							</p:dataTable>
+						</h:panelGroup>
+					</h:panelGroup>
+				</h:panelGroup>
+				
+				<h:panelGroup layout="block" class="margin" rendered="false">
+					<p:selectBooleanCheckbox value="#{notificacaoFinalController.dto.alterarPotencialPoluidor}">
+						<p:ajax event="change" listener="#{notificacaoFinalController.alterarPotencialPoluidor()}" update="notificacaoFinalForm:pnlReequadramentoProcesso" />
+					</p:selectBooleanCheckbox>
+					<h:outputText value="Alteração de potencial poluidor da atividade" />
+				</h:panelGroup>
+				<h:panelGroup layout="block" class="margin" rendered="false" ><!-- rendered="#{notificacaoFinalController.dto.alterarPotencialPoluidor}"--> 
+					<h:panelGroup layout="block" class="margin">
+						<h:panelGrid>
+							<h:outputText value="* Selecione a atividade:" />
+							<p:selectManyCheckbox value="#{notificacaoFinalController.dto.listaRequerimentoTipologiaParaReenquadramento}" 
+							converter="simpleEntityConverter">
+								<f:selectItems value="#{notificacaoFinalController.dto.vwProcesso.requerimentoTipologiaList}" 
+								var="rt" 
+								itemLabel="#{rt.ideUnidadeMedidaTipologiaGrupo.ideTipologiaGrupo.ideTipologia.desTipologia}" 
+								itemValue="#{rt}" />
+								<p:ajax event="change" listener="#{notificacaoFinalController.onChangeRequerimentoTipologia()}" update="notificacaoFinalForm:pnlReequadramentoProcesso" />
+							</p:selectManyCheckbox>
+						</h:panelGrid>
+						<h:panelGroup layout="block" class="margin">
+							<p:dataTable var="rpp" value="#{notificacaoFinalController.dto.listaReenquadramentoPotencialPoluicao}" emptyMessage="#{bundle.msg_lista_vazia}">
+								<p:column>
+									<f:facet name="header">
+										<h:outputText value="Atividade" />
+									</f:facet>
+									<h:outputText value="#{rpp.ideRequerimentoTipologia.ideUnidadeMedidaTipologiaGrupo.ideTipologiaGrupo.ideTipologia.desTipologia}" />
+								</p:column>
+								<p:column>
+									<f:facet name="header">
+										<h:outputText value="Potencial poluidor" />
+									</f:facet>
+									<h:panelGroup layout="block" style="text-align: center;">
+										<p:selectOneMenu value="#{rpp.idePotencialPoluicaoNovo}"
+										converter="simpleEntityConverter">
+											<f:selectItem itemLabel="Selecione..." />
+											<f:selectItems value="#{notificacaoFinalController.dto.listaPotencialPoluicaoParaReenquadramento}" var="pp" itemLabel="#{pp.nomPotencialPoluicao}" itemValue="#{pp}" />
+											<p:ajax event="change" listener="#{notificacaoFinalController.onChangePotencialPoluicao()}" />
+										</p:selectOneMenu>
+									</h:panelGroup>
+								</p:column>
+							</p:dataTable>
+						</h:panelGroup>
+					</h:panelGroup>
+				</h:panelGroup>
+				
+				<h:panelGroup layout="block" class="margin" rendered="false">
+					<p:selectBooleanCheckbox value="#{notificacaoFinalController.dto.alterarClasseEmpreendimento}">
+						<p:ajax event="change" listener="#{notificacaoFinalController.alterarClasseEmpreendimento()}" update="notificacaoFinalForm:pnlReequadramentoProcesso" />
+					</p:selectBooleanCheckbox>
+					<h:outputText value="Alteração de classe do empreendimento" />
+				</h:panelGroup>
+				
+				<h:panelGroup layout="block" class="margin" rendered="false"> <!--rendered="#{notificacaoFinalController.dto.alterarClasseEmpreendimento}"> -->
+					
+					<h:panelGrid>
+						<h:outputText value="* Indique a nova classe do empreendimento:" />
+						<p:selectOneMenu value="#{notificacaoFinalController.dto.reenquadramentoProcesso.ideNovaClasseEmpreendimento}" converter="simpleEntityConverter">
+							<f:selectItem itemLabel="Selecione..."/>
+							<f:selectItems value="#{notificacaoFinalController.dto.listaClasseParaReenquadramento}" var="classe" 
+							itemLabel="#{classe.nomClasse}" itemValue="#{classe}" />
+							<p:ajax event="change" listener="#{notificacaoFinalController.onChangeClasse()}" />
+						</p:selectOneMenu>
+					</h:panelGrid>
+				</h:panelGroup>
+				
+				<h:panelGroup layout="block" class="margin" rendered="false">
+					<p:selectBooleanCheckbox value="#{notificacaoFinalController.dto.alterarTipologia}">
+						<p:ajax event="change" listener="#{notificacaoFinalController.alterarTipologia()}" update="notificacaoFinalForm:pnlReequadramentoProcesso" />
+					</p:selectBooleanCheckbox>
+					<h:outputText value="Alteração de tipologia" />
+				</h:panelGroup>
+				<h:panelGroup layout="block" class="margin" rendered="false"> <!-- rendered="#{notificacaoFinalController.dto.alterarTipologia}" > -->
+					<h:panelGroup layout="block" class="margin">
+						<h:outputText value="* Indique todas as tipologias que caracterizam o empreendimento neste processo: " />
+					</h:panelGroup>
+					<h:panelGroup layout="block" class="margin">
+						<p:commandLink actionListener="#{selecionarTipologiaController.load()}" process="@this">
+							<h:graphicImage value="/resources/img/ico-adicionar.png" />
+							<h:outputText value="Incluir uma ou mais tipologias" />
+							<f:attribute name="metodoAdicionarTipologia" value="#{notificacaoFinalController.metodoAdicionarTipologia}" />
+						</p:commandLink>
+					</h:panelGroup>
+					<h:panelGroup layout="block" class="margin">
+						<p:dataTable var="rt" value="#{notificacaoFinalController.dto.listaReenquadramentoTipologia}" emptyMessage="#{bundle.msg_lista_vazia}">
+							<p:column>
+								<f:facet name="header">
+									<h:outputText value="Tipologia" />
+								</f:facet>
+								<h:outputText value="#{rt.ideTipologia.desTipologia}" />
+							</p:column>
+							<p:column>
+								<f:facet name="header">
+									<h:outputText value="Ações" />
+								</f:facet>
+								<h:panelGroup layout="block" style="text-align: center;">
+									<p:commandLink actionListener="#{notificacaoFinalController.removerTipologia(rt)}">
+										<h:graphicImage title="Excluir" value="/resources/img/ico-excluir.png" />
+									</p:commandLink>
+								</h:panelGroup>
+							</p:column>
+						</p:dataTable>
+					</h:panelGroup>
+				</h:panelGroup>
+				
+				<h:panelGroup layout="block" class="margin" rendered="false">
+					<p:selectBooleanCheckbox value="#{notificacaoFinalController.dto.corrigirPorte}">
+						<p:ajax event="change" listener="#{notificacaoFinalController.corrigirPorte()}" update="notificacaoFinalForm:pnlReequadramentoProcesso" />
+					</p:selectBooleanCheckbox>
+					<h:outputText value="Correção do porte do empreendimento" />
+				</h:panelGroup>
+				
+			</h:panelGroup>
+		</h:panelGroup>
+
+		<h:panelGroup layout="block" rendered="#{not empty notificacaoFinalController.dto.notificacaoFinal.notificacaoParcialCollection}">
+			<hr class="margin" style="width:100%; border: none; border-top: 1px solid #ccc;" />
+			<p class="titulo-grupo">
+				<h:outputText value="Minutas da Notificação:" />
+			</p>
+			<ui:repeat var="notificacao" value="#{notificacaoFinalController.dto.notificacaoFinal.notificacaoParcialCollection}">
+				<div>
+					<h:outputText value="Tecnico: #{notificacao.idePauta.idePessoaFisica.pessoaFisica.nomPessoa}" />
+					<br /><br />
+					<div style="float: left; padding: 0px; padding-right: 5px;">Parecer:</div> 
+					<div style="float:rigth; padding: 10px; padding-top: 0px; padding-left: 50px; margin: 0px; width: 540px;">
+						<p style="text-align: justify; margin: 0px; padding: 0px;">
+							<h:outputText escape="false" value="#{notificacao.dscTextoParcial}" />
+						</p>
+					</div>
+				</div>
+			</ui:repeat>
+		</h:panelGroup>
+		
+		<hr class="margin" style="width:100%; border: none; border-top: 1px solid #ccc;" />
+
+		<h:panelGroup id="pnlTextoNotificacao" layout="block">
+			<p class="titulo-grupo">
+				<h:outputText value="Descrição da Notificação:" />
+			</p>
+			<h:panelGroup layout="block" style="width:100%;">
+				<p><h:outputText rendered="#{notificacaoFinalController.renderedTextoNotificacao}" value="Texto da notificação:" /></p>
+				<h:inputTextarea id="texto_final" value="#{notificacaoFinalController.dto.notificacaoFinal.dscNotificacao}" cols="9" style="width:100%;height:500px;" />
+			</h:panelGroup>
+		</h:panelGroup>
+		
+		<h:panelGroup id="pnlDocumentosNotificacao" layout="block">
+			<h:panelGrid columns="2">
+				<p:selectBooleanCheckbox 
+					id="chkApensarDocumentosNotificacao"
+					rendered="#{documentoNotificacaoController.renderedApensarDocumentos and notificacaoFinalController.renderedApensarDocumentos}"
+					value="#{notificacaoFinalController.dto.notificacaoComArquivosApensados}" 
+					valueChangeListener="#{notificacaoFinalController.onChangeChbxApensarDocumentosNotificacao()}">
+					<p:ajax 
+						event="change"
+						listener="#{notificacaoFinalController.carregarListaDeDocumentosDaNotificacao()}"
+						process="@this,notificacaoFinalForm:texto_final,notificacaoFinalForm:qtdDiasValidade"
+						update=":notificacaoFinalForm:documentosDaNotificacao :notificacaoFinalForm:botoes"/>
+				</p:selectBooleanCheckbox>
+				
+				<h:outputText rendered="#{notificacaoFinalController.renderedApensarDocumentos}"
+				value="Apensar documento à notificação" />
+			
+			</h:panelGrid>				
+		</h:panelGroup>
+		
+		<h:panelGroup id="documentosDaNotificacao" layout="block">
+			<h:panelGroup rendered="#{notificacaoFinalController.dto.notificacaoComArquivosApensados}" >
+				<p style="text-align: justify;line-height: 1.5;">
+					Caso deseje apensar algum documento a essa notificação, realize o upload do(s) documento(s) abaixo. Esses documentos 
+					serão disponibilizados para o requerente juntamente com a notificação.
+				</p>
+				<p:fileUpload 
+					id="fileupload" mode="advanced" allowTypes="/(\.|\/)(pdf|gif|jpeg|png|jpg)$/" 
+					label="Selecione um Arquivo" auto="true" invalidFileMessage="Tipo de arquivo inválido."
+					fileUploadListener="#{notificacaoFinalController.trataArquivo()}"
+					update=":notificacaoFinalForm:documentosDaNotificacao"
+					process="@this,notificacaoFinalForm:listaDeDocumentosDaNotificacao" />
+				<br />
+				<p:dataTable 
+					id="listaDeDocumentosDaNotificacao" 
+					var="documento"
+					value="#{notificacaoFinalController.dto.listaDeDocumentosDaNotificacao}" 
+					rendered="#{(notificacaoFinalController.dto.listaDeDocumentosDaNotificacao ne null) and (fn:length(notificacaoFinalController.dto.listaDeDocumentosDaNotificacao) gt 0)}">
+					
+					<p:ajax event="rowEdit" listener="#{notificacaoFinalController.onRowEdit()}" update=":notificacaoFinalForm:botoes" />
+					<p:ajax event="rowEditCancel" listener="#{notificacaoFinalController.onRowCancel()}" update=":notificacaoFinalForm:botoes" />
+					
+					<f:facet name="header">
+						<h:outputText value="Lista de Documentos apensados a notificação" />
+					</f:facet>
+					
+					<p:column>
+						<f:facet name="header">
+							<h:outputText value="Documentos" />
+							<br />
+							<h:outputText value="Apensados" />
+						</f:facet>
+						<h:outputText value="#{documento.nomeArquivo}" />
+					</p:column>
+					
+					<p:column sortBy="#{documento.dtcCriacao}">
+						<f:facet name="header">
+							<h:outputText value="Data" />
+						</f:facet>
+						<h:outputText value="#{documento.dtcCriacao}">
+							<f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss" locale="pt,BR"
+								timeZone="GMT-3" />
+						</h:outputText>
+					</p:column>
+					
+					<p:column headerText="Descrição" sortBy="#{documento.dscArquivoProcesso}">
+						<p:cellEditor>
+							<f:facet name="output">
+								<h:outputText value="#{documento.dscArquivoProcesso}" />
+							</f:facet>
+							
+							<f:facet name="input" >
+								<p:inputText value="#{documento.dscArquivoProcesso}" />
+							</f:facet>
+						</p:cellEditor>
+					</p:column>
+					
+					<p:column style="text-align: center;">
+						<h:panelGroup layout="block">
+							<p:commandLink id="rowEditLink" action="#{documento.setDscConfirmada(false)}" ajax="true" update=":notificacaoFinalForm:botoes">
+								<p:rowEditor />
+							</p:commandLink>
+							<p:commandLink onclick="msgConfirmacaoExclusaoDocumento.show();" process="@this">
+								<h:graphicImage title="Excluir" value="/resources/img/ico-excluir.png" />
+								<f:setPropertyActionListener target="#{notificacaoFinalController.dto.documentoNotificacaoSelecionado}" value="#{documento}"/>
+							</p:commandLink>
+						</h:panelGroup>
+					</p:column>
+				</p:dataTable>
+			</h:panelGroup>
+		</h:panelGroup>
+		
+		<h:panelGroup layout="block" rendered="#{notificacaoFinalController.notificacaoPrazo}">
+			<p><h:outputText value="Motivo:" /></p>
+			<p:dataTable var="nmn" value="#{notificacaoFinalController.dto.listaNotificacaoMotivoNotificacao}"
+			style="height:150px; overflow:auto;">
+				<p:column>
+					<h:panelGroup layout="block" style="text-align: center;">
+						<p:selectBooleanCheckbox value="#{nmn.ideMotivoNotificacao.checked}">
+							<p:ajax event="change" listener="#{notificacaoFinalController.adicionarRemoverMotivo(nmn)}" />
+						</p:selectBooleanCheckbox> 
+					</h:panelGroup>
+				</p:column>
+				<p:column>
+					<f:facet name="header">Motivo</f:facet>
+					<h:outputText value="#{nmn.ideMotivoNotificacao.nomMotivoNotificacao}" />
+				</p:column>
+			</p:dataTable>
+			
+			<p><h:outputText value="Solicitação de shapes:" /></p>
+			<p:dataTable id="motivo" var="nmn" rowIndexVar="index"
+			 value="#{notificacaoFinalController.dto.listaNotificacaoMotivoNotificacaoEnvioShape}"
+			 scrollable="true" scrollHeight="150" style="border-bottom:1px solid #ccc;">
+				<p:column style="width: 16px;">
+					<h:panelGroup layout="block" style="text-align: center;">
+						<p:selectBooleanCheckbox value="#{nmn.ideMotivoNotificacao.checked}">
+							<f:attribute name="nmn" value="#{nmn}" />
+							<p:ajax event="change" listener="#{notificacaoFinalController.adicionarRemoverMotivoEnvioShape()}" process="@this" update="notificacaoFinalForm:motivo:#{index}:imovel" />
+						</p:selectBooleanCheckbox> 
+					</h:panelGroup>
+				</p:column>
+				<p:column headerText="Motivo" style="width: 500px;" rendered="#{!notificacaoFinalController.renderedColumnImovel}">
+					<h:outputText value="#{nmn.ideMotivoNotificacao.nomMotivoNotificacao}" />
+				</p:column>
+				<p:column style="width: 250px;" rendered="#{notificacaoFinalController.renderedColumnImovel}">
+					<f:facet name="header">Motivo</f:facet>
+					<h:outputText value="#{nmn.ideMotivoNotificacao.nomMotivoNotificacao}" />
+				</p:column>
+				<p:column style="width: 211px;" rendered="#{notificacaoFinalController.renderedColumnImovel}">
+					<f:facet name="header">Imovel</f:facet>
+					<h:panelGroup layout="block" style="max-height:100px; overflow:auto;">
+						<p:selectManyCheckbox id="imovel" disabled="#{!nmn.ideMotivoNotificacao.checked}" layout="pageDirection" value="#{nmn.motivoNotificacaoImovelCollection}" converter="simpleEntityConverter">
+							<f:selectItems value="#{notificacaoFinalController.listarMotivoNotificacaoImovel(nmn)}" var="mi" itemValue="#{mi}" 
+							itemLabel="#{mi.ideImovel.imovelRural.desDenominacao}" />
+							<p:ajax event="change" listener="#{notificacaoFinalController.adicionarOuRemoverMotivoImovel(nmn)}" process="@this"/>
+						</p:selectManyCheckbox>
+					</h:panelGroup>
+				</p:column>
+			</p:dataTable>
+			<br />
+			<h:outputText value="Quantidade de dias para cumprimento: " />
+			<p:inputText id="qtdDiasValidade"
+			             value="#{notificacaoFinalController.dto.notificacaoFinal.qtdDiasValidade}"
+			             style="width:20px;"  maxlength="3" />
+			<h:outputText value=" dias." />
+			<hr class="margin" style="width:100%; border: none; border-top: 1px solid #ccc;" />
+		</h:panelGroup>
+		
+		
+		<h:panelGroup layout="block">
+			<p class="titulo-grupo">
+				<h:outputText value="Observação:" />
+			</p>
+			<h:inputTextarea value="#{notificacaoFinalController.dto.observacao}" styleClass="maxlength500 limitedTextArea" style="width:100%;height:50px;"/>
+		</h:panelGroup>
+		
+		<h:panelGroup id="botoes" layout="block" style="text-align: right;" class="margin">
+			<p:commandButton value="Enviar" actionListener="#{notificacaoFinalController.confirmacao()}" disabled="#{notificacaoFinalController.bloquearEnvio()}" update="notificacaoFinalForm, formPautaGestor" process="@form" />
+			<p:commandButton value="Salvar" actionListener="#{notificacaoFinalController.salvarNotificacaoFinal()}" process="@form" update="notificacaoFinalForm"/>
+			<p:commandButton value="Voltar" onclick="dialogNotificacar.hide();" />
+			<p:remoteCommand name="consultarPautaTecnico"  actionListener="#{pautaTecnicoController.consultarProcesso()}" process="@this" update="formPautaTecnico:tabelaProcessos" />
+			<p:remoteCommand name="consultarPautaGestor"  actionListener="#{pautaGestorController.consultarProcesso()}" process="@this" update="formPautaGestor:gridProcessos" />
+		</h:panelGroup>
+		
+	</h:form>
+
+</ui:composition>

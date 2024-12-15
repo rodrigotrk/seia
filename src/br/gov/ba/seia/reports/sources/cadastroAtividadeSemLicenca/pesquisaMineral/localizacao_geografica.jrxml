@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="localizacao_geografica" pageWidth="250" pageHeight="36" columnWidth="250" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="c07e0da1-41a4-48f2-ad14-889adbb752ad">
+	<property name="ireport.zoom" value="2.6573415000000065"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="ide_localizacao_geografica" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT
+array_to_string( array(SELECT latitude FROM (
+
+			SELECT
+				case when length(trim(f_get_vertices(ide_localizacao_geografica)):: character varying) > 0
+				then
+					substring(
+						( SELECT trim(f_get_vertices(ide_localizacao_geografica) ) )
+						FROM (strpos((SELECT trim(f_get_vertices(ide_localizacao_geografica))), '(') + 1) for (strpos((SELECT trim(f_get_vertices(ide_localizacao_geografica))),
+						' ') - 1)
+						)
+				else 'valor não informado.' end AS latitude
+			FROM
+				localizacao_geografica
+			WHERE
+				ide_localizacao_geografica = lg.ide_localizacao_geografica) pontos), ', ') AS latitudeInicial,
+
+		array_to_string( array(SELECT longitude FROM (
+		SELECT
+			case when length(trim(f_get_vertices(ide_localizacao_geografica)):: character varying) > 0
+			then
+			replace(substring((SELECT trim(f_get_vertices(ide_localizacao_geografica))) FROM (strpos((SELECT trim(f_get_vertices(ide_localizacao_geografica))), ' ') + 1) for (strpos((SELECT trim(f_get_vertices(ide_localizacao_geografica))), ')') - 1)), ')', '') else 'valor não informado.' end AS longitude
+		FROM
+			localizacao_geografica
+		WHERE
+			ide_localizacao_geografica = lg.ide_localizacao_geografica) pontos), ', ') AS longitudeInicial
+
+FROM localizacao_geografica lg
+WHERE lg.ide_localizacao_geografica = $P{ide_localizacao_geografica}]]>
+	</queryString>
+	<field name="latitudeinicial" class="java.lang.String"/>
+	<field name="longitudeinicial" class="java.lang.String"/>
+	<detail>
+		<band height="36" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="3b5e6624-0972-4ba1-a70e-a600a455e882" x="0" y="0" width="131" height="36"/>
+				<box leftPadding="3"/>
+				<textElement verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[Localização Geográfica:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="a7acd66c-5c3c-4346-bd0f-0e2f988a32fb" x="131" y="0" width="30" height="18"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[LAT]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="3477996e-71e1-4dc7-923d-0df683e1d407" x="131" y="18" width="30" height="18"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[LON]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="8d3eacbd-0414-4adf-b25d-87febdca9bb9" x="160" y="18" width="90" height="18"/>
+				<box topPadding="1" leftPadding="5" bottomPadding="1" rightPadding="1"/>
+				<textElement verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{longitudeinicial}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="e8e2440a-430c-44f2-9709-452e29bce860" x="160" y="0" width="90" height="18"/>
+				<box topPadding="1" leftPadding="5" bottomPadding="1" rightPadding="1"/>
+				<textElement verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{latitudeinicial}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

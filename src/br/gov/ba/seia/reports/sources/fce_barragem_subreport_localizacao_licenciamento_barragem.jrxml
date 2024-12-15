@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="fce_barragem_subreport_localizacao_licenciamento_barragem" language="java" pageWidth="484" pageHeight="572" orientation="Landscape" columnWidth="484" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="2fa881a1-c1ad-41d5-b580-2ebfb09cb166">
+	<property name="ireport.zoom" value="2.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="ide_fce_barragem_licenciamento" class="java.lang.Integer"/>
+	<queryString>
+		<![CDATA[select
+	loc_inicio.ide_localizacao_geografica as ide_localizacao_geografica_inicio,
+        loc_fim.ide_localizacao_geografica as ide_localizacao_geografica_fim,
+	f_get_vertices(loc_inicio.ide_localizacao_geografica) as inicio_eixo,
+	f_get_vertices(loc_fim.ide_localizacao_geografica) as fim_eixo,
+	licen_loc.nom_rio,
+	sp_get_bacia(loc_inicio.ide_localizacao_geografica)
+from fce_barrag_licenc_loca_geo licen_loc
+LEFT OUTER JOIN localizacao_geografica loc_inicio on(loc_inicio.ide_localizacao_geografica = licen_loc.ide_local_geo_inicio_eixo)
+LEFT OUTER JOIN localizacao_geografica loc_fim on(loc_fim.ide_localizacao_geografica = licen_loc.ide_local_geo_fim_eixo)
+Where ide_fce_barragem_licenciamento = $P{ide_fce_barragem_licenciamento}]]>
+	</queryString>
+	<field name="ide_localizacao_geografica_inicio" class="java.lang.Integer"/>
+	<field name="ide_localizacao_geografica_fim" class="java.lang.Integer"/>
+	<field name="inicio_eixo" class="java.lang.String"/>
+	<field name="fim_eixo" class="java.lang.String"/>
+	<field name="nom_rio" class="java.lang.String"/>
+	<field name="sp_get_bacia" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement uuid="383293a9-5064-4204-8db5-083f1ba2b665" x="0" y="0" width="123" height="20"/>
+				<box>
+					<pen lineWidth="0.25"/>
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{inicio_eixo}.replace("(","").replace(")","")]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="0220f63a-109b-45a4-b28d-d4392bfe8af4" x="357" y="0" width="127" height="20" isPrintWhenDetailOverflows="true"/>
+				<box>
+					<pen lineWidth="0.25"/>
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{sp_get_bacia}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="ee3a4c00-945c-4a84-94b1-4d966e9a53e1" x="123" y="0" width="123" height="20"/>
+				<box>
+					<pen lineWidth="0.25"/>
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{fim_eixo}.replace("(","").replace(")","")]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="b3b28cdc-9f6d-40f4-9979-b4e11a15c5eb" x="246" y="0" width="111" height="20" isPrintWhenDetailOverflows="true"/>
+				<box>
+					<pen lineWidth="0.25"/>
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nom_rio}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

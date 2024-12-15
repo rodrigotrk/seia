@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="resumo_requerimento_caracterizacao_titulo" pageWidth="479" pageHeight="802" columnWidth="479" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="e5ec8bf9-c4cd-42a7-bb04-94e10f0aa72b">
+	<property name="ireport.zoom" value="2.5937424601000023"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="ide_requerimento" class="java.lang.Integer"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT
+	*,
+	f_get_resposta(104, er.ide_requerimento) AS is_ape
+FROM
+	empreendimento_requerimento er
+	left join fase_empreendimento fe on er.ide_fase_empreendimento = fe.ide_fase_empreendimento
+	left join classe c on c.ide_classe = er.ide_classe
+	left join porte p on p.ide_porte = er.ide_porte
+ where er.ide_requerimento =  $P{ide_requerimento}]]>
+	</queryString>
+	<field name="ide_requerimento" class="java.lang.Integer"/>
+	<field name="ide_empreendimento" class="java.lang.Integer"/>
+	<field name="ide_empreendimento_requerimento" class="java.lang.Integer"/>
+	<field name="ide_fase_empreendimento" class="java.lang.Integer"/>
+	<field name="dtc_fase_empreendimento" class="java.sql.Timestamp"/>
+	<field name="ide_porte" class="java.lang.Integer"/>
+	<field name="ide_classe" class="java.lang.Integer"/>
+	<field name="ind_dla" class="java.lang.Boolean"/>
+	<field name="num_processo_ana" class="java.lang.String"/>
+	<field name="num_portaria_ana" class="java.lang.String"/>
+	<field name="num_vazao_total" class="java.math.BigDecimal"/>
+	<field name="nom_fase_empreendimento" class="java.lang.String"/>
+	<field name="nom_classe" class="java.lang.String"/>
+	<field name="ind_ativo" class="java.lang.Boolean"/>
+	<field name="sgl_porte" class="java.lang.String"/>
+	<field name="nom_porte" class="java.lang.String"/>
+	<field name="is_ape" class="java.lang.Boolean"/>
+	<detail>
+		<band height="15" splitType="Stretch">
+			<staticText>
+				<reportElement positionType="Float" mode="Opaque" x="0" y="0" width="479" height="15" backcolor="#FFFFFF" uuid="b6724316-9de4-48ea-b153-3e068f5aeecb"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="8" isBold="true" isUnderline="true"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<text><![CDATA[CARACTERIZAÇÃO DO EMPREENDIMENTO]]></text>
+			</staticText>
+		</band>
+		<band height="20">
+			<subreport>
+				<reportElement positionType="Float" x="0" y="0" width="479" height="20" isRemoveLineWhenBlank="true" uuid="ed898d58-c5a9-44f6-ac0e-e215695ad8da"/>
+				<subreportParameter name="SUBREPORT_DIR">
+					<subreportParameterExpression><![CDATA[$P{SUBREPORT_DIR}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="ide_requerimento">
+					<subreportParameterExpression><![CDATA[$P{ide_requerimento}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "resumo_requerimento_questionario_caracterizacao_autorizacao_ambiental.jasper"]]></subreportExpression>
+			</subreport>
+			<textField>
+				<reportElement positionType="Float" mode="Opaque" x="223" y="0" width="256" height="12" backcolor="#FFFFFF" uuid="d6b10aaa-1ab9-4860-93d7-a41763c71cee">
+					<printWhenExpression><![CDATA["A".equals("B")]]></printWhenExpression>
+				</reportElement>
+				<textElement verticalAlignment="Middle" markup="none">
+					<font fontName="Arial" size="8" isBold="false" isUnderline="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Caracterização das atividades passíveis de autorização ambiental"]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="22">
+			<subreport>
+				<reportElement positionType="Float" x="0" y="0" width="479" height="20" isRemoveLineWhenBlank="true" isPrintWhenDetailOverflows="true" uuid="7eb53804-b406-4f50-9480-ea701e95579e"/>
+				<subreportParameter name="SUBREPORT_DIR">
+					<subreportParameterExpression><![CDATA[$P{SUBREPORT_DIR}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="ide_requerimento">
+					<subreportParameterExpression><![CDATA[$P{ide_requerimento}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "resumo_requerimento_questionario_caracterizacao_licenciamento_ambiental.jasper"]]></subreportExpression>
+			</subreport>
+			<textField>
+				<reportElement positionType="Float" mode="Opaque" x="223" y="0" width="256" height="12" backcolor="#FFFFFF" uuid="d0f0d25f-1406-4a5e-9807-3cdea6411967">
+					<printWhenExpression><![CDATA["A".equals("B")]]></printWhenExpression>
+				</reportElement>
+				<textElement verticalAlignment="Middle" markup="none">
+					<font fontName="Arial" size="8" isBold="false" isUnderline="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Caracterização das atividades passíveis de licenciamento ambiental"]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="27">
+			<textField>
+				<reportElement positionType="Float" mode="Opaque" x="182" y="0" width="36" height="12" backcolor="#FFFFFF" uuid="70f29bb5-130d-4a77-ae03-8d83eb7df7a3">
+					<printWhenExpression><![CDATA[$F{nom_porte} != null && $F{is_ape} != true]]></printWhenExpression>
+				</reportElement>
+				<textElement verticalAlignment="Middle" markup="none">
+					<font fontName="Arial" size="6" isBold="false" isUnderline="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Classe:"]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
+				<reportElement positionType="Float" x="423" y="15" width="56" height="12" isRemoveLineWhenBlank="true" uuid="3919ef48-041a-4ace-b8d6-e555e875d58b">
+					<printWhenExpression><![CDATA[$F{ide_fase_empreendimento} == 3 && $F{is_ape} != true]]></printWhenExpression>
+				</reportElement>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Arial" size="6" isBold="true"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dtc_fase_empreendimento}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
+				<reportElement positionType="Float" x="189" y="15" width="90" height="12" isRemoveLineWhenBlank="true" uuid="3919ef48-041a-4ace-b8d6-e555e875d58b">
+					<printWhenExpression><![CDATA[$F{ide_fase_empreendimento} == 2 && $F{is_ape} != true || $F{ide_fase_empreendimento} == 1 && $F{is_ape} != true]]></printWhenExpression>
+				</reportElement>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Arial" size="6" isBold="true"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dtc_fase_empreendimento}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement positionType="Float" mode="Opaque" x="280" y="15" width="143" height="12" backcolor="#FFFFFF" uuid="70f29bb5-130d-4a77-ae03-8d83eb7df7a3">
+					<printWhenExpression><![CDATA[$F{ide_fase_empreendimento} == 3 && $F{is_ape} != true]]></printWhenExpression>
+				</reportElement>
+				<textElement verticalAlignment="Middle" markup="none">
+					<font fontName="Arial" size="6" isBold="false" isUnderline="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Data para início da operação:"]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement positionType="Float" x="219" y="0" width="55" height="12" isRemoveLineWhenBlank="true" uuid="3919ef48-041a-4ace-b8d6-e555e875d58b">
+					<printWhenExpression><![CDATA[$F{nom_porte} != null && $F{is_ape} != true]]></printWhenExpression>
+				</reportElement>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Arial" size="6" isBold="true"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nom_classe}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement positionType="Float" mode="Opaque" x="0" y="0" width="84" height="12" backcolor="#FFFFFF" uuid="70f29bb5-130d-4a77-ae03-8d83eb7df7a3">
+					<printWhenExpression><![CDATA[$F{nom_porte} != null && $F{is_ape} != true]]></printWhenExpression>
+				</reportElement>
+				<textElement verticalAlignment="Middle" markup="none">
+					<font fontName="Arial" size="6" isBold="false" isUnderline="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Porte Identificado:"]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement positionType="Float" x="84" y="0" width="98" height="12" isRemoveLineWhenBlank="true" uuid="3919ef48-041a-4ace-b8d6-e555e875d58b">
+					<printWhenExpression><![CDATA[$F{nom_porte} != null && $F{is_ape} != true]]></printWhenExpression>
+				</reportElement>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Arial" size="6" isBold="true"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nom_porte}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement positionType="Float" mode="Opaque" x="0" y="15" width="73" height="12" backcolor="#FFFFFF" uuid="70f29bb5-130d-4a77-ae03-8d83eb7df7a3">
+					<printWhenExpression><![CDATA[$F{ide_requerimento}.equals(2) || $F{ide_requerimento}.equals(1)]]></printWhenExpression>
+				</reportElement>
+				<textElement verticalAlignment="Middle" markup="none">
+					<font fontName="Arial" size="8" isBold="false" isUnderline="false"/>
+				</textElement>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement positionType="Float" x="403" y="0" width="76" height="12" isRemoveLineWhenBlank="true" uuid="3919ef48-041a-4ace-b8d6-e555e875d58b">
+					<printWhenExpression><![CDATA[$F{nom_porte} != null && $F{is_ape} != true]]></printWhenExpression>
+				</reportElement>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Arial" size="6" isBold="true"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nom_fase_empreendimento}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement positionType="Float" x="0" y="15" width="189" height="12" isRemoveLineWhenBlank="true" uuid="3fbc25bf-108a-4640-8e4e-ea3482f5b752">
+					<printWhenExpression><![CDATA[$F{ide_fase_empreendimento} == 1 && $F{is_ape} != true || $F{ide_fase_empreendimento} == 2 && $F{is_ape} != true]]></printWhenExpression>
+				</reportElement>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Arial" size="6" isBold="false"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Data prevista para "+$F{nom_fase_empreendimento}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement positionType="Float" mode="Opaque" x="279" y="0" width="124" height="12" backcolor="#FFFFFF" uuid="70f29bb5-130d-4a77-ae03-8d83eb7df7a3">
+					<printWhenExpression><![CDATA[$F{nom_porte} != null && $F{is_ape} != true]]></printWhenExpression>
+				</reportElement>
+				<textElement verticalAlignment="Middle" markup="none">
+					<font fontName="Arial" size="6" isBold="false" isUnderline="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Fase do Empreendimento:"]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

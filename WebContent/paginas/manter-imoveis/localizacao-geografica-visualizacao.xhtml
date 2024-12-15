@@ -1,0 +1,64 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+
+
+	<h:panelGrid columns="1" id="localizacaoGeografica" >
+	<h3>
+		<h:outputLabel styleClass="titulo-grupo"
+			value="LOCALIZAÇÂO GEOGRÁFICA DO IMÓVEL" />
+	</h3>
+	<h:form id="locGeografica">
+                                                                              
+		<p:dataTable rendered="#{localizacaoGeograficaImovelController.mostraLista}" var="vertice" styleClass="w100px"
+			value="#{localizacaoGeograficaImovelController.localizacaoGeograficaSelecionada.dadoGeograficoCollection}">
+                <p:column headerText="#{bundle.empreendimento_lbl_latitude}">
+					<h:outputText value="${localizacaoGeograficaImovelController.getLatitude(vertice)}" />
+                </p:column>
+                <p:column headerText="#{bundle.empreendimento_lbl_longitude}">
+					<h:outputText value="${localizacaoGeograficaImovelController.getLongitude(vertice)}" />
+                </p:column>
+                <p:column style="width:100px" headerText="#{bundle.geral_lbl_acoes}" rendered="#{imoveisController.temImovelSelecionado}" >
+					<p:commandLink update=":tabAbas:paginaImovel:locGeograficaVertices" oncomplete="dlgIncluirVertice.show();" process="@this" immediate="true"
+						action="#{localizacaoGeograficaImovelController.carregarVertice}" disabled="#{empreendimentoController.visualizarEmpreendimento}">
+						<h:graphicImage title="Editar" value="/resources/img/ico-editar.png" />
+						<f:setPropertyActionListener value="#{vertice}"	target="#{localizacaoGeograficaImovelController.vertice}" />
+					</p:commandLink>                                   
+					<p:commandLink onclick="confirmacaoExclusaoVertice.show()" process="@this" disabled="#{empreendimentoController.visualizarEmpreendimento}">
+						<f:setPropertyActionListener target="#{localizacaoGeograficaImovelController.verticeExclusao}" value="#{vertice}" />
+						<h:graphicImage title="Excluir"	value="/resources/img/ico-excluir.png" />
+                    </p:commandLink>
+					<a onclick="javascript:${localizacaoGeograficaImovelController.getUrl(vertice)}">
+						<h:graphicImage title="Geo Bahia" value="/resources/img/ico-arl-relocacao.png" />
+                    </a>
+                 </p:column>
+		 </p:dataTable>
+                           
+    </h:form>
+ </h:panelGrid> 
+        
+<p:confirmDialog id="confirmacaoExclusaoVertice"
+	widgetVar="confirmacaoExclusaoVertice"
+	header="#{bundle.geral_lbl_mensagem}" zindex="9000"
+                message="#{bundle.msg_confirma_exclusao}" severity="alert">
+            <h:form id="formexclusao">
+            <h:panelGroup>
+                <div style="text-align: center;">
+                    <p:commandButton id="confirmarInclusaoBoleto"
+                        value="#{bundle.btn_sim}"
+                        update="tabAbas:paginaImovel:locGeografica"
+                        onclick="confirmacaoExclusaoVertice.hide()"
+                        action="${localizacaoGeograficaImovelController.excluirVertice}"/>
+				<p:commandButton value="#{bundle.btn_nao}" process="@this"
+					update="formexclusao"
+					oncomplete="confirmacaoExclusaoVertice.hide()" />
+                </div>
+            </h:panelGroup>
+            </h:form>
+        </p:confirmDialog>					
+	
+	</html>

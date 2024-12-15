@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="fce_geracao_energia_dados_gerais" pageWidth="555" pageHeight="802" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="994f8353-18dd-4030-998e-89dee383ed15">
+	<property name="ireport.zoom" value="2.196150000000001"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="IDE_FCE_ENERGIA" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT
+E.DES_IDENTIFICACAO_EMPREENDIMENTO AS EMPREENDIMENTO,
+CASE E.IND_CAPTACAO WHEN 'T' THEN 'O empreendimento faz captação de água' ELSE 'O empreendimento não faz captação de água' END AS CAPTACAO,
+CASE E.IND_CAPTACAO WHEN 'T' THEN E.NUM_PROCESSO_OUTORGA ELSE 'NÃO INFORMADO' END AS NUMERO_PROCESSO_OUTORGA,
+CASE E.IND_ASV WHEN 'T' THEN 'Existe processo de Autorização de Supressão de Vegetação (ASV) para o empreendimento' ELSE 'Não existe processo de Autorização de Supressão de Vegetação (ASV)' END AS ASV,
+CASE E.IND_ASV WHEN 'T' THEN E.NUM_PROCESSO_ASV ELSE 'NÃO INFORMADO' END AS NUMERO_PROCESSO_ASV
+FROM FCE_ENERGIA E
+WHERE E.IDE_FCE_ENERGIA = $P{IDE_FCE_ENERGIA}]]>
+	</queryString>
+	<field name="empreendimento" class="java.lang.String"/>
+	<field name="captacao" class="java.lang.String"/>
+	<field name="numero_processo_outorga" class="java.lang.String"/>
+	<field name="asv" class="java.lang.String"/>
+	<field name="numero_processo_asv" class="java.lang.String"/>
+	<detail>
+		<band height="106">
+			<staticText>
+				<reportElement uuid="d466135b-4b82-4725-b7d1-b24c5e065b95" positionType="Float" mode="Opaque" x="0" y="1" width="495" height="17" backcolor="#DDDDDD"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif" isBold="true"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<text><![CDATA[Dados Gerais]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="0a81e343-06dd-4471-b3db-eac13c39f451" x="3" y="18" width="87" height="20"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[Empreendimento:]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="5c3e9f48-8837-4bfd-a1e6-ffeb20bcd8b9" x="90" y="18" width="455" height="20"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{empreendimento}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="0576d348-5926-4623-beed-991a54ef2bb2" x="3" y="40" width="531" height="15"/>
+				<textElement>
+					<font isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{captacao}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="49a29712-2568-4956-9c07-9f0119a124e0" x="13" y="54" width="122" height="13">
+					<printWhenExpression><![CDATA[!$F{numero_processo_outorga}.equals("NÃO INFORMADO")]]></printWhenExpression>
+				</reportElement>
+				<textElement verticalAlignment="Top">
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[Núm. Processo Outorga:]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="dc048581-298d-4b16-a394-aabee9f878b8" x="134" y="54" width="400" height="13">
+					<printWhenExpression><![CDATA[!$F{numero_processo_outorga}.equals("NÃO INFORMADO")]]></printWhenExpression>
+				</reportElement>
+				<textElement verticalAlignment="Top"/>
+				<textFieldExpression><![CDATA[$F{numero_processo_outorga}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="54198281-a3bc-4a5e-829c-1d341fb59aca" x="3" y="77" width="531" height="15"/>
+				<textElement>
+					<font isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{asv}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="179aaeda-366a-469d-8812-676a37445039" x="13" y="91" width="100" height="13">
+					<printWhenExpression><![CDATA[!$F{numero_processo_asv}.equals("NÃO INFORMADO")]]></printWhenExpression>
+				</reportElement>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[Núm. Processo ASV:]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="e1a2df08-0298-450f-b7b3-e530f749a227" x="112" y="91" width="443" height="13">
+					<printWhenExpression><![CDATA[!$F{numero_processo_asv}.equals("NÃO INFORMADO")]]></printWhenExpression>
+				</reportElement>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{numero_processo_asv}]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="16">
+			<printWhenExpression><![CDATA[$F{asv}.equals("Existe processo de Autorização de Supressão de Vegetação (ASV) para o empreendimento")]]></printWhenExpression>
+			<staticText>
+				<reportElement uuid="4043b117-a3df-4eac-8efd-ecb6250c806d" x="3" y="0" width="60" height="12">
+					<printWhenExpression><![CDATA[$F{asv}.equals("Existe processo de Autorização de Supressão de Vegetação (ASV) para o empreendimento")]]></printWhenExpression>
+				</reportElement>
+				<textElement/>
+				<text><![CDATA[Finalidades:]]></text>
+			</staticText>
+			<subreport>
+				<reportElement uuid="14276541-0ab6-471a-9f8d-56cc8c8ea26f" stretchType="RelativeToBandHeight" x="63" y="0" width="418" height="12"/>
+				<subreportParameter name="SUBREPORT_DIR">
+					<subreportParameterExpression><![CDATA[$P{SUBREPORT_DIR}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="IDE_FCE_ENERGIA">
+					<subreportParameterExpression><![CDATA[$P{IDE_FCE_ENERGIA}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "fce_geracao_energia_finalidades.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+	</detail>
+</jasperReport>

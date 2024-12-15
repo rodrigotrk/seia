@@ -1,0 +1,379 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="certificado_caepog" language="java" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="c07e0da1-41a4-48f2-ad14-889adbb752ad">
+	<property name="ireport.zoom" value="1.9965000000000006"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="847"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="ide_caepog" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="LOGO_INEMA" class="java.lang.String"/>
+	<parameter name="LOGO_GOVERNO" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[select
+	c.ide_caepog,
+	c.num_caepog as numero_de_cadastro,
+
+	--certificado
+	ce.num_certificado num_certificado,
+	ce.num_token,
+	ce.dtc_emissao_certificado
+
+from caepog c
+
+	inner join caepog_certificado cc on c.ide_caepog = cc.ide_caepog
+	inner join certificado ce on ce.ide_certificado = cc.ide_certificado
+
+where c.ide_caepog = $P{ide_caepog}]]>
+	</queryString>
+	<field name="ide_caepog" class="java.lang.Integer">
+		<fieldDescription><![CDATA[Chave primária da tabela CAEPOG]]></fieldDescription>
+	</field>
+	<field name="numero_de_cadastro" class="java.lang.String"/>
+	<field name="num_certificado" class="java.lang.String"/>
+	<field name="num_token" class="java.lang.String"/>
+	<field name="dtc_emissao_certificado" class="java.sql.Timestamp"/>
+	<variable name="ide_caepog_SUM" class="java.lang.Integer" calculation="Sum">
+		<variableExpression><![CDATA[$F{ide_caepog}]]></variableExpression>
+	</variable>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<detail>
+		<band height="41">
+			<image isLazy="true" onErrorType="Blank">
+				<reportElement uuid="8c2b1aa1-3e36-4df3-8b3b-6d8dc227b09e" x="15" y="0" width="99" height="41" forecolor="#FFFFFF"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<graphicElement>
+					<pen lineWidth="0.0"/>
+				</graphicElement>
+				<imageExpression><![CDATA[$P{LOGO_INEMA}]]></imageExpression>
+			</image>
+			<image isLazy="true" onErrorType="Blank">
+				<reportElement uuid="8c0f911e-b70f-48e2-adc6-f70c7c6cadc4" x="385" y="0" width="155" height="41" forecolor="#FFFFFF"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<graphicElement>
+					<pen lineWidth="1.0" lineStyle="Solid" lineColor="#FFFFFF"/>
+				</graphicElement>
+				<imageExpression><![CDATA[$P{LOGO_GOVERNO}]]></imageExpression>
+			</image>
+		</band>
+		<band height="110">
+			<staticText>
+				<reportElement uuid="16375c0d-8c7b-4d55-ade6-4334cdff1128" x="15" y="0" width="525" height="42"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="14" isBold="true" isUnderline="true"/>
+				</textElement>
+				<text><![CDATA[CERTIFICADO DE CADASTRO ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="a15a14be-9137-43ed-8072-bb9b4a903245" x="15" y="42" width="525" height="51"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="html">
+					<font fontName="Arial" size="14" isBold="true"/>
+					<paragraph lineSpacing="1_1_2"/>
+				</textElement>
+				<text><![CDATA[PERFURAÇÃO DE POÇOS TERRESTRES DE PETRÓLEO E GÁS,<br> POÇOS ESTRATIGRÁFICOS E AMOSTRADORES EM CAMPOS LICENCIADOS]]></text>
+			</staticText>
+		</band>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement uuid="5c508e19-a500-42a2-8277-5dfa889ba9a5" x="15" y="0" width="303" height="20"/>
+				<box topPadding="1" leftPadding="3" bottomPadding="1" rightPadding="1">
+					<topPen lineWidth="0.25" lineStyle="Solid"/>
+					<leftPen lineWidth="0.25" lineStyle="Solid"/>
+					<bottomPen lineWidth="0.25" lineStyle="Solid"/>
+					<rightPen lineWidth="0.25" lineStyle="Solid"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Nº Certificado: " + $F{num_certificado}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="089ae908-1705-4c4d-bf1a-bf13727c6eb6" x="318" y="0" width="222" height="20"/>
+				<box topPadding="1" leftPadding="3" bottomPadding="1" rightPadding="1">
+					<topPen lineWidth="0.25" lineStyle="Solid"/>
+					<leftPen lineWidth="0.25" lineStyle="Solid"/>
+					<bottomPen lineWidth="0.25" lineStyle="Solid"/>
+					<rightPen lineWidth="0.25" lineStyle="Solid"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dtc_emissao_certificado}!= null
+? "Data de emissão: " + new java.text.SimpleDateFormat("dd/MM/yyyy").format($F{dtc_emissao_certificado})
+: "Data de emissão não encontrada."]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="20">
+			<subreport>
+				<reportElement uuid="e4538302-330b-4f89-92b8-27043f6ff96b" x="15" y="0" width="525" height="20"/>
+				<subreportParameter name="SUBREPORT_DIR">
+					<subreportParameterExpression><![CDATA[$P{SUBREPORT_DIR}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="ide_caepog">
+					<subreportParameterExpression><![CDATA[$F{ide_caepog}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "certificado_caepog_cabecalho.jasper"]]></subreportExpression>
+			</subreport>
+			<staticText>
+				<reportElement uuid="4439f22a-a64d-49de-bd70-eecb5f07e672" x="440" y="0" width="100" height="20">
+					<printWhenExpression><![CDATA[false]]></printWhenExpression>
+				</reportElement>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[Titulo]]></text>
+			</staticText>
+		</band>
+		<band height="20">
+			<subreport>
+				<reportElement uuid="41b6c4b9-9085-45ed-8d41-1c6f6250765f" x="15" y="0" width="525" height="20"/>
+				<subreportParameter name="SUBREPORT_DIR">
+					<subreportParameterExpression><![CDATA[$P{SUBREPORT_DIR}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="ide_caepog">
+					<subreportParameterExpression><![CDATA[$F{ide_caepog}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "certificado_caepog_artigo_primeiro.jasper"]]></subreportExpression>
+			</subreport>
+			<staticText>
+				<reportElement uuid="99271676-8a66-4eb0-9d27-8e03cff6f73c" x="440" y="0" width="100" height="20">
+					<printWhenExpression><![CDATA[false]]></printWhenExpression>
+				</reportElement>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[Artigo 1]]></text>
+			</staticText>
+		</band>
+		<band height="20">
+			<subreport>
+				<reportElement uuid="3338137b-7fef-44db-b9f6-001eafd6f7af" x="15" y="0" width="525" height="20"/>
+				<subreportParameter name="SUBREPORT_DIR">
+					<subreportParameterExpression><![CDATA[$P{SUBREPORT_DIR}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="ide_caepog">
+					<subreportParameterExpression><![CDATA[$F{ide_caepog}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "certificado_caepog_poco.jasper"]]></subreportExpression>
+			</subreport>
+			<staticText>
+				<reportElement uuid="de2b51e5-052c-42e0-937e-b937e503904b" x="440" y="0" width="100" height="20">
+					<printWhenExpression><![CDATA[false]]></printWhenExpression>
+				</reportElement>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[Poço ]]></text>
+			</staticText>
+		</band>
+		<band height="177" splitType="Prevent">
+			<staticText>
+				<reportElement uuid="ce82f0b9-baf6-4d91-b085-51a7274fa243" x="37" y="20" width="503" height="12"/>
+				<textElement textAlignment="Justified" markup="html">
+					<font fontName="Arial"/>
+				</textElement>
+				<text><![CDATA[A perfuração dos poços mencionados deverá respeitar os seguintes condicionantes:
+]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="6bfc8097-ede4-4e03-8b67-258e0789f886" x="37" y="38" width="10" height="12"/>
+				<textElement markup="html">
+					<font fontName="Arial"/>
+				</textElement>
+				<text><![CDATA[1.
+]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="b30a7547-ff53-4133-bcef-a807f25b7b17" x="65" y="38" width="475" height="24"/>
+				<textElement markup="html">
+					<font fontName="Arial"/>
+				</textElement>
+				<text><![CDATA[Comunicar imediatamente ao  INEMA sobre qualquer ocorrência  de acidentes  e/ou emergências ambientais;]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="56a22525-f786-40b4-932e-efa9f6d0214e" x="37" y="68" width="10" height="12"/>
+				<textElement markup="html">
+					<font fontName="Arial"/>
+				</textElement>
+				<text><![CDATA[2.
+]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="f33be2f6-6224-4e3b-8ebd-c4fbce551da7" x="65" y="68" width="475" height="24"/>
+				<textElement textAlignment="Justified" markup="html">
+					<font fontName="Arial"/>
+				</textElement>
+				<text><![CDATA[Acondicionar adequadamente o cascalho gerado pela perfuração do novo poço, em local impermeável, e encaminhá-lo para locais devidamente licenciados para tal fim;]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="683d48f7-1738-4edd-85f2-4b9ead8488bd" x="37" y="98" width="10" height="12"/>
+				<textElement markup="html">
+					<font fontName="Arial"/>
+				</textElement>
+				<text><![CDATA[3.
+]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="f2d64562-7ecd-4a3a-bc85-9e1f9e11ae12" x="65" y="98" width="475" height="24"/>
+				<textElement textAlignment="Justified" markup="html">
+					<font fontName="Arial"/>
+				</textElement>
+				<text><![CDATA[Utilizar fluido base água com salinidade inferior ou igual a 1000 mg/L de cloretos ao atravessar aquíferos de água doce (salinidade inferior ou igual a 500 mg/L de cloretos);]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="a6d652d5-f403-48f1-bc61-778a52cf3276" x="37" y="126" width="10" height="12"/>
+				<textElement markup="html">
+					<font fontName="Arial"/>
+				</textElement>
+				<text><![CDATA[4.
+]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="d6c28a29-0003-496c-aee9-367c67ca3498" x="65" y="126" width="475" height="24"/>
+				<textElement textAlignment="Justified" markup="html">
+					<font fontName="Arial"/>
+				</textElement>
+				<text><![CDATA[Proceder com ações de recuperação ambiental dos impactos gerados na perfuração do novo poço, mantendo para fins de fiscalização o relatório técnico de acompanhamento com registro fotográfico;]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="dce078fe-c8e6-4e3d-94f5-af43a2263178" x="37" y="154" width="10" height="12"/>
+				<textElement markup="html">
+					<font fontName="Arial"/>
+				</textElement>
+				<text><![CDATA[5.
+]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="3730041d-f313-41c8-8ff6-04c6914d3063" x="65" y="154" width="475" height="12"/>
+				<textElement textAlignment="Justified" markup="html">
+					<font fontName="Arial"/>
+				</textElement>
+				<text><![CDATA[Adotar as portarias da Agência Nacional de Petróleo (ANP); ]]></text>
+			</staticText>
+		</band>
+		<band height="58">
+			<textField>
+				<reportElement uuid="70406691-f12e-4096-8782-3123bc31489d" x="52" y="10" width="488" height="48"/>
+				<textElement textAlignment="Justified">
+					<font fontName="Arial"/>
+				</textElement>
+				<textFieldExpression><![CDATA[" Este certificado refere-se exclusivamente à perfuração dos poços descritos dentro dos campos declarados como licenciados, não abrangendo outros empreendimentos ou atividades do mesmo requerente, cabendo a empresa obter a Anuência e/ou Autorização das outras instâncias no Âmbito Federal, Estadual ou Municipal, quando couber, para que a mesma alcance seus efeitos legais."]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="fab932a6-1e80-4cce-b6c1-202f81d6e448" x="15" y="10" width="37" height="13"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Art. 2.º]]></text>
+			</staticText>
+		</band>
+		<band height="47">
+			<staticText>
+				<reportElement uuid="774efb9c-66f8-473b-93c0-f271ecc9cf6f" x="15" y="10" width="37" height="13"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Art. 3.º]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="d3034d4d-1450-4185-8d6b-53f8e2be9089" x="52" y="10" width="488" height="36"/>
+				<textElement textAlignment="Justified">
+					<font fontName="Arial"/>
+				</textElement>
+				<textFieldExpression><![CDATA[" A validade deste ato declaratório corresponde apenas à fase de perfuração para realização de seus testes de viabilidade técnica e/ou econômica, devendo ser incorporado ao campo, mediante a obtenção da Licença de Alteração (LA), quando apresentarem viabilidade técnica ou econômica."]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="46">
+			<staticText>
+				<reportElement uuid="e384018c-cf70-4e86-bdba-13fa40b5de09" x="15" y="10" width="37" height="13"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Art. 4.º]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="66418c70-0fc9-4f93-89cd-8c828612792f" x="52" y="10" width="488" height="36"/>
+				<textElement textAlignment="Justified">
+					<font fontName="Arial"/>
+				</textElement>
+				<textFieldExpression><![CDATA[" Estabelecer que este certificado, bem como cópias dos documentos relativos ao cumprimento dos condicionantes acima citados, sejam mantidos disponíveis à fiscalização do INEMA e aos demais órgãos do Sistema Estadual de Meio Ambiente – SISEMA."]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="79">
+			<textField>
+				<reportElement uuid="4adb62d5-9bec-4e9e-a1ed-33d05832df3f" x="15" y="20" width="525" height="24"/>
+				<textElement textAlignment="Justified">
+					<font fontName="Arial"/>
+				</textElement>
+				<textFieldExpression><![CDATA["A autenticidade deste certificado pode ser atestada na internet, no endereço: http://www.seia.ba.gov.br em Serviços On-line/Atestar Certificado, utilizando a chave de segurança deste certificado."]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="427ac6fc-5502-4bb0-a176-28df6f14e6b3" x="15" y="44" width="525" height="35"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{num_token}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="47">
+			<textField>
+				<reportElement uuid="6bd5aed0-b98c-463b-8680-6fc81a513463" x="15" y="23" width="179" height="12" forecolor="#C0C0C0"/>
+				<textElement textAlignment="Justified" verticalAlignment="Middle">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Cadastro de Perfuração de Poço de Óleo e Gás"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="5e98e9fc-c50f-44da-951f-86b32c4183c5" x="194" y="23" width="346" height="12" forecolor="#C0C0C0"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Documento emitido às " + new java.text.SimpleDateFormat("hh:mm:ss").format(new java.util.Date()) +
+" do dia "+ new java.text.SimpleDateFormat("dd/MM/yyyy").format(new java.util.Date()) +
+" (Hora e Data de Brasília) Valido por 02 anos."]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="59a427c0-6a5c-4890-8761-33651ed7d009" x="15" y="35" width="525" height="12" forecolor="#C0C0C0"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA["INEMA/CAB: Avenida Luís Viana Filho, 6ª Avenida, nº 600 CAB. CEP:41.746-900 - Salvador - Bahia - Brasil"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="eeca94aa-7a37-43d4-a3c6-1bc24b487c5c" x="15" y="11" width="525" height="12" forecolor="#C0C0C0"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Chave de segurança " + $F{num_token}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="8844cf7a-ec66-41d5-869b-a6dc0dafbe11" x="516" y="35" width="12" height="12" forecolor="#C0C0C0"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Arial" size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}+ " | "]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement uuid="38d63822-38d8-4e13-b3ca-b38651e70423" x="528" y="35" width="12" height="12" forecolor="#C0C0C0"/>
+				<box leftPadding="1"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+</jasperReport>

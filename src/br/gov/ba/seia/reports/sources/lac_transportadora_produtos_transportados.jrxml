@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="lac_transportadora_produtos_transportados" language="java" pageWidth="495" pageHeight="802" whenNoDataType="AllSectionsNoDetail" columnWidth="495" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="80b78396-35cc-4e26-aaf9-1207b1892468">
+	<property name="ireport.zoom" value="1.4641000000000066"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="ide_lac" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[select p.dsc_produto,p.num_onu,p.dsc_classe_risco, ltp.qtd_media_transporte_anual from lac lc
+inner join lac_transporte lt on lc.ide_lac = lt.ide_lac
+inner join lac_transporte_produto ltp on lt.ide_lac_transporte = ltp.ide_lac_transporte
+inner join produto p on ltp.ide_produto = p.ide_produto
+where lc.ide_lac = $P{ide_lac}]]>
+	</queryString>
+	<field name="dsc_produto" class="java.lang.String"/>
+	<field name="num_onu" class="java.lang.String"/>
+	<field name="dsc_classe_risco" class="java.lang.String"/>
+	<field name="qtd_media_transporte_anual" class="java.math.BigDecimal"/>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="17" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="d5cd7005-edc5-4a84-baad-3b2b62037910" mode="Transparent" x="3" y="4" width="180" height="13" backcolor="#FEFEFE">
+					<printWhenExpression><![CDATA[$F{dsc_produto} !=null]]></printWhenExpression>
+				</reportElement>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Nome do Produto]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="582f4b08-44ba-4bf8-b7f3-df7c40b01dc5" mode="Transparent" x="183" y="4" width="64" height="13" backcolor="#FEFEFE">
+					<printWhenExpression><![CDATA[$F{dsc_produto} !=null]]></printWhenExpression>
+				</reportElement>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" isBold="true"/>
+				</textElement>
+				<text><![CDATA[N° ONU]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="582f4b08-44ba-4bf8-b7f3-df7c40b01dc5" mode="Transparent" x="247" y="4" width="86" height="13" backcolor="#FEFEFE">
+					<printWhenExpression><![CDATA[$F{dsc_produto} !=null]]></printWhenExpression>
+				</reportElement>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Classe de Risco]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="582f4b08-44ba-4bf8-b7f3-df7c40b01dc5" mode="Transparent" x="333" y="4" width="150" height="13" backcolor="#FEFEFE">
+					<printWhenExpression><![CDATA[$F{dsc_produto} !=null]]></printWhenExpression>
+				</reportElement>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Qtd. Méd. Anual Transportada (t/ano)]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="13" splitType="Stretch">
+			<line>
+				<reportElement uuid="b5b5ff53-152a-4d65-8ed4-02b1a1156089" positionType="Float" stretchType="RelativeToBandHeight" x="333" y="0" width="1" height="12">
+					<printWhenExpression><![CDATA[$F{dsc_produto} !=null]]></printWhenExpression>
+				</reportElement>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</line>
+			<line>
+				<reportElement uuid="4e92e7db-1838-4214-9fe6-6d7513e0ba68" positionType="Float" stretchType="RelativeToBandHeight" x="247" y="0" width="1" height="12">
+					<printWhenExpression><![CDATA[$F{dsc_produto} !=null]]></printWhenExpression>
+				</reportElement>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</line>
+			<line>
+				<reportElement uuid="bf5dbda0-0611-499f-9732-63e027d00a55" positionType="Float" stretchType="RelativeToBandHeight" x="183" y="0" width="1" height="13">
+					<printWhenExpression><![CDATA[$F{dsc_produto} !=null]]></printWhenExpression>
+				</reportElement>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</line>
+			<textField isStretchWithOverflow="true">
+				<reportElement uuid="2195d456-f9cd-49bf-8fbd-799aacc7d5c8" x="247" y="0" width="86" height="12">
+					<printWhenExpression><![CDATA[$F{dsc_produto} !=null]]></printWhenExpression>
+				</reportElement>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Bottom">
+					<font fontName="Arial" size="9"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dsc_classe_risco}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement uuid="89d1f565-5094-486c-8e98-06cf19ed2463" x="4" y="0" width="179" height="12">
+					<printWhenExpression><![CDATA[$F{dsc_produto} !=null]]></printWhenExpression>
+				</reportElement>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="9"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dsc_produto}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement uuid="d8ce8bf5-b71c-4f80-83d7-3be023beb6fc" positionType="Float" stretchType="RelativeToBandHeight" x="3" y="0" width="1" height="12">
+					<printWhenExpression><![CDATA[$F{dsc_produto} !=null]]></printWhenExpression>
+				</reportElement>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</line>
+			<line>
+				<reportElement uuid="e68e13c0-ed26-42fe-b75a-5efb05818a8d" positionType="Float" stretchType="RelativeToBandHeight" x="483" y="0" width="1" height="13"/>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</line>
+			<textField isStretchWithOverflow="true" pattern="#,##0.00;-#,##0.00">
+				<reportElement uuid="2195d456-f9cd-49bf-8fbd-799aacc7d5c8" x="333" y="0" width="151" height="12">
+					<printWhenExpression><![CDATA[$F{dsc_produto} !=null]]></printWhenExpression>
+				</reportElement>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Bottom">
+					<font fontName="Arial" size="9"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{qtd_media_transporte_anual}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="2195d456-f9cd-49bf-8fbd-799aacc7d5c8" x="183" y="0" width="64" height="12">
+					<printWhenExpression><![CDATA[$F{dsc_produto} !=null]]></printWhenExpression>
+				</reportElement>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Bottom">
+					<font fontName="Arial" size="9"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{num_onu}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement uuid="0839caa5-abbe-4ae8-b0b5-13dcfceb3715" positionType="Float" x="3" y="12" width="481" height="1">
+					<printWhenExpression><![CDATA[$F{dsc_produto} !=null]]></printWhenExpression>
+				</reportElement>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</line>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="6"/>
+	</pageFooter>
+</jasperReport>

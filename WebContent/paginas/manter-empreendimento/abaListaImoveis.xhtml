@@ -1,0 +1,277 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core"
+ xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.prime.com.tr/ui">
+
+	<h:form id="formListaImoveis">
+		<h3 class="titulo-grupo" style="font-weight: bold;">Imóveis Rurais vinculados ao empreendimento:</h3>
+		<h:panelGrid id="listaImoveisAssociados">
+
+			<!-- 
+			
+			
+			
+			TABELA IMOVEL 
+			
+			
+			
+			-->
+			<p:dataTable emptyMessage="Nenhum registro encontrado." style="margin-left: -5px" value="#{listaImoveisController.empreendimento.imovelCollection}" var="imovel"
+				paginator="true" rows="8" paginatorPosition="bottom" paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}">
+				
+				<p:column style="width: 80px;">
+					<f:facet name="header">Itr</f:facet>
+					<h:outputLabel value="#{imovel.imovelRural.numItr}" />
+				</p:column>
+
+				<p:column>
+					<f:facet name="header">Denominação</f:facet>
+					<h:outputLabel value="#{imovel.imovelRural.desDenominacao}" />
+				</p:column>
+
+				<p:column>
+					<f:facet name="header">Valor Área</f:facet>
+					<h:outputLabel value="#{imovel.imovelRural.valArea}" />
+				</p:column>
+
+				<p:column>
+					<f:facet name="header">Cartório</f:facet>
+					<h:outputLabel value="#{imovel.imovelRural.desCartorio}" />
+				</p:column>
+
+				<p:column>
+					<f:facet name="header">Comarca</f:facet>
+					<h:outputLabel value="#{imovel.imovelRural.desComarca}" />
+				</p:column>
+
+				<p:column>
+					<f:facet name="header">Matricula</f:facet>
+					<h:outputLabel value="#{imovel.imovelRural.numMatricula}" />
+				</p:column>
+
+				<p:column>
+					<f:facet name="header">Num. de<br />Registro</f:facet>
+					<h:outputLabel value="#{imovel.imovelRural.numRegistro}" />
+				</p:column>
+
+				<p:column>
+					<f:facet name="header">Ações</f:facet>
+					
+					<h:graphicImage value="/resources/imagens/atencao.png" rendered="#{listaImoveisController.exibeAlertaRequerenteAlterado(imovel)}"
+						title="O requerente deste imóvel foi alterado." alt="O requerente deste imóvel foi alterado."/>
+
+					<p:commandLink oncomplete="imovelDialog.show()" title="Visualisar Imóvel Rural" process="@this" update="tabAbas:conteudoDialogImovel"
+						action="#{listaImoveisController.carregarImovelComEndereco()}">
+						
+						<h:graphicImage title="Visualisar Imóvel Rural" value="/resources/img/ico-pesquisa.png" />
+						<f:setPropertyActionListener target="#{listaImoveisController.imovelSelecionado}" value="#{imovel}" />
+					</p:commandLink>
+					
+					<p:commandLink disabled="#{listaImoveisController.desabilitarInclusaoOuRemocaoDeVinculo}" action="#{listaImoveisController.desassociarImovel()}" 
+						update="@form" title="Remover Vínculo" process="@this">
+						
+						<h:graphicImage title="Remover Vínculo" value="/resources/img/ico-excluir.png" />
+						<f:setPropertyActionListener target="#{listaImoveisController.imovelSelecionado}" value="#{imovel}" />
+					</p:commandLink>
+				</p:column>
+			</p:dataTable>
+		</h:panelGrid>
+
+		<br /><br /><br />
+
+		<h3 class="titulo-grupo" style="font-weight: bold;">Selecionar Imóveis para associar ao Empreendimento:</h3>
+
+		<h:panelGrid id="listaImoveis">
+
+			<!-- 
+			
+			
+			
+			TABELA IMOVEL RURAL 
+			
+			
+			
+			-->
+			<p:dataTable emptyMessage="Nenhum registro encontrado." style="margin-left: -5px" value="#{listaImoveisController.listaImovelRuralModel}" var="imovel" lazy="true"
+				paginator="true" rows="8" paginatorPosition="bottom" paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}">
+				
+				<p:column style="width: 80px;">
+					<f:facet name="header">Itr</f:facet>
+					<h:outputLabel value="#{imovel.numItr}" />
+				</p:column>
+
+				<p:column>
+					<f:facet name="header">Denominação</f:facet>
+					<h:outputLabel value="#{imovel.desDenominacao}" />
+				</p:column>
+
+				<p:column>
+					<f:facet name="header">Vl. Área</f:facet>
+					<h:outputLabel value="#{imovel.valArea}" />
+				</p:column>
+
+				<p:column>
+					<f:facet name="header">Cartório</f:facet>
+					<h:outputLabel value="#{imovel.desCartorio}" />
+				</p:column>
+
+				<p:column>
+					<f:facet name="header">Comarca</f:facet>
+					<h:outputLabel value="#{imovel.desComarca}" />
+				</p:column>
+
+				<p:column>
+					<f:facet name="header">Matricula</f:facet>
+					<h:outputLabel value="#{imovel.numMatricula}" />
+				</p:column>
+
+				<p:column>
+					<f:facet name="header">Num. de<br/>Registro</f:facet>
+					<h:outputLabel value="#{imovel.numRegistro}" />
+				</p:column>
+
+				<p:column>
+					<f:facet name="header">Ações</f:facet>
+					<h:panelGroup id="pnlGroupBotoesListaImoveisNaoAssociados" rendered="#{listaImoveisController.ocultarBotoes(imovel)}">
+
+						<p:commandLink id="visualizar" oncomplete="imovelRuralDialog.show()" title="Visualisar Imóvel Rural" process="@this" update="tabAbas:conteudoDialogImovelRural">
+							<h:graphicImage title="Visualisar Imóvel Rural" value="/resources/img/ico-pesquisa.png" />
+							<f:setPropertyActionListener target="#{listaImoveisController.imovelRuralSelecionado}" value="#{imovel}" />
+						</p:commandLink>
+						
+						<p:commandLink id="associar" action="#{listaImoveisController.associarImovelAoEmpreendimento()}" update="@form" style="padding-left: 2px;"
+							rendered="#{listaImoveisController.podeAssociar(imovel)}" disabled="#{empreendimentoController.visualizarEmpreendimento}" 
+							title="Associar Imóvel ao Empreendimento" process="@this">
+							
+							<h:graphicImage title="Associar Imóvel ao Empreendimento" value="/resources/img/ico-aprovado.png" />
+							<f:setPropertyActionListener target="#{listaImoveisController.imovelRuralSelecionado}" value="#{imovel}" />
+						</p:commandLink>
+
+						<p:commandLink id="botaoIcnPendencia" disabled="true" rendered="#{!listaImoveisController.podeAssociar(imovel)}">
+							<h:graphicImage id="icnPendencia" width="19px" value="/resources/img/warning.png" style="border-width:0px!important"
+								title="Este Imóvel está com pendências no Cadastro/Registro, vá em Cadastro de Imóvel Rural e Finalize o Cadastro/Registro." />
+						</p:commandLink>
+					</h:panelGroup>
+				</p:column>
+			</p:dataTable>
+		</h:panelGrid>
+
+		<br /><br />
+
+		<h:panelGroup rendered="#{!empreendimentoController.visualizarEmpreendimento}">
+			<h4 class="titulo-grupo" style="font-weight: bold; color: red;">
+				Caso o imóvel não esteja cadastrado,
+				<h:commandLink style="color:blue;" action="/paginas/manter-imoveis/cefir/listaImoveisRural.xhtml" immediate="true">clique aqui</h:commandLink>
+				para cadastrá-lo.
+			</h4>
+			<h4 class="titulo-grupo" style="font-weight: bold; color: red;">Após o Cadastro/Registro realizado com sucesso, retorne para vincula-lo ao empreendimento.</h4>
+		</h:panelGroup>
+	</h:form>
+
+	<!-- 
+	
+	
+	
+	DIALOG TABELA IMOVEL
+	
+	
+	
+	-->
+	<p:dialog id="imovelDialog" widgetVar="imovelDialog" header="Detalhes do Imóvel" showEffect="fade" 
+		hideEffect="fade" draggable="true" resizable="false" position="center" width="600">
+		
+		<h:panelGrid id="conteudoDialogImovel">
+			<h3 class="titulo-grupo" style="font-weight: bold;">Detalhes do Imóvel:</h3>
+
+			<h:panelGrid columns="2">
+				<h:outputText style="font-weight:bold;" value="Número do ITR:" />
+				<h:outputText value="#{listaImoveisController.imovelSelecionado.imovelRural.numItr}" />
+
+				<h:outputText style="font-weight:bold;" value="Denominação:" />
+				<h:outputText value="#{listaImoveisController.imovelSelecionado.imovelRural.desDenominacao}" />
+
+				<h:outputText style="font-weight:bold;" value="Área:" />
+				<h:outputText value="#{listaImoveisController.imovelSelecionado.imovelRural.valArea}" />
+
+				<h:outputText style="font-weight:bold;" value="Cartório:" />
+				<h:outputText value="#{listaImoveisController.imovelSelecionado.imovelRural.desCartorio}" />
+
+				<h:outputText style="font-weight:bold;" value="Comarca:" />
+				<h:outputText value="#{listaImoveisController.imovelSelecionado.imovelRural.desComarca}" />
+			</h:panelGrid>
+
+			<h:panelGrid columns="2">
+				<h:outputText style="font-weight:bold;" value="Livro:" />
+				<h:outputText value="#{listaImoveisController.imovelSelecionado.imovelRural.desLivro}" />
+
+				<h:outputText style="font-weight:bold;" value="Folha:" />
+				<h:outputText value="#{listaImoveisController.imovelSelecionado.imovelRural.numFolha}" />
+
+				<h:outputText style="font-weight:bold;" value="Matricula:" />
+				<h:outputText value="#{listaImoveisController.imovelSelecionado.imovelRural.numMatricula}" />
+
+				<h:outputText style="font-weight:bold;" value="Número de Registro:" />
+				<h:outputText value="#{listaImoveisController.imovelSelecionado.imovelRural.numRegistro}" />
+			</h:panelGrid>
+
+			<h:panelGrid>
+				<h:outputText style="font-weight:bold;" value="Endereço:" />
+				<h:outputText value="#{listaImoveisController.imovelSelecionado.ideEndereco.enderecoCompleto}" />
+			</h:panelGrid>
+		</h:panelGrid>
+	</p:dialog>
+
+	<!-- 
+	
+	
+	
+	DIALOG TABELA IMOVEL RURAL 
+	
+	
+	
+	-->
+	<p:dialog id="imovelRuralDialog" widgetVar="imovelRuralDialog" header="Detalhes do Imóvel" 
+		showEffect="fade" hideEffect="fade" draggable="true" resizable="false" position="center" width="600">
+		
+		<h:panelGrid id="conteudoDialogImovelRural">
+			<h3 class="titulo-grupo" style="font-weight: bold;">Detalhes do Imóvel:</h3>
+
+			<h:panelGrid columns="2">
+				<h:outputText style="font-weight:bold;" value="Número do ITR:" />
+				<h:outputText value="#{listaImoveisController.imovelRuralSelecionado.numItr}" />
+
+				<h:outputText style="font-weight:bold;" value="Denominação:" />
+				<h:outputText value="#{listaImoveisController.imovelRuralSelecionado.desDenominacao}" />
+
+				<h:outputText style="font-weight:bold;" value="Área:" />
+				<h:outputText value="#{listaImoveisController.imovelRuralSelecionado.valArea}" />
+
+				<h:outputText style="font-weight:bold;" value="Cartório:" />
+				<h:outputText value="#{listaImoveisController.imovelRuralSelecionado.desCartorio}" />
+
+				<h:outputText style="font-weight:bold;" value="Comarca:" />
+				<h:outputText value="#{listaImoveisController.imovelRuralSelecionado.desComarca}" />
+
+			</h:panelGrid>
+
+			<h:panelGrid columns="2">
+				<h:outputText style="font-weight:bold;" value="Livro:" />
+				<h:outputText value="#{listaImoveisController.imovelRuralSelecionado.desLivro}" />
+
+				<h:outputText style="font-weight:bold;" value="Folha:" />
+				<h:outputText value="#{listaImoveisController.imovelRuralSelecionado.numFolha}" />
+
+				<h:outputText style="font-weight:bold;" value="Matricula:" />
+				<h:outputText value="#{listaImoveisController.imovelRuralSelecionado.numMatricula}" />
+
+				<h:outputText style="font-weight:bold;" value="Número de Registro:" />
+				<h:outputText value="#{listaImoveisController.imovelRuralSelecionado.numRegistro}" />
+			</h:panelGrid>
+
+			<h:panelGrid>
+				<h:outputText style="font-weight:bold;" value="Endereço:" />
+				<h:outputText value="#{listaImoveisController.imovelRuralSelecionado.imovel.ideEndereco.enderecoCompleto}" />
+			</h:panelGrid>
+		</h:panelGrid>
+	</p:dialog>
+</ui:composition>

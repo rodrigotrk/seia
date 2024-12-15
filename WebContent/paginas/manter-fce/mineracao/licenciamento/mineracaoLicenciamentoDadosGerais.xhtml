@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.prime.com.tr/ui">
+	<h:form id="minLicDadosGerais">
+		<h:panelGrid id="gridSubstanciaMineral" style="margin-left:10px;">
+			<h:outputText styleClass="titulo-grupo-bold" value="* #{bundle.fce_lic_min_substancia_mineral}" />
+			<p:commandLink title="#{bundle.fce_lic_min_incluir_substancia}" onclick ="dialogIncluirSubstanciaMineral.show()" update="formIncluirSubstancia"
+				disabled="#{fceLicenciamentoMineracaoController.desabilitarTudo}">
+				<h:graphicImage title="#{bundle.fce_lic_min_incluir_substancia}" value="/resources/img/ico-expandir.png" style="margin-right: 2px;"/>
+				<h:outputText value="#{bundle.fce_lic_min_incluir_substancia}"/>
+			</p:commandLink>
+
+			<p:dataTable id="dataTableMinLicSubstancia"
+				style="margin-left:5px; width: 620px;"
+				value="#{fceLicenciamentoMineracaoController.listaFceLicenciamentoMineralSubstanciaMineral}"
+				var="substancia"
+				rendered="#{fceLicenciamentoMineracaoController.substanciaMineralAdicionada}">
+				<p:column headerText="Substância" style="text-align:center;">
+					<h:outputText value="#{substancia.substanciaMineralTipologia.ideSubstanciaMineral.nomSubstanciaMineral}" />
+				</p:column>
+				<p:column headerText="Grupo" style="text-align:center;">
+					<h:outputText value="#{substancia.substanciaMineralTipologia.ideTipologia.ideTipologiaPai.desTipologia}" />
+				</p:column>
+				<p:column headerText="Produção Anual" style="text-align:center;">
+					<h:panelGroup rendered="#{!substancia.outros}">
+						<p:inputText id="numProducao" value="#{substancia.numProducaoAnual}" onkeyup="mascararNumeroAndAddZeros(this, event, 13, 2, '.', ',', 3);" maxlength="16" 
+							disabled="#{substancia.confirmado}" style="width:100px;" converter="doubleConverter">
+							<f:convertNumber integerOnly="false" maxIntegerDigits="10" minFractionDigits="2" />
+							<!-- <p:ajax event="blur"/> -->
+						</p:inputText>
+						<h:outputText style="margin-left:5px;" value="#{substancia.substanciaMineralTipologia.labelUnidadeMedidaSubstanciaMineral}" />
+					</h:panelGroup>
+				</p:column>
+				<p:column headerText="Ação" style="text-align:center;">
+					<p:commandLink update="tabLicMineracao:minLicDadosGerais:dataTableMinLicSubstancia" actionListener="#{fceLicenciamentoMineracaoController.confirmarSubstanciaMineral()}"
+						rendered="#{!substancia.confirmado and !substancia.outros}" disabled="#{fceLicenciamentoMineracaoController.desabilitarTudo}" process="tabLicMineracao:minLicDadosGerais:dataTableMinLicSubstancia">
+						<h:graphicImage title="Confirmar" value="/resources/img/ico-aprovar-notificacao.png" />
+						<f:attribute name="substancia" value="#{substancia}"/>
+					</p:commandLink>
+				
+					<p:commandLink update="tabLicMineracao:minLicDadosGerais:dataTableMinLicSubstancia" actionListener="#{fceLicenciamentoMineracaoController.editarSubstanciaMineral()}" 
+						rendered="#{substancia.confirmado and !substancia.outros}" disabled="#{fceLicenciamentoMineracaoController.desabilitarTudo}" process="tabLicMineracao:minLicDadosGerais:dataTableMinLicSubstancia">
+						<h:graphicImage title="Editar" value="/resources/img/ico-editar.png" />
+						<f:attribute name="substancia" value="#{substancia}"/>
+					</p:commandLink>
+				
+					<p:commandLink update="tabLicMineracao:minLicDadosGerais:dataTableMinLicSubstancia" oncomplete="confirmaExclusaoSubstanciaMineral.show()" title="Excluir"
+						disabled="#{fceLicenciamentoMineracaoController.desabilitarTudo}">
+						<h:graphicImage title="Excluir" value="/resources/img/ico-excluir.png" />
+						<f:setPropertyActionListener target="#{fceLicenciamentoMineracaoController.fceLicenciamentoMineralSubstanciaMineral}" value="#{substancia}" />
+					</p:commandLink>
+				</p:column>
+			</p:dataTable>
+		</h:panelGrid>
+		
+		<h:panelGrid id="gridIntervencaoCorpoHidrico" style="margin-left:10px; margin-top:20px;">
+			<h:outputText styleClass="titulo-grupo-bold" value="* #{bundle.fce_lic_min_intervencao}" />
+			<p:selectOneRadio
+				value="#{fceLicenciamentoMineracaoController.fceLicenciamentoMineral.indPesqintervRecursoHidrico}"
+				valueChangeListener="#{fceLicenciamentoMineracaoController.changeIntervencaoCorpoHidrico()}"
+				disabled="#{fceLicenciamentoMineracaoController.desabilitarTudo}">
+				<f:selectItem itemLabel="Sim" itemValue="true" />
+				<f:selectItem itemLabel="Não" itemValue="false" />
+				<p:ajax event="change" update="tabLicMineracao:minLicDadosGerais:gridIntervencaoCorpoHidrico"/>
+			</p:selectOneRadio>
+			
+			<h:panelGrid columns="2" style="margin-left:15px;" rendered="#{fceLicenciamentoMineracaoController.intervencaoCorpoHidrico}">
+				<p:selectBooleanCheckbox value="#{fceLicenciamentoMineracaoController.fceLicenciamentoMineral.indEsferaEstadual}" disabled="#{fceLicenciamentoMineracaoController.desabilitarTudo}"/>
+				<h:outputText style="margin-left:5px;" value="Estadual"/>
+				<p:selectBooleanCheckbox value="#{fceLicenciamentoMineracaoController.fceLicenciamentoMineral.indEsferaFederal}" disabled="#{fceLicenciamentoMineracaoController.desabilitarTudo}"/>
+				<h:outputText style="margin-left:5px;" value="Federal"/>
+			</h:panelGrid>				
+		</h:panelGrid>
+		
+		<h:panelGrid style="margin-left:10px; margin-top:20px;">
+			<h:outputText styleClass="titulo-grupo-bold" value="* #{bundle.fce_lic_min_supressao}" />
+			<p:selectOneRadio
+				value="#{fceLicenciamentoMineracaoController.fceLicenciamentoMineral.indSupressao}"
+				disabled="true">
+				<f:selectItem itemLabel="Sim" itemValue="true" />
+				<f:selectItem itemLabel="Não" itemValue="false" />
+			</p:selectOneRadio>
+		</h:panelGrid>
+		
+		<h:panelGrid style="margin-left:10px; margin-top:20px;">
+			<h:outputText styleClass="titulo-grupo-bold" value="* #{bundle.fce_lic_min_regime_exploracao}" />
+			<p:selectManyCheckbox
+				value="#{fceLicenciamentoMineracaoController.listaRegimeExploracaoSelected}"
+				disabled="#{fceLicenciamentoMineracaoController.desabilitarTudo}"
+				layout="pageDirection" 
+				converter="simpleEntityConverter">
+				<f:selectItems value="#{fceLicenciamentoMineracaoController.listaRegimeExploracao}" var="regimeExploracao" itemLabel="#{regimeExploracao.nomRegimeExploracao}" itemValue="#{regimeExploracao}" />
+				<p:ajax event="change"  />
+			</p:selectManyCheckbox>
+		</h:panelGrid>
+		
+		<h:panelGrid style="margin-left:10px; margin-top:20px;" rendered="#{fceLicenciamentoMineracaoController.existeProcessoOutorga}">
+			<h:outputText styleClass="titulo-grupo-bold" value="#{bundle.fce_lic_min_suprimento_agua}" />
+			<h:outputText styleClass="titulo-grupo-bold" style="margin-left:13px;" value="#{bundle.fce_lic_min_outorga}" />
+			
+			<p:dataTable id="dataTableMinLicOutMin"
+				style="margin-left:5px; width: 600px;"
+				value="#{fceLicenciamentoMineracaoController.listaOutorgaMineracao}"
+				var="outorgaMineracao">
+				<p:column headerText="#{bundle.fce_lic_min_numero_portaria}" style="text-align:center;">
+					<p:inputText value="#{outorgaMineracao.numPortariaOutorga}" maxlength="20"  disabled="#{outorgaMineracao.confirmado}">
+						<!-- <p:ajax event="blur" /> -->
+					</p:inputText>
+				</p:column>
+				<p:column headerText="#{bundle.fce_lic_min_numero_processo}" style="text-align:center;">
+					<h:outputText value="#{outorgaMineracao.numProcessoOutorga}" />
+				</p:column>
+				<p:column headerText="Ação" style="text-align:center;">
+					<p:commandLink update="tabLicMineracao:minLicDadosGerais:dataTableMinLicOutMin" actionListener="#{fceLicenciamentoMineracaoController.confirmarOutorgaMineracao()}"
+						rendered="#{!outorgaMineracao.confirmado}" disabled="#{fceLicenciamentoMineracaoController.desabilitarTudo}" process="tabLicMineracao:minLicDadosGerais:dataTableMinLicOutMin">
+						<h:graphicImage title="Confirmar" value="/resources/img/ico-aprovar-notificacao.png" />
+						<f:attribute name="outorgaMineracao" value="#{outorgaMineracao}"/>
+					</p:commandLink>
+				
+					<p:commandLink update="tabLicMineracao:minLicDadosGerais:dataTableMinLicOutMin" actionListener="#{fceLicenciamentoMineracaoController.editarOutorgaMineracao()}" 
+						rendered="#{outorgaMineracao.confirmado}" disabled="#{fceLicenciamentoMineracaoController.desabilitarTudo}" process="tabLicMineracao:minLicDadosGerais:dataTableMinLicOutMin">
+						<h:graphicImage title="Editar" value="/resources/img/ico-editar.png" />
+						<f:attribute name="outorgaMineracao" value="#{outorgaMineracao}"/>
+					</p:commandLink>
+				</p:column>
+			</p:dataTable>
+		</h:panelGrid>
+		
+		<h:panelGrid style="margin-left:10px; margin-top:20px;">
+			<h:outputText styleClass="titulo-grupo-bold" value="* #{bundle.fce_lic_min_suprimento_energia}" />
+			<p:selectManyCheckbox
+				value="#{fceLicenciamentoMineracaoController.listaTipoOrigemEnergiaSelected}"
+				valueChangeListener="#{fceLicenciamentoMineracaoController.changeOrigemEnergia()}"
+				disabled="#{fceLicenciamentoMineracaoController.desabilitarTudo}"
+				layout="pageDirection" 
+				converter="simpleEntityConverter">
+				<f:selectItems value="#{fceLicenciamentoMineracaoController.listaTipoOrigemEnergia}" var="energia" itemLabel="#{energia.dscTipoOrigemEnergia}" itemValue="#{energia}" />
+				<p:ajax event="change"  />
+			</p:selectManyCheckbox>
+		</h:panelGrid>
+		
+		<!-- PANELGRID BOTOES -->
+		<h:panelGrid id="gridBotoes" rendered="#{!fceLicenciamentoMineracaoController.desabilitarTudo}" columns="2" style="margin-top:40px; margin-left:575px;">
+			<p:commandButton id="btnVoltar" value="Voltar" style="width:90px;" update="minLicDadosGerais" onclick="voltarFceLicMineracao.show();" global="false"/>
+			<p:commandButton id="btnAvancar" value="Avançar" style="width:90px;" update="tabLicMineracao" process="minLicDadosGerais" action="#{fceLicenciamentoMineracaoController.avancarAba()}" /> 
+		</h:panelGrid>
+		<!-- FIM DO PANELGRID BOTOES -->
+	</h:form>
+</ui:composition>

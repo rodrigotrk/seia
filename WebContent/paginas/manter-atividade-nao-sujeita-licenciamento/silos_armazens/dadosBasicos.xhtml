@@ -1,0 +1,453 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+				xmlns:h="http://java.sun.com/jsf/html" 
+				xmlns:f="http://java.sun.com/jsf/core" 
+				xmlns:ui="http://java.sun.com/jsf/facelets" 
+				xmlns:p="http://primefaces.prime.com.tr/ui"
+				xmlns:c="http://java.sun.com/jsp/jstl/core">
+
+	<p:remoteCommand name="updateSilosCar" actionListener="#{silosArmazensController.limparGridOperacao()}" process="@this"/>
+<!-- 	  <p:poll interval="1" listener="#{silosArmazensController.poll}" widgetVar="dadosBasicosPoll" global="false"/>   -->
+	<!-- Empreendimento -->
+		<h:panelGrid columns="3" id="panelFiltroEmpreendimentoSilos" style="margin-botton:10px;" rendered="#{silosArmazensController.empreendimentoEditavel}">
+		 	<h:outputText id="lblEmpreendimento" value="Empreendimento:" />
+			<p:inputText value="#{silosArmazensController.empreendimento.nomEmpreendimento}" disabled="true" style="width: 200px;"/>
+		    <p:commandLink onclick="dialogSelecionarEmpreendimento.show();">
+		    	<h:graphicImage title="Pesquisar" value="/resources/img/ico-pesquisa.png" />
+		    	<f:setPropertyActionListener value="#{silosArmazensController.requerente}" target="#{selecionarEmpreendimentoController.requerente}" />
+		    	<f:setPropertyActionListener value="#{silosArmazensController.telaDestionEnum}" target="#{selecionarEmpreendimentoController.destinoEnum}" />
+		    	
+		    </p:commandLink>
+		</h:panelGrid>
+		
+		<h:panelGroup id="gridRequerente" style="margin-botton:10px;">
+			<fieldset>
+				<legend>Dados do Requerente</legend>
+				<h:panelGrid columns="2">
+					<h:panelGrid rendered="#{silosArmazensController.requerente.pessoaJuridica != null and silosArmazensController.requerente.pessoaJuridica.idePessoaJuridica != null}">
+						<h:outputText value="#{bundle.geral_lbl_razao_social}: #{silosArmazensController.requerente.pessoaJuridica.nomRazaoSocial}" />
+						<h:outputText value="#{bundle.geral_lbl_inscricao_estadual}: #{silosArmazensController.requerente.pessoaJuridica.numInscricaoEstadual}" />
+					</h:panelGrid>
+					
+					<h:panelGrid rendered="#{silosArmazensController.requerente.pessoaFisica != null and silosArmazensController.requerente.pessoaFisica.idePessoaFisica != null}">
+						<h:outputText value="#{bundle.geral_lbl_nome} #{silosArmazensController.requerente.pessoaFisica.nomPessoa}" />
+						<h:outputText value="#{bundle.geral_lbl_cpf}: #{silosArmazensController.requerente.pessoaFisica.numCpfFormatado}" />
+					</h:panelGrid>					
+					
+					<h:panelGrid style="margin-left:5px;" rendered="#{silosArmazensController.requerente.pessoaJuridica != null and silosArmazensController.requerente.pessoaJuridica.idePessoaJuridica != null}">
+						<h:panelGroup>
+							<h:outputText value="#{bundle.geral_lbl_cnpj}:" />
+							<h:outputText value="#{silosArmazensController.requerente.pessoaJuridica.numCnpj}" >
+								<f:converter converterId="cnpjConverter" />
+							</h:outputText>
+						</h:panelGroup>
+						<h:outputText value="#{bundle.geral_lbl_inscricao_municipal}: #{silosArmazensController.requerente.pessoaJuridica.numInscricaoMunicipal}" />
+					</h:panelGrid>
+					
+				</h:panelGrid>
+				
+			 	<!-- ATIVIDADE(S) CNAE -->
+				<h:panelGrid style="margin-left:4px;" rendered="#{silosArmazensController.requerente.pessoaJuridica != null and silosArmazensController.requerente.pessoaJuridica.idePessoaJuridica != null}">
+					<!-- <p:dataList id="tableCnaeSilosArmazens" 
+						value="#{silosArmazensController.requerente.pessoaJuridica.pessoaJuridicaCnaeCollection}" 
+						var="pjcnae" 
+						type="ordered" 
+						styleClass="no-border">
+						<h:outputText value="CNAE - Seção:"/>
+						<h:outputText value="#{pjcnae.ideCnae.codCnae} - #{pjcnae.ideCnae.desCnae}" style="margin-left:5px;"/>
+					</p:dataList> -->
+					
+					<p:dataTable value="#{silosArmazensController.requerente.pessoaJuridica.pessoaJuridicaCnaeCollection}" 
+						var="pjcnae" style="width: 680px;">
+					
+					<p:column headerText="CNAE - Seção" style="text-align: -webkit-auto;">
+						<h:outputText value="#{pjcnae.ideCnae.codCnae} - #{pjcnae.ideCnae.desCnae}" style="margin-left:5px;"/>
+					</p:column>
+					</p:dataTable>
+					
+				</h:panelGrid>
+				<!-- ATIVIDADE(S) CNAE -->
+				
+				<!-- ENDEREÇO PJ -->				
+				<h:panelGrid columns="2" rendered="#{silosArmazensController.requerente.pessoaJuridica != null and silosArmazensController.requerente.pessoaJuridica.idePessoaJuridica != null}">
+					<h:panelGrid>
+						<h:outputText value="#{bundle.geral_lbl_endereco}: #{silosArmazensController.requerente.pessoaJuridica.pessoa.endereco.enderecoBasicoFormatado}" />
+						<h:outputText value="#{bundle.geral_lbl_cidade}: #{silosArmazensController.requerente.pessoaJuridica.pessoa.endereco.ideLogradouro.ideBairro.ideMunicipio.nomMunicipio}" />
+						<h:outputText value="#{bundle.geral_lbl_cep}: #{silosArmazensController.requerente.pessoaJuridica.pessoa.endereco.ideLogradouro.numCepFormatado}" />
+					</h:panelGrid>
+					
+					<h:panelGrid>
+						<h:outputText value="#{bundle.geral_lbl_bairro}: #{silosArmazensController.requerente.pessoaJuridica.pessoa.endereco.ideLogradouro.ideBairro.nomBairro}" />
+						<h:outputText value="#{bundle.geral_lbl_estado}: #{silosArmazensController.requerente.pessoaJuridica.pessoa.endereco.ideLogradouro.ideBairro.ideMunicipio.ideEstado.nomEstado}" />
+						<p:spacer width="0" height="12"/>
+					</h:panelGrid>
+					
+					<p:spacer width="0" height="12"/>
+					<h:panelGrid style="margin-top:-26px;">
+						<p:dataList id="dataTelefonesRequerentePJ" value="#{silosArmazensController.requerente.pessoaJuridica.pessoa.telefoneCollection}" var="tel" type="ordered" styleClass="no-border">
+							<h:outputText value="#{silosArmazensController.getLabelTelefone(tel)}#{tel.ideTipoTelefone.nomTipoTelefone}: #{tel.numTelefone}" />
+					    </p:dataList>
+					</h:panelGrid>
+					
+				</h:panelGrid>
+				<!-- ENDEREÇO --> 
+				
+				<!-- ENDEREÇO PF -->				
+				<h:panelGrid columns="2" rendered="#{silosArmazensController.requerente.pessoaFisica != null and silosArmazensController.requerente.pessoaFisica.idePessoaFisica != null}">
+					<h:panelGrid>
+						<h:outputText value="#{bundle.geral_lbl_endereco}: #{silosArmazensController.requerente.pessoaFisica.pessoa.endereco.enderecoBasicoFormatado}" />
+						<h:outputText value="#{bundle.geral_lbl_cidade}: #{silosArmazensController.requerente.pessoaFisica.pessoa.endereco.ideLogradouro.ideBairro.ideMunicipio.nomMunicipio}" />
+						<h:outputText value="#{bundle.geral_lbl_cep}: #{silosArmazensController.requerente.pessoaFisica.pessoa.endereco.ideLogradouro.numCepFormatado}" />
+					</h:panelGrid>
+					
+					<h:panelGrid>
+						<h:outputText value="#{bundle.geral_lbl_bairro}: #{silosArmazensController.requerente.pessoaFisica.pessoa.endereco.ideLogradouro.ideBairro.nomBairro}" />
+						<h:outputText value="#{bundle.geral_lbl_estado}: #{silosArmazensController.requerente.pessoaFisica.pessoa.endereco.ideLogradouro.ideBairro.ideMunicipio.ideEstado.nomEstado}" />
+						<p:spacer width="0" height="12"/>
+					</h:panelGrid>
+					
+					<p:spacer width="0" height="12"/>
+					<h:panelGrid style="margin-top:-26px;">
+						<p:dataList id="dataTelefonesRequerentePF" value="#{silosArmazensController.requerente.pessoaFisica.pessoa.telefoneCollection}" var="tel" type="ordered" styleClass="no-border">
+							<h:outputText value="#{silosArmazensController.getLabelTelefone(tel)}#{tel.ideTipoTelefone.nomTipoTelefone}: #{tel.numTelefone}" />
+					    </p:dataList>
+					</h:panelGrid>
+					
+				</h:panelGrid>
+				<!-- ENDEREÇO --> 				
+				
+				<!-- REPRESENTANTES LEGAIS -->
+				<h:panelGrid style="margin-left:4px;" rendered="#{silosArmazensController.requerente.pessoaJuridica != null and silosArmazensController.requerente.pessoaJuridica.idePessoaJuridica != null}">
+				
+					<h:outputText value="Representante(s) Legal(is):" style="font-weight: bold;"/>
+					<p:dataList id="listReplegal" value="#{silosArmazensController.requerente.pessoaJuridica.representanteLegalCollection}" var="replegal" type="ordered" styleClass="no-border">
+						<h:panelGrid columns="3" >
+						<h:outputText value="#{bundle.geral_lbl_nome} #{replegal.idePessoaFisica.nomPessoa}" />
+						<h:outputText value="#{bundle.lbl_email}: #{replegal.idePessoaFisica.pessoa.desEmail}" style="margin-left:5px;padding-left: 10px;"/>
+						<p:dataList id="dataTelefonesRepresentates" value="#{replegal.idePessoaFisica.pessoa.telefoneCollection}" var="tel" type="ordered" styleClass="no-border">
+							<h:outputText value="#{silosArmazensController.getLabelTelefone(tel)}#{tel.ideTipoTelefone.nomTipoTelefone}: #{tel.numTelefone}" style="padding-left: 10px;" />
+					    </p:dataList>
+						</h:panelGrid>
+						<p:spacer height="10"/>
+					</p:dataList>
+				</h:panelGrid>
+				<!-- REPRESENTANTES LEGAIS -->				
+			</fieldset>
+		</h:panelGroup>
+		
+		<p:spacer width="0" height="10" />
+		
+		<h:panelGroup rendered="#{not empty silosArmazensController.empreendimento}">
+			<fieldset>
+				<legend>Dados do Empreendimento</legend>
+				
+				<h:panelGrid columns="2">
+					<h:panelGrid>
+						<h:outputText value="#{bundle.geral_lbl_nome} #{silosArmazensController.empreendimento.nomEmpreendimento}" />
+						<h:outputText value="#{bundle.geral_lbl_endereco}: #{silosArmazensController.empreendimento.endereco.enderecoBasicoFormatado}" />
+						<h:outputText value="#{bundle.geral_lbl_cidade}: #{silosArmazensController.empreendimento.endereco.ideLogradouro.ideBairro.ideMunicipio.nomMunicipio}" />
+						<h:outputText value="#{bundle.geral_lbl_cep}: #{silosArmazensController.empreendimento.endereco.ideLogradouro.numCepFormatado}" />
+					</h:panelGrid>
+					
+					<h:panelGrid>
+						<p:spacer width="0" height="12"/>
+						<h:outputText value="#{bundle.geral_lbl_bairro}: #{silosArmazensController.empreendimento.endereco.ideLogradouro.ideBairro.nomBairro}" />
+						<h:outputText value="#{bundle.geral_lbl_estado}: #{silosArmazensController.empreendimento.endereco.ideLogradouro.ideBairro.ideMunicipio.ideEstado.nomEstado}" />
+						<p:spacer width="0" height="12"/>
+					</h:panelGrid>
+					
+				</h:panelGrid>
+				
+				<h:panelGrid id="enderecoCorrespondencia" columns="2" rendered="#{not empty silosArmazensController.empreendimento and not empty silosArmazensController.enderecoCorrespondencia}">
+					<h:panelGrid>
+						<h:outputText value="Endereço para correspondência: #{silosArmazensControliler.enderecoCorrespondencia.enderecoBasicoFormatado}" />
+						<h:outputText value="#{bundle.geral_lbl_cidade}: #{silosArmazensController.enderecoCorrespondencia.ideLogradouro.ideBairro.ideMunicipio.nomMunicipio}" />
+						<h:outputText value="#{bundle.geral_lbl_cep}: #{silosArmazensController.enderecoCorrespondencia.ideLogradouro.numCepFormatado}" />
+					</h:panelGrid>
+					
+					<h:panelGrid>
+						<h:outputText value="#{bundle.geral_lbl_bairro}: #{silosArmazensController.enderecoCorrespondencia.ideLogradouro.ideBairro.nomBairro}" />
+						<h:outputText value="#{bundle.geral_lbl_estado}: #{silosArmazensController.enderecoCorrespondencia.ideLogradouro.ideBairro.ideMunicipio.ideEstado.nomEstado}" />
+						<p:spacer width="0" height="12"/>
+					</h:panelGrid>
+				</h:panelGrid>
+				
+				<h:panelGrid id="gridResponsavelTecnico">
+					<p:dataTable id="tableResponsavelTecnico" 
+						widgetVar="tableResponsavelTecnico" 
+						value="#{silosArmazensController.empreendimento.responsavelEmpreendimentoCollection}" 
+						var="respTecnico" 
+						emptyMessage="#{bundle.msg_lista_vazia}"
+						style="width:400px;">
+						<f:facet name="header">
+							<h:outputText value="#{bundle.lbl_cpm_responsavel_tecnico}" />					
+						</f:facet>
+						<p:column headerText="#{bundle.lbl_nome}">
+							<h:outputText value="#{respTecnico.idePessoaFisica.nomPessoa}" />
+						</p:column>
+						<p:column headerText="#{bundle.lbl_acao}">
+							<p:selectBooleanCheckbox value="#{respTecnico.selecionado}" 
+								disabled="#{silosArmazensController.isVisivel}"
+								style="margin-left:17px;">
+								<p:ajax listener="#{silosArmazensController.changeCheckResponsavelTecnico(respTecnico)}"
+										process="@this" />
+							</p:selectBooleanCheckbox>
+						</p:column>
+					</p:dataTable>
+				</h:panelGrid>
+				
+				<h:panelGrid id="gridTable">
+					<h:dataTable id="tableResp" value="#{silosArmazensController.silosArmazen.silosArmazensResponsavelTecnicos}" rendered="#{silosArmazensController.existeResponsavelPeloSilosArmazen}" var="pmResp">
+						<h:column>
+							<h:panelGrid id="grid2" style="width:375px;">
+								<h:outputText value="#{bundle.geral_lbl_nome} #{pmResp.idePessoaFisica.nomPessoa}"/>
+							
+								<h:panelGroup style="margin-top:-5px;">
+									<h:outputText value="#{bundle.geral_lbl_cpf_pontos}" />
+									<h:outputText value="#{pmResp.idePessoaFisica.numCpf}">
+										<f:converter converterId="cpfConverter"/>
+									</h:outputText>
+								</h:panelGroup>
+							
+								<h:outputText value="#{bundle.geral_lbl_carteira_conselho_classe}: #{pmResp.numeroCarteiraConselho}"/>
+								
+								<p:dataList id="dataTelefonesResponsaveis" value="#{pmResp.idePessoaFisica.pessoa.telefoneCollection}" var="tel" type="ordered" styleClass="no-border">
+									<h:outputText value="#{silosArmazensController.getLabelTelefone(tel)}#{tel.ideTipoTelefone.nomTipoTelefone}: #{tel.numTelefone}" />
+							    </p:dataList>
+							    
+							    <h:outputText value="#{bundle.lbl_email}: #{pmResp.idePessoaFisica.pessoa.desEmail}"/>
+							    
+							</h:panelGrid>
+						</h:column>
+					</h:dataTable>
+				</h:panelGrid>
+				
+				
+			</fieldset> 
+		</h:panelGroup>	
+		
+		<h:panelGroup id="silosSicar">
+		<h:panelGroup rendered="#{!silosArmazensController.existeResponsavelPeloSilosArmazenSemCarteira and silosArmazensController.isCarteiraCPM}">
+		
+		<h:panelGroup rendered="#{silosArmazensController.temImovelRural}">
+			
+			<p:spacer width="0" height="10" />
+			<fieldset>
+				<legend>Imóvel(eis) Rural(ais)</legend>
+				<p:spacer height="10"/>
+				
+				<h:panelGrid >
+
+					<p:commandLink oncomplete="dialogIncluirImovelCARSilos.show()"
+						actionListener="#{silosArmazensController.prepararDialogIncluirImovel()}"
+						update="formIncluirImovelCAR msg" disabled="#{silosArmazensController.isVisivel}">
+
+						<h:outputText
+							value="Incluir Imóvel rural"
+							style="margin-right:5px;" />
+						<h:graphicImage value="/resources/img/ico-expandir.png" />
+					</p:commandLink>
+
+
+					<p:dataTable value="#{silosArmazensController.silosArmazen.silosArmazensImovelRurals}"
+						var="silosCar" emptyMessage="Nenhum registro encontrado"
+						style="width: 680px;" lazy="true" paginator="true" rows="5" rowIndexVar="i"
+						paginatorPosition="bottom"
+						paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}" rendered="#{not empty silosArmazensController.silosArmazen.silosArmazensImovelRurals}">
+
+						<p:column headerText="Nome do Imóvel" >
+							<h:outputText
+								value="#{silosCar.ideImovel.imovelRural.desDenominacao}" />
+						</p:column>
+						
+						<p:column headerText="N° CAR" >
+							<h:outputText value="#{silosCar.ideImovel.imovelRural.imovelRuralSicar.numSicar}" />
+						</p:column>
+						
+						<p:column styleClass="text-center" headerText="Ações"
+							style="width: 80px;">
+							<p:commandLink oncomplete="confirmarExclusaoImovelCar.show();" process="@this" disabled="#{silosArmazensController.isVisivel}" 
+							rendered="#{silosCar.indNumCar}">
+								
+								<f:setPropertyActionListener target="#{silosArmazensController.excluirArmazensImovelRural}"
+									value="#{silosCar}" />	
+								<h:graphicImage title="Excluir"
+									value="/resources/img/ico-excluir.png" />
+							</p:commandLink>
+
+						</p:column>
+					</p:dataTable>
+
+
+				
+				</h:panelGrid>
+				
+			</fieldset>
+			</h:panelGroup>	
+				
+			<p:spacer height="10"/>	
+			<h:panelGroup rendered="true">
+				<!-- Inicio Existe comunidade -->
+				<h:panelGrid>
+
+					<h:outputText
+						value="* Existe alguma comunidade num raio de 1 km do empreendimento?" style="font-weight: bold;"/>
+
+					<p:selectOneRadio
+						value="#{silosArmazensController.silosArmazen.indExisteComunidade}" disabled="#{silosArmazensController.isVisivel}">
+						<!-- <p:ajax event="change" process="@this" update="formSilosArmazen:tabViewSilosArmazens:gridOperacao" /> -->
+						<f:selectItem itemLabel="Sim" itemValue="#{true}" />
+						<f:selectItem itemLabel="Não" itemValue="#{false}" />
+					</p:selectOneRadio>
+
+				</h:panelGrid>
+				<!-- Fim Existe comunidade -->
+
+				<p:spacer height="10"/>	
+				<h:panelGrid columns="2" cellspacing="10">
+					<h:outputLabel value="* Área total construída:" style="font-weight: bolder;"/>
+					<h:outputLabel value="* Área total do terreno:" style="font-weight: bold;"/>
+					
+					<h:panelGroup>
+					<p:inputText
+						value="#{silosArmazensController.silosArmazen.valAreaTotalConstruida}" styleClass="campoNumericoComDecimal-2" maxlength="13"
+						disabled="#{silosArmazensController.isVisivel}">
+						<f:convertNumber minFractionDigits="2" locale="pt_BR"/>
+					</p:inputText>
+					<h:outputLabel value=" m²" />
+					</h:panelGroup>
+					
+					<h:panelGroup>
+					<p:inputText
+						value="#{silosArmazensController.silosArmazen.valAreaTotalTerreno}" styleClass="campoNumericoComDecimal-2" maxlength="13" 
+						disabled="#{silosArmazensController.isVisivel}">
+						<f:convertNumber minFractionDigits="2" locale="pt_BR"/>
+					</p:inputText>
+					<h:outputLabel value=" m²" />
+					</h:panelGroup>
+				</h:panelGrid>
+			<p:spacer height="10"/>
+			
+			<h:panelGrid columns="1" id="gridOperacao" rendered="#{not empty silosArmazensController.operacaoDesenvolvidaSilosArmazenList}">
+			
+				<h:outputText value="*Operações desenvolvidas no empreendimento?" style="font-weight: bold;"/>
+				
+					<ui:repeat var="op"
+						value="#{silosArmazensController.operacaoDesenvolvidaSilosArmazenList}">
+
+						<h:panelGrid columns="3">
+							<p:selectBooleanCheckbox value="#{op.indSelecionado}" disabled="#{silosArmazensController.isVisivel}">
+								<f:attribute name="operacao" value="#{op}"/>
+								<p:ajax event="change" process="@this"
+									update="formSilosArmazen:tabViewSilosArmazens:gridOperacao" listener="#{silosArmazensController.valueChangeOperacaoOutros()}"/>
+							</p:selectBooleanCheckbox>
+							<h:outputText value="#{op.nomOperacaoDesevolvida}" />
+							<h:graphicImage id="ajudah" value="/resources/img/ico-ajuda.png" rendered="#{op.ideOperacaoDesenvolvidaSilosArmazens eq 9}"/>
+							<p:tooltip for="ajudah" value="Fertilizantes ensacados, sementes, defensivos agrícolas, rações e concentrados, sais minerais, peças, ferramentas, implementos, etc."  rendered="#{op.ideOperacaoDesenvolvidaSilosArmazens eq 9}"/>
+						</h:panelGrid>
+
+						<h:panelGrid>
+							<h:panelGrid
+								rendered="#{op.ideOperacaoDesenvolvidaSilosArmazens eq 5 and op.indSelecionado}">
+
+								<ui:repeat var="opAux"
+									value="#{op.operacaoDesenvolvidaSilosArmazenAuxiliar}">
+									<h:panelGrid columns="2">
+										<p:selectBooleanCheckbox value="#{opAux.indSelecionado}" disabled="#{silosArmazensController.isVisivel}" 
+										valueChangeListener="#{silosArmazensController.valueChangeOperacaoBeneficiamentoOutros()}" immediate="true" >
+											<p:ajax event="change" process="@this" oncomplete="updateGridOperacao()" /> 
+											
+											<f:attribute name="outrosOP" value="#{opAux}"/>
+										</p:selectBooleanCheckbox>
+
+										<h:outputText value="#{opAux.nomOperacaoDesevolvida}" />
+										
+									</h:panelGrid>
+								</ui:repeat>
+
+							</h:panelGrid>
+						</h:panelGrid>
+					</ui:repeat>
+				</h:panelGrid>
+			
+			<h:panelGrid>
+				<h:outputText value="*No empreendimento é realizada a queima de combustíveis para secagem?" style="font-weight: bold;" />
+				<p:selectOneRadio value="#{silosArmazensController.silosArmazen.indQueimaCombustivel}"  valueChangeListener="#{silosArmazensController.carregarTipoCombustivel()}" 
+				immediate="true" disabled="#{silosArmazensController.isVisivel}">
+					<p:ajax event="change" listener="#{silosArmazensController.limparCheckCombustiveis}" update="formSilosArmazen:tabViewSilosArmazens:gridCombustivel" process="@this" async="false" />
+					<f:selectItem itemLabel="Sim" itemValue="#{true}"/>
+					<f:selectItem itemLabel="Não" itemValue="#{false}"/>
+				</p:selectOneRadio>
+			</h:panelGrid>
+			
+			<h:panelGroup id="gridCombustivel">
+					<h:panelGrid columns="1"
+						rendered="#{silosArmazensController.silosArmazen.indQueimaCombustivel}">
+
+						<h:outputText value="*Qual o tipo de combustível utilizado?"
+							style="font-weight: bold;" />
+
+						<ui:repeat var="comb"
+							value="#{silosArmazensController.tipoCombustivelSiloArmazensList}">
+
+								<h:panelGrid columns="2">
+									<p:selectBooleanCheckbox value="#{comb.indSelecionado}" disabled="#{silosArmazensController.isVisivel}">
+										<f:attribute name="combustivel" value="#{comb}"/>
+										<p:ajax event="change" process="@this"
+											update="formSilosArmazen:tabViewSilosArmazens:gridCombustivel" listener="#{silosArmazensController.valueChangeCombustivelUtilizadoOutros()}"/>
+									</p:selectBooleanCheckbox>
+									<h:outputText value="#{comb.nomTipoCombustivel}" />
+								</h:panelGrid>
+
+								<h:panelGrid>
+									<h:panelGrid
+										rendered="#{comb.ideTipoCombustivelSiloArmazens eq 4 and comb.indSelecionado}">
+
+										<ui:repeat var="comAux"
+											value="#{comb.tipoCombustivelSiloArmazensAuxiliar}">
+											<h:panelGrid columns="3">
+												<p:selectBooleanCheckbox value="#{comAux.indSelecionado}" disabled="#{silosArmazensController.isVisivel}" >
+													<p:ajax event="change" process="@this" oncomplete="updateGridCombustivel()"/>
+													
+												</p:selectBooleanCheckbox>
+
+												<h:outputText
+													value="#{comAux.nomTipoCombustivel} - N° do RAF:" />
+
+												<p:inputText id="t" value="#{comAux.numeroRaf}" disabled="#{(!comAux.indSelecionado or empty comAux.indSelecionado) or silosArmazensController.isVisivel}"
+												maxlength="30">
+													<p:ajax event="blur" process="@this" oncomplete="updateGridCombustivel()"/>
+												</p:inputText>
+													
+											</h:panelGrid>
+										</ui:repeat>
+
+									</h:panelGrid>
+								</h:panelGrid>
+						</ui:repeat>
+					</h:panelGrid>
+				</h:panelGroup>
+			<p:remoteCommand name="updateGridCombustivel" update="formSilosArmazen:tabViewSilosArmazens:gridCombustivel" actionListener="#{silosArmazensController.limparInputCombustivel()}"/>
+			<p:remoteCommand name="updateGridOperacao" update="formSilosArmazen:tabViewSilosArmazens:gridOperacao"/>
+			<p:remoteCommand name="isOutrosBeneficiamento" actionListener="#{silosArmazensController.valueChangeOperacaoBeneficiamentoOutros()}"/>
+			 <p:remoteCommand name="updateGridSilos" update="formSilosArmazen:tabViewSilosArmazens:silosSicar, formSilosArmazen:groupBotoes"/> 
+			<!-- <p:remoteCommand name="updateTeste" update="formSilosArmazen:tabViewSilosArmazens:gridOperacao"/> -->
+			<h:panelGrid>
+				<h:outputText value="*No empreendimento é utilizado caldeira?" style="font-weight: bold;"/>
+				<p:selectOneRadio value="#{silosArmazensController.silosArmazen.indEmpreendimentoCaldeira}" disabled="#{silosArmazensController.isVisivel}">
+					<!-- <p:ajax event="change" process="@this" async="false" /> -->
+					<f:selectItem itemLabel="Sim" itemValue="#{true}"/>
+					<f:selectItem itemLabel="Não" itemValue="#{false}"/>
+				</p:selectOneRadio>
+			
+			</h:panelGrid>
+			
+			</h:panelGroup>
+			</h:panelGroup>
+		</h:panelGroup>
+		
+		<p:spacer height="50"/>
+	
+	
+</ui:composition>

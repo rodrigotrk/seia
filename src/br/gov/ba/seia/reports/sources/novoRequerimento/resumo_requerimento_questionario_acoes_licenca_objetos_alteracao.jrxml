@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="resumo_requerimento_questionario_acoes_licenca_objetos_alteracao" language="java" pageWidth="439" pageHeight="72" columnWidth="439" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="bdee431f-fe02-437e-88a5-729a624b9b33">
+	<property name="ireport.zoom" value="1.9487171000000019"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="ide_licenca" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[select oa.nom_objeto_alteracao
+from objeto_alteracao oa
+inner join licenca_objeto_alteracao loa on oa.ide_objeto_alteracao = loa.ide_objeto_alteracao
+ where loa.ide_licenca = $P{ide_licenca}]]>
+	</queryString>
+	<field name="nom_objeto_alteracao" class="java.lang.String"/>
+	<columnHeader>
+		<band height="12" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="d5e126ce-d842-40c1-b841-679444781afa" positionType="Float" mode="Opaque" x="0" y="0" width="439" height="12" backcolor="#EEECE1"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font fontName="Arial" size="8" isBold="false" isUnderline="false"/>
+				</textElement>
+				<text><![CDATA[Objetos de Alteração]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="14" splitType="Stretch">
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="c60a70e7-2876-4e28-aa21-ad6b4bc8e7ad" positionType="Float" stretchType="RelativeToTallestObject" mode="Opaque" x="0" y="0" width="439" height="12" backcolor="#FFFFFF"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font fontName="Arial" size="8" isBold="false" isUnderline="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nom_objeto_alteracao}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

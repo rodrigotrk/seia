@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="relatorio_subreport_caracterizacao_ambiental_silos_armazens_origem_agua_tipo_concessionaria" language="java" pageWidth="514" pageHeight="752" columnWidth="514" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="a93b0a9d-bafb-4859-9f56-b24c38a5ec74">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="ide_caracterizacao_ambiental_silos_armazens" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[select caoa.*,tc.* from caracterizacao_ambiental_silos_armazens casa
+inner join  caracterizacao_ambiental_origem_agua  caoa
+on casa.ide_caracterizacao_ambiental_silos_armazens = caoa.ide_caracterizacao_ambiental_silos_armazens
+left join origem_agua_tipo_concessionaria oatc
+on oatc.ide_caracterizacao_ambiental_origem_agua = caoa.ide_caracterizacao_ambiental_origem_agua
+left join tipo_concessionaria tc
+on tc.ide_tipo_concessionaria = oatc.ide_tipo_concessionaria
+where caoa.ide_caracterizacao_ambiental_silos_armazens = $P{ide_caracterizacao_ambiental_silos_armazens} and oatc.ide_tipo_concessionaria is not null]]>
+	</queryString>
+	<field name="ide_caracterizacao_ambiental_origem_agua" class="java.lang.Integer"/>
+	<field name="ide_caracterizacao_ambiental_silos_armazens" class="java.lang.Integer"/>
+	<field name="ide_silos_armazens_origem_agua" class="java.lang.Integer"/>
+	<field name="num_documento_dispensa" class="java.lang.String"/>
+	<field name="num_documento_portaria" class="java.lang.String"/>
+	<field name="ide_tipo_concessionaria" class="java.lang.Integer"/>
+	<field name="nom_concessionarias" class="java.lang.String"/>
+	<field name="ind_ativo" class="java.lang.Boolean"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement uuid="ed89b548-4fec-4b4f-9928-f13638d74d4b" x="0" y="0" width="214" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nom_concessionarias}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

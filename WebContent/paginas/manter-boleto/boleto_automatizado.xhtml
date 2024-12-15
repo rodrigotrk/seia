@@ -1,0 +1,389 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui">
+	
+	<ui:include src="/paginas/manter-boleto/dialogIncluirParametro.xhtml" />
+	
+	<p:dialog	
+		id="dialogBoleto"
+		widgetVar="dialogBoleto" 
+		height="600"
+		width="870"
+		modal="true"  
+		showHeader="false" 
+		position="center" 
+		appendToBody="true" 
+		resizable="false">
+		
+		<h:form id="boleto">
+			<h1 style="font-size: 14px">GRAVAR TAXA BOLETO / DAE</h1>
+			<hr	style="width: 100%; margin-top: 5px; margin-bottom: 5px; border: none; border-top: 1px solid #ccc;" />
+			<p style="margin: 5px;" class="titulo-grupo"><h:outputText value="Dados do requerimento"/></p>
+			<h:panelGrid columns="4">
+				<h:outputLabel value="N° Requerimento " styleClass="tit-requerimento"/>
+				<h:outputText value="#{boletoAutomatizadoController.requerimento.numRequerimento}" styleClass="dados-requerimento"/>
+				<h:outputLabel value="Empreendimento "  styleClass="tit-requerimento"/>
+				<h:outputText value="#{boletoAutomatizadoController.requerimento.ultimoEmpreendimento.nomEmpreendimento}" styleClass="dados-requerimento"/>
+				<h:outputLabel value="CPF "  styleClass="tit-requerimento" rendered="#{boletoAutomatizadoController.requerimento.requerente.PF}"/>
+				<h:outputLabel value="CNPJ "  styleClass="tit-requerimento" rendered="#{boletoAutomatizadoController.requerimento.requerente.PJ}" />
+				<h:outputText value="#{boletoAutomatizadoController.requerimento.requerente.cpfCnpj}" styleClass="dados-requerimento"/>
+				<h:outputLabel value="Requerente " styleClass="tit-requerimento"/>
+				<h:outputText value="#{boletoAutomatizadoController.requerimento.requerente.nomeRazao}" styleClass="dados-requerimento"/>
+			</h:panelGrid>
+			<br />
+			<p:dataTable rendered="#{!empty boletoAutomatizadoController.atividadesLicenca}" var="atividade" value="#{boletoAutomatizadoController.atividadesLicenca}">
+				<p:column headerText="Tipologia(s) do empreendimento">
+					<h:outputText value="#{atividade.desTipologia}" />
+				</p:column>
+			</p:dataTable>
+			
+			<hr	style="width: 100%; margin-top: 5px; margin-bottom: 5px; border: none; border-top: 1px solid #ccc;" /><br />
+			
+			<p style="margin: 5px;margin-bottom: 10px;" class="titulo-grupo">
+				<h:outputText value="Dados do boleto/DAE"/>
+			</p>
+			
+			<h:panelGrid id="pnlLinkIncluirParametroCalculo" rendered="#{boletoAutomatizadoController.isRenderedIncluirParametroCalculoBoleto}">
+				<p:commandLink  value="+ Incluir parâmetro de cálculo do boleto" process="@this" actionListener="#{boletoAutomatizadoController.incluirParametroCalculo()}" update=":frmDialogIncluirParametroCalculo"  />
+			</h:panelGrid>
+			
+			<br />
+			
+			<p:dataTable id="detalhamentoBoleto" emptyMessage="Nenhum detalhamento a ser exibido." var="detalhe" 
+				value="#{boletoAutomatizadoController.detalhamentosBoleto}"	style="width:830px;">
+				
+				<f:facet name="header">
+					Detalhamento das taxas por ato ambiental
+				</f:facet>
+				<p:column headerText="Ato do Enquadramento" style="padding: 4px 5px;">
+					<h:outputText value="#{detalhe.ideAtoAmbiental.nomAtoAmbiental}" />
+				</p:column>
+				<p:column headerText="Tipologia" style="padding: 4px 5px; text-align:center;">
+					<h:outputText value="#{detalhe.ideTipologia.desTipologia}" rendered="#{detalhe.ideTipologia != null}" />
+					<h:outputText value=" - " rendered="#{detalhe.ideTipologia == null}" />
+				</p:column>
+				<p:column headerText="Vazão Total (m³)" style="padding: 4px 5px; text-align:center;">
+					<h:outputText value="#{detalhe.numVazao}" rendered="#{detalhe.numVazao != null}"/>
+					<h:outputText value="-" rendered="#{detalhe.numVazao == null}" />
+				</p:column>
+				<p:column headerText="Valor" style="text-align:center;" >
+					<h:outputText value="R$ #{detalhe.valorFormatado}" rendered="#{not empty detalhe.valor and !detalhe.dae}"/>
+					<h:outputText value=" - " rendered="#{empty detalhe.valor and !detalhe.dae}"/>
+					<h:outputText value=" R$ #{detalhe.valorCertificadoFormatado} " rendered="#{detalhe.dae and not empty detalhe.valorCertificado}"/>
+					<h:outputText value=" - " rendered="#{detalhe.dae and empty detalhe.valorCertificado}"/>
+				</p:column>
+				<p:column headerText="Ação" style="text-align:center">
+					
+					<p:commandLink title="Boleto" style="color:blue" rendered="#{detalhe.exigeCalculo}" disabled="#{boletoAutomatizadoController.faltaParametros}" update="taxaBoleto taxaBoleto:valorTotal"
+						action="#{boletoController.calcularTaxaBoleto(detalhe)}" oncomplete="taxa_boleto.show()">
+						
+						<h:graphicImage title="Calcular Valor" value="/resources/img/ico-alterar.png" />
+					</p:commandLink>
+					
+					<p:commandLink 
+						value="DAE" 
+						style="color:blue" 
+						rendered="#{boletoAutomatizadoController.isRenderedCalcularTaxaDAE(detalhe)}" 
+						actionListener="#{daeController.load()}"
+						update="taxaDae"
+						oncomplete="dae.show()">
+						
+						<f:attribute name="detalhamentoBoleto" value="#{detalhe}" />
+						<f:attribute name="listaDetalhamentoBoleto" value="#{boletoAutomatizadoController.detalhamentosBoleto}" />
+						<f:attribute name="listaBiomaRequerimento" value="#{boletoAutomatizadoController.listaBiomaRequerimento}" />
+						
+					</p:commandLink>
+					
+					<p:commandLink rendered="#{boletoAutomatizadoController.isRenderedLinkRemoverParametro(detalhe)}" title="Remover parâmetro" 
+						actionListener="#{boletoAutomatizadoController.removerParametroDetalhamentoBoleto(detalhe)}" process="@this" update="boleto:detalhamentoBoleto boleto:valor_boleto">
+						
+						<h:graphicImage title="Calcular Valor" value="/resources/img/ico-excluir.png" />
+					</p:commandLink>
+				</p:column>
+			</p:dataTable>
+			
+			<br/>
+			
+			<h:panelGroup id="pnlDetalhamentoOutorga" rendered="#{boletoAutomatizadoController.renderedOutorgaRecusosHidricos}" layout="block" style="width:830px;">
+				
+				<h:panelGrid columns="2">
+					
+					<h:panelGrid rendered="#{!empty boletoAutomatizadoController.listaCaptacaoSubterranea}">
+						<h:outputText value="Tipologia: Captação Subterrânea" style="font-weight: bold;" />
+						<p:dataTable var="olg" value="#{boletoAutomatizadoController.listaCaptacaoSubterranea}">
+							<p:column>
+									<f:facet name="header">Latitude</f:facet>
+									<h:outputText value="#{olg.ideLocalizacaoGeografica.pontoLatitude}" />
+							</p:column>
+							<p:column>
+									<f:facet name="header">Longitude</f:facet>
+									<h:outputText value="#{olg.ideLocalizacaoGeografica.pontoLongitude}" />
+							</p:column>
+							<p:column style="text-align: center;">
+									<f:facet name="header">Vazão(m3)/dia</f:facet>
+									<h:outputText value="#{olg.numVazao}" />
+							</p:column>
+						</p:dataTable>
+					</h:panelGrid>
+					
+					<h:panelGrid rendered="#{!empty boletoAutomatizadoController.listaCaptacaoSuperficial}" layout="block">
+						<h:outputText value="Tipologia: Captação Superficial" style="font-weight: bold;" />
+						<p:dataTable var="olg" value="#{boletoAutomatizadoController.listaCaptacaoSuperficial}">
+							<p:column>
+									<f:facet name="header">Latitude</f:facet>
+									<h:outputText value="#{olg.ideLocalizacaoGeografica.pontoLatitude}" />
+							</p:column>
+							<p:column>
+									<f:facet name="header">Longitude</f:facet>
+									<h:outputText value="#{olg.ideLocalizacaoGeografica.pontoLongitude}" />
+							</p:column>
+							<p:column style="text-align: center;">
+									<f:facet name="header">Vazão(m3)/dia</f:facet>
+									<h:outputText value="#{olg.numVazao}" />
+							</p:column>
+						</p:dataTable>
+					</h:panelGrid>
+					
+					<h:panelGrid rendered="#{!empty boletoAutomatizadoController.listaLancamentoEfluente}" layout="block">
+						<h:outputText value="Tipologia: Lançamento de Efluentes" style="font-weight: bold;" />
+						<p:dataTable var="olg" value="#{boletoAutomatizadoController.listaLancamentoEfluente}">
+							<p:column>
+									<f:facet name="header">Latitude</f:facet>
+									<h:outputText value="#{olg.ideLocalizacaoGeografica.pontoLatitude}" />
+							</p:column>
+							<p:column>
+									<f:facet name="header">Longitude</f:facet>
+									<h:outputText value="#{olg.ideLocalizacaoGeografica.pontoLongitude}" />
+							</p:column>
+							<p:column style="text-align: center;">
+									<f:facet name="header">Vazão(m3)/dia</f:facet>
+									<h:outputText value="#{olg.numVazao}" />
+							</p:column>
+						</p:dataTable>
+					</h:panelGrid>
+					
+				</h:panelGrid>
+				
+			</h:panelGroup>
+			
+			<br/>
+			
+			<h:panelGroup id="pnlDetalhamentoBioma"  layout="block" style="width:830px;">
+				
+				<h:panelGroup layout="block"  rendered="#{boletoAutomatizadoController.renderedPnlDetalhamentoBioma}">
+					
+					<p style="text-align: justify;">
+						Para cobrança de atos florestais de acordo com a Lei nº 13.457 de 03 de dezembro de 2015, são utilizados os seguintes produtos do Instituto Brasileiro 
+						de Geografia e Estatística: mapa de Biomas do Brasil (2004) e Mapa da Área de Aplicação da Lei nº 11.428 de 2006 
+						(Decreto nº 6.660, de 21 de novembro de 2008), ambos com escala 1:5.000.000.
+					</p>
+				
+					<br />
+					
+					<h:panelGrid columns="2">
+						<p:dataTable id="detalhamentoBioma"  var="bioma" value="#{boletoAutomatizadoController.listaBiomaRequerimentoDetalhamento}" style="width:415px;">
+							<p:column>
+								<f:facet name="header">Bioma</f:facet>
+								<h:outputText value="#{bioma.ideBioma.nomBioma}" />
+							</p:column>
+							<p:column>
+								<f:facet name="header">Área(ha)</f:facet>
+								<p style="text-align: right;">
+									<h:outputText value="#{bioma.valArea}">
+										<f:convertNumber pattern="#,##0.0000" locale="pt_BR" />
+									</h:outputText>
+								</p>
+							</p:column>
+							<p:columnGroup type="footer">
+								<p:row>
+									<p:column style="text-align:right;" footerText="Total:" />
+									<p:column style="text-align:right;">
+										<f:facet name="footer">
+											<h:outputText value="#{boletoAutomatizadoController.valorTotalAreaBioma}">
+												<f:convertNumber pattern="#,##0.0000" locale="pt_BR" />
+											</h:outputText>
+										</f:facet>
+									</p:column>
+								</p:row>
+							</p:columnGroup>
+						</p:dataTable>
+						
+						<h:panelGroup layout="block" style="width:415px; text-align: center;">
+							<h:outputText value="Bioma predominante: " />
+							<h:outputText value="#{boletoAutomatizadoController.biomaPredominante.nomBioma}" />
+						</h:panelGroup>
+					</h:panelGrid>
+					
+				</h:panelGroup>
+				
+			</h:panelGroup>
+			
+			<br/>
+			
+			<h:panelGrid rendered="#{boletoAutomatizadoController.existeBoleto or boletoAutomatizadoController.boletoApe}">
+				<h:outputText value="Valores para geração do boleto:" style="text-decoration: underline;font-weight: bold;"/>
+				<h:panelGrid columns="2">
+					<h:panelGrid columns="3" id="valor_boleto">
+						<h:outputText value="Valor Total do boleto" style="font-weight: bold;"/>
+						<p:spacer width="100" height="5"/>
+						<h:outputText value="Data de vencimento" style="font-weight: bold;"/>
+										
+						<h:panelGrid columns="2">
+							<h:outputText value="R$" style="font-weight: bold;"/>
+							<p:inputText size="12" disabled="#{!boletoAutomatizadoController.boletoApe}" value="#{boletoAutomatizadoController.boleto.valBoleto}" rendered="#{boletoAutomatizadoController.desabiliatarInputValorTotalBoleto()}"
+								onkeypress="mascararNumeroLR(this, event, 9, 2, '.', ',', 3);" onkeyup="mascararNumeroLR(this, event, 9, 2, '.', ',', 3);" maxlength="13" converter="bigDecimalConverterNaoRetornaVazio" />
+							
+							<p:inputText size="12" id="fdValorTotalBoleto" disabled="#{boletoAutomatizadoController.boleto.indIsento}" rendered="#{!boletoAutomatizadoController.desabiliatarInputValorTotalBoleto()}" value="#{boletoAutomatizadoController.boleto.valBoleto}"
+										  onkeypress="mascararNumeroLR(this, event, 9, 2, '.', ',', 3);" onkeyup="mascararNumeroLR(this, event, 9, 2, '.', ',', 3);" maxlength="13" converter="bigDecimalConverterNaoRetornaVazio"/>
+						</h:panelGrid>
+						<p:spacer width="100" height="5"/>
+						<p:calendar rendered="#{!boletoAutomatizadoController.boletoApe}" disabled="#{!boletoAutomatizadoController.boletoApe}"
+							styleClass="ui-state-disabled" value="#{boletoAutomatizadoController.boleto.dtcVencimento}" pattern="dd/MM/yyyy"/>
+						<p:calendar rendered="#{boletoAutomatizadoController.boletoApe}" disabled="#{!boletoAutomatizadoController.boletoApe}"
+							value="#{boletoAutomatizadoController.boleto.dtcVencimento}" pattern="dd/MM/yyyy"/>
+						<p:calendar id="dataVencimento" size="10" showOn="button" locale="pt" pattern="dd/MM/yyyy" readOnlyInputText="true" 
+									rendered="false"
+									value="#{boletoAutomatizadoController.boleto.dtcVencimento}" mindate="#{boletoAutomatizadoController.dataHoje}">
+							<p:ajax event="dateSelect" global="false" process="@this" />
+						</p:calendar>
+					</h:panelGrid>
+					
+					<h:panelGrid id="isento" columns="2" style="margin-top: 15px;">
+						<p:selectBooleanCheckbox value="#{boletoAutomatizadoController.boleto.indIsento}" disabled="#{boletoAutomatizadoController.boleto.indBoletoGeradoManualmente}">
+							<p:ajax global="false" update="boleto:motivo valor_boleto boleto:boleto_manual" listener="#{boletoAutomatizadoController.isentarPagamento()}"/>
+						</p:selectBooleanCheckbox>
+						<h:outputLabel value="Isenção"  />
+					</h:panelGrid>			
+				</h:panelGrid>
+				
+				<h:panelGrid id="boleto_manual" columns="2" style="margin-top: 10px;">
+					<p:selectBooleanCheckbox value="#{boletoAutomatizadoController.boleto.indBoletoGeradoManualmente}" disabled="#{boletoAutomatizadoController.boleto.indIsento or boletoAutomatizadoController.boletoApe}">
+						<p:ajax global="false" update="boleto:isento boleto:motivo valor_boleto boleto:upload_boleto_manual" listener="#{boletoAutomatizadoController.checkBoletoManual()}"/>
+					</p:selectBooleanCheckbox>
+					<h:outputLabel value="Gerar boleto manualmente"  />
+				</h:panelGrid>
+				
+				<h:panelGrid id="upload_boleto_manual" columns="1">
+					<h:panelGrid columns="1" rendered="#{boletoAutomatizadoController.boleto.indBoletoGeradoManualmente}">
+						* Número do Boleto
+						<p:inputText size="50" maxlength="50" value="#{boletoAutomatizadoController.boleto.numBoleto}" styleClass="inputTextOnlyInteger" >
+							<p:ajax event="change" global="false" process="@this" listener="#{boletoAutomatizadoController.removerCaracteres()}" />
+						</p:inputText>
+					</h:panelGrid>
+
+					<h:panelGrid columns="2" id="bol" rendered="#{not empty boletoAutomatizadoController.boleto.desCaminhoBoleto and boletoAutomatizadoController.boleto.indBoletoGeradoManualmente}">
+						<h:commandLink value="#{boletoAutomatizadoController.boleto.nomeArquivo}" style="color:blue;">
+							<p:fileDownload value="#{boletoAutomatizadoController.getFileDownload(boletoAutomatizadoController.boleto.desCaminhoBoleto)}" />
+						</h:commandLink>
+
+						<p:commandLink global="false" oncomplete="excluirBoletoManual.show()">
+							<h:graphicImage title="Excluir" value="/resources/img/ico-excluir.png" />
+						</p:commandLink>
+					</h:panelGrid>
+					
+					<h:panelGrid columns="1" rendered="#{empty boletoAutomatizadoController.boleto.desCaminhoBoleto and boletoAutomatizadoController.boleto.indBoletoGeradoManualmente}">
+						* Upload do boleto
+						<p:fileUpload id="upload_bol_man" uploadLabel="false" label="Upload do documento" auto="true"
+							rendered="#{empty boletoAutomatizadoController.boleto.desCaminhoBoleto}" invalidFileMessage="Tipo de arquivo inválido." mode="advanced"
+							fileUploadListener="#{boletoAutomatizadoController.uploadBoleto}" allowTypes="/(\.|\/)(pdf)$/" update="upload_boleto_manual" />
+					</h:panelGrid>			
+				</h:panelGrid>
+				
+				<h:panelGrid id="motivo" >
+					<h:outputText value="Selecione a justificativa da isenção de acordo com o artigo 166 do regulamento da Lei 10.431/2006 aprovado pelo decreto 14.024/2012 ou de acordo com as demais isenções previstas no Anexo Único do referido decreto" 
+						style="font-weight:bold" rendered="#{boletoAutomatizadoController.boleto.indIsento}"/>
+					<p:spacer height="10"/>
+					<p:selectOneMenu value="#{boletoAutomatizadoController.boleto.ideMotivoIsencaoBoleto}" converter="motivoIsencaoConverter"
+						rendered="#{boletoAutomatizadoController.boleto.indIsento}">
+						<f:selectItem itemLabel="Selecione..." itemValue=""/>
+						<f:selectItems var="motivo" value="#{boletoAutomatizadoController.motivosIsencao}" itemLabel="#{motivo.dscMotivoIsencaoBoleto}" itemValue="#{motivo}"/>
+						<p:ajax global="false" process="@this"/>
+					</p:selectOneMenu>
+				</h:panelGrid>			
+			</h:panelGrid>			
+			
+			
+			<h:panelGrid rendered="#{boletoAutomatizadoController.existeDae}">
+				<h:outputText value="Valores para geração de DAEs:" style="text-decoration: underline;font-weight: bold;"/>
+				<h:panelGrid columns="4">
+					<h:outputText value="Valor Total do DAE - Certificado" style="font-weight: bold;"/>
+					<p:spacer width="100" height="5"/>
+					
+					<h:panelGroup>
+						<h:outputText value="Valor Total do DAE - Vistoria" style="font-weight: bold;"/>
+						<h:graphicImage value="/resources/img/ico-ajuda.png"  id="ajuda" style="margin: -3px 5px;" />
+					  	<p:tooltip for="ajuda" value="O valor do DAE - Vistoria é o somatório das áreas (ha) de todos os biomas impactados aplicando a taxa referente ao bioma predominante." showEffect="fade" hideEffect="fade" />
+					</h:panelGroup>
+					
+					
+					<p:spacer width="100" height="2"/>
+					<h:panelGrid>
+						<h:outputText value="#{boletoAutomatizadoController.valorTotalCertificadoDAE}">
+							<f:convertNumber type="currency" locale="pt_BR"/>
+						</h:outputText>
+					</h:panelGrid>
+					<p:spacer width="100" height="5"/>
+					<h:panelGrid id="valorVistoriaDae">
+						<h:outputText value="#{boletoAutomatizadoController.valorTotalVistoriaDAE}">
+							<f:convertNumber type="currency" locale="pt_BR"/>
+						</h:outputText>
+					
+					</h:panelGrid>
+					<h:panelGrid id="isentoDae" columns="2" style="margin-top: 15px;">
+						<p:selectBooleanCheckbox value="#{boletoAutomatizadoController.certificado.indIsento}" disabled="#{boletoAutomatizadoController.boleto.indBoletoGeradoManualmente}">
+							<p:ajax global="false" update="boleto:motivoDae valorVistoriaDae" listener="#{boletoAutomatizadoController.isentarPagamento()}"/>
+						</p:selectBooleanCheckbox>
+						<h:outputLabel value="Isenção"  />
+					</h:panelGrid>	
+				</h:panelGrid>
+				<h:panelGrid id="motivoDae" >
+					<h:outputText value="Selecione a justificativa da isenção de acordo com o artigo 166 do regulamento da Lei 10.431/2006 aprovado pelo decreto 14.024/2012 ou de acordo com as demais isenções previstas no Anexo Único do referido decreto" 
+						style="font-weight:bold" rendered="#{boletoAutomatizadoController.certificado.indIsento}"/>
+					<p:spacer height="10"/>
+					<p:selectOneMenu value="#{boletoAutomatizadoController.certificado.ideMotivoIsencaoBoleto}" converter="motivoIsencaoConverter" 
+						rendered="#{boletoAutomatizadoController.certificado.indIsento}">
+						<f:selectItem itemLabel="Selecione..." itemValue=""/>
+						<f:selectItems var="motivoDae" value="#{boletoAutomatizadoController.motivoIsencaoVistoriaDae}" itemLabel="#{motivoDae.dscMotivoIsencaoBoleto}" itemValue="#{motivoDae}"/>
+						<p:ajax global="false" process="@this"/>
+					</p:selectOneMenu>
+				</h:panelGrid>		
+			</h:panelGrid>
+			
+			<h:panelGrid columns="1" style="float:left" id="mensagem">
+				<h:outputText value="#{boletoAutomatizadoController.strMsgAlerta}" style="font-weight: bold;color:red;" rendered="#{boletoAutomatizadoController.faltaParametros}"/>
+			</h:panelGrid>
+			
+			<h:panelGrid columns="2" style="float:right">
+				<p:commandButton value="Salvar" process="@this, fdValorTotalBoleto" global="true" disabled="#{boletoAutomatizadoController.faltaParametros}"
+						 update="formConsultarRequerimento:tabelaRequerimentos" action="#{boletoAutomatizadoController.salvarBoletos()}" />
+				<p:commandButton value="Voltar"  process="@this" global="false"  oncomplete="modalConfirmarFechamentoDaTelaBoleto.show();" />
+			</h:panelGrid>
+			
+		</h:form>		
+	</p:dialog>
+	
+	<p:confirmDialog widgetVar="modalConfirmarFechamentoDaTelaBoleto" appendToBody="true" header="Alerta" message="#{bundle.geral_msg_confirmar_nao_salvar}" severity="alert">
+		<h:form>
+			<p:commandButton value="Sim" global="false" oncomplete="modalConfirmarFechamentoDaTelaBoleto.hide();dialogBoleto.hide();"/>
+			<p:commandButton value="Não" global="false" oncomplete="modalConfirmarFechamentoDaTelaBoleto.hide();"/>
+		</h:form>
+	</p:confirmDialog>
+	
+	<ui:include src="/paginas/manter-boleto/boleto.xhtml" />
+	<ui:include src="/paginas/manter-boleto/dae.xhtml" />
+	
+	<p:confirmDialog widgetVar="excluirBoletoManual" appendToBody="true" header="Alerta" message="Tem certeza que deseja remover o item?" severity="alert">
+		<h:form>
+			<p:commandButton value="Sim" global="false" update="boleto:upload_boleto_manual" oncomplete="excluirBoletoManual.hide()">
+				<f:setPropertyActionListener target="#{boletoAutomatizadoController.boleto.pathComprovante}" value="" />
+				<f:setPropertyActionListener target="#{boletoAutomatizadoController.boleto.desCaminhoBoleto}" value="" />
+			</p:commandButton>
+			<p:commandButton value="Não" global="false" oncomplete="excluirBoletoManual.hide()" />
+		</h:form>
+	</p:confirmDialog>
+	
+</ui:composition>

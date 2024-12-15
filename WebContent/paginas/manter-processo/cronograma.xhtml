@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui">
+
+	<p:confirmDialog id="confirmationExcluirAtividCronograma" message="#{bundle.crono_confimar_exclusao}" header="Mensagem" severity="alert" widgetVar="confirmationExcluirAtividCronograma">
+		<h:form>
+			<p:commandButton value="Sim" update=":formAtividadesCronograma:painelAtividadesCronograma" actionListener="#{cronogramaController.excluirAtividade()}"
+			oncomplete="confirmationExcluirAtividCronograma.hide()" process="@this"/>
+			<p:commandButton value="Não" onclick="confirmationExcluirAtividCronograma.hide()" type="button" />
+		</h:form>
+	</p:confirmDialog>
+			
+	<p:dialog id="_dialogSetDataRealizacao" header="Definir Data de Realização" closable="true" position="center" draggable="true"  resizable="false" widgetVar="dialogSetDataRealizacao" >	
+		<ui:include src="/paginas/manter-processo/definirDataRealizacao.xhtml" />
+	</p:dialog>
+	
+	<p:dialog id="_dialogReplanejarData" header="Replanejar Data" closable="true" draggable="true" position="center" resizable="false" widgetVar="dialogReplanejarData">	
+		<ui:include src="/paginas/manter-processo/replanejarData.xhtml" />
+	</p:dialog>
+	
+	
+	<p:dialog id="_dialogCronograma" header="Cronograma" closable="true" draggable="true" resizable="false" widgetVar="dlgCronograma" modal="true" width="750" height="500">
+		<h:panelGrid id="mainPanelCronograma">
+			
+			<h:panelGrid id="panelFormIncluirNovaAtividade" rendered="#{cronogramaController.renderedCronograma}">
+				<h:form id="formIncluirNovaAtividade">
+					<h3><h:outputLabel styleClass="titulo-grupo" value="Processo: #{cronogramaController.vwProcesso.numProcesso}" /></h3>
+					<h:outputLabel />
+					<br />
+					<h:panelGrid id="panelFormIncluirAtivid" columns="2" rendered="#{!cronogramaController.usuarioTecnico or true}">
+						<h:outputLabel value="Tipo de Atividade" />
+						<h:outputText value="Data Prevista:" />
+						<p:selectOneMenu id="selectTpAtividade" value="${cronogramaController.itemCronograma.ideItemCronograma}" disabled="#{cronogramaController.apenasVisualizacao}"> 
+							<f:selectItem itemValue="0" itemLabel="Selecione..." />
+							<f:selectItems value="${cronogramaController.listaAtividades}" var="atividade" itemValue="#{atividade.ideItemCronograma}" itemLabel="#{atividade.dscItemCronograma}"/>
+						</p:selectOneMenu>
+						<p:calendar locale="pt" readOnlyInputText="true" pattern="dd/MM/yyyy" navigator="true" mindate="${cronogramaController.minDataPrevistaFormatada}" maxdate="#{cronogramaController.maxDataPrevista}"
+						 value="#{cronogramaController.atividadeCronogramaAdd.dtcItemPrevista}" requiredMessage="O campo Data Prevista é de preenchimento obrigatório." required="true"
+						 showOn="button"  disabled="#{cronogramaController.apenasVisualizacao}"/> 
+						
+						<p:commandButton 
+							id="btnIncluirNovaAtividade" 
+							disabled="#{cronogramaController.apenasVisualizacao}" 
+							value="#{bundle.crono_incluir_nova_atividade}"
+							actionListener="#{cronogramaController.adicionarControleCronograma()}"
+							process="@form"
+							update=":formAtividadesCronograma:painelAtividadesCronograma :formIncluirNovaAtividade:panelFormIncluirAtivid"	/>
+						<br />
+					</h:panelGrid>
+				</h:form>
+			</h:panelGrid>
+			
+			<h:form id="formAtividadesCronograma" rendered="#{cronogramaController.renderedCronograma}">
+					<h:panelGrid id="painelAtividadesCronograma">
+						<p:dataTable id="tabelaAtividadesCronograma" widgetVar="tabelaAtividadesCronograma" var="atividadeCronograma" style="width:700px;" emptyMessage="#{bundle.msg_lista_vazia}"
+							value="#{cronogramaController.modelAtividControleCronograma}" paginator="true" rows="10" paginatorPosition="bottom" paginatorAlwaysVisible="false"
+							paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}">
+							
+							<f:facet name="header">  
+								<h:outputText value="#{bundle.crono_atividades}" />
+							</f:facet>
+							
+							<p:column headerText="#{bundle.crono_atividades}" style="text-align: center; width: 150px;">
+								<h:outputText value="#{atividadeCronograma.ideItemCronograma.dscItemCronograma}" />
+							</p:column>
+							
+							<p:column headerText="#{bundle.crono_data_prevista}" style="text-align: center;">
+								<h:outputText value="#{atividadeCronograma.dtcItemPrevista}">
+									<f:convertDateTime for="dtcItemPrevista" pattern="dd/MM/yyyy" locale="pt,BR" timeZone="Brazil/East"/>
+								</h:outputText>
+							</p:column>
+							
+							<p:column headerText="#{bundle.crono_data_realizada}" style="text-align: center;">
+								<h:outputText value="#{atividadeCronograma.dtcItemRealizada}">
+									<f:convertDateTime for="dtcItemRealizada" pattern="dd/MM/yyyy" locale="pt,BR" timeZone="Brazil/East"/>
+								</h:outputText>
+							</p:column>
+							
+							<p:column headerText="#{bundle.crono_justificativa}" style="text-align: center; width: 200px; max-height: 300px; overflow-y: auto;">
+								<h:outputText value="#{atividadeCronograma.dscJustificativa}"/>
+							</p:column>
+							
+							<p:column style="text-align: center;" headerText="#{bundle.lbl_acao}" rendered="#{!cronogramaController.usuarioTecnico or true}">
+								
+								<p:commandLink action="#{cronogramaController.definirMaxDataPrevista()}"  oncomplete="limparMsgErro();" onsuccess="dialogReplanejarData.show()" process="@this" title="Replanejar Data"
+											   update=":mainPanelReplanejarDataPrevista" rendered="#{cronogramaController.isEmptyDate(atividadeCronograma)}" disabled="#{!cronogramaController.habilitaReplanejarData(atividadeCronograma) || cronogramaController.apenasVisualizacao}"  > 
+									<h:graphicImage title="Replanejar Data" value="/resources/img/arrow-circle.png" />
+									<f:setPropertyActionListener value="#{atividadeCronograma}" target="#{cronogramaController.atividCronogData}" />
+								</p:commandLink>
+								
+								<p:commandLink onsuccess="dialogSetDataRealizacao.show()" process="@this" title="Definir Data de Realização" action="#{cronogramaController.showDefinirData()}"
+											  update=":panelFormDefiniDataRealizacao" disabled="#{!cronogramaController.habilitaReplanejarData(atividadeCronograma) || cronogramaController.apenasVisualizacao}" >
+									<h:graphicImage title="Definir Data de Realização" value="/resources/img/definirData.gif" width="16" height="16" style="padding: 0px 4px;" />
+									<f:setPropertyActionListener value="#{atividadeCronograma}" target="#{cronogramaController.atividCronogData}" />						
+								</p:commandLink>
+								
+								<p:commandLink onclick="confirmationExcluirAtividCronograma.show();" process="@this" title="Excluir"
+											  rendered="#{!cronogramaController.isConclusaoParecer(atividadeCronograma)}" disabled="#{cronogramaController.apenasVisualizacao}"> 
+									<h:graphicImage title="Excluir" value="/resources/img/ico-excluir.png" />
+									<f:setPropertyActionListener value="#{atividadeCronograma}" target="#{cronogramaController.delAtividadeCronograma}" />
+								</p:commandLink>
+							</p:column>
+						</p:dataTable>
+					</h:panelGrid>
+				</h:form>
+		</h:panelGrid>
+	</p:dialog>
+	
+</ui:composition>

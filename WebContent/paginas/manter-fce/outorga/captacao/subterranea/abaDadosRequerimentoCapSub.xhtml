@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui">
+	
+		<h:outputText styleClass="titulo-grupo" style="font-weight:bold;" value="*Coordenada de Captação" />
+		<br /><br />
+	
+		<p:dataTable id="tableOutorgaLocGeo" style="; width:1050px;" emptyMessage="#{bundle.lac_dadosGerais_msg007}" value="#{fceCaptacaoSubterraneaController.listFceCaptacaoSubterranea}" var="fceCaptacaoSubterranea">
+			
+	 		    <p:column id="latitude" style="text-align:center;" headerText="Latitude" >
+	 		    	<h:outputText value="#{fceCaptacaoSubterranea.latitude}"/>
+	 		    </p:column>
+	 		    
+	 		    <p:column id="longitude" style="text-align:center;" headerText="Longitude">
+		 			<h:outputText value="#{fceCaptacaoSubterranea.longitude}"/>
+	 		    </p:column>
+	 		    
+	 		    <p:column id="sisCoord" style="text-align:center;">
+	 		    	<f:facet name="header">
+	   	 		   		Sistema de<br/> Coordenada
+	   	 		  	</f:facet>
+	 		    	<h:outputText value="#{fceCaptacaoSubterranea.sistemaCoordenada}"/>
+	 		    </p:column>
+	 		    
+ 		       <p:column id="baciaHidrografica" style="text-align:center;">
+ 		       		<f:facet name="header">
+	   	 		   		Bacia<br/> Hidrográfica
+	   	 		  	</f:facet>
+	 		    	<h:outputText value="#{fceCaptacaoSubterranea.bacia}"/>
+	 		    </p:column>
+	 		    
+	 		     <p:column id="subBaciaHidrografica" style="text-align:center;" headerText="Sub-Bacia">
+	 		    	<h:outputText value="#{fceCaptacaoSubterranea.subBacia}"/>
+	 		    </p:column>
+	 		    
+	 		     <p:column id="rpga" style="text-align:center;" headerText="RPGA">
+	 		    	<h:outputText value="#{fceCaptacaoSubterranea.rpga}"/>
+	 		    </p:column>
+	 		    
+	 		    <p:column id="vazaoMaxCap" style="text-align:center;" >
+	 		    	<f:facet name="header">
+	   	 		   		Vazão Máxima<br/> Captada
+	   	 		  	</f:facet>
+	 		    	<p:inputText value="#{fceCaptacaoSubterranea.numVazao}" 
+	 		    		disabled="#{fceCaptacaoSubterraneaController.isDisableNumVazao(fceCaptacaoSubterranea) or fceCaptacaoSubterraneaController.desabilitarTudo}" 
+	 		    		onkeyup="maskIt(this, event, '99.999.999,99', true)"
+	 		    		size="8">
+	 		    		<p:ajax event="blur" global="false" update="tableOutorgaLocGeo"/>
+	 		    		<f:convertNumber integerOnly="false" minFractionDigits="2" />
+	 		    	</p:inputText>
+	 		    	<h:outputText value=" (m³/dia)" />
+	 		    </p:column>
+	 		    
+	 		     <p:column id="tempoCaptacao" style="text-align:center;" >
+	 		     	<f:facet name="header">
+	   	 		   		 Tempo<br/> de<br/> Captação
+	   	 		  	</f:facet>
+	 		    	<p:inputText  value="#{fceCaptacaoSubterranea.numTempoCaptacao}" maxlength="2" size="2"  disabled="#{fceCaptacaoSubterranea.confirmado or fceCaptacaoSubterraneaController.desabilitarTudo}" converterMessage="O tempo de captação é um campo númerico.">
+	 		    		<p:ajax event="blur" global="false" update="tableOutorgaLocGeo" listener="fceCaptacaoSubterranea"/>
+	 		    		<f:convertNumber integerOnly="true" minIntegerDigits="1" maxIntegerDigits="2" />
+	 		    	</p:inputText>
+	 		    	<h:outputText value=" (h/dia)"/>
+	 		    </p:column>
+	 		    
+	 		   <p:column id="vazaoMaxCapHoras" style="text-align:center;" >
+	 		   		<f:facet name="header">
+	   	 		   		 Vazão captada<br/> por hora
+	   	 		  	</f:facet>
+	 		    	<p:inputText value="#{fceCaptacaoSubterranea.vazaoHora}" size="8" disabled="true"  converter="doubleConverter">
+	 		    		<f:convertNumber integerOnly="false"  minFractionDigits="2" />
+	 		    	</p:inputText>
+	 		    	<h:outputText value=" (m³/h)" />
+	 		    </p:column>
+	 		    
+	 		    <p:column id="acoes" style="text-align:center;" headerText="Ações" >
+	 		    	
+	 		    	<p:commandLink  title="Confirmar" action="#{fceCaptacaoSubterraneaController.salvarTempoCaptacao()}"  update="formTabCapSub:tabAbasId_fceCapSub:tableOutorgaLocGeo" process="@this" 
+	 		    	global="false" rendered="#{!fceCaptacaoSubterranea.confirmado}" disabled="#{fceCaptacaoSubterraneaController.desabilitarTudo}">
+		 		    	<f:setPropertyActionListener target="#{fceCaptacaoSubterraneaController.fceCaptacaoSubterranea}" value="#{fceCaptacaoSubterranea}"/>
+	          			 <h:graphicImage title="Confirmar" value="/resources/img/ico-aprovar-notificacao.png"/>
+		            </p:commandLink>
+		        	
+		        	<p:commandLink update="formTabCapSub:tabAbasId_fceCapSub:tableOutorgaLocGeo" action="#{fceCaptacaoSubterranea.setConfirmado(false)}" 
+		        	rendered="#{fceCaptacaoSubterranea.confirmado}" global="false" disabled="#{fceCaptacaoSubterraneaController.desabilitarTudo}" >
+	          			<h:graphicImage title="Editar Tempo de Captação." value="/resources/img/ico-editar.png" />
+		            </p:commandLink>
+		            
+		            <h:panelGroup rendered="#{!fceCaptacaoSubterraneaController.fceTecnico}">
+	     				<a onclick="javascript:#{localizacaoGeograficaGenericController.retornarUrl(fceCaptacaoSubterranea.ideOutorgaLocalizacaoGeografica.ideLocalizacaoGeografica)}">
+							<h:graphicImage title="Localização do Ponto no Geobahia" value="/resources/img/ico-arl-relocacao.png" />
+						</a>
+		            </h:panelGroup>
+		           
+		            <h:panelGroup rendered="#{fceCaptacaoSubterraneaController.fceTecnico}">
+			            
+			            <a onclick="javascript:${localizacaoGeograficaGenericController.retornarUrl(fceCaptacaoSubterranea.ideFceOutorgaLocalizacaoGeografica.ideLocalizacaoGeografica)}">
+							<h:graphicImage title="Localização do Ponto no Geobahia" value="/resources/img/ico-arl-relocacao.png" />
+						</a>
+						
+						<p:commandLink oncomplete="dlgLocalizacaoGeograficaGeneric.show();" process="@this" actionListener="#{localizacaoGeograficaGenericController.editarLocGeoComActionEvent()}" rendered="#{fceCaptacaoSubterranea.confirmado and !fceCaptacaoSubterraneaController.desabilitarTudo}">
+							<f:attribute name="ideLocalizacaoGeografica" value="#{fceCaptacaoSubterranea.ideFceOutorgaLocalizacaoGeografica.ideLocalizacaoGeografica}"/>
+							<f:attribute name="ideTipoInsercao" value="#{fceCaptacaoSubterraneaController.somentePonto}"/>
+							<f:attribute name="analiseTecnica" value="#{fceCaptacaoSubterraneaController.fceTecnico}"/>
+							<f:attribute name="objetoLocalizacao" value="#{fceCaptacaoSubterranea.ideFceOutorgaLocalizacaoGeografica.ideLocalizacaoGeografica}"/>
+							<f:attribute name="ideRequerimento" value="#{fceCaptacaoSubterraneaController.fce.ideRequerimento.ideRequerimento}"/>
+							<h:graphicImage title="Editar localização geográfica" value="/resources/img/edit_loc_geo.png" />
+						</p:commandLink>
+						
+						<p:commandLink 
+							 update=":formFinalidade:tableFinalidade" title="Excluir Finalidade" oncomplete="dialogExcluirFinalidade.show()"  global="false"
+				        	 actionListener="#{fceOutorgaLocalizacaoGeograficaFinalidadeController.listarTipoFinalidadeUsoAgua()}"
+				        	 rendered="#{!fceCaptacaoSubterraneaController.desabilitarTudo}"
+				        	 >
+				        	<f:attribute name="ideFceOutorgaLocalizacaoGeografica" value="#{fceCaptacaoSubterranea.ideFceOutorgaLocalizacaoGeografica}"/>
+							<h:graphicImage title="Excluir Finalidade" value="/resources/img/BT_line_remove-16.png" />
+						</p:commandLink>
+		            </h:panelGroup>
+		            
+					<p:commandLink title="Informar Características do poço" action="#{fceCaptacaoSubterraneaController.carregarDadosCaracteristicaPoco()}" immediate="true" 
+						update="_fce_caracteristica_poco"  oncomplete="fce_caracteristica_poco.show()" global="false" rendered="#{fceCaptacaoSubterranea.confirmado}">
+						<f:setPropertyActionListener target="#{fceCaptacaoSubterraneaController.fceCaptacaoSubterranea}" value="#{fceCaptacaoSubterranea}"/>
+						<h:graphicImage title="Informar características do poço." value="/resources/img/ico-preencher.png" />
+					</p:commandLink>
+	 		    
+	 		    </p:column>
+   		 
+		</p:dataTable> <!-- Fim da DataTable -->
+		
+		<h:panelGrid id="gridBotoes" rendered="#{!fceCaptacaoSubterraneaController.desabilitarTudo}" columns="2" style="margin-top:40px;">
+			<p:commandButton id="btnVoltar" value="Voltar" onclick="confirmationVoltarCapSub.show();" style="width:90px;" update="@form" global="false"/>
+			<p:commandButton id="btnAvancar" value="Avançar" style="width:90px;" update="formTabCapSub:tabAbasId_fceCapSub" actionListener="#{fceCaptacaoSubterraneaController.avancarAba()}" global="false"/> 
+		</h:panelGrid>
+	
+</ui:composition>

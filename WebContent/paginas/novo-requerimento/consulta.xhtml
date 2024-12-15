@@ -1,0 +1,633 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	template="../../layout/template.xhtml">
+	
+	<ui:define name="titulo-pagina">
+		<h3>Consultar Requerimento</h3>
+	</ui:define>
+	
+	<ui:define name="conteudo-principal">
+		
+		<ui:include src="/paginas/atos-declaratorios/include-atos.xhtml" />
+		<ui:include src="/paginas/manter-fce/include-fce.xhtml" />
+		<ui:include src="/paginas/manter-lac/include-lac.xhtml" />
+		<ui:include src="/paginas/manter-boleto/boleto_automatizado.xhtml" />
+		<ui:include src="/paginas/manter-enviardocobrigatorio/documento.xhtml" />
+		<ui:include src="/paginas/manter-efetuarvalidacaoprevia/validacaoPrevia.xhtml" />
+		<ui:include src="/paginas/manter-boleto/comprovante.xhtml" />
+		<ui:include src="/paginas/manter-boleto/validacao.xhtml" />
+		<ui:include src="/paginas/novo-requerimento/comunicacaoRequerente.xhtml" />
+		<ui:include src="/paginas/manter-processo/detalhe-processo/detalharProcesso.xhtml" />
+		
+		<ui:include src="/paginas/manter-dae/gerarDae.xhtml" />
+		
+		<p:dialog id="_dialogNumeroProcesso" dynamic="true" header="Número Processo" closable="false" position="center"
+			widgetVar="dialogNumeroProcesso" modal="true" resizable="false">
+			<h:form id="formNumeroProcesso">
+				<h:panelGrid  columns="2">
+					<h:outputText value="Número do Processo:" />
+					<p:commandLink 
+						value="#{novoRequerimentoController.requerimentoDTO.processo.numProcesso}"
+						update=":formDetalharProcesso" 
+						process="@this"
+						oncomplete="dialogdetalharProcesso.show()">
+					</p:commandLink>
+				 </h:panelGrid>
+				 <br/>
+				<div align="center"> 
+					<p:commandButton style="" type="submit" value="OK" 
+						oncomplete="dialogNumeroProcesso.hide()"
+				 	/>
+				 </div>
+			</h:form>
+		</p:dialog>
+		
+		<p:dialog id="dialogAlteracaoStatus" appendToBody="true" header="#{bundle.alteracao_status_lbl_titulo}" widgetVar="dialogAlteracaoStatus" 
+				modal="true" resizable="false" closable="false" position="center">
+			<div style="width: 400px;">
+				<ui:include	src="/paginas/novo-requerimento/alteracaoStatus.xhtml"/>
+			</div>
+		</p:dialog>		
+		
+		<h3>
+			<h:outputLabel styleClass="titulo-grupo" style="font-weight:bold;" value="INSTRUÇÕES" />
+		</h3>
+		<br />
+			<h:outputLabel styleClass="titulo-grupo" 
+					   	   value="Para consultar um ou mais requerimentos, informe o(s) parâmetro(s) de consulta desejado(s) e clique no botão &#34;Consultar&#34;." />
+		<br />
+		<br />
+		<br />
+		<h3>
+			<h:outputLabel styleClass="titulo-grupo" style="font-weight:bold;" value="PARÂMETROS DA CONSULTA"/>
+		</h3>
+
+		<h:form id="formConsultarRequerimento">
+			<p:fieldset style="border-color:#ccc;" >
+				
+				<h:panelGrid id="filtro">
+					
+					<h:panelGrid columns="4">
+						<h:outputText value="Requerente:" />
+						<p:spacer width="16"/>
+						<h:outputText  value="Empreendimento:" />
+						<h:outputText  value="Porte:" />
+						
+						<p:inputText id="nomeRazao"	value="#{novoRequerimentoController.requerente.nomeRazao}"	disabled="true"	/>
+						
+						<p:commandLink oncomplete="dialogselecionarRequerente.show()" type="button" actionListener="#{requerenteController.load(novoRequerimentoController.metodoExterno)}" update="form_dialog_requerente" >
+							<h:graphicImage title="Selecionar Requerente" value="/resources/img/ico-pesquisa.png" />
+						</p:commandLink>
+						
+						<p:selectOneMenu id="comboEmpreendimento" value="#{novoRequerimentoController.empreendimento.ideEmpreendimento}" disabled="#{novoRequerimentoController.requerente == null}" style="width:220px;">
+							<f:selectItem itemValue="0" itemLabel="Selecione..." />
+							<f:selectItems value="#{novoRequerimentoController.collEmpreendimento}" />
+							<p:ajax event="change" global="false" update="form_dialog_requerente" listener="#{novoRequerimentoController.carregarInformacoesEmpreendimento()}"/>
+						</p:selectOneMenu>
+					
+						<p:selectOneMenu id="comboPorte" value="#{novoRequerimentoController.idePorte}" converter="porteConverter" >
+							<f:selectItem itemLabel="Selecione..."/>
+							<f:selectItems value="#{novoRequerimentoController.listaPortes}" var="porte" itemValue="#{porte}" itemLabel="#{porte.nomPorte}"/>	
+						</p:selectOneMenu>
+					</h:panelGrid>
+					
+					<h:panelGrid columns="4">
+						<h:outputText value="Nº do Requerimento:" />
+						<p:spacer width="16"/>
+						<h:outputText value="Status:"/>
+						<h:outputText value="Período:" />
+					
+						<p:inputText value="#{novoRequerimentoController.numeroRequerimento}" maxlength="40" />
+						<p:spacer width="8"/>
+						<p:selectOneMenu id="comboStatus" value="#{novoRequerimentoController.statusRequerimento}" style="width:220px;">
+							<f:selectItems value="#{novoRequerimentoController.status}" />
+							<f:converter converterId="simpleEntityConverter" />
+						</p:selectOneMenu>
+						<h:panelGrid columns="4">
+							<h:outputText value="De   " />
+							<p:calendar id="calendarDE" size="10" showOn="button" locale="pt" pattern="dd/MM/yyyy" readOnlyInputText="true" navigator="true"
+										value="#{novoRequerimentoController.periodoInicio}" yearRange="c-50:c+10" mindate="01/01/1900" maxdate="#{novoRequerimentoController.dataHoje}">
+								<p:ajax event="dateSelect" global="false" process="@this" />
+							</p:calendar>
+							<h:outputText value="Até" />
+							<p:calendar id="calendarATE" size="10" showOn="button" locale="pt" pattern="dd/MM/yyyy" readOnlyInputText="true" navigator="true"
+										value="#{novoRequerimentoController.periodoFim}" mindate="01/01/1900" maxdate="#{novoRequerimentoController.dataHoje}" yearRange="c-50:c+10">
+								<p:ajax event="dateSelect" global="false" process="@this" />
+							</p:calendar>
+						</h:panelGrid>
+					</h:panelGrid>
+					
+					<h:panelGrid columns="4">
+					
+						<h:outputText value="Categoria:" />
+						<h:outputText value="Ato:" />						
+						<h:outputText value="Tipologia:" />
+						<h:outputText value="Finalidade:" />
+
+						<p:selectOneMenu 
+							id="comboTipoAto"
+							value="#{novoRequerimentoController.tipoAto}"
+							valueChangeListener="#{novoRequerimentoController.changeTipoAto()}"
+							converter="simpleEntityConverter"
+							style="min-width:133px;">
+							<f:selectItem itemLabel="Selecione..." />
+							<f:selectItems var="tipoAto" itemValue="#{tipoAto}"
+								itemLabel="#{tipoAto.nomTipoAto}"
+								value="#{novoRequerimentoController.listaTipoAto}" />
+							<p:ajax event="change" update="comboAto" />
+						</p:selectOneMenu>
+						
+						<p:selectOneMenu 
+							id="comboAto"
+							disabled="#{novoRequerimentoController.disabledComboAto()}"
+							value="#{novoRequerimentoController.atoAmbiental}"
+							valueChangeListener="#{novoRequerimentoController.changeAtoAmbiental()}"
+							converter="simpleEntityConverter"
+							style="width: 278px;">
+							<f:selectItem itemLabel="Selecione..." />
+							<f:selectItems value="#{novoRequerimentoController.listaAto}" var="ato" itemValue="#{ato}" itemLabel="#{ato.nomAtoAmbiental}" />
+							<p:ajax event="change" update="lstTipologia formConsultarRequerimento:comboFormaCumprimento" />
+						</p:selectOneMenu>
+
+						<p:selectOneMenu 
+							id="lstTipologia" 
+							value="#{novoRequerimentoController.tipologia}"							
+							converter="tipologiaConverter" 					
+							valueChangeListener="#{novoRequerimentoController.changeTipologia()}"
+							styleClass="form-input form-select"
+							style="width: 145px;"
+							disabled="#{novoRequerimentoController.comboTipologiaBlocked}">
+							<f:selectItem itemLabel="Selecione..."/>
+							<f:selectItems value="#{novoRequerimentoController.listaTipologia}" var="tipologia" itemLabel="#{tipologia.desTipologia}" itemValue="#{tipologia}"/>					
+							<p:ajax event="change" update="lstFinalidade" process="@this"/> 
+						</p:selectOneMenu>
+		
+						<p:selectOneMenu 
+							id="lstFinalidade" 
+							value="#{novoRequerimentoController.finalidadeUsoAgua}"
+							converter="simpleEntityConverter" 
+							styleClass="form-input form-select"
+							style="width: 147px;"
+							disabled="#{novoRequerimentoController.comboFinalidadeBlocked}">
+							<f:selectItem itemLabel="Selecione..."/>
+							<f:selectItems value="#{novoRequerimentoController.listaFinalidadeUsoAgua}" var="finalidade" itemLabel="#{finalidade.nomTipoFinalidadeUsoAgua}" itemValue="#{finalidade}"/>
+							<p:ajax event="change" process="@this"/> 
+						</p:selectOneMenu>
+					
+					</h:panelGrid>
+					
+					<h:panelGrid columns="3">
+						<h:outputText value="Forma de Cumprimento:" />
+						<h:outputText  value="Divisao:" />
+						<h:outputText  value="Atividade:" />
+						
+					<p:selectOneMenu 
+						id="comboFormaCumprimento"
+						value="#{novoRequerimentoController.pagamentoReposicaoFlorestal}"
+						disabled="#{novoRequerimentoController.disabledComboCumprimento}"
+						converter="simpleEntityConverter"
+						styleClass="form-input form-select"
+						style="width:250px;">
+						<f:selectItem itemLabel="Selecione..." />
+						<f:selectItems var="pag" itemValue="#{pag}"
+							itemLabel="#{pag.nomPagamentoReposicaoFlorestal}"
+							value="#{novoRequerimentoController.pagamentoReposicaoFlorestalList}" />
+						
+					</p:selectOneMenu>
+						
+						<p:selectOneMenu id="comboDivisao" value="#{novoRequerimentoController.tipologiaDivisao}" converter="simpleEntityConverter" style="min-width:133px;">
+							<f:selectItem itemLabel="Selecione..." />
+							<f:selectItems value="#{novoRequerimentoController.listaTipologiaDivisao}" var="tipologia" itemLabel="#{tipologia.desTipologia}" itemValue="#{tipologia}" />
+							<p:ajax event="change" listener="#{novoRequerimentoController.carregarAtividade()}" process="@this" update="formConsultarRequerimento:comboAtividade" />
+						</p:selectOneMenu>
+						<p:selectOneMenu id="comboAtividade" disabled="#{novoRequerimentoController.disabledComboAtividade}" value="#{novoRequerimentoController.tipologiaAtividade}" converter="simpleEntityConverter" style="min-width:133px;">
+							<f:selectItem itemLabel="Selecione..." />
+							<f:selectItems value="#{novoRequerimentoController.listaTipologiaAtividade}" var="tipologia" itemLabel="#{tipologia.desTipologia}" itemValue="#{tipologia}" />
+							<p:ajax event="change" process="@this" />
+						</p:selectOneMenu>
+					</h:panelGrid>
+					
+					<h:panelGrid columns="2">
+						<h:outputText value="Unidade Regional:" />
+						<h:outputText value="Localidade:" />
+						<p:selectOneMenu id="comboUR" value="#{novoRequerimentoController.urSelecionada}"  converter="areaConverter" styleClass="form-input form-select" style="min-width:133px;">
+							<f:selectItem itemLabel="Selecione..."/>
+							<f:selectItems value="#{novoRequerimentoController.listaUrs}" var="ur" itemValue="#{ur}" itemLabel="#{ur.nomArea}"/>								
+						</p:selectOneMenu>
+						<p:selectOneMenu id="comboMunicipio" value="#{novoRequerimentoController.municipioSelecionado}"  converter="municipioConverter" style="min-width:133px;">
+							<f:selectItem itemLabel="Selecione..."/>
+							<f:selectItems value="#{novoRequerimentoController.listaMunicipios}" var="municipio" itemValue="#{municipio}" itemLabel="#{municipio.nomMunicipio}"/>								
+						</p:selectOneMenu>
+					</h:panelGrid>
+					
+					<h:panelGrid columns="1" rendered="#{novoRequerimentoController.renderedFiltroTecnico}">
+						<h:outputText  value="Técnico:" />
+						<p:autoComplete 
+							id="tecnico"
+							dropdown="true"
+							minQueryLength="3"
+							scrollHeight="300"
+							value="#{novoRequerimentoController.tecnico}"
+							var="funcionario" 
+							itemLabel="#{funcionario.pessoaFisica.nomPessoa}" 
+							itemValue="#{funcionario}" 
+							completeMethod="#{novoRequerimentoController.carregarFuncionariosAtend}"
+							converter="simpleEntityConverter">
+							<p:ajax event="itemSelect" process="formConsultarRequerimento:tecnico" update=":formConsultarRequerimento:tecnico" />
+						</p:autoComplete>
+					</h:panelGrid>
+					
+					<h:panelGrid columns="2">
+						<p:commandButton value="Consultar"  rendered="#{security.temAcesso('4.15.4')}" actionListener="#{novoRequerimentoController.consultar()}" update="tabelaRequerimentos" process="formConsultarRequerimento" />
+						<p:commandButton value="Limpar" process="@this" actionListener="#{novoRequerimentoController.limparTela()}" update="formConsultarRequerimento,filtro,tabelaRequerimentos" />
+					</h:panelGrid>
+				</h:panelGrid>
+				
+				<h:panelGrid id="tabelaRequerimentos">
+					<p:dataTable id="dataTable" style="width:850px \0/;" lazy="true" binding="#{novoRequerimentoController.dataTableRequerimentos}" paginator="true" rows="8" paginatorPosition="bottom"
+								 paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}" emptyMessage="#{bundle.consultapf_msg_empty_list}"
+								 value="#{novoRequerimentoController.listaRequerimentosDTOModel}" var="requerimentoDTO">
+						<f:facet name="header">Requerimentos encontrados</f:facet>
+						<p:column>
+							<f:facet name="header">Requerimento</f:facet>
+							<h:outputText value="#{requerimentoDTO.requerimento.numRequerimentoTabela}"/>
+							<h:graphicImage value="/resources/imagens/atencao.png" rendered="#{requerimentoDTO.empreendimento.municipio.indEstadoEmergencia and !requerimentoDTO.requerimento.indEstadoEmergencia and !contextoController.usuarioLogado.usuarioExterno}" title="#{bundle.geral_lbl_title_seca}" alt=" * #{bundle.geral_lbl_title_seca}"/>
+							<h:graphicImage value="/resources/imagens/emergencia.png" rendered="#{requerimentoDTO.requerimento.indEstadoEmergencia and !contextoController.usuarioLogado.usuarioExterno}" title="#{bundle.geral_lbl_title_seca}" alt=" * #{bundle.geral_lbl_title_seca}"/>
+							<h:graphicImage value="/resources/imagens/icon-consulta-req-tla.png" rendered="#{requerimentoDTO.indTla and !contextoController.usuarioLogado.usuarioExterno}" title="#{bundle.geral_lbl_tla}" alt=" * #{bundle.geral_lbl_tla}"/>
+							<!-- #9262 -->
+							<h:graphicImage value="/resources/imagens/if_info-g_86250.png" rendered="#{requerimentoDTO.processoReenquadrado and !contextoController.usuarioLogado.usuarioExterno}" title="#{bundle.geral_lbl_processo_reenquadramento_reenquadrado}" alt=" * #{bundle.geral_lbl_processo_reenquadramento_reenquadrado}"/>
+						</p:column>
+						<p:column style="width:65px">
+							<f:facet name="header">Data</f:facet>
+							<h:outputText value="#{requerimentoDTO.requerimento.dtcFinalizacao}">
+								<f:convertDateTime pattern="dd/MM/yyyy" locale="pt,BR" timeZone="Brazil/East" />
+							</h:outputText>
+						</p:column>
+						<p:column style="width:85px">
+							<f:facet name="header">Requerente</f:facet>
+							<p style="word-wrap:break-word;">
+								<h:outputText value="#{requerimentoDTO.pessoa.pessoaFisica.nomPessoa} #{requerimentoDTO.pessoa.pessoaJuridica.nomRazaoSocial}" />
+							</p>
+						</p:column>
+						<p:column style="width:145px;">
+							<f:facet name="header">Empreendimento</f:facet>
+							<p style="word-wrap:break-word;"><h:outputText value="#{requerimentoDTO.empreendimento.nomEmpreendimento}" /></p>
+						</p:column>
+						<p:column style="width:85px">
+							<f:facet name="header">Status</f:facet>
+							
+							<h:outputText value="#{requerimentoDTO.statusRequerimento.nomStatusRequerimento}" rendered="#{requerimentoDTO.statusRequerimento.ideStatusRequerimento != 8}" />
+							<p:commandLink 
+								style="position:center"
+								rendered="#{requerimentoDTO.statusRequerimento.processoFormado}" 
+								actionListener="#{novoRequerimentoController.visualizarProcesso(requerimentoDTO)}" 
+								oncomplete="dialogNumeroProcesso.show()" 
+								update="formNumeroProcesso" 
+								process="@this" 
+								value="#{requerimentoDTO.statusRequerimento.nomStatusRequerimento}" />
+						</p:column>
+						
+						<c:if test="#{!contextoController.usuarioLogado.usuarioExterno}">
+							<p:column  style="width:85px">
+								<f:facet name="header">Usuário</f:facet>
+								<p style="word-wrap:break-word;">
+									<h:outputText value="#{requerimentoDTO.pessoaTramitacao.pessoaFisica.nomPessoa} #{requerimentoDTO.pessoaTramitacao.pessoaJuridica.nomRazaoSocial}" />
+								</p>
+							</p:column>
+						</c:if>
+
+						<p:column style="width:35px;">
+							<f:facet name="header">
+								<h:outputText value="#{bundle.consultapf_lbl_acoes}" />
+							</f:facet>
+
+							<!-- Visualizar Requerimento -->
+							<h:commandLink action="#{identificarTipoSolicitacaoController.redirecionarVisualizacao(requerimentoDTO)}" rendered="#{security.temAcesso('4.15.6')}" disabled="#{false}">
+								<f:setPropertyActionListener target="#{requerimentoDTO.visualizar}" value="#{true}" />
+								<f:setPropertyActionListener target="#{requerimentoDTO.urlVoltar}" value="/paginas/novo-requerimento/consulta.xhtml" />
+								<f:setPropertyActionListener target="#{requerimentoDTO.indiceTela}" value="4" />
+								<f:setPropertyActionListener target="#{contextoController.object}" value="#{requerimentoDTO}" />
+								<f:setPropertyActionListener target="#{novoRequerimentoController.requerimento}" value="#{requerimentoDTO.requerimento}" />
+								<h:graphicImage title="Visualizar" value="/resources/img/ico-pesquisa.png" />
+							</h:commandLink>
+
+							<!-- Gerar Resumo do Requerimento -->
+							<h:commandLink id="resumo_Requerimento" rendered="#{novoRequerimentoController.rendered(requerimentoDTO,22) and security.temAcesso('4.34.14') and not requerimentoDTO.incompleto}"
+								disabled="#{requerimentoDTO.statusRequerimento.ideStatusRequerimento == 9}">
+								<h:graphicImage title="Gerar Resumo do Requerimento" value="/resources/img/ico-pdf.png" />
+								<f:setPropertyActionListener target="#{novoRequerimentoController.requerimentoDTO}" value="${requerimentoDTO}" />
+								<p:fileDownload value="#{novoRequerimentoController.gerarResumoRequerimentoPdf}" />
+							</h:commandLink>
+
+							<!-- 1 - editar -->
+							<h:commandLink action="#{identificarTipoSolicitacaoController.redirecionarVisualizacao(requerimentoDTO)}"
+								rendered="#{novoRequerimentoController.rendered(requerimentoDTO, 1) and security.temAcesso('4.15.3')}"
+								disabled="#{requerimentoDTO.statusRequerimento.ideStatusRequerimento == 9}">
+								<f:setPropertyActionListener target="#{requerimentoDTO.visualizar}" value="#{false}" />
+								<f:setPropertyActionListener target="#{contextoController.object}" value="#{requerimentoDTO}" />
+								<f:setPropertyActionListener target="#{requerimentoDTO.urlVoltar}" value="/paginas/novo-requerimento/consulta.xhtml" />
+								<h:graphicImage title="Editar" value="/resources/img/ico-alterar.png" />
+							</h:commandLink>
+
+							<!-- 2 - efetuar enquadramento -->
+							<p:commandLink action="#{novoRequerimentoController.redirectToEnquadramento(requerimentoDTO)}"
+								rendered="#{(security.temAcesso('4.24.15') and requerimentoDTO.enquadramento) or (security.temAcesso('4.24.15') and requerimentoDTO.pendenciaEnquadramento)}"
+								ajax="false">
+								<f:setPropertyActionListener target="#{requerimentoDTO.visualizar}" value="#{true}" />
+								<f:setPropertyActionListener target="#{requerimentoDTO.modoEnquadramento}" value="#{true}" />
+								<f:setPropertyActionListener target="#{requerimentoDTO.urlVoltar}" value="/paginas/novo-requerimento/consulta.xhtml" />
+								<f:setPropertyActionListener target="#{contextoController.object}" value="#{requerimentoDTO}" />
+								<f:setPropertyActionListener target="#{novoRequerimentoController.pessoa}" value="#{requerimentoDTO.pessoa}" />
+								<h:graphicImage title="Efetuar Enquadramento" value="/resources/img/document-resize.png" />
+							</p:commandLink>
+
+							<!-- 3 - enviar documento-->
+							<p:commandLink rendered="#{security.temAcesso('4.25.12') and requerimentoDTO.envioDocumentacao}" oncomplete="dialogEnviarDocumento.show();updateDocumento();"
+								actionListener="#{envioDocumentoController.load(requerimentoDTO.requerimento)}" update="documento" process="@this">
+								<h:graphicImage title="Enviar Documentação Obrigatória" value="/resources/img/ico-anexo.png" />
+							</p:commandLink>
+
+							<!-- 4 - efetuar validação prévia-->
+							<p:commandLink rendered="#{novoRequerimentoController.isRenderedValidacaoPrevia(requerimentoDTO)}"
+								oncomplete="dialogEfetuarValidacaoPrevia.show();expandAllValidacao();" action="#{validacaoPreviaController.load(requerimentoDTO.requerimento)}"
+								update="validacaoPrevia">
+								<h:graphicImage title="Efetuar Validação Prévia" value="/resources/img/ico-empreendimento.gif" />
+							</p:commandLink>
+
+							<!-- 5 - gravar taxa boleto-->
+							<p:commandLink rendered="#{requerimentoDTO.boletoLiberado and security.temAcesso('4.27.11') and !novoRequerimentoController.isDae(requerimentoDTO)}" update="boleto"
+								action="#{boletoAutomatizadoController.load(requerimentoDTO.requerimento)}" oncomplete="dialogBoleto.show()" process="@this">
+								<h:graphicImage title="Gravar Taxa Boleto" value="/resources/img/ico-boleto.png" />
+							</p:commandLink>
+							
+							<!-- 5 - gerar dae -->
+							<p:commandLink rendered="#{requerimentoDTO.boletoLiberado and security.temAcesso('4.94.14') and novoRequerimentoController.isDae(requerimentoDTO)}" update="fromDae"
+								action="#{gerarDaeController.load(requerimentoDTO.requerimento)}" oncomplete="dialogGerarDae.show()" process="@this">
+								<h:graphicImage title="Gerar DAE" value="/resources/img/ico-boleto.png" />
+							</p:commandLink>						
+
+
+							<!-- 5 - gerar certificado dae -->
+							<h:commandLink rendered="#{(requerimentoDTO.completo or requerimentoDTO.formado) and security.temAcesso('4.94.14') and novoRequerimentoController.isCRF(requerimentoDTO)}">
+								<h:graphicImage title="Gerar Certificado do CRF" value="/resources/img/ico-pdf.png" />
+								<p:fileDownload value="#{novoRequerimentoController.gerarDocumentoCRF(requerimentoDTO.requerimento)}" />
+							</h:commandLink>
+
+
+							<!-- 6 - enviar comprovante-->
+							<p:commandLink rendered="#{requerimentoDTO.envioComprovante and security.temAcesso('4.28.12')}"
+								update="comprovante boleto_form certificado_form vistoria_form comprovante_bt" process="@this" oncomplete="dialogComprovante.show()"
+								action="#{comprovanteBoletoController.load(requerimentoDTO.requerimento)}">
+								<h:graphicImage title="Enviar Comprovante" value="/resources/img/ico-comprovante.png" />
+							</p:commandLink>
+
+							<!-- 7 - validar comprovante-->
+							<p:commandLink rendered="#{requerimentoDTO.validacaoComprovante  and security.temAcesso('4.29.13')}"
+								actionListener="#{validacaoBoletoController.load(requerimentoDTO.requerimento)}" oncomplete="dialogValidacaoComprovante.show()" process="@this"
+								update="validacao_comprovante">
+								<h:graphicImage title="Validar Boleto" value="/resources/img/ico-msg-sucesso.png" />
+							</p:commandLink>
+
+							<!-- Gerar relatório de DLA -->
+							<h:commandLink rendered="#{requerimentoDTO.indDla and security.temAcesso('4.36.14')}" disabled="${requerimentoDTO.cancelado}">
+								<h:graphicImage title="Gerar DLA" value="/resources/img/ico-pdf.png" />
+								<p:fileDownload value="#{novoRequerimentoController.gerarDocumentoDLA(requerimentoDTO.requerimento)}" />
+							</h:commandLink>
+
+							<!-- Visualizar Lac de ERB -->
+							<p:commandLink rendered="#{novoRequerimentoController.rendered(requerimentoDTO,9) and security.temAcesso('4.37.6')}" oncomplete="lac.show();" update="form_lac"
+								action="#{lacErbController.visualizar}" disabled="#{requerimentoDTO.statusRequerimento.ideStatusRequerimento == 9}">
+								<h:graphicImage title="Visualizar Lac de ERB" value="/resources/img/licon.png" />
+								<f:setPropertyActionListener target="#{lacErbController.lacErb.ideRequerimento.ideRequerimento}" value="#{requerimentoDTO.requerimento.ideRequerimento}" />
+							</p:commandLink>
+
+							<!-- Visualizar Lac de Posto -->
+							<p:commandLink rendered="#{novoRequerimentoController.rendered(requerimentoDTO,12) and security.temAcesso('4.38.6')}" oncomplete="lac_posto.show();"
+								update="posto_tab,form_dados,form_abastecimento,form_controle,form_manutencao" action="#{lacPostoController.visualizar}"
+								disabled="#{requerimentoDTO.statusRequerimento.ideStatusRequerimento == 9}">
+								<h:graphicImage title="Visualizar Lac de Posto" value="/resources/img/licon.png" />
+								<f:setPropertyActionListener target="#{lacPostoController.lacPostoCombustivel.ideRequerimento.ideRequerimento}"
+									value="#{requerimentoDTO.requerimento.ideRequerimento}" />
+							</p:commandLink>
+
+							<!-- Imprimir Relatório Final da Lac de ERB -->
+							<h:commandLink
+								rendered="#{novoRequerimentoController.rendered(requerimentoDTO,11) and novoRequerimentoController.isLacErb(requerimentoDTO) and security.temAcesso('4.39.5')}"
+								ajax="false" disabled="#{requerimentoDTO.statusRequerimento.ideStatusRequerimento == 9}">
+								<h:graphicImage title="Imprimir Relatório Final da Lac de ERB" value="/resources/img/licon.png" />
+								<f:setPropertyActionListener target="#{lacErbController.lacErb.ideRequerimento.ideRequerimento}" value="#{requerimentoDTO.requerimento.ideRequerimento}" />
+								<p:fileDownload value="#{lacErbController.imprimirRelatorioFinalLac}" />
+							</h:commandLink>
+
+							<!-- Imprimir Relatório Final da Lac de Posto -->
+							<h:commandLink
+								rendered="#{novoRequerimentoController.rendered(requerimentoDTO,11) and novoRequerimentoController.isLacPosto(requerimentoDTO) and security.temAcesso('4.40.5')}"
+								ajax="false" disabled="#{requerimentoDTO.statusRequerimento.ideStatusRequerimento == 9}">
+								<h:graphicImage title="Imprimir Relatório Final da Lac de Posto" value="/resources/img/licon.png" />
+								<f:setPropertyActionListener target="#{lacPostoController.lacPostoCombustivel.ideRequerimento.ideRequerimento}"
+									value="#{requerimentoDTO.requerimento.ideRequerimento}" />
+								<p:fileDownload value="#{lacPostoController.imprimirRelatorioFinal}" />
+							</h:commandLink>
+
+							<!-- Imprimir Relatório Final da Lac Transportadora -->
+							<h:commandLink
+								rendered="#{novoRequerimentoController.rendered(requerimentoDTO,17) and security.temAcesso('4.55.5')}"
+								ajax="false" disabled="#{requerimentoDTO.statusRequerimento.ideStatusRequerimento == 9}">
+								<h:graphicImage title="Imprimir Relatório Final da Lac Transportadora" value="/resources/img/licon.png" />
+								<f:setPropertyActionListener target="#{lacTransporteController.requerimento}" value="#{requerimentoDTO.requerimento}" />
+								<p:fileDownload value="#{lacTransporteController.imprimirRelatorioFinal}" />
+							</h:commandLink>
+							
+							<!-- Gerar Certificado Lac de ERB -->
+							<h:commandLink
+								rendered="#{novoRequerimentoController.rendered(requerimentoDTO,10) 
+									and novoRequerimentoController.isLacErb(requerimentoDTO) 
+									and security.temAcesso('4.41.14')}"
+								ajax="false" disabled="#{requerimentoDTO.statusRequerimento.ideStatusRequerimento == 9}">
+								<h:graphicImage title="Gerar Certificado Lac de ERB" value="/resources/img/cicon.png" />
+								<f:setPropertyActionListener target="#{lacErbController.lacErb.ideRequerimento.ideRequerimento}" value="#{requerimentoDTO.requerimento.ideRequerimento}" />
+								<p:fileDownload value="#{lacErbController.imprimirCertificado}" />
+							</h:commandLink>
+
+							<!-- Gerar Certificado Lac -->
+							<h:commandLink
+								rendered="#{novoRequerimentoController.isConversaoTcraLac(requerimentoDTO) 
+									and novoRequerimentoController.isProcessoConcluido(requerimentoDTO) 
+									and novoRequerimentoController.isLac(requerimentoDTO) 
+									and !novoRequerimentoController.rendered(requerimentoDTO,10) 
+									and security.temAcesso('4.42.14')}"
+								ajax="false" disabled="#{requerimentoDTO.statusRequerimento.ideStatusRequerimento == 9}">
+								<h:graphicImage title="Gerar Certificado Lac" value="/resources/img/cicon.png" />
+								<f:setPropertyActionListener target="#{lacPostoController.lacPostoCombustivel.ideRequerimento.ideRequerimento}"
+									value="#{requerimentoDTO.requerimento.ideRequerimento}" />
+								<p:fileDownload value="#{lacPostoController.getImprimirCertificadoTcraLac(requerimentoDTO.requerimento.ideRequerimento)}" />
+							</h:commandLink>
+
+							<!-- Gerar Certificado Lac de Posto -->
+							<h:commandLink
+								rendered="#{novoRequerimentoController.rendered(requerimentoDTO,10) 
+									and novoRequerimentoController.isLacPosto(requerimentoDTO) 
+									and security.temAcesso('4.43.14')}"
+								ajax="false" disabled="#{requerimentoDTO.statusRequerimento.ideStatusRequerimento == 9}">
+								<h:graphicImage title="Gerar Certificado Lac de Posto" value="/resources/img/cicon.png" />
+								<f:setPropertyActionListener target="#{lacPostoController.lacPostoCombustivel.ideRequerimento.ideRequerimento}"
+									value="#{requerimentoDTO.requerimento.ideRequerimento}" />
+								<p:fileDownload value="#{lacPostoController.imprimirCertificado}" />
+							</h:commandLink>
+
+							<!-- Gerar Certificado Lac de Transportadora -->
+							<h:commandLink
+								rendered="#{novoRequerimentoController.rendered(requerimentoDTO,10) 
+									and novoRequerimentoController.isLacTransportadora(requerimentoDTO) 
+									and security.temAcesso('4.54.14')}"
+								ajax="false" disabled="${requerimentoDTO.statusRequerimento.ideStatusRequerimento == 9}">
+
+								<h:graphicImage title="Gerar Certificado Lac de Transportadora" value="/resources/img/cicon.png" />
+								<f:setPropertyActionListener target="#{lacTransporteController.requerimento}" value="#{requerimentoDTO.requerimento}" />
+								<p:fileDownload value="#{lacTransporteController.imprimirCertificado}" />
+							</h:commandLink>
+
+							<!-- Gerar Certificado RLAC -->
+							<h:commandLink
+								rendered="#{novoRequerimentoController.isProcessoConcluido(requerimentoDTO) 
+									and novoRequerimentoController.isRLAC(requerimentoDTO)
+									and security.temAcesso('4.62.14')}"
+								ajax="false">
+
+								<h:graphicImage title="Gerar Certificado RLAC" value="/resources/img/cicon.png" />
+								<p:fileDownload value="#{novoRequerimentoController.imprimirCertificadoRLAC(requerimentoDTO)}" />
+							</h:commandLink>
+
+							<!-- Gerar Certificado de Corte de Floresta -->
+							<h:commandLink rendered="#{novoRequerimentoController.rendered(requerimentoDTO,14) and  security.temAcesso('4.44.14')}" ajax="false"
+								disabled="#{requerimentoDTO.statusRequerimento.ideStatusRequerimento == 9}">
+
+								<h:graphicImage title="Gerar Certificado de Registro de Corte de Floresta Plantada" value="/resources/img/ico-tesoura.png" />
+								<p:fileDownload value="#{novoRequerimentoController.getImprimirRelatorioCorteFloresta(requerimentoDTO)}" />
+							</h:commandLink>
+
+							<!-- Gerar relatório de ato declaratório -->
+							<h:commandLink rendered="#{novoRequerimentoController.rendered(requerimentoDTO,8)}"
+								disabled="#{requerimentoDTO.statusRequerimento.ideStatusRequerimento == 9}">
+								
+								<h:graphicImage title="Gerar Relatório de Ato Declaratório" value="/resources/img/ico-pdf.png" />
+								<f:setPropertyActionListener target="#{novoRequerimentoController.requerimentoDTO}" value="${requerimentoDTO}" />
+								<p:fileDownload value="#{novoRequerimentoController.gerarDocumentoDeclaracaoPdf}" />
+							</h:commandLink>
+
+							<!-- Gerar Certificado de Floresta de Produção Plantada -->
+							<h:commandLink rendered="#{novoRequerimentoController.rendered(requerimentoDTO,15) and  security.temAcesso('4.45.14')}" ajax="false"
+								disabled="#{requerimentoDTO.statusRequerimento.ideStatusRequerimento == 9}">
+								<h:graphicImage title="Gerar Certificado de Registro de Floresta de Produção Plantada" value="/resources/img/ico-pdf.png" />
+								<p:fileDownload value="#{novoRequerimentoController.getRegistroCorteFlorestaProducaoPlantada(requerimentoDTO)}" />
+							</h:commandLink>
+							
+							<!-- Gerar Certificado de APE -->
+							<h:commandLink rendered="#{novoRequerimentoController.rendered(requerimentoDTO,18) and security.temAcesso('4.68.14')}" ajax="false"
+								disabled="#{requerimentoDTO.statusRequerimento.ideStatusRequerimento == 9}">
+								<h:graphicImage title="Gerar Certificado de APE" value="/resources/img/ico-pdf.png" />
+								<p:fileDownload value="#{novoRequerimentoController.getImprimirCertificadoAPE(requerimentoDTO)}" />
+							</h:commandLink>
+
+							<!-- Visualizar historico comunicacao requerente -->
+							<p:commandLink rendered="#{security.temAcesso('4.46.6') and  not requerimentoDTO.incompleto}"
+								action="#{comunicacaoRequerenteController.carregarTela(requerimentoDTO.requerimento)}" oncomplete="dialoghistoricoComunicacao.show()" update="formHistorico">
+								<f:setPropertyActionListener target="${contextoController.object}" value="#{requerimentoDTO.requerimento}" />
+								<h:graphicImage title="Visualizar Histórico do requerimento" value="/resources/img/ico-mnp.gif" />
+							</p:commandLink>
+							
+							<!-- Cancelar Requerimento -->
+							<h:commandLink onclick="confirmacaoExclusaoRequerimento.show();"
+								rendered="#{(requerimentoDTO.permitidoCancelar and security.temAcesso('4.15.2'))
+										or (requerimentoDTO.incompleto and contextoController.usuarioLogado.usuarioExterno)}">
+								
+								<h:graphicImage title="Cancelar Requerimento" value="/resources/img/ico-excluir.png" />
+								<f:setPropertyActionListener target="#{contextoController.object}" value="#{requerimentoDTO.requerimento}" />
+								<f:ajax execute="@this" />
+							</h:commandLink>
+							
+							<!-- Voltar status -->
+							<p:commandLink oncomplete="dialogAlteracaoStatus.show()" action="#{alteracaoStatusController.consultar()}" 
+								rendered="#{novoRequerimentoController.rendered(requerimentoDTO, 16)}" update="formAlteracaoStatus">
+								
+								<f:setPropertyActionListener value="#{requerimentoDTO.requerimento}" target="#{alteracaoStatusController.requerimento}"/>
+								<h:graphicImage title="Alterar status" value="/resources/img/voltar.png" />
+							</p:commandLink>
+							
+							<!-- Gerar Certificado de DIAP -->
+							<h:commandLink rendered="#{novoRequerimentoController.rendered(requerimentoDTO,19) and  security.temAcesso('4.68.14')}" ajax="false"
+								disabled="#{requerimentoDTO.statusRequerimento.ideStatusRequerimento == 9}">
+								<h:graphicImage title="Gerar Certificado de DIAP" value="/resources/img/ico-pdf.png" />
+								<p:fileDownload value="#{novoRequerimentoController.getImprimirCertificadoDIAP(requerimentoDTO)}" />
+							</h:commandLink>
+							
+							<!-- Gerar Resumo DTRP -->
+							<h:commandLink
+								rendered="#{novoRequerimentoController.rendered(requerimentoDTO,21) and security.temAcesso('4.34.14')}"
+								ajax="false" disabled="#{requerimentoDTO.statusRequerimento.ideStatusRequerimento == 9}">
+									<h:graphicImage title="Gerar Resumo DTRP" value="/resources/img/ico-pdf.png" />
+									<f:setPropertyActionListener target="#{declaracaoTransporteResiduoPerigosoController.requerimentoConsulta.ideRequerimento}"
+									value="#{requerimentoDTO.requerimento.ideRequerimento}" />
+								<p:fileDownload value="#{declaracaoTransporteResiduoPerigosoController.imprimirRelatorio}" />
+							</h:commandLink>
+							
+							<!-- Gerar Certificado DTRP -->
+							<h:commandLink
+								rendered="#{novoRequerimentoController.rendered(requerimentoDTO,20) and security.temAcesso('4.34.14')}"
+								ajax="false" disabled="#{requerimentoDTO.statusRequerimento.ideStatusRequerimento == 9}">
+								<h:graphicImage title="Gerar Certificado DTRP" value="/resources/img/ico-pdf.png" />
+								<f:setPropertyActionListener target="#{lacPostoController.lacPostoCombustivel.ideRequerimento.ideRequerimento}"
+									value="#{requerimentoDTO.requerimento.ideRequerimento}" />
+								<p:fileDownload value="#{declaracaoTransporteResiduoPerigosoController.getImprimirCertificadoDTRP(requerimentoDTO.requerimento.ideRequerimento)}" />
+							</h:commandLink>
+							
+							<!-- Gerar Resumo Inexigibilidade -->
+							<h:commandLink
+								rendered="#{novoRequerimentoController.rendered(requerimentoDTO,23) and security.temAcesso('4.34.14')}"
+								ajax="false" disabled="#{requerimentoDTO.statusRequerimento.ideStatusRequerimento == 9}">
+									<h:graphicImage title="Gerar Resumo Inexigibilidade" value="/resources/img/ico-pdf.png" />
+									<f:setPropertyActionListener target="#{declaracaoInexigibilidadeController.requerimentoConsulta.ideRequerimento}"
+									value="#{requerimentoDTO.requerimento.ideRequerimento}" />
+								<p:fileDownload value="#{declaracaoInexigibilidadeController.imprimirRelatorio}" />
+							</h:commandLink>
+							
+							<!-- Gerar Certificado Inexigibilidade/Gerar Declaração Inexigibilidade -->
+							<h:commandLink
+								rendered="#{novoRequerimentoController.rendered(requerimentoDTO,24) and security.temAcesso('4.34.14')}"
+								ajax="false" disabled="#{requerimentoDTO.statusRequerimento.ideStatusRequerimento == 9}">
+								<h:graphicImage title="Gerar Declaração Inexigibilidade" value="/resources/img/ico-pdf.png" />
+								<f:setPropertyActionListener target="#{declaracaoInexigibilidadeController.requerimentoConsulta.ideRequerimento}"
+									value="#{requerimentoDTO.requerimento.ideRequerimento}" />
+								<p:fileDownload value="#{declaracaoInexigibilidadeController.getImprimirCertificado(requerimentoDTO.requerimento.ideRequerimento)}" />
+							</h:commandLink>
+						</p:column>
+					</p:dataTable>
+				</h:panelGrid>
+			</p:fieldset>
+		</h:form>
+		
+		<p:dialog id="dialogselecionarRequerente" dynamic="true" header="Selecionar Requerente" widgetVar="dialogselecionarRequerente" modal="true" position="center" resizable="false">
+			<ui:include src="/paginas/novo-requerimento/selecionarRequerente.xhtml" />
+		</p:dialog>
+
+		<!-- Confirmacao exclusao Requerimento Unico -->
+		<h:form id="confirmacaoExclusaoRequerimento">
+			<p:confirmDialog id="confirmacaoExclusaoRequerimento" widgetVar="confirmacaoExclusaoRequerimento" header="#{bundle.geral_lbl_mensagem}" closable="false"
+							 message="#{bundle.geral_msg_confirmar_exclusao}">
+				<h:panelGroup>
+					<div style="text-align: center;"> 
+						<p:commandButton value="#{bundle.btn_sim}" action="#{novoRequerimentoController.excluirRequerimento()}" onclick="confirmacaoExclusaoRequerimento.hide();" process="@this" />
+						<p:commandButton value="#{bundle.btn_nao}" onclick="confirmacaoExclusaoRequerimento.hide();" process="@this" />
+					</div>
+				</h:panelGroup>
+			</p:confirmDialog>
+		</h:form>
+		
+	</ui:define>
+</ui:composition>

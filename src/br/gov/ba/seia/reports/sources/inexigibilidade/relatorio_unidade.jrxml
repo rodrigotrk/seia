@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="rel_loc_real_ativ" pageWidth="495" pageHeight="817" whenNoDataType="AllSectionsNoDetail" columnWidth="495" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="80b78396-35cc-4e26-aaf9-1207b1892468">
+	<property name="ireport.zoom" value="1.6528925619834731"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="ide_declaracao_inexigibilidade" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[select
+uni.ide_declaracao_inexigibilidade_info_unidade,
+uni.nom_unidade,
+to_char(uni.val_area, 'FM999G999G999G990D00') as val_area,
+to_char(uni.val_area_inundada, 'FM999G999G999G990D0000') as val_area_inundada,
+uni.ide_endereco,
+uni.ide_declaracao_inexigibilidade,
+tlgr.nom_tipo_logradouro || lgr.nom_logradouro as logradouro,
+lgr.num_cep,
+bgr.nom_bairro,
+mgr.nom_municipio,
+ufgr.des_sigla
+from declaracao_inexigibilidade_info_unidade uni
+left join endereco e on uni.ide_endereco = e.ide_endereco
+left join logradouro lgr on lgr.ide_logradouro = e.ide_logradouro
+left join tipo_logradouro tlgr on tlgr.ide_tipo_logradouro = lgr.ide_tipo_logradouro
+left join bairro bgr on bgr.ide_bairro = lgr.ide_bairro
+left join municipio mgr on mgr.ide_municipio = lgr.ide_municipio
+left join estado ufgr on ufgr.ide_estado = mgr.ide_estado
+where ide_declaracao_inexigibilidade = $P{ide_declaracao_inexigibilidade}]]>
+	</queryString>
+	<field name="ide_declaracao_inexigibilidade_info_unidade" class="java.lang.Integer"/>
+	<field name="nom_unidade" class="java.lang.String"/>
+	<field name="val_area" class="java.lang.String">
+		<fieldDescription><![CDATA[Valor da área a Área de Preservação Permanente possui]]></fieldDescription>
+	</field>
+	<field name="val_area_inundada" class="java.lang.String"/>
+	<field name="ide_endereco" class="java.lang.Integer"/>
+	<field name="ide_declaracao_inexigibilidade" class="java.lang.Integer"/>
+	<field name="logradouro" class="java.lang.String"/>
+	<field name="num_cep" class="java.math.BigDecimal"/>
+	<field name="nom_bairro" class="java.lang.String"/>
+	<field name="nom_municipio" class="java.lang.String"/>
+	<field name="des_sigla" class="java.lang.String"/>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<detail>
+		<band height="72" splitType="Stretch">
+			<elementGroup/>
+			<staticText>
+				<reportElement uuid="4cbaea72-12a9-472c-9f92-8aa7528a22d0" x="5" y="5" width="92" height="13"/>
+				<textElement verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Nome da unidade:]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="14359b20-02af-46c9-b8b5-19cf2b9dd078" x="97" y="5" width="380" height="13"/>
+				<textElement verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nom_unidade}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="3d0ca464-42e4-43a6-97a3-9c21c688a963" x="5" y="18" width="32" height="13"/>
+				<textElement verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Área:]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="9eb44a84-9c8c-45c5-8b5f-293463c4073d" x="37" y="18" width="440" height="13"/>
+				<textElement verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{val_area} == null ? $F{val_area_inundada} + " ha" : $F{val_area} + " m²"]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="2eec27d8-3772-43fc-b1a7-d84e8bdc028c" x="5" y="31" width="60" height="13"/>
+				<textElement verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Endereço]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="f5144953-60b6-43c5-9d5c-892231187a2a" x="5" y="44" width="60" height="13"/>
+				<textElement verticalAlignment="Middle">
+					<font size="9" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Logradouro:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="1b8ab7f0-d435-4e3d-929a-edbd54c0a503" x="372" y="44" width="22" height="13"/>
+				<textElement verticalAlignment="Middle">
+					<font size="9" isBold="false"/>
+				</textElement>
+				<text><![CDATA[CEP:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="ee8f909e-16d7-4189-804c-0bcce26488c1" x="5" y="57" width="79" height="13"/>
+				<textElement verticalAlignment="Middle">
+					<font size="9" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Bairro/Distrito:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="366f28f7-1afe-4f3d-9647-a99ec1fd066a" x="184" y="57" width="40" height="13"/>
+				<textElement verticalAlignment="Middle">
+					<font size="9" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Cidade:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="c8487136-97d0-4bcd-9e0a-770c304b02e2" x="398" y="57" width="20" height="13"/>
+				<textElement verticalAlignment="Middle">
+					<font size="9" isBold="false"/>
+				</textElement>
+				<text><![CDATA[UF:]]></text>
+			</staticText>
+			<textField pattern="#####-###">
+				<reportElement uuid="c251fc7e-b8d3-4f8f-9b1d-95de276166ec" x="394" y="44" width="91" height="13">
+					<printWhenExpression><![CDATA[$F{num_cep} != null]]></printWhenExpression>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{num_cep}.toString().substring(0,5) + "-" + $F{num_cep}.toString().substring(5)]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="f15ce1b1-457c-4239-879a-20613b107e07" x="84" y="57" width="100" height="13">
+					<printWhenExpression><![CDATA[$F{nom_bairro} != null]]></printWhenExpression>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nom_bairro}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="f6045f7d-40e2-4d09-90bf-2be52a9317cd" x="224" y="57" width="174" height="13">
+					<printWhenExpression><![CDATA[$F{nom_municipio} != null]]></printWhenExpression>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nom_municipio}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="8721519a-1646-40ad-b14a-88a2897fcc59" x="418" y="57" width="43" height="13">
+					<printWhenExpression><![CDATA[$F{des_sigla} != null]]></printWhenExpression>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{des_sigla}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="736b7938-06e0-4bf3-a455-99d29c4ea510" x="65" y="44" width="307" height="13">
+					<printWhenExpression><![CDATA[$F{logradouro} != null]]></printWhenExpression>
+				</reportElement>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{logradouro}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

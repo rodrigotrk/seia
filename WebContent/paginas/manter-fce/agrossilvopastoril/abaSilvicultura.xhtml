@@ -1,0 +1,274 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui">
+	<h:form id="formSilvicultura">
+		<h:panelGrid style="margin-left:-7px;">
+		   <h:panelGrid id="pngFlorestaProducao">
+			    <h:outputText value="*Dados para Floresta de produção" styleClass="titulo-grupo" style="font-weight:bold;"/>
+			    <ui:repeat var="flor_prod" value="#{silviculturaController.listaSilviculturaFlorestaProducao}">
+				   	<h:panelGrid columns="2">
+			   		<p:selectBooleanCheckbox value="#{flor_prod.indProjeto}" rendered="#{flor_prod.tipoProjetoOuFloresta == 'Projeto'}">
+				    	<p:ajax update="formGeral:tabAbasId_Agro:pngFlorestaProducao" global="false"/>
+				    </p:selectBooleanCheckbox>
+				    <p:selectBooleanCheckbox value="#{flor_prod.indFlorestaImplantada}" rendered="#{flor_prod.tipoProjetoOuFloresta == 'Floresta Implantada'}">
+				    	<p:ajax update="formGeral:tabAbasId_Agro:pngFlorestaProducao" global="false"/>
+				    </p:selectBooleanCheckbox>
+				   	<h:outputText value="#{flor_prod.tipoProjetoOuFloresta == 'Floresta Implantada' ? 'Floresta Implantada' : 'Projeto'}" style="font-weight:bold;"/>					    
+				   </h:panelGrid>
+				     <h:panelGrid columns="6" rendered="#{flor_prod.indProjeto || flor_prod.indFlorestaImplantada}">
+				     	 <h:outputText value="*Previsão de plantio (mês/ano)"/>
+				     	 <p:selectOneMenu value="#{flor_prod.dtcMesPrevisaoPlantio}" converter="mesConverter">  
+				            <f:selectItem itemLabel="Selecione" itemValue="" />
+				            <f:selectItems value="#{silviculturaController.listaMes}" var="mes" itemLabel="#{mes.nomMes}" itemValue="#{mes}" />  
+		        		 	<p:ajax event="change" global="false" immediate="true"/>
+		        		 </p:selectOneMenu>
+		        		 <p:selectOneMenu value="#{flor_prod.dtcAnoPrevisaoPlantio}" converter="integerNewConverter">  
+				            <f:selectItem itemLabel="Selecione" itemValue="" />
+				            <f:selectItems value="#{silviculturaController.listaAno}" var="ano" itemLabel="#{ano}" itemValue="#{ano}" />  
+		        		 	<p:ajax event="change" global="false" immediate="true"/>
+		        		 </p:selectOneMenu>
+		        		 <p:spacer height="0" width="20"/>
+		        		 <h:outputText value="*Área total de plantio(ha):"/>
+		        		 <p:inputText value="#{flor_prod.numAreaTotal}" converter="doubleConverter" onkeyup="maskIt(this, event, '99.999.999,99', true)" maxlength="13">
+		        		 	<p:ajax global="false"/>
+		        		 </p:inputText>
+		        		 <h:outputText value="*Previsão de corte (mês/ano)"/>
+				     	 <p:selectOneMenu value="#{flor_prod.dtcMesPrevisaoCorte}" converter="mesConverter">
+				            <f:selectItem itemLabel="Selecione" itemValue="" />
+				            <f:selectItems value="#{silviculturaController.listaMes}" var="mes" itemLabel="#{mes.nomMes}" itemValue="#{mes}" />  
+		        			<p:ajax global="false"/>
+		        		 </p:selectOneMenu>
+		        		  <p:selectOneMenu value="#{flor_prod.dtcAnoPrevisaoCorte}">
+				            <f:selectItem itemLabel="Selecione" itemValue="" />
+				            <f:selectItems value="#{silviculturaController.listaAno}" var="ano" itemLabel="#{ano}" itemValue="#{ano}" />  
+		        			<p:ajax global="false"/>
+		        		 </p:selectOneMenu>
+		        		 <p:spacer height="0" width="20"/>
+		        		 <h:outputText value="*Estimativa do volume de produção final (m³)"/>
+		        		 <p:inputText value="#{flor_prod.numVolumeFinal}" converter="doubleConverter" onkeyup="maskIt(this, event, '99.999.999,99', true)" maxlength="13">
+		        		 	<p:ajax global="false" />
+		        		 </p:inputText>
+				     </h:panelGrid>
+			     </ui:repeat>
+		   </h:panelGrid>
+		    <br />
+		    <h:outputText value="*Espécies e variedades propostas/implantadas no reflorestamento" styleClass="titulo-grupo" style="font-weight:bold;"/>
+		    <h:panelGrid id="pngEspeciesReflorestamento">
+			    <ui:repeat var="esp_refl" value="#{silviculturaController.listaSilviculturaEspecieReflores}">
+				   	<h:panelGrid columns="2">
+			   		<p:selectBooleanCheckbox value="#{esp_refl.indProjeto}" rendered="#{esp_refl.tipoProjetoOuFloresta == 'Projeto'}">
+				    	<p:ajax update="formGeral:tabAbasId_Agro:pngEspeciesReflorestamento" global="false"/>
+				    </p:selectBooleanCheckbox>
+				    <p:selectBooleanCheckbox value="#{esp_refl.indFlorestaImplantada}" rendered="#{esp_refl.tipoProjetoOuFloresta == 'Floresta Implantada'}">
+				    	<p:ajax update="formGeral:tabAbasId_Agro:pngEspeciesReflorestamento" global="false"/>
+				    </p:selectBooleanCheckbox>
+				   	<h:outputText value="#{esp_refl.tipoProjetoOuFloresta == 'Floresta Implantada' ? 'Floresta Implantada' : 'Projeto'}" style="font-weight:bold;"/>
+				   						    
+				   </h:panelGrid>
+				     <h:panelGrid columns="5" rendered="#{esp_refl.indProjeto || esp_refl.indFlorestaImplantada}">
+				     	 <h:outputText value="*Previsão de plantio (ano)"/>
+				     	 <p:selectOneMenu value="#{esp_refl.dtcAnoPrevisaoPlantio}">  
+				            <f:selectItem itemLabel="Selecione" itemValue="" />
+				            <f:selectItems value="#{silviculturaController.listaAno}" var="ano" itemLabel="#{ano}" itemValue="#{ano}" />  
+		        			<p:ajax global="false" />
+		        		 </p:selectOneMenu>
+		        		 <p:spacer height="0" width="20"/>
+		        		 <h:outputText value="*Área total de plantio(ha):"/>
+		        		 <p:inputText value="#{esp_refl.numAreaTotal}" converter="doubleConverter" onkeyup="maskIt(this, event, '99.999.999,99', true)" maxlength="13">
+		        		 	<p:ajax global="false" />
+		        		 </p:inputText>
+		        		 <h:outputText value="*Previsão de corte (ano)"/>
+				     	 <p:selectOneMenu value="#{esp_refl.dtcAnoPrevisaoCorte}">
+				            <f:selectItem itemLabel="Selecione" itemValue="" />
+				            <f:selectItems value="#{silviculturaController.listaAno}" var="ano" itemLabel="#{ano}" itemValue="#{ano}" />  
+		        		 	<p:ajax global="false" />
+		        		 </p:selectOneMenu>
+		        		 <p:spacer height="0" width="20"/>
+		        		 <h:outputText value="*Estimativa do volume de produção final (m³)"/>
+		        		 <p:inputText value="#{esp_refl.numVolumeFinal}" converter="doubleConverter" onkeyup="maskIt(this, event, '99.999.999,99', true)" maxlength="13">
+		        		 	<p:ajax global="false" />
+		        		 </p:inputText>
+				     </h:panelGrid>
+			     </ui:repeat>
+		   </h:panelGrid>
+		   <h:panelGrid id="pngEspecieHibrido">
+				<h:panelGroup style="margin-top:20px; margin-bottom:10px;">
+					<h:outputText value="Espécie(s) ou Hibrido(s)"/>
+					<p:spacer width="5" height="0"/>
+					<p:inputText id="pesquisar_especie" value="#{silviculturaController.nomEspecieHibridos}" onkeyup="pesq_tipo_especie();" style="width:250px;">
+						<p:ajax event="blur" process="@this" global="false"/>
+					</p:inputText>
+					<p:watermark for="pesquisar_especie" value="Digite o nome da Espécie ou híbrido" />
+					<p:remoteCommand name="pesq_tipo_especie" actionListener="#{silviculturaController.pesquisarEspecieHibrido()}" global="false" update="formGeral:tabAbasId_Agro:tblEspecieHibrido" />
+				</h:panelGroup>
+				<p:dataTable id="tblEspecieHibrido" value="#{silviculturaController.listaEspecieHibrido}" var="espec" lazy="true" paginator="true" rows="10"  
+				paginatorPosition="bottom" paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}" rowsPerPageTemplate="5,10,15" 
+				emptyMessage="Nenhuma espécie encontrada." style="width: 958px;">
+					<p:column headerText="Espécie" style="width: 290px; text-align:justify;">
+						<h:outputText value="#{espec.dscEspecieHibrido}" />
+					</p:column>
+					<p:column headerText="Nome Vulgar" style="width: 290px; text-align:justify;">
+						<h:outputText value="#{espec.nomVulgar}" />
+					</p:column>
+					<p:column style="width: 40px; text-align:center;" headerText="Ações">		
+						<p:commandLink title="Confirmar" process="@this" update="formGeral:tabAbasId_Agro:tblEspecieHibrido formGeral:tabAbasId_Agro:pngEspecieHibridoSelecionados" 
+						action="#{silviculturaController.adicionarEspecie()}" global="false">
+							<h:graphicImage title="Confirmar" value="/resources/img/ico-aprovar-notificacao.png" />
+							<f:setPropertyActionListener target="#{silviculturaController.especieHibrido}" value="#{espec}"/>
+						</p:commandLink>
+					</p:column>
+				</p:dataTable>				
+			</h:panelGrid>
+			<h:panelGrid id="pngEspecieHibridoSelecionados">
+				<p:dataTable id="tblEspecieHibridoSelecionados" value="#{silviculturaController.listaSilvicultura}" var="espec_sel" lazy="true" paginator="true" rows="10"  
+				paginatorPosition="bottom" paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}" rowsPerPageTemplate="5,10,15" 
+				style="width: 958px;" rendered="#{silviculturaController.exibirEspecieHibrido}">
+					<p:column headerText="Espécie">
+						<h:outputText value="#{espec_sel.ideEspecieHibrido.dscEspecieHibrido}" />
+					</p:column>
+					
+					<p:column headerText="Nome Vulgar">
+						<h:outputText value="#{espec_sel.ideEspecieHibrido.nomVulgar}" />
+					</p:column>
+					
+					<p:column style="width:40px;">
+						<center>
+							<f:facet name="header" >
+								<h:outputText value="Projeto" style="margin-left:-5px;"/>
+							</f:facet>
+							<p:selectBooleanCheckbox value="#{espec_sel.indProjeto}" disabled="#{espec_sel.indFlorestaImplantada or espec_sel.desabilitado}">
+								<p:ajax global="false" update="formGeral:tabAbasId_Agro:tblEspecieHibridoSelecionados"/>
+							</p:selectBooleanCheckbox>
+						</center>
+					</p:column>
+					
+					<p:column style="width:45px;">
+						<center>
+							<f:facet name="header">
+								<h:outputText value="Floresta" style="margin-left:-5px;"/>
+							</f:facet>
+							<p:selectBooleanCheckbox value="#{espec_sel.indFlorestaImplantada}" disabled="#{espec_sel.indProjeto or espec_sel.desabilitado}">
+								<p:ajax global="false" update="formGeral:tabAbasId_Agro:tblEspecieHibridoSelecionados"/>
+							</p:selectBooleanCheckbox>
+						</center>
+					</p:column>
+					
+					<p:column headerText="*Previsão plantio">
+						 <p:selectOneMenu value="#{espec_sel.dtcAnoPrevisaoPlantio}" disabled="#{espec_sel.indFlorestaImplantada or espec_sel.desabilitado}">  
+				            <f:selectItem itemLabel="Selecione" itemValue="" />
+				            <f:selectItems value="#{silviculturaController.listaAno}" var="ano" itemLabel="#{ano}" itemValue="#{ano}" />
+		        		 	<p:ajax global="false" />
+		        		 </p:selectOneMenu>
+					</p:column>
+					
+					<p:column headerText="*Previsão corte">
+						 <p:selectOneMenu value="#{espec_sel.dtcAnoPrevisaoCorte}" disabled="#{espec_sel.desabilitado}">   
+				            <f:selectItem itemLabel="Selecione" itemValue="" />
+				            <f:selectItems value="#{silviculturaController.listaAno}" var="ano" itemLabel="#{ano}" itemValue="#{ano}" />  
+		        		 	<p:ajax global="false" />
+		        		 </p:selectOneMenu>
+					</p:column>
+					
+					<p:column style="width:78px;">
+						<f:facet name="header">
+							*Área total <br/> (ha)
+						</f:facet>
+						<p:inputText value="#{espec_sel.numAreaTotal}" converter="doubleConverter" onkeyup="maskIt(this, event, '99.999.999,99', true)" style="width:70px;" maxlength="13" disabled="#{espec_sel.desabilitado}">
+							<p:ajax global="false" />
+						</p:inputText>
+					</p:column>
+					
+					<p:column>
+						<f:facet name="header">
+							*Estimativa do volume <br />de produção final (m³)
+						</f:facet>
+						<p:inputText value="#{espec_sel.numVolumeFinal}" converter="doubleConverter" onkeyup="maskIt(this, event, '99.999.999,99', true)" maxlength="13" disabled="#{espec_sel.desabilitado}">
+							<p:ajax global="false" />
+						</p:inputText>
+					</p:column>
+					<p:column style="width: 40px; text-align:center;" headerText="Ações">		
+						<p:commandLink actionListener="#{espec_sel.setDesabilitado(false)}" update="formGeral:tabAbasId_Agro:pngEspecieHibridoSelecionados" 
+		           	 	title="Editar" process="@this" global="false" rendered="#{espec_sel.desabilitado}">
+	          			 <h:graphicImage title="Editar criacao animal" value="/resources/img/ico-editar.png" />
+		            </p:commandLink>
+		            <p:commandLink actionListener="#{silviculturaController.validaGridEspecie(espec_sel)}" update="formGeral:tabAbasId_Agro:pngEspecieHibridoSelecionados" 
+		            	title="Confirmar" process="@this" global="false" rendered="#{!espec_sel.desabilitado}">
+	          			 <h:graphicImage title="Salvar criacao animal" value="/resources/img/ico-aprovar-notificacao.png" />
+		            </p:commandLink>
+						<p:commandLink title="Excluir" process="@this" onclick="excluirEspecieHibrido.show()" global="false">
+							<h:graphicImage title="Excluir espécie" value="/resources/img/ico-excluir.png" />
+							<f:setPropertyActionListener target="#{silviculturaController.especieHibrido}" value="#{espec_sel.ideEspecieHibrido}"/>
+						</p:commandLink>
+					</p:column>
+				</p:dataTable>				
+			</h:panelGrid>
+			
+			<h:outputText value="*Incremento Médio Anual Estimado - IMA (m³/ha/ano)" styleClass="titulo-grupo" style="font-weight:bold;"/>
+		    <h:panelGrid id="pngIMA">
+			    <ui:repeat var="ima" value="#{silviculturaController.listaSilviculturaIMA}">
+				   	<h:panelGrid columns="2">
+			   		<p:selectBooleanCheckbox value="#{ima.indProjeto}" rendered="#{ima.tipoProjetoOuFloresta == 'Projeto'}">
+				    	<p:ajax update="formGeral:tabAbasId_Agro:pngIMA" global="false"/>
+				    </p:selectBooleanCheckbox>
+				    <p:selectBooleanCheckbox value="#{ima.indFlorestaImplantada}" rendered="#{ima.tipoProjetoOuFloresta == 'Floresta Implantada'}">
+				    	<p:ajax update="formGeral:tabAbasId_Agro:pngIMA" global="false"/>
+				    </p:selectBooleanCheckbox>
+				   	<h:outputText value="#{ima.tipoProjetoOuFloresta == 'Projeto' ? 'Projeto' : 'Floresta Implantada'}" style="font-weight:bold;"/>					    
+				   </h:panelGrid>
+				     <h:panelGrid columns="6" rendered="#{ima.indProjeto || ima.indFlorestaImplantada}">
+				     	 <h:outputText value="*Previsão de plantio (mês/ano)"/>
+				     	 <p:selectOneMenu value="#{ima.dtcMesPrevisaoPlantio}" converter="mesConverter">  
+				            <f:selectItem itemLabel="Selecione" itemValue="" />
+				            <f:selectItems value="#{silviculturaController.listaMes}" var="mes" itemLabel="#{mes.nomMes}" itemValue="#{mes}" />  
+		        		 	<p:ajax global="false" />
+		        		 </p:selectOneMenu>
+		        		 <p:selectOneMenu value="#{ima.dtcAnoPrevisaoPlantio}">  
+				            <f:selectItem itemLabel="Selecione" itemValue="" />
+				            <f:selectItems value="#{silviculturaController.listaAno}" var="ano" itemLabel="#{ano}" itemValue="#{ano}" />  
+		        		 	<p:ajax global="false" />
+		        		 </p:selectOneMenu>
+		        		 <p:spacer height="0" width="20"/>
+		        		 <h:outputText value="*Área total de plantio(ha):"/>
+		        		 <p:inputText value="#{ima.numAreaTotal}" converter="doubleConverter" onkeyup="maskIt(this, event, '99.999.999,99', true)" maxlength="13">
+		        		 	<p:ajax global="false" />
+		        		 </p:inputText>
+		        		 <h:outputText value="*Previsão de corte (mês/ano)"/>
+				     	 <p:selectOneMenu value="#{ima.dtcMesPrevisaoCorte}" converter="mesConverter">
+				            <f:selectItem itemLabel="Selecione" itemValue="" />
+				            <f:selectItems value="#{silviculturaController.listaMes}" var="mes" itemLabel="#{mes.nomMes}" itemValue="#{mes}" />  
+		        			<p:ajax global="false" />
+		        		 </p:selectOneMenu>
+		        		  <p:selectOneMenu value="#{ima.dtcAnoPrevisaoCorte}">
+				            <f:selectItem itemLabel="Selecione" itemValue="" />
+				            <f:selectItems value="#{silviculturaController.listaAno}" var="ano" itemLabel="#{ano}" itemValue="#{ano}" />  
+		        			<p:ajax global="false" />
+		        		 </p:selectOneMenu>
+		        		 <p:spacer height="0" width="20"/>
+		        		 <h:outputText value="*Estimativa do volume de produção final (m³)"/>
+		        		 <p:inputText value="#{ima.numVolumeFinal}" converter="doubleConverter" onkeyup="maskIt(this, event, '99.999.999,99', true)" maxlength="13">
+		        		 	<p:ajax global="false" />
+		        		 </p:inputText>
+				     </h:panelGrid>
+			     </ui:repeat>
+		   </h:panelGrid>
+		  	<h:panelGrid id="pngSoloAguas">
+			   <h:outputText value="*Praticas existentes e planejadas, de manejo e conservação dos solos e águas" styleClass="titulo-grupo" style="font-weight:bold;"/>
+				<h:panelGroup layout="block" style="height:150px; width:250px; overflow:auto;">		        
+			     <p:selectManyCheckbox value="#{silviculturaController.listaTipoConservSoloAguaSelecionados}" converter="simpleEntityConverter" layout="pageDirection" valueChangeListener="#{silviculturaController.changeCheckBoxSoloAguas()}">
+					<f:selectItems value="#{silviculturaController.listaTipoConservSoloAgua}" var="conserv" itemLabel="#{conserv.dscTipoConservacaoSoloAgua}" itemValue="#{conserv}"/>
+					<p:ajax global="false"/>
+				 </p:selectManyCheckbox>
+				</h:panelGroup>
+			</h:panelGrid>
+			<h:panelGrid columns="3" style="margin-top:25px;">
+				<p:commandButton value="Voltar" global="false" action="#{agrossilvopastorilController.voltarAba()}" update="tabAbasId_Agro"/>
+				<p:spacer width="15" height="0"/>
+			 	<p:commandButton value="Avançar" action="#{silviculturaController.salvarAbaSilvicultura(false)}" update="tabAbasId_Agro" global="false" />
+			</h:panelGrid>
+		</h:panelGrid>
+	</h:form>
+</ui:composition>

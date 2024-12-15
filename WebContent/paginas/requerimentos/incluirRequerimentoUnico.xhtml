@@ -1,0 +1,504 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition
+	  xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.prime.com.tr/ui" 
+      template="../../layout/template.xhtml">
+      
+    <ui:define name="titulo-pagina">
+    	<h3><h:outputText value="#{contextoController.labelTitutoRequerimento}"/></h3>
+    </ui:define>  
+      
+	<ui:define name="conteudo-principal">
+	
+		<h:form id="formForm">
+			<h:panelGrid columns="1" id="principal">
+				<h:inputHidden value="#{contextoController.pessoa.idePessoa}" />
+				
+				<h3><h:outputText value="#{bundle.requerimentoUnicoLabelHeaderDadosGerais}" styleClass="titulo-grupo" style="font-size: 12px; font-weight: bold;"/></h3>
+				
+				<h:panelGrid columns="3">
+					<h:outputText value="#{bundle.requerimentoUnicoLabelRequerente}" style="font-size: 11px;font-weight: bold;"/>
+					<p:spacer width="1" height="10"/>					
+					<h:outputText value="#{bundle.requerimentoUnicoLabelCNPJCPF}" style="font-size: 11px;font-weight: bold;"/>	
+					<h:panelGroup>
+						<h:outputText value="#{requerimentoUnicoController.pessoa.nomeRazao}"/>
+					</h:panelGroup>
+					<h:outputText value="" />
+					<h:panelGrid>
+						<h:outputText value="#{requerimentoUnicoController.pessoa.pessoaJuridica.numCnpj}">
+							<f:converter converterId="cnpjConverter"/>
+						</h:outputText>
+						
+						<h:outputText value="#{requerimentoUnicoController.pessoa.pessoaFisica.numCpf}" >
+							<f:converter converterId="cpfConverter"/>
+						</h:outputText>
+					</h:panelGrid>
+					
+					<h:panelGroup rendered="${contextoController.isRegulacaoAmbientalEmpreendimento}">
+						<h:outputText value="* Empreendimento" style="font-size: 11px;font-weight: bold;"/><br/>
+						<h:selectOneMenu title="#{bundle.requerimentoUnicoLabelEmpreendimento}"  style="width: 400px; margin-top: 3px;" value="#{requerimentoUnicoController.empreendimento.ideEmpreendimento}" id="comboEmpreendimento" 
+						 disabled="#{requerimentoUnicoController.desabilitarTudo and !requerimentoUnicoController.visualizaSelectEmpreendimento or requerimentoUnicoController.modoEdicao or requerimentoUnicoController.salvoParcialmente}" required="true" >
+							<f:selectItem itemValue="0" itemLabel="Selecione o Empreendimento já cadastrado"/>
+							<f:selectItems value="#{requerimentoUnicoController.collEmpreendimento}"/>						
+							<p:ajax event="change" global="false" process="@this" update="principal,formEndereco" listener="#{requerimentoUnicoController.carregarInformacoesEmpreendimento()}"/>							
+						</h:selectOneMenu>
+						<br/>
+						<br/>
+						<p:commandLink ajax="false" action="#{requerimentoUnicoController.incluirEmpreendimento}" immediate="true" 
+									   disabled="#{requerimentoUnicoController.desabilitarTudo and !requerimentoUnicoController.visualizaSelectEmpreendimento  or requerimentoUnicoController.salvoParcialmente or requerimentoUnicoController.modoEdicao}">
+						  <h:graphicImage title="Incluir novo Empreendimento" value="/resources/img/ico-expandir.png" />
+						  <f:setPropertyActionListener target="#{empreendimentoController.urlOrigem}" value="/paginas/requerimentos/incluirRequerimentoUnico.xhtml"  />
+						</p:commandLink>
+						<h:outputText value=" Incluir novo Empreendimento" style="font-size: 11px;"/>
+					</h:panelGroup>
+					
+				</h:panelGrid>
+				
+				<hr></hr>	
+				<h:outputLabel value="#{bundle.lbl_preench_obrig_asterisc}" style="float: left; margin:-12px 0px 0px -2px;" />
+				<h3><h:outputText value="#{bundle.requerimentoUnicoLabelHeaderContratoAssuntoRelacionadoRequerimento}" styleClass="titulo-grupo" style="font-size: 12px; font-weight: bold;"/></h3>
+				
+				<h:panelGroup>
+					<h:selectBooleanCheckbox value="#{requerimentoUnicoController.dadosContato}" rendered="#{contextoController.tipoRequerimento.ideTipoRequerimento != 4}" disabled="${(requerimentoUnicoController.desabilitarTudo and urlReqUnicoController.disableImovelRural)  or requerimentoUnicoController.salvoParcialmente or requerimentoUnicoController.desabilitarTudo}">							
+						<f:ajax execute="@this" render="formDadosContatoReqUnico"/>
+					</h:selectBooleanCheckbox>&nbsp;&nbsp;
+					<h:outputText value="#{bundle.requerimentoUnicoLabelCheckboxContato}" rendered="#{contextoController.tipoRequerimento.ideTipoRequerimento != 4}" />
+				</h:panelGroup>
+				
+				<h:panelGrid id="formDadosContatoReqUnico" columns="3">
+					<h:outputText value="*#{bundle.requerimentoUnicoLabelNome}" style="font-weight: bold;"/>
+					<h:outputText value="*#{bundle.requerimentoUnicoLabelTelefone}" style="font-weight: bold;"/>
+					<h:outputText value="*#{bundle.requerimentoUnicoLabelEmail}" style="font-weight: bold;"/>
+					
+					<p:inputText label="#{bundle.requerimentoUnicoLabelNome}" id="requerimentoUnicoLabelNome" value="#{requerimentoUnicoController.requerimentoUnico.requerimento.nomContato}" required="true" disabled="${!requerimentoUnicoController.dadosContato  or requerimentoUnicoController.salvoParcialmente or requerimentoUnicoController.desabilitarTudo}">
+						<p:ajax process="@this"  global="false"/>
+					</p:inputText>
+					<p:inputMask label="#{bundle.requerimentoUnicoLabelTelefone}" id="requerimentoUnicoLabelTelefone" value="#{requerimentoUnicoController.requerimentoUnico.requerimento.numTelefone}" required="true" disabled="${!requerimentoUnicoController.dadosContato  or requerimentoUnicoController.salvoParcialmente}" mask="#{bundle.MascaraTelefone}">
+						<p:ajax process="@this"  global="false"/>
+					</p:inputMask>
+					<p:inputText label="#{bundle.requerimentoUnicoLabelEmail}" id="requerimentoUnicoLabelEmail" value="#{requerimentoUnicoController.requerimentoUnico.requerimento.desEmail}" required="true" disabled="${!requerimentoUnicoController.dadosContato  or requerimentoUnicoController.salvoParcialmente}">
+						<p:ajax process="@this"  global="false"/>
+						<f:validator validatorId="emailValidator"/>	
+					</p:inputText>
+				</h:panelGrid>				
+			</h:panelGrid>				
+		</h:form>
+				
+		<h:form id="formEndereco" rendered="${!urlReqUnicoController.bloqueiaEndContatoTemporario}">
+			<h:panelGroup>
+				<h:selectBooleanCheckbox value="#{requerimentoUnicoController.enderecoContato}" valueChangeListener="#{requerimentoUnicoController.enderecoContato}" disabled="${(requerimentoUnicoController.desabilitarTudo and urlReqUnicoController.disableImovelRural ) or urlReqUnicoController.bloqueiaEndContatoTemporario  or requerimentoUnicoController.salvoParcialmente or requerimentoUnicoController.desabilitarTudo}">
+					<f:ajax execute="@this" render="formEndereco" listener="#{enderecoController.limparEndereco()}"/>
+				</h:selectBooleanCheckbox>&nbsp;&nbsp;
+				<h:outputText value="#{bundle.requerimentoUnicoLabelCheckboxEndereco}"/>
+			</h:panelGroup>
+												
+			<h:panelGrid columns="1" id="enderoContato" rendered="#{requerimentoUnicoController.enderecoContato}">
+				<p:spacer height="10"/>								
+				
+				<h3><h:outputText value="#{bundle.requerimentoUnicoLabelHeaderEnderecoContato}" styleClass="titulo-grupo" style="font-size: 12px; font-weight: bold;"/></h3>
+				
+				<h:panelGrid columns="1" id="formEnderecoPesquisaCep">
+					<h:outputLabel id="idlblcep" value="* CEP" /><br/>
+					<h:panelGroup>
+						<p:remoteCommand action="#{enderecoController.filtrarPorCep}" update="formEndereco" name="filtrarCepRequerimento"/>
+						<p:inputMask title="CEP" value="#{enderecoController.logradouroPesquisa.numCep}" onblur="filtrarCepRequerimento();" onkeypress="blurOnEnter(event,this);" mask="99.999-999" required="true" requiredMessage="O campo CEP deve ser preenchido."  disabled="${requerimentoUnicoController.desabilitarTudo  or requerimentoUnicoController.salvoParcialmente}">
+							<f:converter converterId="cepConverter" />
+						</p:inputMask>						
+					</h:panelGroup>
+				</h:panelGrid>
+				
+				<h:panelGrid columns="1">
+					<h:panelGrid columns="2">
+						<h:outputText id="idlblbairro" value="* Bairro"/>
+						<h:outputText />
+						
+						<p:selectOneMenu id="idcombobairro" value="#{enderecoController.bairro}" valueChangeListener="#{enderecoController.changeLogradouroMunicipio}"  disabled="#{!enderecoController.enableFormEndereco  or requerimentoUnicoController.salvoParcialmente or  requerimentoUnicoController.desabilitarTudo}" >
+							<f:selectItems value="#{enderecoController.valuesComboBairro}" />
+							<f:converter converterId="bairroConverter" />
+							<f:validator validatorId="bairroComboValidator" />
+							<p:ajax global="false" update="formEndereco" />
+						</p:selectOneMenu>
+						<p:inputText value="#{enderecoController.bairro.nomBairro}" required="true" requiredMessage="O campo Bairro é de preenchimento obrigatório." rendered="#{enderecoController.showInputs}"/>
+					</h:panelGrid>
+					
+					<h:panelGrid columns="2">
+						<h:outputLabel id="idlbllogradouro" value="* Logradouro" />
+						<h:outputText />
+						
+						<p:selectOneMenu  id="idcombotipologradouroinput" value="#{enderecoController.tipoLogradouro}" disabled="false" rendered="#{enderecoController.showInputs or enderecoController.showInputLogradouro}" >
+							<f:selectItems value="#{enderecoController.valuesComboBox}" />
+							<f:converter converterId="tipoLogradouroConverter" />
+						</p:selectOneMenu>
+						
+						<p:inputText value="#{enderecoController.logradouro.nomLogradouro}" rendered="#{enderecoController.showInputs or enderecoController.showInputLogradouro}" required="true" requiredMessage="O campo Logradouro deve ser preenchido." />
+						
+						<p:selectOneMenu  id="idcombotipologradouro" value="#{enderecoController.tipoLogradouro}" disabled="true"
+							rendered="#{!enderecoController.showInputs and !enderecoController.showInputLogradouro}">
+							<f:selectItems value="#{enderecoController.valuesComboBox}" />
+							<f:converter converterId="tipoLogradouroConverter" />
+						</p:selectOneMenu>
+							
+						<p:selectOneMenu id="idcombologradouro" value="#{enderecoController.logradouro}" disabled="#{enderecoController.desabilitarLogradouro or requerimentoUnicoController.desabilitarTudo  or requerimentoUnicoController.salvoParcialmente}"
+							rendered="#{!enderecoController.showInputs and !enderecoController.showInputLogradouro}" valueChangeListener="#{enderecoController.changeLogradouro}">
+							<f:selectItems value="#{enderecoController.valuesComboLogradouro}"/>
+							<f:converter converterId="logradouroConverter" />
+							<f:validator validatorId="logradouroComboValidator" />
+							<p:ajax global="false" update="formEndereco" />
+						</p:selectOneMenu>
+					</h:panelGrid>
+						
+					<h:panelGrid columns="2" id="panelmunicipioestado" width="100%">	
+						<h:outputText id="idlblnumero" value="* Número"/>
+						<h:outputLabel id="idlblcomplemento" value="Complemento" />
+						<p:inputText style="width: 70%" disabled="#{!enderecoController.enableFormEndereco or requerimentoUnicoController.desabilitarTudo  or requerimentoUnicoController.salvoParcialmente}" value="#{enderecoController.endereco.numEndereco}" size="4" required="true" requiredMessage="O campo Número deve ser preenchido." />
+						<p:inputText style="width: 100%" value="#{enderecoController.endereco.desComplemento}" disabled="#{!enderecoController.enableFormEndereco  or requerimentoUnicoController.salvoParcialmente or requerimentoUnicoController.desabilitarTudo}" />
+					</h:panelGrid>
+					
+					<h:panelGrid columns="2">		
+						<h:outputText id="idlbluf" value="* UF"/>
+						<h:outputLabel id="idlblmunicipio" value="* Localidade" />					
+						
+						<p:selectOneMenu id="idcombouf" value="#{enderecoController.estado}" disabled="#{!enderecoController.showInputs  or requerimentoUnicoController.salvoParcialmente or requerimentoUnicoController.desabilitarTudo}"  required="true" requiredMessage="O campo UF deve ser selecionado." >
+							<f:selectItems value="#{enderecoController.valuesComboBoxEstado}" var="#{estadoSelecionado}"/>
+							<f:converter converterId="estadoConverter" />
+							<f:validator validatorId="estadoValidator"/>
+							<p:ajax global="false" update="idcombomunicipio" listener="#{enderecoController.listarMunicipios(estadoSelecionado)}"/>
+						</p:selectOneMenu>
+							
+						<p:selectOneMenu id="idcombomunicipio" value="#{enderecoController.municipio}" disabled="#{!enderecoController.showInputs  or requerimentoUnicoController.salvoParcialmente or requerimentoUnicoController.desabilitarTudo}"  required="true" requiredMessage="O campo Localidade deve ser selecionado." >
+							<f:selectItems value="#{enderecoController.valuesComboBoxMunicipio}" />
+							<f:converter converterId="municipioConverter" />
+							<f:validator validatorId="municipioValidator"/>
+						</p:selectOneMenu>
+					</h:panelGrid>
+					
+					<h:panelGrid columns="1" width="100%">
+						<h:outputText id="idlblpontoreferencia" value="Ponto de Referência"  />
+						<p:inputText style="width: 100%" value="#{enderecoController.endereco.desPontoReferencia}" disabled="#{!enderecoController.enableFormEndereco  or requerimentoUnicoController.salvoParcialmente or requerimentoUnicoController.desabilitarTudo}"/>
+					</h:panelGrid>
+					
+					<h:panelGrid columns="2">	
+						<p:commandButton ajax="true" value="Salvar" action="#{enderecoController.salvarEnderecoRequerimento()}" 
+							disabled="#{!enderecoController.enableFormEndereco  or requerimentoUnicoController.salvoParcialmente or  requerimentoUnicoController.desabilitarTudo}" 
+							process="formEndereco"/>
+					</h:panelGrid>
+				</h:panelGrid>
+				
+			</h:panelGrid>		
+			<p:spacer height="15"/>
+			<h:panelGrid  columns="1" style="width:100%;">
+				<p:commandButton style="float:right;"  value="Cadastrar Requerimento" disabled="#{requerimentoUnicoController.salvoParcialmente or requerimentoUnicoController.desabilitarTudo}" update=":formForm :formEndereco :formQuestionario" rendered="#{requerimentoUnicoController.requerimentoUnico.ideRequerimentoUnico == null}" action="#{requerimentoUnicoController.salvarRequerimentoParcial()}" process="@this"/>
+			</h:panelGrid>
+		</h:form>		
+		
+		
+		<ui:include src="#{urlReqUnicoController.carregarUrlQuestionario()}" />	
+		
+		
+		<ui:include src="#{urlReqUnicoController.carregarUrlPaginaLocalizacaoGeoGraficaAll()}" />	
+		
+		
+		<ui:include src="/paginas/manter-localizacao-geografica/req-limp-area-localizacao-geografica.xhtml" />	
+		
+		
+		<p:dialog header="#{bundle.empreendimento_lbl_incluir_ponto}" widgetVar="dialogoIncluirVerticeReq" modal="true" id="dialogoIncluirVerticeReq" resizable="false">
+			<h:form id="locGeograficaVerticesReq" onmouseover="RemovMenosFracGrau();">
+				<h:outputLabel>
+				</h:outputLabel>
+				<br />
+				<h:outputLabel>
+					<em>*</em>
+					<h:outputLabel value="#{bundle.incluirvertice_lbl_informar_coordenada}" />
+					<br />
+					<h:selectOneRadio label="#{bundle.incluirvertice_lbl_informar_coordenada}" value="#{localizacaoGeograficaController.selectedModoCoordenada}" id="ModoCoordenadaReq">
+						<f:selectItem itemLabel="#{bundle.incluirvertice_lbl_latitude_longitude_grau_minuto_segundo}" itemValue="1" />
+						<br />
+						<f:selectItem itemLabel="#{bundle.incluirvertice_lbl_grau_fracao_grau}" itemValue="2" />
+						<p:ajax event="change" global="false" process="ModoCoordenadaReq" update="hideModalReq" immediate="true" />
+					</h:selectOneRadio>
+				</h:outputLabel>
+				<br />
+				<h:panelGrid>
+					<h:panelGrid id="hideModalReq">
+						<h:panelGrid columns="1" rendered="#{localizacaoGeograficaController.selectedModoCoordenada == '1'}">
+							<h:panelGrid columns="3" id="latitudeReq">
+								<h:panelGroup>
+									<h:outputLabel value="* #{bundle.empreendimento_lbl_latitude}" for="grausLatitudeReq" />
+									<br />
+									<p:inputText label="#{bundle.empreendimento_lbl_latitude}" value="#{requerimentoUnicoController.grausLatitudeLoc}" onkeyup="SomenteNumero(this);" onblur="verificaLatitude(this);" id="grausLatitudeReq" style="width: 40px;" />&nbsp;°&nbsp;
+                                    <p:inputText label="#{bundle.empreendimento_lbl_latitude}" value="#{requerimentoUnicoController.minutosLatitudeLoc}" onkeyup="SomenteNumero(this);" onblur="verificaMinutoSegundo(this);" id="minutosLatitudeReq" style="width: 40px;" />&nbsp;'&nbsp;
+                                    <p:inputText label="#{bundle.empreendimento_lbl_latitude}" value="#{requerimentoUnicoController.segundosLatitudeLoc}" onkeyup="SomenteNumero(this);" onblur="verificaMinutoSegundo(this);" id="segundosLatitudeReq" style="width: 40px;" />&nbsp;"&nbsp;S
+                                </h:panelGroup>
+								<h:commandLink actionListener="#{requerimentoUnicoController.calculaFracaoGrauLatitudeLoc}">
+									<h:graphicImage title="Calcula Fração Grau Latitude" value="/resources/img/arrow-circle-double-135.png" />
+									<f:ajax execute="@this grausLatitudeReq minutosLatitudeReq segundosLatitudeReq" render="latitudeReq" />
+								</h:commandLink>
+								<h:panelGroup>
+									<h:outputLabel value="#{bundle.incluirvertice_lbl_grau_fracao_grau}" />
+									<br />
+									<p:inputText value="#{requerimentoUnicoController.fracaoGrauLatitudeLoc}" readonly="true" />
+								</h:panelGroup>
+							</h:panelGrid>
+							<h:panelGrid columns="3" id="longitudeReq">
+								<h:panelGroup>
+									<h:outputLabel value="* #{bundle.empreendimento_lbl_longitude}" for="grausLongitudeReq" />
+									<br />
+									<p:inputText value="#{requerimentoUnicoController.grausLongitudeLoc}" onkeyup="SomenteNumero(this);" onblur="verificaLongitude(this);" id="grausLongitudeReq" style="width: 40px;" />&nbsp;°&nbsp;
+                                    <p:inputText value="#{requerimentoUnicoController.minutosLongitudeLoc}" onkeyup="SomenteNumero(this);" onblur="verificaMinutoSegundo(this);" id="minutosLongitudeReq" style="width: 40px;" />&nbsp;'&nbsp;
+                                    <p:inputText value="#{requerimentoUnicoController.segundosLongitudeLoc}" onkeyup="SomenteNumero(this);" onblur="verificaMinutoSegundo(this);" id="segundosLongitudeReq" style="width: 40px;" />&nbsp;"&nbsp;W
+                                </h:panelGroup>
+								<h:commandLink actionListener="#{requerimentoUnicoController.calculaFracaoGrauLongitudeLoc}">
+									<h:graphicImage title="Calcula Fração Grau Latitude" value="/resources/img/arrow-circle-double-135.png" />
+									<f:ajax execute="@this grausLongitudeReq minutosLongitudeReq segundosLongitudeReq" render="longitudeReq" />
+								</h:commandLink>
+								<h:panelGroup>
+									<h:outputLabel value="#{bundle.incluirvertice_lbl_grau_fracao_grau}" />
+									<br />
+									<p:inputText value="#{requerimentoUnicoController.fracaoGrauLongitudeLoc}" readonly="true" />
+								</h:panelGroup>
+							</h:panelGrid>
+						</h:panelGrid>
+						<h:panelGrid rendered="#{localizacaoGeograficaController.selectedModoCoordenada == '2'}">
+							<h:panelGroup>
+								<h:outputLabel value="* #{bundle.empreendimento_lbl_latitude}" for="latitudeFracaoGrauReq" /> - <h:outputLabel value="#{bundle.incluirvertice_lbl_grau_fracao_grau}" />
+								<br />-&nbsp;<p:inputText value="#{requerimentoUnicoController.fracaoGrauLatitudeLoc}" id="latitudeFracaoGrauReq" required="true" label="#{bundle.empreendimento_lbl_latitude}" />
+							</h:panelGroup>
+							<h:panelGroup>
+								<h:outputLabel value="* #{bundle.empreendimento_lbl_longitude}" for="longitudeFracaoGrauReq" /> - <h:outputLabel value="#{bundle.incluirvertice_lbl_grau_fracao_grau}" />
+								<br />-&nbsp;<p:inputText value="#{requerimentoUnicoController.fracaoGrauLongitudeLoc}" id="longitudeFracaoGrauReq" required="true" label="#{bundle.empreendimento_lbl_longitude}" />
+							</h:panelGroup>
+						</h:panelGrid>
+					</h:panelGrid>
+					<br />
+					<h:panelGroup>
+						<h:outputLabel value="#{bundle.lbl_preench_obrig_asterisc}" />
+					</h:panelGroup>
+					<h:panelGroup>
+						<div style="text-align: center;">
+							<p:commandButton type="reset" process="@form" update="@form" immediate="true" action="${localizacaoGeograficaController.limparVertice()}" value="#{bundle.geral_lbl_limpar}" />
+							<p:commandButton value="#{bundle.geral_lbl_salvar}" update="formQuestionario:tabelaVertices @form" process="@form" actionListener="#{requerimentoUnicoController.incluirVertice}" />
+						</div>
+					</h:panelGroup>
+				</h:panelGrid>
+			</h:form>
+		</p:dialog>
+		<p:confirmDialog id="confirmacaoExclusaoVertice" widgetVar="confirmacaoExclusaoVertice" header="#{bundle.geral_lbl_mensagem}" appendToBody="true" message="#{bundle.msg_confirma_exclusao}" severity="alert">
+			<h:form id="formexclusao">
+				<h:panelGroup>
+					<div style="text-align: center;">
+						<p:commandButton id="confirmarInclusaoBoleto" value="#{bundle.btn_sim}" update="formQuestionario:tabelaVertices" onclick="confirmacaoExclusaoVertice.hide()" action="${requerimentoUnicoController.excluirVertice}" />
+						<p:commandButton value="#{bundle.btn_nao}" process="@this" update="formexclusao" oncomplete="confirmacaoExclusaoVertice.hide()" />
+					</div>
+				</h:panelGroup>
+			</h:form>
+		</p:confirmDialog>
+		
+		<p:confirmDialog id="confirmacaoExclusaoLocalizacaoReqImovel" widgetVar="confirmacaoExclusaoLocalizacaoReqImovel" header="#{bundle.geral_lbl_mensagem}" message="#{bundle.msg_confirma_exclusao}" appendToBody="true" closable="false" severity="alert">
+			<h:form id="formConfirmExclusaoLocGeoReqImovel">
+				<h:panelGroup>
+					<div style="text-align: center;">
+						<p:commandButton id="confirmarExclusaoLoc" process="@this" value="#{bundle.btn_sim}" update="formQuestionario:locGeoDasRespostas formQuestionario :formQuestionario:locGeoDasRespostas formQuestionario:locGeoDasRespostas formQuestionario" oncomplete="confirmacaoExclusaoLocalizacaoReqImovel.hide()"  action="${requerimentoUnicoController.excluirAPorraDaLocalizacao()}" />
+						<p:commandButton value="#{bundle.btn_nao}" process="@this" update="formexclusao" oncomplete="confirmacaoExclusaoLocalizacaoReqImovel.hide()" >
+							<f:setPropertyActionListener value="#{null}" target="${requerimentoUnicoController.localizacaoGeograficaASerExcluida}" />
+							<f:setPropertyActionListener value="#{null}" target="${requerimentoUnicoController.perguntaDalocalizacaoGeograficaASerExcluida}" />
+							<f:setPropertyActionListener value="#{null}" target="${requerimentoUnicoController.objLimpezaAreaSelecionado}" />
+						</p:commandButton>
+					</div>
+				</h:panelGroup>
+			</h:form>
+		</p:confirmDialog>
+		
+		<p:confirmDialog id="confirmacaoExclusaoProcesso" widgetVar="confirmacaoExclusaoProcesso" header="#{bundle.geral_lbl_mensagem}" appendToBody="true" message="#{bundle.msg_confirma_exclusao}" severity="alert">
+			<h:form id="formexclusaoProcesso">
+				<h:panelGroup>
+					<div style="text-align: center;">
+						<p:commandButton id="confirmarExclusaoProcessoTramite" value="#{bundle.btn_sim}" update="formQuestionario:tabelaProcessoTramite" onclick="confirmacaoExclusaoProcesso.hide()" action="${requerimentoUnicoController.excluirProcessoTramite()}" />
+						<p:commandButton value="#{bundle.btn_nao}" process="@this" update="formexclusaoProcesso" oncomplete="confirmacaoExclusaoProcesso.hide()" />
+					</div>
+				</h:panelGroup>
+			</h:form>
+		</p:confirmDialog>
+		
+		<p:confirmDialog id="dialogQuestaoDLA" widgetVar="dialogQuestaoDLA" header="#{bundle.geral_lbl_mensagem}" appendToBody="true" message="#{bundle.msg_gerar_DLA}" severity="alert">
+			<h:form id="formDialogQuestaoDLA">
+				<h:panelGroup>
+					<div style="text-align: center;">
+						<p:commandButton id="confirmacaoDialogQuestaoDLA" ajax="false" value="#{bundle.btn_sim}" oncomplete="dialogQuestaoDLA.hide()">
+							<p:fileDownload value="#{requerimentoUnicoController.gerarDocumentoDLA}"/>
+						</p:commandButton>						
+						<p:commandButton value="#{bundle.btn_nao}" ajax="false" oncomplete="dialogQuestaoDLA.hide()" action="#{requerimentoUnicoController.redirecionar()}"/>
+					</div>
+				</h:panelGroup>
+			</h:form>
+		</p:confirmDialog>
+		
+		<p:dialog id="dialogProcessoTramite" widgetVar="dialogProcessoTramite" resizable="false" modal="true">
+			<ui:include src="/paginas/manter-requerimento_unico/dialogProcessoTramiteInema.xhtml" />			
+		</p:dialog>
+		
+		<!-- Efetuar Enquadramento  -->
+		<!-- <p:dialog id="dialogDocumentos" widgetVar="dialogDocumentos" rendered="#{efetuarEnquadramentoController.isEnquadramentoRendered}" -->
+		<p:dialog id="dialogDocumentos" widgetVar="dialogDocumentos" width="500" height="400" style="top:50px !important;" position="center" >
+			
+			<h:form>
+				<p:dataTable id="tableDocsObrigs"
+					value="#{efetuarEnquadramentoController.listDocsAtoAmbiental}"
+					var="atos">
+					<f:facet name="header">
+						Documento(s) Obrigatório(s) do(s) Ato(s) Ambiental(ais)
+					</f:facet>
+					<p:column>
+						<p:rowToggler />
+					</p:column>
+					<p:column>
+						<h:outputLabel value="#{atos.nomAtoAmbiental}" />
+					</p:column>
+					<p:rowExpansion>
+						<p:selectManyCheckbox value="#{atos.listaDocumentoAtoSelecionado}" converter="simpleEntityConverter" layout="pageDirection">
+							<f:selectItems value="#{atos.documentoAtoCollection}" var="docAto" 
+							itemLabel="#{docAto.ideDocumentoObrigatorio.nomDocumentoObrigatorio}" itemValue="#{docAto}" />
+							<p:ajax update="@this" global="false" event="change" process="@this" />
+						</p:selectManyCheckbox>
+					</p:rowExpansion>
+				</p:dataTable>
+				
+				<h:panelGrid columns="2" cellpadding="7" dir="rtl" rendered="#{efetuarEnquadramentoController.isEnquadramentoRendered}">
+					<p:commandButton value="#{bundle.geral_lbl_salvar}" oncomplete="dialogDocumentos.hide()" />
+					<p:commandButton value="#{bundle.geral_lbl_voltar}" oncomplete="dialogDocumentos.hide()" />
+				</h:panelGrid>
+			</h:form>
+			
+		</p:dialog>
+		
+		<p:confirmDialog id="dialogEnquadramentoConfirmarVoltar"
+			widgetVar="dialogEnquadramentoConfirmarVoltar" appendToBody="true"
+			styleClass="modalFirefox"
+			message="#{bundle.enquadramento_msg_enquadramento_ainda_nao_efetuado_deseja_voltar}"
+			severity="alert">
+			<h:form>
+				<p:commandButton ajax="false" process="@this" immediate="true"
+					value="#{bundle.geral_lbl_sim}"
+					action="/paginas/novo-requerimento/consulta.xhtml" />
+				<p:commandButton value="#{bundle.btn_nao}"
+					onclick="dialogEnquadramentoConfirmarVoltar.hide();" />
+			</h:form>
+		</p:confirmDialog>
+		
+
+		
+		<!-- Efetuar Enquadramento  -->
+		
+		<ui:include src="/paginas/manter-enquadramento/enquadramento.xhtml" />
+		
+		
+		
+		<p:dialog header="#{bundle.empreendimento_lbl_incluir_ponto}" widgetVar="dialogoIncluirVerticeVazao" style="z-index: 99999;top:300px;left:400px;" 
+			modal="true" id="dialogoIncluirVerticeVazao" resizable="false" appendToBody="true" >
+			
+		<h:form id="locGeograficaVerticesVazao" onmouseover="RemovMenosFracGrau();" style="z-index: 99999;">
+		
+			<p:remoteCommand name="carregaLocalizacao" action="#{requerimentoUnicoController.carregarLocalizacaoGeografica()}" update="formQuestionario:tabelaVertices" />
+		
+				<em>*</em>
+				<h:outputLabel value="#{bundle.incluirvertice_lbl_informar_coordenada}" />
+				<br />
+				<p:selectOneRadio label="#{bundle.incluirvertice_lbl_informar_coordenada}" value="#{localizacaoGeograficaController.selectedModoCoordenada}" id="ModoCoordenada">
+					<f:selectItem itemLabel="#{bundle.incluirvertice_lbl_latitude_longitude_grau_minuto_segundo}" itemValue="1" /><br />
+					<f:selectItem itemLabel="#{bundle.incluirvertice_lbl_grau_fracao_grau}" itemValue="2" />
+					<p:ajax event="change" process="ModoCoordenada" update="hideModal" immediate="true"/>
+				</p:selectOneRadio>
+			<br />
+			<h:panelGrid>
+				<h:panelGrid id="hideModal">
+					<h:panelGrid columns="1" rendered="#{localizacaoGeograficaController.selectedModoCoordenada == '1'}">
+						<h:panelGrid columns="3" id="latitude">
+							<h:panelGroup>
+								<h:outputLabel value="* #{bundle.empreendimento_lbl_latitude}" for="grausLatitude" />
+								<br />
+								<p:inputText label="#{bundle.empreendimento_lbl_latitude}" value="#{localizacaoGeograficaController.grausLatitude}" onkeyup="SomenteNumero(this);"
+									 onblur="verificaLatitude(this);" id="grausLatitude" style="width: 40px;"/>&nbsp;°&nbsp;
+									 
+								<p:inputText label="#{bundle.empreendimento_lbl_latitude}" value="#{localizacaoGeograficaController.minutosLatitude}" onkeyup="SomenteNumero(this);"
+									 onblur="verificaMinutoSegundo(this);" id="minutosLatitude" style="width: 40px;"/>&nbsp;'&nbsp;
+									 
+								<p:inputText label="#{bundle.empreendimento_lbl_latitude}" value="#{localizacaoGeograficaController.segundosLatitude}" onkeyup="SomenteNumero(this);"
+									 onblur="verificaMinutoSegundo(this);" id="segundosLatitude" style="width: 40px;"/>&nbsp;"&nbsp;S
+							</h:panelGroup>
+							<h:commandLink id="calculaFracaoGrauLatitude" actionListener="#{localizacaoGeograficaController.calculaFracaoGrauLatitude}">
+								<h:graphicImage title="Calcular Fração Grau Latitude" value="/resources/img/arrow-circle-double-135.png" />
+								<f:ajax execute="@form" render="@form" />
+							</h:commandLink>
+							<h:panelGroup>
+								<h:outputLabel value="#{bundle.incluirvertice_lbl_grau_fracao_grau}" />
+								<br />
+								<p:inputText value="#{localizacaoGeograficaController.fracaoGrauLatitude}" maxlength="9" readonly="true" />
+							</h:panelGroup>
+						</h:panelGrid>
+						<h:panelGrid columns="3" id="longitude">
+							<h:panelGroup>
+								<h:outputLabel value="* #{bundle.empreendimento_lbl_longitude}" for="grausLongitude" />
+								<br />
+								<p:inputText value="#{localizacaoGeograficaController.grausLongitude}" onkeyup="SomenteNumero(this);"
+								 onblur="verificaLongitude(this);" id="grausLongitude" style="width: 40px;"/>&nbsp;°&nbsp;
+								<p:inputText value="#{localizacaoGeograficaController.minutosLongitude}" onkeyup="SomenteNumero(this);"
+								 onblur="verificaMinutoSegundo(this);" id="minutosLongitude" style="width: 40px;"/>&nbsp;'&nbsp;
+								<p:inputText value="#{localizacaoGeograficaController.segundosLongitude}" onkeyup="SomenteNumero(this);"
+								 onblur="verificaMinutoSegundo(this);" id="segundosLongitude" style="width: 40px;"/>&nbsp;"&nbsp;W
+							</h:panelGroup>
+							<h:commandLink id="calculaFracaoGrauLongitude" actionListener="#{localizacaoGeograficaController.calculaFracaoGrauLongitude}">
+								<h:graphicImage title="Calcular Fração Grau Longitude" value="/resources/img/arrow-circle-double-135.png" />
+								<f:ajax execute="@form" render="longitude" />
+							</h:commandLink>
+							<h:panelGroup>
+								<h:outputLabel value="#{bundle.incluirvertice_lbl_grau_fracao_grau}" />
+								<br />
+								<p:inputText value="#{localizacaoGeograficaController.fracaoGrauLongitude}" maxlength="9" readonly="true" />
+							</h:panelGroup>
+						</h:panelGrid>
+					</h:panelGrid>
+					<h:panelGrid rendered="#{localizacaoGeograficaController.selectedModoCoordenada == '2'}">
+						<h:panelGroup>
+							<h:outputLabel value="* #{bundle.empreendimento_lbl_latitude}" for="latitudeFracaoGrau" /> - <h:outputLabel value="#{bundle.incluirvertice_lbl_grau_fracao_grau}" />
+							<br />-&nbsp;<p:inputMask mask="99,999999" value="#{localizacaoGeograficaController.fracaoGrauLatitudeDecimal}" onblur="verificaLatitude(this);" onchange="RemoveMenos(this);" onfocus="RemoveMenos(this);" id="latitudeFracaoGrau" required="true" label="#{bundle.empreendimento_lbl_latitude}"/>
+						</h:panelGroup>
+						<h:panelGroup>
+							<h:outputLabel value="* #{bundle.empreendimento_lbl_longitude}" for="longitudeFracaoGrau" /> - <h:outputLabel value="#{bundle.incluirvertice_lbl_grau_fracao_grau}" />
+							<br />-&nbsp;<p:inputMask mask="99,999999" value="#{localizacaoGeograficaController.fracaoGrauLongitudeDecimal}" onblur="verificaLongitude(this);" onchange="RemoveMenos(this);" onfocus="RemoveMenos(this);" id="longitudeFracaoGrau" required="true" label="#{bundle.empreendimento_lbl_longitude}"/>
+						</h:panelGroup>
+						<h:outputLabel value="#{bundle.loc_geo_aviso_digito_decimal}" style="color: red;" />
+					</h:panelGrid>
+				</h:panelGrid>
+				<br />
+				<h:panelGroup>
+					<div style="text-align: center;">
+						<p:commandButton update="@form" actionListener="${localizacaoGeograficaController.limparVertice()}" value="#{bundle.geral_lbl_limpar}"/>
+						
+						<p:commandButton value="#{bundle.geral_lbl_salvar}" process="@form" update=":formQuestionario:tabelaVertices :locGeografica:tabelaVertices tabelaVertices localizacaoGeografica :locGeograficaVertices locGeografica" 
+							action="#{localizacaoGeograficaController.salvarVertice}" oncomplete="dialogoIncluirVerticeVazao.hide(); carregaLocalizacao();" />
+					</div>
+				</h:panelGroup>
+				<br />
+				<h:outputLabel value="#{bundle.lbl_preench_obrig_asterisc}" style="float: left;" />
+			</h:panelGrid>
+		</h:form>
+		
+	</p:dialog>
+		
+	</ui:define>
+		<p:confirmDialog id="confirmacaoCopiaRequerimentoUnicoAnterior" widgetVar="confirmacaoCopiaRequerimentoUnicoAnterior" header="#{bundle.geral_lbl_mensagem}" appendToBody="true" message="#{bundle.msg_confirma_copia_requerimento_unico_anterior}" severity="alert">
+			<h:form id="formConfirmacaoCopiaRequerimentoUnicoAnterior">
+				<h:panelGroup>
+					<div style="text-align: center;">
+						<p:commandButton id="confirmacaoCopiaRequerimentoUnicoAnterior" value="#{bundle.btn_sim}" update=":formForm :formEndereco :formQuestionario" onclick="confirmacaoCopiaRequerimentoUnicoAnterior.hide()" action="#{requerimentoUnicoController.utilizarDadosRequerimentoAnterior()}" />
+						<p:commandButton value="#{bundle.btn_nao}" process="@this" oncomplete="confirmacaoCopiaRequerimentoUnicoAnterior.hide()" />
+					</div>
+				</h:panelGroup>
+			</h:form>
+		</p:confirmDialog>
+		
+		<p:remoteCommand action="#{requerimentoUnicoController.gerarDocumentoDLA}" name="geraDLA" />
+		
+</ui:composition>

@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui">
+	
+	<p:dialog header="Instruções do cadastro" 
+		widgetVar="dialogInstrucoesCadastro" 
+		id="dialogInstrucoesCadastro" 
+		modal="true" 
+		resizable="false" 
+		position="center" height="500" width="500">
+		
+		
+		<h:form id="formInstrucoesCadastro">
+			
+			<p:fieldset>
+				<p style="text-align: justify;">De acordo com o anexo VIII do regulamento da Lei Estadual 10.431/2012, aprovado pelo Decreto Estadual n° 14.024/2012 e
+				acrescido pelo Decreto Estadual n° 15.682/2014, a atividade de silos e armazéns destinados ao armazenamento, secagem e beneficiamento de produtos agrícolas
+				não industrializados, estará dispensada do licenciamento ambiental, mediante prévio cadastramento no SEIA, quando não possuírem processo de industrialização.
+				</p>
+				
+				<p style="text-align: justify;">Entende-se por processo de industrialização as atividades que envolvem a transformação física, química e biológica de materiais,
+				substâncias e componentes com a finalidade de se obterem produtos novos. (Ex: Fabricação de farelo, farinha, amido, óleo, biodiesel, fiação, tecelagem de algodão, 
+				etc.)
+				</p>
+				
+				<p style="text-align: justify;">Entende-se por produtos agrícolas não industrializados aqueles produtos que não passaram por processo de industrialização.</p>
+				
+				<p style="text-align: justify;">É vedada a instalação e operação da atividade de silos e armazéns destinados ao armazenamento, secagem e beneficiamento de
+				produtos agrícolas não industrializados, em:
+				</p>
+				
+				<p align="left">a) Áreas de Unidade de Conservação de Proteção Integral (Lei n° 9.985/2000);</p>
+				
+				<p align="left">b) Áreas de Preservação Permanente (Lei n° 12.651/2012);</p>
+				
+				<p align="left">c) Áreas de Reserva Legal (Lei n° 12.651/2012);</p>
+				
+				<p style="text-align: justify;">A realização deste cadastro não isenta a obrigatoriedade de prévia autorização para a outorga de direito de uso de recursos 
+				hídricos, supressão de vegetação nativa e demais atos autorizados associados.
+				</p>
+				
+				<p style="text-align: justify;">A regularidade ambiental desta atividade será fiscalizada pelos órgãos integrantes do SISNAMA, estando sujeitos à aplicação das sanções
+				penais e as penas administrativas previstas na Lei n° 10.431/2006.
+				</p>
+				
+				<p style="text-align: justify;font-weight: bold; ">O responsável legal bem como o responsável técnico, cadastrados no SEIA responsabilizar-se-ão administrativa, civil, e penalmente
+				pela veracidade e precisão das informações prestadas durante este cadastramento.</p>
+				
+				<h:panelGrid columns="2" cellspacing="5">
+				
+					<p:selectBooleanCheckbox value="#{silosArmazensController.primeiraDeclaracao}" />
+					<h:outputText value="Declaro que no empreendimento não é realizado processo de industrialização." />
+					
+					<p:selectBooleanCheckbox value="#{silosArmazensController.segundaDeclaracao}" />
+					<h:outputText value="Declaro que o empreendimento não está localizado em áreas protegidas, como as citadas nas instruções acima." />
+					
+					<p:selectBooleanCheckbox value="#{silosArmazensController.terceiraDeclaracao}" />
+					<h:outputText value="Declaro que estou ciente quanto às instruções acima." />
+				</h:panelGrid>
+				
+			</p:fieldset>
+			
+			<h:panelGrid id="botaoOk" style="text-align:center;" width="100%" >
+				<p:commandButton value="OK" action="#{silosArmazensController.validarDeclaracoes()}"/>
+			</h:panelGrid>
+						
+		</h:form>
+	</p:dialog>
+
+		
+</ui:composition>

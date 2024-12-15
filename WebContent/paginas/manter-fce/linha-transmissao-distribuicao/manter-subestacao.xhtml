@@ -1,0 +1,68 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui">
+
+	<p:dialog id="fce_manter_subestacao" widgetVar="fce_manter_subestacao"
+		position="center" appendToBody="true" draggable="true" dynamic="true"
+		height="300" width="600" resizable="false" header="Incluir Subestação"
+		modal="true">
+
+
+		<h:form id="manterSubestacaoForm">
+
+			<p:fieldset style="border-radius:1px;">
+				<h1 class="titulo-grupo" style="font-weight:bold;">Subestação</h1> 
+				
+				<!-- Inicio Nome Subestação -->
+				<h:panelGrid>
+
+					<h:outputLabel value="* Nome subestação" style="font-weight: bold;"/>
+					<p:inputText
+						value="#{fceLinhaTransmissaoDistribruicaoController.fceLinhaEnergiaTipoSubestacao.dscSubestacao}" size="70"/>
+
+				</h:panelGrid>
+				<p:spacer height="20"/>
+				<!-- Fim Nome Subestação -->
+				
+				
+				<!-- Inicio Tipo subestação -->
+				<h:panelGrid >
+					<h:outputLabel value="* Tipo subestação" style="font-weight: bold;"/>
+
+					<p:selectOneRadio converter="simpleEntityConverter"
+						value="#{fceLinhaTransmissaoDistribruicaoController.tipoSubestacao}" 
+						style="margin-left:20px;">
+						<f:selectItems
+							value="#{fceLinhaTransmissaoDistribruicaoController.listaTipoSubestacao}"
+							var="subestacao" itemLabel="#{subestacao.dscTipoSubestacao}"
+							itemValue="#{subestacao}" />
+							
+					</p:selectOneRadio>
+				</h:panelGrid>
+				<!-- Fim Tipo subestação -->
+				
+				
+				<!-- Inicio Comandos -->
+				<h:panelGrid>
+					<h:panelGrid columns="3" style="padding-top:20px;">
+
+						<p:commandButton value="Cancelar" style="width:90px;"
+							onclick="fce_manter_subestacao.hide()" process="@this"/>
+						<p:commandButton value="Salvar e Fechar" style="width:200px;"
+							actionListener="#{fceLinhaTransmissaoDistribruicaoController.salvarFecharModalSubestacao()}"  update="linhaEnergiaForm:gridSubestacao manterSubestacaoForm" global="false" process="manterSubestacaoForm"/>
+						<p:commandButton value="Salvar e Continuar" style="width:200px;"
+							actionListener="#{fceLinhaTransmissaoDistribruicaoController.salvarContinuarModalSubestacao()}" update="linhaEnergiaForm:gridSubestacao manterSubestacaoForm" global="false" process="manterSubestacaoForm"/>
+
+					</h:panelGrid>
+
+				</h:panelGrid>
+				<!-- Fim Comandos -->
+			</p:fieldset>
+		</h:form>
+
+	</p:dialog>
+
+</ui:composition>

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="relatorio_padrao_numero" language="java" pageWidth="555" pageHeight="802" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="8840b208-afed-455c-ace7-a396b1310f77">
+	<property name="ireport.zoom" value="1.2100000000000002"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="NUM_RELATORIO" class="java.lang.String"/>
+	<parameter name="TITULO_NUM_RELATORIO" class="java.lang.String"/>
+	<parameter name="DATA_RELATORIO" class="java.lang.String"/>
+	<parameter name="TITULO_DATA_RELATORIO" class="java.lang.String"/>
+	<queryString language="SQL">
+		<![CDATA[select 1]]>
+	</queryString>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement uuid="a8ba08be-7de9-450e-accb-92ed6d214d60" x="0" y="8" width="555" height="12"/>
+				<box leftPadding="10"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$P{TITULO_DATA_RELATORIO} +": "+ $P{DATA_RELATORIO}]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="20">
+			<textField>
+				<reportElement uuid="8673dc49-67f7-4a15-b570-ca8cf4e9a5d8" x="0" y="0" width="555" height="12"/>
+				<box leftPadding="10"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$P{TITULO_NUM_RELATORIO} +": " +
+
+($P{NUM_RELATORIO}!=null ? $P{NUM_RELATORIO}: " - ")]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+				xmlns:h="http://java.sun.com/jsf/html" 
+				xmlns:f="http://java.sun.com/jsf/core" 
+				xmlns:ui="http://java.sun.com/jsf/facelets" 
+				xmlns:p="http://primefaces.prime.com.tr/ui"
+				xmlns:func="http://example.com/functions">
+	<h:form id="formLiConcordoUploadPlanilha">
+		<h:panelGroup>
+			<p:outputPanel >
+				<p id="mensagemResponsabilidadeOperacao" style="line-height: 1.5; text-align:justify;">#{bundle.cefir_msg_A058}</p>
+			</p:outputPanel>
+		</h:panelGroup>
+		<h:panelGroup id="pnlBotoes">
+			<h:panelGrid columns="2">
+				<p:selectBooleanCheckbox value="#{imovelRuralControllerNew.liConcordoImportacaoPlanilha}" id="cbxLiConcordo">
+					<p:ajax process="@this" update="pnlBotaoConfirmar pnlBotoes" />
+				</p:selectBooleanCheckbox>
+				<h:outputText value="#{bundle.geral_lbl_checkbox_li_concordo}" />
+			</h:panelGrid>
+			<p:separator />
+			<h:panelGroup id="pnlBotaoConfirmar" style="float: right; padding: 4px;" columns="2">
+				<p:commandButton id="btnConfirmarUploadPlanilha" value="#{bundle.geral_btn_confirmar}" 
+								 actionListener="#{imovelRuralControllerNew.prepararUpload()}" 
+								 disabled="#{!imovelRuralControllerNew.liConcordoImportacaoPlanilha}"
+					process="@this" oncomplete="dlgLiConcordoImportacaoPlanilha.hide()" 
+					update="formCadImovelRural:tabAbasDadosEspecificos:dataTablePCT 
+					formCadImovelRural:tabAbasDadosEspecificos:formLiConcordoUploadPlanilha:cbxLiConcordo" />
+			</h:panelGroup>
+		</h:panelGroup>
+	</h:form>
+</ui:composition>

@@ -1,0 +1,59 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+	
+<h:panelGrid id="pnlAgricultura" columns="2" rendered="#{imovelRuralControllerNew.pnlAgricultura}">
+	
+	<h:outputLabel value="* Informe o método e meses de irrigação" />
+	
+	<h:panelGrid columns="13" width="100%">
+		<h:outputLabel value="J" />
+		<h:outputLabel value="F" />
+		<h:outputLabel value="M" />
+		<h:outputLabel value="A" />
+		<h:outputLabel value="M" />
+		<h:outputLabel value="J" />
+		<h:outputLabel value="J" />
+		<h:outputLabel value="A" />
+		<h:outputLabel value="S" />
+		<h:outputLabel value="O" />
+		<h:outputLabel value="N" />
+		<h:outputLabel value="D" />
+	</h:panelGrid>
+	
+	<p:selectOneMenu id="metodoIrrigacao" 
+					 value="#{imovelRuralControllerNew.metodoIrrigacao}" 
+					 disabled="#{!imovelRuralControllerNew.imovelRural.indAreaProdutiva}" 
+					 required="true" 
+					 requiredMessage="O campo Método de Irrigação é de preenchimento obrigatório." 
+					 style="width: 220px;">
+		<f:selectItem itemLabel="#{bundle.geral_lbl_selecione}" />
+		<f:selectItems value="#{imovelRuralControllerNew.listaMetodoIrrigacao}" 
+					   var="metodoIrrigacao" 
+					   itemLabel="#{metodoIrrigacao.dscMetodoIrrigacao}" 
+					   itemValue="#{metodoIrrigacao}" />
+		<f:converter converterId="metodoIrrigacaoConverter" />
+	</p:selectOneMenu>
+	
+	<h:panelGrid columns="13" width="100%">
+		<h:selectBooleanCheckbox id="chkMesJAN" value="#{imovelRuralControllerNew.temMesJan}" />
+		<h:selectBooleanCheckbox id="chkMesFEV" value="#{imovelRuralControllerNew.temMesFev}" />
+		<h:selectBooleanCheckbox id="chkMesMAR" value="#{imovelRuralControllerNew.temMesMar}" />
+		<h:selectBooleanCheckbox id="chkMesABR" value="#{imovelRuralControllerNew.temMesAbr}" />
+		<h:selectBooleanCheckbox id="chkMesMAI" value="#{imovelRuralControllerNew.temMesMai}" />
+		<h:selectBooleanCheckbox id="chkMesJUN" value="#{imovelRuralControllerNew.temMesJun}" />
+		<h:selectBooleanCheckbox id="chkMesJUL" value="#{imovelRuralControllerNew.temMesJul}" />
+		<h:selectBooleanCheckbox id="chkMesAGO" value="#{imovelRuralControllerNew.temMesAgo}" />
+		<h:selectBooleanCheckbox id="chkMesSET" value="#{imovelRuralControllerNew.temMesSet}" />
+		<h:selectBooleanCheckbox id="chkMesOUT" value="#{imovelRuralControllerNew.temMesOut}" />
+		<h:selectBooleanCheckbox id="chkMesNOV" value="#{imovelRuralControllerNew.temMesNov}" />
+		<h:selectBooleanCheckbox id="chkMesDEZ" value="#{imovelRuralControllerNew.temMesDez}" />
+	</h:panelGrid>
+	
+</h:panelGrid>
+
+</html>

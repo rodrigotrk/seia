@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="relatorio_questionario_aba_barragem_caracterizacao_finalidade_detalhe" pageWidth="555" pageHeight="802" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="f860ff11-7ae1-4364-aa79-f592f63c0b63">
+	<property name="ireport.zoom" value="2.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["/home/alexandre/workspace/seia/src/br/gov/ba/seia/reports/cerh/"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="IDE_CERH_BARRAGEM_CARACTERIZACAO" class="java.lang.Integer"/>
+	<parameter name="aproveitamentoHidreletrico" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[41]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT cbcf.ide_tipo_finalidade_uso_agua, cbcf.ide_cerh_barragem_caracterizacao_finalidade, tfua.nom_tipo_finalidade_uso_agua  FROM
+	cerh_barragem_caracterizacao_finalidade cbcf
+INNER JOIN tipo_finalidade_uso_agua tfua ON tfua.ide_tipo_finalidade_uso_agua = cbcf.ide_tipo_finalidade_uso_agua
+WHERE cbcf.ide_cerh_barragem_caracterizacao = $P{IDE_CERH_BARRAGEM_CARACTERIZACAO}]]>
+	</queryString>
+	<field name="ide_tipo_finalidade_uso_agua" class="java.lang.Integer"/>
+	<field name="ide_cerh_barragem_caracterizacao_finalidade" class="java.lang.Integer"/>
+	<field name="nom_tipo_finalidade_uso_agua" class="java.lang.String"/>
+	<title>
+		<band height="10"/>
+	</title>
+	<detail>
+		<band height="21">
+			<printWhenExpression><![CDATA[$F{ide_tipo_finalidade_uso_agua} == $P{aproveitamentoHidreletrico}]]></printWhenExpression>
+			<line>
+				<reportElement uuid="9a1405cc-a61b-4c25-b97e-afa8968e4598" mode="Transparent" x="1" y="10" width="539" height="1" backcolor="#45FF00"/>
+			</line>
+			<textField>
+				<reportElement uuid="96891326-fab5-433f-8a2d-a4e4d95559bb" mode="Opaque" x="20" y="0" width="267" height="20"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{nom_tipo_finalidade_uso_agua} + " - Informações de Uso"]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement uuid="1c49de0f-fcfe-434b-b667-73a999f042b7" mode="Transparent" x="0" y="10" width="1" height="11" backcolor="#45FF00"/>
+			</line>
+			<line>
+				<reportElement uuid="d3e40af5-e159-40d0-8eb5-1a3156fa8c62" mode="Transparent" x="540" y="10" width="1" height="11" backcolor="#45FF00"/>
+			</line>
+		</band>
+		<band height="20" splitType="Prevent">
+			<printWhenExpression><![CDATA[$F{ide_tipo_finalidade_uso_agua} == $P{aproveitamentoHidreletrico}]]></printWhenExpression>
+			<subreport>
+				<reportElement uuid="49fa88a5-603e-46ef-9c95-279f418e48a6" x="10" y="0" width="500" height="20"/>
+				<subreportParameter name="ide_cerh_barragem_caracterizacao_finalidade">
+					<subreportParameterExpression><![CDATA[$F{ide_cerh_barragem_caracterizacao_finalidade}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "relatorio_questionario_aba_barragem_aproveitamento_hidreletrico.jasper"]]></subreportExpression>
+			</subreport>
+			<line>
+				<reportElement uuid="b039646c-ab0d-42a8-ba37-28119496bb24" stretchType="RelativeToBandHeight" x="0" y="0" width="1" height="20"/>
+			</line>
+			<line>
+				<reportElement uuid="1bebf869-44f7-44e6-86de-2646103fbfe0" stretchType="RelativeToBandHeight" x="540" y="0" width="1" height="20"/>
+			</line>
+		</band>
+		<band height="21">
+			<printWhenExpression><![CDATA[$F{ide_tipo_finalidade_uso_agua} == $P{aproveitamentoHidreletrico}]]></printWhenExpression>
+			<line>
+				<reportElement uuid="f0cefcc0-4fe8-4fbd-9ac0-cad2c7e9ea57" x="1" y="10" width="539" height="1"/>
+			</line>
+			<line>
+				<reportElement uuid="9c1a7e6a-55fc-4e29-8d35-d1c37f35cae2" mode="Transparent" x="540" y="0" width="1" height="11" backcolor="#45FF00"/>
+			</line>
+			<line>
+				<reportElement uuid="e0afe180-3907-4a0c-be08-040a3214e5c1" mode="Transparent" x="0" y="0" width="1" height="10" backcolor="#45FF00"/>
+			</line>
+		</band>
+		<band height="20">
+			<printWhenExpression><![CDATA[$F{ide_tipo_finalidade_uso_agua} != $P{aproveitamentoHidreletrico}]]></printWhenExpression>
+			<textField>
+				<reportElement uuid="964112e7-8884-4baa-a909-23546ea82719" x="0" y="0" width="300" height="20"/>
+				<box leftPadding="10">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[" [x] "+ $F{nom_tipo_finalidade_uso_agua}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

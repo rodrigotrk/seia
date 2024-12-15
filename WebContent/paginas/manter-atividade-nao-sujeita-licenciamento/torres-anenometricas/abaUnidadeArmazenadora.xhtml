@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui"
+	xmlns:s="http://java.sun.com/jsf/composite/seia">
+
+
+
+<h:panelGrid id="pnlUnidadeArmazenadora" style="width: 100%;">
+	<h:panelGrid>
+		<h:outputText value="#{bundle.title_cadastro_torres}"
+			style="font-weight:bold" />
+	</h:panelGrid>
+	<h:panelGrid>
+    <p:spacer height="10"/>
+		<p:commandLink process="@this" oncomplete="dialogCadastroTorreAnemometrica.show()"	update="dialogCadastroTorreAnemometrica" 
+			action="#{torresAnemometricasController.inicializarTorreModal}" disabled="#{torresAnemometricasController.visualizacao}">
+			<h:graphicImage title="#{bundle.txt_incluir_imovel_rural}" value="/resources/img/ico-expandir.png" />
+			<f:setPropertyActionListener value="#{false}" target="#{torresAnemometricasController.visualizarTorre}"/>
+			<h:outputText value="#{bundle.txt_incluir_torre}" style="font-size: 11px;" />
+		</p:commandLink>
+
+        <p:spacer height="10"/>
+        
+		<p:dataTable id="dataTableUnidadesArmazenadoras"
+			var="torreAnemometrica"
+			value="#{torresAnemometricasController.torres}" lazy="true"
+			paginator="true" rows="8" paginatorPosition="bottom"
+			paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}" 
+			emptyMessage="#{bundle.geral_msg_empty_list}"
+			widgetVar="torreAnemometrica" style="width: 100%;">
+
+			<p:column headerText="#{bundle.lbl_cpm_identificacao}" style="text-align:center;">
+				<h:outputText id="identificacaoTorre" 
+					value="#{torresAnemometricasController.abreviarStringComReticencias(torreAnemometrica.nomTorreAnemometrica, 30)}" />
+					
+				<p:tooltip for="identificacaoTorre" rendered="#{torreAnemometrica.tamanhoIdentificacao > 30}"
+					value="#{torreAnemometrica.nomTorreAnemometrica}" />
+					
+			</p:column>
+
+			<p:column headerText="#{bundle.lbl_altura}(m)"
+				style="text-align:center;">
+				<h:outputText value="#{torreAnemometrica.valAlturaTorre}" />
+			</p:column>
+
+			<p:column headerText="#{bundle.lbl_natureza_torre}"
+				style="text-align:center;">
+				<h:outputText
+					value="#{torreAnemometrica.ideTipoNaturezaTorre.nomTipoNaturezaTorre}" />
+			</p:column>
+
+			<p:column headerText="#{bundle.lbl_projecao_monitoramento}(mês))"
+				style="text-align:center;" rendered="#{torreAnemometrica.valProjecaoMonitoramento eq '1'}">
+				<h:outputText
+					value="#{torreAnemometrica.valProjecaoMonitoramento}" />
+			</p:column>
+			
+			<p:column headerText="#{bundle.lbl_projecao_monitoramento}(meses)"
+				style="text-align:center;" rendered="#{torreAnemometrica.valProjecaoMonitoramento ne '1'}">
+				<h:outputText
+					value="#{torreAnemometrica.valProjecaoMonitoramento}" />
+			</p:column>
+
+			<p:column headerText="#{bundle.geral_lbl_acoes}" style="text-align:center;">
+				<h:panelGrid columns="3">
+					<p:commandLink id="linkEditarTorreAnemometrica" oncomplete="dialogCadastroTorreAnemometrica.show();" process="@this" update="scroll"
+						disabled="#{torresAnemometricasController.visualizacao}">
+						<h:graphicImage value="/resources/img/ico-alterar.png" title="Editar"/>
+						<f:setPropertyActionListener value="#{false}" target="#{torresAnemometricasController.visualizarTorre}"/>
+						<f:setPropertyActionListener value="#{torreAnemometrica}" target="#{torresAnemometricasController.torreAnemometrica}"/>
+						<f:setPropertyActionListener value="#{torresAnemometricasController.cadastro}" target="#{torresAnemometricasController.torreAnemometrica.ideCadastroAtividadeNaoSugeitaLic}"/>
+					</p:commandLink>
+					
+					<p:commandLink id="linkVisualizarTorreAnemometrica" oncomplete="dialogCadastroTorreAnemometrica.show();" process="@this" update="scroll">
+						<h:graphicImage value="/resources/img/ico-pesquisa.png" title="Visualizar"/>
+						<f:setPropertyActionListener value="#{true}" target="#{torresAnemometricasController.visualizarTorre}"/>
+						<f:setPropertyActionListener value="#{torreAnemometrica}" target="#{torresAnemometricasController.torreAnemometrica}"/>
+					</p:commandLink>
+					
+					<p:commandLink id="linkExcluirTorreAnemometrica" oncomplete="confirmation.show()"
+						disabled="#{torresAnemometricasController.visualizacao}">
+						<h:graphicImage value="/resources/img/ico-excluir.png" title="Excluir" process="@this"/>
+						<f:setPropertyActionListener value="#{torreAnemometrica}" target="#{torresAnemometricasController.torreAnemometrica}"/>
+					</p:commandLink>
+				</h:panelGrid>
+			</p:column>
+		</p:dataTable>
+
+	</h:panelGrid>
+
+
+	<h:panelGrid columns="2" style="width:100%;text-align:center">
+
+		<p:commandButton title="#{bundle.geral_lbl_voltar}"
+			value="#{bundle.geral_lbl_voltar}" process="@this" update="tabViewCadastroTorres"
+			action="#{torresAnemometricasController.voltarAba}"
+			styleClass="left" />
+
+		<p:commandButton title="#{bundle.geral_lbl_finalizar}" action="#{torresAnemometricasController.validarFinalizacao}"
+			value="#{bundle.geral_lbl_finalizar}" process="@this" styleClass="right"
+			disabled="#{torresAnemometricasController.visualizacao}" />
+			
+	</h:panelGrid>
+</h:panelGrid>
+</html>

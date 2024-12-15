@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui"
+	xmlns:s="http://java.sun.com/jsf/composite/seia">
+	
+	<h:form id="formReajustarValor">
+		<h:panelGrid>
+			<h:panelGrid columns="2">
+				<h:outputLabel value="Número do TCCA:" styleClass="bold"/>
+				<h:outputLabel value="#{tccaController.tcca.numTcca}"/>
+			</h:panelGrid>
+			
+			<h:panelGrid columns="2">
+				<h:outputLabel value="Requerente:" styleClass="bold" /> 
+				<h:outputLabel value="#{tccaController.tcca.idePessoaRequerente.nomeRazao}"/> 
+			</h:panelGrid>
+			
+			<h:panelGrid columns="2">
+				<h:outputLabel value="Empreendimento:" styleClass="bold" />
+				<h:outputLabel value="#{tccaController.tcca.ideEmpreendimento.nomEmpreendimento}"/>
+		 	</h:panelGrid>
+		 	
+		 	<h:panelGrid columns="2">
+				<h:outputLabel value="Valor do TCCA (R$):" styleClass="bold" /> 
+				<h:outputText value="#{(tccaController.tccaHistoricoReajusteValor.valTcca)==null ? 0.00 : (tccaController.tccaHistoricoReajusteValor.valTcca)}"
+					styleClass="#{tccaController.isValorNegativo(tccaController.tccaHistoricoReajusteValor.valTcca)}">
+					
+					<f:convertNumber pattern="#,###,##0.00" locale="pt_BR"/>
+				</h:outputText>
+			</h:panelGrid>
+			
+			<h:panelGrid columns="2">
+				<h:outputLabel value="Saldo Disponível do TCCA:" styleClass="bold" /> 
+				<h:outputText value="#{(tccaController.tcca.ultimoSaldo.valSaldoNaoDestinadoProjeto)==null ? 0.00 : (tccaController.tcca.ultimoSaldo.valSaldoNaoDestinadoProjeto)}"
+					styleClass="#{tccaController.isValorNegativo(tccaController.tcca.ultimoSaldo.valSaldoNaoDestinadoProjeto)}">
+					
+					<f:convertNumber pattern="#,###,##0.00" locale="pt_BR"/>
+				</h:outputText>
+			</h:panelGrid>
+			
+			<hr style="width: 100%;"/>
+			
+			<h:panelGrid columns="3">
+				<h:outputLabel value="Índice de reajuste (%):" onkeyup="SomenteNumero(this);" onblur="SomenteNumero(this);" styleClass="bold" /> 
+				
+				<p:inputText value="#{tccaController.tccaHistoricoReajusteValor.indiceReajuste}" converter="bigConverter" maxlength="6"
+					onkeyup="mascararNumeroAndAddZeros(this, event, 3, 2, '.',',', 3);"
+					onblur="mascararNumeroAndAddZeros(this, event, 3, 2, '.',',', 3);"/>
+				
+				<p:commandLink actionListener="#{tccaController.calcularReajustarValor}" process="formReajustarValor" global="true"
+					style="margin-left: 5px;">
+					
+			    	<h:graphicImage title="calcular" value="/resources/img/ico-pesquisa.png" />
+				</p:commandLink>
+			</h:panelGrid>
+			
+			<h:panelGrid columns="2">
+				<h:outputLabel value="Valor do TCCA após o reajuste (R$):" styleClass="bold"/> 
+				<h:outputText value="#{(tccaController.valorTccaReajustado)==null ? 0.00 : (tccaController.valorTccaReajustado)}"
+					styleClass="#{tccaController.isValorNegativo(tccaController.valorTccaReajustado)}">
+					
+					<f:convertNumber pattern="#,###,##0.00" locale="pt_BR"/>
+				</h:outputText>
+			</h:panelGrid>
+			
+			<h:panelGrid columns="2">
+				<h:outputLabel styleClass="bold">Saldo disponível no TCCA <br/>após o reajuste (R$):</h:outputLabel>
+				
+				<h:outputText value="#{(tccaController.valorSaldoNaoSuplementadoReajustado)==null ? 0.00 : (tccaController.valorSaldoNaoSuplementadoReajustado)}"
+					styleClass="#{tccaController.isValorNegativo(tccaController.valorSaldoNaoSuplementadoReajustado)}" style="margin-left: 10px;">
+					
+					<f:convertNumber pattern="#,###,##0.00" locale="pt_BR"/>
+				</h:outputText>
+			</h:panelGrid>
+		</h:panelGrid>
+		
+		<p:spacer width="1" height="30"/>
+		
+		<s:divCentralizado>
+			<p:commandButton title="Salvar" value="Salvar" actionListener="#{tccaController.salvarReajustarValor()}"/>
+		</s:divCentralizado>
+	</h:form>
+</ui:composition>

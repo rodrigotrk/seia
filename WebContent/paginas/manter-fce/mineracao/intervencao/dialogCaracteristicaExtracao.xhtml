@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui">
+	<p:dialog id="caracteristicaExtracao" 
+		  widgetVar="caracteristicaExtracao" 
+		  position="center" 
+		  appendToBody="false" 
+		  draggable="true" 
+		  dynamic="true" 
+		  resizable="false" 
+		  header="Característica da Extração" 
+		  modal="true"
+   		  height="670"
+   		  width="600">
+	  	<h:form id="formCaracteristicaExtracao">
+	  		<p:fieldset>
+		  		<h:panelGrid columns="1">
+		  		
+		  			<h:outputText value="Nome da coordenada:" style="font-weight:bold;"/>
+		  			
+		  			<h:outputText value="#{fceIntervencaoMineracaoController.fceIntervencaoCaracteristicaExtracao.nomCoordenada}" />
+		  			
+		  			<br/>
+		  			
+		  			<h:outputText value="Município(s):" style="font-weight:bold;"/>
+		  			
+		  			<h:outputText value="#{fceIntervencaoMineracaoController.municipiosCaracteritica}"/>
+		  			
+		  			<br/>
+		  			
+		  			<h:outputText value="* Característica da extração" style="font-weight:bold;"/>
+					
+					<p:selectManyCheckbox value="#{fceIntervencaoMineracaoController.fceIntervencaoCaracteristicaExtracao.fceIntervencaoTipoCaracticasExtracao}" layout="pageDirection" valueChangeListener="#{fceIntervencaoMineracaoController.selectOutros}"
+						disabled="#{fceIntervencaoMineracaoController.desabilitarTudo}">
+						<f:selectItems value="#{fceIntervencaoMineracaoController.fceIntervencaoTipoCaracticasExtracao}" var="t" itemLabel="#{t.ideTipoCaracteristicaExtracao.nomCaracteristicaExtracao}" itemValue="#{t}"/>
+				 		<f:converter converterId="simpleEntityConverter" />
+				 		<p:ajax process="@this" global="true"/>
+				 	</p:selectManyCheckbox>
+				 	
+					<br/>
+		  			<h:outputText value="* Mineral Extraído" style="font-weight:bold;"/>
+					
+					<p:selectOneRadio value="#{fceIntervencaoMineracaoController.fceIntervencaoCaracteristicaExtracao.ideTipoMineralExtraido}" layout="pageDirection" valueChangeListener="#{fceIntervencaoMineracaoController.selectOutros}"
+						disabled="#{fceIntervencaoMineracaoController.desabilitarTudo}">
+						<f:selectItems value="#{fceIntervencaoMineracaoController.tiposMineraislExtraidos}" var="t" itemLabel="#{t.nomTipoMineralExtraido}" itemValue="#{t}"/>
+						<f:converter converterId="simpleEntityConverter" />
+						<p:ajax process="@this" global="true"/>
+				 	</p:selectOneRadio>
+					
+					<br />
+					<br />
+					
+		  			<h:panelGrid columns="3" id="panelVal">
+	
+		  				<h:outputText value="* Período da Atividade de Mineração"/>
+		  				<p:inputText disabled="#{fceIntervencaoMineracaoController.desabilitarTudo}" id="periodoAtividadeMin" value="#{fceIntervencaoMineracaoController.fceIntervencaoCaracteristicaExtracao.valPeriodoMineracao}" maxlength="2" converter="integerConverter" onkeyup="SomenteNumero(this)">
+		  					<p:ajax global="false" event="blur" update="formCaracteristicaExtracao:periodoAtividadeMin" process="@this" listener="#{fceIntervencaoMineracaoController.validarPeriodoAtividadeMineracao}"/>
+		  				</p:inputText>
+		  				<h:outputText value="(h/dia)"/>
+		  				
+		  				<h:outputText value="* Volume de mineração extraído na polpa"/>
+		  				<p:inputText disabled="#{fceIntervencaoMineracaoController.desabilitarTudo}" value="#{fceIntervencaoMineracaoController.fceIntervencaoCaracteristicaExtracao.valVazaoMineralExtraidoPolpa}" converter="bigConverter" onkeyup="maskIt(this, event, '99.999.999,99', true)" maxlength="13">
+		  					<p:ajax global="false" event="blur" update="formCaracteristicaExtracao:razaoAguaExtraido" process="@this"/>
+		  				</p:inputText>
+		  				<h:outputText value="(m3/dia)"/>
+	
+		  				<h:outputText value="* Vazão de água na polpa"/>
+		  				<p:inputText disabled="#{fceIntervencaoMineracaoController.desabilitarTudo}" value="#{fceIntervencaoMineracaoController.fceIntervencaoCaracteristicaExtracao.valVazaoAguaPolpa}" converter="bigConverter" onkeyup="maskIt(this, event, '99.999.999,99', true)" maxlength="13">
+		  					<p:ajax global="false" event="blur" update="formCaracteristicaExtracao:razaoAguaExtraido" process="@this"/>
+		  				</p:inputText>
+		  				<h:outputText value="(m3/dia)"/>
+		  				
+		  				<h:outputText value="* Vazão de polpa"/>
+		  				<p:inputText disabled="#{fceIntervencaoMineracaoController.desabilitarTudo}" value="#{fceIntervencaoMineracaoController.fceIntervencaoCaracteristicaExtracao.valVazaoPolpa}" converter="bigConverter" onkeyup="maskIt(this, event, '99.999.999,99', true)" maxlength="13" />
+		  				<h:outputText value="(m3/dia)"/>
+		  				
+		  				<h:outputText value="Razão água/mineral extraído"/>
+		  				<h:panelGroup id="razaoAguaExtraido">
+			  				<p:inputText value="#{fceIntervencaoMineracaoController.calculoRazaoDaAguaMineralExtraido}" disabled="true"/>
+		  				</h:panelGroup>
+		  				<h:outputText value=""/>
+	
+		  				<h:outputText value="* Teor de umidade"/>
+		  				<p:inputText disabled="#{fceIntervencaoMineracaoController.desabilitarTudo}" value="#{fceIntervencaoMineracaoController.fceIntervencaoCaracteristicaExtracao.valTeorUmidade}" converter="bigConverter" onkeyup="maskIt(this, event, '99.999.999,99', true)" maxlength="13" />
+		  				<h:outputText value="%"/>
+	
+		  				<h:outputText value="* Área de lavra"/>
+		  				<p:inputText disabled="#{fceIntervencaoMineracaoController.desabilitarTudo}" value="#{fceIntervencaoMineracaoController.fceIntervencaoCaracteristicaExtracao.valAreaLavra}" converter="bigConverterQuatroDecimais" onkeyup="maskIt(this, event, '99.999.999,9999', true)" maxlength="13" />
+		  				<h:outputText value="(ha)"/>
+	
+		  				<h:outputText value="* Produção máxima mensal"/>
+		  				<p:inputText disabled="#{fceIntervencaoMineracaoController.desabilitarTudo}" value="#{fceIntervencaoMineracaoController.fceIntervencaoCaracteristicaExtracao.valProducaoMaximaMensal}" converter="bigConverter" onkeyup="maskIt(this, event, '99.999.999,99', true)" maxlength="13" />
+		  				<h:outputText value="(m3/mês)"/>
+	
+		  				<h:outputText value="* Quantidade de dias de produção/mês"/>
+		  				<p:inputText disabled="#{fceIntervencaoMineracaoController.desabilitarTudo}" id="quantidadeDiasProducaoMes" value="#{fceIntervencaoMineracaoController.fceIntervencaoCaracteristicaExtracao.valQtdeDiasProducaoMes}" converter="integerConverter" onkeyup="SomenteNumero(this)" maxlength="2">
+		  					<p:ajax global="false" event="blur" update="formCaracteristicaExtracao:quantidadeDiasProducaoMes" process="@this" listener="#{fceIntervencaoMineracaoController.validarQuantidadeDiasProducaoMes}"/>
+		  				</p:inputText>
+		  				<h:outputText value=""/>
+		  				
+		  				<!--h:outputText value=" Vazão de lançamento do manancial"/>
+		  				<p:inputText disabled="#{fceIntervencaoMineracaoController.desabilitarTudo}" value="#{fceIntervencaoMineracaoController.fceIntervencaoCaracteristicaExtracao.valVazaoLancamentoManancial}" required="false" converter="bigConverter" onkeyup="maskIt(this, event, '99.999.999,99', true)" maxlength="13"/>
+		  				<h:outputText value="(m3/dia)"/-->
+		  			</h:panelGrid>
+		  		</h:panelGrid>
+	  		</p:fieldset>
+	  		<br/>
+			<p:commandButton value="Voltar" immediate="true" onclick="caracteristicaExtracao.hide();" styleClass="left"/>
+			<p:commandButton disabled="#{fceIntervencaoMineracaoController.desabilitarTudo}" value="Salvar" actionListener="#{fceIntervencaoMineracaoController.salvarCaracteristicaExtracao()}" styleClass="left" style="margin-left: 10px"/>  
+		</h:form>
+	</p:dialog>
+</ui:composition>

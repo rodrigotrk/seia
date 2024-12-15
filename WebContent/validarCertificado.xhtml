@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui"
+	xmlns:sec="http://www.springframework.org/security/facelets/tags"
+	template="/layout/template.xhtml">
+	
+	<ui:define name="titulo-pagina">	
+		<h3> SEIA | Sistema Estadual de Informações Ambientais e de
+			Recursos Hídricos</h3>		
+	</ui:define>
+	<ui:define name="conteudo-principal">
+		<div>
+			<h:form id="validacao">
+				<h:outputText value="Chave de Segurança " style="font-weight:bold;" />
+				<h:panelGrid columns="2">
+					<p:inputMask id="fdTokenMask" value="#{validarCertificadoController.token}"  mask="********-********-********-********" style="width:250px;"/>
+					<p:commandButton value="Atestar" action="#{validarCertificadoController.validarCertificado()}" update="validacao" />
+				</h:panelGrid>
+				<p:spacer height="20"/>
+				<h:panelGrid rendered="#{validarCertificadoController.existeCertificado}">
+					<p:fieldset>
+						
+						<!-- 1a linha -->
+						<h:panelGrid columns="5">
+							<h:outputText style="font-weight:bold;" value="Nº Certificado:" />
+							<h:outputText value="#{validarCertificadoController.dto.certificado.numCertificado}" />
+							
+							<p:spacer height="5" width="70"/>
+							
+							<h:graphicImage title="#{validarCertificadoController.dscTipoCertificado}" value="/resources/img/cicon.png" rendered="#{!validarCertificadoController.dto.certificado.termoCompromisso and validarCertificadoController.dto.podeImprimir}" />
+							<h:graphicImage title="Imprimir Termo de Compromisso" value="/resources/img/ticon.png" rendered="#{validarCertificadoController.dto.certificado.termoCompromisso}" />
+							
+							<h:commandLink value="#{validarCertificadoController.dscTipoCertificado}" 
+								rendered="#{validarCertificadoController.dto.podeImprimir}"
+								ajax="false">
+								<p:fileDownload value="#{validarCertificadoController.imprimirCertificado}" />
+							</h:commandLink>
+							
+						</h:panelGrid>
+						
+						<!-- 2a linha -->
+						<h:panelGrid columns="2">
+							<h:outputText style="font-weight:bold;" value="Data Emissão:" />
+							<h:outputText value="#{validarCertificadoController.dto.certificado.dtcEmissaoCertificado}">
+								<f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss" timeZone="Brazil/East"/>
+							</h:outputText>
+						</h:panelGrid>
+						
+						<!-- 3a linha -->
+						<h:panelGrid columns="2">
+							<h:outputText style="font-weight:bold;" value="#{validarCertificadoController.nomeTipoCertificado}" />
+							<h:outputText value="#{validarCertificadoController.dto.numero}"/>
+						</h:panelGrid>
+						
+						<!-- 4a linha -->
+						<h:panelGrid columns="5">
+							<h:outputText style="font-weight:bold;" value="Requerente:" />
+							<h:outputText value="#{validarCertificadoController.dto.nomRequerente}" />
+							
+							<p:spacer height="5" width="70"/>
+							
+							<h:outputText style="font-weight:bold;" value="CPF/CNPJ:" />
+							<h:outputText value="#{validarCertificadoController.dto.numCpfCnpj}" />
+						</h:panelGrid>
+						
+						<!-- 5a linha -->
+						<h:panelGrid columns="2" rendered="#{!empty validarCertificadoController.dto.endereco}">
+							<h:outputText style="font-weight:bold;" value="#{validarCertificadoController.dscComplementoEndereco}" />
+							<h:outputText value="#{validarCertificadoController.dto.endereco}" />
+						</h:panelGrid>
+						
+						<h:panelGrid rendered="#{validarCertificadoController.dto.certificadoDeRequerimento and (not empty validarCertificadoController.dto.certificado.requerimento.ultimoEmpreendimento or validarCertificadoController.dto.certificado.requerimento.ultimoEmpreendimento ne null)}">
+							<p:dataTable value="#{validarCertificadoController.tipologia}" var="grupo" style="width:750px;">
+								<f:facet name="header">
+									<h:outputText value="Tipologia" />
+								</f:facet>
+								<p:column>
+									<h:outputText value="#{grupo.ideTipologia.desTipologia}" />
+								</p:column>
+							</p:dataTable>
+						</h:panelGrid>
+						
+						<p:spacer height="10" width="0"/>
+						
+						<p:fieldset legend="Aviso" style="background-color: rgb(257,231,219);" rendered="#{validarCertificadoController.exibeMensagemErroASV}">
+							<h:panelGrid styleClass="aviso-home">
+								Houve correção no certificado de Ato Declaratório originalmente emitido para este processo. 
+								<br/>O certificado correto é o referente à Declaração referente à Queima Controlada
+							</h:panelGrid>
+						</p:fieldset>
+						
+						<p:spacer height="10" width="0"/>
+					</p:fieldset>
+				</h:panelGrid>
+				
+				<h:panelGrid rendered="#{validarCertificadoController.existeDeclaracao}">
+					<p:fieldset>
+						
+						<!-- 1a linha -->
+						<h:panelGrid columns="5">
+							<h:outputText style="font-weight:bold;" value="Nº Certificado:" />
+							<h:outputText value="#{validarCertificadoController.dtoDeclaracao.declaracao.numDeclaracaoParcialDae}" />
+							
+							<p:spacer height="5" width="70"/>
+							
+							<h:graphicImage title="#{validarCertificadoController.dscTipoCertificado}" value="/resources/img/cicon.png" rendered="#{!validarCertificadoController.dtoDeclaracao.declaracao.termoCompromisso and validarCertificadoController.dtoDeclaracao.podeImprimir}" />
+							<h:graphicImage title="Imprimir Termo de Compromisso" value="/resources/img/ticon.png" rendered="#{validarCertificadoController.dtoDeclaracao.declaracao.termoCompromisso}" />
+							
+							<h:commandLink value="#{validarCertificadoController.dscTipoCertificado}" rendered="#{validarCertificadoController.dtoDeclaracao.podeImprimir}">			
+								<p:fileDownload value="#{validarCertificadoController.imprimirCertificado}" />
+							</h:commandLink>
+							
+						</h:panelGrid>
+						
+						<!-- 2a linha -->
+						<h:panelGrid columns="2">
+							<h:outputText style="font-weight:bold;" value="Data Emissão:" />
+							<h:outputText value="#{validarCertificadoController.dtoDeclaracao.declaracao.dtcEmissaoDeclaracaoParcialDae}">
+								<f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss" timeZone="Brazil/East"/>
+							</h:outputText>
+						</h:panelGrid>
+						
+						<!-- 3a linha -->
+						<h:panelGrid columns="2">
+							<h:outputText style="font-weight:bold;" value="#{validarCertificadoController.nomeTipoCertificado}" />
+							<h:outputText value="#{validarCertificadoController.dtoDeclaracao.numero}"/>
+						</h:panelGrid>
+						
+						<!-- 4a linha -->
+						<h:panelGrid columns="5">
+							<h:outputText style="font-weight:bold;" value="Requerente:" />
+							<h:outputText value="#{validarCertificadoController.dtoDeclaracao.nomRequerente}" />
+							
+							<p:spacer height="5" width="70"/>
+							
+							<h:outputText style="font-weight:bold;" value="CPF/CNPJ:" />
+							<h:outputText value="#{validarCertificadoController.dtoDeclaracao.numCpfCnpj}" />
+						</h:panelGrid>
+						
+<!-- 						<h:panelGrid rendered="#{validarCertificadoController.dtoDeclaracao.certificadoDeRequerimento}">
+							<p:dataTable value="#{validarCertificadoController.tipologia}" var="grupo" style="width:750px;">
+								<f:facet name="header">
+									<h:outputText value="Tipologia" />
+								</f:facet>
+								<p:column>
+									<h:outputText value="#{grupo.ideTipologia.desTipologia}" />
+								</p:column>
+							</p:dataTable>
+						</h:panelGrid> -->
+						
+					</p:fieldset>
+				</h:panelGrid>					
+								
+			</h:form>
+		</div>
+	</ui:define>
+</ui:composition>

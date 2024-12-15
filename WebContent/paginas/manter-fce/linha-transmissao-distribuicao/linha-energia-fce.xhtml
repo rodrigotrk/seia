@@ -1,0 +1,582 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui">
+
+
+	<p:confirmDialog id="confirmaExclusaoSubestação"
+		widgetVar="confirmaExclusaoSubestação" header="Confirmação"
+		appendToBody="true" message="Deseja realmente excluir o registro?"
+		severity="alert">
+		<h:form>
+			<p:commandButton value="Sim" update="linhaEnergiaForm:gridSubestacao"
+				process="@this"
+				actionListener="#{fceLinhaTransmissaoDistribruicaoController.removerSubestacao()}">
+			</p:commandButton>
+			<p:commandButton value="Não"
+				onclick="confirmaExclusaoSubestação.hide();" type="button"
+				global="false" />
+		</h:form>
+	</p:confirmDialog>
+
+	<!-- Inicio Dialog Exclusão Poligonal Principal -->
+	<p:confirmDialog id="confirmaExclusaoPoligonalLInhaEnergia"
+		widgetVar="confirmaExclusaoPoligonalLInhaEnergia" header="Confirmação"
+		appendToBody="true" message="Deseja realmente excluir o registro?"
+		severity="alert">
+		<h:form>
+			<p:commandButton value="Sim" update="linhaEnergiaForm:gridPoligonal"
+				onclick="confirmaExclusaoPoligonalLInhaEnergia.hide()"
+				process="@this"
+				actionListener="#{fceLinhaTransmissaoDistribruicaoController.removerLocalizacao()}">
+			</p:commandButton>
+			<p:commandButton value="Não"
+				onclick="confirmaExclusaoPoligonalLInhaEnergia.hide();"
+				type="button" global="false" />
+		</h:form>
+	</p:confirmDialog>
+	<!-- Fim Dialog Exclusão Poligonal Principal -->
+
+	<!-- Inicio Dialog Exclusão Poligonal Alternativa -->
+	<p:confirmDialog id="confirmaExclusaoPoligonalLInhaEnergiaAlternativa"
+		widgetVar="confirmaExclusaoPoligonalLInhaEnergiaAlternativa"
+		header="Confirmação" appendToBody="true"
+		message="Deseja realmente excluir o registro?" severity="alert">
+		<h:form>
+			<p:commandButton value="Sim" update="linhaEnergiaForm:gridPoligonal"
+				onclick="confirmaExclusaoPoligonalLInhaEnergiaAlternativa.hide()"
+				process="@this"
+				actionListener="#{fceLinhaTransmissaoDistribruicaoController.removerLocalizacaoAlternativa()}">
+			</p:commandButton>
+			<p:commandButton value="Não"
+				onclick="confirmaExclusaoPoligonalLInhaEnergiaAlternativa.hide();"
+				type="button" global="false" />
+		</h:form>
+	</p:confirmDialog>
+	<!-- Fim Dialog Exclusão Poligonal Alternativa -->
+
+	<!-- Inicio Dialog Fechar Linha Transmissao -->
+	<p:confirmDialog
+		id="modalConfirmarFechamentoDaTelaLinhaTransmissaoEnergia"
+		widgetVar="modalConfirmarFechamentoDaTelaLinhaTransmissaoEnergia"
+		header="Alerta" appendToBody="true"
+		message="É obrigatória a seleção de ao menos um Sistema de Controle Ambiental."
+		severity="alert">
+		<h:form>
+			<p:commandButton value="Ok" update="linhaEnergiaForm:gridPoligonal"
+				onclick="modalConfirmarFechamentoDaTelaLinhaTransmissaoEnergia.hide()"
+				process="@this"
+				actionListener="#{fceLinhaTransmissaoDistribruicaoController.voltar()}">
+			</p:commandButton>
+			<p:commandButton value="Cancelar"
+				onclick="modalConfirmarFechamentoDaTelaLinhaTransmissaoEnergia.hide();"
+				type="button" global="false" />
+		</h:form>
+	</p:confirmDialog>
+	<!-- Fim Dialog Fechar Linha Transmissao -->
+
+	<p:confirmDialog id="confirmaImprimirRelatorioLinhaEnergia"
+		widgetVar="confirmaImprimirRelatorioLinhaEnergia" header="Confirmação"
+		appendToBody="true" message="Deseja imprimir relatório?"
+		severity="alert">
+		<h:form>
+			<p:commandButton value="Sim" ajax="false" global="false"
+				onclick="fce_linha_trasmissao_distribuicao.hide();confirmaImprimirRelatorioLinhaEnergia.hide();"
+				actionListener="#{fceLinhaTransmissaoDistribruicaoController.imprimirRelatorio()}">
+
+				<p:fileDownload
+					value="#{fceLinhaTransmissaoDistribruicaoController.imprimirRelatorioFce}" />
+			</p:commandButton>
+
+			<p:commandButton value="Não"
+				onclick="confirmaImprimirRelatorioLinhaEnergia.hide();"
+				global="false"
+				actionListener="#{fceLinhaTransmissaoDistribruicaoController.naoImprimir()}" />
+
+		</h:form>
+	</p:confirmDialog>
+
+	<!-- Inicio Tela Manter Subestação -->
+	<ui:include
+		src="/paginas/manter-fce/linha-transmissao-distribuicao/manter-subestacao.xhtml" />
+	<!-- Fim Tela Manter Subestação -->
+
+
+	<p:dialog id="fce_linha_trasmissao_distribuicao"
+		widgetVar="fce_linha_trasmissao_distribuicao" position="center"
+		appendToBody="true" draggable="true" dynamic="true" height="600"
+		width="1030" resizable="false"
+		header="FCE Linha de Transmissão e Distribuição" modal="true">
+
+		<h:form id="linhaEnergiaForm">
+		<p:fieldset>
+			<!-- Inicio Origem da energia -->
+			<h:panelGrid>
+				<h:outputLabel value="* Origem da energia"
+					style="font-weight: bold;" />
+ 			    <p:selectManyCheckbox id="grid3" value="#{fceLinhaTransmissaoDistribruicaoController.listTipoEnergia}" 
+			    	layout="pageDirection" columns="1" disabled="#{fceLinhaTransmissaoDistribruicaoController.desabilitarTudo}" converter="simpleEntityConverter">
+       				<f:selectItems value="#{fceLinhaTransmissaoDistribruicaoController.listaTipoEnergia}" var="energia" itemLabel="#{energia.dscTipoEnergia}" itemValue="#{energia}" />
+  				</p:selectManyCheckbox> 
+				
+			</h:panelGrid>
+
+			<!-- Fim Origem da energia -->
+
+
+			<!-- Inicio Poligonal do objeto da licença -->
+			<h:panelGrid style="padding-top:20px;" id="gridPoligonal">
+				<h:outputText value="* Poligonal do objeto da licença"
+					style="font-weight: bold;"
+					rendered="#{!fceLinhaTransmissaoDistribruicaoController.isVisivel || fceLinhaTransmissaoDistribruicaoController.isVisivel == null}" />
+
+				<p:spacer height="5" />
+
+				<h:panelGrid style="margin-left:20px;">
+					<h:panelGroup style="padding-top:10px;">
+						<h:outputText value="* Poligonal do objeto da licença"
+							style="font-weight: bold;"
+							rendered="#{fceLinhaTransmissaoDistribruicaoController.isVisivel}" />
+						<p:commandLink
+							action="#{localizacaoGeograficaGenericController.carregarTela()}"
+							actionListener="#{localizacaoGeograficaGenericController.limparLocalizacaoGeografSelecionada()}"
+							process="@this"
+							oncomplete="dlgLocalizacaoGeograficaGeneric.show();"
+							update="linhaEnergiaForm:gridLocacional"
+							rendered="#{!fceLinhaTransmissaoDistribruicaoController.isVisivel  || fceLinhaTransmissaoDistribruicaoController.isVisivel == null}" 
+							disabled="#{fceLinhaTransmissaoDistribruicaoController.desabilitarTudo}">
+
+							<f:setPropertyActionListener
+								target="#{localizacaoGeograficaGenericController.tipoSecaoGeometrica}"
+								value="#{fceLinhaTransmissaoDistribruicaoController.secaoPoligonoOuLinha}" />
+							<f:setPropertyActionListener
+								target="#{localizacaoGeograficaGenericController.empreendimento}"
+								value="#{fceLinhaTransmissaoDistribruicaoController.empreendimento}" />
+							<f:setPropertyActionListener
+								target="#{localizacaoGeograficaGenericController.localizacaoGeograficaSelecionada}"
+								value="#{fceLinhaTransmissaoDistribruicaoController.fceLinhaEnergia.fceLinhaEnergiaLocalizacaoGeograficaPreferencial.ideLocalizacaoGeografica}" />
+							<f:setPropertyActionListener
+								target="#{localizacaoGeograficaGenericController.idDoComponenteParaSerAtualizado}"
+								value="linhaEnergiaForm:gridPoligonal" />
+							<f:setPropertyActionListener
+								target="#{localizacaoGeograficaGenericController.metodoAtualizarExterno}"
+								value="#{fceLinhaTransmissaoDistribruicaoController.metodoNovoFceLinhaEnergiaLocGeoPrincipal}" />
+							<h:graphicImage title="#{bundle.fce_lic_min_incluir_shape}"
+								value="/resources/img/ico-expandir.png"
+								style="margin-right: 2px;" />
+							<h:outputText value="Incluir a poligonal do objeto da licença" />
+						</p:commandLink>
+						<h:graphicImage title="Poligonal do traçado preferencial"
+							value="/resources/img/ico-ajuda.png" style="margin-left:2px;" />
+
+					</h:panelGroup>
+					<p:dataTable var="localizacao"
+						value="#{fceLinhaTransmissaoDistribruicaoController.fceLinhaEnergia.fceLinhaEnergiaLocalizacaoGeograficaPreferencial}"
+						id="poligonalTablePrincipal"
+						rendered="#{fceLinhaTransmissaoDistribruicaoController.poligonalObjetoLicencaPreenchida}">
+
+
+						<p:column headerText="Tipo">
+							<h:outputText
+								value="#{localizacao.ideLocalizacaoGeografica.ideClassificacaoSecaoToString}" />
+						</p:column>
+						<p:column headerText="Sistema de coordenadas">
+							<h:outputText
+								value="#{localizacao.ideLocalizacaoGeografica.nomeSistemaCoordenadas}" />
+						</p:column>
+						
+<!-- 						<p:column>
+								
+							<f:facet name="header">
+								<h:outputText value="Área(ha)"/>
+		        			</f:facet>
+		        			
+							<h:outputText
+								value="#{localizacao.ideLocalizacaoGeografica.vlrArea != null ? localizacao.ideLocalizacaoGeografica.vlrArea : 0}">
+								<f:convertNumber minFractionDigits="4" locale="pt_BR" />
+							</h:outputText>
+						</p:column>  -->
+						<p:column headerText="Ações">
+							<p:commandLink style="cursor: pointer; margin-left:5px;"
+								onclick='javascript:${fceLinhaTransmissaoDistribruicaoController.visualizarLocalizacao(localizacao.ideLocalizacaoGeografica)}'
+								global="false" accesskey="VISUALIZAR GEOBAHIA">
+								<h:graphicImage
+									title="#{bundle.fce_lic_aqui_visualizar_dados_geobahia}"
+									value="/resources/img/ico-arl-relocacao.png" />
+							</p:commandLink>
+							<p:commandLink process="@this"
+								oncomplete="confirmaExclusaoPoligonalLInhaEnergia.show();"
+								rendered="#{!fceLinhaTransmissaoDistribruicaoController.isVisivel}" disabled="#{fceLinhaTransmissaoDistribruicaoController.desabilitarTudo}">
+								<!-- <f:setPropertyActionListener
+									target="#{fceLinhaTransmissaoDistribruicaoController.fceLinhaEnergiaLocalizacaoGeografica}"
+									value="#{localizacao}" /> -->
+								<h:graphicImage title="Excluir"
+									value="/resources/img/ico-excluir.png" />
+							</p:commandLink>
+						</p:column>
+						<p:column headerText="Concedido"
+							rendered="#{fceLinhaTransmissaoDistribruicaoController.isVisivel}"
+							style="text-align: -webkit-center; text-align:-moz-center" disabled="#{fceLinhaTransmissaoDistribruicaoController.desabilitarTudo}">
+							<p:selectBooleanCheckbox
+								value="#{localizacao.indObjetoConcedido}" disabled="#{fceLinhaTransmissaoDistribruicaoController.desabilitarTudo}">
+
+								<p:ajax event="change" process="@this" immediate="true"
+									listener="#{fceLinhaTransmissaoDistribruicaoController.concedidoCheck(localizacao)}"
+									update="linhaEnergiaForm:gridPoligonal" />
+
+							</p:selectBooleanCheckbox>
+						</p:column>
+					</p:dataTable>
+
+					<p:dataTable
+						value="#{fceLinhaTransmissaoDistribruicaoController.fceLinhaEnergiaLocalizacaoGeografica.listaMunicipio}"
+						var="municipio"
+						rendered="#{(fceLinhaTransmissaoDistribruicaoController.isVisivel != true) and 
+						not empty fceLinhaTransmissaoDistribruicaoController.fceLinhaEnergiaLocalizacaoGeografica.listaMunicipio}">
+
+						<p:column headerText="Municípios">
+							<h:outputText value="#{municipio.nomMunicipio}" />
+						</p:column>
+					</p:dataTable>
+
+				</h:panelGrid>
+				<!-- Fim Poligonal do objeto da licença -->
+
+				<!-- Inicio Poligonal da notificação -->
+				<h:panelGrid
+					rendered="#{fceLinhaTransmissaoDistribruicaoController.isVisivel and not empty fceLinhaTransmissaoDistribruicaoController.listaFceEnergiaLocalizacaoGeograficaPoligonalNotificacao}">
+					<h:panelGroup style="padding-top:10px;">
+						<h:outputText value="* Poligonal da notificação"
+							style="font-weight: bold;" />
+						<h:graphicImage title="Poligonal da notificação"
+							value="/resources/img/ico-ajuda.png" style="margin-left:2px;" />
+					</h:panelGroup>
+					<p:dataTable var="localizacao"
+						value="#{fceLinhaTransmissaoDistribruicaoController.listaFceEnergiaLocalizacaoGeograficaPoligonalNotificacao}"
+						id="poligonalTableNotificacao"
+						 style="margin-left:20px;">
+
+						<p:column headerText="Notificação">
+							<h:outputText value="#{localizacao.numeroNotificacao}" />
+						</p:column>
+						<p:column headerText="Tipo">
+							<h:outputText
+								value="#{localizacao.ideLocalizacaoGeografica.ideClassificacaoSecaoToString}" />
+						</p:column>
+						<p:column headerText="Sistema de coordenadas">
+							<h:outputText
+								value="#{localizacao.ideLocalizacaoGeografica.nomeSistemaCoordenadas}" />
+						</p:column>
+						<p:column headerText="Área(ha)">
+							<h:outputText
+								value="#{localizacao.ideLocalizacaoGeografica.vlrArea}">
+								<f:convertNumber minFractionDigits="4" locale="pt_BR" />
+							</h:outputText>
+						</p:column>
+						<p:column headerText="Ações">
+							<p:commandLink style="cursor: pointer; margin-left:5px;"
+								onclick='javascript:${fceLinhaTransmissaoDistribruicaoController.visualizarLocalizacao(localizacao.ideLocalizacaoGeografica)}'
+								global="false" accesskey="VISUALIZAR GEOBAHIA">
+								<h:graphicImage
+									title="#{bundle.fce_lic_aqui_visualizar_dados_geobahia}"
+									value="/resources/img/ico-arl-relocacao.png" />
+							</p:commandLink>
+						</p:column>
+						<p:column headerText="Concedido"
+							rendered="#{fceLinhaTransmissaoDistribruicaoController.isVisivel}"
+							style="text-align: -webkit-center; text-align:-moz-center" disabled="#{fceLinhaTransmissaoDistribruicaoController.desabilitarTudo}">
+							<p:selectBooleanCheckbox
+								value="#{localizacao.indObjetoConcedido}">
+
+								<p:ajax event="change" process="@this" immediate="true"
+									listener="#{fceLinhaTransmissaoDistribruicaoController.concedidoCheck(localizacao)}"
+									update="linhaEnergiaForm:gridPoligonal" />
+							</p:selectBooleanCheckbox>
+						</p:column>
+					</p:dataTable>
+				</h:panelGrid>
+				<!-- Fim Poligonal da notificação -->
+
+				<!-- Inicio Existe alternativa locacional -->
+				<h:panelGrid style="padding-top:20px;" id="gridLocacional"
+					rendered="#{not empty fceLinhaTransmissaoDistribruicaoController.fceLinhaEnergiaLocalizacaoGeografica.listaMunicipio}">
+					<h:outputLabel value="Existe alternativa locacional?"
+						style="font-weight: bold;" />
+
+					<p:selectOneRadio
+						value="#{fceLinhaTransmissaoDistribruicaoController.fceLinhaEnergia.indAlternativaLocacional}"
+						style="margin-left:20px;"
+						label="fceLinhaTransmissaoDistribruicaoController.isAlternativaLocacional" disabled="#{fceLinhaTransmissaoDistribruicaoController.desabilitarTudo}">
+						<f:selectItem itemLabel="Sim" itemValue="true" />
+						<f:selectItem itemLabel="Não" itemValue="false" />
+						<p:ajax global="false" event="change" update="gridLocacional" />
+					</p:selectOneRadio>
+
+					<h:panelGrid style="padding-top:10px;"
+						rendered="#{fceLinhaTransmissaoDistribruicaoController.fceLinhaEnergia.indAlternativaLocacional}">
+
+						<h:panelGroup style="padding-top:10px;">
+
+							<p:commandLink
+								action="#{localizacaoGeograficaGenericController.carregarTela()}"
+								actionListener="#{localizacaoGeograficaGenericController.limparLocalizacaoGeografSelecionada()}"
+								process="@this"
+								oncomplete="dlgLocalizacaoGeograficaGeneric.show();"
+								update="linhaEnergiaForm:gridLocacional">
+
+								<f:setPropertyActionListener
+									target="#{localizacaoGeograficaGenericController.tipoSecaoGeometrica}"
+									value="#{fceLinhaTransmissaoDistribruicaoController.secaoPoligonoOuLinha}" />									
+								<f:setPropertyActionListener
+									target="#{localizacaoGeograficaGenericController.empreendimento}"
+									value="#{fceLinhaTransmissaoDistribruicaoController.empreendimento}" />
+								<f:setPropertyActionListener
+									target="#{localizacaoGeograficaGenericController.localizacaoGeograficaSelecionada}"
+									value="#{fceLinhaTransmissaoDistribruicaoController.fceLinhaEnergiaLocalizacaoGeograficaAlternativa.ideLocalizacaoGeografica}" />
+								<f:setPropertyActionListener
+									target="#{localizacaoGeograficaGenericController.idDoComponenteParaSerAtualizado}"
+									value="linhaEnergiaForm:gridLocacional" />
+								<f:setPropertyActionListener
+									target="#{localizacaoGeograficaGenericController.metodoAtualizarExterno}"
+									value="#{fceLinhaTransmissaoDistribruicaoController.metodoNovoFceLinhaEnergiaLocGeoAlternativa}" />
+								<h:graphicImage title="#{bundle.fce_lic_min_incluir_shape}"
+									value="/resources/img/ico-expandir.png"
+									style="margin-right: 2px;" />
+								<h:outputText value="Incluir alternativa locacional" />
+							</p:commandLink>
+
+							<h:graphicImage
+								title="Poligonal com todos os traçados alternativos"
+								value="/resources/img/ico-ajuda.png" style="margin-left:2px;" />
+						</h:panelGroup>
+
+						<p:dataTable var="localizacao"
+							value="#{fceLinhaTransmissaoDistribruicaoController.fceLinhaEnergia.fceLinhaEnergiaLocalizacaoGeograficaCollection}"
+							rendered="#{not empty fceLinhaTransmissaoDistribruicaoController.fceLinhaEnergia.fceLinhaEnergiaLocalizacaoGeograficaCollection}">
+
+							<p:column headerText="Tipo">
+								<h:outputText
+									value="#{localizacao.ideLocalizacaoGeografica.ideClassificacaoSecaoToString}" />
+							</p:column>
+							<p:column headerText="Sistema de coordenadas">
+								<h:outputText
+									value="#{localizacao.ideLocalizacaoGeografica.nomeSistemaCoordenadas}" />
+							</p:column>
+							<p:column headerText="Ações">
+								<p:commandLink style="cursor: pointer; margin-left:5px;"
+									onclick='javascript:${fceLinhaTransmissaoDistribruicaoController.visualizarLocalizacao(localizacao.ideLocalizacaoGeografica)}'
+									global="false" accesskey="VISUALIZAR GEOBAHIA">
+									<h:graphicImage
+										title="#{bundle.fce_lic_aqui_visualizar_dados_geobahia}"
+										value="/resources/img/ico-arl-relocacao.png" />
+								</p:commandLink>
+
+								<p:commandLink process="@this"
+									oncomplete="confirmaExclusaoPoligonalLInhaEnergiaAlternativa.show();" disabled="#{fceLinhaTransmissaoDistribruicaoController.desabilitarTudo}">
+									<f:setPropertyActionListener
+										target="#{fceLinhaTransmissaoDistribruicaoController.fceLinhaEnergiaLocalizacaoGeograficaAlternativa}"
+										value="#{localizacao}" />
+									<h:graphicImage title="Excluir"
+										value="/resources/img/ico-excluir.png" />
+								</p:commandLink>
+							</p:column>
+						</p:dataTable>
+
+						<p:spacer height="5" />
+
+						<h:panelGrid
+							rendered="#{fceLinhaTransmissaoDistribruicaoController.isVisivel}">
+							<h:outputText value="Observações sobre alternativa locacional"
+								style="font-weight: bold;" />
+							<h:inputTextarea
+								value="#{fceLinhaTransmissaoDistribruicaoController.fceLinhaEnergia.obsAlternativaLocacional}"
+								style="width:500px;height:150px;overflow-y:scroll; max-width: 500px; max-height:150px;" disabled="#{fceLinhaTransmissaoDistribruicaoController.desabilitarTudo}"/>
+
+						</h:panelGrid>
+
+
+					</h:panelGrid>
+				</h:panelGrid>
+			</h:panelGrid>
+			<!-- Fim Existe alternativa locacional -->
+
+			<!-- Inicio Extensão Total da linha -->
+			<h:panelGrid style="padding-top:20px;">
+
+				<h:outputLabel value="* Extensão Total da linha (Km)"
+					style="font-weight: bold;" />
+				<p:inputText converter="doubleConverterToDecimal" style="margin-left:20px;"
+					value="#{fceLinhaTransmissaoDistribruicaoController.fceLinhaEnergia.valExtensaoTotalLinha}"
+					onkeyup="maskIt(this, event, '99.999.999,99', true)"
+					disabled="#{fceLinhaTransmissaoDistribruicaoController.desabilitado || fceLinhaTransmissaoDistribruicaoController.desabilitarTudo}">
+
+					<f:convertNumber minFractionDigits="2" maxFractionDigits="2" locale="pt_BR" />
+				</p:inputText>
+
+			</h:panelGrid>
+			<!-- Fim Extensão Total da linha -->
+
+			<!-- Inicio Tensão de operação -->
+			<h:panelGrid style="padding-top:20px;">
+
+				<h:outputLabel value="* Tensão de operação (Kv)"
+					style="font-weight: bold;" />
+				<p:inputText converter="doubleConverterToDecimal" style="margin-left:20px;"
+					value="#{fceLinhaTransmissaoDistribruicaoController.fceLinhaEnergia.valTensaoOperacao}"
+					onkeyup="maskIt(this, event, '99.999.999,99', true)" disabled="#{fceLinhaTransmissaoDistribruicaoController.desabilitarTudo}">
+
+					<f:convertNumber minFractionDigits="2" maxFractionDigits="2" locale="pt_BR" />
+				</p:inputText>
+			</h:panelGrid>
+			<!-- Fim Tensão de operação -->
+
+			<!-- Inicio Subestação -->
+			<h:panelGrid style="padding-top:20px;" id="gridSubestacao">
+				<h:outputLabel value="* Subestação" style="font-weight: bold;" />
+				<p:selectOneRadio
+					value="#{fceLinhaTransmissaoDistribruicaoController.isSubestacao}"
+					style="margin-left:20px;"
+					label="#{fceLinhaTransmissaoDistribruicaoController.isSubestacao}" disabled="#{fceLinhaTransmissaoDistribruicaoController.desabilitarTudo}">
+					<f:selectItem itemLabel="Sim" itemValue="true" />
+					<f:selectItem itemLabel="Não" itemValue="false" />
+					<p:ajax global="false" event="change" update="gridSubestacao" />
+				</p:selectOneRadio>
+
+				<h:panelGrid
+					rendered="#{fceLinhaTransmissaoDistribruicaoController.isSubestacao}"
+					style="padding-top:20px;">
+					<p:commandLink
+						actionListener="#{fceLinhaTransmissaoDistribruicaoController.carregarManterSubestacao()}"
+						global="false" process="@this"
+						oncomplete="fce_manter_subestacao.show()"
+						update="manterSubestacaoForm"
+						rendered="#{fceLinhaTransmissaoDistribruicaoController.isSubestacao}"
+						disabled="#{fceLinhaTransmissaoDistribruicaoController.desabilitarTudo}">
+						<h:graphicImage title="Incluir Subestação"
+							value="/resources/img/ico-expandir.png"
+							style="margin-right: 2px;" />
+						<h:outputText value="Incluir Subestação" />
+					</p:commandLink>
+
+					<p:dataTable var="subestacao"
+						value="#{fceLinhaTransmissaoDistribruicaoController.listaFceLinhaEnergiaTipoSubestacao}"
+						rendered="#{not empty fceLinhaTransmissaoDistribruicaoController.listaFceLinhaEnergiaTipoSubestacao}"
+						style="padding-top:20px;">
+
+						<p:column headerText="Subestação">
+							<h:outputText value="#{subestacao.dscSubestacao}" />
+						</p:column>
+						<p:column headerText="Tipo">
+							<h:outputText
+								value="#{subestacao.ideTipoSubestacao.dscTipoSubestacao}" />
+						</p:column>
+						<p:column headerText="Ações" style="text-align:center;">
+							<h:inputHidden value="#{subestacao.ideSubestacao}" />
+							<p:commandLink process="@this"
+								update="linhaEnergiaForm:gridSubestacao"
+								oncomplete="confirmaExclusaoSubestação.show()" immediate="true"
+								disabled="#{fceLinhaTransmissaoDistribruicaoController.desabilitarTudo}">
+								<f:setPropertyActionListener value="#{subestacao}"
+									target="#{fceLinhaTransmissaoDistribruicaoController.fceLinhaEnergiaTipoSubestacao}" />
+								<h:graphicImage title="Excluir"
+									value="/resources/img/ico-excluir.png" />
+							</p:commandLink>
+						</p:column>
+					</p:dataTable>
+				</h:panelGrid>
+			</h:panelGrid>
+			<!-- Fim Subestação -->
+
+			<!-- Inicio Resíduos gerados -->
+			<h:panelGrid style="padding-top:20px;">
+				<h:outputLabel value="* Resíduos gerados ou a serem gerados"
+					style="font-weight: bold;" />
+				<p:spacer height="5" />
+				<h:outputLabel
+					value="Informar classe conforme Classificação da Norma Técnica ABNT NBR 10.004/2004"
+					style="margin-left:15px;" />
+				<p:selectManyCheckbox layout="pageDirection"
+					style="margin-left:20px;"
+					value="#{fceLinhaTransmissaoDistribruicaoController.fceLinhaEnergiaResiduoGerado.tipoResiduoGeradoCollection}"
+					converter="simpleEntityConverter" disabled="#{fceLinhaTransmissaoDistribruicaoController.desabilitarTudo}">
+					<f:selectItems
+						value="#{fceLinhaTransmissaoDistribruicaoController.listaTipoResiduoGerado}"
+						var="tipo" itemLabel="#{tipo.dscTipoResiduoGerado}"
+						itemValue="#{tipo}" />
+
+				</p:selectManyCheckbox>
+			</h:panelGrid>
+			<!-- Fim Resíduos gerados -->
+
+			<!-- Inicio Destino dos resíduos -->
+			<h:panelGrid style="padding-top:10px;">
+				<h:outputLabel value="* Destino dos resíduos"
+					style="font-weight: bold;" />
+				<p:selectManyCheckbox layout="pageDirection"
+					style="margin-left:20px;"
+					value="#{fceLinhaTransmissaoDistribruicaoController.fceLinhaEnergiaDestinoResiduo.destinoResiduoCollection}"
+					converter="simpleEntityConverter"
+					valueChangeListener="#{fceLinhaTransmissaoDistribruicaoController.destinoResiduoCheck()}"
+					disabled="#{fceLinhaTransmissaoDistribruicaoController.desabilitarTudo}">
+
+					<f:ajax global="false" event="click" process="@this"
+						immediate="true" />
+					<f:selectItems
+						value="#{fceLinhaTransmissaoDistribruicaoController.listaDestinoResiduo}"
+						var="destino" itemLabel="#{destino.dscDestinoResiduo}"
+						itemValue="#{destino}" />
+
+				</p:selectManyCheckbox>
+			</h:panelGrid>
+			<!-- Fim Destino dos resíduos -->
+
+			<!-- Inicio Largura da faixa -->
+			<h:panelGrid style="padding-top:20px;">
+
+				<h:outputLabel value="* Largura da faixa de servidão (m)"
+					style="font-weight: bold;" />
+				<p:inputText converter="doubleConverterToDecimal" style="margin-left:20px;"
+					value="#{fceLinhaTransmissaoDistribruicaoController.fceLinhaEnergia.valLarguraFaixaServidao}"
+					onkeyup="maskIt(this, event, '99.999.999,99', true)" disabled="#{fceLinhaTransmissaoDistribruicaoController.desabilitarTudo}">
+
+					<f:convertNumber minFractionDigits="2" maxFractionDigits="2" locale="pt_BR" />
+				</p:inputText>
+
+			</h:panelGrid>
+			<!-- Fim Largura da faixa -->
+
+			<!-- Inicio Área total da faixa -->
+			<h:panelGrid style="padding-top:20px;">
+
+				<h:outputLabel value="* Área total da faixa de servidão (ha)"
+					style="font-weight: bold;" />
+				<p:inputText converter="doubleConverterToDecimal" style="margin-left:20px;"
+					value="#{fceLinhaTransmissaoDistribruicaoController.fceLinhaEnergia.valAreaTotalFaixaServidao}"
+					onkeyup="maskIt(this, event, '999.999.999.999,9999', true)" disabled="#{fceLinhaTransmissaoDistribruicaoController.desabilitarTudo}">
+
+					<f:convertNumber minFractionDigits="4" maxFractionDigits="4" locale="pt_BR" />
+				</p:inputText>
+
+			</h:panelGrid>
+			<!-- Fim Área total da faixa -->
+		</p:fieldset>
+			<!-- Inicio Comandos -->
+			<h:panelGrid columns="2" style="padding-top:20px;">
+
+				<p:commandButton value="Voltar" style="width:90px;" process="@this"
+					actionListener="#{fceLinhaTransmissaoDistribruicaoController.voltar()}" disabled="#{fceLinhaTransmissaoDistribruicaoController.desabilitarTudo}"/>
+				<p:commandButton value="Finalizar" style="width:90px;"
+					actionListener="#{fceLinhaTransmissaoDistribruicaoController.finalizar()}"
+					global="false" process="linhaEnergiaForm" disabled="#{fceLinhaTransmissaoDistribruicaoController.desabilitarTudo}"/>
+
+			</h:panelGrid>
+			<!-- Fim Comandos -->
+		</h:form>
+
+
+	</p:dialog>
+
+</ui:composition>

@@ -1,0 +1,908 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+
+	<script type="text/javascript" language="JavaScript">
+          var $ = jQuery;
+          
+          $(document).ready(function() {
+              $("input[id*='dataAssinaturaTac']").mask('99/99/9999');
+              $("input[id*='dataEncerramentoTac']").mask('99/99/9999');
+              $("input[id*='dataAssinaturaPrad']").mask('99/99/9999');
+              $("input[id*='dataEncerramentoPrad']").mask('99/99/9999');
+          });
+          
+          function addMaskDataTac() {
+        	  var $ = jQuery;
+        	  $("input[id*='dataAssinaturaTac']").mask('99/99/9999');
+              $("input[id*='dataEncerramentoTac']").mask('99/99/9999');
+          }
+          
+          function addMaskDataPrad() {
+        	  var $ = jQuery;
+        	  $("input[id*='dataAssinaturaPrad']").mask('99/99/9999');
+              $("input[id*='dataEncerramentoPrad']").mask('99/99/9999');
+          }
+     </script>
+
+	<p:panel id="panelQuestionario">
+
+		<h:panelGrid id="pnlGroupRespCefir" rendered="#{!imovelRuralControllerNew.showPCT}">
+			<h:panelGrid id="pnlGridPerguntaCadSEA" columns="3"
+				style="width: 100%;"
+				rendered="#{imovelRuralControllerNew.imovelRural.menorQueQuatroModulosFiscais
+ 					and !imovelRuralControllerNew.imovelRural.imovelINCRA}">
+				<p:selectBooleanCheckbox id="idCheckParaCadCEFIR"
+					value="#{imovelRuralControllerNew.imovelRural.indDesejaCompletarInformacoes}"
+					valueChangeListener="#{imovelRuralControllerNew.changeDesejaCompletarInformacoes}"
+					disabled="#{imovelRuralControllerNew.imovelRural.cadastrado
+ 						or imovelRuralControllerNew.imovelRural.imovelBNDES}">
+					<p:ajax event="change" process="@this" update="formCadImovelRural" />
+				</p:selectBooleanCheckbox>
+
+				<h:outputLabel id="lblPerguntaParaOCefir"
+					value="#{bundle.cefir_lbl_pergunta_confirmacao_completar_cadastro}"
+					style="width:390px;font-weight: bold;"
+					title="#{bundle.cefir_lbl_tooltip_pergunta_confirmacao_completar_cadastro}" />
+				<h:graphicImage value="/resources/img/ico-ajuda.png"
+					id="ajudaCadCefir" style="margin: 3px 1px 2px 4px;" />
+
+				<p:tooltip for="ajudaCadCefir"
+					value="#{bundle.cefir_lbl_tooltip_pergunta_confirmacao_completar_cadastro}"
+					showEffect="fade" hideEffect="fade" />
+			</h:panelGrid>
+
+			<!-- INICIO CEFIR -->
+			<h:panelGrid
+				rendered="#{imovelRuralControllerNew.imovelRural.indDesejaCompletarInformacoes
+					 or !imovelRuralControllerNew.imovelRural.menorQueQuatroModulosFiscais
+					 or imovelRuralControllerNew.imovelRural.imovelINCRA}">
+				<br />
+				<h:panelGrid id="boxDesejaAderirPra"
+					rendered="#{imovelRuralControllerNew.imovelRural.imovelINCRA}">
+					<h:outputText value="* #{bundle.cefir_msg_deseja_aderir_pra}" />
+					<p:selectOneRadio id="desejaAderirPra"
+						value="#{imovelRuralControllerNew.imovelRural.indDesejaAderirPra}"
+						required="true"
+						requiredMessage="#{func:messageFormat('javax.faces.component.UISelectOne.REQUIRED', bundle.cefir_msg_deseja_aderir_pra)}"
+						onchange="desabilitarBotaoProximo()">
+						<f:selectItem itemLabel="#{bundle.geral_lbl_sim}"
+							itemValue="#{true}" />
+						<f:selectItem itemLabel="#{bundle.geral_lbl_nao}"
+							itemValue="#{false}" />
+						<p:ajax event="change" process="@this"
+							oncomplete="desabilitarBotaoProximo()" global="false" />
+					</p:selectOneRadio>
+				</h:panelGrid>
+				<h:panelGrid columns="1" id="panelContratoConvenio"
+					rendered="#{imovelRuralControllerNew.imovelRural.menorQueQuatroModulosFiscais}">
+					<h:panelGrid id="boxContratoConvenio">
+						<h:outputText
+							value="* #{bundle.cefir_lbl_pergunta_contrato_convenio}" />
+						<p:selectOneRadio id="temContratoConvenio"
+							value="#{imovelRuralControllerNew.imovelRural.indContratoConvenio}"
+							required="true"
+							disabled="#{imovelRuralControllerNew.imovelRural.imovelBNDES}"
+							valueChangeListener="#{imovelRuralControllerNew.changeContratoConvenio}"
+							requiredMessage="#{func:messageFormat('javax.faces.component.UISelectOne.REQUIRED', bundle.cefir_lbl_pergunta_contrato_convenio)}">
+							<f:selectItem itemLabel="#{bundle.geral_lbl_sim}"
+								itemValue="#{true}" />
+							<f:selectItem itemLabel="#{bundle.geral_lbl_nao}"
+								itemValue="#{false}" />
+							<p:ajax event="change" process="@this"
+								update="panelContratoConvenio"
+								oncomplete="desabilitarBotaoProximo()" />
+						</p:selectOneRadio>
+					</h:panelGrid>
+					<h:panelGrid columns="2" id="boxNumContratoConvenio"
+						rendered="#{imovelRuralControllerNew.imovelRural.indContratoConvenio != null
+ 							and imovelRuralControllerNew.imovelRural.indContratoConvenio}">
+						<h:outputText
+							value="* #{bundle.cefir_lbl_numero_contrato_convenio}" />
+						<p:spacer width="20" height="10" />
+
+						<p:inputText id="numContratoConvenio"
+							value="#{imovelRuralControllerNew.imovelRural.ideContratoConvenioCefir.numContratoConvenioCefir}"
+							maxlength="30" required="true" size="30"
+							requiredMessage="#{func:messageFormat('javax.faces.component.UISelectOne.REQUIRED', bundle.cefir_lbl_numero_contrato_convenio)}">
+							<p:ajax event="change"
+								listener="#{imovelRuralControllerNew.validarContratoConvenioCefir}"
+								update="panelContratoConvenio" process="@this"
+								oncomplete="desabilitarBotaoProximo()" global="true" />
+						</p:inputText>
+						<h:outputText
+							value="#{imovelRuralControllerNew.imovelRural.ideContratoConvenioCefir.nomContratoConvenioCefir}" />
+					</h:panelGrid>
+				</h:panelGrid>
+				<h:panelGrid columns="1" id="panelTac">
+					<h:panelGrid id="boxTac">
+						<h:outputText value="* #{bundle.cefir_lbl_pergunta_existeTac}" />
+						<p:selectOneRadio id="temTac"
+							value="#{imovelRuralControllerNew.imovelRural.indTac}"
+							required="true"
+							valueChangeListener="#{imovelRuralControllerNew.changeTac}"
+							requiredMessage="#{func:messageFormat('javax.faces.component.UISelectOne.REQUIRED', bundle.cefir_lbl_pergunta_existeTac)}">
+							<f:selectItem itemLabel="#{bundle.geral_lbl_sim}"
+								itemValue="#{true}" />
+							<f:selectItem itemLabel="#{bundle.geral_lbl_nao}"
+								itemValue="#{false}" />
+							<p:ajax event="change" update="panelTac"
+								oncomplete="desabilitarBotaoProximo(); addMaskDataTac();" />
+						</p:selectOneRadio>
+					</h:panelGrid>
+					<h:panelGrid id="boxOrgaoEmitenteTac"
+						rendered="#{imovelRuralControllerNew.imovelRural.indTac}">
+						<h:outputText
+							value="* #{bundle.cefir_lbl_pergunta_orgao_emitente}" />
+						<p:inputText id="orgaoEmitenteTac" widgetVar="orgaoEmitenteTac"
+							value="#{imovelRuralControllerNew.imovelRural.imovelRuralTac.dscOrgaoEmissor}"
+							maxlength="100" required="true"
+							requiredMessage="#{func:messageFormat('javax.faces.component.UISelectOne.REQUIRED', bundle.cefir_lbl_pergunta_orgao_emitente)}">
+							<p:ajax event="change" process="@this"
+								oncomplete="desabilitarBotaoProximo();" global="false" />
+						</p:inputText>
+					</h:panelGrid>
+					<h:panelGrid id="boxDataAssinaturaTac"
+						rendered="#{imovelRuralControllerNew.imovelRural.indTac}">
+						<h:outputText
+							value="* #{bundle.cefir_lbl_pergunta_data_assinatura}" />
+						<p:calendar id="dataAssinaturaTac" widgetVar="dataAssinaturaTac"
+							label="#{bundle.cefir_lbl_pergunta_data_assinatura}" size="15"
+							showOn="button" locale="pt" pattern="dd/MM/yyyy" navigator="true"
+							readOnlyInputText="false"
+							value="#{imovelRuralControllerNew.imovelRural.imovelRuralTac.dtcAssinatura}"
+							required="true"
+							requiredMessage="#{func:messageFormat('javax.faces.component.UISelectOne.REQUIRED', bundle.cefir_lbl_pergunta_data_assinatura)}"
+							yearRange="c-500:c+10" onchange="desabilitarBotaoProximo()">
+							<f:validator validatorId="dataMinMaxValidator" />
+							<p:ajax event="dateSelect" process="@this"
+								oncomplete="desabilitarBotaoProximo()" global="false" />
+						</p:calendar>
+					</h:panelGrid>
+					<h:panelGrid id="boxDataEncerramentoTac"
+						rendered="#{imovelRuralControllerNew.imovelRural.indTac}">
+						<h:outputText
+							value="* #{bundle.cefir_lbl_pergunta_data_encerramento}" />
+						<p:calendar id="dataEncerramentoTac"
+							widgetVar="dataEncerramentoTac"
+							label="#{bundle.cefir_lbl_pergunta_data_encerramento}" size="15"
+							showOn="button" locale="pt" pattern="dd/MM/yyyy" navigator="true"
+							readOnlyInputText="false"
+							value="#{imovelRuralControllerNew.imovelRural.imovelRuralTac.dtcEncerramento}"
+							required="true"
+							requiredMessage="#{func:messageFormat('javax.faces.component.UISelectOne.REQUIRED', bundle.cefir_lbl_pergunta_data_encerramento)}"
+							yearRange="c-500:c+10" onchange="desabilitarBotaoProximo()">
+							<!-- <f:validator validatorId="dataMinMaxValidator"/> -->
+							<p:ajax event="dateSelect" process="@this"
+								oncomplete="desabilitarBotaoProximo()" global="false" />
+						</p:calendar>
+					</h:panelGrid>
+				</h:panelGrid>
+				<br />
+				<h:panelGrid columns="1" id="panelPrad">
+					<h:panelGrid id="boxPrad">
+						<h:outputText value="* #{bundle.cefir_lbl_pergunta_existePrad}" />
+						<p:selectOneRadio id="temPrad"
+							value="#{imovelRuralControllerNew.imovelRural.indPrad}"
+							required="true"
+							valueChangeListener="#{imovelRuralControllerNew.changePrad}"
+							requiredMessage="#{func:messageFormat('javax.faces.component.UISelectOne.REQUIRED', bundle.cefir_lbl_pergunta_existePrad)}">
+							<f:selectItem itemLabel="#{bundle.geral_lbl_sim}"
+								itemValue="#{true}" />
+							<f:selectItem itemLabel="#{bundle.geral_lbl_nao}"
+								itemValue="#{false}" />
+							<p:ajax event="change" process="@this" update="panelPrad"
+								oncomplete="desabilitarBotaoProximo(); addMaskDataPrad();" />
+						</p:selectOneRadio>
+					</h:panelGrid>
+					<h:panelGrid id="boxOrgaoEmitentePrad"
+						rendered="#{imovelRuralControllerNew.imovelRural.indPrad}">
+						<h:outputText
+							value="* #{bundle.cefir_lbl_pergunta_orgao_emitente}" />
+						<p:inputText id="orgaoEmitentePrad" widgetVar="orgaoEmitentePrad"
+							value="#{imovelRuralControllerNew.imovelRural.imovelRuralPrad.dscOrgaoEmissor}"
+							maxlength="100" required="true"
+							requiredMessage="#{func:messageFormat('javax.faces.component.UISelectOne.REQUIRED', bundle.cefir_lbl_pergunta_orgao_emitente)}">
+							<p:ajax event="change" process="@this"
+								oncomplete="desabilitarBotaoProximo()" global="false" />
+						</p:inputText>
+					</h:panelGrid>
+					<h:panelGrid id="boxDataAssinaturaPrad"
+						rendered="#{imovelRuralControllerNew.imovelRural.indPrad}">
+						<h:outputText
+							value="* #{bundle.cefir_lbl_pergunta_data_assinatura}" />
+						<p:calendar id="dataAssinaturaPrad" widgetVar="dataAssinaturaPrad"
+							label="#{bundle.cefir_lbl_pergunta_data_assinatura}" size="15"
+							showOn="button" locale="pt" pattern="dd/MM/yyyy" navigator="true"
+							readOnlyInputText="false"
+							value="#{imovelRuralControllerNew.imovelRural.imovelRuralPrad.dtcAssinatura}"
+							required="true"
+							requiredMessage="#{func:messageFormat('javax.faces.component.UISelectOne.REQUIRED', bundle.cefir_lbl_pergunta_data_assinatura)}"
+							yearRange="c-500:c+10" onchange="desabilitarBotaoProximo()">
+							<f:validator validatorId="dataMinMaxValidator" />
+							<p:ajax event="dateSelect" process="@this"
+								oncomplete="desabilitarBotaoProximo()" global="false" />
+						</p:calendar>
+					</h:panelGrid>
+					<h:panelGrid id="boxDataEncerramentoPrad"
+						rendered="#{imovelRuralControllerNew.imovelRural.indPrad}">
+						<h:outputText
+							value="* #{bundle.cefir_lbl_pergunta_data_encerramento}" />
+						<p:calendar id="dataEncerramentoPrad"
+							widgetVar="dataEncerramentoPrad"
+							label="#{bundle.cefir_lbl_pergunta_data_encerramento}" size="15"
+							showOn="button" locale="pt" pattern="dd/MM/yyyy" navigator="true"
+							readOnlyInputText="false"
+							value="#{imovelRuralControllerNew.imovelRural.imovelRuralPrad.dtcEncerramento}"
+							required="true"
+							requiredMessage="#{func:messageFormat('javax.faces.component.UISelectOne.REQUIRED', bundle.cefir_lbl_pergunta_data_encerramento)}"
+							yearRange="c-500:c+10" onchange="desabilitarBotaoProximo()">
+							<!-- <f:validator validatorId="dataMinMaxValidator"/> -->
+							<p:ajax event="dateSelect" process="@this"
+								oncomplete="desabilitarBotaoProximo()" global="false" />
+						</p:calendar>
+					</h:panelGrid>
+				</h:panelGrid>
+				<br />
+				<h:panelGrid id="painelInfracaoSupressao">
+					<h:outputText
+						value="* #{bundle.cefir_lbl_pergunta_existemInfracoesSupressao}" />
+					<p:selectOneRadio id="temInfracaoSupressao"
+						value="#{imovelRuralControllerNew.imovelRural.indInfracaoSupressao}"
+						required="true"
+						requiredMessage="#{func:messageFormat('javax.faces.component.UISelectOne.REQUIRED', bundle.cefir_lbl_pergunta_existemInfracoesSupressao)}">
+						<f:selectItem itemLabel="#{bundle.geral_lbl_sim}"
+							itemValue="#{true}" />
+						<f:selectItem itemLabel="#{bundle.geral_lbl_nao}"
+							itemValue="#{false}" />
+						<p:ajax event="change" process="@this"
+							oncomplete="desabilitarBotaoProximo()" global="false" />
+					</p:selectOneRadio>
+				</h:panelGrid>
+				<h:panelGrid id="painelPossuiCrf">
+					<h:outputText value="* #{bundle.cefir_lbl_pergunta_possui_crf}" />
+					<p:selectOneRadio id="temCrf"
+						value="#{imovelRuralControllerNew.imovelRural.indCrf}"
+						required="true"
+						requiredMessage="#{func:messageFormat('javax.faces.component.UISelectOne.REQUIRED', bundle.cefir_lbl_pergunta_possui_crf)}">
+						<f:selectItem itemLabel="#{bundle.geral_lbl_sim}"
+							itemValue="#{true}" />
+						<f:selectItem itemLabel="#{bundle.geral_lbl_nao}"
+							itemValue="#{false}" />
+						<p:ajax event="change" process="@this"
+							oncomplete="desabilitarBotaoProximo()" global="false" />
+					</p:selectOneRadio>
+				</h:panelGrid>
+				<h:panelGrid id="painelOcoreuAlteracao">
+					<h:outputText
+						value="* #{bundle.cefir_lbl_pergunta_ocorreu_alteracao_tamanho}" />
+					<p:selectOneRadio id="temAlteracao"
+						value="#{imovelRuralControllerNew.imovelRural.indAlteracaoTamanho}"
+						required="true"
+						requiredMessage="#{func:messageFormat('javax.faces.component.UISelectOne.REQUIRED', bundle.cefir_lbl_pergunta_ocorreu_alteracao_tamanho)}"
+						onchange="desabilitarBotaoProximo()">
+						<f:selectItem itemLabel="#{bundle.geral_lbl_sim}"
+							itemValue="#{true}" />
+						<f:selectItem itemLabel="#{bundle.geral_lbl_nao}"
+							itemValue="#{false}" />
+						<p:ajax event="change" process="@this"
+							update="painelOcoreuAlteracao"
+							oncomplete="desabilitarBotaoProximo()" />
+					</p:selectOneRadio>
+
+					<h:outputLabel value="* Área (ha) do imóvel em 22/07/2008?"
+						rendered="#{imovelRuralControllerNew.imovelRural.indAlteracaoTamanho}" />
+					<p:inputText id="valAreaVegetacaoNativa"
+						value="#{imovelRuralControllerNew.imovelRural.valAlteracaoTamanho}"
+						maxlength="15"
+						rendered="#{imovelRuralControllerNew.imovelRural.indAlteracaoTamanho}"
+						onkeypress="mascararNumeroLR(this, event, 10, 4, '.', ',', 3);"
+						onkeyup="mascararNumeroLR(this, event, 10, 4, '.', ',', 3);"
+						converter="doubleQuatroCasasDecimaisConverter" required="true"
+						requiredMessage="Área (ha) do imóvel em 22/07/2008 é de preenchimento obrigatório.">
+						<p:ajax event="blur" process="@this"
+							oncomplete="desabilitarBotaoProximo()" global="false" />
+					</p:inputText>
+				</h:panelGrid>
+				<br />
+				<h:panelGrid id="boxReservaLegal"
+					rendered="#{(imovelRuralControllerNew.imovelRural.imovelCDA
+						 or imovelRuralControllerNew.imovelRural.imovelBNDES)
+						 and imovelRuralControllerNew.imovelRural.menorQueQuatroModulosFiscais}">
+					<h3>
+						<h:outputLabel styleClass="titulo-grupo"
+							value="#{bundle.empreendimento_lbl_reserva_legal}" />
+					</h3>
+					<br />
+					<h:panelGrid>
+						<h:outputText
+							value="* #{bundle.cefir_lbl_pergunta_existia_remanescente_vn}" />
+						<p:selectOneRadio id="existiaRemanescenteVn"
+							value="#{imovelRuralControllerNew.imovelRural.indExistiaRemanescenteVegetacaoNativa}"
+							required="true"
+							requiredMessage="#{func:messageFormat('javax.faces.component.UISelectOne.REQUIRED', bundle.cefir_lbl_pergunta_existia_remanescente_vn)}">
+							<f:selectItem itemLabel="#{bundle.geral_lbl_sim}"
+								itemValue="#{true}" />
+							<f:selectItem itemLabel="#{bundle.geral_lbl_nao}"
+								itemValue="#{false}" />
+							<p:ajax event="change" update="formCadImovelRural"
+								process="@this" oncomplete="desabilitarBotaoProximo()"
+								global="false" />
+						</p:selectOneRadio>
+					</h:panelGrid>
+					<br />
+				</h:panelGrid>
+				<h3>
+					<h:outputLabel styleClass="titulo-grupo"
+						value="#{bundle.cefir_lbl_app}" />
+				</h3>
+				<br />
+				<h:panelGrid id="boxAPP">
+					<h:outputText value="* #{bundle.cefir_msg_app}" />
+					<p:selectOneRadio id="temAPP"
+						value="#{imovelRuralControllerNew.imovelRural.indApp}"
+						required="true"
+						requiredMessage="#{func:messageFormat('javax.faces.component.UISelectOne.REQUIRED', bundle.cefir_msg_app)}">
+						<f:selectItem itemLabel="#{bundle.geral_lbl_sim}"
+							itemValue="#{true}" />
+						<f:selectItem itemLabel="#{bundle.geral_lbl_nao}"
+							itemValue="#{false}"/>
+						<p:ajax event="change" process="@this"
+							oncomplete="desabilitarBotaoProximo()" global="false" listener="#{imovelRuralControllerNew.btnNaoapp()}"/>
+					</p:selectOneRadio>
+				</h:panelGrid>
+				<br />
+				<h3>
+					<h:outputLabel styleClass="titulo-grupo"
+						value="#{bundle.cefir_lbl_area_produtiva}" />
+				</h3>
+				<br />
+				<h:panelGrid id="boxAtividadeDesenvolvida">
+					<h:panelGrid columns="2">
+						<h:outputText value="* #{bundle.cefir_msg_atividade_desenvolvida}"
+							rendered="#{!imovelRuralControllerNew.imovelRural.imovelCDA
+ 								and !imovelRuralControllerNew.imovelRural.imovelBNDES}" />
+						<h:outputText value="#{bundle.cefir_msg_atividade_desenvolvida}"
+							rendered="#{imovelRuralControllerNew.imovelRural.imovelCDA
+ 								or imovelRuralControllerNew.imovelRural.imovelBNDES}" />
+						<h:graphicImage id="hintAreaProdutiva"
+							value="/resources/img/ico-ajuda.png" />
+						<p:tooltip value="#{bundle.cefir_hint_atividade_desenvolvida}"
+							for="hintAreaProdutiva" showEffect="fade" hideEffect="fade" />
+					</h:panelGrid>
+					<p:selectOneRadio id="temAreaProdutiva"
+						value="#{imovelRuralControllerNew.imovelRural.indAreaProdutiva}"
+						required="#{!imovelRuralControllerNew.imovelRural.imovelCDA
+ 							and !imovelRuralControllerNew.imovelRural.imovelBNDES}"
+						requiredMessage="#{func:messageFormat('javax.faces.component.UISelectOne.REQUIRED', bundle.cefir_msg_atividade_desenvolvida)}">
+						<f:selectItem itemLabel="#{bundle.geral_lbl_sim}"
+							itemValue="#{true}" />
+						<f:selectItem itemLabel="#{bundle.geral_lbl_nao}"
+							itemValue="#{false}" />
+						<p:ajax event="change" process="@this"
+							oncomplete="desabilitarBotaoProximo()" global="false" listener="#{imovelRuralControllerNew.botaoAreaProdutiva()}"/>
+					</p:selectOneRadio>
+
+				</h:panelGrid>
+				<br />
+				
+				<h:panelGrid id="boxAgrotoxico">
+					<h:panelGrid columns="2">
+						<h:outputText value="* #{bundle.cefir_lbl_agrotoxico}"
+							rendered="#{!imovelRuralControllerNew.imovelRural.imovelINCRA 
+									and !imovelRuralControllerNew.imovelRural.imovelCDA and !imovelRuralControllerNew.imovelRural.imovelBNDES}" />
+						
+						<h:outputText value=" #{bundle.cefir_lbl_agrotoxico}"
+							rendered="#{imovelRuralControllerNew.imovelRural.imovelINCRA
+								 	or imovelRuralControllerNew.imovelRural.imovelCDA or imovelRuralControllerNew.imovelRural.imovelBNDES}" />
+					</h:panelGrid>
+					
+					<p:selectOneRadio id="temAgrotoxico" value="#{imovelRuralControllerNew.imovelRural.indAgrotoxico}"
+						requiredMessage="#{func:messageFormat('javax.faces.component.UISelectOne.REQUIRED', bundle.cefir_lbl_agrotoxico)}"
+						required="#{!imovelRuralControllerNew.imovelRural.imovelINCRA
+							 and !imovelRuralControllerNew.imovelRural.imovelCDA and !imovelRuralControllerNew.imovelRural.imovelBNDES}">
+						
+						<f:selectItem itemLabel="#{bundle.geral_lbl_sim}" itemValue="#{true}" />
+						<f:selectItem itemLabel="#{bundle.geral_lbl_nao}" itemValue="#{false}" />
+						<p:ajax event="change" process="@this" oncomplete="desabilitarBotaoProximo()" global="false" />
+					</p:selectOneRadio>
+				</h:panelGrid>
+
+				<h:panelGrid id="boxAreaRuralConsolidada"
+					rendered="#{imovelRuralControllerNew.imovelRural.imovelINCRA}">
+					<br />
+					<h3>
+						<h:outputLabel styleClass="titulo-grupo"
+							value="#{bundle.cefir_lbl_area_consolidada}" />
+					</h3>
+					<br />
+					<h:panelGrid columns="2">
+						<h:outputText value="* #{bundle.cefir_msg_area_consolidada}?" />
+						<h:graphicImage value="/resources/img/ico-ajuda.png"
+							id="hintAreaConsolidada" />
+						<p:tooltip for="hintAreaConsolidada"
+							value="#{bundle.cefir_hint_area_consolidada}" showEffect="fade"
+							hideEffect="fade" />
+					</h:panelGrid>
+					<p:selectOneRadio id="temAreaRuralConsolidada"
+						value="#{imovelRuralControllerNew.imovelRural.indAreaRuralConsolidada}"
+						required="true"
+						requiredMessage="#{func:messageFormat('javax.faces.component.UISelectOne.REQUIRED', bundle.cefir_msg_area_consolidada)}">
+						<f:selectItem itemLabel="#{bundle.geral_lbl_sim}"
+							itemValue="#{true}" />
+						<f:selectItem itemLabel="#{bundle.geral_lbl_nao}"
+							itemValue="#{false}" />
+						<p:ajax event="change" process="@this"
+							oncomplete="desabilitarBotaoProximo()" global="false" />
+					</p:selectOneRadio>
+				</h:panelGrid>
+
+				<br />
+				<h3>
+					<h:outputLabel styleClass="titulo-grupo"
+						value="#{bundle.cefir_lbl_vegetacao_nativa}" />
+				</h3>
+				<br />
+				<h:panelGrid id="boxVegetacaoNativa">
+					<h:outputText value="* #{bundle.cefir_msg_vegetacao_nativa}" />
+					<p:selectOneRadio id="temVegetacaoNativa"
+						value="#{imovelRuralControllerNew.imovelRural.indVegetacaoNativa}"
+						required="true"
+						disabled="#{imovelRuralControllerNew.disablePerguntaVegetacaoNativa}"
+						requiredMessage="#{func:messageFormat('javax.faces.component.UISelectOne.REQUIRED', bundle.cefir_msg_vegetacao_nativa)}">
+						<f:selectItem itemLabel="#{bundle.geral_lbl_sim}"
+							itemValue="#{true}" />
+						<f:selectItem itemLabel="#{bundle.geral_lbl_nao}"
+							itemValue="#{false}" />
+						<p:ajax event="change" process="@this"
+							oncomplete="desabilitarBotaoProximo()" global="false"  listener="#{imovelRuralControllerNew.excluirVn()}"/>
+					</p:selectOneRadio>
+				</h:panelGrid>
+				<br />
+				
+				<h:panelGrid columns="1" id="panelSupressaoVegetacao">
+					<h:panelGrid id="boxSupressaoVegetacao">
+						<h:outputText value="#{imovelRuralControllerNew.indSupressaoVegetacaoObrigatorio?'*':''} 
+							#{bundle.cefir_lbl_pergunta_houveSupressaoVegetacaoNativa}"/>
+						
+						<p:selectOneRadio value="#{imovelRuralControllerNew.imovelRural.indSupressaoVegetacao}" 
+							required="#{imovelRuralControllerNew.indSupressaoVegetacaoObrigatorio}" 
+							requiredMessage="#{func:messageFormat('javax.faces.component.UISelectOne.REQUIRED', bundle.cefir_lbl_pergunta_houveSupressaoVegetacaoNativa)}"
+							valueChangeListener="#{imovelRuralControllerNew.changeSupressaoVegetacao}"
+							onchange="desabilitarBotaoProximo()">
+							
+							<f:selectItem itemLabel="#{bundle.geral_lbl_sim}" itemValue="#{true}" />
+							<f:selectItem itemLabel="#{bundle.geral_lbl_nao}" itemValue="#{false}" />
+							<p:ajax event="change" process="@this" update="panelSupressaoVegetacao" />
+						</p:selectOneRadio>
+					</h:panelGrid>
+					
+					<h:panelGrid id="boxAutorizacaoSupressaoVegetacao" rendered="#{imovelRuralControllerNew.imovelRural.indSupressaoVegetacao}">
+						<h:outputText value="* #{bundle.cefir_lbl_pergunta_areaSupressaoVegetacaoNativa}" />
+						
+						<p:inputText id="areaSupressaoVegetacao" value="#{imovelRuralControllerNew.imovelRural.supressaoVegetacao.valArea}"
+							requiredMessage="#{func:messageFormat('javax.faces.component.UISelectOne.REQUIRED', bundle.cefir_lbl_pergunta_areaSupressaoVegetacaoNativa)}"
+							required="true" maxlength="15" converter="doubleQuatroCasasDecimaisConverter" onkeyup="mascararNumeroLR(this, event, 10, 4, '.', ',', 3);"
+							onkeypress="mascararNumeroLR(this, event, 10, 4, '.', ',', 3);desabilitarBotaoProximo()">
+							
+							<p:ajax event="blur" process="@this" oncomplete="desabilitarBotaoProximo()" global="false" />
+						</p:inputText>
+					</h:panelGrid>
+					
+					<h:panelGrid id="boxProcessoAutorizacaoSupressaoVegetacao" rendered="#{imovelRuralControllerNew.imovelRural.indSupressaoVegetacao}">
+						<h:outputText value="* #{bundle.cefir_lbl_pergunta_supressaoAutorizadaOragaoCompetente}" />
+						
+						<p:selectOneRadio id="temAutorizacaoSupressaoVegetacao" value="#{imovelRuralControllerNew.imovelRural.supressaoVegetacao.indProcesso}"
+							required="true" onchange="desabilitarBotaoProximo()"
+							requiredMessage="#{func:messageFormat('javax.faces.component.UISelectOne.REQUIRED', bundle.cefir_lbl_pergunta_supressaoAutorizadaOragaoCompetente)}">
+							
+							<f:selectItem itemLabel="#{bundle.geral_lbl_sim}" itemValue="#{true}" />
+							<f:selectItem itemLabel="#{bundle.geral_lbl_nao}" itemValue="#{false}" />
+							<p:ajax event="change" process="@this" update="boxProcessoAutorizacaoSupressaoVegetacao" />
+						</p:selectOneRadio>
+						
+						<h:outputText value="* #{bundle.cefir_lbl_pergunta_numeroProcessoAutorizacao}" 
+							rendered="#{imovelRuralControllerNew.imovelRural.supressaoVegetacao.indProcesso}" />
+						
+						<p:inputText value="#{imovelRuralControllerNew.imovelRural.supressaoVegetacao.numProcesso}" maxlength="30"
+							rendered="#{imovelRuralControllerNew.imovelRural.supressaoVegetacao.indProcesso}"
+							required="#{imovelRuralControllerNew.imovelRural.supressaoVegetacao.indProcesso}"
+							requiredMessage="#{func:messageFormat('javax.faces.component.UISelectOne.REQUIRED', bundle.cefir_lbl_pergunta_numeroProcessoAutorizacao)}">
+							
+							<p:ajax event="change" process="@this" oncomplete="desabilitarBotaoProximo()" global="false" />
+						</p:inputText>
+					</h:panelGrid>
+				</h:panelGrid>
+				
+				<br />
+				<br />
+				
+				<h3>
+					<h:outputLabel styleClass="titulo-grupo"
+						value="#{bundle.cefir_lbl_reserva_particular_patrimonio_natural}" />
+				</h3>
+				<h:panelGrid columns="1" id="rppn">
+					<h:panelGrid id="perguntaRppn">
+						<h:outputText
+							value="* #{bundle.cefir_lbl_pergunta_reservaParticularPatrimonioNatural}" />
+						<p:selectOneRadio id="temReservaParticularPatrimonioNatural"
+							value="#{imovelRuralControllerNew.imovelRural.indRppn}"
+							required="true" onchange="desabilitarBotaoProximo()"
+							requiredMessage="#{func:messageFormat('javax.faces.component.UISelectOne.REQUIRED', bundle.cefir_lbl_pergunta_reservaParticularPatrimonioNatural)}">
+							<f:selectItem itemLabel="#{bundle.geral_lbl_sim}"
+								itemValue="#{true}" />
+							<f:selectItem itemLabel="#{bundle.geral_lbl_nao}"
+								itemValue="#{false}" />
+							<p:ajax event="change" process="@this" update="perguntaRppn" listener="#{imovelRuralControllerNew.excluirImovelRuralRppn()}"/>
+						</p:selectOneRadio>
+					</h:panelGrid>
+				</h:panelGrid>
+
+				<br />
+
+				<h3>
+					<h:outputLabel styleClass="titulo-grupo"
+						value="#{bundle.cefir_lbl_uso_agua}" />
+				</h3>
+				<br />
+
+				<h:panelGrid columns="1" id="origemAgua">
+					<h:outputText value="#{bundle.cefir_lbl_pergunta_origem_agua}" />
+					<h:panelGrid columns="2">
+
+						<p:selectBooleanCheckbox
+							value="#{imovelRuralControllerNew.imovelRural.indConcessionaria}">
+							<p:ajax event="change" process="@this"
+								oncomplete="desabilitarBotaoProximo()" global="false" />
+						</p:selectBooleanCheckbox>
+						<h:outputLabel
+							value="#{bundle.requerimentoUnicoLabelPergunta5Checkbox1}"
+							style="width:390px;"
+							title="#{bundle.requerimentoUnicoLabelPergunta5Checkbox1}" />
+
+						<p:selectBooleanCheckbox
+							value="#{imovelRuralControllerNew.imovelRural.indPrecipitacao}">
+							<p:ajax event="change" process="@this"
+								oncomplete="desabilitarBotaoProximo()" global="false" />
+						</p:selectBooleanCheckbox>
+						<h:outputLabel
+							value="#{bundle.requerimentoUnicoLabelPergunta5Checkbox2}"
+							style="width:390px;"
+							title="#{bundle.requerimentoUnicoLabelPergunta5Checkbox2}" />
+
+						<p:selectBooleanCheckbox
+							value="#{imovelRuralControllerNew.imovelRural.indSubterraneo}"
+							onchange="desabilitarBotaoProximo()">
+							<p:ajax event="change" process="@this"
+								update="formCadImovelRural:tabAbasDadosEspecificos:tabelaCaptacaoSubterranea" />
+						</p:selectBooleanCheckbox>
+						<h:outputLabel
+							value="#{bundle.requerimentoUnicoLabelPergunta5Checkbox4}"
+							style="width:390px;"
+							title="#{bundle.requerimentoUnicoLabelPergunta5Checkbox4}" />
+
+						<p:selectBooleanCheckbox
+							value="#{imovelRuralControllerNew.imovelRural.indSuperficial}"
+							onchange="desabilitarBotaoProximo()">
+							<p:ajax event="change" process="@this"
+								update="formCadImovelRural:tabAbasDadosEspecificos:tabelaCaptacaoSuperficial" />
+						</p:selectBooleanCheckbox>
+						<h:outputLabel
+							value="#{bundle.requerimentoUnicoLabelPergunta5Checkbox3}"
+							style="width:390px;"
+							title="#{bundle.requerimentoUnicoLabelPergunta5Checkbox3}" />
+					</h:panelGrid>
+				</h:panelGrid>
+
+				<h:panelGrid columns="1" id="panelLancamentoResiduoLiquido">
+					<h:panelGrid id="boxLancamentoResiduoLiquido">
+						<h:outputText
+							value="* #{bundle.cefir_lbl_pergunta_lancamento_residuos_liquidos}"
+							rendered="#{!imovelRuralControllerNew.imovelRural.imovelCDA
+ 								and !imovelRuralControllerNew.imovelRural.imovelBNDES}" />
+						<h:outputText
+							value="#{bundle.cefir_lbl_pergunta_lancamento_residuos_liquidos}"
+							rendered="#{imovelRuralControllerNew.imovelRural.imovelCDA
+ 								or imovelRuralControllerNew.imovelRural.imovelBNDES}" />
+						<p:selectOneRadio id="temLacamentoResiduoLiquido"
+							value="#{imovelRuralControllerNew.indLancamentoResiduosLiquidos}"
+							required="#{!imovelRuralControllerNew.imovelRural.imovelCDA
+ 								and !imovelRuralControllerNew.imovelRural.imovelBNDES}"
+							valueChangeListener="#{imovelRuralControllerNew.changeIndLancamentoResiduosLiquidos()}"
+							requiredMessage="#{func:messageFormat('javax.faces.component.UISelectOne.REQUIRED', bundle.cefir_lbl_pergunta_lancamento_residuos_liquidos)}"
+							onchange="desabilitarBotaoProximo()">
+							<f:selectItem itemLabel="#{bundle.geral_lbl_sim}"
+								itemValue="#{true}" />
+							<f:selectItem itemLabel="#{bundle.geral_lbl_nao}"
+								itemValue="#{false}" />
+							<p:ajax event="change" process="@this"
+								update="formCadImovelRural:panelLancamentoResiduoLiquido" />
+						</p:selectOneRadio>
+					</h:panelGrid>
+					<h:panelGrid id="receptoresResiduos" columns="1"
+						rendered="#{imovelRuralControllerNew.indLancamentoResiduosLiquidos}">
+						<h:outputText value="* #{bundle.requerimentoUnicoLabelPergunta13}"
+							rendered="#{!imovelRuralControllerNew.imovelRural.imovelCDA
+ 								and !imovelRuralControllerNew.imovelRural.imovelBNDES}" />
+						<h:outputText value="#{bundle.requerimentoUnicoLabelPergunta13}"
+							rendered="#{imovelRuralControllerNew.imovelRural.imovelCDA
+ 								or imovelRuralControllerNew.imovelRural.imovelBNDES}" />
+						<h:panelGroup>
+							<p:selectBooleanCheckbox
+								label="#{bundle.requerimentoUnicoLabelPergunta13Checkbox1}"
+								layout="pageDirection"
+								value="#{imovelRuralControllerNew.imovelRural.indLancamentoConcessionaria}">
+								<p:ajax event="change" process="@this"
+									oncomplete="desabilitarBotaoProximo()" global="false" />
+							</p:selectBooleanCheckbox>
+							<h:outputLabel
+								value="#{bundle.requerimentoUnicoLabelPergunta13Checkbox1}" />
+						</h:panelGroup>
+						<h:panelGroup>
+							<p:selectBooleanCheckbox
+								label="#{bundle.requerimentoUnicoLabelPergunta13Checkbox2}"
+								layout="pageDirection"
+								value="#{imovelRuralControllerNew.imovelRural.indLancamentoManancial}"
+								onchange="desabilitarBotaoProximo()">
+								<p:ajax event="change" process="@this"
+									update="formCadImovelRural:tabAbasDadosEspecificos:tableReceptorResiduos" />
+							</p:selectBooleanCheckbox>
+							<h:outputLabel
+								value="#{bundle.requerimentoUnicoLabelPergunta13Checkbox2}" />
+						</h:panelGroup>
+					</h:panelGrid>
+				</h:panelGrid>
+
+				<h:panelGrid columns="1" id="panelIntervencaoCorpoHidrico">
+					<h:panelGrid id="boxIntervencaoCorpoHidrico">
+						<h:outputText
+							value="* #{bundle.cefir_lbl_pergunta_intervencao_corpo_hidrico}"
+							rendered="#{!imovelRuralControllerNew.imovelRural.imovelCDA
+ 								and !imovelRuralControllerNew.imovelRural.imovelBNDES}" />
+						<h:outputText
+							value="#{bundle.cefir_lbl_pergunta_intervencao_corpo_hidrico}"
+							rendered="#{imovelRuralControllerNew.imovelRural.imovelCDA
+ 								or imovelRuralControllerNew.imovelRural.imovelBNDES}" />
+						<p:selectOneRadio id="temIntervencaoCorpoHidrico"
+							value="#{imovelRuralControllerNew.imovelRural.indIntervencao}"
+							required="#{!imovelRuralControllerNew.imovelRural.imovelCDA
+ 								and !imovelRuralControllerNew.imovelRural.imovelBNDES}"
+							requiredMessage="#{func:messageFormat('javax.faces.component.UISelectOne.REQUIRED', bundle.cefir_lbl_pergunta_intervencao_corpo_hidrico)}"
+							onchange="desabilitarBotaoProximo()">
+							<f:selectItem itemLabel="#{bundle.geral_lbl_sim}"
+								itemValue="#{true}" />
+							<f:selectItem itemLabel="#{bundle.geral_lbl_nao}"
+								itemValue="#{false}" />
+							<p:ajax event="change" process="@this"
+								update="formCadImovelRural:tabAbasDadosEspecificos:tableIntervencao"
+								global="false" />
+						</p:selectOneRadio>
+					</h:panelGrid>
+				</h:panelGrid>
+
+				<br />
+				<h3>
+					<h:outputLabel styleClass="titulo-grupo"
+						value="#{bundle.cefir_lbl_outros_passivos_ambientais}" />
+				</h3>
+				<br />
+				<h:panelGrid id="boxOP">
+					<h:outputText
+						value="* #{bundle.cefir_lbl_pergunta_outros_passivos_ambientais}"
+						rendered="#{!imovelRuralControllerNew.imovelRural.imovelCDA
+ 							and !imovelRuralControllerNew.imovelRural.imovelBNDES}" />
+					<h:outputText
+						value="#{bundle.cefir_lbl_pergunta_outros_passivos_ambientais}"
+						rendered="#{imovelRuralControllerNew.imovelRural.imovelCDA
+ 							or imovelRuralControllerNew.imovelRural.imovelBNDES}" />
+					<p:selectOneRadio id="temOutrosPassivos"
+						value="#{imovelRuralControllerNew.imovelRural.indOutrosPassivos}"
+						required="#{!imovelRuralControllerNew.imovelRural.imovelCDA
+ 							and !imovelRuralControllerNew.imovelRural.imovelBNDES}"
+						requiredMessage="#{func:messageFormat('javax.faces.component.UISelectOne.REQUIRED', bundle.cefir_lbl_pergunta_outros_passivos_ambientais)}">
+						<f:selectItem itemLabel="#{bundle.geral_lbl_sim}"
+							itemValue="#{true}" />
+						<f:selectItem itemLabel="#{bundle.geral_lbl_nao}"
+							itemValue="#{false}" />
+						<p:ajax event="change" process="@this"
+							oncomplete="desabilitarBotaoProximo()" global="false" />
+					</p:selectOneRadio>
+				</h:panelGrid>
+
+				<p:commandButton id="btn_salvar_imovel_parcial" value="Salvar"
+					action="#{imovelRuralControllerNew.salvarQuestionario()}"
+					process="panelQuestionario" immediate="true"
+					update="formCadImovelRural" onclick="habilitarBotaoProximo()"
+					rendered="#{!imovelRuralControllerNew.imovelRural.isFinalizado}" />
+			</h:panelGrid>
+			<!-- FIM CEFIR -->
+		</h:panelGrid>
+		<h:panelGrid id="panelPCT" columns="1" rendered="#{imovelRuralControllerNew.showPCT}">
+			<h:outputText
+				value="* #{bundle.cefir_msg_app}" />
+			<p:selectOneRadio 
+				value="#{imovelRuralControllerNew.imovelRural.indApp}"
+				requiredMessage="#{func:messageFormat('javax.faces.component.UISelectOne.REQUIRED', bundle.cefir_msg_app)}"
+				required="true">
+				<f:selectItem itemLabel="#{bundle.geral_lbl_sim}"
+					itemValue="#{true}" />
+				<f:selectItem itemLabel="#{bundle.geral_lbl_nao}"
+					itemValue="#{false}" />
+				<!-- <p:ajax event="change" process="@this" global="false" /> -->
+			</p:selectOneRadio>
+			<h:outputText
+				value="* #{bundle.cefir_msg_vegetacao_nativa}" />
+			<p:selectOneRadio 
+				value="#{imovelRuralControllerNew.imovelRural.indVegetacaoNativa}"
+				requiredMessage="#{func:messageFormat('javax.faces.component.UISelectOne.REQUIRED', bundle.cefir_msg_vegetacao_nativa)}"
+				required="true">
+				<f:selectItem itemLabel="#{bundle.geral_lbl_sim}"
+					itemValue="#{true}" />
+				<f:selectItem itemLabel="#{bundle.geral_lbl_nao}"
+					itemValue="#{false}" />
+				<!--<p:ajax event="change" process="@this" global="false" />-->
+			</p:selectOneRadio>
+			
+
+				<h:panelGrid columns="2">
+					<h:outputText value="#{bundle.cefir_msg_atividade_desenvolvida}" />
+					<h:graphicImage id="hintAreaProdutiva2"
+						value="/resources/img/ico-ajuda.png" />
+					<p:tooltip value="#{bundle.cefir_hint_atividade_desenvolvida}"
+						for="hintAreaProdutiva2" showEffect="fade" hideEffect="fade" />
+				</h:panelGrid>
+				<p:selectOneRadio
+					value="#{imovelRuralControllerNew.imovelRural.indAreaProdutiva}"
+					style="margin-top: -11px">
+					<f:selectItem itemLabel="#{bundle.geral_lbl_sim}"
+						itemValue="#{true}" />
+					<f:selectItem itemLabel="#{bundle.geral_lbl_nao}"
+						itemValue="#{false}" />
+					<p:ajax event="change" process="@this"
+						oncomplete="desabilitarBotaoProximo()" global="false" />
+				</p:selectOneRadio>
+
+
+
+				<h:panelGrid columns="2">
+					<h:outputText value="#{bundle.cefir_msg_area_consolidada}?" />
+					<h:graphicImage value="/resources/img/ico-ajuda.png"
+						id="hintAreaConsolidada2" />
+					<p:tooltip for="hintAreaConsolidada2"
+						value="#{bundle.cefir_hint_area_consolidada}" showEffect="fade"
+						hideEffect="fade" />
+				</h:panelGrid>
+				<p:selectOneRadio
+					value="#{imovelRuralControllerNew.imovelRural.indAreaRuralConsolidada}"
+					style="margin-top: -11px">
+					<f:selectItem itemLabel="#{bundle.geral_lbl_sim}"
+						itemValue="#{true}" />
+					<f:selectItem itemLabel="#{bundle.geral_lbl_nao}"
+						itemValue="#{false}" />
+					<p:ajax event="change" process="@this"
+						oncomplete="desabilitarBotaoProximo()" global="false" />
+				</p:selectOneRadio>
+
+
+				<h:outputText value="#{bundle.cefir_lbl_pergunta_origem_agua}" />
+				<h:panelGrid columns="2">
+
+					<p:selectBooleanCheckbox
+						value="#{imovelRuralControllerNew.imovelRural.indConcessionaria}">
+						<p:ajax event="change" process="@this"
+							oncomplete="desabilitarBotaoProximo()" global="false" />
+					</p:selectBooleanCheckbox>
+					<h:outputLabel
+						value="#{bundle.requerimentoUnicoLabelPergunta5Checkbox1}"
+						style="width:390px;"
+						title="#{bundle.requerimentoUnicoLabelPergunta5Checkbox1}" />
+
+					<p:selectBooleanCheckbox
+						value="#{imovelRuralControllerNew.imovelRural.indPrecipitacao}">
+						<p:ajax event="change" process="@this"
+							oncomplete="desabilitarBotaoProximo()" global="false" />
+					</p:selectBooleanCheckbox>
+					<h:outputLabel
+						value="#{bundle.requerimentoUnicoLabelPergunta5Checkbox2}"
+						style="width:390px;"
+						title="#{bundle.requerimentoUnicoLabelPergunta5Checkbox2}" />
+
+					<p:selectBooleanCheckbox
+						value="#{imovelRuralControllerNew.imovelRural.indSubterraneo}"
+						onchange="desabilitarBotaoProximo()">
+						<p:ajax event="change" process="@this"
+							update="formCadImovelRural:tabAbasDadosEspecificos:tabelaCaptacaoSubterranea" />
+					</p:selectBooleanCheckbox>
+					<h:outputLabel
+						value="#{bundle.requerimentoUnicoLabelPergunta5Checkbox4}"
+						style="width:390px;"
+						title="#{bundle.requerimentoUnicoLabelPergunta5Checkbox4}" />
+
+					<p:selectBooleanCheckbox
+						value="#{imovelRuralControllerNew.imovelRural.indSuperficial}"
+						onchange="desabilitarBotaoProximo()">
+						<p:ajax event="change" process="@this"
+							update="formCadImovelRural:tabAbasDadosEspecificos:tabelaCaptacaoSuperficial" />
+					</p:selectBooleanCheckbox>
+					<h:outputLabel
+						value="#{bundle.requerimentoUnicoLabelPergunta5Checkbox3}"
+						style="width:390px;"
+						title="#{bundle.requerimentoUnicoLabelPergunta5Checkbox3}" />
+				</h:panelGrid>
+
+			<h:panelGrid columns="1" id="panelLancamentoResiduoLiquidoPCT">
+				<h:panelGrid>
+					<h:outputText
+						value="#{bundle.cefir_lbl_pergunta_lancamento_residuos_liquidos}" />
+					<p:selectOneRadio 
+						value="#{imovelRuralControllerNew.indLancamentoResiduosLiquidos}"
+						valueChangeListener="#{imovelRuralControllerNew.changeIndLancamentoResiduosLiquidos()}"
+						onchange="desabilitarBotaoProximo()">
+						<f:selectItem itemLabel="#{bundle.geral_lbl_sim}"
+							itemValue="#{true}" />
+						<f:selectItem itemLabel="#{bundle.geral_lbl_nao}"
+							itemValue="#{false}" />
+						<p:ajax event="change" process="@this"
+							update="formCadImovelRural:panelLancamentoResiduoLiquidoPCT" />
+					</p:selectOneRadio>
+				</h:panelGrid>
+				<h:panelGrid columns="1"
+					rendered="#{imovelRuralControllerNew.indLancamentoResiduosLiquidos != null and imovelRuralControllerNew.indLancamentoResiduosLiquidos}">
+					<h:outputText value="#{bundle.requerimentoUnicoLabelPergunta13}" />
+					<h:panelGroup>
+						<p:selectBooleanCheckbox
+							label="#{bundle.requerimentoUnicoLabelPergunta13Checkbox1}"
+							layout="pageDirection"
+							value="#{imovelRuralControllerNew.imovelRural.indLancamentoConcessionaria}">
+							<p:ajax event="change" process="@this"
+								oncomplete="desabilitarBotaoProximo()" global="false" />
+						</p:selectBooleanCheckbox>
+						<h:outputLabel
+							value="#{bundle.requerimentoUnicoLabelPergunta13Checkbox1}" />
+					</h:panelGroup>
+					<h:panelGroup>
+						<p:selectBooleanCheckbox
+							label="#{bundle.requerimentoUnicoLabelPergunta13Checkbox2}"
+							layout="pageDirection"
+							value="#{imovelRuralControllerNew.imovelRural.indLancamentoManancial}"
+							onchange="desabilitarBotaoProximo()">
+							<p:ajax event="change" process="@this"
+								update="formCadImovelRural:tabAbasDadosEspecificos:tableReceptorResiduos" />
+						</p:selectBooleanCheckbox>
+						<h:outputLabel
+							value="#{bundle.requerimentoUnicoLabelPergunta13Checkbox2}" />
+					</h:panelGroup>
+					
+				</h:panelGrid>
+			</h:panelGrid>
+			<h:panelGrid columns="1">
+				<h:outputText value="#{bundle.cefir_lbl_pergunta_intervencao_corpo_hidrico}" />
+				<p:selectOneRadio
+					value="#{imovelRuralControllerNew.imovelRural.indIntervencao}"
+					required="#{!imovelRuralControllerNew.imovelRural.imovelCDA
+							and !imovelRuralControllerNew.imovelRural.imovelBNDES}"
+					requiredMessage="#{func:messageFormat('javax.faces.component.UISelectOne.REQUIRED', bundle.cefir_lbl_pergunta_intervencao_corpo_hidrico)}"
+					onchange="desabilitarBotaoProximo()">
+					<f:selectItem itemLabel="#{bundle.geral_lbl_sim}"
+						itemValue="#{true}" />
+					<f:selectItem itemLabel="#{bundle.geral_lbl_nao}"
+						itemValue="#{false}" />
+					<p:ajax event="change" process="@this"
+						update="formCadImovelRural:tabAbasDadosEspecificos:tableIntervencao"
+						global="false" />
+				</p:selectOneRadio>
+			</h:panelGrid>
+			<br />
+			
+			<p:commandButton id="btn_salvar_imovel_parcial_pct" value="Salvar"
+					action="#{imovelRuralControllerNew.salvarQuestionario()}"
+					process="panelQuestionario"
+					update="formCadImovelRural" onclick="habilitarBotaoProximo()"
+					rendered="#{!imovelRuralControllerNew.imovelRural.isFinalizado}" />
+		</h:panelGrid>
+	</p:panel>
+</ui:composition>

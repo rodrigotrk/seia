@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui"	
+	template="/layout/template.xhtml">
+	
+	<ui:define name="titulo-pagina">
+		<h3><h:outputText value="#{bundle.lbl_cadastro_pesquisa_mineral_sem_guia}" /></h3>
+	</ui:define>
+	
+	<ui:define name="conteudo-principal">
+		<!-- <f:event type="preRenderView" listener="#{pesquisaMineralController.redirecionarParaTelaConsulta()}" /> -->
+		
+		<!-- INCLUDE DOS DIALOGS -->
+		<ui:include src="/paginas/manter-atividade-nao-sujeita-licenciamento/pesquisa-mineral/pesquisaMineralDialogsInclude.xhtml" />
+		
+		<h:form>
+			<p:poll interval="1" listener="#{pesquisaMineralController.poll}" widgetVar="pesquisaMineralPoll" global="false"/>
+		</h:form>
+		
+		<p:tabView id="tabCadastroPesquisaMineral" 
+			widgetVar="tabCadastroPesquisaMineral" 
+			activeIndex="#{pesquisaMineralController.activeTab}" 
+			dynamic="true">
+			<p:ajax event="tabChange" listener="#{pesquisaMineralController.controlarAbas()}" update="tabCadastroPesquisaMineral formBotoesNavegacao " />
+			
+			<p:tab title="#{bundle.lbl_cpm_dados_basico}" id="tabDadosBasicos">
+				<ui:include src="/paginas/manter-atividade-nao-sujeita-licenciamento/pesquisa-mineral/pesquisaMineralDadosBasicos.xhtml" />
+			</p:tab>
+			
+			<p:tab title="#{bundle.lbl_cpm_caracterizacao_atividade}" id="tabCaractAtividade" disabled="#{!pesquisaMineralController.cadastroValido or !pesquisaMineralController.pesquisaMineralSalva}">
+				<ui:include src="/paginas/manter-atividade-nao-sujeita-licenciamento/pesquisa-mineral/pesquisaMineralCaracterizacaoAtividade.xhtml" />
+			</p:tab>
+
+			<p:tab title="#{bundle.lbl_cpm_documentos_estudos}" id="tabDocumentos" disabled="#{!pesquisaMineralController.cadastroValido or !pesquisaMineralController.pesquisaMineralSalva}">
+				<ui:include src="/paginas/manter-atividade-nao-sujeita-licenciamento/pesquisa-mineral/pesquisaMineralDocumentosEstudos.xhtml" />
+			</p:tab>
+		</p:tabView>
+		
+	</ui:define>
+</ui:composition>

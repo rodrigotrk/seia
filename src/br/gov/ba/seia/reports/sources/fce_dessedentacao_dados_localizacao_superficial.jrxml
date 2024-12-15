@@ -1,0 +1,265 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="fce_captacao_superficial_localizacao" pageWidth="540" pageHeight="817" whenNoDataType="AllSectionsNoDetail" columnWidth="540" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="80b78396-35cc-4e26-aaf9-1207b1892468">
+	<property name="ireport.zoom" value="1.8181818181818181"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="ide_fce" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[$P{ide_fce}]]></defaultValueExpression>
+	</parameter>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[SELECT DISTINCT
+	fce.ide_fce,
+	sis.nom_sistema_coordenada,
+	olg.ide_localizacao_geografica,
+	olg.ide_outorga_localizacao_geografica,
+	fceOLG.nom_rio,
+
+
+
+
+	array_to_string( array(SELECT latitude FROM (
+		SELECT
+			case when length(trim(f_get_vertices(ide_localizacao_geografica)):: character varying) > 0
+			then
+				substring(
+					( SELECT trim(f_get_vertices(ide_localizacao_geografica) ) )
+					FROM (strpos((SELECT trim(f_get_vertices(ide_localizacao_geografica))), '(') + 1) for (strpos((SELECT trim(f_get_vertices(ide_localizacao_geografica))),
+					' ') - 1)
+					)
+			else 'valor não informado.' end AS latitude
+		FROM
+			localizacao_geografica
+		WHERE
+			ide_localizacao_geografica = loc.ide_localizacao_geografica) pontos), ', ') AS latitudeInicial,
+
+	array_to_string( array(SELECT longitude FROM (
+		SELECT
+			case when length(trim(f_get_vertices(ide_localizacao_geografica)):: character varying) > 0
+			then
+			replace(substring((SELECT trim(f_get_vertices(ide_localizacao_geografica))) FROM (strpos((SELECT trim(f_get_vertices(ide_localizacao_geografica))), ' ') + 1) for (strpos((SELECT trim(f_get_vertices(ide_localizacao_geografica))), ')') - 1)), ')', '') else 'valor não informado.' end AS longitude
+		FROM
+			localizacao_geografica
+		WHERE
+			ide_localizacao_geografica = loc.ide_localizacao_geografica) pontos), ', ') AS longitudeInicial
+
+
+
+FROM fce fce
+INNER JOIN fce_outorga_localizacao_geografica fceOLG ON fce.ide_fce = fceOLG.ide_fce
+INNER JOIN outorga_localizacao_geografica olg ON fceOLG.ide_outorga_localizacao_geografica = olg.ide_outorga_localizacao_geografica
+INNER JOIN outorga o ON olg.ide_outorga = o.ide_outorga
+INNER JOIN outorga_tipo_captacao ot ON o.ide_outorga = ot.ide_outorga
+INNER JOIN localizacao_geografica loc ON olg.ide_localizacao_geografica = loc.ide_localizacao_geografica
+INNER JOIN sistema_coordenada sis ON loc.ide_sistema_coordenada = sis.ide_sistema_coordenada
+
+WHERE fce.ide_fce = $P{ide_fce}
+AND ot.ide_tipo_captacao = 3;]]>
+	</queryString>
+	<field name="ide_fce" class="java.lang.Integer"/>
+	<field name="nom_sistema_coordenada" class="java.lang.String"/>
+	<field name="ide_localizacao_geografica" class="java.lang.Integer"/>
+	<field name="ide_outorga_localizacao_geografica" class="java.lang.Integer"/>
+	<field name="nom_rio" class="java.lang.String"/>
+	<field name="latitudeinicial" class="java.math.BigDecimal"/>
+	<field name="longitudeinicial" class="java.math.BigDecimal"/>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="57">
+			<printWhenExpression><![CDATA[$F{ide_outorga_localizacao_geografica}!=null]]></printWhenExpression>
+			<staticText>
+				<reportElement uuid="afa81cd0-3a04-4ce9-b5a1-034789f6eab1" x="155" y="18" width="60" height="39"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Bacia hidrográfica]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="afa81cd0-3a04-4ce9-b5a1-034789f6eab1" x="90" y="18" width="65" height="39"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Sistema de Coordenada]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="afa81cd0-3a04-4ce9-b5a1-034789f6eab1" x="215" y="18" width="60" height="39"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Sub-Bacia]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="5cac7e76-5f44-4192-88d4-1eca16c15ad4" x="45" y="18" width="45" height="39"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Longitude]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="b2188a39-8db5-4b50-ab66-a01b1abed5ad" x="0" y="18" width="45" height="39"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Latitude]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="afa81cd0-3a04-4ce9-b5a1-034789f6eab1" x="415" y="18" width="65" height="39"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Rio]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="afa81cd0-3a04-4ce9-b5a1-034789f6eab1" x="275" y="18" width="140" height="39"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[RPGA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="b4dc6393-0625-4bdc-aa94-8a87a08c956f" positionType="Float" x="0" y="-3" width="200" height="20"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[Captação Superficial]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="35" splitType="Stretch">
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="d975e294-ab9a-436f-b17b-97a7949e2657" x="415" y="0" width="65" height="35"/>
+				<box>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nom_rio} != null ? $F{nom_rio} : "Sem nome"]]></textFieldExpression>
+			</textField>
+			<subreport>
+				<reportElement uuid="57b6be84-ddd5-45b7-8272-039c2b06619f" positionType="Float" isPrintRepeatedValues="false" x="155" y="0" width="60" height="35" isRemoveLineWhenBlank="true"/>
+				<subreportParameter name="Latitude">
+					<subreportParameterExpression><![CDATA[$F{latitudeinicial}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="Longitude">
+					<subreportParameterExpression><![CDATA[$F{longitudeinicial}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="loc_geografica">
+					<subreportParameterExpression><![CDATA[$F{ide_localizacao_geografica}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} +"fce_outorga_bacia.jasper"]]></subreportExpression>
+			</subreport>
+			<textField>
+				<reportElement uuid="d975e294-ab9a-436f-b17b-97a7949e2657" x="90" y="0" width="65" height="35"/>
+				<box>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nom_sistema_coordenada}]]></textFieldExpression>
+			</textField>
+			<subreport>
+				<reportElement uuid="57b6be84-ddd5-45b7-8272-039c2b06619f" positionType="Float" isPrintRepeatedValues="false" x="215" y="0" width="60" height="35" isRemoveLineWhenBlank="true"/>
+				<subreportParameter name="Latitude">
+					<subreportParameterExpression><![CDATA[$F{latitudeinicial}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="Longitude">
+					<subreportParameterExpression><![CDATA[$F{longitudeinicial}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="loc_geografica">
+					<subreportParameterExpression><![CDATA[$F{ide_localizacao_geografica}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} +"fce_outorga_subbacia.jasper"]]></subreportExpression>
+			</subreport>
+			<textField>
+				<reportElement uuid="e0deefae-64b0-4b75-93c7-902eb25574ff" x="0" y="0" width="45" height="35"/>
+				<box>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{latitudeinicial}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="56f9d646-6763-429c-801c-926f1ddaa803" x="45" y="0" width="45" height="35"/>
+				<box>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{longitudeinicial}]]></textFieldExpression>
+			</textField>
+			<subreport>
+				<reportElement uuid="57b6be84-ddd5-45b7-8272-039c2b06619f" positionType="Float" isPrintRepeatedValues="false" x="275" y="0" width="140" height="35" isRemoveLineWhenBlank="true"/>
+				<subreportParameter name="Latitude">
+					<subreportParameterExpression><![CDATA[$F{latitudeinicial}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="Longitude">
+					<subreportParameterExpression><![CDATA[$F{longitudeinicial}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="loc_geografica">
+					<subreportParameterExpression><![CDATA[$F{ide_localizacao_geografica}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} +"fce_outorga_rpga.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+	</detail>
+</jasperReport>

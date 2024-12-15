@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui">
+	
+	<p:dialog id="dialogselecionarRequerente" dynamic="true" header="Selecionar Requerente" widgetVar="dialogselecionarRequerente" modal="true" position="center" resizable="false">
+		<ui:include src="/paginas/novo-requerimento/selecionarRequerente.xhtml" />
+	</p:dialog>
+		
+		
+	<p:dialog id="aviso" dynamic="true" header="Aviso" widgetVar="aviso" modal="true" position="center" resizable="false">
+		<h:outputText value="A geração do relatório pode levar alguns minutos, por favor, aguarde." />
+		
+		<h:panelGrid columns="1">
+			<h:form>
+				
+				<p:commandButton global="true" actionListener="#{consultarCerhController.getImprimirResumoQuantitativoCerh('XLS')}" id="btnResumoPlanilha" value="Gerar relatório de planilha" onclick="aviso.hide();"/>
+
+				<p:spacer width="10" height="1" />
+				
+				<p:commandButton global="true" actionListener="#{consultarCerhController.getImprimirResumoQuantitativoCerh('PDF')}" id="btnResumoDocumento" value="Gerar relatório em documento" onclick="aviso.hide();"/>
+			</h:form>
+			
+		</h:panelGrid>
+	</p:dialog>
+		
+	<ui:include src="/paginas/manter-cerh/cancelar.xhtml" />
+		
+</ui:composition>

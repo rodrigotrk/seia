@@ -1,0 +1,402 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+				xmlns:h="http://java.sun.com/jsf/html" 
+				xmlns:f="http://java.sun.com/jsf/core" 
+				xmlns:ui="http://java.sun.com/jsf/facelets" 
+				xmlns:p="http://primefaces.prime.com.tr/ui"
+                xmlns:c="http://java.sun.com/jsp/jstl/core">
+	
+	<h:panelGrid id="gridProcessoDnpm" style="margin-top:20px;">
+		<h:outputText styleClass="titulo-grupo-bold" value="* #{bundle.fce_lic_min_informacao_area_dnpm}" />
+		<p:commandLink id="dnpm" 
+			actionListener="#{pesquisaMineralController.incluirProcessoDpnm()}"
+			oncomplete="dialogIncluirProcessoDNPM.show()" 
+			update="formIncluirProcessoDnpm"
+			disabled="#{pesquisaMineralController.cadastro.visualizar}">
+			<h:graphicImage title="#{bundle.lbl_cpm_incluir} #{bundle.fce_lic_min_processo_dnpm}" value="/resources/img/ico-expandir.png" style="margin-right: 2px;" />
+			<h:outputText value="#{bundle.lbl_cpm_incluir} #{bundle.fce_lic_min_processo_dnpm}" style="cursor: initial;" />
+		</p:commandLink>
+	</h:panelGrid>
+	
+	<h:panelGrid id="gridPanelProcessoDnpm" >
+		<p:accordionPanel id="panelProcessoDnpm" 
+			widgetVar="panelProcessoDnpm"
+			var="processoDnpm"
+			value="#{pesquisaMineralController.pesquisaMineral.processoDnpms}"
+			dynamic="true"
+			style="margin-top:10px; 
+					width: 745px;
+					border-style:solid;
+				   	border-right-width: 1px;
+				   	border-bottom-width: 1px;
+				   	border-left-width: 1px;
+				   	border-color: #9BBB59;"
+			rendered="#{pesquisaMineralController.processoDnpmAdicionado}">
+			
+			<p:ajax event="tabChange" listener="#{pesquisaMineralController.controlarTabAccordion()}" process="@this" update="panelProcessoDnpm"/>
+			
+			<p:tab title="Processo DNPM - #{processoDnpm.numProcessoDnpm}" id="tabProcesso" >
+				<h:panelGrid style="margin-left:-17px;">
+					<h:panelGroup id="groupProcessoDnpm">
+						<h:outputText value="Área" style="margin-left:5px; margin-right: 5px;"/>
+						<p:inputText value="#{processoDnpm.areaProcessoDnpm}" onblur="mascararNumeroAndAddZeros(this, event, 9, 4, '.', ',', 3);" maxlength="13" disabled="#{true}">
+							<f:convertNumber integerOnly="false" maxIntegerDigits="9" maxFractionDigits="4"/>
+						</p:inputText>
+						<h:outputText value="(ha)" style="margin-left:5px;"/>
+						<p:commandLink style="cursor: pointer; margin-left:5px;"
+							onclick='javascript:${pesquisaMineralController.visualizarLocalizacao(processoDnpm.ideLocalizacaoGeografica)}'
+							global="false" accesskey="VISUALIZAR GEOBAHIA">
+							<h:graphicImage title="#{bundle.fce_lic_aqui_visualizar_dados_geobahia}" value="/resources/img/ico-arl-relocacao.png" />
+						</p:commandLink>
+					
+						<p:commandLink actionListener="#{pesquisaMineralController.editarProcessoDpnm()}"
+							process="@this"
+							oncomplete="dialogIncluirProcessoDNPM.show()" 
+							update="formIncluirProcessoDnpm"
+							disabled="#{pesquisaMineralController.cadastro.visualizar}">
+							<h:graphicImage title="Editar" value="/resources/img/ico-editar.png" />
+							<f:attribute name="processoDnpm" value="#{processoDnpm}"/>
+						</p:commandLink>
+					</h:panelGroup>
+				</h:panelGrid>
+			
+				<h:panelGrid id="gridMetodoProspeccao" style="margin-top:10px; margin-left:-17px;">
+					<h:outputText value="* #{bundle.lbl_cpm_metodo_prospeccao}" styleClass="titulo-grupo" style="font-weight:bold;" />
+
+					<h:dataTable id="tableCheck" var="prospeccao" value="#{processoDnpm.listaProcessoDnpmProspecaoToSelect}">
+						<h:column id="columnCheck">
+							<h:panelGrid id="gridCheck" columns="2">
+								<p:selectBooleanCheckbox id="check" value="#{prospeccao.ideMetodoProspeccao.checked}"  
+									disabled="#{pesquisaMineralController.cadastro.visualizar}" >
+									<p:ajax event="change" process="@this" update="tabCadastroPesquisaMineral:formAbaCaracterizacaoAtividade:panelProcessoDnpm" listener="#{pesquisaMineralController.selecionarProspeccao(prospeccao)}"/>
+								</p:selectBooleanCheckbox>
+								<h:outputText style="margin-left:5px;" value="#{prospeccao.ideMetodoProspeccao.nomMetodoProspeccao}"/>	
+							</h:panelGrid>
+						</h:column>					
+					</h:dataTable>
+					
+					<h:panelGrid id="gridFuroSondagem" rendered="#{processoDnpm.existeMetodoProspeccaoFuroSondagem}" style="margin-top:10px;">
+						<h:outputText value="* #{bundle.lbl_cpm_furos_sondagem}"  styleClass="titulo-grupo" style="font-weight:bold;"/>
+
+						<h:panelGroup>
+							<h:outputText value="* #{bundle.lbl_cpm_incluir}" />
+							<p:commandLink title="#{bundle.lbl_cpm_incluir}" 
+								global="true" 
+								actionListener="#{pesquisaMineralController.incluirFuroSondagem(processoDnpm)}"
+								update="dialogIncluirPropesccao"
+								oncomplete="dialogIncluirPropesccao.show();"
+								disabled="#{pesquisaMineralController.cadastro.visualizar}">
+								<h:graphicImage title="#{bundle.lbl_cpm_incluir}" value="/resources/img/ico-expandir.png" style="margin-left:5px;"/>
+							</p:commandLink>
+						</h:panelGroup>
+						
+						<h:panelGrid id="gridFuroSondagemAdicionado" 
+							rendered="#{processoDnpm.isExisteListaProspeccaoDetalhamentoSondagem(processoDnpm)}">
+							<p:dataTable id="tableSondagem" widgetVar="tableSondagem" 
+								value="#{processoDnpm.getListaProspeccaoDetalhamentoSondagem(processoDnpm)}"
+								var="detalhamento"
+								lazy="true">
+								<p:column>
+									<f:facet name="header">
+										<h:outputText value="#{bundle.lbl_cpm_identificacao}"/>
+										 	<br/> 
+									 	<h:outputText value="do #{bundle.lbl_cpm_furo}"/>
+									</f:facet>
+									<h:outputText value="#{detalhamento.nomIdentificacao}"/>
+								</p:column>
+								<p:column>
+									<f:facet name="header">
+										Identificação
+										<br/>  
+										do alvo
+									</f:facet>
+									<h:outputText value="#{detalhamento.nomIdentificacaoAlvo}"/>
+								</p:column>
+								<p:column>
+									<f:facet name="header">
+										Nome do 
+										<br/>
+										imóvel Rural
+									</f:facet>
+									<h:outputText value="#{detalhamento.nomImovelRural}"/>
+								</p:column>
+								<p:column>
+									<f:facet name="header">
+										<h:outputText value="#{bundle.lbl_cpm_profundidade}" />
+											<br />
+										<h:outputText value="#{bundle.geral_lbl_metro}" />
+									</f:facet>
+									
+									<h:outputText value="#{detalhamento.numProfundidade}">
+										<f:convertNumber maxIntegerDigits="8" maxFractionDigits="2" pattern="##,###,###,##0.00" locale="pt_BR"/>
+									</h:outputText>
+								</p:column>
+								<p:column>
+									<f:facet name="header">
+										<h:outputText value="#{bundle.lbl_cpm_diametro}" />
+											<br />
+										<h:outputText value="#{bundle.geral_lbl_milimetro}" />
+									</f:facet>
+								
+									<h:outputText value="#{detalhamento.numDiametro}" >
+										<f:convertNumber maxIntegerDigits="8" maxFractionDigits="2" pattern="##,###,###,##0.00" locale="pt_BR"/>
+									</h:outputText>
+								</p:column>
+								<p:column>
+									<f:facet name="header">
+										Área  
+											<br />
+										da Praça
+										<h:outputText value="#{bundle.geral_lbl_metro_quadrado}" />
+									</f:facet>
+									
+									<h:outputText value="#{detalhamento.numAreaPraca}">
+										<f:convertNumber maxIntegerDigits="8" maxFractionDigits="2" pattern="##,###,###,##0.00" locale="pt_BR"/>
+									</h:outputText>
+								</p:column>
+								
+								<p:column headerText="#{bundle.geral_lbl_acoes}" style="width:55px;">
+									
+									<p:commandLink style="cursor: pointer; margin-left:5px;"
+										onclick='javascript:${pesquisaMineralController.visualizarLocalizacao(detalhamento.ideLocalizacaoGeografica)}'
+										global="false" accesskey="VISUALIZAR GEOBAHIA"
+										rendered="#{pesquisaMineralController.existeLocalizacaoGeografica(detalhamento)}">
+										<h:graphicImage title="#{bundle.fce_lic_aqui_visualizar_dados_geobahia}" value="/resources/img/ico-arl-relocacao.png" />
+									</p:commandLink>
+									
+									<p:commandLink oncomplete="dialogIncluirPropesccao.show()" 
+										update="dialogIncluirPropesccao" process="@this"
+										disabled="#{pesquisaMineralController.cadastro.visualizar}">
+										<h:graphicImage title="#{bundle.btn_editar}" value="/resources/img/ico-editar.png" />
+										<f:setPropertyActionListener value="#{detalhamento}" target="#{pesquisaMineralController.prospecaoDetalhamento}"/>
+									</p:commandLink>
+									
+									<p:commandLink oncomplete="confirmaExclusaoProspeccaoMineral.show()" 
+										process="@this"
+										disabled="#{pesquisaMineralController.cadastro.visualizar}">
+										<h:graphicImage title="#{bundle.geral_lbl_excluir}" value="/resources/img/ico-excluir.png" />
+										<f:setPropertyActionListener value="#{detalhamento}" target="#{pesquisaMineralController.prospecaoDetalhamento}"/>
+									</p:commandLink>
+								</p:column>
+							</p:dataTable>
+						</h:panelGrid>
+						
+					</h:panelGrid>
+					
+					<h:panelGrid id="gridPoco" rendered="#{processoDnpm.existeMetodoProspeccaoPocos}" style="margin-top:10px;">
+						<h:outputText value="* #{bundle.lbl_cpm_poco}s"  styleClass="titulo-grupo" style="font-weight:bold;"/>
+						
+						<h:panelGroup>
+							<h:outputText value="* #{bundle.lbl_cpm_incluir}" />
+							<p:commandLink title="#{bundle.lbl_cpm_incluir}" 
+								global="true" 
+								actionListener="#{pesquisaMineralController.incluirPoco(processoDnpm)}"
+								update="dialogIncluirPropesccao"
+								oncomplete="dialogIncluirPropesccao.show();"
+								disabled="#{pesquisaMineralController.cadastro.visualizar}">
+								<h:graphicImage title="#{bundle.lbl_cpm_incluir}" value="/resources/img/ico-expandir.png" style="margin-left:5px;"/>
+							</p:commandLink>
+						</h:panelGroup>	
+						
+						<h:panelGrid id="gridPocoAdicionado"
+							rendered="#{processoDnpm.isExisteListaProspeccaoDetalhamentoPoco(processoDnpm)}">
+							<p:dataTable id="tablePoco" widgetVar="tablePoco" 
+								value="#{processoDnpm.getListaProspeccaoDetalhamentoPoco(processoDnpm)}"
+								var="detalhamento"
+								lazy="true">
+								<p:column>
+									<f:facet name="header">
+										<h:outputText value="#{bundle.lbl_cpm_identificacao}"/>
+										 	<br/> 
+									 	<h:outputText value="do #{bundle.lbl_cpm_poco}"/>
+									</f:facet>
+									<h:outputText value="#{detalhamento.nomIdentificacao}"/>
+								</p:column>
+								<p:column>
+									<f:facet name="header">
+										Identificação
+										<br/>  
+										do alvo
+									</f:facet>
+									<h:outputText value="#{detalhamento.nomIdentificacaoAlvo}"/>
+								</p:column>
+								<p:column>
+									<f:facet name="header">
+										Nome do 
+										<br/>
+										imóvel Rural
+									</f:facet>
+									<h:outputText value="#{detalhamento.nomImovelRural}"/>
+								</p:column>
+								<p:column>
+									<f:facet name="header">
+										<h:outputText value="#{bundle.lbl_cpm_profundidade}" />
+											<br />
+										<h:outputText value="#{bundle.geral_lbl_metro}" />
+									</f:facet>
+									
+									<h:outputText value="#{detalhamento.numProfundidade}">
+										<f:convertNumber maxIntegerDigits="8" maxFractionDigits="2" pattern="##,###,###,##0.00" locale="pt_BR"/>
+									</h:outputText>
+								</p:column>
+								<p:column>
+									<f:facet name="header">
+										<h:outputText value="#{bundle.lbl_cpm_diametro}" />
+											<br />
+										<h:outputText value="#{bundle.geral_lbl_milimetro}" />
+									</f:facet>
+								
+									<h:outputText value="#{detalhamento.numDiametro}" >
+										<f:convertNumber maxIntegerDigits="8" maxFractionDigits="2" pattern="##,###,###,##0.00" locale="pt_BR"/>
+									</h:outputText>
+								</p:column>
+								
+								<p:column headerText="#{bundle.geral_lbl_acoes}" style="width:55px;">
+									
+									<p:commandLink style="cursor: pointer; margin-left:5px;"
+										onclick='javascript:${pesquisaMineralController.visualizarLocalizacao(detalhamento.ideLocalizacaoGeografica)}'
+										global="false" accesskey="VISUALIZAR GEOBAHIA"
+										rendered="#{pesquisaMineralController.existeLocalizacaoGeografica(detalhamento)}">
+										<h:graphicImage title="#{bundle.fce_lic_aqui_visualizar_dados_geobahia}" value="/resources/img/ico-arl-relocacao.png" />
+									</p:commandLink>
+									
+									<p:commandLink oncomplete="dialogIncluirPropesccao.show()" 
+										update="dialogIncluirPropesccao" process="@this"
+										disabled="#{pesquisaMineralController.cadastro.visualizar}">
+										<h:graphicImage title="#{bundle.btn_editar}" value="/resources/img/ico-editar.png" />
+										<f:setPropertyActionListener value="#{detalhamento}" target="#{pesquisaMineralController.prospecaoDetalhamento}"/>
+									</p:commandLink>
+									
+									<p:commandLink oncomplete="confirmaExclusaoProspeccaoMineral.show()"
+										process="@this"
+										disabled="#{pesquisaMineralController.cadastro.visualizar}">
+										<h:graphicImage title="#{bundle.geral_lbl_excluir}" value="/resources/img/ico-excluir.png" />
+										<f:setPropertyActionListener value="#{detalhamento}" target="#{pesquisaMineralController.prospecaoDetalhamento}"/>
+									</p:commandLink>
+								</p:column>
+							</p:dataTable>
+						</h:panelGrid>
+						
+					</h:panelGrid>
+					
+					<h:panelGrid id="gridTrincheira" rendered="#{processoDnpm.existeMetodoProspeccaoTrincheiras}" style="margin-top:10px;">
+						<h:outputText value="* #{bundle.lbl_cpm_trincheira}s"  styleClass="titulo-grupo" style="font-weight:bold;"/>
+						
+						<h:panelGroup>
+							<h:outputText value="* #{bundle.lbl_cpm_incluir}" />
+							<p:commandLink title="#{bundle.lbl_cpm_incluir}" 
+								global="true" 
+								actionListener="#{pesquisaMineralController.incluirTrincheira(processoDnpm)}"
+								update="dialogIncluirPropesccao"
+								oncomplete="dialogIncluirPropesccao.show();"
+								disabled="#{pesquisaMineralController.cadastro.visualizar}">
+								<h:graphicImage title="#{bundle.lbl_cpm_incluir}" value="/resources/img/ico-expandir.png" style="margin-left:5px;"/>
+							</p:commandLink>
+						</h:panelGroup>
+						
+						<h:panelGrid id="gridTrincheiraAdicionada"
+							rendered="#{processoDnpm.isExisteListaProspeccaoDetalhamentoTrincheira(processoDnpm)}">
+							<p:dataTable id="tableTrincheira" widgetVar="tableTrincheira" 
+								value="#{processoDnpm.getListaProspeccaoDetalhamentoTrincheira(processoDnpm)}"
+								var="detalhamento"
+								lazy="true">
+								<p:column>
+									<f:facet name="header">
+										<h:outputText value="#{bundle.lbl_cpm_identificacao}"/>
+										 	<br/> 
+									 	<h:outputText value="da #{bundle.lbl_cpm_trincheira}"/>
+									</f:facet>
+									<h:outputText value="#{detalhamento.nomIdentificacao}"/>
+								</p:column>
+								<p:column>
+									<f:facet name="header">
+										Identificação
+										<br/>  
+										do alvo
+									</f:facet>
+									<h:outputText value="#{detalhamento.nomIdentificacaoAlvo}"/>
+								</p:column>
+								<p:column>
+									<f:facet name="header">
+										Nome do 
+										<br/>
+										imóvel Rural
+									</f:facet>
+									<h:outputText value="#{detalhamento.nomImovelRural}"/>
+								</p:column>
+								<p:column>
+									<f:facet name="header">
+										<h:outputText value="#{bundle.lbl_cpm_profundidade}" />
+											<br />
+										<h:outputText value="#{bundle.geral_lbl_metro}" />
+									</f:facet>
+									
+									<h:outputText value="#{detalhamento.numProfundidade}">
+										<f:convertNumber maxIntegerDigits="8" maxFractionDigits="2" pattern="##,###,###,##0.00" locale="pt_BR"/>
+									</h:outputText>
+								</p:column>
+								<p:column>
+									<f:facet name="header">
+										<h:outputText value="#{bundle.lbl_cpm_largura}" />
+											<br />
+										<h:outputText value="#{bundle.geral_lbl_metro}" />
+									</f:facet>
+								
+									<h:outputText value="#{detalhamento.numLargura}" >
+										<f:convertNumber maxIntegerDigits="8" maxFractionDigits="2" pattern="##,###,###,##0.00" locale="pt_BR"/>
+									</h:outputText>
+								</p:column>
+								<p:column>
+									<f:facet name="header">
+										<h:outputText value="#{bundle.lbl_cpm_comprimento}" />
+											<br />
+										<h:outputText value="#{bundle.geral_lbl_metro}" />
+									</f:facet>
+									
+									<h:outputText value="#{detalhamento.numComprimento}">
+										<f:convertNumber maxIntegerDigits="8" maxFractionDigits="2" pattern="##,###,###,##0.00" locale="pt_BR"/>
+									</h:outputText>
+								</p:column>
+								
+								<p:column headerText="#{bundle.geral_lbl_acoes}" style="width:55px;">
+									
+									<p:commandLink style="cursor: pointer; margin-left:5px;"
+										onclick='javascript:${pesquisaMineralController.visualizarLocalizacao(detalhamento.ideLocalizacaoGeografica)}'
+										global="false" accesskey="VISUALIZAR GEOBAHIA"
+										rendered="#{pesquisaMineralController.existeLocalizacaoGeografica(detalhamento)}">
+										<h:graphicImage title="#{bundle.fce_lic_aqui_visualizar_dados_geobahia}" value="/resources/img/ico-arl-relocacao.png" />
+									</p:commandLink>
+									
+									<p:commandLink oncomplete="dialogIncluirPropesccao.show()" 
+										update="dialogIncluirPropesccao" process="@this"
+										disabled="#{pesquisaMineralController.cadastro.visualizar}">
+										<h:graphicImage title="#{bundle.btn_editar}" value="/resources/img/ico-editar.png" />
+										<f:setPropertyActionListener value="#{detalhamento}" target="#{pesquisaMineralController.prospecaoDetalhamento}"/>
+									</p:commandLink>
+									
+									<p:commandLink oncomplete="confirmaExclusaoProspeccaoMineral.show()" 
+										process="@this"
+										disabled="#{pesquisaMineralController.cadastro.visualizar}">
+										<h:graphicImage title="#{bundle.geral_lbl_excluir}" value="/resources/img/ico-excluir.png" />
+										<f:setPropertyActionListener value="#{detalhamento}" target="#{pesquisaMineralController.prospecaoDetalhamento}"/>
+									</p:commandLink>
+								</p:column>
+							</p:dataTable>
+						
+						</h:panelGrid>
+					</h:panelGrid>
+				</h:panelGrid>
+				<h:panelGroup id="groupBotao" style="float:right; margin-top:20px;">
+					<p:commandButton value="#{bundle.geral_lbl_excluir}" update="tabCadastroPesquisaMineral:formAbaCaracterizacaoAtividade:gridPanelProcessoDnpm"
+						style="width:90px;" actionListener="#{pesquisaMineralController.excluirProcessoDnpm(processoDnpm)}"
+						disabled="#{pesquisaMineralController.cadastro.visualizar}"/>
+					<p:commandButton value="#{bundle.geral_lbl_salvar}" 
+						style="width:90px; margin-left:20px;" actionListener="#{pesquisaMineralController.salvarAccordionProcessoDnpm(processoDnpm)}"
+						disabled="#{pesquisaMineralController.cadastro.visualizar}"/>
+				</h:panelGroup>
+			</p:tab>
+		</p:accordionPanel>
+	</h:panelGrid>
+		
+</ui:composition>

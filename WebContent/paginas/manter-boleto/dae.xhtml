@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui">
+	
+	<p:dialog widgetVar="dae" dynamic="true" appendToBody="true" position="center" closable="true" width="500" height="270" showHeader="false" resizable="false">
+		<h:form id="taxaDae">
+			<h1 style="font-size: 14px">Calcular Taxa para DAEs</h1>
+			
+			<br/>
+			
+			<h:panelGrid>
+				<h:outputText value="Ato Ambiental" />
+				<h:outputText value="#{daeController.detalhamentoBoletoACalcular.ideAtoAmbiental.nomAtoAmbiental}" style="font-weight: bold;"/>
+				
+				<br/>
+				
+				</h:panelGrid>
+					<h:panelGrid columns="3">
+						<h:outputText value="Valor do DAE - Certificado" />
+						<h:outputText value="R$" />
+						<p:inputText size="12" disabled="true" value="#{daeController.detalhamentoBoletoACalcular.valorCertificadoFormatado}" />
+					</h:panelGrid>
+				<h:panelGrid>
+				
+				<h:outputText value="Existe área a ser vistoriada para este ato?" />
+				
+				<p:selectOneRadio id="comboVistoria" value="#{daeController.detalhamentoBoletoACalcular.existeArea}" disabled="true">
+					<f:selectItem itemLabel="Sim" itemValue="#{true}" />
+					<f:selectItem itemLabel="Não" itemValue="#{false}"/>
+					<p:ajax event="change" listener="#{daeController.zerarArea()}" process="@this" update="area_dae"  />
+				</p:selectOneRadio>
+			</h:panelGrid>
+			
+			<h:panelGrid id="area_dae">	
+				<h:panelGrid columns="3" rendered="#{daeController.detalhamentoBoletoACalcular.existeArea}">
+					<h:outputText value="Informe a área a ser vistoriada" />
+					<p:inputText size="12" value="#{daeController.detalhamentoBoletoACalcular.areaVistoriada}" converter="bigConverter" maxlength="12" 
+					styleClass="campoNumericoComDecimal-4">
+						<f:convertNumber pattern="#,##0.0000" locale="pt_BR" />
+					</p:inputText>
+					<h:outputText value="ha" />
+				</h:panelGrid>
+			</h:panelGrid>	
+			
+			<br/>
+			<h:panelGrid columns="2" style="float:right">
+				<p:commandButton value="Salvar" actionListener="#{daeController.gerarValorDAE()}" process="@form" update="boleto" oncomplete="dae.hide()" />
+				<p:commandButton value="Cancelar" immediate="true" process="@this" oncomplete="dae.hide()" />
+			</h:panelGrid>
+		</h:form>
+	</p:dialog>	
+</ui:composition>

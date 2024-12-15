@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui">
+
+	<p:dialog header="Selecionar Empreendimento" 
+		widgetVar="dialogSelecionarEmpreendimento" 
+		id="dialogSelecionarEmpreendimento" 
+		modal="true" 
+		resizable="false" 
+		position="center">
+		<p:ajax event="close" update="formDialogEmpreendimento" listener="#{selecionarEmpreendimentoController.limpar()}" />
+		
+		<h:form id="formDialogEmpreendimento">
+			
+			<h:panelGrid columns="2">
+				<h:outputText value="Nome:" />
+				<p:spacer width="0" height="12"/>
+				
+				<p:inputText value="#{selecionarEmpreendimentoController.nomeEmpreendimento}" style="width: 200px;"/>
+				<p:spacer width="0" height="12"/>
+				
+			    <p:commandButton value="Consultar" 
+			    	actionListener="#{selecionarEmpreendimentoController.consultarEmpreendimento()}" 
+			    	update="formDialogEmpreendimento:dataTableEmpreendimentos"
+			    	style="float:left; margin-top:10px;"/>
+			    <p:commandButton value="Incluir Novo Empreendimento" 
+			    	onclick="dialogSelecionarEmpreendimento.hide();"
+			    	action="#{selecionarEmpreendimentoController.incluirNovoEmpreendimento}" 
+			    	ajax="false" 
+			    	style="float:right; margin-top:10px;"/>
+				
+			</h:panelGrid>
+						
+			<h:panelGrid style="width:442px;">
+				<p:dataTable id="dataTableEmpreendimentos" var="empreendimento" value="#{selecionarEmpreendimentoController.listaEmpreendimento}" lazy="true"
+					paginator="true" rows="8" paginatorPosition="bottom" paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}"
+					emptyMessage="#{bundle.consultapf_msg_empty_list}" widgetVar="empreendimento" style="width: 100%;">
+		
+					<p:column style="width: 300px;" >
+						<f:facet name="header">
+							<h:outputText value="#{bundle.consulta_empree_nome}" />
+						</f:facet>
+						
+						<p:commandLink oncomplete="dialogSelecionarEmpreendimento.hide()" update="tabViewCerh:abaDadosGerais" process="@this" ajax="true">
+							<h:outputText value="#{empreendimento.nomEmpreendimento}" />
+							<f:setPropertyActionListener value="#{empreendimento}" target="#{selecionarEmpreendimentoController.empreendimentoSelecionado}" />
+						</p:commandLink>
+					</p:column>
+		
+					<p:column style="width: 100px;" >
+						<f:facet name="header">
+							<h:outputText value="#{bundle.consulta_empree_municipio}" />
+						</f:facet>
+		
+						<h:outputText value="#{empreendimento.municipio.nomMunicipio}" />
+					</p:column>
+				</p:dataTable>
+			</h:panelGrid>
+		</h:form>
+	</p:dialog>
+</ui:composition>

@@ -1,0 +1,571 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+	<p:fieldset>
+		<h:panelGrid>
+			<br />
+			<h:outputText value="Shape Original" />
+			<br />
+			<h:panelGrid>
+			<!-- Tebela das Abas LP, RL e VN -->
+				<p:dataTable  var="original" value="#{atualizarShapesController.listaImoveis}" lazy="true" paginator="true" rows="8" paginatorPosition="bottom" widgetVar="tblImovel"
+					paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}" 
+					rendered="#{atualizarShapesController.activeIndex != 3 and atualizarShapesController.activeIndex != 4 and atualizarShapesController.activeIndex != 5}"
+					emptyMessage="#{bundle.cefir_msg_A012}" >
+
+					<p:column style="width: 100px;">
+						<f:facet name="header">
+							<h:outputText value="Identificador" />
+						</f:facet>
+						<h:outputText value="#{original.ideLocalizacaoGeografica.ideLocalizacaoGeografica}" rendered="#{atualizarShapesController.activeIndex == 0}" />
+						<h:outputText value="#{original.reservaLegal.ideLocalizacaoGeografica.ideLocalizacaoGeografica}" rendered="#{atualizarShapesController.activeIndex == 1}" />
+						<h:outputText value="#{original.vegetacaoNativa.ideLocalizacaoGeografica.ideLocalizacaoGeografica}" rendered="#{atualizarShapesController.activeIndex == 2}" />
+					</p:column>
+
+					<p:column style="width: 50px;">
+						<f:facet name="header">
+							<h:outputText value="Tipo" />
+						</f:facet>
+						<h:outputText value="#{original.ideLocalizacaoGeografica.ideClassificacaoSecao.nomClassificacaoSecao}" rendered="#{atualizarShapesController.activeIndex == 0}" />
+						<h:outputText value="#{original.reservaLegal.ideLocalizacaoGeografica.ideClassificacaoSecao.nomClassificacaoSecao}" rendered="#{atualizarShapesController.activeIndex == 1}" />
+						<h:outputText value="#{original.vegetacaoNativa.ideLocalizacaoGeografica.ideClassificacaoSecao.nomClassificacaoSecao}" rendered="#{atualizarShapesController.activeIndex == 2}" />
+					</p:column>
+
+					<p:column style="width: 170px;">
+						<f:facet name="header">
+							<h:outputText value="Sistema de coordenadas" />
+						</f:facet>
+						<h:outputText value="#{original.ideLocalizacaoGeografica.ideSistemaCoordenada.nomSistemaCoordenada}"  rendered="#{atualizarShapesController.activeIndex == 0}" />
+						<h:outputText value="#{original.reservaLegal.ideLocalizacaoGeografica.ideSistemaCoordenada.nomSistemaCoordenada}"  rendered="#{atualizarShapesController.activeIndex == 1}" />
+						<h:outputText value="#{original.vegetacaoNativa.ideLocalizacaoGeografica.ideSistemaCoordenada.nomSistemaCoordenada}" rendered="#{atualizarShapesController.activeIndex == 2}" />
+					</p:column>
+
+					<p:column style="width: 80px;">
+						<f:facet name="header">
+							<h:outputText value="Área (ha)" />
+						</f:facet>
+						
+						<h:outputText value="#{atualizarShapesController.getBuscarAreaShape(original.ideLocalizacaoGeografica)}" rendered="#{atualizarShapesController.activeIndex == 0}" >
+							<f:converter converterId="doubleQuatroCasasDecimaisConverter"/>
+						</h:outputText>
+						
+						<h:outputText value="#{atualizarShapesController.getBuscarAreaShape(original.reservaLegal.ideLocalizacaoGeografica)}" rendered="#{atualizarShapesController.activeIndex == 1}" >
+							<f:converter converterId="doubleQuatroCasasDecimaisConverter"/>
+						</h:outputText>
+											
+						<h:outputText value="#{atualizarShapesController.getBuscarAreaShape(original.vegetacaoNativa.ideLocalizacaoGeografica)}" rendered="#{atualizarShapesController.activeIndex == 2}" >
+							<f:converter converterId="doubleQuatroCasasDecimaisConverter"/>
+						</h:outputText>
+												
+					</p:column>
+
+					<p:column style="text-align: center; width: 80px;">
+						<f:facet name="header">
+							<h:outputText value="#{bundle.geral_lbl_acoes}" />
+						</f:facet>
+						<h:panelGrid style="color:white;" columns="5">
+							
+							<h:outputLink value="#{atualizarShapesController.caminhoDesenharGeoBahia}" title="GEOBAHIA" rendered="#{atualizarShapesController.activeIndex != 0}" target="_blank">  
+						        <h:graphicImage title="Visualizar" value="/resources/img/ico-arl-relocacao.png" /> 
+						        <f:param name="acao" value="view"/>
+						        <f:param name="idloc" value="#{atualizarShapesController.idlocImovelRural(original)}"/>
+						        <f:param name="tipo" value="#{atualizarShapesController.tipoImovelRural}"/>
+				    		</h:outputLink> 
+				    		
+				    		<h:outputLink value="#{atualizarShapesController.caminhoDesenharGeoBahia}" title="GEOBAHIA" 
+				    		rendered="#{atualizarShapesController.activeIndex == 0}" target="_blank">  
+						        <h:graphicImage title="Visualizar" value="/resources/img/ico-arl-relocacao.png" /> 
+						        <f:param name="acao" value="view"/>
+						        <f:param name="idimov" value="#{atualizarShapesController.imovelRural.ideImovelRural}"/>
+				    		</h:outputLink> 
+				    		<!-- Melhoria #9788 -->
+				    		<p:commandLink title="Download dos arquivos (SHP, DBF e SHX) originais" onclick="carregarDownloadArquivosSelecionado()" oncomplete="abrirModalDownloadShapes()" style="margin: 0.7px;" process="@this" image="ui-icon ui-icon-close">
+								<h:graphicImage title="Download dos arquivos (SHP, DBF e SHX) originais" value="/resources/img/ico-download.png" />
+							</p:commandLink> 
+							<p:remoteCommand name="carregarDownloadArquivosSelecionado" actionListener="#{atualizarShapesController.carregarDownloadArquivosSelecionado(original)}"/>
+							<p:remoteCommand name="abrirModalDownloadShapes" actionListener="#{atualizarShapesController.carregarDownloadShapes()}"/>
+				    		<!-- FIM Melhoria #9788 -->
+				    		
+							<p:commandLink  title="Incluir Shape Ajustado" onclick="carregarImovelSelecionado()" oncomplete="abrirModalShapes()" disabled="#{atualizarShapesController.incluirShape}" 
+								 style="margin: 0.7px;" process="@this" image="ui-icon ui-icon-close">
+								<h:graphicImage title="Incluir Shape Ajustado" value="/resources/img/ico-upload.gif" />
+							</p:commandLink> 
+							<p:remoteCommand name="carregarImovelSelecionado" actionListener="#{atualizarShapesController.setarImovelSelcionado(original)}"/>
+							<p:remoteCommand name="abrirModalShapes" actionListener="#{atualizarShapesController.atualizarShapes()}"/>
+						</h:panelGrid>
+					</p:column>
+				</p:dataTable>
+				
+				<!--Tabela da Aba Área de Preservação Permanente -->
+				<p:dataTable  var="original" value="#{atualizarShapesController.appCollection}" lazy="true" rendered="#{atualizarShapesController.activeIndex == 3}"
+					paginator="true" rows="8" paginatorPosition="bottom" paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}"
+					emptyMessage="#{bundle.cefir_msg_A012}" widgetVar="tblImovel"  rowIndexVar="rowIndex" >
+
+					<p:column style="width: 100px;">
+						<f:facet name="header">
+							<h:outputText value="Identificador" />
+						</f:facet>
+						<h:outputText value="#{original.ideLocalizacaoGeografica.ideLocalizacaoGeografica}"  />
+					</p:column>
+					
+					<p:column style="width: 50px;">
+						<f:facet name="header">
+							<h:outputText value="Tipo" />
+						</f:facet>
+						<h:outputText value="#{original.ideLocalizacaoGeografica.ideClassificacaoSecao.nomClassificacaoSecao}" />
+					</p:column>
+
+					<p:column style="width: 170px;">
+						<f:facet name="header">
+							<h:outputText value="Sistema de coordenadas" />
+						</f:facet>
+						<h:outputText value="#{original.ideLocalizacaoGeografica.ideSistemaCoordenada.nomSistemaCoordenada}" />
+					</p:column>
+
+					<p:column style="width: 80px;">
+						<f:facet name="header">
+							<h:outputText value="Área (ha)" />
+						</f:facet>
+						
+						<h:outputText value="#{atualizarShapesController.getBuscarAreaShape(original.ideLocalizacaoGeografica)}">
+							<f:converter converterId="doubleQuatroCasasDecimaisConverter"/>
+						</h:outputText>
+												
+					</p:column>
+
+					<p:column style="text-align: center; width: 80px;"> 
+						<f:facet name="header">
+							<h:outputText value="#{bundle.geral_lbl_acoes}" />
+						</f:facet>
+						<h:panelGrid style="color:white;" columns="5">
+							
+							<h:outputLink value="#{atualizarShapesController.caminhoDesenharGeoBahia}" title="GEOBAHIA" target="_blank">  
+						        <h:graphicImage title="Visualizar" value="/resources/img/ico-arl-relocacao.png" /> 
+						        <f:param name="acao" value="view"/>
+						        <f:param name="idloc" value="#{atualizarShapesController.idlocApp(original)}"/>
+						        <f:param name="tipo" value="#{atualizarShapesController.tipoImovelRural}"/>
+				    		</h:outputLink> 
+				    		
+				    		<!-- Melhoria #9788 -->
+				    		<p:commandLink  title="Download dos arquivos (SHP, DBF e SHX) originais" action="#{atualizarShapesController.carregarDownloadArquivosSelecionado(original)}" onclick="carregarDownloadArquivosSelecionado()" oncomplete="abrirModalDownloadShapes()" style="margin: 0.7px;" process="@this" image="ui-icon ui-icon-close">
+								<h:graphicImage title="Download dos arquivos (SHP, DBF e SHX) originais" value="/resources/img/ico-download.png" />
+							</p:commandLink> 
+							<p:remoteCommand name="carregarDownloadArquivosSelecionado" actionListener="#{atualizarShapesController.carregarDownloadArquivosSelecionado(original)}"/>
+							<p:remoteCommand name="abrirModalDownloadShapes" actionListener="#{atualizarShapesController.carregarDownloadShapes()}"/>
+				    		<!-- FIM Melhoria #9788 -->
+
+							<p:commandLink  title="Incluir Shape Ajustado" action="#{atualizarShapesController.setarAppSelcionado(original)}" onclick="carregarAppSelecionado()" oncomplete="abrirModalShapes()" disabled="#{atualizarShapesController.incluirShapeApp(original)}" 
+								 style="margin: 0.7px;" process="@this" image="ui-icon ui-icon-close">
+								<h:graphicImage title="Incluir Shape Ajustado" value="/resources/img/ico-upload.gif" />
+							</p:commandLink> 
+							<p:remoteCommand name="carregarAppSelecionado" actionListener="#{atualizarShapesController.setarAppSelcionado(original)}"/>
+							<p:remoteCommand name="abrirModalShapes" actionListener="#{atualizarShapesController.atualizarShapes()}"/>
+						</h:panelGrid>
+					</p:column>
+				</p:dataTable>
+								
+				<!--Tabela da Aba RPPN  -->
+				<p:dataTable  var="original" value="#{atualizarShapesController.listaImovelRuralRppn}" lazy="true" paginator="true" rows="8" paginatorPosition="bottom" widgetVar="tblImovel"
+					paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}" 
+					rendered="#{atualizarShapesController.activeIndex == 4}"
+					emptyMessage="#{bundle.cefir_msg_A012}" >
+
+					<p:column style="width: 100px;">
+						<f:facet name="header">
+							<h:outputText value="Identificador" />
+						</f:facet>
+						<h:outputText value="#{original.ideLocalizacaoGeografica.ideLocalizacaoGeografica}"/>
+					</p:column>
+
+					<p:column style="width: 50px;">
+						<f:facet name="header">
+							<h:outputText value="Tipo" />
+						</f:facet>
+						<h:outputText value="#{original.ideLocalizacaoGeografica.ideClassificacaoSecao.nomClassificacaoSecao}"/>
+					</p:column>
+
+					<p:column style="width: 170px;">
+						<f:facet name="header">
+							<h:outputText value="Sistema de coordenadas" />
+						</f:facet>
+						<h:outputText value="#{original.ideLocalizacaoGeografica.ideSistemaCoordenada.nomSistemaCoordenada}" />
+					</p:column>
+
+					<p:column style="width: 80px;">
+						<f:facet name="header">
+							<h:outputText value="Área (ha)" />
+						</f:facet>
+						
+						<h:outputText value="#{atualizarShapesController.getBuscarAreaShape(original.ideLocalizacaoGeografica)}">
+							<f:converter converterId="doubleQuatroCasasDecimaisConverter"/>
+						</h:outputText>
+					</p:column>
+
+					<p:column style="text-align: center; width: 80px;">
+						<f:facet name="header">
+							<h:outputText value="#{bundle.geral_lbl_acoes}" />
+						</f:facet>
+						<h:panelGrid style="color:white;" columns="5">
+							
+							<h:outputLink value="#{atualizarShapesController.caminhoDesenharGeoBahia}" title="GEOBAHIA" target="_blank">  
+						        <h:graphicImage title="Visualizar" value="/resources/img/ico-arl-relocacao.png" /> 
+						        <f:param name="acao" value="view"/>
+						        <f:param name="idloc" value="#{atualizarShapesController.idlocRppn(original)}"/>
+						        <f:param name="tipo" value="#{atualizarShapesController.tipoImovelRural}"/>
+				    		</h:outputLink> 
+				    		
+				    		<!-- Melhoria #9788 -->
+				    		<p:commandLink  title="Download dos arquivos (SHP, DBF e SHX) originais" onclick="carregarDownloadArquivosSelecionado()" oncomplete="abrirModalDownloadShapes()" style="margin: 0.7px;" process="@this" image="ui-icon ui-icon-close">
+								<h:graphicImage title="Download dos arquivos (SHP, DBF e SHX) originais" value="/resources/img/ico-download.png" />
+							</p:commandLink> 
+							<p:remoteCommand name="carregarDownloadArquivosSelecionado" actionListener="#{atualizarShapesController.carregarDownloadArquivosSelecionado(original)}"/>
+							<p:remoteCommand name="abrirModalDownloadShapes" actionListener="#{atualizarShapesController.carregarDownloadShapes()}"/>
+				    		<!-- FIM Melhoria #9788 -->
+														
+							<p:commandLink  title="Incluir Shape Ajustado" onclick="carregarImovelSelecionado()" oncomplete="abrirModalShapes()" disabled="#{atualizarShapesController.incluirShapeRppn}" 
+								 style="margin: 0.7px;" process="@this" image="ui-icon ui-icon-close">
+								<h:graphicImage title="Incluir Shape Ajustado" value="/resources/img/ico-upload.gif" />
+							</p:commandLink> 
+							<p:remoteCommand name="carregarImovelSelecionado" actionListener="#{atualizarShapesController.setarRppnSelecionado(original)}"/>
+							<p:remoteCommand name="abrirModalShapes" actionListener="#{atualizarShapesController.atualizarShapes()}"/>
+						</h:panelGrid>
+					</p:column>
+				</p:dataTable>
+				
+				<!-- Tabela da Aba Atividade Desenvolvida -->
+				<p:dataTable  var="original" value="#{atualizarShapesController.areaProdutivaCollection}" lazy="true" rendered="#{atualizarShapesController.activeIndex == 5}" 
+					paginator="true" rows="8" paginatorPosition="bottom" paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}"
+					emptyMessage="#{bundle.cefir_msg_A012}" widgetVar="tbAtivDesen"   rowIndexVar="rowIndex" >
+
+					<p:column style="width: 100px;">
+						<f:facet name="header">
+							<h:outputText value="Identificador" />
+						</f:facet>
+						<h:outputText value="#{original.ideLocalizacaoGeografica.ideLocalizacaoGeografica}"  />
+					</p:column>
+
+					<p:column style="width: 50px;">
+						<f:facet name="header">
+							<h:outputText value="Tipo" />
+						</f:facet>
+						<h:outputText value="#{original.ideLocalizacaoGeografica.ideClassificacaoSecao.nomClassificacaoSecao}"  />
+					</p:column>
+
+					<p:column style="width: 170px;">
+						<f:facet name="header">
+							<h:outputText value="Sistema de coordenadas" />
+						</f:facet>
+						<h:outputText value="#{original.ideLocalizacaoGeografica.ideSistemaCoordenada.nomSistemaCoordenada}" />
+					</p:column>
+
+					<p:column style="width: 80px;">
+						<f:facet name="header">
+							<h:outputText value="Área (ha)" />
+						</f:facet>
+						
+						<h:outputText value="#{atualizarShapesController.getBuscarAreaShape(original.ideLocalizacaoGeografica)}">
+							<f:converter converterId="doubleQuatroCasasDecimaisConverter"/>
+						</h:outputText>						
+					</p:column>
+
+					<p:column style="text-align: center; width: 80px;">
+						<f:facet name="header">
+							<h:outputText value="#{bundle.geral_lbl_acoes}" />
+						</f:facet>
+						<h:panelGrid style="color:white;" columns="5">
+							<h:outputLink value="#{atualizarShapesController.caminhoDesenharGeoBahia}" title="GEOBAHIA" target="_blank">  
+						        <h:graphicImage title="Visualizar" value="/resources/img/ico-arl-relocacao.png" /> 
+						        <f:param name="acao" value="view"/>
+						        <f:param name="idloc" value="#{atualizarShapesController.idlocAd(original)}"/>
+						        <f:param name="tipo" value="#{atualizarShapesController.tipoImovelRural}"/>
+				    		</h:outputLink> 
+				    		
+				    		<!-- Melhoria #9788 -->
+				    		<p:commandLink  title="Download dos arquivos (SHP, DBF e SHX) originais" action="#{atualizarShapesController.carregarDownloadArquivosSelecionado(original)}" onclick="carregarDownloadArquivosSelecionado()" oncomplete="abrirModalDownloadShapes()" style="margin: 0.7px;" process="@this" image="ui-icon ui-icon-close">
+								<h:graphicImage title="Download dos arquivos (SHP, DBF e SHX) originais" value="/resources/img/ico-download.png" />
+							</p:commandLink> 
+							<p:remoteCommand name="carregarDownloadArquivosSelecionado" actionListener="#{atualizarShapesController.carregarDownloadArquivosSelecionado(original)}"/>
+							<p:remoteCommand name="abrirModalDownloadShapes" actionListener="#{atualizarShapesController.carregarDownloadShapes()}"/>
+				    		<!-- FIM Melhoria #9788 -->
+				    		
+				    		<p:commandLink  title="Incluir Shape Ajustado" action="#{atualizarShapesController.setarAtividadeDesenvolvidaSelecionado(original)}" onclick="carregarImovelSelecionado()" oncomplete="abrirModalShapes()" 
+											disabled="#{atualizarShapesController.incluirShapeAd(original)}" style="margin: 0.7px;" process="@this" image="ui-icon ui-icon-close">
+								<h:graphicImage title="Incluir Shape Ajustado" value="/resources/img/ico-upload.gif" />
+							</p:commandLink> 
+							<p:remoteCommand name="carregarImovelSelecionado" actionListener="#{atualizarShapesController.setarAtividadeDesenvolvidaSelecionado(original)}"/>
+							<p:remoteCommand name="abrirModalShapes" actionListener="#{atualizarShapesController.atualizarShapes()}"/>
+						</h:panelGrid>
+							 
+							 
+					</p:column>
+				</p:dataTable>
+				
+			</h:panelGrid>
+			
+			<p:outputPanel autoUpdate="true">
+				<h:panelGrid>
+					<!--Tabela da Aba LP,RL, VN Shape Alterado -->
+					<p:dataTable  var="alterado"
+						value="#{atualizarShapesController.listaShapeUpldImoveis}" lazy="true" rendered="#{atualizarShapesController.activeIndex != 3 and atualizarShapesController.activeIndex != 4 and atualizarShapesController.activeIndex != 5}"
+						paginator="true" rows="8" paginatorPosition="bottom"
+						paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}"
+						emptyMessage="#{bundle.cefir_msg_A012}" widgetVar="tblImovel">
+
+						<p:column style="width: 185px;" >
+							<f:facet name="header">
+								<h:outputText value="Identificador Shape Original" />
+							</f:facet>
+							<h:outputText value="#{alterado.ideLocalizacaoGeografica.ideLocalizacaoGeografica}" rendered="#{atualizarShapesController.activeIndex == 0}" />
+							<h:outputText value="#{alterado.reservaLegal.ideLocalizacaoGeografica.ideLocalizacaoGeografica}" rendered="#{atualizarShapesController.activeIndex == 1}" />
+							<h:outputText value="#{alterado.vegetacaoNativa.ideLocalizacaoGeografica.ideLocalizacaoGeografica}" rendered="#{atualizarShapesController.activeIndex == 2}" />
+						</p:column>
+						
+						<p:column style="width: 50px;">
+							<f:facet name="header">
+								<h:outputText value="Tipo" />
+							</f:facet>
+							<h:outputText value="#{alterado.ideLocalizacaoGeografica.ideClassificacaoSecao.nomClassificacaoSecao}" rendered="#{atualizarShapesController.activeIndex == 0}" />
+							<h:outputText value="#{alterado.reservaLegal.ideLocalizacaoGeografica.ideClassificacaoSecao.nomClassificacaoSecao}" rendered="#{atualizarShapesController.activeIndex == 1}" />
+							<h:outputText value="#{alterado.vegetacaoNativa.ideLocalizacaoGeografica.ideClassificacaoSecao.nomClassificacaoSecao}" rendered="#{atualizarShapesController.activeIndex == 2}" />
+						</p:column>
+						<p:column style="width: 170px;">
+							<f:facet name="header">
+								<h:outputText value="Sistema de coordenadas" />
+							</f:facet>
+							<h:outputText value="#{alterado.ideLocalizacaoGeografica.ideSistemaCoordenada.nomSistemaCoordenada}"  rendered="#{atualizarShapesController.activeIndex == 0}" />
+							<h:outputText value="#{alterado.reservaLegal.ideLocalizacaoGeografica.ideSistemaCoordenada.nomSistemaCoordenada}"  rendered="#{atualizarShapesController.activeIndex == 1}" />
+							<h:outputText value="#{alterado.vegetacaoNativa.ideLocalizacaoGeografica.ideSistemaCoordenada.nomSistemaCoordenada}" rendered="#{atualizarShapesController.activeIndex == 2}" />
+						</p:column>
+						<p:column style="width: 80px;">
+							<f:facet name="header">
+								<h:outputText value="Área (ha)" />
+							</f:facet>
+													
+							<h:outputText value="#{atualizarShapesController.valAreaLim}" rendered="#{atualizarShapesController.activeIndex == 0}" >
+								<f:converter converterId="doubleQuatroCasasDecimaisConverter" />
+							</h:outputText>
+							<h:outputText value="#{atualizarShapesController.valAreaRL}" rendered="#{atualizarShapesController.activeIndex == 1}" >
+								<f:converter converterId="doubleQuatroCasasDecimaisConverter" />
+							</h:outputText>
+							<h:outputText value="#{atualizarShapesController.valAreaVN}" rendered="#{atualizarShapesController.activeIndex == 2}" >
+								<f:converter converterId="doubleQuatroCasasDecimaisConverter" />
+							</h:outputText>
+							
+						</p:column>
+						<p:column style="text-align: center; width: 50px;">
+							<f:facet name="header">
+								<h:outputText value="#{bundle.geral_lbl_acoes}" />
+							</f:facet>
+							<h:panelGrid style="color:white;" columns="5">
+								
+				    			<h:outputLink value="#{atualizarShapesController.caminhoDesenharGeoBahia}" title="GEOBAHIA" target="_blank">
+									<h:graphicImage title="Visualizar" value="/resources/img/ico-arl-relocacao.png" />
+									<f:param name="acao" value="view" />
+									<f:param name="idimov" value="#{atualizarShapesController.idlocImovelRuralAlterado}"/>
+									<f:param name="tipo" value="#{atualizarShapesController.tipoImovelRural}"/>
+								</h:outputLink>
+								
+								<p:commandLink  title="#{bundle.btn_excluir}" onclick="carregarImovelSelecionado()" oncomplete="excluirShapes()" update="formAtualizacaoShape formAcao"
+									style="margin: 0.7px;" image="ui-icon ui-icon-close" process="excluir">
+									<h:graphicImage title="Excluir" value="/resources/img/ico-excluir.png" />
+								</p:commandLink>
+								<p:remoteCommand name="carregarImovelSelecionado" actionListener="#{atualizarShapesController.setarImovelSelcionado(alterado)}"/>
+								<p:remoteCommand name="excluirShapes" actionListener="#{atualizarShapesController.excluirShapes(true, null)}"/>
+							</h:panelGrid>
+						</p:column>
+					</p:dataTable>
+				
+				<!--Tabela da Aba Área de Preservação Permanente Shape Alterado -->
+				<p:dataTable  var="app" value="#{atualizarShapesController.listaAppsAlterados}" lazy="true" rendered="#{atualizarShapesController.activeIndex == 3}"
+					paginator="true" rows="8" paginatorPosition="bottom" paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}"
+					emptyMessage="#{bundle.cefir_msg_A012}" widgetVar="tblImovel"  rowIndexVar="rowIndex" >
+
+					<p:column style="width: 100px;">
+						<f:facet name="header">
+							<h:outputText value="Identificador" />
+						</f:facet>
+						<h:outputText value="#{app.ideLocalizacaoGeografica.ideLocalizacaoGeografica}"  />
+					</p:column>
+
+					<p:column style="width: 50px;">
+						<f:facet name="header">
+							<h:outputText value="Tipo" />
+						</f:facet>
+						<h:outputText value="#{app.ideLocalizacaoGeografica.ideClassificacaoSecao.nomClassificacaoSecao}" rendered="#{atualizarShapesController.activeIndex == 3}" />
+					</p:column>
+
+					<p:column style="width: 170px;">
+						<f:facet name="header">
+							<h:outputText value="Sistema de coordenadas" />
+						</f:facet>
+						<h:outputText value="#{app.ideLocalizacaoGeografica.ideSistemaCoordenada.nomSistemaCoordenada}" rendered="#{atualizarShapesController.activeIndex == 3}" />
+					</p:column>
+
+					<p:column style="width: 80px;">
+						<f:facet name="header">
+							<h:outputText value="Área (ha)" />
+						</f:facet>
+						
+						<h:outputText value="#{atualizarShapesController.valAreaAPP}">
+							<f:converter converterId="doubleQuatroCasasDecimaisConverter" />
+						</h:outputText>
+						
+					</p:column>
+
+					<p:column style="text-align: center; width: 50px;">
+						<f:facet name="header">
+							<h:outputText value="#{bundle.geral_lbl_acoes}" />
+						</f:facet>
+						<h:panelGrid style="color:white;" columns="5">
+							
+				    		<h:outputLink value="#{atualizarShapesController.caminhoDesenharGeoBahia}" title="GEOBAHIA" target="_blank">
+								<h:graphicImage title="Visualizar" value="/resources/img/ico-arl-relocacao.png" /> 
+								<f:param name="acao" value="view" />
+								<f:param name="idimov" value="#{atualizarShapesController.imovelRural.ideImovelRural}" />
+								<f:param name="tipo" value="#{atualizarShapesController.tipoImovelRural}"/>
+								<f:param name="subtipo" value="#{app.ideTipoApp.ideTipoApp}"/>
+								<f:param name="identificador" value="#{app.codigoPersistirShape}" />
+							</h:outputLink>
+
+							<p:commandLink  title="#{bundle.btn_excluir}" action="#{atualizarShapesController.excluirShapes(true, null)}" update="formAtualizacaoShape formAcao"
+									style="margin: 0.7px;" image="ui-icon ui-icon-close" process="@this" >
+									<h:graphicImage title="Excluir" value="/resources/img/ico-excluir.png" />
+									<f:setPropertyActionListener value="#{app}" target="#{atualizarShapesController.appSelecionada}" />
+							</p:commandLink>
+						</h:panelGrid>
+					</p:column>
+				</p:dataTable>
+				
+				<!--Tabela da Aba RPPN Shape Alterado -->
+				<p:dataTable  var="alterado" value="#{atualizarShapesController.listaImovelRuralRppnAlterados}" lazy="true" rendered="#{atualizarShapesController.activeIndex == 4}"
+					paginator="true" rows="8" paginatorPosition="bottom" paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}"
+					emptyMessage="#{bundle.cefir_msg_A012}" widgetVar="tblImovel"  rowIndexVar="rowIndex" >
+
+					<p:column style="width: 100px;">
+						<f:facet name="header">
+							<h:outputText value="Identificador" />
+						</f:facet>
+						<h:outputText value="#{alterado.ideLocalizacaoGeografica.ideLocalizacaoGeografica}"  />
+					</p:column>
+
+					<p:column style="width: 50px;">
+						<f:facet name="header">
+							<h:outputText value="Tipo" />
+						</f:facet>
+						<h:outputText value="#{alterado.ideLocalizacaoGeografica.ideClassificacaoSecao.nomClassificacaoSecao}" />
+					</p:column>
+
+					<p:column style="width: 170px;">
+						<f:facet name="header">
+							<h:outputText value="Sistema de coordenadas" />
+						</f:facet>
+						<h:outputText value="#{alterado.ideLocalizacaoGeografica.ideSistemaCoordenada.nomSistemaCoordenada}" />
+					</p:column>
+
+					<p:column style="width: 80px;">
+						<f:facet name="header">
+							<h:outputText value="Área (ha)" />
+						</f:facet>
+						
+						<h:outputText value="#{atualizarShapesController.valAreaRPPN}">
+							<f:converter converterId="doubleQuatroCasasDecimaisConverter" />
+						</h:outputText>
+						
+					</p:column>
+
+					<p:column style="text-align: center; width: 50px;">
+						<f:facet name="header">
+							<h:outputText value="#{bundle.geral_lbl_acoes}" />
+						</f:facet>
+						<h:panelGrid style="color:white;" columns="5">
+							
+							<h:outputLink value="#{atualizarShapesController.caminhoDesenharGeoBahia}" title="GEOBAHIA" target="_blank">  
+						        <h:graphicImage title="Visualizar" value="/resources/img/ico-arl-relocacao.png" /> 
+						        <f:param name="acao" value="view"/>
+						        <f:param name="idimov" value="#{atualizarShapesController.imovelRural.ideImovelRural}"/>
+						        <f:param name="tipo" value="#{atualizarShapesController.tipoImovelRural}"/>
+				    		</h:outputLink>
+				    		
+							<p:commandLink  title="#{bundle.btn_excluir}" action="#{atualizarShapesController.excluirShapes(true, null)}" update="formAtualizacaoShape formAcao"
+									style="margin: 0.7px;" image="ui-icon ui-icon-close" process="@this">
+									<h:graphicImage title="Excluir" value="/resources/img/ico-excluir.png" />
+									<f:setPropertyActionListener value="#{alterado}" target="#{atualizarShapesController.rppnSelecionado}" />
+							</p:commandLink>
+							
+						</h:panelGrid>
+					</p:column>
+				</p:dataTable>
+				
+				<!--Tabela da Aba Atividade Desenvolvida Shape Alterado -->
+				<p:dataTable  var="alterado" value="#{atualizarShapesController.listaAreasProdutivasAlterados}" lazy="true" rendered="#{atualizarShapesController.activeIndex == 5}"
+					paginator="true" rows="8" paginatorPosition="bottom" paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}"
+					emptyMessage="#{bundle.cefir_msg_A012}" widgetVar="tblImovel"  rowIndexVar="rowIndex" >
+
+					<p:column style="width: 100px;">
+						<f:facet name="header">
+							<h:outputText value="Identificador" />
+						</f:facet>
+						<h:outputText value="#{alterado.ideLocalizacaoGeografica.ideLocalizacaoGeografica}"  />
+					</p:column>
+
+					<p:column style="width: 50px;">
+						<f:facet name="header">
+							<h:outputText value="Tipo" />
+						</f:facet>
+						<h:outputText value="#{alterado.ideLocalizacaoGeografica.ideClassificacaoSecao.nomClassificacaoSecao}"/>
+					</p:column>
+
+					<p:column style="width: 170px;">
+						<f:facet name="header">
+							<h:outputText value="Sistema de coordenadas" />
+						</f:facet>
+						<h:outputText value="#{alterado.ideLocalizacaoGeografica.ideSistemaCoordenada.nomSistemaCoordenada}"/>
+					</p:column>
+
+					<p:column style="width: 80px;">
+						<f:facet name="header">
+							<h:outputText value="Área (ha)" />
+						</f:facet>
+						
+						<h:outputText value="#{alterado.valArea}">
+							<f:converter converterId="doubleQuatroCasasDecimaisConverter" />
+						</h:outputText>
+					</p:column>
+
+					<p:column style="text-align: center; width: 50px;">
+						<f:facet name="header">
+							<h:outputText value="#{bundle.geral_lbl_acoes}" />
+						</f:facet>
+						<h:panelGrid style="color:white;" columns="4">
+							
+							<h:outputLink value="#{atualizarShapesController.caminhoDesenharGeoBahia}" title="GEOBAHIA" target="_blank">
+								<h:graphicImage title="Visualizar" value="/resources/img/ico-arl-relocacao.png" /> 
+								<f:param name="acao" value="view" />
+								<f:param name="idimov" value="#{atualizarShapesController.imovelRural.ideImovelRural}" />
+								<f:param name="tipo" value="#{atualizarShapesController.tipoImovelRural}"/>
+								<f:param name="identificador" value="#{alterado.codigoPersistirShape}"/>
+							</h:outputLink>
+							
+							<p:commandLink  title="#{bundle.btn_excluir}" actionListener="#{atualizarShapesController.excluirShapes(true,alterado)}" 
+									style="margin: 0.7px;" image="ui-icon ui-icon-close" process="@this">
+									<h:graphicImage title="Excluir" value="/resources/img/ico-excluir.png" />
+							</p:commandLink>
+						</h:panelGrid>
+					</p:column>
+				</p:dataTable>
+				
+				</h:panelGrid>
+			</p:outputPanel>
+			
+			 <h:panelGrid>  
+				<h:outputText value="* Observação:" />
+				<p:inputTextarea value="#{atualizarShapesController.observacoes}" style="width:700px; height:100px;">
+					<p:ajax event="blur" process="@this" listener="#{atualizarShapesController.validarObservacao}" update="@formAtualizacaoShape:abasAtualizacaoShapes @formAcao"/>
+				</p:inputTextarea>  
+			 </h:panelGrid> 
+		</h:panelGrid> 
+	</p:fieldset>
+</ui:composition>

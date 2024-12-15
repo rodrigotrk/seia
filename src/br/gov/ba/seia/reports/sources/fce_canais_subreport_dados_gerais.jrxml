@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="fce_canais_subreport1" language="java" pageWidth="495" pageHeight="572" orientation="Landscape" columnWidth="495" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="2cf8976d-c106-4eea-994a-20481969f25b">
+	<property name="ireport.zoom" value="2.0000000000000018"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="ide_fce" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT a.ide_fce_canal, a.val_vazao, a.val_area_ocupada, a.nom_rio
+  FROM fce_canal as a
+  where ide_fce = $P{ide_fce}]]>
+	</queryString>
+	<field name="ide_fce_canal" class="java.lang.Integer"/>
+	<field name="val_vazao" class="java.math.BigDecimal"/>
+	<field name="val_area_ocupada" class="java.math.BigDecimal"/>
+	<field name="nom_rio" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<detail>
+		<band height="35" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="b774d322-2607-4612-9ccf-5130298f1455" positionType="Float" mode="Opaque" x="0" y="0" width="495" height="17" backcolor="#DDDDDD"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" isBold="true"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<text><![CDATA[Dados Gerais]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="a4c97a91-93c6-4b61-b205-5d1907c741ea" x="67" y="23" width="65" height="12"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{val_vazao}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="2dd4a884-40df-46f0-abea-5cc982e30fc7" positionType="Float" x="8" y="23" width="59" height="12"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Arial" size="9" isBold="false"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<text><![CDATA[Vazão (m³/s):]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="d6963041-76d2-48d8-bd88-aa947a99b81a" x="132" y="23" width="80" height="12"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="9"/>
+				</textElement>
+				<text><![CDATA[Área Ocupada (m²):]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="c11db83a-6f4a-4a61-b709-14ce6605ce18" x="213" y="23" width="44" height="12"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{val_area_ocupada}]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="37">
+			<staticText>
+				<reportElement uuid="a29748d9-2ccc-41d2-be13-dbe29de80d01" x="0" y="4" width="487" height="13"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="9" isBold="true" isUnderline="false"/>
+				</textElement>
+				<text><![CDATA[Característica do Canal]]></text>
+			</staticText>
+			<subreport>
+				<reportElement uuid="62779ed5-dfaf-4de8-86a0-4bb08cf79755" x="0" y="19" width="487" height="18"/>
+				<subreportParameter name="ide_fce_canal">
+					<subreportParameterExpression><![CDATA[$F{ide_fce_canal}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "fce_canais_subreport_dados_gerais_subreport_caracteristicas_canal.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+		<band height="33">
+			<staticText>
+				<reportElement uuid="6a78042d-b9ac-450f-9dc9-d6f0e36bcff5" mode="Transparent" x="0" y="2" width="50" height="12" forecolor="#000000" backcolor="#FFFFFF"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="Arial" size="9" isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<text><![CDATA[Finalidade]]></text>
+			</staticText>
+			<subreport>
+				<reportElement uuid="36f93a9d-3f0a-4337-bfb9-e80a4a06232f" x="0" y="14" width="487" height="19"/>
+				<subreportParameter name="ide_fce_canal">
+					<subreportParameterExpression><![CDATA[$F{ide_fce_canal}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "fce_canais_subreport_dados_gerais_subreport_tipo_uso_agua.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+	</detail>
+</jasperReport>

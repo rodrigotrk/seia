@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui">
+	
+	<p:dialog id="_dlgCaracterizacaoCapSubterranea"
+		widgetVar="dlgCaracterizacaoCapSubterranea"
+		header="#{bundle.cerh_aba_cap_sub_caracterizcao}" 
+		position="top"
+		appendToBody="false" 
+		draggable="true" 
+		dynamic="true" 
+		width="1000"
+		height="580" 
+		resizable="false"
+		modal="true">
+		
+		<p:ajax event="close" listener="#{cerhController.abaCaptacaoSubterranea.limparCaracterizacao()}" update="tabViewCerh:frmCaptacaoSubterranea:tableCaracterizacaoSubterranea"/>
+		
+		<ui:include src="/paginas/manter-cerh/captacao-subterranea/incluirCaracterizacao.xhtml" />
+	</p:dialog>
+	
+	<p:dialog id="_dialogIncluirDadosAbsIndustrialSubterranea" 
+		widgetVar="dialogIncluirDadosAbsIndustrialSubterranea"
+		header="#{bundle.geral_lbl_incluir} #{bundle.cerh_finalidade_dados_de} #{bundle.cerh_finalidade_abs_industrial}"
+		position="center" 
+	  	appendToBody="false" 
+		draggable="true"
+		dynamic="true"
+		resizable="false" 
+		modal="true"
+		width="485"
+		height="200">
+		<ui:include src="/paginas/manter-cerh/captacao-subterranea/incluirDadosAbastecimentoIndustrial.xhtml" />
+	</p:dialog>
+	
+	<p:dialog id="_dialogIncluirDadosMineracaoSubterranea" 
+		widgetVar="dialogIncluirDadosMineracaoSubterranea"
+		header="#{bundle.geral_lbl_incluir} #{bundle.cerh_finalidade_dados_de} #{bundle.cerh_finalidade_mineracao}"
+		position="center" 
+	  	appendToBody="false" 
+		draggable="true"
+		dynamic="true"
+		resizable="false" 
+		modal="true"
+		width="485"
+		height="200">
+		<ui:include src="/paginas/manter-cerh/captacao-subterranea/incluirDadosMineracao.xhtml" />
+	</p:dialog>
+	
+	<p:confirmDialog id="_confirmExcluirCaracterizacaoSubterranea" 
+		widgetVar="confirmExcluirCaracterizacaoSubterranea" 
+		header="Confirmação" 
+		appendToBody="true" 
+		message="#{bundle.lac_dadosGerais_msg004}" 
+		severity="alert">
+		<h:form>
+			<p:commandButton value="Sim"
+				actionListener="#{cerhController.abaCaptacaoSubterranea.excluirCaracterizacao()}" 
+				update="tabViewCerh:frmCaptacaoSubterranea:groupCoordenadasSubterranea" 
+				oncomplete="confirmExcluirCaracterizacaoSubterranea.hide();"/>
+			<p:commandButton value="Não" onclick="confirmExcluirCaracterizacaoSubterranea.hide();" type="button" global="false"/>
+		</h:form>
+	</p:confirmDialog>
+
+	<p:confirmDialog id="_confirmExcluirAbsIndustrialSubterranea" 
+		widgetVar="confirmExcluirAbsIndustrialSubterranea" 
+		header="Confirmação" 
+		appendToBody="true" 
+		message="#{bundle.lac_dadosGerais_msg004}"   
+		severity="alert">
+		<h:form>
+			<p:commandButton value="Sim"
+				actionListener="#{cerhController.abaCaptacaoSubterranea.excluirDadoAbsIndustrial()}" 
+				update="formCaracterizacaoSubterranea:finalidadeSelecionadasSubterranea" 
+				oncomplete="confirmExcluirAbsIndustrialSubterranea.hide();"/>
+			<p:commandButton value="Não" onclick="confirmExcluirAbsIndustrialSubterranea.hide();" type="button" global="false"/>
+		</h:form>
+	</p:confirmDialog>
+	
+	<p:confirmDialog id="_confirmExcluirMineracaoSubterranea" 
+		widgetVar="confirmExcluirMineracaoSubterranea" 
+		header="Confirmação" 
+		appendToBody="true" 
+		message="#{bundle.lac_dadosGerais_msg004}"   
+		severity="alert">
+		<h:form>
+			<p:commandButton value="Sim"
+				actionListener="#{cerhController.abaCaptacaoSubterranea.excluirDadoMineracao()}" 
+				update="formCaracterizacaoSubterranea:finalidadeSelecionadasSubterranea" 
+				oncomplete="confirmExcluirMineracaoSubterranea.hide();"/>
+			<p:commandButton value="Não" onclick="confirmExcluirMineracaoSubterranea.hide();" type="button" global="false"/>
+		</h:form>
+	</p:confirmDialog>
+	
+	<p:confirmDialog id="_confirmExcluirIrrigacaoSubterranea" 
+		widgetVar="confirmExcluirIrrigacaoSubterranea" 
+		header="Confirmação" 
+		appendToBody="true" 
+		message="#{bundle.lac_dadosGerais_msg004}"   
+		severity="alert">
+		<h:form>
+			<p:commandButton value="Sim"
+				actionListener="#{cerhController.abaCaptacaoSubterranea.excluirCultura()}" 
+				update="formCaracterizacaoSubterranea:finalidadeSelecionadasSubterranea" 
+				oncomplete="confirmExcluirIrrigacaoSubterranea.hide();"/>
+			<p:commandButton value="Não" onclick="confirmExcluirIrrigacaoSubterranea.hide();" type="button" global="false"/>
+		</h:form>
+	</p:confirmDialog>
+	
+	<p:confirmDialog 
+		width="550"
+		id="confirmarPreencherMesCapSub" widgetVar="confirmarPreencherMesCapSub" 
+		message="Um ou mais meses podem não conter o número espeficidado de dias. Deseja preencher os meses subsequentes com o valor máximo permitido?" severity="alert">
+		<h:form>
+			<p:commandButton value="#{bundle.btn_sim}" 
+				actionListener="#{cerhController.abaCaptacaoSubterranea.replicarDiasMesMaximoDias()}"
+				update="formCaracterizacaoSubterranea:tableDadosDeclaradosSubterranea formCaracterizacaoSubterranea:gridDadosDeclaradosMediaSubterranea" 
+				oncomplete="confirmarPreencherMesCapSub.hide();"/>
+			<p:commandButton value="#{bundle.btn_nao}" onclick="confirmarPreencherMesCapSub.hide()" />
+		</h:form>
+	</p:confirmDialog>
+	
+</ui:composition>

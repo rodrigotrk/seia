@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui">
+
+	<p:selectOneMenu id="outrosUsos" 
+    	layout="pageDirection"
+    	value="#{cerhController.abaCaptacaoSuperficial.cerhFinalidadeOutrosUsos.ideCerhCaptacaoOutrosUso.ideCerhOutrosUsos}"
+		converter="simpleEntityConverter"
+    	valueChangeListener="#{cerhController.abaCaptacaoSuperficial.changeFinalidadeOutrosUsos()}"
+    	styleClass="grid-border-15"
+    	disabled="#{cerhController.abaCaptacaoSuperficial.dto.caracterizacaoDTO.visualizacao}">
+    	<f:selectItem itemLabel="Selecione" itemValue="#{null}"/>
+    	<f:selectItems value="#{cerhController.abaCaptacaoSuperficial.cerhOutrosUsosCollection}" 
+    		var="outroUso"
+    		itemValue="#{outroUso}"
+    		itemLabel="#{outroUso.dscOutrosUsos}"/>
+		<p:ajax event="change" process="@this"/>
+    </p:selectOneMenu>
+
+</ui:composition>

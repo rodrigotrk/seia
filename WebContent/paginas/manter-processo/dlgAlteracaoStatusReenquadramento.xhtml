@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui">
+
+
+
+	<p:confirmDialog header="Confirmação"
+		id="dialogConfirmarNaoAlteracaoDeStatusReenquadramento"
+		widgetVar="dialogConfirmarNaoAlteracaoDeStatusReenquadramento"
+		appendToBody="true" message="#{bundle.geral_msg_alteracao_nao_salvas}" severity="alert">
+		<h:form id="formConfirmarNaoAlteracaoDeStatusReenquadramento">
+		<h:panelGroup layout="block" style="text-align: right;" >
+					<p:commandButton id="btnNao" value="#{bundle.geral_lbl_nao}"
+				onclick="dialogConfirmarNaoAlteracaoDeStatusReenquadramento.hide();" />
+					<p:commandButton id="btnSim"
+				onclick="dialogConfirmarNaoAlteracaoDeStatusReenquadramento.hide();dlgAlteracaoStatusReenquadramento.hide();"
+					value="#{bundle.geral_lbl_sim}" process="@this" action="#{alterarStatusReenquadramentoController.limparStatus()}" />
+		</h:panelGroup>
+		</h:form>
+	</p:confirmDialog>
+	
+	<p:confirmDialog header="Confirmação"
+		id="dialogConfirmarAlteracaoStatusReenquadramento"
+		widgetVar="dialogConfirmarAlteracaoStatusReenquadramento"
+		appendToBody="true" message="#{bundle.reenquadramento_mensagem_001}" severity="alert">
+		<h:form id="formConfirmarAlteracaoStatusReenquadramento">
+			<h:panelGroup layout="block" style="text-align: right;" >
+				<p:commandButton id="btnNao" value="#{bundle.geral_lbl_nao}"
+					onclick="dialogConfirmarAlteracaoStatusReenquadramento.hide();" />
+				<p:commandButton id="btnSim"
+					onclick="dlgAlteracaoStatusReenquadramento.hide();dialogConfirmarAlteracaoStatusReenquadramento.hide();"
+					value="#{bundle.geral_lbl_sim}" process="@this" action="#{alterarStatusReenquadramentoController.alterarStatus()}" />
+				
+			</h:panelGroup>
+		</h:form>
+	</p:confirmDialog>
+		
+	<p:dialog id="dlgAlteracaoStatusReenquadramento" dynamic="true" resizable="false"
+		modal="true" widgetVar="dlgAlteracaoStatusReenquadramento" position="center" closable="false"
+		header="#{bundle.alteracao_status_lbl_titulo}">
+		<div style="width: 400px;">
+		<h:form>
+		<h:panelGrid id="gridDialogRetornarStatus" columns="1">
+			<h:outputText value="#{bundle.geral_lbl_dados_requerente}" />
+		</h:panelGrid>
+
+		<h:panelGrid columns="2">
+
+			<h:outputLabel value="#{bundle.geral_lbl_nome}" />
+			<h:outputText value="#{alterarStatusReenquadramentoController.nomePessoaEmpresa}" />
+			<h:outputLabel value="#{bundle.geral_lbl_cpf_cnpj}:" />
+			<h:outputText value="#{alterarStatusReenquadramentoController.numCpfCnpj}" />
+			<h:outputLabel
+				value="#{bundle.requerimentoUnicoLabelTabCollumNumeroProcesso}:" />
+			<h:outputText value="#{alterarStatusReenquadramentoController.numProcesso}" />
+
+		</h:panelGrid>
+			<hr style="margin-top: 10px; margin-bottom:10px; width: 100%" />
+		<h:panelGrid columns="2">
+			<h:outputLabel value="#{bundle.alteracao_status_lbl_voltar_status}" />
+
+			<h:selectOneMenu id="selectStatus" 
+				value="#{alterarStatusReenquadramentoController.statusSelecionado}" >
+				<p:ajax event="change" process="@this"  />
+				<f:selectItem itemValue="0"	itemLabel="#{bundle.geral_lbl_selecione}" />
+				<f:selectItems value="#{alterarStatusReenquadramentoController.listaStatusReenquadramento}" var="status" itemLabel="#{status.nomStatusReenquadramento}" itemValue="#{status.ideStatusReenquadramento}" />
+			</h:selectOneMenu>
+
+		</h:panelGrid>
+		<h:panelGroup layout="block" style="text-align: right;padding-top:10px" >
+			<p:commandButton id="btnVoltar" value="#{bundle.geral_lbl_voltar}"	process="@this" onclick="dialogConfirmarNaoAlteracaoDeStatusReenquadramento.show()" />
+			<p:spacer height="0px" width="5px"/>
+			<p:commandButton id="btnSalvar" value="#{bundle.geral_lbl_salvar}"	process="@this" action="#{alterarStatusReenquadramentoController.validarStatus()}" /> 
+		</h:panelGroup>
+		
+</h:form>
+	</div>
+	</p:dialog>
+	
+
+
+
+</ui:composition>
+

@@ -1,0 +1,102 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.prime.com.tr/ui">
+      
+
+	<ui:composition template="/layout/template.xhtml">
+	
+		<ui:define name="titulo-pagina">		
+			<h3>Relatório Financeiro</h3>		
+		</ui:define>	
+		
+		<ui:define name="conteudo-principal">	
+		
+			<h:form id="filtroImoveis">	
+					<h3><h:outputLabel styleClass="titulo-grupo" style="font-weight:bold;" value="INSTRUÇÕES" /></h3>
+					<p class="titulo-grupo">
+						- Para elaborar um relatório, Informe o(s) parâmetro(s) de consulta desejado(s) e clique no botão "Consultar".<br />
+					</p>
+				
+					<h3><h:outputLabel styleClass="titulo-grupo" style="font-weight:bold;" value="PARÂMETROS DA CONSULTA" /></h3>
+					<br /><br />
+					<h:panelGrid columns="1" id="panelRelatorioFinanceiro" >
+						<h:outputLabel id="lblDocumentoGuia" value="Nº do documento/ Nº da Guia: "/>
+						<p:inputText id="fdDocumentoGuia" value="#{relatorioFinanceiroController.numDocumento}" size="40"/>
+					   
+					   <h:panelGrid>
+ 			   	   	   		<h:outputLabel id="lblDataVencimento" value="Data do vencimento: "/>
+					   </h:panelGrid>
+	  			   	   <h:panelGrid id="tblFiltroDataVencimento" columns="4">
+						   <h:panelGroup>
+							   <p:calendar showOn="button" id="dataVencimento1" label="Data do Vencimento" size="13"
+										   value="#{relatorioFinanceiroController.dataVencimentoInicial}" locale="pt" pattern="dd/MM/yyyy" navigator="true"
+										   readOnlyInputText="true" yearRange="c-100" />
+								<h:outputText value="   a" />
+							</h:panelGroup>
+							<h:panelGroup>
+								<p:calendar showOn="button" id="dataVencimento2" size="13"
+											value="#{relatorioFinanceiroController.dataVencimentoFinal}" locale="pt" pattern="dd/MM/yyyy" readOnlyInputText="true" navigator="true" 
+											yearRange="c-100:c+100" />
+							</h:panelGroup>
+					   </h:panelGrid>
+					   <h:panelGrid>
+  			   	   	   		<h:outputLabel id="lblRequerente" value="Requerente: "/>
+						</h:panelGrid>
+					   <h:panelGrid id="tblFiltroRequerente" columns="3">
+					   		<p:inputText id="fdRequerente" value="#{relatorioFinanceiroController.nomeRequerente}" disabled="true" size="40" />
+					   		<h:commandButton image="/resources/img/ico-pesquisa.png" onclick="dlgBuscaReq.show();" />
+					   </h:panelGrid>
+					   <h:panelGrid columns="2" id="pgFiltroStatus">
+					   		<h:panelGrid columns="1">
+						   		<h:outputText value="Status: "/>
+								<p:selectManyCheckbox value="#{relatorioFinanceiroController.listStatusFinanceiroEnum}"
+									layout="pageDirection"	converter="enumTypeConverter">
+									<f:selectItems value="#{relatorioFinanceiroController.listaStatusFinanceiro}"
+										var="status" itemLabel="#{bundle[status.label]}"
+										itemValue="#{status}" />
+									<p:ajax listener="#{relatorioFinanceiroController.vizualizarDataPagamento}" update="@form" />
+								</p:selectManyCheckbox>
+							</h:panelGrid>
+							<h:panelGrid columns="4" style="margin-top:52px" rendered="#{relatorioFinanceiroController.vizualizarDtPag}" id="pgDataPagamento">
+								   <p:spacer height="10" />
+								   <h:panelGroup>
+								   	<h:outputText value="De " />
+								   </h:panelGroup>
+								   <h:panelGroup>
+									   <p:calendar showOn="button" id="dataPagamentoInicial" label="Data do Vencimento" size="13"
+												   value="#{relatorioFinanceiroController.dataPagamentoInicial}" locale="pt" pattern="dd/MM/yyyy" navigator="true"
+												   readOnlyInputText="true" yearRange="c-100" />
+										<h:outputText value="   até" />
+									</h:panelGroup>
+									<h:panelGroup>
+										<p:calendar showOn="button" id="dataPagamentoFinal" size="13"
+													value="#{relatorioFinanceiroController.dataPagamentoFinal}" locale="pt" pattern="dd/MM/yyyy" readOnlyInputText="true" navigator="true" 
+													yearRange="c-100:c+100" />
+									</h:panelGroup>
+							</h:panelGrid>
+
+					   </h:panelGrid>
+					 </h:panelGrid>
+					 
+				<h:panelGrid columns="2" style="float:right;">
+			    	<p:commandButton value="Gerar" update="dataTableRelFinanceiro" ajax="false">
+			    	<f:setPropertyActionListener target="#{relatorioFinanceiroController.nomeRequerente}" value="#{relatorioFinanceiroController.nomeRequerente}" />
+			    	<p:fileDownload value="#{relatorioFinanceiroController.gerarRelatorio}" />
+			    	</p:commandButton>
+			    	<p:commandButton value="Limpar" action="#{relatorioFinanceiroController.limpar()}" process="@this" update="filtroImoveis">
+			    	<f:setPropertyActionListener target="#{relatorioFinanceiroController.nomeRequerente}" value="" />
+			    	</p:commandButton>
+		    	</h:panelGrid>
+			</h:form>
+			
+		<p:dialog id="dlgBuscaReq" header="Selecionar Requerente" widgetVar="dlgBuscaReq" modal="true" style="text-align:center;" resizable="false"  position="center">  
+			<ui:include src="/paginas/relatorios/pesquisaRequerente.xhtml" />
+        </p:dialog>
+		        
+		</ui:define>
+		
+	</ui:composition>
+</html>

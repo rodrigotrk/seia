@@ -1,0 +1,1 @@
+UPDATE motivo_notificacao SET nom_motivo_notificacao = 'Envio de shape para realocação de reserva legal' WHERE ide_motivo_notificacao = 16;

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="relatorio_subreport_caracterizacao_ambiental_silos_armazens_equipamento_controle" language="java" pageWidth="514" pageHeight="752" columnWidth="514" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="224b5925-8538-4949-a75b-00507dab45b7">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="ide_caracterizacao_ambiental_silos_armazens" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[select ec.* from caracterizacao_ambiental_silos_armazens casa
+inner join caracterizacao_ambiental_equipamento_controle caec
+on casa.ide_caracterizacao_ambiental_silos_armazens = caec.ide_caracterizacao_ambiental_silos_armazens
+inner join equipamento_controle ec
+on caec.ide_equipamento_controle = ec.ide_equipamento_controle
+where casa.ide_caracterizacao_ambiental_silos_armazens = $P{ide_caracterizacao_ambiental_silos_armazens}]]>
+	</queryString>
+	<field name="ide_equipamento_controle" class="java.lang.Integer"/>
+	<field name="nom_equipamento_controle" class="java.lang.String"/>
+	<field name="ind_ativo" class="java.lang.Boolean"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<columnHeader>
+		<band height="20" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="0f555919-a901-42f1-966f-b1ff7d72fe17" x="0" y="0" width="514" height="20"/>
+				<box>
+					<bottomPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Equipamentos de controle]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement uuid="2bf9cf36-1f27-4a07-9572-3598911be89b" x="0" y="0" width="265" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nom_equipamento_controle}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

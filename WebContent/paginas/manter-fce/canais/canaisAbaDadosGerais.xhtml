@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui">
+	<h:panelGrid style="margin-top:20px">
+		<p:row>
+			<h:outputText value="* Vazão (m³/s)" />
+		</p:row>
+		<p:row>
+			<p:inputText id="vazao" value="#{fceCanalController.fceCanal.vazao}" disabled="#{fceCanalController.desabilitarTudo || fceCanalController.editarVazao}" onkeyup="maskIt(this, event, '99.999.999,99', true)" maxlength="10">
+				<f:converter converterId="doubleConverter"/>
+				<p:ajax event="change" process="@this"/>
+			</p:inputText>
+		</p:row>
+		<p:row>
+			<h:outputText value="* Área ocupada (m²)" />
+		</p:row>
+		<p:row>
+			<p:inputText id="areaOcupada" value="#{fceCanalController.fceCanal.areaOcupada}" disabled="#{fceCanalController.desabilitarTudo}" onkeyup="maskIt(this, event, '99.999.999,99', true)" maxlength="10">
+				<f:converter converterId="doubleConverter"/>
+				<p:ajax event="change" process="@this"/>
+			</p:inputText>
+		</p:row>
+		<p:row>
+			<h:outputText value="* Característica do canal" />
+		</p:row>
+		<p:row>
+			<ui:repeat var="caracteristica" value="#{fceCanalController.getCaracteristicasCanal(fceCanalController.fceCanal)}">
+				<h:panelGrid columns="2">
+					<p:selectBooleanCheckbox value="#{caracteristica.selecionado}" disabled="#{fceCanalController.desabilitarTudo}" >
+						<p:ajax event="change" update="formFceCanaisDadosTrecho" listener="#{fceCanalController.addcaracteristica(caracteristica)}" process="@this"/>
+					</p:selectBooleanCheckbox>
+					<h:outputText style="margin-left:5px;" value="#{caracteristica.dsCaracteristicaCanal}" /> 
+				</h:panelGrid>
+			</ui:repeat>
+		</p:row>
+		<p:row>
+			<h:outputText value="* Finalidade:" />
+		</p:row>
+		<p:row>
+			<p:selectOneMenu id="listaUsoAgua" value="#{fceCanalController.fceCanalTipoFinalidadeUsoAgua}" rendered="#{fceCanalController.fceCanal != null}" disabled="#{fceCanalController.desabilitarTudo}" converter="simpleEntityConverter" valueChangeListener="#{fceCanalController.selecionarTipoUsoAgua}">
+				<f:selectItem itemLabel="Selecione" itemValue="#{null}"/>
+				<f:selectItems value="#{fceCanalController.fceCanalTiposFinalidadesUsoAguas}" var="t" itemValue="#{t}"  itemLabel="#{t.ideTipoFinalidadeUsoAgua.nomTipoFinalidadeUsoAgua}" />
+				<p:ajax event="change" process="@this" update="formFceCanais:_tabAbasFceCanais:tiposUsoAgua, formFceCanais:_tabAbasFceCanais:listaUsoAgua"/>
+			</p:selectOneMenu>
+		</p:row>
+		<p:row>
+			<p:dataTable id="tiposUsoAgua" rendered="#{fceCanalController.fceCanal != null}" var="t" value="#{fceCanalController.fceCanal.fceCanalTiposFinalidadesUsoAgua}" emptyMessage="">
+				<p:column headerText="Finalidade">
+					<h:outputText value="#{t.ideTipoFinalidadeUsoAgua.nomTipoFinalidadeUsoAgua}"  />
+				</p:column>
+				<p:column headerText="Ação">
+					<center>
+						<p:commandLink actionListener="#{fceCanalController.excluirTipoUsoAgua(t)}" disabled="#{fceCanalController.desabilitarTudo}" update="formFceCanais:_tabAbasFceCanais:tiposUsoAgua">
+							<h:graphicImage title="#{bundle.diap_lbl_legenda_excluir}" value="/resources/img/ico-excluir.png" />
+						</p:commandLink>
+					</center>
+				</p:column>
+			</p:dataTable>
+		</p:row>
+	</h:panelGrid>
+</ui:composition>

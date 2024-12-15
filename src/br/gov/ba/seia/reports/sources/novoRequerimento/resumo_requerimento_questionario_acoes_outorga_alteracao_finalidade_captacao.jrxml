@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="resumo_requerimento_questionario_acoes_outorga_alteracao_finalidade_captacao" language="java" pageWidth="139" pageHeight="802" columnWidth="139" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="6fce2bec-0d2f-45d7-bfe8-0018a07c16ea">
+	<property name="ireport.zoom" value="3.4522712143931042"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="ide_requerimento" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="ide_outorga_localizacao_geografica" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[select distinct t.nom_tipo_finalidade_uso_agua
+
+	from outorga o
+
+	inner join outorga_localizacao_geografica olg on olg.ide_outorga = o.ide_outorga
+	inner join localizacao_geografica lg on lg.ide_localizacao_geografica = olg.ide_localizacao_geografica
+	inner join outorga_localizacao_geografica_finalidade olgf on olgf.ide_outorga_localizacao_geografica = olg.ide_outorga_localizacao_geografica
+	inner join tipo_finalidade_uso_agua t on t.ide_tipo_finalidade_uso_agua = olgf.ide_tipo_finalidade_uso_agua
+	where  o.ide_tipo_solicitacao = 6 --alterar outorga
+	and olg.ide_outorga_localizacao_geografica = $P{ide_outorga_localizacao_geografica}
+	and o.ide_requerimento = $P{ide_requerimento}
+
+]]>
+	</queryString>
+	<field name="nom_tipo_finalidade_uso_agua" class="java.lang.String"/>
+	<detail>
+		<band height="12" splitType="Stretch">
+			<textField>
+				<reportElement uuid="9ac1232d-6972-4f24-a1ed-6a4070737ebc" x="0" y="0" width="139" height="12"/>
+				<box leftPadding="3"/>
+				<textElement>
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nom_tipo_finalidade_uso_agua}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

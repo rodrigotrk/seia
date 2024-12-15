@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="relatorio_caepog_locacao" language="java" pageWidth="515" pageHeight="802" columnWidth="515" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="9a29b6be-b95d-49aa-931c-108132df8aed">
+	<property name="ireport.zoom" value="1.610510000000001"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="ide_caepog" class="java.lang.Integer"/>
+	<queryString>
+		<![CDATA[select
+	c.ide_caepog,
+	cc.nom_caepog_campo,
+	cdc.num_processo_caepog_campo,
+	cl.prefix_poco_caepog_locacao,
+	cl.area_locacao_caepog_locacao
+from caepog c
+	inner join caepog_definicao_campo cdc on cdc.ide_caepog = c.ide_caepog
+	inner join caepog_campo cc on cc.ide_caepog_campo = cdc.ide_caepog_campo
+	inner join caepog_locacao cl on cl.ide_caepog_definicao_campo = cdc.ide_caepog_definicao_campo
+
+where c.ide_caepog = $P{ide_caepog}]]>
+	</queryString>
+	<field name="ide_caepog" class="java.lang.Integer">
+		<fieldDescription><![CDATA[Chave primária da tabela CAEPOG]]></fieldDescription>
+	</field>
+	<field name="nom_caepog_campo" class="java.lang.String">
+		<fieldDescription><![CDATA[Nome do Campo da atividade do CAEPOG]]></fieldDescription>
+	</field>
+	<field name="num_processo_caepog_campo" class="java.lang.String">
+		<fieldDescription><![CDATA[Número do processo vinculado ao campo]]></fieldDescription>
+	</field>
+	<field name="prefix_poco_caepog_locacao" class="java.lang.String">
+		<fieldDescription><![CDATA[Prefixo do poço da locação]]></fieldDescription>
+	</field>
+	<field name="area_locacao_caepog_locacao" class="java.lang.Integer">
+		<fieldDescription><![CDATA[Tamanho da área da locação (m²)]]></fieldDescription>
+	</field>
+	<title>
+		<band height="40">
+			<staticText>
+				<reportElement uuid="efd75e2c-4214-46b0-b675-5b7bda5981f1" x="0" y="0" width="515" height="20"/>
+				<box leftPadding="5">
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="9" isBold="false"/>
+				</textElement>
+				<text><![CDATA[LOCAÇÃO]]></text>
+			</staticText>
+		</band>
+	</title>
+	<detail>
+		<band height="40">
+			<textField>
+				<reportElement uuid="fcd5011e-ddaf-40bf-9fcd-a4dba3400719" x="13" y="20" width="251" height="20"/>
+				<box leftPadding="5"/>
+				<textElement verticalAlignment="Middle" markup="html">
+					<font fontName="Arial" size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Prefixo do poço: " + "<b>" +
+($F{prefix_poco_caepog_locacao}!=null ? $F{prefix_poco_caepog_locacao} : " --- " )
++ "<b>"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="31573944-31a0-4064-8beb-c3cc098f733a" x="13" y="0" width="251" height="20"/>
+				<box leftPadding="5"/>
+				<textElement verticalAlignment="Middle" markup="html">
+					<font fontName="Arial" size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Nome do campo: " + "<b>" +
+($F{nom_caepog_campo}!= null ? $F{nom_caepog_campo} : "---")
++ "<b>"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="a988b8dd-e37b-4450-9a8e-b333e835dea9" x="264" y="0" width="251" height="20"/>
+				<box leftPadding="5"/>
+				<textElement verticalAlignment="Middle" markup="html">
+					<font fontName="Arial" size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Nº do processo: " + "<b>" +
+($F{num_processo_caepog_campo}!= null ? $F{num_processo_caepog_campo} : "---")
++ "<b>"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="162300b4-3e5a-4007-af37-5ab6eb3b9b82" x="264" y="20" width="251" height="20"/>
+				<box leftPadding="5"/>
+				<textElement verticalAlignment="Middle" markup="html">
+					<font fontName="Arial" size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Área de locação: " + "<b>" +
+($F{area_locacao_caepog_locacao}!=null ? $F{area_locacao_caepog_locacao}+" m²" : "0" )
++ "<b>"]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="20"/>
+	</detail>
+</jasperReport>

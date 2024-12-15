@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui"
+	template="../../layout/template.xhtml">
+
+	<ui:define name="titulo-pagina">		
+		<h3>Controle de Resíduos Perigosos</h3>		
+	</ui:define>	
+
+	<ui:define name="conteudo-principal">
+
+		<h:form id="formFiltroResiduos">
+			
+			<h:outputText  value="Nome do resíduo/Código:" />
+ 			<p:inputText value="#{residuoController.descricaoResiduo}" >
+			    <p:ajax event="keyup" listener="#{residuoController.filtrarDados}"
+       				 update="formListaResiduos:dataTableResiduos" process="@this" />
+			</p:inputText>
+ 			<!-- <p:autoComplete id="acSimple" value="#{residuoController.textFilter}" minQueryLength="3" completeMethod="#{residuoController.filtrarDados}" /> -->
+			&nbsp;
+			<p:commandButton action="#{residuoController.novoResiduo}" update=":formResiduo:panelResiduo" value="Novo resíduo" oncomplete="dlgResiduo.show()"/>
+		
+		</h:form>
+		<br />
+		
+		<h:form id="formListaResiduos">
+			<p:dataTable id="dataTableResiduos" widgetVar="dtTbResiduos" value="#{residuoController.modelAcoes}" var="residuo" 
+			lazy="true" paginator="true" rows="10" paginatorPosition="bottom" paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}" rowsPerPageTemplate="5,10,15" emptyMessage="#{bundle.msg_lista_vazia}" style="width: 700px;">
+
+        		<f:facet name="header">
+					<h:outputText value="Resíduos" />
+				</f:facet>
+				<p:column style="width: 420px;">  
+					<f:facet name="header">
+						<h:outputText value="Nome do Resíduo" />  
+					</f:facet>
+					<h:outputText value="#{residuo.nomResiduo}" />  
+				</p:column>
+				<p:column style="width:40px;">  
+					<f:facet name="header">
+						<h:outputText value="Código" />  
+					</f:facet>
+					<h:outputText value="#{residuo.codResiduo}" />  
+				</p:column>				
+				<p:column>
+					<f:facet name="header">  
+						<h:outputText value="#{bundle.msg_acoes}" />  
+					</f:facet>
+					<p:commandLink id="visualizar" disabled="${!security.temAcesso('1.91.3')}" action="#{residuoController.visualizarDados}" title="#{bundle.geral_btn_visualizar}" update=":formResiduo:panelResiduo" onclick="dlgResiduo.show()" process="visualizar">
+						<h:graphicImage title="Visualizar" value="/resources/img/ico-pesquisa.png" />
+						<f:setPropertyActionListener value="#{residuo}" target="#{residuoController.residuo}" />
+            		</p:commandLink>
+					<p:commandLink id="alterar" disabled="${!security.temAcesso('1.91.3')}" action="#{residuoController.editar}" title="#{bundle.btn_editar}" update=":formResiduo:panelResiduo" onclick="dlgResiduo.show()" process="alterar">
+						<h:graphicImage title="Editar" value="/resources/img/ico-alterar.png" />
+						<f:setPropertyActionListener value="#{residuo}" target="#{residuoController.residuo}" />
+            		</p:commandLink>            		
+					<p:commandLink id="excluir" disabled="${!security.temAcesso('1.91.2')}" title="#{bundle.btn_excluir}" onclick="confirmDlgExclusaoResiduo.show()" image="ui-icon ui-icon-close" process="excluir">
+						<h:graphicImage title="Excluir" value="/resources/img/ico-excluir.png" />
+						<f:setPropertyActionListener value="#{residuo}" target="#{residuoController.residuo}" />
+            		</p:commandLink>
+        		</p:column>
+    		</p:dataTable>
+
+			<p:confirmDialog id="confirmDialogExclusaoResiduo" widgetVar="confirmDlgExclusaoResiduo" header="#{bundle.hdr_confirma_exclusao}" message="#{bundle.msg_confirma_exclusao}" severity="alert">
+				<p:commandButton id="confirmarExclusao" value="#{bundle.btn_sim}" update=":formListaResiduos:dataTableResiduos" action="#{residuoController.excluirResiduo}" oncomplete="confirmDlgExclusaoResiduo.hide()" process="confirmarExclusao"/>
+				<p:commandButton value="#{bundle.btn_nao}" type="button" onclick="confirmDlgExclusaoResiduo.hide()" />
+			</p:confirmDialog>
+
+    	</h:form>
+
+ 		<p:dialog id="dialogResisuo" header="Cadastro de Resíduo" closable="true" draggable="true" resizable="false" width="350" widgetVar="dlgResiduo" modal="true">	
+			<ui:include src="/paginas/manter-residuos-perigosos/residuo.xhtml" />
+		</p:dialog>
+
+	</ui:define>
+</ui:composition>

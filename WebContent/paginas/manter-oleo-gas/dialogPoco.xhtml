@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui">
+	
+	<h:panelGroup layout="block" style="max-height: 750px; min-width:570px; overflow-y:auto;">
+		<h:form id="formDialogPoco">
+			<h:panelGrid style="text-align: left;">
+				<p:tabView id="tabViewDialogPoco" activeIndex="#{caepogController.tabAtualPoco}" cache="false" dynamic="true">
+					<p:ajax event="tabChange" listener="#{caepogController.onTabChangePoco}" update="tabViewDialogPoco formBotoesNavegacaoPoco" />
+					
+					<p:tab title="Dados do Poço">
+						<ui:include src="/paginas/manter-oleo-gas/abaDadosDoPoco.xhtml" />
+					</p:tab>
+					
+					<p:tab title="Resíduos Gerados" disabled="#{caepogController.abaResiduoDesabilitada}">
+						<div  style="width: 100% !important;">
+						<ui:include src="/paginas/manter-oleo-gas/abaResiduosGerados.xhtml" />
+						</div>
+					</p:tab>
+				</p:tabView>
+			</h:panelGrid>
+		</h:form>
+		
+		<h:form id="formBotoesNavegacaoPoco">
+			<p:outputPanel autoUpdate="true">
+				<div style="text-align: right;">
+					
+					<p:commandButton value="Voltar" update="formDialogPoco:tabViewDialogPoco tabViewOleoGas:formBotoesNavegacaoPoco" action="#{caepogController.decrementaIndexAbaPoco}" 
+						rendered="#{caepogController.visualizaAnteriorPoco}" />
+					
+					<p:spacer width="10" height="0"/>
+					
+					<p:commandButton value="Avançar" update="formDialogPoco:tabViewDialogPoco tabViewOleoGas:formBotoesNavegacaoPoco" action="#{caepogController.incrementaIndexAbaPoco}" 
+						rendered="#{caepogController.visualizaProximoPoco}" style="margin-right: 5px;"/>
+					
+					<p:commandButton value="Salvar" update="formDialogPoco:tabViewDialogPoco tabViewOleoGas" actionListener="#{caepogController.salvarPoco()}" 
+						rendered="#{caepogController.visualizaAnteriorPoco or caepogController.abaResiduoDesabilitada}" disabled="#{caepogController.caepog.visualizando}" style="margin-right: 5px;"/>
+				</div>
+			</p:outputPanel>
+		</h:form>
+	</h:panelGroup>
+</ui:composition>

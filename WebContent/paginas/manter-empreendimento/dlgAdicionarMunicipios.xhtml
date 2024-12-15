@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui">
+	
+		
+	<p:dialog header="Adicionar Município" widgetVar="dlgAdicionarMunicipio" height="300" width="280"  dynamic="true" modal="true" position="center" resizable="false">
+		
+		<h:form id="frmAdicionarMunicipio">
+			
+			<h:panelGrid id="pnlBuscarMunicipio" >
+				<h:outputText value="Municipio:" />
+				<h:panelGrid columns="2">
+					<p:inputText id="busca" style="width: 200px;" value="#{adicionarMunicipioController.nomMunicipio}">
+						<p:ajax event="keyup" global="false" listener="#{adicionarMunicipioController.onKeyUp()}" process="busca" />
+					</p:inputText>
+					<p:commandLink actionListener="#{adicionarMunicipioController.buscarMunicipio()}" 
+						process="@form" update="tabAbas:frmAdicionarMunicipio:pnlListaMunicipioSelecionado">
+						<h:graphicImage value="/resources/img/ico-pesquisa.png" />
+					</p:commandLink>
+				</h:panelGrid>
+			</h:panelGrid>
+			<p:spacer height="10px;" />
+			<h:panelGroup id="pnlListaMunicipioSelecionado" style="text-align: center  ">
+				<p:dataTable  
+					var="municipio"
+					value="#{adicionarMunicipioController.listaMunicipio}" 
+					lazy="true" 
+					paginator="true" 
+					rows="8"
+					paginatorPosition="bottom"
+					paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}"
+					pageLinks="3" 
+					emptyMessage="#{bundle.msg_lista_vazia}">
+					
+					<p:column>
+						<f:facet name="header">
+							<h:outputText value="Ação" />
+						</f:facet>
+						<p:selectBooleanCheckbox value="#{municipio.checked}">
+							<p:ajax event="change"  
+								process="@this" 
+								update="tabAbas:frmAdicionarMunicipio:pnlListaMunicipioSelecionado"
+								listener="#{adicionarMunicipioController.changeListener(municipio)}" />
+						</p:selectBooleanCheckbox>
+					</p:column>
+					<p:column>
+						<f:facet name="header">
+							<h:outputText value="Municípios" />
+						</f:facet>
+						<h:outputText value="#{municipio.nomMunicipio}" />
+					</p:column>
+					
+				</p:dataTable>	
+			</h:panelGroup>
+			<p:spacer height="10px;" />
+			<h:panelGroup id="pnlBotoes" layout="block" style="text-align: center;">
+				<p:commandButton value="Salvar"
+					actionListener="#{adicionarMunicipioController.salvar()}" 
+					process="@this"
+					update="tabAbas:frmMunicipiosAdicionais:pnlListaMunicipioEnvolvido" />
+			</h:panelGroup>
+			
+		</h:form>
+		
+	</p:dialog>
+
+</ui:composition>

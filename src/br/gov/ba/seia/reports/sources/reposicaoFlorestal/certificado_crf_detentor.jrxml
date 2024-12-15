@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="certificado_crf_detentor" language="java" pageWidth="500" pageHeight="800" orientation="Landscape" columnWidth="500" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="82bb6ffa-3902-419f-bb3d-301461eb2173">
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="IDE_REQUERIMENTO" class="java.lang.Integer"/>
+	<parameter name="valor_por_extenso" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[select pf.nom_pessoa as nome_pf,
+pj.nom_razao_social as nome_pj,
+pf.num_cpf as num_cpf,
+pj.num_cnpj as num_cnpj,
+florestal.vlr_pecuniario,
+devedor.volume_autorizado,
+devedor.num_portaria,
+devedor.data_publicacao_portaria,
+florestal.ide_pagamento_reposicao_florestal,
+um.cod_unidade_medida
+from requerimento req
+inner join cumprimento_reposicao_florestal florestal on florestal.ide_requerimento = req.ide_requerimento
+inner join detentor_reposicao_florestal devedor on florestal.ide_cumprimento_reposicao_florestal = devedor.ide_cumprimento_reposicao_florestal
+INNER JOIN unidade_medida um on um.ide_unidade_medida=devedor.ide_unidade_medida
+inner JOIN requerimento_pessoa rp ON rp.ide_requerimento = req.ide_requerimento
+LEFT JOIN pessoa p ON p.ide_pessoa = rp.ide_pessoa
+LEFT JOIN pessoa_juridica pj ON pj.ide_pessoa_juridica = p.ide_pessoa
+LEFT JOIN pessoa_fisica pf ON pf.ide_pessoa_fisica = p.ide_pessoa
+where req.ide_requerimento = $P{IDE_REQUERIMENTO}
+and rp.ide_tipo_pessoa_requerimento = 1;]]>
+	</queryString>
+	<field name="nome_pf" class="java.lang.String"/>
+	<field name="nome_pj" class="java.lang.String"/>
+	<field name="num_cpf" class="java.lang.String"/>
+	<field name="num_cnpj" class="java.lang.String"/>
+	<field name="vlr_pecuniario" class="java.math.BigDecimal"/>
+	<field name="volume_autorizado" class="java.math.BigDecimal"/>
+	<field name="num_portaria" class="java.lang.String"/>
+	<field name="data_publicacao_portaria" class="java.sql.Timestamp"/>
+	<field name="ide_pagamento_reposicao_florestal" class="java.lang.Integer"/>
+	<field name="cod_unidade_medida" class="java.lang.String"/>
+	<variable name="valor_pecuniario" class="java.lang.String">
+		<variableExpression><![CDATA[$F{vlr_pecuniario} == null ? "" : java.text.NumberFormat.getCurrencyInstance(new Locale("pt","br")).format($F{vlr_pecuniario}.doubleValue())]]></variableExpression>
+	</variable>
+	<variable name="data_publicacao" class="java.lang.String">
+		<variableExpression><![CDATA[$F{data_publicacao_portaria} == null ? '-' : new SimpleDateFormat("dd/MM/yyyy").format($F{data_publicacao_portaria})]]></variableExpression>
+	</variable>
+	<variable name="tipo_pagamento" class="java.lang.String">
+		<variableExpression><![CDATA[( $F{ide_pagamento_reposicao_florestal} == 21 ? "Autorização de Supressão Vegetação (ASV) nativa" : ( $F{ide_pagamento_reposicao_florestal} == 22 ? "Aproveitamento de Material Lenhoso (AML)" : "Reconhecimento de Volume Florestal Remanescente (RVFR)" ) )]]></variableExpression>
+	</variable>
+	<variable name="volume_autorizado_formatado" class="java.lang.String">
+		<variableExpression><![CDATA[$F{volume_autorizado} == null ? "" : new DecimalFormat("#,##0.0000").format($F{volume_autorizado})]]></variableExpression>
+	</variable>
+	<detail>
+		<band height="211" splitType="Stretch">
+			<textField>
+				<reportElement uuid="88599eab-9071-4c59-9afd-218c7782c404" x="0" y="43" width="487" height="168"/>
+				<textElement textAlignment="Justified"/>
+				<textFieldExpression><![CDATA["O INEMA certifica que "+ ($F{nome_pf} != null ? $F{nome_pf} : $F{nome_pj})+ ", " +
+($F{num_cnpj} == null ? new String($F{num_cpf}.substring(0,3) + "." + $F{num_cpf}.substring(3,6) + "." + $F{num_cpf}.substring(6,9) + "-" + $F{num_cpf}.substring(9,11)) : new String($F{num_cnpj}.substring(0,2) + "." + $F{num_cnpj}.substring(2,5) + "." + $F{num_cnpj}.substring(5,8) + "/" + $F{num_cnpj}.substring(8,12) + "-" + $F{num_cnpj}.substring(12,14))) + ", recolheu ao Fundo de Recursos para o Meio Ambiente – FERFA, o valor pecuniário de " + $V{valor_pecuniario} +" (" + $P{valor_por_extenso} +"), a título de crédito de reposição florestal, equivalente ao custo de implantação e efetiva manutenção  de silvicultura para produção de "+ $V{volume_autorizado_formatado} +" " + $F{cod_unidade_medida} + " destinados à reposição florestal da matéria prima gerada pela " + $V{tipo_pagamento} + " concedido pela Port. "+ $F{num_portaria} +" de "+ $V{data_publicacao} +". "+
+"\n\nOs créditos de reposição florestal gerados neste ato não podem ser transferidos." +
+"\n\nPara transporte do volume de material lenhoso é necessário o cadastro dos creditos de reposição florestal no Sinaflor/DOF."]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="f8a0933a-fd6f-4f68-b131-1f3666d02df0" x="0" y="0" width="487" height="43"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Pagamento de Reposição Florestal alusiva a " + $V{tipo_pagamento}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+	
+		<h:panelGrid columns="1">
+			<h:panelGrid columns="2">
+				<h:outputText value="#{bundle.cefir_msg_area_consolidada} (ha):" style="font-size: 11px;font-weight: bold;" />
+				<h:outputText value="#{detalharImovelRuralController.imovelRural.ideAreaRuralConsolidada.valArea}" />
+			</h:panelGrid>
+			
+			<h:panelGrid columns="1" >
+				<h3><h:outputLabel value="POLIGONAL DA ÁREA RURAL CONSOLIDADA" styleClass="titulo-grupo" /></h3>
+		        <p:outputPanel>
+			        <h:panelGrid columns="5">
+			        	<h:outputText value="#{bundle.empreendimento_lbl_secao_geometrica}" style="font-size: 11px;font-weight: bold;" />
+						<p:spacer width="20" height="10" />
+						<h:outputText value="#{bundle.empreendimento_lbl_datum}" style="font-size: 11px;font-weight: bold;" />
+						<p:spacer width="20" height="10" />
+						<h:outputText value="Descrição" style="font-size: 11px;font-weight: bold;" />
+						<h:outputText value="#{detalharImovelRuralController.imovelRural.ideAreaRuralConsolidada.ideLocalizacaoGeografica.ideClassificacaoSecao.nomClassificacaoSecao}" />
+						<p:spacer width="20" height="10" />
+						<h:outputText value="#{detalharImovelRuralController.imovelRural.ideAreaRuralConsolidada.ideLocalizacaoGeografica.ideSistemaCoordenada.nomSistemaCoordenada}" />
+						<p:spacer width="20" height="10" />
+						<h:outputText value="#{detalharImovelRuralController.imovelRural.ideAreaRuralConsolidada.ideLocalizacaoGeografica.desLocalizacaoGeografica}" />	
+					</h:panelGrid>
+				</p:outputPanel>
+			</h:panelGrid>		
+		</h:panelGrid>
+				
+		<h:panelGrid rendered="#{detalharImovelRuralController.existeTheGeomByIdeLocGeo(detalharImovelRuralController.imovelRural.ideAreaRuralConsolidada.ideLocalizacaoGeografica.ideLocalizacaoGeografica)}" columns="1">
+    		<h:panelGrid columns="3">
+			    <h:outputLink value="#{detalharImovelRuralController.caminhoGeoBahia}" title="GEOBAHIA" target="_blank">  
+			        <h:outputText value="VISUALIZAR SHAPE DA ÁREA RURAL CONSOLIDADA"/>  
+			        <f:param name="secao" value="cefir" />
+					<f:param name="acao" value="view" />
+					<f:param name="id" value="#{detalharImovelRuralController.imovelRural.ideImovelRural}"/>
+					<f:param name="tema" value="14" />
+					<f:param name="id_loc" value="#{detalharImovelRuralController.imovelRural.ideAreaRuralConsolidada.ideLocalizacaoGeografica.ideLocalizacaoGeografica}"/>
+					<f:param name="token" value="#{detalharImovelRuralController.token}"/>
+			    </h:outputLink>
+			    
+			    <h:outputLink value="#{detalharImovelRuralController.caminhoGeoBahia}" title="GEOBAHIA" target="_blank">  
+			        <h:graphicImage title="Visualizar" value="/resources/img/ico-arl-relocacao.png" /> 
+			        <f:param name="secao" value="cefir" />
+					<f:param name="acao" value="view" />
+					<f:param name="id" value="#{detalharImovelRuralController.imovelRural.ideImovelRural}"/>
+					<f:param name="tema" value="14" />
+					<f:param name="id_loc" value="#{detalharImovelRuralController.imovelRural.ideAreaRuralConsolidada.ideLocalizacaoGeografica.ideLocalizacaoGeografica}"/>
+					<f:param name="token" value="#{detalharImovelRuralController.token}"/>
+			    </h:outputLink>
+	    	</h:panelGrid>
+		</h:panelGrid>
+</ui:composition>

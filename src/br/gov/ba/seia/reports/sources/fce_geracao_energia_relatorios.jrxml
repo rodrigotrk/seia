@@ -1,0 +1,265 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="fce_geracao_energia_relatorios" language="java" pageWidth="555" pageHeight="802" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="21cd9160-d7f8-4c50-b261-7fa8182fc0a6">
+	<property name="ireport.zoom" value="1.9487171000000019"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="IDE_FCE_ENERGIA" class="java.lang.Integer"/>
+	<queryString>
+		<![CDATA[SELECT
+(SELECT COUNT(FESU.IDE_FCE_ENERGIA_SOLAR_USINA) FROM FCE_ENERGIA_SOLAR_USINA FESU, FCE_ENERGIA_SOLAR FES
+WHERE FES.IDE_FCE_ENERGIA_SOLAR = FESU.IDE_FCE_ENERGIA_SOLAR
+AND FES.IDE_FCE_ENERGIA = $P{IDE_FCE_ENERGIA}) AS EXIBIR_ENERGIA_SOLAR,
+(SELECT COUNT(FEE.IDE_FCE_ENERGIA_EOLICA)
+FROM FCE_ENERGIA_EOLICA FEE INNER JOIN FCE_ENERGIA_EOLICA_PARQUE FEEP
+ON FEE.IDE_FCE_ENERGIA_EOLICA = FEEP.IDE_FCE_ENERGIA_EOLICA
+LEFT JOIN FCE_ENERGIA_EOLICA_PARQUE_AEROGERADOR FEEPA
+ON FEEP.IDE_FCE_ENERGIA_EOLICA_PARQUE = FEEPA.IDE_FCE_ENERGIA_EOLICA_PARQUE
+WHERE FEE.IDE_FCE_ENERGIA = $P{IDE_FCE_ENERGIA}) AS EXIBIR_EOLICA,
+(SELECT COUNT(FET.IDE_FCE_ENERGIA_TERMOELETRICA)
+FROM FCE_ENERGIA_TERMOELETRICA FET, FCE_ENERGIA_TERMOELETRICA_UNIDADE FETU
+WHERE FET.IDE_FCE_ENERGIA_TERMOELETRICA = FETU.IDE_FCE_ENERGIA_TERMOELETRICA
+AND FET.IDE_FCE_ENERGIA = $P{IDE_FCE_ENERGIA}) AS EXIBIR_TERMO
+FROM FCE_ENERGIA E
+where ide_fce_energia = $P{IDE_FCE_ENERGIA}]]>
+	</queryString>
+	<field name="exibir_energia_solar" class="java.lang.Integer"/>
+	<field name="exibir_eolica" class="java.lang.Integer"/>
+	<field name="exibir_termo" class="java.lang.Integer"/>
+	<detail>
+		<band height="67">
+			<staticText>
+				<reportElement uuid="1baf4cba-a5eb-4a18-a4d6-2cf696c8f0fa" positionType="Float" mode="Opaque" x="0" y="0" width="504" height="17" isRemoveLineWhenBlank="true" backcolor="#DDDDDD"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif" isBold="true"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<text><![CDATA[Energia Eólica]]></text>
+			</staticText>
+			<subreport>
+				<reportElement uuid="c5d02add-c32f-4ae2-891e-a7ab9f5c1552" x="0" y="27" width="504" height="20" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[new Boolean($F{exibir_eolica}.equals(0))]]></printWhenExpression>
+				</reportElement>
+				<subreportParameter name="IDE_FCE_ENERGIA">
+					<subreportParameterExpression><![CDATA[$P{IDE_FCE_ENERGIA}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "fce_geracao_energia_relatorios_energia_eolica_licenca_previa.jasper"]]></subreportExpression>
+			</subreport>
+			<subreport>
+				<reportElement uuid="79b120e5-9c42-482d-b7ed-7d471e54c332" x="0" y="47" width="504" height="20" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[new Boolean(!$F{exibir_eolica}.equals(0))]]></printWhenExpression>
+				</reportElement>
+				<subreportParameter name="SUBREPORT_DIR">
+					<subreportParameterExpression><![CDATA[$P{SUBREPORT_DIR}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="IDE_FCE_ENERGIA">
+					<subreportParameterExpression><![CDATA[$P{IDE_FCE_ENERGIA}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "fce_geracao_energia_relatorios_energia_eolica.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+		<band height="69">
+			<printWhenExpression><![CDATA[new Boolean(!$F{exibir_energia_solar}.equals(0))]]></printWhenExpression>
+			<staticText>
+				<reportElement uuid="8f041fda-336e-473c-8730-036e06622081" positionType="Float" mode="Opaque" x="0" y="0" width="504" height="17" backcolor="#DDDDDD"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif" isBold="true"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<text><![CDATA[Energia Solar]]></text>
+			</staticText>
+			<subreport>
+				<reportElement uuid="2e20e6b0-3cbf-4bd8-aaf9-027d6d236f32" x="0" y="49" width="503" height="20"/>
+				<subreportParameter name="IDE_FCE_ENERGIA">
+					<subreportParameterExpression><![CDATA[$P{IDE_FCE_ENERGIA}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "fce_geracao_energia_relatorios_energia_solar.jasper"]]></subreportExpression>
+			</subreport>
+			<staticText>
+				<reportElement uuid="cf1db4f8-b7e8-440b-a648-521667bbee8c" x="0" y="29" width="249" height="20"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Identificação]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="6fe5fddc-cfa5-43d4-be82-35c3372a114b" x="366" y="29" width="135" height="20"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Potência (MW)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="22e96849-79da-4c9e-bffe-7c784f4ddb95" x="249" y="29" width="117" height="20"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Área (ha)]]></text>
+			</staticText>
+		</band>
+		<band height="75" splitType="Prevent">
+			<printWhenExpression><![CDATA[new Boolean(!$F{exibir_termo}.equals(0))]]></printWhenExpression>
+			<staticText>
+				<reportElement uuid="640b546b-0d0d-44b7-8419-c34c75cbfdd2" positionType="Float" mode="Opaque" x="0" y="1" width="503" height="17" backcolor="#DDDDDD"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif" isBold="true"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<text><![CDATA[Unidades Termoelétricas/Grupo Geradores]]></text>
+			</staticText>
+			<subreport>
+				<reportElement uuid="467bbd91-34cf-475c-803a-9a3963ed8719" x="1" y="53" width="503" height="20"/>
+				<subreportParameter name="IDE_FCE_ENERGIA">
+					<subreportParameterExpression><![CDATA[$P{IDE_FCE_ENERGIA}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "fce_geracao_energia_relatorios_termoeletrica.jasper"]]></subreportExpression>
+			</subreport>
+			<staticText>
+				<reportElement uuid="b363883f-affa-4106-87c9-acf291cd11f7" x="142" y="32" width="66" height="21" isPrintWhenDetailOverflows="true"/>
+				<box leftPadding="5">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Tipo Combustível]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="062e159a-9f70-427a-977a-8c43a9feaca0" x="359" y="32" width="72" height="21" isPrintWhenDetailOverflows="true"/>
+				<box leftPadding="5">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[% Eficiência Sist. Controle]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="1800dd73-e5a0-42d1-bc4a-1f1b79039770" x="84" y="32" width="58" height="21" isPrintWhenDetailOverflows="true"/>
+				<box leftPadding="5">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Área (ha)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="1e06820c-d7ad-4e44-ae16-44a0ff44d174" x="263" y="32" width="43" height="21" isPrintWhenDetailOverflows="true"/>
+				<box leftPadding="5">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Qtde Água]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="d781f502-41d7-4f39-9bc2-7faa29e31381" x="431" y="32" width="74" height="21" isPrintWhenDetailOverflows="true"/>
+				<box leftPadding="5">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Total Potência (MW)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="d913b82b-deb6-4292-97e8-055209a2eb61" x="1" y="32" width="83" height="21" isPrintWhenDetailOverflows="true"/>
+				<box leftPadding="5">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Identificação]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="d548fcca-109e-4796-9024-d0dc34b15390" x="306" y="32" width="53" height="21" isPrintWhenDetailOverflows="true"/>
+				<box leftPadding="5">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Vapor Gerado]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="9912aa81-aa96-46ef-be11-1a7f41e9c22a" x="208" y="32" width="55" height="21" isPrintWhenDetailOverflows="true"/>
+				<box leftPadding="5">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Nº Geradores]]></text>
+			</staticText>
+		</band>
+	</detail>
+</jasperReport>

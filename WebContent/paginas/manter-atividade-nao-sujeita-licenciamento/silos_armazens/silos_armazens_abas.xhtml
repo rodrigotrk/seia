@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.prime.com.tr/ui">
+
+	<ui:composition template="/layout/template.xhtml">
+	
+		<ui:define name="titulo-pagina">
+		
+			<h3>Silos e Armazéns</h3>
+		</ui:define>	
+	
+		<ui:define name="conteudo-principal">
+			
+			<ui:include src="/paginas/manter-atividade-nao-sujeita-licenciamento/silos_armazens/dialog/IncluirImovelRural.xhtml" />
+			<ui:include src="/paginas/manter-atividade-nao-sujeita-licenciamento/silos_armazens/dialog/dialogCadastrarUnidade.xhtml" />
+			<ui:include src="/paginas/manter-localizacao-geografica/localizacao-geografica-generic.xhtml" />
+			
+		<p:confirmDialog id="confirmarExclusaoImovelCar"
+			widgetVar="confirmarExclusaoImovelCar"
+			message="#{bundle.consultapf_msg_confimrexclusao}" header="Mensagem"
+			severity="alert">
+			<h:form style="text-align: center;">
+				<p:commandButton value="Sim"
+					actionListener="#{silosArmazensController.excluirSicar()}"
+					style="margin-right:30px;" />
+				<p:commandButton value="Não"
+					onclick="confirmarExclusaoImovelCar.hide();" />
+			</h:form>
+		</p:confirmDialog>
+
+		<p:confirmDialog id="confirmaExclusaoUnidArmazenadora"
+			widgetVar="confirmaExclusaoUnidArmazenadora"
+			header="#{bundle.geral_lbl_mensagem}" appendToBody="true"
+			style="top: 40px!important;left: 30% !important"
+			message="#{bundle.msg_confirma_exclusao}" severity="alert">
+			<h:form id="formConfirmaExclusaoUnidArmazenadora">
+				<div style="text-align: center;">
+					<p:commandButton global="false"
+						id="btnConfirmaExclusaoUnidArmazenadora"
+						actionListener="#{silosArmazensController.excluirUnidadeArmazenadora()}"
+						onclick="confirmaExclusaoUnidArmazenadora.hide()"
+						value="#{bundle.btn_sim}" />
+					<p:commandButton value="#{bundle.btn_nao}" type="button"
+						onclick="confirmaExclusaoUnidArmazenadora.hide()" />
+				</div>
+			</h:form>
+		</p:confirmDialog>
+		
+		<!-- 	DIALOG UPLOAD -->
+		<p:dialog widgetVar="fileUpload" 
+			id="fileUpload" 
+			header="#{bundle.validacao_previa_lbl_selecione_arquivo}"
+			modal="true" 
+			resizable="false" 
+			position="center" 
+			min-width="240" 
+			min-height="120" 
+			style="text-align: center;">
+			
+			<h:form style="text-align: center;">
+				<p:fileUpload 
+					uploadLabel="false" label="Upload Documento"  process="@this" update="formSilosArmazen:tabViewSilosArmazens:gridDocumentos formSilosArmazen:tabViewSilosArmazens:gridEstudos msg"
+					fileUploadListener="#{silosArmazensController.uploadArquivo()}"
+					invalidFileMessage="#{bundle.msg_erro_007}" mode="advanced" auto="true" 
+					allowTypes="/(\.|\/)(pdf|png|jpg)$/" oncomplete="fileUpload.hide();" />
+			</h:form>
+		</p:dialog>
+		
+		<p:dialog id="dialogDeclaracaoLegal" widgetVar="dialogDeclaracaoLegal" header="Declaração do representante legal da empresa geradora" width="500" height="250" dynamic="true" modal="true" 
+		position="center" resizable="false" draggable="true">
+		
+		<h:form id="formDeclaracaoLegal">
+		
+			<h:panelGrid columns="2" id="declaracaoLegalGrid" style="vertical-align: -webkit-baseline-middle;">
+				<p:selectBooleanCheckbox value="#{silosArmazensController.silosArmazen.indAceiteDeclaracaoFinal}" />
+				<h:outputText id="textoDeclaracao" value="Declaro serem verdadeiras as informações constantes neste CADASTRO DE SILOS E ARMAZÉNS DESTINADOS AO ARMAZENAMENTO, 
+				SECAGEM E BENEFICIAMENTO DE PRODUTOS AGRÍCOLAS NÃO INDUSTRIALIZADOS, estando ciente de que a falsidade de quaisquer dados constitui prática
+				de crime e resultará na aplicação das sanções penais cabíveis, nos termos dispostos no Código Penal (Decreto-Lei n°2.848/40), na lei de Crimes Ambientais 
+				(Lei n° 9.605/98) e nas suas normas regulamentadoras." />
+			</h:panelGrid>
+			
+			<p:spacer height="50"/>
+			<h:panelGrid style="margin-left: 400px;">
+				<p:commandButton value="Salvar" action="#{silosArmazensController.salvarDeclaracaoFinal()}" process="@this formDeclaracaoLegal"/>
+			</h:panelGrid>
+			
+			<style>
+				table[id="formDeclaracaoLegal:declaracaoLegalGrid"]>tbody>tr>td{
+					vertical-align: baseline !important;
+				}
+	
+			</style>
+		</h:form>
+		
+		</p:dialog>
+		
+		<h:form id="formSilosArmazen">
+			
+			<p:tabView id="tabViewSilosArmazens" activeIndex="#{silosArmazensController.activeTab}" dynamic="false" cache="false">
+				<p:ajax event="tabChange" update="tabViewSilosArmazens, formSilosArmazen:groupBotoes" process="@this" listener="#{silosArmazensController.onTabChangeEvent()}"/>
+				
+				<p:tab title="Dados Básicos" id="tabDadosBasicos">
+					<ui:include src="/paginas/manter-atividade-nao-sujeita-licenciamento/silos_armazens/dadosBasicos.xhtml" />
+				</p:tab>
+				
+				<p:tab title="Unidade Armazenadora" id="tabUnidadeArmazenadora" 
+				disabled="#{!(not empty silosArmazensController.silosArmazen.ideSilosArmazens) }">
+					<ui:include src="/paginas/manter-atividade-nao-sujeita-licenciamento/silos_armazens/unidade_armazenadora.xhtml" />
+				</p:tab>
+				
+				
+				<p:tab title="Caracterização Ambiental" id="tabCarazterizacaoAmbiental" 
+				disabled="#{!(not empty silosArmazensController.silosArmazen.silosArmazensUnidadeArmazenadoras)}">
+					<ui:include src="/paginas/manter-atividade-nao-sujeita-licenciamento/silos_armazens/caracterizacao_ambiental.xhtml" />
+				</p:tab>
+					
+				<p:tab title="Segurança" id="tabSeguranca" 
+				disabled="#{!(not empty silosArmazensController.caracterizacaoAmbientalSilosArmazen.ideCaracterizacaoAmbientalSilosArmazens)}">
+					<ui:include src="/paginas/manter-atividade-nao-sujeita-licenciamento/silos_armazens/seguranca_silos.xhtml" />
+				</p:tab>	
+				
+				<p:tab title="Documentos e Estudos" id="tabDocumentosEstudos" 
+				disabled="#{!(not empty silosArmazensController.silosArmazen.sistemaSegurancaSilosArmazens) }">
+					<ui:include src="/paginas/manter-atividade-nao-sujeita-licenciamento/silos_armazens/documentos_estudos_silos.xhtml" />
+				</p:tab>
+				
+				<p:spacer height="50"/>
+			</p:tabView>
+		
+			<h:panelGroup id="groupBotoes" layout="block" rendered="#{!silosArmazensController.isVisivel}">
+				<div style="text-align: right; margin-top: -30px; margin-right: 20px;">
+				
+				<p:commandButton value="Voltar" action="#{silosArmazensController.voltar()}" update="tabViewSilosArmazens, formSilosArmazen:groupBotoes" rendered="#{silosArmazensController.activeTab>0}" process="@this" style="margin-right:10px;"/>
+				<p:commandButton value="Avançar" actionListener="#{silosArmazensController.avancarAbas()}" update="formSilosArmazen formSilosArmazen:groupBotoes" process="@this, formSilosArmazen" rendered="#{silosArmazensController.activeTab ne 4}" disabled="#{silosArmazensController.existeResponsavelPeloSilosArmazenSemCarteira}"/>
+				<p:commandButton value="Finalizar" action="#{silosArmazensController.finalizar()}" process="@this, formSilosArmazen:tabViewSilosArmazens:tabDocumentosEstudos" rendered="#{silosArmazensController.activeTab eq 4}"/>
+				</div> 
+				
+			</h:panelGroup>
+		</h:form>	
+		
+		<ui:include src="/paginas/manter-atividade-nao-sujeita-licenciamento/dialogSelecionarEmpreendimento.xhtml"/>
+		</ui:define>
+		
+		
+</ui:composition>
+
+</html>

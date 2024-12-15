@@ -1,0 +1,1218 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="lac_erb" pageWidth="595" pageHeight="842" columnWidth="495" leftMargin="50" rightMargin="50" topMargin="20" bottomMargin="20" isFloatColumnFooter="true" uuid="c4ecfa5d-978c-4245-a7b5-c4df6eea73db">
+	<property name="ireport.zoom" value="1.50262960180316"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="686"/>
+	<parameter name="LOGO_INEMA" class="java.lang.String"/>
+	<parameter name="LOGO_SEIA" class="java.lang.String"/>
+	<parameter name="ide_lac" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[0]]></defaultValueExpression>
+	</parameter>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[select distinct
+	le.ide_lac_erb,
+	le.dsc_nome_erb,
+	le.cod_erb,
+	le.vlr_area_total_terreno,
+	le.vlr_altura_torre,
+	le.vlr_altura_antena_base,
+	le.vlr_menor_dist_limite,
+	dsc_nome_edificacao,
+	le.vlr_altura_edificacao,
+	le.vlr_altura_maior, le.vlr_altura_menor, le.vlr_altura_antena_edificacao, le.dsc_outros_tipo_delimitacao, le.dsc_nome_estabelecimento , le.dsc_atividade_estabelecimento , le.vlr_potencia_transmissor,
+	le.vlr_frequencia_utilizada ,  lc.ide_documento_obrigatorio , le.ind_compartilhado, le.vlr_azimute_antena_base ,
+	lc.ide_requerimento ,  rq.nom_contato ,  rq.num_telefone, rq.ide_orgao,  rq.num_requerimento,  rq.ide_endereco_contato,  rq.ind_declaracao, rq.ide_tipo_requerimento,
+	er.ide_fase_empreendimento,
+	pt.ide_porte,  pt.sgl_porte,  coalesce (pt.nom_porte,'Não Identificado') as nom_porte,tm.ide_tipo_modalidade_erb,tm.dsc_tipo_modalidade_erb , rp.ide_tipo_pessoa_requerimento,p.ide_pessoa,
+	pj.ide_pessoa_juridica,pj.ide_natureza_juridica ,initcap(pj.nom_razao_social) as nom_razao_social ,pj.nom_nome_fantasia , pj.dtc_abertura, pj.num_cnpj, pj.num_inscricao_municipal, pj.num_inscricao_estadual ,
+	pf.ide_pessoa_fisica ,  pf.ide_estado_civil,  pf.ide_escolaridade ,  pf.ide_ocupacao ,  pf.ide_pais ,  initcap(pf.nom_pessoa) as nom_pessoa,  pf.tip_sexo ,  pf.dtc_nascimento ,  pf.des_naturalidade,  pf.nom_pai ,
+	pf.nom_mae  ,  pf.num_cpf, er.ide_empreendimento_requerimento,em.ide_empreendimento,  em.ide_localizacao_geografica ,  em.nom_empreendimento,  em.val_investimento ,
+	em.qtd_funcionarios ,  em.num_cadastro_tecnico_federal ,  em.dtc_validade_ctf,  em.ind_correspondencia,
+	ereq.num_endereco as num_endereco_req,ereq.des_complemento as des_complemento_req,lreq.nom_logradouro as nom_logradouro_req,
+	tlreq.nom_tipo_logradouro as nom_tipo_logradouro_req,tlreq.sgl_tipo_logradouro as sgl_tipo_logradouro_req,
+	brreq.nom_bairro as nom_bairro_req,mpreq.nom_municipio as nom_municipio_req,etreq.nom_estado as nom_estado_req,
+	preq.nom_pais as nom_pais_req,
+	eemp.num_endereco as num_endereco_emp,eemp.des_complemento as des_complemento_emp,lemp.nom_logradouro as nom_logradouro_emp,
+	tlemp.nom_tipo_logradouro as nom_tipo_logradouro_emp,tlemp.sgl_tipo_logradouro as sgl_tipo_logradouro_emp,
+	bremp.nom_bairro as nom_bairro_emp,mpemp.nom_municipio as nom_municipio_emp,etemp.nom_estado as nom_estado_emp,
+	pemp.nom_pais as nom_pais_emp,
+
+tpl.des_tipologia as nome_atividade,cn.cod_cnae,    em.nom_empreendimento nome_empreendimento,rq.dtc_criacao , rq.num_requerimento,
+coalesce(
+			overlay(overlay(overlay(overlay(pj.num_cnpj placing '-' from 13 for 0) placing '/' from 9 for 0) placing '.' from 6 for 0) placing '.' from 3 for 0),
+			overlay(overlay(overlay(pf.num_cpf placing '-' from 10 for 0) placing '.' from 7 for 0) placing '.' from 4 for 0)) as num_documento,
+
+ etemp.des_sigla AS uf_emp,
+ etreq.des_sigla AS uf_req,
+
+
+overlay(lemp.num_cep::character varying placing '-' from 6 for 0) as cep_emp,
+overlay(lreq.num_cep::character varying placing '-' from 6 for 0) as cep_req,
+ array_to_string( array(
+	select dsc_tipo_delimitacao_terreno ||
+		CASE
+		  WHEN le.dsc_outros_tipo_delimitacao is not null and ep.ide_tipo_delimitacao_terreno = 3
+		  THEN ': '||dsc_outros_tipo_delimitacao
+		  ELSE ''
+		END as dsc_outros
+	from tipo_delimitacao_terreno ep
+	inner join lac_erb_tipo_delimitacao ee on ee.ide_tipo_delimitacao_terreno = ep.ide_tipo_delimitacao_terreno
+	inner join lac_erb le on le.ide_lac_erb = ee.ide_lac_erb
+	 where ee.ide_lac_erb = $P{ide_lac}
+), ', ') as tipo_delimitacao,
+upper(COALESCE(pj2.nom_razao_social,pf2.nom_pessoa)) as solicitante
+
+from lac_erb le
+	inner join lac lc on lc.ide_lac = le.ide_lac_erb
+	inner join requerimento rq on lc.ide_requerimento = rq.ide_requerimento
+
+	inner join tipo_modalidade_erb tm on tm.ide_tipo_modalidade_erb = le.ide_tipo_modalidade_erb
+
+	inner join requerimento_pessoa rp on rp.ide_requerimento = rq.ide_requerimento and rp.ind_solicitante = true
+	left join pessoa p2 on p2.ide_pessoa = rp.ide_pessoa
+	left join pessoa_juridica pj2 on pj2.ide_pessoa_juridica = p2.ide_pessoa
+	left join pessoa_fisica pf2 on pf2.ide_pessoa_fisica = p2.ide_pessoa
+
+	inner join empreendimento_requerimento er on er.ide_requerimento = rq.ide_requerimento
+	inner join porte pt on pt.ide_porte = er.ide_porte
+	inner join empreendimento em on em.ide_empreendimento = er.ide_empreendimento
+
+	inner join pessoa p on p.ide_pessoa = em.ide_pessoa
+	left join pessoa_juridica pj on pj.ide_pessoa_juridica = p.ide_pessoa
+	left join pessoa_fisica pf on pf.ide_pessoa_fisica = p.ide_pessoa
+
+	left join requerimento_tipologia etl on etl.ide_requerimento = rq.ide_requerimento
+	left join unidade_medida_tipologia_grupo umtg on umtg.ide_unidade_medida_tipologia_grupo = etl.ide_unidade_medida_tipologia_grupo
+	left join pessoa_juridica_cnae pjc on pjc.ide_pessoa_juridica = pj.ide_pessoa_juridica
+	left join cnae cn on cn.ide_cnae = pjc.ide_cnae
+	left join tipologia_grupo tg on tg.ide_tipologia_grupo = umtg.ide_tipologia_grupo
+	left join tipologia tpl on tpl.ide_tipologia = tg.ide_tipologia
+
+	inner join endereco_empreendimento eem on eem.ide_empreendimento =em.ide_empreendimento and eem.ide_tipo_endereco = 4
+	left join endereco eemp on eemp.ide_endereco = eem.ide_endereco
+	left join logradouro lemp on lemp.ide_logradouro = eemp.ide_logradouro
+	left join tipo_logradouro tlemp on tlemp.ide_tipo_logradouro = lemp.ide_tipo_logradouro
+	left join bairro bremp on bremp.ide_bairro = lemp.ide_bairro
+	left join municipio mpemp on mpemp.ide_municipio = lemp.ide_municipio
+	left join estado etemp on etemp.ide_estado = mpemp.ide_estado
+	left join pais pemp on pemp.ide_pais = etemp.ide_pais
+
+	left join endereco_pessoa ep on ep.ide_pessoa = em.ide_pessoa AND ep.ide_tipo_endereco = 1
+	left join endereco ereq on ereq.ide_endereco = ep.ide_endereco
+	left join logradouro lreq on lreq.ide_logradouro = ereq.ide_logradouro
+	left join tipo_logradouro tlreq on tlreq.ide_tipo_logradouro = lreq.ide_tipo_logradouro
+	left join bairro brreq on brreq.ide_bairro = lreq.ide_bairro
+	left join municipio mpreq on mpreq.ide_municipio = lreq.ide_municipio
+	left join estado etreq on etreq.ide_estado = mpreq.ide_estado
+	left join pais preq on preq.ide_pais = etreq.ide_pais
+
+where le.ide_lac_erb = $P{ide_lac} and p.ind_excluido = false and etl.ind_tipologia_principal = true]]>
+	</queryString>
+	<field name="ide_lac_erb" class="java.lang.Integer"/>
+	<field name="dsc_nome_erb" class="java.lang.String"/>
+	<field name="cod_erb" class="java.lang.String"/>
+	<field name="vlr_area_total_terreno" class="java.math.BigDecimal"/>
+	<field name="vlr_altura_torre" class="java.math.BigDecimal"/>
+	<field name="vlr_altura_antena_base" class="java.math.BigDecimal"/>
+	<field name="vlr_menor_dist_limite" class="java.math.BigDecimal"/>
+	<field name="dsc_nome_edificacao" class="java.lang.String"/>
+	<field name="vlr_altura_edificacao" class="java.math.BigDecimal"/>
+	<field name="vlr_altura_maior" class="java.math.BigDecimal"/>
+	<field name="vlr_altura_menor" class="java.math.BigDecimal"/>
+	<field name="vlr_altura_antena_edificacao" class="java.math.BigDecimal"/>
+	<field name="dsc_outros_tipo_delimitacao" class="java.lang.String"/>
+	<field name="dsc_nome_estabelecimento" class="java.lang.String"/>
+	<field name="dsc_atividade_estabelecimento" class="java.lang.String"/>
+	<field name="vlr_potencia_transmissor" class="java.math.BigDecimal"/>
+	<field name="vlr_frequencia_utilizada" class="java.math.BigDecimal"/>
+	<field name="ide_documento_obrigatorio" class="java.lang.Integer"/>
+	<field name="ind_compartilhado" class="java.lang.Boolean"/>
+	<field name="vlr_azimute_antena_base" class="java.lang.Integer"/>
+	<field name="ide_requerimento" class="java.lang.Integer"/>
+	<field name="nom_contato" class="java.lang.String"/>
+	<field name="num_telefone" class="java.lang.String">
+		<fieldDescription><![CDATA[Telefone da associação INCRA]]></fieldDescription>
+	</field>
+	<field name="ide_orgao" class="java.lang.Integer"/>
+	<field name="num_requerimento" class="java.lang.String"/>
+	<field name="ide_endereco_contato" class="java.lang.Integer"/>
+	<field name="ind_declaracao" class="java.lang.Boolean"/>
+	<field name="ide_tipo_requerimento" class="java.lang.Integer"/>
+	<field name="ide_fase_empreendimento" class="java.lang.Integer"/>
+	<field name="ide_porte" class="java.lang.Integer"/>
+	<field name="sgl_porte" class="java.lang.String"/>
+	<field name="nom_porte" class="java.lang.String"/>
+	<field name="ide_tipo_modalidade_erb" class="java.lang.Integer"/>
+	<field name="dsc_tipo_modalidade_erb" class="java.lang.String"/>
+	<field name="ide_tipo_pessoa_requerimento" class="java.lang.Integer"/>
+	<field name="ide_pessoa" class="java.lang.Integer"/>
+	<field name="ide_pessoa_juridica" class="java.lang.Integer">
+		<fieldDescription><![CDATA[Identificador da pessoa jurídica da associação INCRA]]></fieldDescription>
+	</field>
+	<field name="ide_natureza_juridica" class="java.lang.Integer"/>
+	<field name="nom_razao_social" class="java.lang.String"/>
+	<field name="nom_nome_fantasia" class="java.lang.String"/>
+	<field name="dtc_abertura" class="java.sql.Timestamp"/>
+	<field name="num_cnpj" class="java.lang.String"/>
+	<field name="num_inscricao_municipal" class="java.lang.String"/>
+	<field name="num_inscricao_estadual" class="java.lang.String"/>
+	<field name="ide_pessoa_fisica" class="java.lang.Integer"/>
+	<field name="ide_estado_civil" class="java.lang.Integer"/>
+	<field name="ide_escolaridade" class="java.lang.Integer"/>
+	<field name="ide_ocupacao" class="java.lang.Integer"/>
+	<field name="ide_pais" class="java.lang.Integer"/>
+	<field name="nom_pessoa" class="java.lang.String"/>
+	<field name="tip_sexo" class="java.lang.Integer"/>
+	<field name="dtc_nascimento" class="java.sql.Date"/>
+	<field name="des_naturalidade" class="java.lang.String"/>
+	<field name="nom_pai" class="java.lang.String"/>
+	<field name="nom_mae" class="java.lang.String"/>
+	<field name="num_cpf" class="java.lang.String"/>
+	<field name="ide_empreendimento_requerimento" class="java.lang.Integer"/>
+	<field name="ide_empreendimento" class="java.lang.Integer"/>
+	<field name="ide_localizacao_geografica" class="java.lang.Integer">
+		<fieldDescription><![CDATA[Identificar da localização geográfica da Área de Preservação Permanente]]></fieldDescription>
+	</field>
+	<field name="nom_empreendimento" class="java.lang.String"/>
+	<field name="val_investimento" class="java.math.BigDecimal"/>
+	<field name="qtd_funcionarios" class="java.lang.Integer"/>
+	<field name="num_cadastro_tecnico_federal" class="java.lang.String"/>
+	<field name="dtc_validade_ctf" class="java.sql.Date"/>
+	<field name="ind_correspondencia" class="java.lang.Boolean"/>
+	<field name="num_endereco_req" class="java.lang.String"/>
+	<field name="des_complemento_req" class="java.lang.String"/>
+	<field name="nom_logradouro_req" class="java.lang.String"/>
+	<field name="nom_tipo_logradouro_req" class="java.lang.String"/>
+	<field name="sgl_tipo_logradouro_req" class="java.lang.String"/>
+	<field name="nom_bairro_req" class="java.lang.String"/>
+	<field name="nom_municipio_req" class="java.lang.String"/>
+	<field name="nom_estado_req" class="java.lang.String"/>
+	<field name="nom_pais_req" class="java.lang.String"/>
+	<field name="num_endereco_emp" class="java.lang.String"/>
+	<field name="des_complemento_emp" class="java.lang.String"/>
+	<field name="nom_logradouro_emp" class="java.lang.String"/>
+	<field name="nom_tipo_logradouro_emp" class="java.lang.String"/>
+	<field name="sgl_tipo_logradouro_emp" class="java.lang.String"/>
+	<field name="nom_bairro_emp" class="java.lang.String"/>
+	<field name="nom_municipio_emp" class="java.lang.String"/>
+	<field name="nom_estado_emp" class="java.lang.String"/>
+	<field name="nom_pais_emp" class="java.lang.String"/>
+	<field name="nome_atividade" class="java.lang.String"/>
+	<field name="cod_cnae" class="java.lang.String"/>
+	<field name="nome_empreendimento" class="java.lang.String"/>
+	<field name="dtc_criacao" class="java.sql.Timestamp"/>
+	<field name="num_documento" class="java.lang.String"/>
+	<field name="uf_emp" class="java.lang.String"/>
+	<field name="uf_req" class="java.lang.String"/>
+	<field name="cep_emp" class="java.lang.String"/>
+	<field name="cep_req" class="java.lang.String"/>
+	<field name="tipo_delimitacao" class="java.lang.String"/>
+	<field name="solicitante" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band height="49" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="7e3a7f1e-23f6-4c48-916d-8321f54fcba4" x="0" y="33" width="495" height="15"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="9" isBold="true" isUnderline="true"/>
+				</textElement>
+				<text><![CDATA[DOCUMENTO DE ADESÃO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="ed64bd5e-dbdd-47d3-bf0a-6192483b14b0" x="0" y="19" width="495" height="15"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[ESTAÇÕES RÁDIO-BASE DE TELEFONIA CELULAR]]></text>
+			</staticText>
+			<line>
+				<reportElement uuid="07728e14-9245-4ca4-98a5-ee4d94e221ed" x="0" y="48" width="495" height="1"/>
+			</line>
+			<staticText>
+				<reportElement uuid="5c0f7a21-ac26-4679-9ccb-f645b83bebd8" x="0" y="1" width="495" height="19"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[LICENCIAMENTO AMBIENTAL POR ADESÃO E COMPROMISSO]]></text>
+			</staticText>
+			<line>
+				<reportElement uuid="2894cba5-d6bb-4f17-b975-67edff8f3666" x="0" y="0" width="495" height="1"/>
+			</line>
+			<image isLazy="true" onErrorType="Blank">
+				<reportElement uuid="0eaf5df1-e22a-44dd-8e81-8885dd70d072" x="396" y="1" width="99" height="41" forecolor="#FFFFFF"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<graphicElement>
+					<pen lineWidth="0.0"/>
+				</graphicElement>
+				<imageExpression><![CDATA[$P{LOGO_SEIA}]]></imageExpression>
+			</image>
+			<image isLazy="true" onErrorType="Blank">
+				<reportElement uuid="69b9d110-d7d7-43e5-bfa3-891f3513c6b0" x="1" y="1" width="99" height="41" forecolor="#FFFFFF"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<graphicElement>
+					<pen lineWidth="1.0" lineStyle="Solid" lineColor="#FFFFFF"/>
+				</graphicElement>
+				<imageExpression><![CDATA[$P{LOGO_INEMA}]]></imageExpression>
+			</image>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="215" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="cefb28c3-a1f1-4565-882b-fc1f58f2c08e" positionType="Float" x="215" y="128" width="41" height="12"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Arial" size="8" isBold="false"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<text><![CDATA[Cidade:]]></text>
+			</staticText>
+			<textField pattern="dd MMMMM yyyy" isBlankWhenNull="true">
+				<reportElement uuid="b2a1a6b8-8a67-4747-bbac-6959a430ca0d" positionType="Float" x="95" y="0" width="123" height="12"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Arial" size="9"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dtc_criacao}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="c97a922e-a0bc-4f56-ba08-39b33c147e45" positionType="Float" x="11" y="115" width="67" height="12"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Arial" size="8" isBold="false"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<text><![CDATA[Logradouro:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="447a75e3-4899-470a-afb1-c97b10893169" positionType="Float" x="373" y="45" width="115" height="12"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Arial" size="9"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{num_documento}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="77caab17-13bf-402d-998f-bcd0ee4db980" positionType="Float" x="256" y="128" width="123" height="12" isRemoveLineWhenBlank="true"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Arial" size="9"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nom_municipio_emp}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="6b51109e-b6bd-49a7-8e84-43c35668c0ad" positionType="Float" x="396" y="58" width="92" height="12" isRemoveLineWhenBlank="true"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Arial" size="9"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{cep_req}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="ef5d4769-bdeb-4f6e-a90f-b156b6b7ab14" positionType="Float" x="79" y="128" width="134" height="12" isRemoveLineWhenBlank="true"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Arial" size="9"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nom_bairro_emp}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="46dc92ac-c6dd-40f4-b06d-83e0e720c82c" positionType="Float" x="94" y="45" width="234" height="12"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Arial" size="9"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nom_pessoa} == null ? $F{nom_razao_social}:$F{nom_pessoa}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="c6de7b0b-8935-4cd4-bb06-b792d547316b" positionType="Float" x="328" y="45" width="45" height="12"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Arial" size="8" isBold="false"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<text><![CDATA[CPF/CNPJ:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="84842076-2466-4d9e-bba3-bd5f0aad2753" positionType="Float" x="94" y="58" width="241" height="12" isRemoveLineWhenBlank="true"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Arial" size="9"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new String($F{nom_logradouro_req} == null ? " Não Informado ":  $F{nom_tipo_logradouro_req}+" "+$F{nom_logradouro_req})]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="b8aea110-8998-4b17-b937-78dcb012daca" positionType="Float" x="277" y="71" width="123" height="12" isRemoveLineWhenBlank="true"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Arial" size="9"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nom_municipio_req}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="5c008db0-d595-4163-87ab-6308eec0582c" positionType="Float" x="0" y="0" width="93" height="12"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Arial" size="8" isBold="false"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<text><![CDATA[Data da Solicitação:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="c4a204bd-2069-4b4f-b477-6d4fc739750e" positionType="Float" x="0" y="12" width="93" height="12"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Arial" size="8" isBold="false"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<text><![CDATA[N° Requerimento SEIA:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="b706ecd2-8f1d-4ec9-86ab-6e0778748af6" positionType="Float" mode="Opaque" x="1" y="26" width="495" height="17" backcolor="#DDDDDD"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Verdana" isBold="true"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<text><![CDATA[Dados do Requerente]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="4b9fe2ca-4bc1-47b7-b5b3-86bcbd5a2249" positionType="Float" x="10" y="45" width="83" height="12"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Arial" size="8" isBold="false"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<text><![CDATA[Nome/Razão Social:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="4d1f40e5-22c1-462b-82ab-f8a5ff515175" positionType="Float" x="95" y="13" width="219" height="12"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Arial" size="9"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{num_requerimento}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="3e9cbdd4-ed93-4b16-93e3-a12d913322c2" positionType="Float" x="79" y="102" width="404" height="12" isRemoveLineWhenBlank="true"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Arial" size="9"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nome_empreendimento}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="a685bb08-f99e-406b-9cd3-188da5f8cea8" positionType="Float" x="364" y="58" width="32" height="12"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Arial" size="8" isBold="false"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<text><![CDATA[CEP:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="9103fb12-68af-4730-a3be-1323a262dffb" positionType="Float" x="376" y="115" width="107" height="12" isRemoveLineWhenBlank="true"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Arial" size="9"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{cep_emp}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="87273147-b283-4082-9a83-03d56c1edcd3" positionType="Float" x="11" y="128" width="67" height="12"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Arial" size="8" isBold="false"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<text><![CDATA[Bairro/Distrito:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="435f3024-7c12-4825-9187-373cecdb3477" positionType="Float" x="386" y="128" width="20" height="12"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Arial" size="8" isBold="true"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<text><![CDATA[UF:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="4d007617-5648-4d92-a5d6-667f3f491244" positionType="Float" x="10" y="71" width="83" height="12"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Arial" size="8" isBold="false"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<text><![CDATA[Bairro/Distrito:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="221c6501-a5c4-414a-8663-5e1ff7e85e4e" positionType="Float" x="406" y="71" width="27" height="12"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Arial" size="8" isBold="false"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<text><![CDATA[UF:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="c6515c5f-17f3-40bd-bbd4-78740bd71389" positionType="Float" x="79" y="115" width="271" height="12" isRemoveLineWhenBlank="true"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Arial" size="9"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new String($F{nom_logradouro_emp} == null ? "Não Informado ":  $F{nom_tipo_logradouro_emp}+" "+$F{nom_logradouro_emp})]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="02131069-5889-4abd-892b-44524285a78c" positionType="Float" x="236" y="71" width="41" height="12"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Arial" size="8" isBold="false"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<text><![CDATA[Cidade:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="24b065cb-4e9c-4068-a9d5-033d658c7f51" positionType="Float" x="94" y="71" width="123" height="12" isRemoveLineWhenBlank="true"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Arial" size="9"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nom_bairro_req}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="430acde6-babf-41e5-b217-34f618a2629e" positionType="Float" x="10" y="58" width="83" height="12"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Arial" size="8" isBold="false"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<text><![CDATA[Logradouro:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="3e064949-02d2-44c0-876b-4d952f0b10e0" positionType="Float" x="408" y="128" width="74" height="12" isRemoveLineWhenBlank="true"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Arial" size="9"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{uf_emp}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="957844cf-ea09-4340-b232-c29119c27b54" positionType="Float" mode="Opaque" x="1" y="85" width="495" height="15" backcolor="#DDDDDD"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Verdana" isBold="true"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<text><![CDATA[Dados do Empreendimento]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="8db19115-1da9-43d7-917a-415e9524b227" positionType="Float" x="431" y="71" width="57" height="12" isRemoveLineWhenBlank="true"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Arial" size="9"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{uf_req}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="68c95f33-c8ca-4330-97ee-8336ef526325" positionType="Float" x="11" y="102" width="67" height="12"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Arial" size="8" isBold="false"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<text><![CDATA[Nome:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="ab174ec5-a441-4fb0-8fd9-758b74e22f79" positionType="Float" x="351" y="115" width="24" height="12"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Arial" size="8" isBold="true"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<text><![CDATA[CEP:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="bf3332df-b258-424a-a70f-9e818ccebc78" positionType="Float" mode="Opaque" x="1" y="146" width="495" height="15" backcolor="#DDDDDD"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Verdana" isBold="true"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<text><![CDATA[Dados da Estação de Rádio Base]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="1367a903-3a67-4726-a32d-9c401d58608c" positionType="Float" x="11" y="189" width="66" height="12"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Arial" size="8" isBold="false"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<text><![CDATA[Nome da ERB:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="137b62fd-2ca2-4703-b18d-cbb42752dbea" positionType="Float" x="77" y="189" width="415" height="12" isRemoveLineWhenBlank="true"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Arial" size="9"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dsc_nome_erb}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="9015d24a-e604-48ac-b2bb-ceac82a066b8" positionType="Float" x="11" y="203" width="67" height="12"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Arial" size="8" isBold="false"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<text><![CDATA[Código da ERB:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="2aa5fc8e-ef6b-42e7-a794-0bf4a95e69ee" positionType="Float" x="78" y="203" width="414" height="12" isRemoveLineWhenBlank="true"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Arial" size="9"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{cod_erb}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="a7c9f25a-b8f2-4ebf-b8fc-7dbd64be6f15" positionType="Float" x="269" y="162" width="224" height="12" isRemoveLineWhenBlank="true"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Arial" size="9"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dsc_tipo_modalidade_erb}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="5e6c8d5c-0601-4d73-90fe-942e343ab317" positionType="Float" x="11" y="162" width="257" height="12" isRemoveLineWhenBlank="true"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Arial" size="8" isBold="false"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<text><![CDATA[Modalidade, caracterização e localização para a instalação da antena:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="ad689022-50d4-4b61-9ce7-b98a9757c999" positionType="Float" x="77" y="174" width="415" height="12" isRemoveLineWhenBlank="true"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Arial" size="9"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ind_compartilhado} ? "Compartilhado" : "Não Compartilhado"]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="bc3be72d-1447-47c4-a28b-293cad4fcdee" positionType="Float" x="11" y="174" width="66" height="12"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Arial" size="8" isBold="false"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<text><![CDATA[Tipo da ERB:]]></text>
+			</staticText>
+		</band>
+		<band height="81">
+			<printWhenExpression><![CDATA[new Boolean ($F{ide_tipo_modalidade_erb}.intValue() == 1)]]></printWhenExpression>
+			<staticText>
+				<reportElement uuid="43d3ddc7-a9ab-45d5-b3c1-addd84d3343b" positionType="Float" x="11" y="44" width="333" height="12" isRemoveLineWhenBlank="true"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Arial" size="8" isBold="false"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<text><![CDATA[Tipo de delimitação a ser utilizada na frente, fundo e laterais direita e esquerda do terreno:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="758202b4-0493-4852-b10e-bfc2e789c5db" positionType="Float" x="243" y="30" width="149" height="12" isRemoveLineWhenBlank="true"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Arial" size="9"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{vlr_azimute_antena_base}.toString()+"°"]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="24ddc775-3928-4322-9ca4-16e10c3dab9a" positionType="Float" x="11" y="30" width="230" height="12" isRemoveLineWhenBlank="true"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Arial" size="8" isBold="false"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<text><![CDATA[Azimute e altura da(s) antena(s) em relação à base da torre:]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="3f4fb54b-054f-410c-bd3f-2b43734ab9bc" positionType="Float" stretchType="RelativeToTallestObject" x="11" y="57" width="482" height="12" isRemoveLineWhenBlank="true"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Arial" size="9"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{tipo_delimitacao}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="fa151db9-c0b2-440f-90b3-e032d2face30" positionType="Float" x="11" y="16" width="139" height="12" isRemoveLineWhenBlank="true"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Arial" size="8" isBold="false"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<text><![CDATA[Altura da torre/postes ou similares:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="76eb3fb8-2147-49c4-ab8c-3aabe9360814" positionType="Float" x="11" y="3" width="82" height="12" isRemoveLineWhenBlank="true"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Arial" size="8" isBold="false"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<text><![CDATA[Área total do terreno:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="38b00913-903d-445a-ad35-420bdc377bac" positionType="Float" x="151" y="16" width="149" height="12" isRemoveLineWhenBlank="true"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Arial" size="9"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{vlr_altura_antena_base}.toString()+"m"]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="26592dfb-8753-40fe-8488-7ff7dea985ec" positionType="Float" x="92" y="3" width="149" height="12" isRemoveLineWhenBlank="true"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Arial" size="9"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{vlr_area_total_terreno}.toString()+"m²"]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="e4ee99bd-0778-43dc-9ca0-fc33b271539f" positionType="Float" x="11" y="69" width="333" height="12" isRemoveLineWhenBlank="true"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Arial" size="8" isBold="false"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<text><![CDATA[Indicar as distâncias da base da torre até os limites do terreno ou unidade habitacional: ]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="c631d47b-a006-4f87-8e03-8b13522bc9ea" positionType="Float" x="343" y="69" width="149" height="12" isRemoveLineWhenBlank="true"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Arial" size="9"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{vlr_menor_dist_limite}.toString()+"m"]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="81">
+			<printWhenExpression><![CDATA[new Boolean ($F{ide_tipo_modalidade_erb}.intValue() == 2)]]></printWhenExpression>
+			<staticText>
+				<reportElement uuid="551203b0-d8eb-41ec-9d0d-71542566272c" positionType="Float" x="11" y="15" width="303" height="12" isRemoveLineWhenBlank="true"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Arial" size="8" isBold="false"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<text><![CDATA[Altura da edificação e dos prédios vizinhos, no entorno de 50(cinqüenta) metros:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="e9370fde-a0b4-4de5-a54d-30ed6f21dacf" positionType="Float" x="256" y="43" width="149" height="12" isRemoveLineWhenBlank="true"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Arial" size="9"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{vlr_azimute_antena_base}.toString()+"°"]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="869f3a9c-a334-4b68-bb35-31b369d16157" positionType="Float" stretchType="RelativeToTallestObject" x="11" y="69" width="482" height="12" isRemoveLineWhenBlank="true"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Arial" size="9"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{tipo_delimitacao}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="97d5080b-a4a6-4dec-b7b3-58e5186d0c8f" positionType="Float" x="11" y="29" width="68" height="12" isRemoveLineWhenBlank="true"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Arial" size="8" isBold="false"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<text><![CDATA[Altura da antena:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="da5a149f-1af3-4988-988c-607cf240ad4e" positionType="Float" x="11" y="43" width="245" height="12" isRemoveLineWhenBlank="true"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Arial" size="8" isBold="false"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<text><![CDATA[Azimute e altura da(s) antena(s) em relação à base da edificação:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="ec659235-6e1b-44d8-8e9a-0f90a00c4d2d" positionType="Float" x="95" y="1" width="149" height="12" isRemoveLineWhenBlank="true"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Arial" size="9"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dsc_nome_edificacao}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="a24cee6a-d9f3-408d-8bb0-b9611b61ad88" positionType="Float" x="11" y="56" width="303" height="12" isRemoveLineWhenBlank="true"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Arial" size="8" isBold="false"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<text><![CDATA[Tipo de delimitação a ser utilizada na frente, fundo e laterais direita e esquerda:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="d36314c5-2de0-4606-969e-eec13ea06ddf" positionType="Float" x="79" y="29" width="149" height="12" isRemoveLineWhenBlank="true"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Arial" size="9"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{vlr_altura_antena_edificacao}.toString()+"m"]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="52a13a50-8ddc-4859-a743-a8757026c8e4" positionType="Float" x="11" y="1" width="82" height="12" isRemoveLineWhenBlank="true"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Arial" size="8" isBold="false"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<text><![CDATA[Nome da edificação:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="be5647b9-dc36-4f80-a9c0-18f37582d27c" positionType="Float" x="314" y="15" width="149" height="12" isRemoveLineWhenBlank="true"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Arial" size="9"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{vlr_altura_edificacao}.toString()+"m"]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="39">
+			<printWhenExpression><![CDATA[new Boolean ($F{ide_tipo_modalidade_erb}.intValue() == 3)]]></printWhenExpression>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="1aea26f6-fb10-42e7-a7af-fef69128b69c" positionType="Float" x="113" y="0" width="379" height="12" isRemoveLineWhenBlank="true"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Arial" size="9"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dsc_nome_estabelecimento}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="bb7dce83-6ace-42ab-a938-75846d544916" positionType="Float" x="11" y="14" width="182" height="12" isRemoveLineWhenBlank="true"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Arial" size="8" isBold="false"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<text><![CDATA[Atividades desenvolvidas no estabelecimento:]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="35df7064-245d-4adc-b1b8-f9ebc2eba16f" positionType="Float" stretchType="RelativeToTallestObject" x="11" y="26" width="483" height="13" isRemoveLineWhenBlank="true"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Top">
+					<font fontName="Arial" size="9"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dsc_atividade_estabelecimento}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="ac40721a-fc2f-41cc-95c8-14f50484b87a" positionType="Float" x="11" y="0" width="102" height="12" isRemoveLineWhenBlank="true"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Arial" size="8" isBold="false"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<text><![CDATA[Nome do estabelecimento:]]></text>
+			</staticText>
+		</band>
+		<band height="23">
+			<subreport>
+				<reportElement uuid="3af3699f-c95e-4e28-8720-bc9652a8d559" isPrintRepeatedValues="false" x="11" y="2" width="481" height="21" isRemoveLineWhenBlank="true"/>
+				<subreportParameter name="SUBREPORT_DIR">
+					<subreportParameterExpression><![CDATA[$P{SUBREPORT_DIR}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="potencia_transmissor">
+					<subreportParameterExpression><![CDATA[$F{vlr_potencia_transmissor}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="frequencia_utilizada">
+					<subreportParameterExpression><![CDATA[$F{vlr_frequencia_utilizada}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="ide_lac">
+					<subreportParameterExpression><![CDATA[$P{ide_lac}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "equipamentos.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+		<band height="30">
+			<textField isStretchWithOverflow="true">
+				<reportElement uuid="6c256ebc-bf8c-430b-ab01-fb126b21ba37" positionType="Float" stretchType="RelativeToTallestObject" x="0" y="7" width="495" height="20" isPrintWhenDetailOverflows="true"/>
+				<textElement/>
+				<textFieldExpression><![CDATA["Condicionantes pertinentes a atividade descrita: \n"
+                + "1 - Antenas instaladas em torres, postes ou similares e sobre edificações:\n"
+                + "1.1 - em hospitais, creches, escolas, centros comerciais e clínicas médicas que utilizam equipamentos suscetíveis a interferências eletromagnéticas, o nível de radiação não poderá ultrapassar os seguintes valores: 1,94 V/m ou 0,01 W/m²;\n"
+                + "1.2 - em qualquer unidade habitacional, o nível de radiação não poderá ultrapassar os seguintes valores: 9,0 V/m ou 0,21 W/m²;\n"
+                + "1.3 - a instalação de estações rádio-base e equipamentos de telefonia sem fio deve respeitar a distância mínima de 02 (dois) metros, medidos do ponto mais próximo do pé da torre, poste ou similar, até qualquer limite do terreno ou unidade habitável;\n"
+                + "1.4 - a empresa responsável pelo serviço de telefonia deverá fornecer aos responsáveis pelo imóvel, material informativo (cartilhas/cartazes/panfletos, etc.) sobre o perigo da permanência de pessoas nas proximidades da antena.\n"
+                + "2 - Antenas instaladas internamente (indoor):\n"
+                + "2.1 - no interior das edificações que abrigam centros de saúde, centros comerciais, clínicas médicas que utilizam equipamentos suscetíveis a radiações eletromagnéticas, escolas e creches, o nível de radiação não poderá ultrapassar os seguintes valores: 1,94 V/m ou 0,01 W/m²;\n"
+                + "2.2 - no interior de qualquer outra edificação, o nível de radiação não poderá ultrapassar os seguintes valores: 9,0 V/m ou 0,21 W/m²;\n"
+                + "2.3 - as antenas devem ser instaladas fora do alcance do público não devendo o nível máximo de radiação em relação a este ultrapassar os valores especificados. Recomendando-se o uso de cabos irradiantes.\n"
+                + "2.4 - a empresa responsável pelo serviço de telefonia deverá fornecer à administração da edificação, material informativo sobre o perigo da permanência de pessoas nas proximidades da antena.\n"
+                + "3 - As torres e/ou antenas devem ter uma área de proteção delimitada de forma a impedir o acesso de pessoas e animais, devidamente sinalizada, com advertência de exposição à radiação eletromagnética, informando as distâncias de afastamento mínimo recomendadas e os números de telefones gratuitos para contato com a operadora, a Agência Nacional de Telecomunicação (ANATEL) e o INEMA.\n"
+                + "4 - A ERB deverá dispor de sistema de proteção contra as descargas atmosféricas, conforme a NBR 5.419 e suas revisões.\n"
+                + "5 - As medições para avaliação das radiações devem ser realizadas dentro da faixa de 100 KHz a 3 GHz. Caso o valor medido esteja acima do especificado deverão ser tomadas medidas para adequação á faixa de operação utilizada pela empresa.\n"
+                + "6 - Respeitar as áreas de Preservação Permanente (APPs) existentes na área do empreendimento, conforme definidas em legislação específica, mantendo as distãncias mínimas legais em relação a qualquer ocupação nestas áreas;\n"
+                + "7 - Desenvolver programa de informação para a comunidade local, previamente é implantação da ERB, divulgando informações sobre os possíveis efeitos da atividade, de forma a esclarecer a população quanto a exposição à radiação eletromagnética, mediante palestras, distribuição de folhetos ou outros instrumentos de comunicaçã contendo, no mínimo: informações sobre a estação, perigos de permanência de pessoas nas proximidades das antenas e número telefônico para que a comunidade possa dirimir suas dúvidas.\n"
+                + "8 - Indenizar ou reparar os danos causados ao meio ambiente causados pelo empreendimento, independentemente da existência de culpa, conforme previsto na Constituição Federal e Estadual, bem como nos demais instrumentos legais e normativos aplicáveis à espécie.\n"
+                + "9 - Fazer com que seus prepostos, funcionários e outros sob sua responsabilidade cumpram o estabelecido neste documento.\n"
+                + "10 - Permitir livre acesso à área do empreendimento, a qualquer tempo, aos funcionários do INEMA, no exercício das suas funções de vistoria e fiscalização, devendo disponibilizar, quando requerido, os documentos relativos à regularidade ambiental do empreendimento.\n"
+                + "11 - Atualizar a Licença por Adesão, junto ao INEMA, previamente a quaisquer alterações, seja na posição das antenas instaladas e/ou aumento da potência do transmissor do empreendimento, com conseqüente alteração dos níveis de radiação emitidos, bem como nos casos de compartilhamento da infraestrutura da ERB por outra operadora ou alteração de titularidade.\n"]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="15" splitType="Stretch">
+			<frame>
+				<reportElement uuid="805a8ccd-ee8e-480d-bf15-0d36f80b4711" mode="Opaque" x="1" y="2" width="190" height="13" forecolor="#000000"/>
+			</frame>
+			<textField pattern="EEEEE dd MMMMM yyyy">
+				<reportElement uuid="f2cd4e29-8615-471d-9e06-8d60f6167c21" mode="Opaque" x="3" y="2" width="118" height="13" forecolor="#000000"/>
+				<textElement verticalAlignment="Middle">
+					<font size="10" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.text.SimpleDateFormat("dd/MM/yyyy").format(new java.util.Date())]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="a00cac8a-fd3f-4596-8c85-7fd95fc32f99" x="113" y="2" width="298" height="13"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="5"/>
+				</textElement>
+				<text><![CDATA[INEMA/CAB: Avenida Luís Viana Filho, 6ª Avenida, nº 600 - CAB - CEP 41.745-900 - Salvador - Bahia - Brasil.]]></text>
+			</staticText>
+			<textField evaluationTime="Report">
+				<reportElement uuid="3f5feefb-e62a-4ef9-93a9-d816f23de908" mode="Opaque" x="480" y="2" width="15" height="13" forecolor="#000000"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="10" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="bdc8a3e0-b178-4dd5-8c99-5bc5179e4fd0" mode="Opaque" x="434" y="2" width="46" height="13" forecolor="#000000"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="10" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Pág "+$V{PAGE_NUMBER}+" de"]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="72" splitType="Stretch">
+			<textField isStretchWithOverflow="true">
+				<reportElement uuid="aac44313-c547-48a9-9797-fa769cdaef19" positionType="Float" stretchType="RelativeToTallestObject" x="26" y="48" width="412" height="24"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{solicitante}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd MMMMM yyyy">
+				<reportElement uuid="ef8a9a43-7b73-4cc3-8b9a-c903eaa281a2" x="37" y="10" width="100" height="16"/>
+				<textElement>
+					<font fontName="Arial" size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new Date()]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement uuid="625fd151-3d2c-4201-b913-597de2e66199" positionType="Float" x="42" y="47" width="396" height="1"/>
+			</line>
+			<staticText>
+				<reportElement uuid="874cfbf9-cfa0-4919-8bcf-be5bd6b15759" x="10" y="10" width="27" height="16"/>
+				<textElement>
+					<font fontName="Arial" size="9"/>
+				</textElement>
+				<text><![CDATA[Data:]]></text>
+			</staticText>
+		</band>
+	</summary>
+</jasperReport>

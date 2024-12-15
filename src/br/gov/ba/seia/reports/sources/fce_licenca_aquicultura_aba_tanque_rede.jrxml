@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="fce_licenca_aquicultura_aba_tanque_rede" pageWidth="495" pageHeight="802" whenNoDataType="BlankPage" columnWidth="495" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="80b78396-35cc-4e26-aaf9-1207b1892468">
+	<property name="ireport.zoom" value="2.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String"/>
+	<parameter name="ide_fce" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[$P{ide_fce}]]></defaultValueExpression>
+	</parameter>
+	<parameter name="ide_tipo_aquicultura" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[6]]></defaultValueExpression>
+	</parameter>
+	<parameter name="ide_requerimento" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[$P{ide_requerimento}]]></defaultValueExpression>
+	</parameter>
+	<parameter name="ide_doc_obrigatorio" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[1444]]></defaultValueExpression>
+	</parameter>
+	<parameter name="ide_classificacao_secao" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[2]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT fal.ide_fce,
+fal.ide_fce_aquicultura_licenca
+FROM fce_aquicultura_licenca fal
+WHERE fal.ide_fce = $P{ide_fce}]]>
+	</queryString>
+	<field name="ide_fce" class="java.lang.Integer"/>
+	<field name="ide_fce_aquicultura_licenca" class="java.lang.Integer"/>
+	<title>
+		<band height="20" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="490f0746-4146-4307-8e5c-75379a4020be" positionType="Float" mode="Opaque" x="0" y="0" width="495" height="20" backcolor="#DDDDDD"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif" isBold="true"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<text><![CDATA[Tanque Rede]]></text>
+			</staticText>
+		</band>
+	</title>
+	<detail>
+		<band height="32" splitType="Stretch">
+			<subreport>
+				<reportElement uuid="57b6be84-ddd5-45b7-8272-039c2b06619f" positionType="Float" isPrintRepeatedValues="false" x="0" y="10" width="495" height="22" isRemoveLineWhenBlank="true"/>
+				<subreportParameter name="SUBREPORT_DIR">
+					<subreportParameterExpression><![CDATA[$P{SUBREPORT_DIR}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="ide_requerimento">
+					<subreportParameterExpression><![CDATA[$P{ide_requerimento}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="ide_doc_obrigatorio">
+					<subreportParameterExpression><![CDATA[$P{ide_doc_obrigatorio}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} +"fce_licenca_aquicultura_aba_tanque_rede_rio.jasper"]]></subreportExpression>
+			</subreport>
+			<staticText>
+				<reportElement uuid="1902745e-39f1-49fc-8892-f775b5fe6f0f" x="162" y="10" width="152" height="20">
+					<printWhenExpression><![CDATA[false]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[tanque_rio]]></text>
+			</staticText>
+		</band>
+		<band height="32">
+			<subreport>
+				<reportElement uuid="57b6be84-ddd5-45b7-8272-039c2b06619f" positionType="Float" isPrintRepeatedValues="false" x="0" y="10" width="495" height="22" isRemoveLineWhenBlank="true"/>
+				<subreportParameter name="SUBREPORT_DIR">
+					<subreportParameterExpression><![CDATA[$P{SUBREPORT_DIR}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="ide_requerimento">
+					<subreportParameterExpression><![CDATA[$P{ide_requerimento}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="ide_doc_obrigatorio">
+					<subreportParameterExpression><![CDATA[$P{ide_doc_obrigatorio}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} +"fce_licenca_aquicultura_aba_tanque_rede_barragem.jasper"]]></subreportExpression>
+			</subreport>
+			<staticText>
+				<reportElement uuid="910c6cb9-3aab-4963-bedc-13ea31ed49f2" x="162" y="12" width="152" height="20">
+					<printWhenExpression><![CDATA[false]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[tanque_barragem]]></text>
+			</staticText>
+		</band>
+		<band height="32">
+			<subreport>
+				<reportElement uuid="57b6be84-ddd5-45b7-8272-039c2b06619f" positionType="Float" isPrintRepeatedValues="false" x="0" y="10" width="495" height="22" isRemoveLineWhenBlank="true"/>
+				<subreportParameter name="SUBREPORT_DIR">
+					<subreportParameterExpression><![CDATA[$P{SUBREPORT_DIR}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="ide_classificacao_secao">
+					<subreportParameterExpression><![CDATA[$P{ide_classificacao_secao}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="ide_fce_aquicultura_licenca">
+					<subreportParameterExpression><![CDATA[$F{ide_fce_aquicultura_licenca}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} +"fce_licenca_aquicultura_aba_tanque_intervencao_cadastradas.jasper"]]></subreportExpression>
+			</subreport>
+			<staticText>
+				<reportElement uuid="a5916f2e-34e8-465c-a8e1-9622c7d3eba6" x="162" y="12" width="152" height="20">
+					<printWhenExpression><![CDATA[false]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[intervencao_cadastrada]]></text>
+			</staticText>
+		</band>
+		<band height="32" splitType="Stretch">
+			<subreport runToBottom="false">
+				<reportElement uuid="6a2fa94a-3643-4a28-8006-6771c1a62b48" positionType="Float" stretchType="RelativeToBandHeight" x="0" y="10" width="495" height="22" isPrintInFirstWholeBand="true"/>
+				<subreportParameter name="SUBREPORT_DIR">
+					<subreportParameterExpression><![CDATA[$P{SUBREPORT_DIR}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="ide_tipo_aquicultura">
+					<subreportParameterExpression><![CDATA[$P{ide_tipo_aquicultura}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="ide_fce_aquicultura_licenca">
+					<subreportParameterExpression><![CDATA[$F{ide_fce_aquicultura_licenca}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} +"fce_licenca_aquicultura_tipo_atividade_new.jasper"]]></subreportExpression>
+			</subreport>
+			<staticText>
+				<reportElement uuid="4860325e-9514-48da-a29c-5e7315dd00fd" x="162" y="12" width="152" height="20">
+					<printWhenExpression><![CDATA[false]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[tipo_atividade_novo]]></text>
+			</staticText>
+		</band>
+	</detail>
+</jasperReport>

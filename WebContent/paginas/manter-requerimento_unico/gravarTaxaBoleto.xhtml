@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui">
+
+	<h:form id="formBoleto">
+
+		<h:outputText style="font-weight: bold;" value="Dados do Requerente"/> 
+		<h:panelGrid columns="2">
+			<h:outputText value="Nome:"/>			
+			<h:outputText value="#{requerimentoUnicoController.requerimentoUnicoDTO.pessoa.nomeRazao}" />
+			<h:outputText value="CPF/CNPJ:"/>			
+			<h:outputText value="#{requerimentoUnicoController.requerimentoUnicoDTO.pessoa.cpfCnpj}" />
+		</h:panelGrid>
+		<p:spacer width="20" height="5"/>
+		<h:panelGrid columns="3">
+			<h:outputText value="Número Requerimento"/>
+			<p:spacer width="50" height="1"/>				
+			<h:outputText value="Porte do Empreendimento"/>
+			<h:outputText value="#{requerimentoUnicoController.requerimentoUnicoDTO.requerimentoUnico.requerimento.numRequerimento}" />
+			<p:spacer width="50" height="1"/>				
+			<h:outputText value="#{requerimentoUnicoController.requerimentoUnicoDTO.requerimentoUnico.idePorte.nomPorte}" />
+		</h:panelGrid>
+		<p:spacer width="20" height="5"/>
+		<h:panelGrid columns="2" id="listas_boleto">
+			<p:dataTable value="#{requerimentoUnicoController.listaAtosDoRequerimentoDTO}" var="ato">
+				<p:column headerText="Ato">
+					<h:outputText value="#{ato.nomAtoAmbiental}" />
+				</p:column>
+			</p:dataTable>
+			<p:dataTable value="#{requerimentoUnicoController.empreendimento.tipologias}" var="tipologia">
+				<p:column headerText="Tipologia">
+					<h:outputText value="#{tipologia.descricaoNo}" />
+				</p:column>
+			</p:dataTable>
+		</h:panelGrid>	
+		<p:spacer width="20" height="5"/>
+		<h:panelGrid columns="2">
+			<p:graphicImage url="/resources/img/ico-msg-informacao.png"/>
+			<h:outputText value="Para os atos de Licenciamento e Outorga de água, utilizar o boleto do Banco do Brasil. Para os atos florestais usar o DAE." />		
+		</h:panelGrid>		
+		<p:remoteCommand name="validarValorBoleto" global="false" process="@this" update="formBoleto:coordenacoes formBoleto:botoes" action="#{requerimentoUnicoController.validarBoletoRequerimento()}"/>
+		<h:panelGrid columns="1">
+			<h:outputText style="font-weight: bold;"
+				value="Valor do Boleto (R$)" />
+			<p:inputText name="Valor do Boleto" 
+				value="#{requerimentoUnicoController.boleto.valBoleto}"		
+				converter="doubleConverter" maxlength="18"
+				onkeyup="maskIt(this, event, '99.999.999.999,99', true)">
+				<p:ajax event="blur" oncomplete="validarValorBoleto();" global="false" process="@this"/>
+			</p:inputText>
+			<h:outputText />
+			<h:outputText style="font-weight: bold;"
+				value="Valor de Outorga (R$)" />
+			<p:inputText name="Valor outorga" 
+				value="#{requerimentoUnicoController.boleto.valBoletoOutorga}"
+				converter="doubleConverter" maxlength="18"
+				onkeyup="maskIt(this, event, '99.999.999.999,99', true)">
+				<p:ajax event="blur" oncomplete="validarValorBoleto();" global="false" process="@this"/>
+			</p:inputText>	
+			<h:outputText />
+			<h:outputText style="font-weight: bold;"
+				value="Data de vencimento" />
+			<p:calendar id="vencimento" title="Data de vencimento" showOn="button"  
+				locale="pt" pattern="dd/MM/yyyy" navigator="true" 
+				accesskey="true"
+				value="#{requerimentoUnicoController.boleto.dtcVencimento}"
+				readOnlyInputText="true" yearRange="c-100:c+100"
+				mindate="#{pessoaFisicaController.dataAmanha}">
+			</p:calendar>
+			<h:outputText style="font-weight: bold;"
+				value="#{bundle.requerimento_boleto_necessaria_emissao_DAE}" />
+			<p:selectOneRadio
+				valueChangeListener="#{requerimentoUnicoController.alterarLayoutBoleto()}"
+				value="#{requerimentoUnicoController.showEmissaoDae}">
+				<f:selectItems value="#{requerimentoUnicoController.listaRadios}" />
+				<p:ajax process="@this" event="change" global="false"
+					listener="#{requerimentoUnicoController.calcularValorTaxaCertificado()}"
+					update="formBoleto:valorTotalCertificado formBoleto:coordenacoes formBoleto:botoes" />
+			</p:selectOneRadio>
+		</h:panelGrid>
+		<h:panelGrid id="panelEmissaoDae">
+			
+			<h:panelGrid rendered="#{requerimentoUnicoController.showEmissaoDae}">
+				<h:outputText value="${requerimentoUnicoController.descricaoListaAtosFlorestaisRequerimento}" />
+			</h:panelGrid>
+			
+			<h:panelGrid columns="2" rendered="#{requerimentoUnicoController.showEmissaoDae}">
+					<h:outputText value="Valor do Certificado: " style="font-weight: bold;" />
+					<p:inputText value="#{requerimentoUnicoController.boletoDaeRequerimeno.vlrTotalCertificado}" required="true" 
+					requiredMessage="#{bundle.requerimento_boleto_msg_required_qtd_certificado}" 
+					converter="doubleConverter" maxlength="18"
+					onkeyup="maskIt(this, event, '99.999.999.999,99', true)"/>
+			</h:panelGrid>
+			
+			<h:panelGrid columns="4" rendered="#{requerimentoUnicoController.showEmissaoDae}">
+					<h:outputText value="#{bundle.requerimento_boleto_area}" style="font-weight: bold;" />
+					
+					<p:inputText disabled="#{requerimentoUnicoController.disableVistoria}" value="#{requerimentoUnicoController.boletoDaeRequerimeno.vlrAreaVistoria}" converter="javax.faces.BigDecimal"  maxlength="14" onkeypress="mascararBigDecimal(this, event, 8, 2);" onkeyup="mascararBigDecimal(this, event, 8, 2);" onblur="mascararBigDecimal(this, event, 8, 2);" id="vlrAreaVistoria"  >
+						<p:ajax event="blur" listener="#{requerimentoUnicoController.calcularValorTaxaVistoria()}" update="formBoleto:valorTotalVistoria"/>
+					</p:inputText>
+					
+					<p:selectBooleanCheckbox value="#{requerimentoUnicoController.disableVistoria}" valueChangeListener="#{requerimentoUnicoController.verificarValorTaxaVistoria()}" >
+						<f:ajax execute="@this" />
+					</p:selectBooleanCheckbox>
+					<h:outputText value="#{bundle.requerimento_boleto_check_nao_ha_area}" style="font-weight: bold;"  />
+			</h:panelGrid>
+			<h:panelGrid columns="2" rendered="#{requerimentoUnicoController.showEmissaoDae}">								
+					<h:outputText value="#{bundle.requerimento_boleto_valor_total_vistoria}" style="font-weight: bold;"  />
+					<h:outputText value="#{requerimentoUnicoController.boletoDaeRequerimeno.vlrTotalVistoriaFormatado}" id="valorTotalVistoria" />
+			</h:panelGrid>
+			
+			<h:panelGrid id="coordenacoes">
+				<h:outputText styleClass="titulo-grupo"	style="font-weight:bold;color:#5D7750;"	value="Encaminhar para coordenação:" rendered="#{requerimentoUnicoController.exibeCoordenacoes}"/>
+				<p:selectOneRadio value="${requerimentoUnicoController.areaSelecionada}" layout="pageDirection" rendered="#{requerimentoUnicoController.exibeCoordenacoes}"
+ 						 required="#{requerimentoUnicoController.exibeCoordenacoes}"	requiredMessage="O campo Encaminhar para coordenação é de preenchimento obrigatório.">
+						<f:selectItems value="${requerimentoUnicoController.areas}" />
+				</p:selectOneRadio>
+			</h:panelGrid>
+			
+		</h:panelGrid>
+		
+		<h:panelGroup id="botoes">
+			<div style="text-align: center;">
+				<p:commandButton value="Voltar" id="bt_voltar" process="@this"
+					oncomplete="confirmacaoVoltarBoleto.show()"  />
+				<p:commandButton value="Salvar" rendered="#{!requerimentoUnicoController.exibeCoordenacoes}"
+					action="${requerimentoUnicoController.validateSalvarBoleto()}" />
+				<p:commandButton value="Gerar Processo" rendered="#{requerimentoUnicoController.exibeCoordenacoes}"
+					action="${requerimentoUnicoController.gerarProcessoRequerimento()}" update="formConsultarRequerimento:tabelaRequerimentos"/>
+			</div>
+		</h:panelGroup>
+		
+	</h:form>
+	
+	
+
+</ui:composition>

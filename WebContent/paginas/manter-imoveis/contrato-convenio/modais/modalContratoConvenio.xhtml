@@ -1,0 +1,135 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui">
+	
+	<style>
+		.ui-picklist .ui-picklist-list {
+		    height: 150px;
+		    margin: 0;
+		    overflow: auto;
+		    padding: 0;
+		}
+	</style>
+	
+	<script type="text/javascript">		
+			
+			function reordenarLista() {
+				$('.ui-picklist-target').children().detach().sort(function(a, b) {
+				    return $(a).text().localeCompare($(b).text());
+				  }).appendTo($('.ui-picklist-target'));
+				  
+				$('.ui-picklist-source').children().detach().sort(function(a, b) {
+					    return $(a).text().localeCompare($(b).text());
+					  }).appendTo($('.ui-picklist-source'));				
+			}
+	</script>
+	
+		
+	<!-- <h:panelGrid id="panelCadastroContratoConvenio" rendered="#{contratoConvenioCefirController.contratoConvenioCefir != null}" columns="1"> -->
+		<h:form id="formContratoConvenio" style="margin-left: 5px;" >
+			<h:panelGrid id="paneldiaglogContratoConvenio" rendered="#{contratoConvenioCefirController.contratoConvenioCefir != null}">
+				<h:panelGrid>
+			  		<h:outputLabel value="* #{bundle.cefir_lbl_nome_contrato_convenio}" />
+					<p:inputText value="#{contratoConvenioCefirController.contratoConvenioCefir.nomContratoConvenioCefir}"
+								 style="width: 433px;"
+								 maxlength="50"/>
+				</h:panelGrid>
+	 		 	<h:panelGrid style="margin-top: 7px;">
+					<h:outputLabel value="* #{bundle.cefir_lbl_numero_contrato_convenio}" />
+					<p:inputText value="#{contratoConvenioCefirController.contratoConvenioCefir.numContratoConvenioCefir}"
+										 size="27"
+										 maxlength="30"/>
+				</h:panelGrid>
+					
+				<h:panelGrid id="panelCheckBoxProjetoCarBndesInema" style="margin-top: 7px; margin-left: -4px;">  	  
+					<h:panelGrid>
+				  		<h:outputLabel value="* #{bundle.cefir_lbl_gestor_financeiro}" />
+				  		<p:selectOneMenu id="gestorFinanceiroCadastro" style="width: 193px;"
+				  						 value="#{contratoConvenioCefirController.contratoConvenioCefir.ideGestorFinanceiroCefir}"
+				  						 converter="gestorFinanceiroConverter">
+				  						 
+				  						 
+							<f:selectItem itemLabel="#{bundle.geral_lbl_selecione}" />
+							<f:selectItems value="#{contratoConvenioCefirController.listGestorFinanceiro}"
+											var="gestor"
+											itemLabel="#{gestor.nomGestorFinanceiroCefir}" 
+											itemValue="#{gestor}"/>
+							<p:ajax event="change" process="gestorFinanceiroCadastro" oncomplete="dlgCadContratoConvenio.initPosition();" listener="#{contratoConvenioCefirController.changeGestorFinanceiro()}" update="panelCheckBoxProjetoCarBndesInema" />				
+						</p:selectOneMenu>
+					</h:panelGrid>
+				
+					<h:panelGrid style="margin-top: 7px;" columns="2" rendered="#{contratoConvenioCefirController.renderedCheckProjetoBndes()}">
+						<h:selectBooleanCheckbox id="checkProjetoCarBndesInema" value="#{contratoConvenioCefirController.contratoConvenioCefir.indProjetoBndes}">
+							<p:ajax process="checkProjetoCarBndesInema" update="panelCheckBoxProjetoCarBndesInema" listener="#{contratoConvenioCefirController.changeIndProjetoBndes()}" oncomplete="dlgCadContratoConvenio.initPosition();" />				
+						</h:selectBooleanCheckbox> 				
+						<h:outputText value="Projeto CAR/BNDES/INEMA"/>
+					</h:panelGrid>
+				
+				
+					<h:panelGrid style="margin-top: 7px;" id="panelProjetoCarBndesInema" rendered="#{contratoConvenioCefirController.contratoConvenioCefir.indProjetoBndes}">
+						<h:panelGrid columns="2" style="margin-left: -4px; margin-top: -5px;">
+							<h:outputLabel value="* #{bundle.cefir_lbl_cnpj_contrato_convenio}" />
+							<p:spacer width="20" height="10" />
+							<p:inputMask  id="cnpjpj" 
+										  widgetVar="cnpjpj"
+										  value="#{contratoConvenioCefirController.contratoConvenioCefir.idePessoaJuridica.numCnpj}" 
+										  mask="#{bundle.consultapj_msk_cnpj}" 
+										  style="width: 185px;">
+								<f:converter converterId="cnpjConverter" />
+								<p:ajax global ="false" event="change" update="txtRazaosocial" listener="#{contratoConvenioCefirController.limparPessoaJuridica()}"/>
+							</p:inputMask>
+							<h:commandButton image="/resources/img/ico-pesquisa.png" 
+											 actionListener="#{contratoConvenioCefirController.carregarPessoaJuridica()}" >
+								<f:ajax execute="cnpjpj" render="panelProjetoCarBndesInema" />
+							</h:commandButton>
+						</h:panelGrid>
+						<h:panelGrid style="margin-top: 7px; margin-left: -4px;">				
+							<h:outputLabel value="* Razão social" />
+							<p:inputText id="txtRazaosocial" value="#{contratoConvenioCefirController.contratoConvenioCefir.idePessoaJuridica.nomRazaoSocial}"
+										 style="width: 433px;"
+										 disabled="true"/>
+						</h:panelGrid>
+					</h:panelGrid>
+					
+					<h:panelGrid id="panelPickListMunicipio" style="margin-top: 7px; margin-left: -4px;" rendered="#{contratoConvenioCefirController.contratoConvenioCefir.indProjetoBndes}">
+							<h:outputLabel value="* Municípios" />
+							<p:pickList value="#{contratoConvenioCefirController.dualListMunicipios}"
+										id="pickListMunicipio"
+										var="municipio"
+										itemLabel="#{municipio.nomMunicipio}"
+										itemValue="#{municipio}" 
+										iconOnly="true"		
+										converter="pickListMunicipioConverter"
+										widgetVar="pickListMunicipio"
+										onTransfer="reorderPickList()">
+								<f:facet name="sourceCaption">Não Selecionados</f:facet>  
+	       						<f:facet name="targetCaption">Selecionados</f:facet>
+							</p:pickList>
+							<p:remoteCommand name="reorderPickList" oncomplete="reordenarLista()" />
+						</h:panelGrid>
+				</h:panelGrid>				
+			</h:panelGrid>
+			<br/>
+			<h:panelGrid columns="2" style="width: 40%;margin-left: 291px;">
+				<p:commandButton id="btnLimparCC" 
+								 value="#{bundle.geral_lbl_limpar}"
+								 action="#{contratoConvenioCefirController.limparCampos()}"
+								 update="formContratoConvenio"
+								 widgetVar="btnLimparCC"
+								 process="@this" 
+								 oncomplete="dlgCadContratoConvenio.initPosition();"/>
+		       
+		        <p:commandButton id="btnIncluirCC" 
+								 value="#{bundle.geral_lbl_salvar}"
+								 action="#{contratoConvenioCefirController.salvarOuAtualizarContratoConvenio()}"
+								 update=":filtroContratosConveniosCefir:dataTableCC"
+								 widgetVar="btnIncluirCC"
+								 process="@form" />
+			</h:panelGrid>
+		        
+		</h:form>
+		
+	<!-- </h:panelGrid> -->
+</ui:composition>

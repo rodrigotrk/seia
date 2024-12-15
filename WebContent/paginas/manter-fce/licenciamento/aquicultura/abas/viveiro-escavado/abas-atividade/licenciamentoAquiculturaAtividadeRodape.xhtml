@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui">
+
+	<h:panelGrid style="background-color:#D8D8D8; height: 100px; width:1020px;"
+		rendered="#{viveiroEscavadoController.especieAdicionada}">
+		
+		<p:spacer height="10px;" />
+
+		<h:outputText styleClass="titulo-grupo"
+			style="font-weight:bold; margin-left:12px;"
+			value="Somatório da atividade" />
+
+		<h:panelGrid columns="2" style="margin-top:5px; margin-left:9px;">
+			<h:outputText value="Área do cultivo (ha)" />
+
+			<h:outputText value="Volume do cultivo (m³)"
+				style="margin-left:23px;" />
+
+			<p:inputText
+				value="#{viveiroEscavadoController.aquiculturaAtividadeDTO.somatorioAreaCultivo}"
+				disabled="true"
+				style="margin-bottom:10px; margin-top:1px; width:105px; background-color:white; opacity: 100;">
+				<f:convertNumber integerOnly="false" minFractionDigits="4" />
+			</p:inputText>
+
+			<p:inputText
+				value="#{viveiroEscavadoController.aquiculturaAtividadeDTO.somatorioVolume}"
+				disabled="true"
+				style="margin-bottom:10px; margin-left:23px; margin-top:1px; width:128px; background-color:white; opacity: 100;">
+				<f:convertNumber integerOnly="false" minFractionDigits="2" />
+			</p:inputText>
+		</h:panelGrid>
+
+	</h:panelGrid>
+</ui:composition>

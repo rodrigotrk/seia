@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="relatorio_empreendimento" pageWidth="515" pageHeight="802" columnWidth="515" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="f635b7aa-b9c3-4784-b471-2691831d82b7">
+	<property name="ireport.zoom" value="1.5026296018031553"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="ide_empreendimento" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[0]]></defaultValueExpression>
+	</parameter>
+	<parameter name="ide_tipo_endereco" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[4]]></defaultValueExpression>
+	</parameter>
+	<parameter name="ide_pesquisa" class="java.lang.Integer"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[select
+	m.nom_municipio,
+	es.des_sigla,
+	e.des_email,
+
+	case when length(trim(to_char(l.num_cep,'99999999')))=7
+	then '0' || trim(to_char(l.num_cep,'99999999'))
+	else to_char(l.num_cep,'99999999')
+	end as num_cep,
+
+	tl.nom_tipo_logradouro,
+	l.nom_logradouro,
+	b.nom_bairro,
+	en.des_complemento,
+	e.nom_empreendimento,
+ (tl.nom_tipo_logradouro ||' '|| l.nom_logradouro ||' '|| coalesce(des_complemento, '') ||' '|| num_endereco) as endereco
+from empreendimento e
+left join endereco_empreendimento ee on ee.ide_empreendimento = e.ide_empreendimento
+left join endereco en on en.ide_endereco = ee.ide_endereco
+left join logradouro l on l.ide_logradouro = en.ide_logradouro
+left join tipo_logradouro tl on tl.ide_tipo_logradouro = l.ide_tipo_logradouro
+left join bairro b on b.ide_bairro = l.ide_bairro
+left join municipio m on m.ide_municipio = l.ide_municipio
+left join estado es on es.ide_estado = m.ide_estado
+where  ee.ide_tipo_endereco = $P{ide_tipo_endereco}  and e.ide_empreendimento = $P{ide_empreendimento}]]>
+	</queryString>
+	<field name="nom_municipio" class="java.lang.String"/>
+	<field name="des_sigla" class="java.lang.String"/>
+	<field name="des_email" class="java.lang.String">
+		<fieldDescription><![CDATA[Email da associação INCRA]]></fieldDescription>
+	</field>
+	<field name="num_cep" class="java.lang.String"/>
+	<field name="nom_tipo_logradouro" class="java.lang.String"/>
+	<field name="nom_logradouro" class="java.lang.String"/>
+	<field name="nom_bairro" class="java.lang.String"/>
+	<field name="des_complemento" class="java.lang.String"/>
+	<field name="nom_empreendimento" class="java.lang.String"/>
+	<field name="endereco" class="java.lang.String"/>
+	<detail>
+		<band height="40" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="ffac193e-832b-4428-893e-583d2315ffdf" x="0" y="0" width="515" height="20"/>
+				<box leftPadding="5">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[DADOS DO EMPREENDIMENTO]]></text>
+			</staticText>
+		</band>
+		<band height="60">
+			<textField>
+				<reportElement uuid="76311088-43d9-4f79-8ec8-94c86d4ef216" x="0" y="0" width="261" height="20"/>
+				<box leftPadding="5">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle" markup="html">
+					<font fontName="SansSerif" size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Nome: <b>"+ $F{nom_empreendimento}+ "<b>"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="274e9930-9d26-4fd5-8fcb-bf967ae00cec" x="0" y="20" width="261" height="20"/>
+				<box leftPadding="5">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle" markup="html">
+					<font fontName="SansSerif" size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Endereco: <b>" + $F{endereco} + "<b>"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="4bec7a0d-fb0b-4565-877c-70bdb0ab8293" x="0" y="40" width="177" height="20"/>
+				<box leftPadding="5">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle" markup="html">
+					<font fontName="SansSerif" size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA["CEP: <b>" + $F{num_cep}+ "<b>"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="ddb8d72c-81c8-42a5-8d0a-dabc8c4d53f2" x="177" y="40" width="84" height="20"/>
+				<box leftPadding="5">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle" markup="html">
+					<font fontName="SansSerif" size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA["UF: <b>" + $F{des_sigla}+ "<b>"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="2a4193f7-1979-4015-8730-36498ff903c5" x="261" y="0" width="254" height="20"/>
+				<box leftPadding="5">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle" markup="html">
+					<font fontName="SansSerif" size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Cidade: " + "<b>" + $F{nom_municipio}+ "<b>"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="bc05cef0-6470-41c2-9d8c-01134ee8754b" x="261" y="20" width="254" height="20"/>
+				<box leftPadding="5">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle" markup="html">
+					<font fontName="SansSerif" size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Bairro/Distrito: " + "<b>" + $F{nom_bairro}+ "<b>"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="9ac849ad-d295-492a-8f35-27cb811a7b71" x="261" y="40" width="254" height="20"/>
+				<box leftPadding="5">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle" markup="html">
+					<font fontName="SansSerif" size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA["E-mail: <b>" + $F{des_email}+ "<b>"]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="20" splitType="Stretch">
+			<subreport>
+				<reportElement uuid="7c12af56-c00a-4420-80df-0c7c8cc45c6b" stretchType="RelativeToBandHeight" x="0" y="0" width="515" height="20"/>
+				<subreportParameter name="ide_pesquisa">
+					<subreportParameterExpression><![CDATA[$P{ide_pesquisa}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "relatorio_empreendimento_resp_tecnico.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+		<band height="20" splitType="Stretch">
+			<subreport>
+				<reportElement uuid="4f4f5f1e-37fd-4c50-a6f8-c725f0685ea8" stretchType="RelativeToBandHeight" x="200" y="0" width="315" height="20"/>
+				<subreportParameter name="ide_pesquisa">
+					<subreportParameterExpression><![CDATA[$P{ide_pesquisa}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "relatorio_substancia_mineral.jasper"]]></subreportExpression>
+			</subreport>
+			<textField>
+				<reportElement uuid="e1b403f6-4aa3-4f75-a2c3-eee137b1cb35" stretchType="RelativeToBandHeight" x="0" y="0" width="200" height="20"/>
+				<box leftPadding="5">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle" markup="html">
+					<font fontName="SansSerif" size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Substância mineral a ser pesquisada:"]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

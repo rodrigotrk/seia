@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+xmlns:h="http://java.sun.com/jsf/html" 
+xmlns:f="http://java.sun.com/jsf/core" 
+xmlns:ui="http://java.sun.com/jsf/facelets" 
+xmlns:p="http://primefaces.prime.com.tr/ui">
+	
+	<p:dialog widgetVar="dialogRevisaoCondicionantes" dynamic="true" header="Revisão de Condicionantes" modal="true" resizable="false" height="306" width="430" position="center" >
+		<h:form id="formRevisaoCondicionantes" >
+			<h:panelGrid columns ="1" id="panelGridRevisao" style="width: 100%;">
+	
+				<h:outputText value="* 1. Selecione o tipo de Revisão"/>
+				<p:selectOneRadio value="#{revisaoCondicionantesController.revisaoCondicionante.ideTipoRevisaoCondicionante}" layout="horizontal" converter="simpleEntityConverter" disabled="#{novoRequerimentoController.desabilitarTudo}">  
+					<f:selectItems value="#{revisaoCondicionantesController.tiposRevisaoCondicionante}" var="tipoRevisao" itemLabel="#{tipoRevisao.nomTipoRevisaoCondicionante}" itemValue="#{tipoRevisao}"/>
+				</p:selectOneRadio>
+	
+				<h:outputText value="* 2. Informe o número do processo"/>
+				<p:inputText id="inpNumProcesso" value="#{revisaoCondicionantesController.revisaoCondicionante.numProcesso}" style="width: 300px" maxlength="50" disabled="#{novoRequerimentoController.desabilitarTudo}"/>
+	
+				<h:outputText value="* 3. Informe o número da portaria"/>
+				<p:inputText id="inpNumPortaria" value="#{revisaoCondicionantesController.revisaoCondicionante.numPortaria}" style="width: 300px" maxlength="50" disabled="#{novoRequerimentoController.desabilitarTudo}"/>
+	
+				<h:outputText value="* 4. Informe a data da publicação da portaria"/>
+				<p:calendar maxdate="#{novoRequerimentoController.dataHoje}" size="6" showOn="button" locale="pt" pattern="dd/MM/yyyy" readOnlyInputText="true" 
+				value="#{revisaoCondicionantesController.revisaoCondicionante.dtcPublicacaoPortaria}" style="width: 50px" disabled="#{novoRequerimentoController.desabilitarTudo}"/>
+
+				<h:outputText value="* 5. Informe a validade:"/>
+				<p:calendar  size="6" showOn="button" locale="pt" pattern="dd/MM/yyyy" readOnlyInputText="true" mindate="#{revisaoCondicionantesController.dataAtual}"
+					value="#{revisaoCondicionantesController.revisaoCondicionante.dtcValidade}" style="width: 50px" disabled="#{novoRequerimentoController.desabilitarTudo}"/>
+			
+				<h:panelGrid style="float:right">
+					<p:commandButton  id="btnSalvar" value="Salvar" process="@form" actionListener="#{revisaoCondicionantesController.salvar()}" 
+					update="formRevisaoCondicionantes subViewAbas:tabAbasId:formAbaRenovacao:tabelaRevisaoCondicionantes" global="false" disabled="#{novoRequerimentoController.desabilitarTudo}"/>
+				</h:panelGrid>
+			
+			</h:panelGrid>			
+		</h:form>
+	</p:dialog>
+				
+</ui:composition>

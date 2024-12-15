@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+	
+		<h:panelGrid columns="1">
+			<h:panelGrid columns="2">
+				<h:outputText value="#{bundle.cefir_lbl_nome_rppn}:" style="font-size: 11px;font-weight: bold;"/>
+				<h:outputText value="#{detalharImovelRuralController.imovelRuralRppn.nomRppn}"/>
+				
+				<h:outputText value="#{bundle.cefir_lbl_area_rppn}:" style="font-size: 11px;font-weight: bold;"/>
+				<h:outputText value="#{detalharImovelRuralController.imovelRuralRppn.valArea}">
+					<f:converter converterId="doubleQuatroCasasDecimaisConverter" />
+				</h:outputText>
+				
+				<h:outputText value="#{bundle.cefir_lbl_data_publicacao_rppn}:" style="font-size: 11px;font-weight: bold;"/>
+				<h:outputText value="#{detalharImovelRuralController.imovelRuralRppn.dtcPublicacao}" >
+					<f:convertDateTime pattern="dd/MM/yyyy"/>
+				</h:outputText>
+				
+				<h:outputText value="#{bundle.cefir_lbl_numero_decreto_rppn}:" style="font-size: 11px;font-weight: bold;"/>
+				<h:outputText value="#{detalharImovelRuralController.imovelRuralRppn.dscNumeroDecreto}"/>
+			</h:panelGrid>
+
+			<h:panelGrid columns="1" >
+				<h3><h:outputLabel value="POLIGONAL DA RPPN" styleClass="titulo-grupo" /></h3>
+		        <p:outputPanel>
+			        <h:panelGrid columns="5">
+			        	<h:outputText value="#{bundle.empreendimento_lbl_secao_geometrica}" style="font-size: 11px;font-weight: bold;" />
+						<p:spacer width="20" height="10" />
+						<h:outputText value="#{bundle.empreendimento_lbl_datum}" style="font-size: 11px;font-weight: bold;" />
+						<p:spacer width="20" height="10" />
+						<h:outputText value="Descrição" style="font-size: 11px;font-weight: bold;" />
+						<h:outputText value="#{detalharImovelRuralController.imovelRuralRppn.ideLocalizacaoGeografica.ideClassificacaoSecao.nomClassificacaoSecao}" />
+						<p:spacer width="20" height="10" />
+						<h:outputText value="#{detalharImovelRuralController.imovelRuralRppn.ideLocalizacaoGeografica.ideSistemaCoordenada.nomSistemaCoordenada}" />
+						<p:spacer width="20" height="10" />
+						<h:outputText value="#{detalharImovelRuralController.imovelRuralRppn.ideLocalizacaoGeografica.desLocalizacaoGeografica}" />	
+					</h:panelGrid>
+				</p:outputPanel>
+			</h:panelGrid>		
+		</h:panelGrid>
+				
+		<h:panelGrid rendered="#{detalharImovelRuralController.existeTheGeomByIdeLocGeo(detalharImovelRuralController.imovelRuralRppn.ideLocalizacaoGeografica.ideLocalizacaoGeografica) and !detalharImovelRuralController.visualizaImpressao}" columns="1">
+    		<h:panelGrid columns="3">
+			    <h:outputLink value="#{detalharImovelRuralController.caminhoGeoBahia}" title="GEOBAHIA" target="_blank">  
+			        <h:outputText value="VISUALIZAR SHAPE DA RPPN"/>  
+			        <f:param name="secao" value="cefir" />
+					<f:param name="acao" value="view" />
+					<f:param name="id" value="#{detalharImovelRuralController.imovelRural.ideImovelRural}"/>
+					<f:param name="tema" value="13" />
+					<f:param name="id_loc" value="#{detalharImovelRuralController.imovelRural.ideImovelRuralRppn.ideLocalizacaoGeografica.ideLocalizacaoGeografica}"/>
+					<f:param name="token" value="#{detalharImovelRuralController.token}"/>
+			    </h:outputLink>
+			    
+			    <h:outputLink value="#{detalharImovelRuralController.caminhoGeoBahia}" title="GEOBAHIA" target="_blank">  
+			        <h:graphicImage title="Visualizar" value="/resources/img/ico-arl-relocacao.png" /> 
+			        <f:param name="secao" value="cefir" />
+					<f:param name="acao" value="view" />
+					<f:param name="id" value="#{detalharImovelRuralController.imovelRural.ideImovelRural}"/>
+					<f:param name="tema" value="13" />
+					<f:param name="id_loc" value="#{detalharImovelRuralController.imovelRural.ideImovelRuralRppn.ideLocalizacaoGeografica.ideLocalizacaoGeografica}"/>
+					<f:param name="token" value="#{detalharImovelRuralController.token}"/>
+			    </h:outputLink>  
+	    	</h:panelGrid>
+		</h:panelGrid>
+</ui:composition>

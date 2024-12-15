@@ -1,0 +1,459 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="resumo_quantitativo_detalhe_xls" pageWidth="798" pageHeight="60" orientation="Landscape" columnWidth="798" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="c9471db7-3826-42a1-a612-3430d841b878">
+	<property name="ireport.zoom" value="1.6500000000000106"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="WHERE" class="java.lang.String">
+		<parameterDescription><![CDATA[serie de parametros opcionais]]></parameterDescription>
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT
+c.ide_cerh,
+e.nom_empreendimento,
+m.nom_municipio,
+turh.dsc_tipo_uso_recurso_hidrico,
+
+case when c.num_cadastro is not null
+	then c.num_cadastro
+	else cp.num_cadastro
+end as numero,
+
+COALESCE ( pj.nom_razao_social, pf.nom_pessoa ) as nom_usuario,
+
+case when COALESCE (pf.num_cpf, pj.num_cnpj) <> ''
+	then formatar_cpf_cnpj(COALESCE (pf.num_cpf, pj.num_cnpj))
+	else ''
+end as cpf_cnpj,
+
+case
+	when c.ide_cerh_status ='1' then 'Incompleto'
+	when c.ide_cerh_status ='2' then 'Completo'
+	when c.ide_cerh_status ='3' then 'Cancelado'
+end as status,
+
+case when dg.the_geom is not null
+then ST_X(ST_GeomFromEWKT(dg.the_geom))
+end AS longuitude,
+
+case when dg.the_geom is not null
+then ST_Y(ST_GeomFromEWKT(dg.the_geom))
+end AS latitude,
+
+(max(cles.val_tempo_lancamento * cles.val_vazao_efluente)) as vazao_maxima_lancamento,
+(max(ccvs.val_tempo_captacao * ccvs.val_vazao_captacao)) as vazao_maxima_captacao,
+
+case when ctu.ide_tipo_uso_recurso_hidrico = 5
+	then clec.nom_corpo_hidrico
+	else ccc.nom_corpo_hidrico
+end as nom_corpo_hidrico,
+
+case when ctu.ide_tipo_uso_recurso_hidrico = 5
+	then cstu.dsc_situacao_tipo_uso
+	else array_to_string(regexp_split_to_array(tfua.nom_tipo_finalidade_uso_agua, ','),',')
+end as finalidades
+
+FROM cerh c
+INNER JOIN cerh_status cs ON c.ide_cerh_status=cs.ide_cerh_status
+INNER JOIN empreendimento e ON c.ide_empreendimento=e.ide_empreendimento
+INNER JOIN endereco_empreendimento ee ON e.ide_empreendimento=ee.ide_empreendimento and ee.ide_tipo_endereco = 4
+INNER JOIN endereco en ON ee.ide_endereco=en.ide_endereco
+INNER JOIN logradouro l ON en.ide_logradouro=l.ide_logradouro
+INNER JOIN municipio m ON l.ide_municipio=m.ide_municipio
+INNER JOIN pessoa p ON c.ide_pessoa_requerente=p.ide_pessoa
+LEFT OUTER JOIN pessoa_fisica pf ON p.ide_pessoa=pf.ide_pessoa_fisica
+LEFT OUTER JOIN pessoa_juridica pj ON p.ide_pessoa=pj.ide_pessoa_juridica
+LEFT OUTER JOIN cerh cp ON c.ide_cerh_pai = cp.ide_cerh
+
+LEFT OUTER JOIN cerh_tipo_uso ctu ON ctu.ide_cerh = c.ide_cerh
+LEFT OUTER JOIN tipo_uso_recurso_hidrico turh ON ctu.ide_tipo_uso_recurso_hidrico = turh.ide_tipo_uso_recurso_hidrico
+INNER JOIN cerh_localizacao_geografica clg ON clg.ide_cerh_tipo_uso =  ctu.ide_cerh_tipo_uso
+INNER JOIN dado_geografico dg ON clg.ide_localizacao_geografica = dg.ide_localizacao_geografica
+LEFT OUTER JOIN cerh_lancamento_efluente_caracterizacao clec ON clg.ide_cerh_localizacao_geografica = clec.ide_cerh_localizacao_geografica
+LEFT OUTER JOIN cerh_lancamento_efluente_sazonalidade cles ON clec.ide_cerh_lancamento_efluente_caracterizacao = cles.ide_cerh_lancamento_efluente_caracterizacao
+LEFT OUTER JOIN cerh_captacao_caracterizacao ccc ON clg.ide_cerh_localizacao_geografica = ccc.ide_cerh_localizacao_geografica
+LEFT OUTER JOIN cerh_captacao_vazao_sazonalidade ccvs ON ccc.ide_cerh_captacao_caracterizacao = ccvs.ide_cerh_captacao_caracterizacao
+left outer join cerh_captacao_caracterizacao_finalidade cccf on cccf.ide_cerh_captacao_caracterizacao = ccc.ide_cerh_captacao_caracterizacao
+left outer join tipo_finalidade_uso_agua tfua on cccf.ide_tipo_finalidade_uso_agua = tfua.ide_tipo_finalidade_uso_agua
+left outer join cerh_situacao_tipo_uso cstu on cstu.ide_cerh_situacao_tipo_uso = clec.ide_cerh_situacao_tipo_uso
+
+$P!{WHERE}
+
+GROUP BY
+c.ide_cerh,
+numero,
+nom_usuario,
+cpf_cnpj,
+status,
+nom_empreendimento,
+nom_municipio,
+dsc_tipo_uso_recurso_hidrico,
+longuitude,
+latitude,
+dg.ide_dado_geografico,
+clec.nom_corpo_hidrico,
+ccc.nom_corpo_hidrico,
+cstu.dsc_situacao_tipo_uso,
+tfua.nom_tipo_finalidade_uso_agua,
+ctu.ide_tipo_uso_recurso_hidrico
+ORDER BY numero]]>
+	</queryString>
+	<field name="ide_cerh" class="java.lang.Integer"/>
+	<field name="nom_empreendimento" class="java.lang.String"/>
+	<field name="nom_municipio" class="java.lang.String"/>
+	<field name="dsc_tipo_uso_recurso_hidrico" class="java.lang.String"/>
+	<field name="numero" class="java.lang.String"/>
+	<field name="nom_usuario" class="java.lang.String"/>
+	<field name="cpf_cnpj" class="java.lang.String"/>
+	<field name="status" class="java.lang.String"/>
+	<field name="longuitude" class="java.lang.Double"/>
+	<field name="latitude" class="java.lang.Double"/>
+	<field name="vazao_maxima_lancamento" class="java.math.BigDecimal"/>
+	<field name="vazao_maxima_captacao" class="java.math.BigDecimal"/>
+	<field name="nom_corpo_hidrico" class="java.lang.String"/>
+	<field name="finalidades" class="java.lang.String"/>
+	<title>
+		<band height="40">
+			<staticText>
+				<reportElement uuid="95704251-ea36-4431-bcfe-51913c443a6f" stretchType="RelativeToBandHeight" mode="Opaque" x="0" y="0" width="110" height="40" isPrintWhenDetailOverflows="true" backcolor="#DDDDDD"/>
+				<box topPadding="0">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="6"/>
+				</textElement>
+				<text><![CDATA[Número do Cadastro]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="e041813c-d015-4d77-86bf-49fb5195ac1e" stretchType="RelativeToBandHeight" mode="Opaque" x="110" y="0" width="90" height="40" isPrintWhenDetailOverflows="true" backcolor="#DDDDDD"/>
+				<box topPadding="0">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="6"/>
+				</textElement>
+				<text><![CDATA[Nome do Usuário]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="fe3c0d9b-3018-447e-8ab5-19b88ddb4817" stretchType="RelativeToBandHeight" mode="Opaque" x="200" y="0" width="73" height="40" isPrintWhenDetailOverflows="true" backcolor="#DDDDDD"/>
+				<box topPadding="0">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="6"/>
+				</textElement>
+				<text><![CDATA[CPF/CNPJ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="f40bf8db-ca57-40f9-a5f1-f7b15cd56ff7" stretchType="RelativeToBandHeight" mode="Opaque" x="273" y="0" width="90" height="40" isPrintWhenDetailOverflows="true" backcolor="#DDDDDD"/>
+				<box topPadding="0">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="6"/>
+				</textElement>
+				<text><![CDATA[Nome do Empreendimento]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="232dd6cb-55d6-4482-83e9-3791cbbf7eeb" stretchType="RelativeToBandHeight" mode="Opaque" x="363" y="0" width="75" height="40" isPrintWhenDetailOverflows="true" backcolor="#DDDDDD"/>
+				<box topPadding="0">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="6"/>
+				</textElement>
+				<text><![CDATA[Município]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="86c4bf59-d5e7-4c85-a5b1-b57bbaf05fae" stretchType="RelativeToBandHeight" mode="Opaque" x="438" y="0" width="50" height="40" isPrintWhenDetailOverflows="true" backcolor="#DDDDDD"/>
+				<box topPadding="0">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="6"/>
+				</textElement>
+				<text><![CDATA[Status]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="7e0a3af3-6ec2-411d-9f96-710fa229c954" stretchType="RelativeToBandHeight" mode="Opaque" x="488" y="0" width="68" height="40" isPrintWhenDetailOverflows="true" backcolor="#DDDDDD"/>
+				<box topPadding="0">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="6"/>
+				</textElement>
+				<text><![CDATA[Tipo de Interferência]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="56462856-e269-42d0-8be3-0e03bb89bfcc" stretchType="RelativeToBandHeight" mode="Opaque" x="556" y="0" width="46" height="40" isPrintWhenDetailOverflows="true" backcolor="#DDDDDD"/>
+				<box topPadding="0">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="6"/>
+				</textElement>
+				<text><![CDATA[Latitude]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="a65a79e3-aead-4aad-80e4-f094861f40f4" stretchType="RelativeToBandHeight" mode="Opaque" x="602" y="0" width="46" height="40" isPrintWhenDetailOverflows="true" backcolor="#DDDDDD"/>
+				<box topPadding="0">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="6"/>
+				</textElement>
+				<text><![CDATA[Longitude]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="c41764c3-27b2-4e1b-8c32-bb3a86698fb0" stretchType="RelativeToBandHeight" mode="Opaque" x="648" y="0" width="50" height="40" isPrintWhenDetailOverflows="true" backcolor="#DDDDDD"/>
+				<box topPadding="0">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="6"/>
+				</textElement>
+				<text><![CDATA[Finalidade]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="39ed1218-fad2-43d9-b6fa-055f1192cfe0" stretchType="RelativeToBandHeight" mode="Opaque" x="698" y="0" width="50" height="40" isPrintWhenDetailOverflows="true" backcolor="#DDDDDD"/>
+				<box topPadding="0">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="6"/>
+				</textElement>
+				<text><![CDATA[Nome do Corpo Hídrico]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="6ba2cae8-ed88-4973-b08e-b79342b7d242" stretchType="RelativeToBandHeight" mode="Opaque" x="748" y="0" width="50" height="40" isPrintWhenDetailOverflows="true" backcolor="#DDDDDD"/>
+				<box topPadding="0">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="6"/>
+				</textElement>
+				<text><![CDATA[Vazão
+ Máxima instantânea (m³/dia)
+]]></text>
+			</staticText>
+		</band>
+	</title>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="848aa153-561c-490c-ad85-10c50058dca5" positionType="Float" stretchType="RelativeToTallestObject" mode="Transparent" x="0" y="0" width="110" height="20" isPrintWhenDetailOverflows="true"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font size="6" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Fixed" tabStopWidth="40"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{numero}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="d2f72b31-47a0-4700-aeb6-b47ad5de4089" positionType="Float" stretchType="RelativeToTallestObject" mode="Transparent" x="110" y="0" width="90" height="20" isPrintWhenDetailOverflows="true"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font size="6" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Fixed" tabStopWidth="40"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nom_usuario}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="ef7db399-9ee6-45db-a6c2-152e56331e01" positionType="Float" stretchType="RelativeToTallestObject" mode="Transparent" x="200" y="0" width="73" height="20" isPrintWhenDetailOverflows="true"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font size="6" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Fixed" tabStopWidth="40"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{cpf_cnpj}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="b01dcf25-1ec3-4b39-81f6-5cfc2203d649" positionType="Float" stretchType="RelativeToTallestObject" mode="Transparent" x="273" y="0" width="90" height="20" isPrintWhenDetailOverflows="true"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font size="6" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Fixed" tabStopWidth="40"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nom_empreendimento}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="af16f0a6-e872-482d-933a-92f76d7b88b2" positionType="Float" stretchType="RelativeToTallestObject" mode="Transparent" x="363" y="0" width="75" height="20" isPrintWhenDetailOverflows="true"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font size="6" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Fixed" tabStopWidth="40"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nom_municipio}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="5fc70ad5-05ea-4f06-9ea3-718d74d3bebc" positionType="Float" stretchType="RelativeToTallestObject" mode="Transparent" x="438" y="0" width="50" height="20" isPrintWhenDetailOverflows="true"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font size="6" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Fixed" tabStopWidth="40"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{status}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="64c79b11-0045-45ef-a2e9-65266862ee72" positionType="Float" stretchType="RelativeToTallestObject" mode="Transparent" x="488" y="0" width="68" height="20" isPrintWhenDetailOverflows="true" backcolor="#FFFFFF"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font size="6" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Fixed" tabStopWidth="40"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dsc_tipo_uso_recurso_hidrico}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="###0.00000" isBlankWhenNull="true">
+				<reportElement uuid="e81f2e78-98d4-41c7-a2a3-b379b6852913" positionType="Float" stretchType="RelativeToTallestObject" mode="Transparent" x="556" y="0" width="46" height="20" isPrintWhenDetailOverflows="true" backcolor="#FFFFFF"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font size="6" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Fixed" tabStopWidth="40"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{latitude}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="###0.00000" isBlankWhenNull="true">
+				<reportElement uuid="c66c85fc-3e7c-4b0f-a3ca-312b9a8c86af" positionType="Float" stretchType="RelativeToTallestObject" mode="Transparent" x="602" y="0" width="46" height="20" isPrintWhenDetailOverflows="true" backcolor="#FFFFFF"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font size="6" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Fixed" tabStopWidth="40"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{longuitude}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="1eb922f3-7712-41cb-8268-6c9eb06543db" positionType="Float" stretchType="RelativeToTallestObject" mode="Transparent" x="648" y="0" width="50" height="20" isPrintWhenDetailOverflows="true"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font size="6" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Fixed" tabStopWidth="40"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{finalidades} != null
+?$F{finalidades}
+:null]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="da0dbc29-d134-414c-bd10-2f765a56487a" positionType="Float" stretchType="RelativeToTallestObject" mode="Transparent" x="698" y="0" width="50" height="20" isPrintWhenDetailOverflows="true"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font size="6" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Fixed" tabStopWidth="40"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nom_corpo_hidrico} != null
+?$F{nom_corpo_hidrico}:null]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="ce087375-fa55-4ea1-b633-ae3063beadeb" positionType="Float" stretchType="RelativeToTallestObject" mode="Transparent" x="748" y="0" width="50" height="20" isPrintWhenDetailOverflows="true"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font size="6" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Fixed" tabStopWidth="40"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{vazao_maxima_captacao} != null
+?(new DecimalFormat("#,##0.00").format($F{vazao_maxima_captacao}).toString())
+:$F{vazao_maxima_lancamento} != null
+?(new DecimalFormat("#,##0.00").format($F{vazao_maxima_lancamento}).toString())
+:null]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

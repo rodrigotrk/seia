@@ -1,0 +1,340 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui">
+	
+	<p:dialog	
+		id="dialogGerarDae"
+		widgetVar="dialogGerarDae" 
+		height="750"
+		width="870"
+		modal="true"  
+		showHeader="false" 
+		position="center" 
+		appendToBody="true" 
+		resizable="false">
+		
+		<h:form id="fromDae">
+			<h1 style="font-size: 14px">Gerar DAE</h1>
+			<hr	style="width: 100%; margin-top: 5px; margin-bottom: 5px; border: none; border-top: 1px solid #ccc;" />
+			<p style="margin: 5px;" class="titulo-grupo"><h:outputText value="Dados do requerimento"/></p>
+			<h:panelGrid columns="2">
+				<h:outputLabel value="N° Requerimento " styleClass="tit-requerimento"/>
+				<h:outputText value="#{gerarDaeController.gerarDaeDTO.requerimento.numRequerimento}" styleClass="dados-requerimento"/>
+				<h:outputLabel value="CPF "  styleClass="tit-requerimento" rendered="#{gerarDaeController.gerarDaeDTO.requerimento.requerente.PF}"/>
+				<h:outputLabel value="CNPJ "  styleClass="tit-requerimento" rendered="#{gerarDaeController.gerarDaeDTO.requerimento.requerente.PJ}" />
+				<h:outputText value="#{gerarDaeController.gerarDaeDTO.requerimento.requerente.cpfCnpj}" styleClass="dados-requerimento"/>
+				<h:outputLabel value="Requerente " styleClass="tit-requerimento"/>
+				<h:outputText value="#{gerarDaeController.gerarDaeDTO.requerimento.requerente.nomeRazao}" styleClass="dados-requerimento"/>
+			</h:panelGrid>
+			<br />
+			
+			<p style="margin: 5px;margin-bottom: 10px;" class="titulo-grupo">
+				<h:outputText value="Dados do DAE"/>
+			</p>
+			
+			<p:dataTable id="detalhamentoBoleto" emptyMessage="Nenhum detalhamento a ser exibido." var="detalhe"  
+				value="#{gerarDaeController.gerarDaeDTO.listaDetalhamentoDaeDTO}" style="width:830px;">
+				
+				<f:facet name="header">
+					Detalhamento dos valores do Cumprimento da Reposição Florestal
+				</f:facet>
+				
+				<p:column style="padding: 4px 5px;" headerText="Cumprimento da Reposição Floresta">  
+					<h:outputText value="#{detalhe.nomTipoCumprimento}" />
+				</p:column>
+				<p:column style="text-align:center;"  headerText="Valor">
+					<h:outputText value="R$ #{detalhe.valorFormatado}" />
+				</p:column>
+			</p:dataTable>
+			
+			<br />
+			<br />
+			<ui:repeat value="#{gerarDaeController.gerarDaeDTO.listaDetalhamentoDaeDTO}" var="detalhe" id="memoriaRepeat">
+			<p:dataTable 
+				id="memoriaCalculo" 
+				var="memoriaCalculo" 
+				value="#{detalhe.listaMemoriaCalculoDTO}"
+				style="width:830px;">
+					
+					<f:facet name="header">
+						Memória de cálculo
+					</f:facet>
+					<p:column headerText="Parâmetros" style="padding: 4px 5px;" rendered="#{memoriaCalculo.rendered}">
+						<h:outputText value="#{memoriaCalculo.nomTipo}" />
+					</p:column>
+					<p:column headerText="Fórmula" style="text-align:center;" rendered="#{memoriaCalculo.rendered}">
+						<h:outputText value="#{memoriaCalculo.formula}" />
+					</p:column>
+				</p:dataTable>
+				<br />
+				<h:outputText value="Legenda" style="font-weight: bold"/>
+				
+				<ui:repeat value="#{detalhe.listaLegenda}" var="detalhe">
+					<h:panelGrid columns="1">
+						<h:outputText value="#{detalhe}"/>
+					</h:panelGrid>
+				</ui:repeat>
+				
+			</ui:repeat>	
+			<h:outputText style="font-style: italic" value="Cálculo conforme Decreto Estadual n° 15.180/2014 e suas alterações." />
+			
+			<br />
+			<br />
+			
+			<h:panelGrid columns="3">
+				<h:outputText value="Deseja parcelar?" style="font-weight: bold" />
+				<h:graphicImage value="/resources/img/ico-ajuda.png" id="ajuda"
+					style="margin: 3px 1px 2px 4px;" />
+				<p:tooltip for="ajuda"
+					value="Ao optar pelo parcelamento do valor, será aplicado o índice IGPM nas parcelas conforme parágrafo 1º do artigo 45-B do Decreto 18.140/2018"
+					showEffect="fade" hideEffect="fade" />	
+				<p:selectOneRadio columns="1" value="#{gerarDaeController.gerarDaeDTO.indParcela}" disabled="#{!empty gerarDaeController.gerarDaeDTO.parcelaDaeDTO or !empty gerarDaeController.gerarDaeDTO.parcelaUnica}">
+		       	   <f:selectItem itemLabel="Sim" itemValue="true" />
+		       	   <f:selectItem itemLabel="Não" itemValue="false" />
+		       	   <p:ajax process="@this" update="fromDae" event="change" />
+		        </p:selectOneRadio>
+			</h:panelGrid>
+			
+
+			<h:panelGrid id="gridParcela" rendered="#{gerarDaeController.gerarDaeDTO.indParcela}" columns="2">
+				<h:outputText value="Quantas vezes?" />	
+				<p:selectOneMenu value="#{gerarDaeController.gerarDaeDTO.qtdeParcelas}" disabled="#{!empty gerarDaeController.gerarDaeDTO.parcelaDaeDTO}">
+					<f:selectItem itemLabel="Selecione..." />
+					<f:selectItem itemLabel="2" itemValue="2" />
+					<f:selectItem itemLabel="3" itemValue="3" />
+					<f:selectItem itemLabel="4" itemValue="4" />
+					<f:selectItem itemLabel="5" itemValue="5" />
+					<f:selectItem itemLabel="6" itemValue="6" />
+					<f:selectItem itemLabel="7" itemValue="7" />
+					<f:selectItem itemLabel="8" itemValue="8" />
+					<f:selectItem itemLabel="9" itemValue="9" />
+					<f:selectItem itemLabel="10" itemValue="10" />
+					<f:selectItem itemLabel="11" itemValue="11" />
+					<f:selectItem itemLabel="12" itemValue="12" />
+					
+					<p:ajax process="@this" update="fromDae" event="change" />
+				</p:selectOneMenu>
+			</h:panelGrid>
+			
+<!-- 			<br /> -->
+			<p:spacer height="5" rendered="#{gerarDaeController.gerarDaeDTO.indParcela}"/>
+			
+			<p:layoutUnit position="center" resizable="false"  style="border-color: green;" rendered="#{!empty gerarDaeController.gerarDaeDTO.parcelaDaeDTO or !empty gerarDaeController.gerarDaeDTO.parcelaUnica}">
+	            <table style="width:100%;font-size: 11px; background-color: #E6F9E6;">
+	                <tr>
+	                    <td />
+	                    <td colspan="2">
+	                        <h:outputText value="ATENÇÃO! Para o vencimento dos DAEs nos casos de parcelamento, 
+	                        a data de emissão da primeira parcela será definida como a data base 
+	                        para o cálculo das parcelas futuras" style="line-height: 150%;"/>
+	                    </td>
+	                </tr>
+	            </table>
+	        </p:layoutUnit>
+	        <p:spacer height="5" rendered="#{!empty gerarDaeController.gerarDaeDTO.parcelaDaeDTO or !empty gerarDaeController.gerarDaeDTO.parcelaUnica}"/>
+	        
+			<p:layoutUnit position="center" resizable="false"  style="border-color: red;" rendered="#{gerarDaeController.exibirMsgNovoDae}">
+	            <table style="width:100%;font-size: 11px; background-color: #E6F9E6;">
+	                <tr>
+	                    <td />
+	                    <td colspan="2">
+	                        <h:outputText value="Conforme o Parágrafo segundo do artigo 45-B do
+	                         decreto 18.140/2018, o atraso no pagamento de qualquer parcela implicará o vencimento antecipado das demais parcelas, multa de 10% 
+	                          (dez por cento) e juros moratórios equivalentes ao percentual da taxa referencial SELIC, sem prejuízo da inscrição 
+	                          do débito em dívida ativa e propositura da ação de execução fiscal." style="line-height: 150%;"/>
+	                    </td>
+	                </tr>
+	            </table>
+	        </p:layoutUnit>		        
+        
+<!--         	<br /> -->
+        	<p:spacer height="5" rendered="#{!empty gerarDaeController.gerarDaeDTO.parcelaDaeDTO or !empty gerarDaeController.gerarDaeDTO.parcelaUnica}"/>
+        	
+			<p:dataTable id="parcelas" emptyMessage="Nenhuma parcela a ser exibido." var="parcela" rendered="#{!empty gerarDaeController.gerarDaeDTO.parcelaDaeDTO}"
+				value="#{gerarDaeController.gerarDaeDTO.parcelaDaeDTO}"
+				style="width:830px;">
+				
+				<f:facet name="header">
+					Parcelas
+				</f:facet>
+				<p:column style="padding: 4px 5px;text-align:center;">
+				<h:outputText value="#{parcela.indParcelaUnica ? '*' : parcela.numParcela}" />
+				</p:column>
+				<p:column headerText="Valor" style="padding: 4px 5px; text-align:center;">
+					<h:outputText value="R$ #{parcela.valorDaeFormatado}" />
+					<h:outputText value=" + (IGPM do mês anterior)" rendered="#{empty parcela.urlDae}"/>
+				</p:column>
+				<p:column headerText="Vencimento" style="text-align:center;" >
+					<h:outputText value="#{parcela.vencimentoFormatado}" />
+				</p:column>
+				<p:column headerText="Status" style="text-align:center;" >
+					<h:outputText value="#{empty parcela.situacaoDae.dscSituacaoDae ? '-' : parcela.situacaoDae.dscSituacaoDae }" />
+				</p:column>
+				<p:column headerText="Ação" style="text-align:center;">
+					<p:commandLink  process="@this" global="true" rendered="#{parcela.gerarDae}"
+						update="formConsultarRequerimento:tabelaRequerimentos" action="#{gerarDaeController.gerarParcelaDae(parcela)}">
+						<h:graphicImage title="Gerar DAE" value="/resources/img/ico-executar-movimentacao-financeira.png" />
+					</p:commandLink>
+					<p:commandLink style="cursor: pointer; margin-left:5px;" onclick='javascript:#{gerarDaeController.gerarLinkDownloadDae(parcela.urlDae)}' 
+						global="false" rendered="#{parcela.boleto}">
+						<h:graphicImage title="Baixar Dae" value="/resources/img/ico-boleto.png" />
+					</p:commandLink>
+					<h:graphicImage rendered="#{parcela.pago}" title="DAE pago" value="/resources/img/ico-aprovado.png" />
+					<h:graphicImage rendered="#{parcela.calendario}" title="Período para geração de DAE não iniciado" value="/resources/img/ico-calendario.png" />
+					<p:commandLink ajax="false" rendered="#{parcela.pago}">
+						<h:graphicImage title="Imprimir Declaração Parcial" value="/resources/img/ico-pdf.png" style="margin-left: 8px;margin-top: -10px; "/>
+						<p:fileDownload value="#{gerarDaeController.getImprimirDeclaracaoParcial(parcela)}" />
+					</p:commandLink>
+				</p:column>
+			</p:dataTable>
+			
+<!-- 			<br/> -->
+			<p:spacer height="5" rendered="#{!empty gerarDaeController.gerarDaeDTO.parcelaDaeDTO}" />
+			
+			<p:dataTable id="parcelaUnica" emptyMessage="Nenhuma parcela a ser exibido." var="parcela" rendered="#{!empty gerarDaeController.gerarDaeDTO.parcelaUnica}"
+				value="#{gerarDaeController.gerarDaeDTO.parcelaUnica}"
+				style="width:830px;">
+				
+				<f:facet name="header">
+					Parcela Única
+				</f:facet>
+				<p:column style="padding: 4px 5px;">
+					<h:outputText value="#{parcela.numParcela}" />
+				</p:column>
+				<p:column headerText="Valor" style="padding: 4px 5px; text-align:center;">
+					<h:outputText value="R$ #{parcela.valorDaeFormatado}" />
+					<h:outputText value=" + (IGPM do mês anterior)" rendered="#{empty parcela.urlDae}"/>
+				</p:column>
+				<p:column headerText="Vencimento" style="text-align:center;" >
+					<h:outputText value="#{parcela.vencimentoFormatado}" />
+				</p:column>
+				<p:column headerText="Status" style="text-align:center;" >
+					<h:outputText value="#{empty parcela.situacaoDae.dscSituacaoDae ? '-' : parcela.situacaoDae.dscSituacaoDae }" />
+				</p:column>
+				<p:column headerText="Ação" style="text-align:center;">
+					<p:commandLink  process="@this" global="true" rendered="#{parcela.gerarDae}"
+						update="formConsultarRequerimento:tabelaRequerimentos" action="#{gerarDaeController.gerarParcelaDae(parcela)}">
+						<h:graphicImage title="Gerar DAE" value="/resources/img/ico-executar-movimentacao-financeira.png" />
+					</p:commandLink>
+
+					<h:outputLink value="#{parcela.urlDae}" target="_blank" rendered="#{parcela.boleto}">
+						<h:graphicImage title="Baixar Dae" value="/resources/img/ico-boleto.png" />
+					</h:outputLink>
+					
+					<h:graphicImage rendered="#{parcela.pago}" title="DAE pago" value="/resources/img/ico-aprovado.png" />
+					<h:graphicImage rendered="#{parcela.calendario}" title="Período para geração de DAE não iniciado" value="/resources/img/ico-calendario.png" />
+					<p:commandLink ajax="false" rendered="#{parcela.pago}">
+						<h:graphicImage title="Imprimir Declaração Parcial" value="/resources/img/ico-pdf.png" style="margin-left: 8px;margin-top: -10px; "/>
+						<p:fileDownload value="#{gerarDaeController.getImprimirDeclaracaoParcial(parcela)}" />
+					</p:commandLink>
+				</p:column>
+			</p:dataTable>
+			
+<!-- 			<br/> -->
+			<p:spacer height="5" rendered="#{!empty gerarDaeController.gerarDaeDTO.parcelaUnica}"/>
+			
+			
+<!-- 		INICIO REVISAR VOLUME -->
+			<h:panelGrid id="panelRevisarVolume">
+			
+				<h:panelGrid id="gridRevisarVolume" rendered="#{gerarDaeController.renderedAlterarVolume() and security.temAcesso('4.94.80', 'ATEND')}" style="margin-left: -10px;">			
+					
+					<h:panelGrid id="desejaAlterarVolume">
+						
+						<h:outputText value="Deseja alterar o volume de referência utilizado no cálculo?" style="font-weight: bold"/>
+						
+						<p:selectOneRadio value="#{gerarDaeController.gerarDaeDTO.indAlterarVolume}">
+							<f:selectItem itemLabel="Sim" itemValue="true"/>
+							<f:selectItem itemLabel="Não" itemValue="false"/>
+							<p:ajax update="fromDae:novoVolumeReferencia" process="@this" listener="#{gerarDaeController.limparCamposVolumeReferencia()}"/>
+						</p:selectOneRadio>
+					
+					</h:panelGrid>
+					
+					<h:panelGrid id="novoVolumeReferencia">
+						<h:panelGrid id="gridNovoVolume" rendered="#{gerarDaeController.gerarDaeDTO.indAlterarVolume}">
+						
+							<h:outputText value="* Novo volume de referência" style="font-weight: bold"/>
+							
+							<h:panelGrid columns="2">
+								<p:inputText id="txtVolume" value="#{gerarDaeController.gerarDaeDTO.valVolumeReferencia}" styleClass="campoNumericoComDecimal-2" maxlength="16">
+									<f:convertNumber maxIntegerDigits="10" maxFractionDigits="2" pattern="###,##0.00" locale="pt_BR"/>
+									<p:ajax process="@this" event="blur" global="false" listener="#{gerarDaeController.resetGerarDae()}"/>
+								</p:inputText>
+								<h:outputText value="m³"/>
+								
+							</h:panelGrid>
+		
+							<h:panelGrid id="uploadParecer">
+								<h:outputText value="* Upload do parecer técnico" style="font-weight: bold"/>
+								<p:fileUpload mode="advanced" auto="true" label="UPLOAD DO ARQUIVO" allowTypes="/(\.|\/)(pdf)$/" fileUploadListener="#{gerarDaeController.uploadBoleto}"
+								update="fromDae:gridParecer"/>
+							</h:panelGrid>
+							
+							<h:panelGrid id="gridParecer">
+								<p:dataTable value="#{gerarDaeController.gerarDaeDTO}" var="arquivo" rendered="#{not empty gerarDaeController.gerarDaeDTO.dscCaminhoAqruivoParecerTecnico}">
+									<p:column headerText="Nome do arquivo">
+										<h:outputText value="#{arquivo.fileName}"/>
+									</p:column>
+									<p:column headerText="Ações">
+										<h:panelGrid columns="2">
+											<p:commandLink global="false" oncomplete="excluirParecerTecnico.show()">
+												<h:graphicImage title="Excluir"
+													value="/resources/img/ico-excluir.png" />
+											</p:commandLink>
+											
+											
+											<h:commandButton value="#{arquivo.fileName}"
+												image="/resources/img/ico-download.png" immediate="true"
+												title="Download do arquivo">
+												<p:fileDownload
+													value="#{gerarDaeController.getFileDownload(arquivo.dscCaminhoAqruivoParecerTecnico)}" />
+											</h:commandButton>
+										</h:panelGrid>
+									</p:column>
+								</p:dataTable>
+							</h:panelGrid>
+							
+							<h:panelGrid>
+								<p:commandButton actionListener="#{gerarDaeController.recalcular()}" process="@this fromDae:txtVolume" value="Recalcular"/>
+							</h:panelGrid>
+						</h:panelGrid>
+					</h:panelGrid>
+					
+				</h:panelGrid>
+			</h:panelGrid>
+
+
+<!-- 			FIM REVISAR VOLUME -->
+			
+			
+			<h:panelGrid columns="2" style="float:right">
+				<p:commandButton value="Gerar" process="@this" global="true" action="#{gerarDaeController.gerarParcelas()}" 
+					disabled="#{gerarDaeController.desabilitarGerarDAE}" update="formConsultarRequerimento:tabelaRequerimentos" />
+					
+				<p:commandButton value="Voltar" process="@this" global="false" oncomplete="dialogGerarDae.hide();" />
+			</h:panelGrid>
+		</h:form>		
+	</p:dialog>
+	
+	<p:confirmDialog widgetVar="excluirParecerTecnico" appendToBody="true" header="Alerta" message="Tem certeza que deseja remover o item?" severity="alert">
+		<h:form>
+			<p:commandButton value="Sim" global="false" update="fromDae:gridParecer"  action="#{gerarDaeController.excluirArquivo()}" process="@this" oncomplete="excluirParecerTecnico.hide()">
+<!-- 				<f:setPropertyActionListener target="#{gerarDaeController.gerarDaeDTO.dscCaminhoAqruivoParecerTecnico}" value="" /> -->
+<!-- 				<f:setPropertyActionListener target="#{gerarDaeController.gerarDaeDTO.fileName}" value="" /> -->
+			</p:commandButton>
+			<p:commandButton value="Não" global="false" oncomplete="excluirParecerTecnico.hide()" />
+		</h:form>
+	</p:confirmDialog>
+	
+	<p:confirmDialog widgetVar="recalcular" appendToBody="true" header="Alerta" message="Está ação apagará todos os DAEs gerados para este registro. Deseja continuar?" severity="alert">
+		<h:form>
+			<p:commandButton value="Sim" global="false" update="fromDae:txtVolume"  action="#{gerarDaeController.gerarNovoCalculo()}" process="@this fromDae:txtVolume" oncomplete="recalcular.hide()"/>
+			<p:commandButton value="Não" global="false" oncomplete="recalcular.hide()" />
+		</h:form>
+	</p:confirmDialog>
+</ui:composition>

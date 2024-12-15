@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	xmlns:sec="http://www.springframework.org/security/facelets/tags">
+	
+	<ui:composition template="/layout/template.xhtml">
+	
+		<ui:define name="titulo-pagina">		
+			<h3>Consultar Auditoria</h3>		
+		</ui:define>	
+		
+		<ui:define name="conteudo-principal">	
+	
+			<h:form id="filtroAuditoria">
+			    <h:panelGrid>
+		      	<h:outputLabel value="Tabela: "/>
+			      	<h:panelGroup>
+			      		<p:selectOneMenu value="#{auditoriaController.tabelaFiltro}" style="width:200px" disabled="${!security.temAcesso('3.33')}" converter="histTabelaConverter">
+		         			<f:selectItem itemLabel="Selecione..." />
+		         			<f:selectItems value="#{auditoriaController.listTabela}" var="tab" itemLabel="#{tab.nomeTabela}" itemValue="#{tab}" />
+		         			<p:ajax event="change" update="selectCampo" />
+		        		</p:selectOneMenu>	
+			      	</h:panelGroup>
+	    		<h:outputLabel value="Campo: "/>
+		    		<h:panelGroup>
+			      		<p:selectOneMenu id="selectCampo" value="#{auditoriaController.campoTabelaFiltro}" style="width:200px" disabled="${!security.temAcesso('3.33')}" converter="histCampoConverter">
+		         			<f:selectItem itemLabel="Selecione..." />
+		         			<f:selectItems value="#{auditoriaController.listCampoTabela}" var="camp" itemLabel="#{camp.nomeCampo}" itemValue="#{camp}" />
+		        		</p:selectOneMenu>	
+			      	</h:panelGroup>
+			      	
+	    		<p:commandButton value="Consultar" disabled="${!security.temAcesso('3.33.4')}" update=":filtroAuditoria:dataTableAuditoria" />
+	    		</h:panelGrid>
+				<p:dataTable id="dataTableAuditoria" var="audit" value="#{auditoriaController.listHistorico}" lazy="true"
+			                 paginator="true" rows="8" paginatorPosition="bottom"
+			                 paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}"  
+			                 emptyMessage="#{bundle.consultapf_msg_empty_list}"
+			                 widgetVar="auditoria">
+			                 
+			        <f:facet name="header">  
+							<h:outputText value="Lista Auditoria" />
+					</f:facet>  
+					
+					<p:column>  
+			            <f:facet name="header">
+			                <h:outputText value="Tabela" />  
+			            </f:facet>
+			            <h:outputText value="${audit.ideCampo.ideTabela.nomeTabela}" />
+		        	</p:column>
+					<p:column>  
+			            <f:facet name="header">
+			                <h:outputText value="Campo" />  
+			            </f:facet>
+			            <h:outputText value="${audit.ideCampo.nomeCampo}" />
+			            
+		        	</p:column>
+					<p:column>  
+			            <f:facet name="header">
+			                <h:outputText value="Ação" />  
+			            </f:facet>
+			            
+			            <h:outputText value="${audit.ideHistorico.acao}" />
+		        	</p:column>
+					<p:column>  
+			            <f:facet name="header">
+			                <h:outputText value="Alteração" />  
+			            </f:facet>
+			            
+			            <h:outputText value="${audit.valor}" />
+		        	</p:column>
+					<p:column>  
+			            <f:facet name="header">
+			                <h:outputText value="Usuário" />  
+			            </f:facet>
+			            <h:outputText value="${audit.ideHistorico.ideUsuario.dscLogin}" />
+		        	</p:column>
+				</p:dataTable>
+			</h:form>
+	
+		</ui:define>
+	</ui:composition>
+</ui:composition>

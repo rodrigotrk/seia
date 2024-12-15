@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui">
+		<h3><h:outputLabel styleClass="titulo-grupo" value="TELEFONES" /></h3>
+		
+		<h:form id="formtelefone" >
+			<h:outputLabel value="Incluir Telefone" />
+			<p:commandLink id="linkDialogTelefone" action="#{telefoneController.limparTelefoneResponsavelLegal()}"
+				oncomplete="telefoneDialogRepLegal.show()" update=":tabviewpj:tabviewreplegal:formconteudotelefone,:tabviewpj:tabviewreplegal:telefoneDialogRepLegalForm" >
+				<h:graphicImage title="Incluir Telefone" value="/resources/img/ico-expandir.png"  />				
+			</p:commandLink>
+		</h:form>
+		
+		<h:form id="formconteudotelefone" >
+<!-- 		<p:outputPanel autoUpdate="true"> -->
+		 <p:remoteCommand name="atualizarGridTelefone" process="@this" update="tabelaTelefone"/> 
+				<h:panelGrid id="paneltabelatelefonereplegal">
+		<!-- DATATABLE TELEFONE -->
+			<p:dataTable id="tabelaTelefone" widgetVar="tabelaTelefone" var="telefone" style="width:400px;"
+				value="#{telefoneController.modelTelefonePessoaRepresentanteLegal}" 
+				paginator="true" rows="5" paginatorPosition="bottom"
+                paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}"  rendered="#{telefoneController.mostraListaRepresentanteLegal}" paginatorAlwaysVisible="false">
+				<f:facet name="header">  
+					<h:outputText value="Lista de Telefones" />
+				</f:facet>
+				<p:column headerText="Tipo">
+					<h:outputText value="#{telefone.ideTipoTelefone.nomTipoTelefone}" />
+				</p:column>
+
+				<p:column headerText="Número" style="text-align: center;">
+					<h:outputText id="teste" value="#{telefone.numTelefone}" />
+				</p:column>
+				
+				<p:column style="text-align: center;" headerText="Ações">	
+						
+						<p:commandLink  actionListener="#{telefoneController.abrirDialogTelefoneRepLegal(telefone)}" title="Editar" >
+							<h:graphicImage title="Editar" value="/resources/img/ico-pesquisa.png" />
+							<f:setPropertyActionListener target="#{telefoneController.visualiza}" value="#{true}" />					
+						</p:commandLink>
+						
+						<p:commandLink actionListener="#{telefoneController.abrirDialogTelefoneRepLegal(telefone)}" title="Editar" >
+							<h:graphicImage title="Editar" value="/resources/img/ico-editar.png" />
+						</p:commandLink>
+						
+						<p:commandLink update=":formconteudotelefone:display" oncomplete="confirmationTelefone.show()" title="Remover">
+							<h:graphicImage title="Excluir" value="/resources/img/ico-excluir.png" />
+							<f:setPropertyActionListener value="#{telefone}" target="#{telefoneController.telefone}" />
+						</p:commandLink>
+					
+				</p:column>
+			</p:dataTable>
+			<!-- FIM DATATABLE TELEFONE -->
+			</h:panelGrid>
+<!-- 			</p:outputPanel> -->
+		</h:form>	
+		
+		
+		
+		<h:form id="frmDialogTelefone">
+			
+			<p:confirmDialog message="#{bundle.consultapf_msg_confimrexclusao}"
+				header="Mensagem" severity="alert"
+				widgetVar="confirmationTelefone" id="confirmationTelefone">
+				<h:panelGroup>
+					<div style="text-align: center;">
+						<p:commandButton value="Sim" update=":tabviewpj:tabviewreplegal:formconteudotelefone:paneltabelatelefonereplegal"
+							actionListener="#{telefoneController.removerTelefonePessoaRepresentanteLegal()}"
+							oncomplete="confirmationTelefone.hide()" />
+						
+						<p:commandButton value="Não" onclick="confirmationTelefone.hide()"
+							type="button" />
+					</div>
+				</h:panelGroup>
+			
+			</p:confirmDialog>
+			
+			
+		</h:form>
+		
+		
+</ui:composition>

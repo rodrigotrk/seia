@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui">
+	
+	<ui:include src="nomeVulgar.xhtml" />
+	
+	<p:dialog id="fce_asv" 
+			  widgetVar="fce_asv" 
+			  position="center" 
+			  appendToBody="true" 
+			  draggable="true" 
+			  dynamic="true" 
+			  height="600" 
+			  width="1030"
+			  resizable="false" 
+			  header="FCE - ASV " 
+			  modal="true">
+		
+		<p:ajax event="close" listener="#{asvDadosGeraisController.limpar()}"/>
+		
+		<h:panelGroup id="pnlFceAsv" layout="block" >
+			<p:tabView id="tabAbasASVid" activeIndex="#{asvDadosGeraisController.activeTab}" widgetVar="tabAbasASV" cache="false" dynamic="true">
+				<p:ajax event="tabChange" global="false" listener="#{asvDadosGeraisController.controlarAbas}" update="tabAbasASVid asvFormAbaDadosGerais" />
+				<p:tab id="asvAbaDadosGerais" title="Dados Gerais">
+					<ui:include src="/paginas/manter-fce/asv/asvAbaDadosGerais.xhtml"/>
+				</p:tab>
+				<p:tab id="asvAbaSupressao" title="Supressão" disabled="#{asvDadosGeraisController.desabilitaAba}">
+					<ui:include src="/paginas/manter-fce/asv/asvAbaSupressao.xhtml"/>
+				</p:tab>
+			</p:tabView>
+		</h:panelGroup>
+		
+	</p:dialog>	
+	
+	<p:confirmDialog widgetVar="excluirClassificacao" header="#{bundle.geral_lbl_mensagem}" appendToBody="true" message="#{bundle.msg_confirma_exclusao}" severity="alert">
+		<h:form id="formExcluirCLass">
+			<p:commandButton value="#{bundle.btn_sim}" update="tabAbasASVid:asvFormAbaDadosGerais:gridTblClassSelecionados tabAbasASVid:asvFormAbaDadosGerais:gridTableTipoClassificacao tabAbasASVid"
+			action="#{asvDadosGeraisController.excluirClassificacao()}" oncomplete="excluirClassificacao.hide()" process="@this" global="false" />
+			<p:commandButton value="#{bundle.btn_nao}" onclick="excluirClassificacao.hide()" type="button" />
+		</h:form>
+	</p:confirmDialog>
+		
+	<p:confirmDialog header="Confirmação" appendToBody="true" message="#{bundle.geral_msg_informacoes_nao_foram_salvas_deseja_continuar}"
+						severity="alert" widgetVar="confirmationVoltarFCE" id="confirmationVoltarFCE">
+		<h:form id="formConfirmaVoltarFCE">
+			<p:commandButton value="Sim" update="asvFormAbaDadosGerais" oncomplete="confirmationVoltarFCE.hide();fce_asv.hide();" global="false"/>
+			<p:commandButton value="Não" onclick="confirmationVoltarFCE.hide();" type="button" global="false"/>
+		</h:form>
+	</p:confirmDialog>
+	
+	<p:confirmDialog id="removerProduto" widgetVar="removerProduto" header="#{bundle.geral_lbl_mensagem}" appendToBody="true" message="#{bundle.lac_dadosGerais_msg004}" severity="alert">
+		<h:form id="formAsvExclusaoProduto">
+			<p:commandButton id="excluirProduto" value="#{bundle.btn_sim}" actionListener="#{asvSupressaoController.removerProdutoSupressaoSelecionado()}" onclick="removerProduto.hide()" 
+	 						 update="asvFormAbaSupressao:tableProdutosSupressao" 
+	 						 global="false" process="@this"/>
+			<p:commandButton value="#{bundle.btn_nao}" onclick="removerProduto.hide()" type="button"/>
+		</h:form>
+	</p:confirmDialog>
+	
+	<h:form>
+		<p:confirmDialog id="dlgImprimirRelatorioASV" message="#{asvSupressaoController.msgImprimirRelatorio('ASV')}" widgetVar="rel_fce_asv" header="Mensagem">
+				<div align="center">
+					<p:commandButton value="Sim" ajax="false" global="false" process="@this" id="imprimir_rel_transporte"  onclick="rel_fce_asv.hide();" style="margin-right:10px;">
+						<p:fileDownload value="#{asvSupressaoController.imprimirRelatorio}"/>
+					</p:commandButton>			
+					<p:commandButton value="Não" oncomplete="rel_fce_asv.hide();" process="@this"/>
+				</div>
+		</p:confirmDialog> 
+	</h:form>
+	
+	<p:confirmDialog widgetVar="excluirEspecie" header="#{bundle.geral_lbl_mensagem}" message="#{bundle.msg_confirma_exclusao}" severity="alert">
+		<h:form id="formexcluirEspecieCLass">
+			<p:commandButton value="#{bundle.btn_sim}" update="tabAbasASVid:asvFormAbaSupressao:gridTableEspecieSupressao tabAbasASVid:asvFormAbaSupressao:gridTableEspecie asvFormAbaSupressao:gridTableEspecieSupressao asvFormAbaSupressao:gridTableEspecie"
+			action="#{asvSupressaoController.removerEspecie()}" oncomplete="excluirEspecie.hide()" process="@this" global="false" />
+			<p:commandButton value="#{bundle.btn_nao}" onclick="excluirEspecie.hide()" type="button" />
+		</h:form>
+	</p:confirmDialog>
+	
+	<p:confirmDialog widgetVar="excluirEspecieAMC" header="#{bundle.geral_lbl_mensagem}" message="#{bundle.msg_confirma_exclusao}" severity="alert">
+		<h:form id="formexcluirEspecieAMCCLass">
+			<p:commandButton value="#{bundle.btn_sim}"
+			action="#{autorizacaoManejoCabrucaController.removerEspecie()}" oncomplete="excluirEspecieAMC.hide()" process="@this" global="false" />
+			<p:commandButton value="#{bundle.btn_nao}" onclick="excluirEspecieAMC.hide()" type="button" />
+		</h:form>
+	</p:confirmDialog>
+	
+	<p:confirmDialog widgetVar="excluirEspecieAMCDadosConcedidos" header="#{bundle.geral_lbl_mensagem}" message="#{bundle.msg_confirma_exclusao}" severity="alert">
+		<h:form id="formexcluirEspecieAMCDadosConcedidosCLass">
+			<p:commandButton value="#{bundle.btn_sim}"
+			action="#{dadoConcedidoAsvController.removerEspecie()}" oncomplete="excluirEspecieAMCDadosConcedidos.hide()" process="@this" global="false" />
+			<p:commandButton value="#{bundle.btn_nao}" onclick="excluirEspecieAMCDadosConcedidos.hide()" type="button" />
+		</h:form>
+	</p:confirmDialog>
+	
+</ui:composition>

@@ -1,0 +1,134 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+	<h3><h:outputLabel styleClass="titulo-grupo" value="#{bundle.representanteLegalLabelCnae}" /></h3>
+	<h:form id="form-pagina-cnae">
+	
+		<h:panelGrid columns="1">
+			<h:panelGroup>
+				<h:outputText value="* #{bundle.representantelegalLabelIncluirCnae}" rendered="#{identificarPapelController.necessitaValidacao}"/>
+				<h:outputText value="#{bundle.representantelegalLabelIncluirCnae}" rendered="#{!identificarPapelController.necessitaValidacao}"/>
+				<p:commandLink oncomplete="dialogCnae.show()" actionListener="#{cnaeController.limparObjetos()}" action="#{cnaeController.limparObjetos()}" process="@this" disabled="#{pessoaJuridicaController.disableForm}" update=":tabviewpj:form-pagina-cnae:dialogCnae" >
+					<h:graphicImage title="Incluir Cnae" value="/resources/img/ico-expandir.png"  />
+					<f:setPropertyActionListener target="#{cnaeController.editMode}" value="#{false}" />
+					<f:setPropertyActionListener target="#{cnaeController.enableFormCnae}" value="#{true}" />
+				</p:commandLink>
+			</h:panelGroup>			
+		</h:panelGrid>
+		<h:panelGrid id="paneltablecnae" columns="1">
+		<p:dataTable id="tableCnae" widgetVar="tableCnae" value="#{cnaeController.cnaeData}" var="pjcnae" rowIndexVar="index" 
+					 rendered="#{cnaeController.emptyList}" paginator="true" rows="10" paginatorAlwaysVisible="false" paginatorPosition="bottom">
+				<f:facet name="header">
+					<h:outputText value="#{bundle.cnaeLabelTabHeader}" />					
+				</f:facet>
+				<p:column headerText="#{bundle.cnaeLabelTabCodigo}">
+					<h:outputText value="#{pjcnae.ideCnae.codCnae}" />
+				</p:column>
+				<p:column headerText="#{bundle.cnaeLabelTabDescricao}">
+					<h:outputText value="#{pjcnae.ideCnae.desCnae}" />
+				</p:column>
+
+				<p:column headerText="Atividade Principal" style="text-align: center;">  
+            				<h:outputText value="#{pjcnae.indCnaePrincipal eq true ? 'Sim' : 'Não'}" />  
+        		</p:column>
+        								
+				<p:column headerText="#{bundle.cnaeLabelTabAtividadeAcoes}" style="width: 56px;">
+					<p:commandLink update=":tabviewpj:form-pagina-cnae:dialogCnae" oncomplete="$('.ui-messages-error').remove();dialogCnae.show()" actionListener="#{cnaeController.editar(pjcnae)}" title="Visualizar">
+							<h:graphicImage title="Visualizar" value="/resources/img/ico-pesquisa.png" />
+							<f:setPropertyActionListener target="#{cnaeController.editMode}" value="#{false}" />
+							<f:setPropertyActionListener target="#{cnaeController.pessoaJuridicaCnae}" value="#{pjcnae}" />
+							<f:setPropertyActionListener target="#{cnaeController.enableFormCnae}" value="#{false}" />
+							<f:ajax execute="@this"/>
+					</p:commandLink>
+					<p:commandLink update=":tabviewpj:form-pagina-cnae:dialogCnae" disabled="#{pessoaJuridicaController.disableForm}"  image="/resources/img/ico-editar.png" actionListener="#{cnaeController.editar(pjcnae)}" oncomplete="$('.ui-messages-error').remove();dialogCnae.show()" title="Editar" >
+						<h:graphicImage title="Editar" value="/resources/img/ico-editar.png" />
+						<f:setPropertyActionListener target="#{cnaeController.editMode}" value="#{true}" />
+						<f:setPropertyActionListener target="#{cnaeController.enableFormCnae}" value="#{true}" />
+						<f:setPropertyActionListener target="#{cnaeController.pessoaJuridicaCnae}" value="#{pjcnae}" />
+						<f:ajax execute="@this"/>
+					</p:commandLink>
+					<p:commandLink update=":tabviewpj:form-pagina-cnae:paneltablecnae" disabled="#{pessoaJuridicaController.disableForm}"  oncomplete="$('.ui-messages-error').remove();tabviewpj:confirmationCnae.show()" title="Remover">
+							<h:graphicImage title="Remover" value="/resources/img/ico-excluir.png" />
+							<f:setPropertyActionListener target="#{cnaeController.editMode}" value="#{false}" />
+							<f:setPropertyActionListener target="#{cnaeController.enableFormCnae}" value="#{true}" />
+							<f:setPropertyActionListener target="#{cnaeController.pessoaJuridicaCnae}" value="#{pjcnae}" />
+							<f:ajax execute="@this"/>
+					</p:commandLink>
+				</p:column>				
+			</p:dataTable>
+		</h:panelGrid>
+		
+		<p:dialog id="dialogCnae" header="#{bundle.cnaeLabelCabecalho}" widgetVar="dialogCnae" modal="true" position="center" resizable="false">
+			<h:panelGrid columns="1" id="paneldiaglogCnae">
+				<h:outputText value="#{bundle.cnaeLabelSecao}" />
+				
+				<p:selectOneMenu id="comboSecao" value="#{cnaeController.cnaeSecao.ideCnae}" style="width: 700px;" disabled="#{!cnaeController.enableFormCnae}">
+					<f:selectItem itemValue="" itemLabel="Selecione Seção..."/>
+					<f:selectItems value="#{cnaeController.listaSecao}"/>	
+					<p:ajax update="paneldiaglogCnae" process="@this" global="false" listener="#{cnaeController.buscarDivisaoPorSecao}"/>							
+				</p:selectOneMenu>
+				
+				<h:outputText value="#{bundle.cnaeLabelDivisao}" />
+				
+				<p:selectOneMenu id="comboDivisao" value="#{cnaeController.cnaeDivisao.ideCnae}" style="width: 700px;" disabled="#{!cnaeController.enableFormCnae}">
+					<f:selectItem itemValue="" itemLabel="Selecione Divisao..."/>
+					<f:selectItems value="#{cnaeController.listaDivisao}"/>								
+					<p:ajax update="paneldiaglogCnae" process="@this" global="false" listener="#{cnaeController.buscarGrupoPorDivisao}"/>				
+				</p:selectOneMenu>
+				
+				<h:outputText value="#{bundle.cnaeLabelGrupo}" />
+				
+				<p:selectOneMenu id="comboGrupo" value="#{cnaeController.cnaeGrupo.ideCnae}" style="width: 700px;" disabled="#{!cnaeController.enableFormCnae}">
+					<f:selectItem itemValue="" itemLabel="Selecione Grupo..."/>
+					<f:selectItems value="#{cnaeController.listaGrupo}"/>
+					<p:ajax update="paneldiaglogCnae" process="@this"  global="false" listener="#{cnaeController.buscarClassePorGrupo}"/>
+				</p:selectOneMenu>
+				
+				<h:outputText value="#{bundle.cnaeLabelClasse}" />
+				
+				<p:selectOneMenu id="comboClasse" value="#{cnaeController.cnaeClasse}" style="width: 700px;" disabled="#{!cnaeController.enableFormCnae}" converter="cnaeConverter">
+					<f:selectItem itemValue="" itemLabel="Selecione Classe..."/>
+					<f:selectItems value="#{cnaeController.listaClasse}" var="classe" itemValue="#{classe}" itemLabel="#{classe.cnaeFormatado}"/>								
+					<p:ajax update="paneldiaglogCnae" process="@this" global="false" listener="#{cnaeController.buscarSubclassePorClasse}"/>
+				</p:selectOneMenu>
+				
+				<h:outputText value="#{bundle.cnaeLabelSubclasse}" />
+				
+				<p:selectOneMenu id="comboSubClasse" value="#{cnaeController.pessoaJuridicaCnae.ideCnae}" style="width: 700px;" disabled="#{!cnaeController.enableFormCnae}" converter="cnaeConverter">
+					<f:selectItem itemValue="" itemLabel="Selecione SubClasse..."/>
+					<f:selectItems value="#{cnaeController.listaSubclasse}" var="subClasse" itemValue="#{subClasse}" itemLabel="#{subClasse.cnaeFormatado}" />								
+				</p:selectOneMenu>
+				
+				<h:outputText value="#{bundle.cnaeLabelPerguntaAtividadePrincipal}" />
+				
+				<p:selectOneRadio value="#{cnaeController.pessoaJuridicaCnae.indCnaePrincipal}" disabled="#{!cnaeController.enableFormCnae}">  
+		            <f:selectItem itemLabel="#{bundle.cnaeLabelSim}" itemValue="true"/>  
+		            <f:selectItem itemLabel="#{bundle.cnaeLabelNao}" itemValue="false"/>
+		        </p:selectOneRadio>
+		        
+		         <h:panelGrid columns="2" rendered="#{cnaeController.enableFormCnae}">
+		        		<p:commandButton id="btnLimparCnae" value="#{bundle.cnaeLabelLimpar}" actionListener="#{cnaeController.limparEdicao()}" update="paneldiaglogCnae" />
+		        		<p:commandButton value="#{bundle.cnaeLabelSalvar}" actionListener="#{cnaeController.salvarCnae}" update=":tabviewpj:form-pagina-cnae:paneldiaglogCnae :tabviewpj:form-pagina-cnae:paneltablecnae">
+							<p:ajax process="@form"/>
+						</p:commandButton>		        		
+				</h:panelGrid>
+		        	        
+		        <h:panelGrid columns="4">
+		        	<h:outputLabel value="#{bundle.lbl_preench_obrig_asterisc}" style="float: left;" />
+		        	<h:outputText style="padding-right: 310px;" />
+		        <h:outputText />
+		        </h:panelGrid>
+		       
+			</h:panelGrid>
+		</p:dialog>
+		<p:confirmDialog message="#{bundle.consultapf_msg_confimrexclusao}"            
+                    header="Mensagem" severity="alert" widgetVar="confirmationCnae" id="confirmationCnae" styleClass="centered">
+        <p:commandButton id="confirmarExcluir" value="#{bundle.consultapf_lbl_sim}" update=":tabviewpj:form-pagina-cnae:paneltablecnae" actionListener="#{cnaeController.excluir()}" oncomplete="confirmationCnae.hide()" process="confirmarExcluir"/>
+        <p:commandButton value="#{bundle.consultapf_lbl_nao}" onclick="confirmationCnae.hide()" type="button" />
+    </p:confirmDialog>
+	</h:form>			
+</html>

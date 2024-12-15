@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui"
+	template="../../layout/template.xhtml">
+	
+	<ui:define name="titulo-pagina">		
+		<h3> Consultar Documentos Obrigatórios</h3>
+	</ui:define>
+		
+	<ui:define name="conteudo-principal">
+		<h3><h:outputLabel styleClass="titulo-grupo" style="font-weight:bold;" value="INSTRUÇÕES" /></h3>
+		<p class="titulo-grupo">
+			- Para consultar um ou mais documentos, informe o(s) parâmetro(s) de consulta desejado(s) e clique no botão "Consultar".<br />
+			- Para incluir um novo documento, clique no botão "Incluir".
+		</p>
+		<br />
+		<h3><h:outputLabel styleClass="titulo-grupo" style="font-weight:bold;" value="PARÂMETROS DA CONSULTA" /></h3>
+		
+		<h:form id="form1" >
+			<h:panelGrid columns="1" >
+				<h:outputFormat value="#{bundle.consultapf_lbl_nomedoispontos}" />
+				<p:inputText value="#{documentoObrigatorioController.nomeDocumento}" style="width: 500px;"/>
+			</h:panelGrid>
+			<br />
+			<p:commandButton value="Consultar" action="#{documentoObrigatorioController.consultarDocumentoObrigatorio()}" update="listaDocumentos:tabelaDocumentos" disabled="${!security.temAcesso('3.22.4')}"/>&nbsp;
+			<p:commandButton value="Incluir" action="#{documentoObrigatorioController.prepararParaIncluir()}" update=":formDocumentoObrigatorio" ajax="false" process="@this" disabled="${!security.temAcesso('3.22.1')}"/>
+		</h:form>
+		
+		<br />
+	
+		<h:form id="listaDocumentos">
+			<p:dataTable var="doc" value="#{documentoObrigatorioController.listaDocumentoObrigatorio}" lazy="true" paginator="true" rows="10" paginatorPosition="bottom"
+	                 paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}"  
+	                 emptyMessage="#{bundle.consultapf_msg_empty_list}"
+	                 style="width: 95%;" id="tabelaDocumentos" widgetVar="pessoas">
+		        <f:facet name="header">
+					<h:outputText value="Lista de Documentos Obrigatórios Cadastrados" />
+				</f:facet>
+		        <p:column style="width: 70%;">
+		        	<f:facet name="header">Nome do Documento</f:facet>
+		            <h:outputText value="#{doc.nomDocumentoObrigatorio}" />
+		        </p:column>
+		        <p:column>
+		        	<f:facet name="header">Formulário?</f:facet>
+		            <h:outputText value="#{doc.indFormulario == false ? 'Não' : 'Sim'}" />
+		        </p:column>
+               <p:column>
+		        	<f:facet name="header">Público?</f:facet>
+		            <h:outputText value="#{doc.indPublico ? 'Sim' : 'Não'}" />
+		        </p:column>
+		        <p:column style="text-align: center;">
+		           <f:facet name="header">Tamanho</f:facet>
+		            <h:outputText value="#{doc.fileSizeFormated}" />
+		        </p:column>
+		        <p:column style="text-align: center;">
+		            <f:facet name="header">Ações</f:facet>
+		            <p:commandLink id="alterar" update=":formDocumentoObrigatorio" ajax="false" action="/paginas/manter-documentoobrigatorio/cadastro.xhtml" disabled="${!security.temAcesso('3.22.3')}">
+            			<h:graphicImage title="Editar" value="/resources/img/ico-alterar.png"/>
+            			<f:setPropertyActionListener target="${contextoController.object}" value="#{doc}" />
+            		</p:commandLink>
+		          	<p:commandLink id="excluir" oncomplete="confirmation.show()" title="Excluir" process="excluir" disabled="${!security.temAcesso('3.22.2')}">
+	          			 <h:graphicImage title="Excluir" value="/resources/img/ico-excluir.png" />
+	     			     <f:setPropertyActionListener target="#{documentoObrigatorioController.documentoObrigatorioSelecionado}" value="#{doc}"/>
+		            </p:commandLink>
+		        </p:column>
+	    	</p:dataTable>
+	    </h:form>
+	   	<h:form id="form3">
+		    <p:confirmDialog message="#{bundle.consultapf_msg_confimrexclusao}" header="Mensagem" severity="alert" widgetVar="confirmation" id="confirmation">
+		        <p:commandButton id="confirmarExcluir" value="#{bundle.consultapf_lbl_sim}" update=":listaDocumentos:tabelaDocumentos" actionListener="#{documentoObrigatorioController.excluirDocumentoObrigatorio()}" oncomplete="confirmation.hide()" process="confirmarExcluir"/>
+		        <p:commandButton value="#{bundle.consultapf_lbl_nao}" onclick="confirmation.hide()" type="button" />
+		    </p:confirmDialog>
+	    </h:form>
+   </ui:define>  
+  
+</ui:composition>

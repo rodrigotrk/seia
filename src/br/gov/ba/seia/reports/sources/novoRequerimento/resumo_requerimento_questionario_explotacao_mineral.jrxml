@@ -1,0 +1,311 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="resumo_requerimento_questionario_processos" pageWidth="480" pageHeight="802" columnWidth="480" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="8719f475-cd82-4e7d-beb9-997db22c6a9d">
+	<property name="ireport.zoom" value="2.3579476910000103"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="ide_requerimento" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="ide_outorga_localizacao_geografica" class="java.lang.Integer"/>
+	<queryString>
+		<![CDATA[select
+	olg.ide_outorga_localizacao_geografica,
+	nom_intervencao,ide_outorga_localizacao_geografica,
+	array_to_string( array(SELECT latitude FROM (
+		SELECT
+			case when length(trim(f_get_vertices(ide_localizacao_geografica)):: character varying) > 0
+			then
+				substring(
+					( SELECT trim(f_get_vertices(ide_localizacao_geografica) ) )
+					FROM (strpos((SELECT trim(f_get_vertices(ide_localizacao_geografica))), '(') + 1) for (strpos((SELECT trim(f_get_vertices(ide_localizacao_geografica))),
+					' ') - 1)
+					)
+			else 'valor não informado.' end AS latitude
+		FROM
+			localizacao_geografica
+		WHERE
+			ide_localizacao_geografica = lg.ide_localizacao_geografica) pontos), ', ') AS latitudeInicial,
+
+	array_to_string( array(SELECT longitude FROM (
+		SELECT
+			case when length(trim(f_get_vertices(ide_localizacao_geografica)):: character varying) > 0
+			then
+			replace(substring((SELECT trim(f_get_vertices(ide_localizacao_geografica))) FROM (strpos((SELECT trim(f_get_vertices(ide_localizacao_geografica))), ' ') + 1) for (strpos((SELECT trim(f_get_vertices(ide_localizacao_geografica))), ')') - 1)), ')', '') else 'valor não informado.' end AS longitude
+		FROM
+			localizacao_geografica
+		WHERE
+			ide_localizacao_geografica = lg.ide_localizacao_geografica) pontos), ', ') AS longitudeInicial,
+
+	array_to_string( array(SELECT latitude FROM (
+		SELECT
+			case when length(trim(f_get_vertices(ide_localizacao_geografica)):: character varying) > 0
+			then
+				substring(
+					( SELECT trim(f_get_vertices(ide_localizacao_geografica) ) )
+					FROM (strpos((SELECT trim(f_get_vertices(ide_localizacao_geografica))), '(') + 1) for (strpos((SELECT trim(f_get_vertices(ide_localizacao_geografica))),
+					' ') - 1)
+					)
+			else 'valor não informado.' end AS latitude
+		FROM
+			localizacao_geografica
+		WHERE
+			ide_localizacao_geografica = lgfim.ide_localizacao_geografica) pontos), ', ') AS latitudeFinal,
+
+	array_to_string( array(SELECT longitude FROM (
+		SELECT
+			case when length(trim(f_get_vertices(ide_localizacao_geografica)):: character varying) > 0
+			then
+			replace(substring((SELECT trim(f_get_vertices(ide_localizacao_geografica))) FROM (strpos((SELECT trim(f_get_vertices(ide_localizacao_geografica))), ' ') + 1) for (strpos((SELECT trim(f_get_vertices(ide_localizacao_geografica))), ')') - 1)), ')', '') else 'valor não informado.' end AS longitude
+		FROM
+			localizacao_geografica
+		WHERE
+			ide_localizacao_geografica = lgfim.ide_localizacao_geografica) pontos), ', ') AS longitudeFinal
+
+
+
+ from outorga o
+inner join outorga_localizacao_geografica olg on o.ide_outorga = olg.ide_outorga
+inner join tipo_intervencao ti on ti.ide_tipo_intervencao = olg.ide_tipo_intervencao
+inner join localizacao_geografica lg on lg.ide_localizacao_geografica = olg.ide_localizacao_geografica
+inner join localizacao_geografica lgfim on lgfim.ide_localizacao_geografica = olg.ide_localizacao_geografica_final
+inner join dado_geografico dg on dg.ide_localizacao_geografica = lg.ide_localizacao_geografica
+where
+ ti.ide_tipo_intervencao = 9 --Explotação mineral
+ and ide_requerimento = $P{ide_requerimento}]]>
+	</queryString>
+	<field name="ide_outorga_localizacao_geografica" class="java.lang.Integer"/>
+	<field name="nom_intervencao" class="java.lang.String"/>
+	<field name="latitudeinicial" class="java.lang.String"/>
+	<field name="longitudeinicial" class="java.lang.String"/>
+	<field name="latitudefinal" class="java.lang.String"/>
+	<field name="longitudefinal" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="24" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="d600740b-2a1d-44f5-8df3-ff65a2e9bf04" positionType="Float" mode="Opaque" x="391" y="12" width="70" height="12" isRemoveLineWhenBlank="true" backcolor="#EEECE1"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font fontName="Arial" size="8" isBold="false" isUnderline="false"/>
+				</textElement>
+				<text><![CDATA[Caracteristicas]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="69583537-d07e-4159-9234-a900197a9c30" positionType="Float" mode="Opaque" x="320" y="12" width="70" height="12" isRemoveLineWhenBlank="true" backcolor="#EEECE1"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font fontName="Arial" size="8" isBold="false" isUnderline="false"/>
+				</textElement>
+				<text><![CDATA[Longitude Final]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="318ae618-9b0c-46ad-88b2-62f852d0c081" positionType="Float" mode="Opaque" x="250" y="12" width="70" height="12" isRemoveLineWhenBlank="true" backcolor="#EEECE1"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font fontName="Arial" size="8" isBold="false" isUnderline="false"/>
+				</textElement>
+				<text><![CDATA[Latitude Final]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="f43eab24-e7ad-41f9-aec7-ad5096e3f901" positionType="Float" mode="Opaque" x="10" y="12" width="100" height="12" isRemoveLineWhenBlank="true" backcolor="#EEECE1"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font fontName="Arial" size="8" isBold="false" isUnderline="false"/>
+				</textElement>
+				<text><![CDATA[Nome da intervenção]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="f43eab24-e7ad-41f9-aec7-ad5096e3f901" positionType="Float" mode="Opaque" x="110" y="12" width="70" height="12" isRemoveLineWhenBlank="true" backcolor="#EEECE1"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font fontName="Arial" size="8" isBold="false" isUnderline="false"/>
+				</textElement>
+				<text><![CDATA[Latitude Inicial]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="5c09fafa-1e3f-426f-a111-ebd3c72bc5a2" positionType="Float" mode="Opaque" x="180" y="12" width="70" height="12" isRemoveLineWhenBlank="true" backcolor="#EEECE1"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font fontName="Arial" size="8" isBold="false" isUnderline="false"/>
+				</textElement>
+				<text><![CDATA[Longitude Inicial]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="53dd6335-ea38-4eae-9fab-c09623faef2f" x="0" y="0" width="262" height="12" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$F{ide_outorga_localizacao_geografica} != null]]></printWhenExpression>
+				</reportElement>
+				<textElement>
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA["[x] Explotação Mineral"]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement uuid="45e16afe-98e5-41db-8e39-b78eb64ce9a6" x="10" y="12" width="451" height="1" isRemoveLineWhenBlank="true"/>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</line>
+			<line>
+				<reportElement uuid="2db74e0d-6aed-49a6-8211-8c43cb3ce755" x="10" y="12" width="1" height="12" isRemoveLineWhenBlank="true"/>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</line>
+			<line>
+				<reportElement uuid="f8ef8336-a206-4cf8-a5e8-2c12538fdba8" x="110" y="12" width="1" height="12" isRemoveLineWhenBlank="true"/>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</line>
+			<line>
+				<reportElement uuid="c1ae69a3-a21c-4d05-a37c-5e6591f9803f" x="180" y="12" width="1" height="12" isRemoveLineWhenBlank="true"/>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</line>
+			<line>
+				<reportElement uuid="f6b26b63-cc6d-4b01-afd8-5cc626fcbf59" x="250" y="12" width="1" height="12" isRemoveLineWhenBlank="true"/>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</line>
+			<line>
+				<reportElement uuid="2cda1849-4004-468b-8a3c-d9400db7bb5f" x="390" y="12" width="1" height="12" isRemoveLineWhenBlank="true"/>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</line>
+			<line>
+				<reportElement uuid="487f00a0-1855-4dba-a483-e87942ea8e7d" x="320" y="12" width="1" height="12" isRemoveLineWhenBlank="true"/>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</line>
+			<line>
+				<reportElement uuid="d5179a19-7b8c-496e-a3ef-59049a490e49" x="460" y="12" width="1" height="12" isRemoveLineWhenBlank="true"/>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</line>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="12" splitType="Stretch">
+			<textField>
+				<reportElement uuid="3a605851-7c15-4e42-92be-84181c09472a" x="180" y="0" width="70" height="12" isRemoveLineWhenBlank="true"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{longitudeinicial}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="e034a2ed-7efd-4a93-bdb2-5b058d0ab9b8" x="110" y="0" width="70" height="12" isRemoveLineWhenBlank="true"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{latitudeinicial}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="9062bbae-78fc-4534-a945-53aae5f712e5" x="10" y="0" width="100" height="12" isRemoveLineWhenBlank="true"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nom_intervencao}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement uuid="350ffd5c-64b2-45f9-a094-79c638c26be3" x="10" y="0" width="451" height="1" isRemoveLineWhenBlank="true"/>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</line>
+			<line>
+				<reportElement uuid="1f0db885-41a3-4840-bcd8-5ec4928fe181" stretchType="RelativeToBandHeight" x="390" y="0" width="1" height="12" isRemoveLineWhenBlank="true"/>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</line>
+			<line>
+				<reportElement uuid="97c8877a-fcaf-4d45-8b0f-ba529aee236e" stretchType="RelativeToBandHeight" x="10" y="0" width="1" height="12" isRemoveLineWhenBlank="true"/>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</line>
+			<line>
+				<reportElement uuid="3f7d65ba-5364-4ee5-98b1-4199e7920ed6" stretchType="RelativeToBandHeight" x="250" y="0" width="1" height="12" isRemoveLineWhenBlank="true"/>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</line>
+			<line>
+				<reportElement uuid="e38f057c-f50c-4b36-a520-99c55e91c427" stretchType="RelativeToBandHeight" x="180" y="0" width="1" height="12" isRemoveLineWhenBlank="true"/>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</line>
+			<line>
+				<reportElement uuid="0f26cb2a-689b-4ea0-9de1-76cbcd340510" stretchType="RelativeToBandHeight" x="110" y="0" width="1" height="12" isRemoveLineWhenBlank="true"/>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</line>
+			<textField>
+				<reportElement uuid="eb4fc7be-7bb0-4419-a1a9-32854d7d0cf4" x="250" y="0" width="70" height="12" isRemoveLineWhenBlank="true"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{latitudefinal}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement uuid="6e75fcd2-5428-4d93-a874-b497474e16e4" stretchType="RelativeToBandHeight" x="320" y="0" width="1" height="12" isRemoveLineWhenBlank="true"/>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</line>
+			<textField>
+				<reportElement uuid="e1be7e95-a15d-4592-b64e-6a6033f545b2" x="320" y="0" width="70" height="12" isRemoveLineWhenBlank="true"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{longitudefinal}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement uuid="4a9c805c-ffcb-4ad9-a1b0-e964802d583d" stretchType="RelativeToBandHeight" x="460" y="0" width="1" height="12" isRemoveLineWhenBlank="true"/>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</line>
+			<subreport>
+				<reportElement uuid="8ab477eb-a49c-4c4a-b433-952c3758d23b" x="391" y="1" width="69" height="11" isRemoveLineWhenBlank="true"/>
+				<subreportParameter name="ide_requerimento">
+					<subreportParameterExpression><![CDATA[$P{ide_requerimento}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="ide_outorga_localizacao_geografica">
+					<subreportParameterExpression><![CDATA[$F{ide_outorga_localizacao_geografica}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "resumo_requerimento_questionario_explotacao_mineral_ind_caracteristicas.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="1" splitType="Stretch">
+			<line>
+				<reportElement uuid="eb6188c4-1f99-41f6-830c-72feff35bfb8" x="10" y="0" width="451" height="1" isRemoveLineWhenBlank="true"/>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</line>
+		</band>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

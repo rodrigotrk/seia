@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui">
+
+	<!-- Cadastro Pesquisa Mineral sem Guia de Utilização  -->
+	<ui:include src="/paginas/manter-atividade-nao-sujeita-licenciamento/pesquisa-mineral/pesquisaMineralInstrucaoCadastro.xhtml" />
+	
+	<ui:include src="/paginas/manter-localizacao-geografica/localizacao-geografica-generic.xhtml" />
+	
+	<!-- ABA DADOS BÁSICOS -->
+	
+	<!-- 	DIALOG SELECIONAR EMPREENDIMENTO -->
+	<!-- <ui:include src="/paginas/manter-atividade-nao-sujeita-licenciamento/dialogSelecionarSolicitante.xhtml" /> -->
+	<ui:include src="/paginas/manter-atividade-nao-sujeita-licenciamento/dialogSelecionarEmpreendimento.xhtml" />
+	<!-- 	FIM DIALOG SELECIONAR EMPREENDIMENTO -->
+	
+	<!-- 	FIM ABA DADOS BÁSICOS -->
+	
+	<!-- ABA CARACTERIZAÇÃO DA ATIVIDADE -->
+	<p:dialog id="dialogIncluirSubstanciaMineral"
+			  widgetVar="dialogIncluirSubstanciaMineral" 
+			  position="center" 
+			  appendToBody="false" 
+			  draggable="true"
+			  dynamic="true"
+			  width="710"
+			  resizable="false" 
+			  header="#{bundle.fce_lic_min_incluir_substancia}"
+			  modal="true"
+			  >
+		<p:ajax event="close" listener="#{pesquisaMineralController.limparSubstanciaMineral()}"/>
+		<ui:include src="/paginas/manter-atividade-nao-sujeita-licenciamento/pesquisa-mineral/pesquisaMineralDialogSubstanciaMineral.xhtml" />
+	</p:dialog>
+
+	<!-- 	DIALOG EXCLUIR SUBSTANCIA MINERAL -->
+	<p:confirmDialog id="confirmaExclusaoSubstanciaMineral"
+		widgetVar="confirmaExclusaoSubstanciaMineral" 
+		header="Confirmação" 
+		appendToBody="true" 
+		message="#{bundle.messagem_004}" 
+		severity="alert">
+		<h:form>
+			<p:commandButton value="Sim" 
+				update="tabCadastroPesquisaMineral:formAbaCaracterizacaoAtividade:gridSubstanciaMineral" 
+				onclick="confirmaExclusaoSubstanciaMineral.hide()"
+				process="@this" 
+				actionListener="#{pesquisaMineralController.excluirSubstanciaMineral()}">
+			</p:commandButton>
+			<p:commandButton value="Não" onclick="confirmaExclusaoSubstanciaMineral.hide();" type="button" global="false" />
+		</h:form>
+	</p:confirmDialog>
+	<!-- 	DIALOG EXCLUIR SUBSTANCIA MINERAL -->
+
+	<!-- 	DIALOG INCLUIR PROCESSO DNPM -->	
+	<p:dialog id="dialogIncluirProcessoDNPM" 
+			  widgetVar="dialogIncluirProcessoDNPM" 
+			  position="center" 
+			  appendToBody="false" 
+			  draggable="true" 
+			  dynamic="true" 
+			  width="280" 
+			  height="190"
+			  resizable="false" 
+			  header="#{bundle.fce_lic_min_informacao_processo_dnpm}" 
+			  modal="true">
+		<p:ajax event="close" listener="#{pesquisaMineralController.limparProcessoDnpm()}"/>
+		<ui:include src="/paginas/manter-atividade-nao-sujeita-licenciamento/pesquisa-mineral/pesquisaMineralDialogProcessoDnpm.xhtml"/>
+	</p:dialog>
+	<!-- 	DIALOG INCLUIR PROCESSO DNPM -->	
+	
+	
+	<!-- 	DIALOG EXCLUIR POLIGONAL DNPM -->
+	<p:confirmDialog id="confirmaExclusaoPoligonalDnpm"  widgetVar="confirmaExclusaoPoligonalDnpm" header="Confirmação" appendToBody="true" message="#{bundle.msg_generica_deseja_exclusao}" severity="alert">
+		<h:form>
+			<p:commandButton value="Sim" 
+				update=":formIncluirProcessoDnpm, tabCadastroPesquisaMineral:formAbaCaracterizacaoAtividade:panelProcessoDnpm" 
+				onclick="confirmaExclusaoPoligonalDnpm.hide()"
+				process="@this" 
+				actionListener="#{pesquisaMineralController.excluirPoligonalRequeridaDnpm()}">
+			</p:commandButton>
+			<p:commandButton value="Não" onclick="confirmaExclusaoPoligonalDnpm.hide();" type="button" global="false" />
+		</h:form>
+	</p:confirmDialog>
+	<!-- 	DIALOG EXCLUIR POLIGONAL DNPM -->
+	
+	<!-- 	DIALOG INCLUIR PROPESCCAO -->
+	<p:dialog id="dialogIncluirPropesccao"
+			  widgetVar="dialogIncluirPropesccao" 
+			  position="center" 
+			  appendToBody="false" 
+			  draggable="true"
+			  dynamic="true"
+			  width="370"
+			  resizable="false" 
+			  header="#{bundle.lbl_cpm_informacoes} #{pesquisaMineralController.headerProspeccao}"
+			  modal="true"
+			  >
+		<p:ajax event="close" listener="#{pesquisaMineralController.limparProspeccao()}"/>
+		<ui:include src="/paginas/manter-atividade-nao-sujeita-licenciamento/pesquisa-mineral/pesquisaMineralDialogProspeccao.xhtml" />
+	</p:dialog>
+	<!-- 	DIALOG INCLUIR PROPESCCAO -->
+	
+	<!-- 	DIALOG EXCLUIR COORDENADA DETALHAMENTO -->
+	<p:confirmDialog id="confirmaExclusaoCoordenadaDetalhamento"  widgetVar="confirmaExclusaoCoordenadaDetalhamento" header="Confirmação" appendToBody="true" message="#{bundle.msg_generica_deseja_exclusao}" severity="alert">
+		<h:form>
+			<p:commandButton value="Sim" 
+				update="tabCadastroPesquisaMineral:formAbaCaracterizacaoAtividade:gridPanelProcessoDnpm, formIncluirProspeccao:gridCoordenada" 
+				onclick="confirmaExclusaoCoordenadaDetalhamento.hide()"
+				process="@this" 
+				actionListener="#{pesquisaMineralController.excluirCoordenadaDetalhamento()}">
+			</p:commandButton>
+			<p:commandButton value="Não" onclick="confirmaExclusaoCoordenadaDetalhamento.hide();" type="button" global="false" />
+		</h:form>
+	</p:confirmDialog>
+	<!-- 	DIALOG EXCLUIR COORDENADA DETALHAMENTO -->
+	
+	<!-- 	DIALOG EXCLUIR PROSPECÇÃO MINERAL -->
+	<p:confirmDialog id="confirmaExclusaoProspeccaoMineral"
+		widgetVar="confirmaExclusaoProspeccaoMineral" 
+		header="Confirmação" 
+		appendToBody="true" 
+		message="#{bundle.messagem_004}" 
+		severity="alert">
+		<h:form>
+			<p:commandButton value="Sim" 
+				update="tabCadastroPesquisaMineral:formAbaCaracterizacaoAtividade:gridPanelProcessoDnpm" 
+				onclick="confirmaExclusaoProspeccaoMineral.hide()"
+				process="@this" 
+				actionListener="#{pesquisaMineralController.excluirProspeccaoMineral()}">
+			</p:commandButton>
+			<p:commandButton value="Não" onclick="confirmaExclusaoProspeccaoMineral.hide();" type="button" global="false" />
+		</h:form>
+	</p:confirmDialog>
+	<!-- 	DIALOG EXCLUIR PROSPECÇÃO MINERAL -->
+	
+	<!-- FIM ABA CARACTERIZAÇÃO DA ATIVIDADE -->
+	
+	<!-- ABA DOCUMENTOS E ESTUDOS -->
+	
+	<!-- 	DIALOG UPLOAD -->
+	<p:dialog widgetVar="fileUpload" 
+		id="fileUpload" 
+		header="#{bundle.validacao_previa_lbl_selecione_arquivo}"
+		modal="true" 
+		resizable="false" 
+		position="center" 
+		min-width="240" 
+		min-height="120" 
+		style="text-align: center;">
+		
+		<h:form style="text-align: center;">
+			<p:fileUpload 
+				uploadLabel="false" label="Upload Documento"  process="@this" update="tabCadastroPesquisaMineral:formAbaDocumentosEstudos"
+				fileUploadListener="#{pesquisaMineralController.uploadArquivo()}"
+				invalidFileMessage="#{bundle.msg_erro_007}" mode="advanced" auto="true" 
+				allowTypes="/(\.|\/)(pdf|png|jpg)$/" oncomplete="fileUpload.hide();" />
+		</h:form>
+	</p:dialog>
+	
+	<p:dialog widgetVar="fileUploadDocRepresentacao" 
+		id="fileUploadDocRepresentacao" 
+		header="#{bundle.validacao_previa_lbl_selecione_arquivo}"
+		modal="true" 
+		resizable="false" 
+		position="center" 
+		min-width="240" 
+		min-height="120" 
+		style="text-align: center;">
+		
+		<h:form style="text-align: center;">
+			<p:fileUpload 
+				uploadLabel="false" label="Upload Documento"  process="@this" update="tabCadastroPesquisaMineral:formAbaDocumentosEstudos"
+				fileUploadListener="#{pesquisaMineralController.uploadDocumentoRepresentacao()}"
+				invalidFileMessage="#{bundle.msg_erro_007}" mode="advanced" auto="true" 
+				allowTypes="/(\.|\/)(pdf|png|jpg)$/" oncomplete="fileUploadDocRepresentacao.hide();" />
+		</h:form>
+	</p:dialog>
+	<!-- 	FIM DIALOG UPLOAD -->
+	
+	
+	<p:dialog header="#{bundle.lbl_cpm_termo_compromisso}" 
+		widgetVar="dialogTermo" 
+		modal="true" 
+		style="text-align:center;" 
+		resizable="false"  
+		position="center" 
+		closable="true"
+		width="430" 
+		max-height="270">
+		<h:form id="formTermoCompromisso">
+			<h:panelGrid columns="2" width="400">
+				<h:panelGrid id="gridBoolean" style="margin-top:-95px !important;">
+					<p:selectBooleanCheckbox value="#{pesquisaMineralController.comprometimento}">
+						<p:ajax event="change" />
+					</p:selectBooleanCheckbox>
+				</h:panelGrid>
+				<p class="font-req-declaracao" style="margin-left:5px;">
+					Comprometo-me a proceder com ações de recuperação ambiental dos impactos gerados no desenvolvimento das referidas atividades até a finalização da pesquisa, 
+					como preconiza o Parágrafo 2º, do Artigo 225 da Constituição Federal de 1988, mantendo para fins de fiscalização o relatório técnico de acompanhamento com 
+					registro fotográfico. Declaro por fim, estar ciente de que a prestação de informações falsas constitui prática de crime e resultará na aplicação das sanções 
+					penais cabíveis, nos termos dispostos no Código Penal (Decreto-Lei nº 2.848/40), na Lei de crimes ambientais (Lei Federal nº 9.605/98) e no seu regulamento.
+				</p> 
+			</h:panelGrid>
+				
+			<h:panelGrid style="float:right;">
+				<p:commandButton value="Salvar" 
+					id="botaoSalvarTermo" 
+					actionListener="#{pesquisaMineralController.salvarTermoCompromisso()}"
+					oncomplete="validaTela(xhr, status, args, dialogTermo);"/>
+			</h:panelGrid>
+		</h:form>
+		
+	</p:dialog>
+	
+</ui:composition>

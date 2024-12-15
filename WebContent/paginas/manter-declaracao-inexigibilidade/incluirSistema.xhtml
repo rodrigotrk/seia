@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui"
+	xmlns:s="http://java.sun.com/jsf/composite/seia">	
+	
+		<h:form id="formSistema">
+			<h:panelGrid>
+				<h:outputLabel value="Nome do Sistema" style="font-weight:bold;"/>
+				<p:inputText id="txtNomeSistema" value="#{sistemaEnderecoController.declaracaoInfoAbastecimento.nomSistema}" 
+							maxlength="80" disabled="#{!sistemaEnderecoController.permiteEditar}">
+					<p:ajax event="change" process="@this"/>
+				</p:inputText>
+			</h:panelGrid>
+			<p:outputPanel id="pnlCoordenada">
+			<h:panelGrid>
+				<h:outputLabel value="Localização geográfica" style="font-weight:bold;"/>
+				<s:inputLocGeo
+		            ideObjetoLocalizacao="#{sistemaEnderecoController.declaracaoInfoAbastecimento}" 
+		            titulo="Incluir coordenada geográfica"
+		            update="formSistema:pnlCoordenada"
+		            ideTipoSecaoGeometrica="#{seiaController.classificacaoSecaoEnum('CLASSIFICACAO_SECAO_PONTO')}"
+		            ideRequerimento="#{declaracaoInexigibilidadeController.requerimento}" 
+		            ideLocalizacaoGeografica="#{sistemaEnderecoController.declaracaoInfoAbastecimento.localizacaoGeografica}"
+		            disabled="#{!empty sistemaEnderecoController.declaracaoInfoAbastecimento.localizacaoGeografica.ideLocalizacaoGeografica}"
+		            />
+				<h:outputLabel id="lblCoordGeo" value="Coordenada Geográfica" rendered="#{!empty sistemaEnderecoController.declaracaoInfoAbastecimento.localizacaoGeografica.ideLocalizacaoGeografica}"/>
+				<p:dataTable id="dtCoordGeo" var="loc" value="#{sistemaEnderecoController.declaracaoInfoAbastecimento.localizacaoGeografica}"
+					rendered="#{!empty sistemaEnderecoController.declaracaoInfoAbastecimento.localizacaoGeografica.ideLocalizacaoGeografica}">
+					<p:column headerText="Sistema de coordenadas">
+						<h:outputText value="#{loc.ideSistemaCoordenada.nomSistemaCoordenada}" />
+					</p:column>
+					
+					<p:column headerText="Latitude">
+						<h:outputText value="#{loc.latitudeInicial}" />
+					</p:column>
+					
+					<p:column headerText="Longitude">
+						<h:outputText value="#{loc.longitudeInicial}" />
+					</p:column>
+					
+					<p:column headerText="Ações">
+						<s:linkGeoBahia ideLocalizacaoGeografica="#{loc}" />
+						<p:commandLink  oncomplete="confirmExcluirGeo.show()" disabled="#{!sistemaEnderecoController.permiteEditar}" process="@this">
+	                        <f:setPropertyActionListener value="#{sistemaEnderecoController.declaracaoInfoAbastecimento}" target="#{localizacaoGeograficaGenericController.objetoLocalizacao}" />
+	                        <f:setPropertyActionListener value="dtCoordGeo" target="#{localizacaoGeograficaGenericController.idDoComponenteParaSerAtualizado}" />
+	                        <h:graphicImage title="Excluir" value="/resources/img/ico-excluir.png" />
+	                    </p:commandLink>
+					
+					</p:column>
+					
+				</p:dataTable>
+			</h:panelGrid>
+			</p:outputPanel>
+			<br/>
+			<h:panelGrid>
+				<h:outputLabel value="Vazão" style="font-weight:bold;"/>
+				<h:panelGrid columns="2">
+					<p:inputText id="txtVazao" value="#{sistemaEnderecoController.declaracaoInfoAbastecimento.valVazao}" onkeyup="maskIt(this, event, '99.999.999,99', true)"
+								maxlength="20" disabled="#{!sistemaEnderecoController.permiteEditar}">
+						<f:converter converterId="bigConverter" />
+						<p:ajax event="change" process="@this" />
+					</p:inputText>
+					<h:outputLabel value="(l/s)" />
+				</h:panelGrid>
+			</h:panelGrid>
+			<br/>
+			<h:panelGrid>
+				<h:outputLabel value="Endereço" style="font-weight:bold;"/>
+				<h:outputLabel id="idlblcep" value="* CEP"  style="font-weight:bold;"/>
+<!-- 				<p:inputMask value="#{projetoEnderecoController.logradouroPesquisa.numCep}" mask="99.999-999"
+					disabled="#{!projetoEnderecoController.permiteEditar}">
+					<p:ajax event="blur" listener="#{projetoEnderecoController.filtrarPorCep()}" process="@this"/>
+					<f:converter converterId="cepConverter" />
+				</p:inputMask> -->
+				
+				
+			<p:inputMask id="cep" valueChangeListener="#{sistemaEnderecoController.changeCep()}"
+				value="#{enderecoGenericoController.cepConsultado}"
+				mask="99.999-999"
+				disabled="#{!sistemaEnderecoController.permiteEditar}" styleClass="notSubmit">
+  				<p:ajax event="blur" 
+					listener="#{sistemaEnderecoController.filtrarPorCep() }" 
+					process="@this" update="pnlEndereco" />
+			</p:inputMask>								
+				
+			</h:panelGrid>
+			
+			<p:outputPanel autoUpdate="true" id="pnlEndereco">
+				<h:panelGrid id="gridbairro" columns="2">
+                    <h:outputText id="idlblbairro" value="#{bundle.geral_lbl_endereco_bairro}"/>
+                    <h:outputText />
+
+                    <p:selectOneMenu id="idcombobairro" 
+                        value="#{enderecoGenericoController.bairro}"
+                        valueChangeListener="#{sistemaEnderecoController.changeLogradouroMunicipio()}"
+                        rendered="#{!enderecoGenericoController.bairroOutroInexibilidade}"
+                        disabled="#{enderecoGenericoController.desabilitaGeral or !sistemaEnderecoController.enableFormEndereco}"
+                        converter="simpleEntityConverter">
+                        <f:selectItem itemLabel="Selecione..." />
+                        <f:selectItems value="#{enderecoGenericoController.listaBairro}" var="bairro" itemValue="#{bairro}" itemLabel="#{bairro.nomBairro}"/>
+                        <p:ajax event="change" process="@this" update="formSistema"/>
+                    </p:selectOneMenu>
+
+                    <p:inputText id="inputBairro" 
+                        value="#{enderecoGenericoController.bairro.nomBairro}" 
+                        rendered="#{enderecoGenericoController.bairroOutroInexibilidade}"
+                        disabled="#{!sistemaEnderecoController.permiteEditar}"/>
+                </h:panelGrid>
+
+			<h:outputLabel id="idlbllogradouro" value="* Logradouro" style="font-weight:bold;"/>
+			<h:outputText />
+			<h:panelGrid columns="3" id="gridlogradouro">
+			
+				<p:selectOneMenu id="idcombotipologradouroinput" 
+					value="#{sistemaEnderecoController.tipoLogradouro}"
+					disabled="#{!sistemaEnderecoController.enableFormEndereco}"
+					converter="simpleEntityConverter">
+					<f:selectItem itemLabel="Selecione..." />
+					<f:selectItems value="#{enderecoGenericoController.listaTipoLogradouro}" var="tipoLogradouro" itemValue="#{tipoLogradouro}" itemLabel="#{tipoLogradouro.nomTipoLogradouro}"/>
+				</p:selectOneMenu>
+				
+				<p:inputText id="inputnomlogradouro"
+					value="#{enderecoGenericoController.logradouro.nomLogradouro}" 
+					maxlength="180" 
+					rendered="#{!sistemaEnderecoController.showInputLogradouro}"
+                    disabled="#{!sistemaEnderecoController.showInputs or !sistemaEnderecoController.enableFormEndereco}" />
+				
+				<p:selectOneMenu id="idcombologradouro" 
+					value="#{sistemaEnderecoController.logradouro}" 
+					valueChangeListener="#{sistemaEnderecoController.changeLogradouro()}"
+					rendered="#{sistemaEnderecoController.showInputLogradouro}"
+					disabled="#{enderecoGenericoController.desabilitaGeral or enderecoGenericoController.bairroNaoSelecionado or !sistemaEnderecoController.enableFormEndereco}"
+					converter="simpleEntityConverter">
+					<f:selectItem itemLabel="Selecione..." />
+					<f:selectItems value="#{enderecoGenericoController.listaLogradouro}" var="logradouro" itemValue="#{logradouro}" itemLabel="#{logradouro.nomLogradouro}" />
+					<p:ajax event="change" process="@this" update="@form"/>
+				</p:selectOneMenu>
+			</h:panelGrid>
+			
+			<h:panelGrid columns="2" id="panelmunicipioestado" width="100%">
+				<h:outputText id="idlblnumero" value="Número" style="font-weight:bold;"/>
+				<h:outputLabel id="idlblcomplemento" value="Complemento" style="font-weight:bold;"/>
+				
+				<p:inputText style="width: 70%"  
+					value="#{sistemaEnderecoController.endereco.numEndereco}" 
+					maxlength="5" 
+					size="5" 
+					disabled="#{!sistemaEnderecoController.enableFormEndereco}"/>				
+				
+				
+			<p:inputText style="width: 100%" 
+					value="#{sistemaEnderecoController.endereco.desComplemento}"  
+					disabled="#{!sistemaEnderecoController.enableFormEndereco}"/>	
+			</h:panelGrid>
+				
+			<h:panelGrid columns="2">
+				<h:outputText id="idlbluf" value="* UF" style="font-weight:bold;"/>
+				<h:outputLabel id="idlblmunicipio" value="* Localidade" style="font-weight:bold;"/>
+				
+				<p:selectOneMenu id="idcombouf" 
+					value="#{enderecoGenericoController.estado}" 
+					valueChangeListener="#{enderecoGenericoController.changeEstado()}"
+					converter="simpleEntityConverter"
+					disabled="#{enderecoGenericoController.bloqueioUfLocalidade or !sistemaEnderecoController.permiteEditar}">
+					<f:selectItems value="#{enderecoGenericoController.listaEstado}" var="estado" itemValue="#{estado}" itemLabel="#{estado.nomEstado}"/>
+					<p:ajax event="change" process="@this" update="idcombomunicipio"/>
+				</p:selectOneMenu>				
+				
+				
+				<p:selectOneMenu id="idcombomunicipio" 
+					value="#{enderecoGenericoController.municipio}"
+					valueChangeListener="#{enderecoGenericoController.changeLocalidade()}" 
+					converter="simpleEntityConverter"
+					disabled="#{(!sistemaEnderecoController.showInputs or !sistemaEnderecoController.showInputLogradouro) or !sistemaEnderecoController.permiteEditar}">
+					<f:selectItems value="#{enderecoGenericoController.listaMunicipio}"  var="municipio" itemValue="#{municipio}" itemLabel="#{municipio.nomMunicipio}" />
+				</p:selectOneMenu>				
+				
+			</h:panelGrid>
+			
+				<h:panelGrid columns="2">	
+					<p:commandButton value="Salvar" 
+						actionListener="#{declaracaoInexigibilidadeController.salvarSistema}" 
+						process="@form" 
+						update="tabViewDI:formInfoAdicional:dtSistema" 
+						disabled="#{!sistemaEnderecoController.permiteEditar}"/>
+				</h:panelGrid>
+				<h:outputLabel value="#{bundle.lbl_preench_obrig_asterisc}" style="float: left;" />
+			</p:outputPanel>
+		</h:form>
+	
+</ui:composition>

@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="fce_sistema_abastecimento_agua_elevatorio_tratada" pageWidth="495" pageHeight="817" whenNoDataType="AllSectionsNoDetail" columnWidth="495" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="80b78396-35cc-4e26-aaf9-1207b1892468">
+	<property name="ireport.zoom" value="2.657341500000001"/>
+	<property name="ireport.x" value="142"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String"/>
+	<parameter name="ide_requerimento" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[$P{ide_requerimento}]]></defaultValueExpression>
+	</parameter>
+	<parameter name="ide_fce_saa" class="java.lang.Integer"/>
+	<queryString>
+		<![CDATA[SELECT this_.ide_fce_saa_localizacao_geografica_reservatorio, this_.nom_identificacao,
+       replace(split_part(f_get_vertices(this_.ide_localizacao_geografica), ' ', 2), '(', '') as latitude,
+       replace(split_part(f_get_vertices(this_.ide_localizacao_geografica), ' ', 3), ')', '') as longitude,
+       this_.val_capacidade,
+       reservatorio.dsc_tipo_reservatorio,
+       sis.nom_sistema_coordenada
+FROM fce_saa_localizacao_geografica_reservatorio this_
+INNER JOIN localizacao_geografica lg1_ ON this_.ide_localizacao_geografica=lg1_.ide_localizacao_geografica
+INNER JOIN sistema_coordenada sis on sis.ide_sistema_coordenada = lg1_.ide_sistema_coordenada
+INNER JOIN fce_saa saa on this_.ide_fce_saa = saa.ide_fce_saa
+INNER JOIN fce on saa.ide_fce = fce.ide_fce
+INNER JOIN tipo_reservatorio reservatorio
+	ON this_.ide_tipo_reservatorio =  reservatorio.ide_tipo_reservatorio
+INNER JOIN requerimento r7_
+	ON fce.ide_requerimento = r7_.ide_requerimento
+WHERE r7_.ide_requerimento=  $P{ide_requerimento}
+and saa.ide_fce_saa = $P{ide_fce_saa}]]>
+	</queryString>
+	<field name="ide_fce_saa_localizacao_geografica_reservatorio" class="java.lang.Integer"/>
+	<field name="nom_identificacao" class="java.lang.String">
+		<fieldDescription><![CDATA[Nome identificador da elevatória]]></fieldDescription>
+	</field>
+	<field name="latitude" class="java.lang.String"/>
+	<field name="longitude" class="java.lang.String"/>
+	<field name="val_capacidade" class="java.math.BigDecimal"/>
+	<field name="dsc_tipo_reservatorio" class="java.lang.String"/>
+	<field name="nom_sistema_coordenada" class="java.lang.String"/>
+	<title>
+		<band height="2" splitType="Stretch"/>
+	</title>
+	<columnHeader>
+		<band height="15">
+			<staticText>
+				<reportElement uuid="182cb063-fc75-4a89-a949-02929fccb6ef" x="429" y="1" width="70" height="12"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Capacidade]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="3989edc5-bc63-4b8b-a29b-de409b6c4530" x="172" y="1" width="71" height="12"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Longitude]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="120b8515-b673-455a-9c1a-1f152e2d36af" x="384" y="1" width="43" height="12"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Tipo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="fc626c1a-9e13-4632-bc2f-7feb1f873a9d" x="2" y="1" width="105" height="12"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Identificação]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="a243fea8-29cb-468a-9818-21174e935f47" x="244" y="1" width="139" height="12"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Sistema de Coordenadas]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="daae1606-9e27-431f-b127-73cec840f485" x="108" y="1" width="62" height="12"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Latitude]]></text>
+			</staticText>
+			<line>
+				<reportElement uuid="754cb92d-b3ae-45a5-9ceb-a031ac0222c0" x="0" y="0" width="495" height="1"/>
+			</line>
+			<line>
+				<reportElement uuid="16f38d40-13e7-4fe3-b473-feb0413cbb24" x="0" y="13" width="495" height="1"/>
+			</line>
+			<line>
+				<reportElement uuid="7077ab90-d09b-494c-b8e0-ef8fcbc183ea" x="0" y="0" width="1" height="13"/>
+			</line>
+			<line>
+				<reportElement uuid="9541d6f3-9a71-4dcc-83fc-50697557c401" x="106" y="0" width="1" height="13"/>
+			</line>
+			<line>
+				<reportElement uuid="0e9e1a64-70ba-45e2-a703-79e1d31bb608" x="170" y="0" width="1" height="13"/>
+			</line>
+			<line>
+				<reportElement uuid="ca5d7096-c539-43a0-8c20-5e96ec3610af" x="242" y="0" width="1" height="13"/>
+			</line>
+			<line>
+				<reportElement uuid="844a9589-4e68-4bfc-88e1-367f842fe94f" x="382" y="0" width="1" height="13"/>
+			</line>
+			<line>
+				<reportElement uuid="e0443e29-15ab-42a7-b023-f7811d85b31e" x="427" y="0" width="1" height="13"/>
+			</line>
+			<line>
+				<reportElement uuid="17710414-2b16-4b78-8b3f-1dc17048861a" x="494" y="0" width="1" height="13"/>
+			</line>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="17">
+			<line>
+				<reportElement uuid="78924685-b3aa-4980-a996-5362a7564b01" x="0" y="15" width="495" height="1"/>
+			</line>
+			<textField>
+				<reportElement uuid="033ff898-89fe-429d-8618-1ef5d31bab2d" x="108" y="1" width="62" height="12"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{latitude}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00">
+				<reportElement uuid="5c0064ba-8c7d-4bec-8431-50ab30ce0a80" x="429" y="1" width="66" height="12"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{val_capacidade}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="0e6a5bb6-61d0-47c6-86df-53045737daa9" x="244" y="1" width="138" height="12"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nom_sistema_coordenada}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="d96813d6-13e1-4315-b4bc-57ef4cd52ebf" x="172" y="1" width="70" height="12"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{longitude}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="7e34d226-fc22-443d-a3c0-907e27b1a417" x="2" y="2" width="105" height="12"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nom_identificacao}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="adb296be-7950-4891-baf5-48975f548f7b" x="384" y="1" width="43" height="12"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dsc_tipo_reservatorio}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement uuid="2d7025ec-cbf2-4e7c-a6c9-4886600d744a" x="106" y="0" width="1" height="15"/>
+			</line>
+			<line>
+				<reportElement uuid="dcadde58-9642-4648-aa3f-b685b8dc38a9" x="170" y="0" width="1" height="15"/>
+			</line>
+			<line>
+				<reportElement uuid="40a00d3f-9d6e-4c4f-bf9a-5a972bba38a5" x="242" y="0" width="1" height="15"/>
+			</line>
+			<line>
+				<reportElement uuid="543555a4-f58e-4710-9afe-d8d0bbcd4e36" x="382" y="0" width="1" height="15"/>
+			</line>
+			<line>
+				<reportElement uuid="722daf36-b4b3-47dd-bc47-f5518afd3bbb" x="427" y="0" width="1" height="15"/>
+			</line>
+			<line>
+				<reportElement uuid="b6a651a0-89bb-4dcb-859e-010b8ec6358b" x="494" y="0" width="1" height="15"/>
+			</line>
+			<line>
+				<reportElement uuid="b5bc11f2-4ddd-46b4-8c6d-5668744e802b" x="0" y="0" width="1" height="15"/>
+			</line>
+		</band>
+	</detail>
+</jasperReport>

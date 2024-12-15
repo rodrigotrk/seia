@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui">
+	<p:dataTable id="tabelaPontosCaptacaoSubterranea" 
+		style="margin-top:17px; margin-bottom:17px;" 
+		value="#{viveiroEscavadoController.listaCaptacaoSubterranea}" 
+		emptyMessage="#{bundle.lac_dadosGerais_msg007}" 
+		var="outLocGeo">
+		<p:column headerText="Latitude" style="text-align:center;">
+			<h:outputText value="#{outLocGeo.ideLocalizacaoGeografica.latitudeInicial}" />
+		</p:column>
+
+		<p:column headerText="Longitude" style="text-align:center;">
+			<h:outputText value="#{outLocGeo.ideLocalizacaoGeografica.longitudeInicial}" />
+		</p:column>
+
+		<p:column style="text-align:center; width:160px;">
+			<f:facet name="header">
+   	 		   		Sistema de Coordenada/ <br/>
+   	 		   		Referência Espacial 
+  	 		  	</f:facet>
+			<h:outputText value="#{outLocGeo.ideLocalizacaoGeografica.nomeSistemaCoordenadas}" />
+		</p:column>
+
+		<p:column headerText="Bacia Hidrográfica" style="text-align:center;">
+			<h:outputText value="#{outLocGeo.ideLocalizacaoGeografica.baciaHidrografica}" />
+		</p:column>
+
+		<p:column headerText="Sub-Bacia" style="text-align:center;">
+			<h:outputText value="#{outLocGeo.ideLocalizacaoGeografica.subBacia}" />
+		</p:column>
+
+		<p:column headerText="RPGA" style="text-align:center;">
+			<h:outputText value="#{outLocGeo.ideLocalizacaoGeografica.rpga}" />
+		</p:column>
+		
+		<p:column headerText="Ações" style="text-align:center; width:35px;">
+			<a onclick="javascript:${localizacaoGeograficaGenericController.retornarUrl(outLocGeo.ideLocalizacaoGeografica)}">
+				<h:graphicImage title="Localização do Ponto no Geobahia" value="/resources/img/ico-arl-relocacao.png" />
+			</a>
+		</p:column>
+	</p:dataTable> <!-- FIM DA DATATABLE COM OS PONTOS -->
+</ui:composition>

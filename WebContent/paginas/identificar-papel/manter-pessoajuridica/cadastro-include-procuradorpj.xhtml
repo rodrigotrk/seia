@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui">
+	
+	<h:panelGrid id="paneltabviewprocpj">
+		<p:tab title="Dados Básicos" rendered="#{procuradorRepresentanteController.showExpandirFormCadastro}">
+		
+			<h:form id="formpesquisacpfproc">
+				<h:outputLabel id="idlblcpf" value="* CPF" />
+				<h:panelGrid columns="2">
+					<p:inputMask id="cpfproc" widgetVar="cpfproc"
+						mask="#{bundle.consultapf_msk_cpf}"
+						value="#{procuradorRepresentanteController.pessoaPesquisa.numCpf}"
+						required="true"
+						requiredMessage="O campo  CPF é de preenchimento obrigatório."
+						disabled="#{procuradorRepresentanteController.disabledFormPessoaFisicaProcurador}">
+						<f:converter converterId="cpfConverter" />
+						<f:validator validatorId="cpfValidator" />
+					</p:inputMask>
+					<p:commandLink
+						disabled="#{procuradorRepresentanteController.disabledFormPessoaFisicaProcurador}"
+						actionListener="#{procuradorRepresentanteController.consultarPessoaFisicaPorCpf}"
+						process="formpesquisacpfproc"
+						update="tabviewpj:paneltabviewprocpj">
+						<h:graphicImage title="Consultar"
+							value="/resources/img/ico-pesquisa.png" />
+						<f:ajax render=":formdocumentosproc" />
+						<f:setPropertyActionListener target="#{telefoneController.pessoaProcurador}"
+							value="#{procuradorRepresentanteController.pessoaSelecionada.pessoa}" />
+						<f:setPropertyActionListener target="#{documentoIdentificacaoController.pessoaProcurador}"
+							value="#{procuradorRepresentanteController.pessoaSelecionada.pessoa}" />
+					</p:commandLink>
+				</h:panelGrid>
+			</h:form>
+			
+			<h:form id="formpessoafisicaprocurador" rendered="#{procuradorRepresentanteController.renderedFormPessoaFisicaProcurador}">
+				<h:panelGroup layout="block">
+					<h:panelGrid columns="1">
+						<h:outputText id="idlblnome" value="* Nome" />
+						<p:inputText id="nomepessoafisica"
+							disabled="#{procuradorRepresentanteController.disabledFormPessoaFisicaProcurador}"
+							value="#{procuradorRepresentanteController.pessoaSelecionada.nomPessoa}"
+							style="width: 300px;margin-top:0px;" required="true"
+							requiredMessage="O campo  Nome é de preenchimento obrigatório." />
+					</h:panelGrid>
+					<h:panelGrid columns="2">
+						<p:commandButton value="Limpar" process="@this"
+							action="#{procuradorRepresentanteController.limparObjetosPessoaFisicaAction}"
+							update="tabviewpj:paneltabviewprocpj" />
+						<p:commandButton value="Salvar"
+							actionListener="#{procuradorRepresentanteController.salvarPessoa}"
+							update="tabviewpj"
+							process="formpessoafisicaprocurador">
+							<f:setPropertyActionListener target="#{telefoneController.pessoaProcurador}"
+								value="#{procuradorRepresentanteController.pessoaSelecionada.pessoa}" />
+							<f:setPropertyActionListener target="#{documentoIdentificacaoController.pessoaProcurador}"
+								value="#{procuradorRepresentanteController.pessoaSelecionada.pessoa}" />
+						</p:commandButton>
+					</h:panelGrid>
+				</h:panelGroup>
+				<h:panelGroup layout="block">
+					<h:outputLabel value="#{bundle.lbl_preench_obrig_asterisc}" style="float: left;" />
+				</h:panelGroup>
+			</h:form>
+			
+		</p:tab>
+	</h:panelGrid>
+</html>

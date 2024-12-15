@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui">
+
+	<p:outputPanel id="licenciamentoAquiculturaShapeGalpao" autoUpdate="true">
+		<h:outputText styleClass="titulo-grupo" style="font-weight:bold; margin-top:50px;" value="* #{bundle.fce_lic_aqui_poligonal_galpao_insumos}" />
+		
+		<br />
+		
+		<h:panelGrid id="gridPontoGalpao" style="margin-left:10px; margin-top:10px; width:720px;" 
+			rendered="#{!fceLicenciamentoAquiculturaDadosGeraisController.galpaoComShape}">
+			
+			<br />
+			<p:commandLink style="margin-left:10px;" oncomplete="dlgLocalizacaoGeograficaGeneric.show();" action="#{localizacaoGeograficaGenericController.carregarTela()}" actionListener="#{localizacaoGeograficaGenericController.limparLocalizacaoGeografSelecionada()}" process="@this" >
+				<f:setPropertyActionListener target="#{localizacaoGeograficaGenericController.tipoSecaoGeometrica}" value="#{fceLicenciamentoAquiculturaController.somenteShape}" />
+				<f:setPropertyActionListener target="#{localizacaoGeograficaGenericController.empreendimento}" value="#{fceLicenciamentoAquiculturaController.empreendimento}" />
+				<f:setPropertyActionListener target="#{localizacaoGeograficaGenericController.localizacaoGeograficaSelecionada}" value="#{fceLicenciamentoAquiculturaDadosGeraisController.fceLocalizacaoGeografica.ideLocalizacaoGeografica}" />
+				<f:setPropertyActionListener target="#{localizacaoGeograficaGenericController.objetoLocalizacao}" value="#{fceLicenciamentoAquiculturaDadosGeraisController.fceLocalizacaoGeografica}" />
+				<f:setPropertyActionListener target="#{localizacaoGeograficaGenericController.isPerfuracaoPocoOuCaptacaoOuAquicuturaEmRede}" value="#{true}" />
+				<f:setPropertyActionListener target="#{localizacaoGeograficaGenericController.isLicenciamentoAquicutura}" value="#{true}" />
+				<h:graphicImage title="Incluir Poligonal" value="/resources/img/ico-expandir.png" />
+				<h:outputText value="Incluir Poligonal" style="margin-left:3px;"/>
+			</p:commandLink>
+			<br />
+		</h:panelGrid>
+		
+		
+		<h:panelGrid id="gridShapeGalpao" style="margin-left:10px; margin-top:10px;" 
+			rendered="#{fceLicenciamentoAquiculturaDadosGeraisController.galpaoComShape}">
+	    	
+	    	<p:dataTable value="#{fceLicenciamentoAquiculturaDadosGeraisController.fceLocalizacaoGeografica}" var="flg" emptyMessage="Nenhum registro encontrado">
+				<p:column headerText="Fonte da Coordenada" style="text-align: center; width:155px;">
+					<h:outputText value="#{flg.ideLocalizacaoGeografica.ideClassificacaoSecaoToString}" />
+				</p:column>
+				
+				<p:column headerText="Sistema de Coordenadas" style="text-align: center; width:165px;">
+					<h:outputText value="#{flg.ideLocalizacaoGeografica.nomeSistemaCoordenadas}" />
+				</p:column>
+				
+				<p:column headerText="Ações" style="text-align: center; width:165px;">
+					
+					<p:commandLink title="Excluir" onclick="confirmaExclusaoGalpao.show()" process="@this" global="false"
+						disabled="#{fceLicenciamentoAquiculturaDadosGeraisController.desabilitado}">
+						
+					<h:outputText value="Excluir Poligonal Galpão" style="margin-right: 5px;"/>
+						<h:graphicImage title="Excluir" value="/resources/img/ico-excluir.png"/>
+					</p:commandLink>
+				</p:column>
+				
+				<p:column headerText="GeoBahia" style="text-align: center;">
+					<a onclick='javascript:${fceLicenciamentoAquiculturaDadosGeraisController.visualizarPoligonalGalpao}' 
+						accesskey="VISUALIZAR GEOBAHIA" style="cursor: pointer;" title="Visualizar Poligonal do Galpão">
+						
+						<h:graphicImage title="Visualizar Poligonal do Galpão" value="/resources/img/ico-arl-relocacao.png"/>
+					</a>
+				</p:column>
+				
+				<p:column headerText="Concedido" rendered="#{fceLicenciamentoAquiculturaController.fceTecnico}">
+					<p:selectBooleanCheckbox value="#{fceLicenciamentoAquiculturaDadosGeraisController.indConcedidoGalpao}" style="margin-left: 25px;"
+						valueChangeListener="#{fceLicenciamentoAquiculturaDadosGeraisController.changeConcedidoGalpao()}">
+						
+						<p:ajax update="licenciamentoAquiculturaAbas:formLicenciamentoAquiculturaDadosGerais:licenciamentoAquiculturaShapeGalpao" global="true"/>
+					</p:selectBooleanCheckbox>
+				</p:column>
+			</p:dataTable>
+		</h:panelGrid>
+		
+	    <h:panelGrid id="gridShapeNotificaoGalpao" style="margin-top:10px; margin-left:10px; width:720px;" 
+	    	rendered="#{fceLicenciamentoAquiculturaDadosGeraisController.renderedListaPoligonalDaNotificacaoGalpao}">
+			
+			<h:outputText styleClass="titulo-grupo" style="font-weight:bold;" value="Poligonal(ais) da(s) notificação(ões)" />
+			
+			<p:dataTable value="#{fceLicenciamentoAquiculturaDadosGeraisController.listaPoligonalDaNotificacaoGalpao}" var="ap" emptyMessage="Nenhum registro encontrado">
+				<p:column headerText="Notificação" style="text-align: center; width:155px;">
+					<h:outputText value="#{ap.ideNotificacao.numNotificacao}" />
+				</p:column>
+				
+				<p:column headerText="Fonte da Coordenada" style="text-align: center; width:165px;">
+					<h:outputText value="#{ap.ideLocalizacaoGeografica.ideClassificacaoSecaoToString}" />
+				</p:column>
+				
+				<p:column headerText="Sistema de Coordenadas" style="text-align: center; width:165px;">
+					<h:outputText value="#{ap.ideLocalizacaoGeografica.nomeSistemaCoordenadas}" />
+				</p:column>
+				
+				<p:column headerText="GeoBahia" style="text-align: center;">
+					<a onclick='javascript:${fceLicenciamentoAquiculturaDadosGeraisController.getVisualizarPoligonalNotificacao(ap.ideLocalizacaoGeografica)}' 
+						accesskey="VISUALIZAR GEOBAHIA" style="cursor: pointer;" >
+						
+						<h:graphicImage title="Visualizar Shape da poligonal externa" value="/resources/img/ico-arl-relocacao.png"/>
+					</a>
+				</p:column>
+				
+				<p:column headerText="Concedido" rendered="#{fceLicenciamentoAquiculturaController.fceTecnico}">
+					<p:selectBooleanCheckbox value="#{ap.indConcedido}" style="margin-left: 25px;">
+						<f:attribute name="attributeAP" value="#{ap}"/>
+						<p:ajax event="change" listener="#{fceLicenciamentoAquiculturaDadosGeraisController.changeConcedidoNotificacoesGalpao()}" 
+							update="licenciamentoAquiculturaAbas:formLicenciamentoAquiculturaDadosGerais:licenciamentoAquiculturaShapeGalpao" global="true"/>
+					</p:selectBooleanCheckbox>
+				</p:column>
+			</p:dataTable>
+		</h:panelGrid>
+	</p:outputPanel>
+</ui:composition>

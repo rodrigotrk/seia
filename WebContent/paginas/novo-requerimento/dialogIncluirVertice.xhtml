@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+xmlns:h="http://java.sun.com/jsf/html" 
+xmlns:f="http://java.sun.com/jsf/core" 
+xmlns:ui="http://java.sun.com/jsf/facelets" 
+xmlns:p="http://primefaces.prime.com.tr/ui">
+	
+	<h:form id="locGeograficaVertices" onmouseover="RemovMenosFracGrau();">
+		<h:outputLabel>
+		</h:outputLabel>
+		<br />
+		<h:outputLabel value="* #{bundle.incluirvertice_lbl_informar_coordenada}" />
+		<br />
+		<p:selectOneRadio label="#{bundle.incluirvertice_lbl_informar_coordenada}" value="#{localizacaoGeograficaController.selectedModoCoordenada}" id="ModoCoordenada">
+			<f:selectItem itemLabel="#{bundle.incluirvertice_lbl_latitude_longitude_grau_minuto_segundo}" itemValue="1" />
+			<br />
+			<f:selectItem itemLabel="#{bundle.incluirvertice_lbl_grau_fracao_grau}" itemValue="2" />
+			<p:ajax process="ModoCoordenada" update="hideModal" immediate="true" />
+		</p:selectOneRadio>
+		<br />
+		<h:panelGrid>
+			<h:panelGrid id="hideModal">
+				<h:panelGrid columns="1" rendered="#{localizacaoGeograficaController.selectedModoCoordenada == '1'}">
+					<h:panelGrid columns="3" id="latitude">
+						<h:panelGroup>
+							<h:outputLabel value="* #{bundle.empreendimento_lbl_latitude}" for="grausLatitude" />
+							<br />
+							<p:inputText label="#{bundle.empreendimento_lbl_latitude}" value="#{novoRequerimentoController.grausLatitudeLoc}" required="true" requiredMessage="Informe ao menos o grau da Latitude da coordenada." 
+										 onkeyup="SomenteNumero(this);" onblur="verificaLatitude(this);" id="grausLatitude" style="width: 40px;" />&nbsp;°&nbsp;
+							<p:inputText label="#{bundle.empreendimento_lbl_latitude}" value="#{novoRequerimentoController.minutosLatitudeLoc}" onkeyup="SomenteNumero(this);" onblur="verificaMinutoSegundo(this);" id="minutosLatitude" style="width: 40px;" />&nbsp;'&nbsp;
+							<p:inputText label="#{bundle.empreendimento_lbl_latitude}" value="#{novoRequerimentoController.segundosLatitudeLoc}" onkeyup="SomenteNumero(this);" onblur="verificaMinutoSegundo(this);" id="segundosLatitude" style="width: 40px;" />&nbsp;"&nbsp;S
+                              </h:panelGroup>
+						<h:commandLink actionListener="#{novoRequerimentoController.calculaFracaoGrauLatitudeLoc()}">
+							<h:graphicImage title="Calcula Fração Grau Latitude" value="/resources/img/arrow-circle-double-135.png" />
+							<f:ajax execute="@this grausLatitude minutosLatitude segundosLatitude" render="latitude" />
+						</h:commandLink>
+						<h:panelGroup>
+							<h:outputLabel value="#{bundle.incluirvertice_lbl_grau_fracao_grau}" />
+							<br />
+							<p:inputText value="#{novoRequerimentoController.fracaoGrauLatitudeLoc}" readonly="true" />
+						</h:panelGroup>
+					</h:panelGrid>
+					<h:panelGrid columns="3" id="longitude">
+						<h:panelGroup>
+							<h:outputLabel value="* #{bundle.empreendimento_lbl_longitude}" for="grausLongitude" />
+							<br />
+							<p:inputText value="#{novoRequerimentoController.grausLongitudeLoc}" onkeyup="SomenteNumero(this);" required="true" requiredMessage="Informe ao menos o grau da Longitude da coordenada." 
+										 onblur="verificaLongitude(this);" id="grausLongitude" style="width: 40px;" />&nbsp;°&nbsp;
+							<p:inputText value="#{novoRequerimentoController.minutosLongitudeLoc}" onkeyup="SomenteNumero(this);" onblur="verificaMinutoSegundo(this);" id="minutosLongitude" style="width: 40px;" />&nbsp;'&nbsp;
+							<p:inputText value="#{novoRequerimentoController.segundosLongitudeLoc}" onkeyup="SomenteNumero(this);" onblur="verificaMinutoSegundo(this);" id="segundosLongitude" style="width: 40px;" />&nbsp;"&nbsp;W
+						</h:panelGroup>
+						<h:commandLink actionListener="#{novoRequerimentoController.calculaFracaoGrauLongitudeLoc()}">
+							<h:graphicImage title="Calcula Fração Grau Latitude" value="/resources/img/arrow-circle-double-135.png" />
+							<f:ajax execute="@this grausLongitude minutosLongitude segundosLongitude" render="longitude" />
+						</h:commandLink>
+						<h:panelGroup>
+							<h:outputLabel value="#{bundle.incluirvertice_lbl_grau_fracao_grau}" />
+							<br />
+							<p:inputText value="#{novoRequerimentoController.fracaoGrauLongitudeLoc}" readonly="true" />
+						</h:panelGroup>
+					</h:panelGrid>
+				</h:panelGrid>
+				<h:panelGrid rendered="#{localizacaoGeograficaController.selectedModoCoordenada == '2'}">
+					<h:panelGroup>
+						<h:outputLabel value="* #{bundle.empreendimento_lbl_latitude}" for="latitudeFracaoGrau" /> - <h:outputLabel value="#{bundle.incluirvertice_lbl_grau_fracao_grau}" />
+						<br />-&nbsp;<p:inputMask mask="99,999999" value="#{novoRequerimentoController.fracaoGrauLatitudeLoc}" id="latitudeFracaoGrau" required="true" label="#{bundle.empreendimento_lbl_latitude}"
+												  onblur="verificaLatitude(this);" onchange="RemoveMenos(this);" onfocus="RemoveMenos(this);" requiredMessage="Informe a Latitude da coordenada." />
+					</h:panelGroup>
+					<h:panelGroup>
+						<h:outputLabel value="* #{bundle.empreendimento_lbl_longitude}" for="longitudeFracaoGrau" /> - <h:outputLabel value="#{bundle.incluirvertice_lbl_grau_fracao_grau}" />
+						<br />-&nbsp;<p:inputMask mask="99,999999" value="#{novoRequerimentoController.fracaoGrauLongitudeLoc}" id="longitudeFracaoGrau" requiredMessage="Informe a Longitude da coordenada."
+												 required="true" label="#{bundle.empreendimento_lbl_longitude}" onblur="verificaLongitude(this);" onchange="RemoveMenos(this);" onfocus="RemoveMenos(this);"/>
+					</h:panelGroup>
+				</h:panelGrid>
+			</h:panelGrid>
+			<br />
+			<h:panelGroup>
+				<h:outputLabel value="#{bundle.lbl_preench_obrig_asterisc}" />
+			</h:panelGroup>
+			<h:panelGroup>
+				<div style="text-align: center;">
+					<p:commandButton process="@this" update="dlgIncluirVertice, locGeograficaVertices" value="#{bundle.geral_lbl_limpar}" actionListener="#{localizacaoGeograficaController.limparVertice()}" />
+					<p:commandButton process="@form" update="dlgIncluirVertice" value="#{bundle.geral_lbl_salvar}" action="#{novoRequerimentoController.incluirVertice}" 
+					oncomplete="dlgIncluirVertice.hide()" global="false" />
+				</div>
+			</h:panelGroup>
+		</h:panelGrid>
+	</h:form>
+	
+</ui:composition>

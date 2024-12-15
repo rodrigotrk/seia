@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+	xmlns:h="http://java.sun.com/jsf/html" 
+	xmlns:f="http://java.sun.com/jsf/core" 
+	xmlns:ui="http://java.sun.com/jsf/facelets" 
+	xmlns:p="http://primefaces.prime.com.tr/ui">
+	
+	<h:panelGrid columns="1">
+		<h:outputText value="Requerimento:" />
+		<h:outputText value="#{registroFlorestaPlantadaController.requerimento.numRequerimento}" />
+		<p:spacer height="5"/>
+	</h:panelGrid>
+	
+	<p:tabView id="tabRegistroFlorestaPlantada" activeIndex="#{registroFlorestaPlantadaController.abaAtiva.id}" widgetVar="_tabRegistroFlorestaPlantada" styleClass="col-12 hg8 clean" cache="true" dynamic="false" >
+		
+		<p:ajax event="tabChange" listener="#{registroFlorestaPlantadaController.onTabChange()}" />
+		
+		<p:tab id="abaEtapaUm" title="Etapa 1" titletip="Termos de Compromisso">
+			<ui:include src="/paginas/atos-declaratorios/rfp/abaAceiteContrato.xhtml" />
+		</p:tab>
+		
+		<p:tab id="abaEtapaDois" disabled="#{registroFlorestaPlantadaController.disableEtapaDois}" title="Etapa 2" titletip="Registro de floresta" >
+			<ui:include src="/paginas/atos-declaratorios/rfp/abaRegistroFlorestaPlantada.xhtml" />
+		</p:tab>
+		
+		<p:tab id="abaEtapaTres" disabled="#{registroFlorestaPlantadaController.disableEtapaTres}" title="Etapa 3" titletip="Termos de Compromisso">
+			<ui:include src="/paginas/atos-declaratorios/rfp/abaTermosCompromisso.xhtml" />
+		</p:tab>
+	
+	</p:tabView>
+
+	<h:form id="btnAuxiliares" styleClass="col-12 clean" style="padding-top: 20px !important;">
+		<p:commandButton title="Avancar" value="Avançar" styleClass="right btn-medio" update="tabRegistroFlorestaPlantada:formAbaRegistroFlorestaPlantada" 
+			actionListener="#{registroFlorestaPlantadaController.avancar()}" rendered="#{registroFlorestaPlantadaController.visivelAvancar}"
+			disabled="#{registroFlorestaPlantadaController.ideRegistroFlorestaProducao.ideAtoDeclaratorio.desabilitaTudo}"/>
+		
+		<p:commandButton title="Concluir" value="Concluir" styleClass="right btn-medio" actionListener="#{registroFlorestaPlantadaController.avancar()}" 
+			rendered="#{registroFlorestaPlantadaController.visivelConcluir}" disabled="#{registroFlorestaPlantadaController.ideRegistroFlorestaProducao.ideAtoDeclaratorio.desabilitaTudo}"/>
+		
+		<p:commandButton title="Voltar" value="Voltar" styleClass="right btn-medio" actionListener="#{registroFlorestaPlantadaController.voltar()}"
+			rendered="#{registroFlorestaPlantadaController.visivelVoltar}" disabled="#{registroFlorestaPlantadaController.ideRegistroFlorestaProducao.ideAtoDeclaratorio.desabilitaTudo}"/>
+	</h:form>
+	
+</ui:composition>

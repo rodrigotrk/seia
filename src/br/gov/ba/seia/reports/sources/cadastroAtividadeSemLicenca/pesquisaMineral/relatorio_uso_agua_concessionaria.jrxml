@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="relatorio_uso_agua_concessionaria" language="java" pageWidth="515" pageHeight="802" columnWidth="515" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="f635b7aa-b9c3-4784-b471-2691831d82b7">
+	<property name="ireport.zoom" value="2.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="ide_pesquisa_mineral_uso_da_agua" class="java.lang.Integer"/>
+	<parameter name="ide_tipo_captacao" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[1]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT
+	pma.ind_fonte_embasa,
+	pma.ind_fonte_saae
+	FROM pesquisa_mineral_uso_da_agua pma
+WHERE pma.ide_pesquisa_mineral_uso_da_agua = $P{ide_pesquisa_mineral_uso_da_agua} AND ide_tipo_captacao = $P{ide_tipo_captacao}]]>
+	</queryString>
+	<field name="ind_fonte_embasa" class="java.lang.Boolean"/>
+	<field name="ind_fonte_saae" class="java.lang.Boolean"/>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="fb238bc3-8c3d-4c37-bf2b-0bd8a7e21481" x="0" y="0" width="100" height="20"/>
+				<box leftPadding="5"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[Concessionária:]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="4d68a398-e88d-410d-8845-7781a273f143" x="100" y="0" width="59" height="20">
+					<printWhenExpression><![CDATA[$F{ind_fonte_embasa}]]></printWhenExpression>
+				</reportElement>
+				<box leftPadding="5"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Embasa"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="2b12b6b9-06c6-48b3-a9f9-85871b1c9972" x="159" y="0" width="45" height="20">
+					<printWhenExpression><![CDATA[$F{ind_fonte_saae}]]></printWhenExpression>
+				</reportElement>
+				<box leftPadding="5"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["SAAE"]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui">
+
+	<p:dialog id="_dlgVisualizarNotificacaoUsuario2" dynamic="true" width="750" height="245"
+		resizable="false" modal="true" widgetVar="dlgVisualizarNotificacaoUsuario2" showHeader="false"
+		position="center" >
+		<h:form id="formVisualizar3">
+				<h:panelGrid columns="1">
+			<h:outputText style="font-size:14px;width:580px " value="#{comunicacaoController.comunicacao.dscTitulo}"/>
+
+				<h:panelGrid columns="4">
+					<h:outputText value="Data" />
+					
+					<h:panelGroup>
+						<p:calendar showOn="button" size="10" disabled="true"
+							value="#{comunicacaoController.comunicacao.dtcPeriodoInicio}"
+							locale="pt" pattern="dd/MM/yyyy" navigator="true"
+							yearRange="c-50:c+10" />
+					</h:panelGroup>
+					
+				</h:panelGrid>
+
+				<h:inputTextarea rows="10" cols="160" disabled="true" 
+				style="width: 100% !important; overflow: scroll;"
+					value="#{comunicacaoController.comunicacao.txtConteudo}"
+					 />
+			</h:panelGrid>
+
+			<h:panelGrid columns="1" style="float: right;">
+				<p:commandButton id="btnVoltar" value="#{bundle.geral_lbl_voltar}"
+		 ajax="true"  onclick="dlgVisualizarNotificacaoUsuario.hide();" process="@this"
+					>
+					</p:commandButton>
+			</h:panelGrid>
+
+
+		</h:form>
+	</p:dialog>
+
+
+</ui:composition>

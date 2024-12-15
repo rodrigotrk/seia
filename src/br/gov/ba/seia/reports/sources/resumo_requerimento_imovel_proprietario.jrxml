@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="resumo_requerimento_imovel_proprietario" language="java" pageWidth="479" pageHeight="802" columnWidth="479" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="e7b773dc-04fc-4555-b11e-daa31f83657a">
+	<property name="ireport.zoom" value="1.771561000000001"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="ide_imovel" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[select
+	CASE
+	  WHEN pf.nom_pessoa is not null
+	  THEN pf.nom_pessoa
+	  ELSE pj.nom_nome_fantasia
+	END as nome_razao_social,
+	CASE
+	  WHEN pf.nom_pessoa is not null
+	  THEN pf.num_cpf
+	  ELSE pj.num_cnpj
+	END as num_cpf_cnpj
+from pessoa_imovel pi
+INNER JOIN tipo_vinculo_imovel tvi on tvi.ide_tipo_vinculo_imovel = pi.ide_tipo_vinculo_imovel
+LEFT JOIN pessoa_fisica pf on pf.ide_pessoa_fisica = pi.ide_pessoa
+LEFT JOIN pessoa_juridica pj on pj.ide_pessoa_juridica = pi.ide_pessoa
+WHERE tvi.ide_tipo_vinculo_imovel = 1
+AND pi.ind_excluido = false
+AND pi.ide_imovel = $P{ide_imovel}]]>
+	</queryString>
+	<field name="nome_razao_social" class="java.lang.String"/>
+	<field name="num_cpf_cnpj" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="12" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="30bf7597-8b86-4934-9ad6-d5ce41338db5" x="343" y="0" width="136" height="12"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[CPF/CNPJ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="f27a227b-633e-49a8-bb58-6e289a3534fe" x="0" y="0" width="343" height="12"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Nome/Razão Social]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="12" splitType="Stretch">
+			<textField>
+				<reportElement uuid="8c3f3f0d-d92f-4c37-97db-06066b501dd2" x="0" y="0" width="343" height="12"/>
+				<box>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="9"/>
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nome_razao_social}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="4a031e1a-a633-4902-9db4-74272d3f057b" x="343" y="0" width="136" height="12"/>
+				<box>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new String($F{num_cpf_cnpj}.length() == 11 ? $F{num_cpf_cnpj}.substring(0,3) + "." + $F{num_cpf_cnpj}.substring(3,6) + "." + $F{num_cpf_cnpj}.substring(6,9) + "-" + $F{num_cpf_cnpj}.substring(9,11) : $F{num_cpf_cnpj}.substring(0,2) + "." + $F{num_cpf_cnpj}.substring(2,5) + "." + $F{num_cpf_cnpj}.substring(5,8) + "/" + $F{num_cpf_cnpj}.substring(8,12) + "-" + $F{num_cpf_cnpj}.substring(12,14))]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

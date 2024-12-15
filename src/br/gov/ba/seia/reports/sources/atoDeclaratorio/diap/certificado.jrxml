@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="certificado" pageWidth="595" pageHeight="842" columnWidth="495" leftMargin="50" rightMargin="50" topMargin="50" bottomMargin="50" uuid="2f311ada-60dd-4ead-9d15-afa793b77d65">
+	<property name="ireport.zoom" value="1.2100000000000029"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="LOGO_INEMA" class="java.lang.String"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="LOGO_SEIA" class="java.lang.String"/>
+	<parameter name="ide_requerimento" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="MARCA_DAGUA" class="java.lang.String"/>
+	<parameter name="representantes" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[select ide_ato_declaratorio, c.num_certificado , prc.num_processo,req.num_requerimento,  overlay(overlay(overlay(c.num_token placing '-' from 25 for 0) placing '-' from 17 for 0) placing '-' from 9 for 0) as num_token, er.ind_dla as dla, c.dtc_emissao_certificado
+from ato_declaratorio  ad
+	left join certificado c on c.ide_requerimento = ad.ide_requerimento
+	inner join empreendimento_requerimento er on er.ide_requerimento = ad.ide_requerimento
+	inner join requerimento req on req.ide_requerimento = er.ide_requerimento
+	left JOIN processo prc ON prc.ide_requerimento = req.ide_requerimento
+	where ad.ide_requerimento =  $P{ide_requerimento};]]>
+	</queryString>
+	<field name="ide_ato_declaratorio" class="java.lang.Integer"/>
+	<field name="num_certificado" class="java.lang.String"/>
+	<field name="num_processo" class="java.lang.String">
+		<fieldDescription><![CDATA[Número do processo de licenciamento da área produtiva]]></fieldDescription>
+	</field>
+	<field name="num_requerimento" class="java.lang.String"/>
+	<field name="num_token" class="java.lang.String"/>
+	<field name="dla" class="java.lang.Boolean"/>
+	<field name="dtc_emissao_certificado" class="java.sql.Timestamp"/>
+	<title>
+		<band height="80" splitType="Stretch">
+			<line>
+				<reportElement uuid="93c331cb-f41c-409e-9f91-ac100822e106" x="0" y="0" width="495" height="1"/>
+			</line>
+			<image isLazy="true" onErrorType="Blank">
+				<reportElement uuid="ee4dbec8-ce13-43eb-8896-5fd840c0f779" x="0" y="2" width="99" height="47" forecolor="#FFFFFF"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<graphicElement>
+					<pen lineWidth="1.0" lineStyle="Solid" lineColor="#FFFFFF"/>
+				</graphicElement>
+				<imageExpression><![CDATA[$P{LOGO_SEIA}]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement uuid="5dc370f5-31ed-4381-a723-87780cec2096" x="99" y="1" width="297" height="30"/>
+				<textElement textAlignment="Center" verticalAlignment="Top">
+					<font fontName="SansSerif" size="10" isBold="true"/>
+					<paragraph leftIndent="2" rightIndent="2" spacingBefore="2" spacingAfter="2"/>
+				</textElement>
+				<text><![CDATA[DECLARAÇÃO DE INTERVENÇÃO EM ÁREA DE PRESERVAÇÃO PERMANENTE]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="69929c92-8ef3-416e-93dc-45f0690f0b3b" x="99" y="31" width="297" height="17"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[" Nº "+$F{num_certificado}]]></textFieldExpression>
+			</textField>
+			<image isLazy="true" onErrorType="Blank">
+				<reportElement uuid="19a93141-7836-4273-a80c-496aea1992a7" x="396" y="2" width="99" height="47" forecolor="#FFFFFF"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<graphicElement>
+					<pen lineWidth="0.0"/>
+				</graphicElement>
+				<imageExpression><![CDATA[$P{LOGO_INEMA}]]></imageExpression>
+			</image>
+			<line>
+				<reportElement uuid="708c4f3b-ddb8-4bf7-aa20-7fe554542248" x="0" y="48" width="495" height="1"/>
+			</line>
+			<textField>
+				<reportElement uuid="bb1f21b7-6b98-470e-ac7f-e8dec49b5d79" x="1" y="60" width="232" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA["Requerimento: "+$F{num_requerimento}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="486100d5-bcc6-4bf8-b53c-927215382ae3" x="233" y="60" width="261" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA["Processo: "+$F{num_processo}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<detail>
+		<band height="15" splitType="Stretch">
+			<subreport runToBottom="false">
+				<reportElement uuid="62ae573f-4afc-4009-bc0a-4863e05bd239" positionType="Float" stretchType="RelativeToBandHeight" isPrintRepeatedValues="false" x="0" y="0" width="494" height="15" isRemoveLineWhenBlank="true"/>
+				<subreportParameter name="representantes">
+					<subreportParameterExpression><![CDATA[$P{representantes}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="ide_ato_declaratorio">
+					<subreportParameterExpression><![CDATA[$F{ide_ato_declaratorio}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "certificado_diap_requerente_endereco.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+		<band height="26">
+			<subreport runToBottom="false">
+				<reportElement uuid="0eb57bf5-3f95-4d90-950e-101110f13c15" positionType="Float" stretchType="RelativeToBandHeight" isPrintRepeatedValues="false" x="0" y="10" width="494" height="15" isRemoveLineWhenBlank="true"/>
+				<subreportParameter name="ide_ato_declaratorio">
+					<subreportParameterExpression><![CDATA[$F{ide_ato_declaratorio}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "certificado_diap_caracteristica_intervencao.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+		<band height="25" splitType="Stretch">
+			<subreport runToBottom="false">
+				<reportElement uuid="ddf042ec-527e-48fc-89a4-421b944a28d8" positionType="Float" stretchType="RelativeToBandHeight" isPrintRepeatedValues="false" x="0" y="10" width="494" height="15" isRemoveLineWhenBlank="true"/>
+				<subreportParameter name="ide_ato_declaratorio">
+					<subreportParameterExpression><![CDATA[$F{ide_ato_declaratorio}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "certificado_diap_localizacao_geografica.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+		<band height="35" splitType="Stretch">
+			<textField isStretchWithOverflow="true">
+				<reportElement uuid="150caf62-b398-4aa0-8264-d4510104b561" stretchType="RelativeToBandHeight" x="0" y="10" width="495" height="15"/>
+				<textElement textAlignment="Justified">
+					<font fontName="SansSerif"/>
+					<paragraph lineSpacing="1_1_2"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Informa ainda, que a intervenção não terá supressão de vegetação nativa"
++( $F{dla} ? "; além de estar dispensada de licenciamento ambiental" : "" ) + "."]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="163">
+			<textField isStretchWithOverflow="true">
+				<reportElement uuid="f238640e-43e8-452b-b556-7acdc24f27e3" stretchType="RelativeToBandHeight" x="0" y="0" width="494" height="80"/>
+				<textElement textAlignment="Justified">
+					<font fontName="SansSerif"/>
+					<paragraph lineSpacing="1_1_2"/>
+				</textElement>
+				<textFieldExpression><![CDATA["O responsável está ciente de que a falsidade de quaisquer dados informados ao INEMA constitui prática de crime e resultará na aplicação das sanções penais cabíveis, nos termos dispostos no Código Penal (Decreto-Lei nº 2.848/40), na Lei de Crimes Ambientais (Lei nº 9.605/98) e nas suas normas regulamentadoras. Fica também ciente de que a inobservância de quaisquer das normas, ora acordadas, ensejará a aplicação das penalidades previstas na Lei."]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement uuid="4bae670d-ab19-40e6-a599-328832233121" stretchType="RelativeToBandHeight" x="0" y="90" width="494" height="33"/>
+				<textElement textAlignment="Justified">
+					<font fontName="SansSerif"/>
+					<paragraph lineSpacing="1_1_2"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Este comprovante refere-se exclusivamente à situação da regulação ambiental no âmbito da atividade descrita, não abrangendo outros empreendimento ou atividades do mesmo requerente."]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="0e70b801-7468-4fc6-8333-5ca636e596c8" positionType="Float" isPrintRepeatedValues="false" x="2" y="133" width="493" height="13" isRemoveLineWhenBlank="true"/>
+				<textElement textAlignment="Justified" markup="none">
+					<font fontName="SansSerif"/>
+				</textElement>
+				<textFieldExpression><![CDATA["A autenticidade deste certificado pode ser atestada na internet, no endereço: http://www.seia.ba.gov.br em Serviços On-line/Atestar Certificado,  utilizando a chave de segurança deste certificado."]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="37">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="0e70b801-7468-4fc6-8333-5ca636e596c8" positionType="Float" isPrintRepeatedValues="false" x="0" y="0" width="493" height="12" isRemoveLineWhenBlank="true"/>
+				<textElement textAlignment="Center" markup="none">
+					<font fontName="SansSerif" size="9" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{num_token}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="0e70b801-7468-4fc6-8333-5ca636e596c8" positionType="Float" isPrintRepeatedValues="false" x="0" y="12" width="493" height="25"/>
+				<textElement textAlignment="Justified" markup="none"/>
+				<textFieldExpression><![CDATA["\n\nCertificado emitido às "+new SimpleDateFormat("HH:mm:ss").format($F{dtc_emissao_certificado})+" do dia "+new SimpleDateFormat("dd/MM/yyyy").format($F{dtc_emissao_certificado})+", válido por 3 (três) anos contados da data da emissão."]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="26" splitType="Stretch">
+			<textField pattern="EEEEE dd MMMMM yyyy">
+				<reportElement uuid="09aa0c8c-8236-408c-b878-8c2f77339633" positionType="Float" x="1" y="2" width="79" height="19"/>
+				<textElement verticalAlignment="Top">
+					<font fontName="SansSerif" size="6"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Impresso em: "+new SimpleDateFormat("dd/MM/yyyy").format(new java.util.Date())]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement uuid="a0e7acf5-003d-44b7-8c59-36f456d7f97a" positionType="Float" x="0" y="0" width="495" height="2"/>
+			</line>
+			<textField>
+				<reportElement uuid="de5894e4-8761-4994-9f40-2b9192410784" positionType="Float" x="451" y="2" width="16" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Top">
+					<font fontName="SansSerif" size="6"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="199af036-0438-4705-8f8d-9fda771a58a1" positionType="Float" x="467" y="2" width="14" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Top">
+					<font fontName="SansSerif" size="6"/>
+				</textElement>
+				<text><![CDATA[de]]></text>
+			</staticText>
+			<textField evaluationTime="Report">
+				<reportElement uuid="64f04528-a5e8-4c0a-8667-ee63ba59333a" positionType="Float" x="481" y="2" width="13" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Top">
+					<font fontName="SansSerif" size="6"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="4b2bc0a1-cadb-43b4-b524-421bc8589db1" positionType="Float" x="422" y="2" width="29" height="19"/>
+				<textElement textAlignment="Center" verticalAlignment="Top">
+					<font fontName="SansSerif" size="6"/>
+				</textElement>
+				<text><![CDATA[Pág.]]></text>
+			</staticText>
+			<textField evaluationTime="Report">
+				<reportElement uuid="289b569a-eb79-4a74-95fd-c4af99775ca2" x="124" y="11" width="263" height="12"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font fontName="SansSerif" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Chave de Segurança: "+$F{num_token}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="51197f20-d21d-44a5-8544-552b6758f65b" x="80" y="2" width="342" height="9"/>
+				<textElement textAlignment="Center" verticalAlignment="Top">
+					<font fontName="SansSerif" size="6"/>
+				</textElement>
+				<text><![CDATA[INEMA/CAB: Avenida Luís Viana Filho, 6ª Avenida, nº 600 - CAB - CEP 41.745-900 - Salvador - Bahia - Brasil.]]></text>
+			</staticText>
+		</band>
+	</pageFooter>
+</jasperReport>

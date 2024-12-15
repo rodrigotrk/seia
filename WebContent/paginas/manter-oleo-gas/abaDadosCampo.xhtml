@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+				xmlns:h="http://java.sun.com/jsf/html" 
+				xmlns:f="http://java.sun.com/jsf/core" 
+				xmlns:ui="http://java.sun.com/jsf/facelets" 
+				xmlns:p="http://primefaces.prime.com.tr/ui">
+
+	<h:form id="formAbaDadosCampo">
+		<h:panelGrid>
+			<p:spacer width="0" height="10" />
+			
+			<p:commandButton value="Inserir Campo" actionListener="#{caepogController.preparaNovoCampo()}" update="formDialogCampo"
+				disabled="#{caepogController.caepog.visualizando or caepogController.existeCampoCadastrado}"/>
+			
+			<p:spacer width="0" height="30" />
+			
+			<p:dataTable id="dataTableCampos" var="def" value="#{caepogController.caepog.caepogDefinicaoCampoCollection}" lazy="true" emptyMessage="#{bundle.consultapf_msg_empty_list}">
+				<p:column>
+					<f:facet name="header">
+						<h:outputText value="Nome do Campo" />
+					</f:facet>
+	
+					<h:outputText value="#{def.ideCaepogCampo.nomCaepogCampo}" />
+				</p:column>
+				
+				<p:column>
+					<f:facet name="header">
+						<h:outputText value="N° Processo" />
+					</f:facet>
+	
+					<h:outputText value="#{def.numProcessoCaepogCampo}" />
+				</p:column>
+				
+				<p:column style="text-align: center;">
+					<f:facet name="header">
+						<h:outputText value="Ring Fence" />
+					</f:facet>
+					
+					<h:panelGroup rendered="#{def.ideLocalizacaoGeografica != null}">
+						<a onclick="javascript:${localizacaoGeograficaGenericController.retornarUrl(def.ideLocalizacaoGeografica)}">
+							<h:graphicImage title="Localização do Ponto no Geobahia" value="/resources/img/ico-arl-relocacao.png" />
+						</a>
+					</h:panelGroup>
+				</p:column>
+				
+				<p:column>
+					<f:facet name="header">
+						<h:outputText value="Ações" />
+					</f:facet>
+					
+					<p:commandLink id="visualizar" update="formDialogCampo" oncomplete="dialogCampo.show();" rendered="#{caepogController.caepog.visualizando}">
+						<h:graphicImage title="Visualizar" value="/resources/img/ico-pesquisa.png" />
+						<f:setPropertyActionListener target="#{caepogController.caepogDefinicaoCampo}" value="#{def}" />
+						<f:setPropertyActionListener target="#{caepogController.editando}" value="#{true}" />
+					</p:commandLink>
+					
+					<p:commandLink id="editar" update="formDialogCampo" oncomplete="dialogCampo.show();" disabled="#{caepogController.caepog.visualizando}">
+						<h:graphicImage title="Editar" value="/resources/img/ico-alterar.png" />
+						<f:setPropertyActionListener target="#{caepogController.caepogDefinicaoCampo}" value="#{def}" />
+						<f:setPropertyActionListener target="#{caepogController.editando}" value="#{true}" />
+					</p:commandLink>
+					
+					<p:commandLink id="excluir" oncomplete="confirmationCampo.show();" disabled="#{caepogController.caepog.visualizando}">
+						<h:graphicImage title="Excluir" value="/resources/img/ico-excluir.png" />
+						<f:setPropertyActionListener target="#{caepogController.caepogDefinicaoCampo}" value="#{def}" />
+					</p:commandLink>
+				</p:column>
+			</p:dataTable>
+		</h:panelGrid>
+	</h:form>
+</ui:composition>

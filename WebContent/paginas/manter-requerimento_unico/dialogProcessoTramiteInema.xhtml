@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui">
+
+	<h:form id="formProcesso">
+				<h:panelGrid columns="1">
+					<p:selectOneRadio value="${requerimentoUnicoController.periodoDoProcesso}" valueChangeListener="#{requerimentoUnicoController.alterarLayoutProcessoTramite()}" >	
+						 <f:selectItem itemLabel="Novo (a partir de 12/06/2012)" itemValue="0" />  
+				         <f:selectItem itemLabel="Antigo (antes de 12/06/2012)" itemValue="1" />
+ 		         		 <p:ajax process="@this" update="formProcesso:panelProcessosNovos formProcesso:panelProcessosAntigos" />
+					</p:selectOneRadio>
+				</h:panelGrid>
+				
+				<h:panelGrid columns="1" id="panelProcessosNovos"  >
+					<h:outputText value="Número do Processo" rendered="#{!requerimentoUnicoController.showPanelProcessosAntigos}"/>
+					<p:inputMask mask="9999.999.999999/INEMA/LIC-99999"
+						label="Número do Processo"
+						value="#{requerimentoUnicoController.processoExterno.processo}"
+						required="true" size="33" rendered="#{!requerimentoUnicoController.showPanelProcessosAntigos}">
+						<f:validateLength maximum="40" />
+					</p:inputMask>
+				</h:panelGrid>
+				
+				<h:panelGrid columns="1" id="panelProcessosAntigos" >
+					<p:selectOneRadio  rendered="#{requerimentoUnicoController.showPanelProcessosAntigos}" 
+					valueChangeListener="#{requerimentoUnicoController.alterarLayoutProcessoAntigo()}" 
+					value="#{requerimentoUnicoController.tipoDoProcesso}" >	
+						 <f:selectItem itemLabel="Licença" itemValue="0" />  
+				         <f:selectItem itemLabel="Outorga" itemValue="1" />
+   		         		 <p:ajax process="@this" update="formProcesso:panelProcessoLicenca formProcesso:panelProcessoOutorga" />
+					</p:selectOneRadio>
+					<h:panelGrid columns="1" id="panelProcessoLicenca">
+							<h:outputText value="Número do Processo" 
+								rendered="#{requerimentoUnicoController.isLicenca and requerimentoUnicoController.showPanelProcessosAntigos}"/>
+						<p:inputMask label="Número do Processo" mask="9999-999999"
+							rendered="#{requerimentoUnicoController.showPanelProcessosAntigos and requerimentoUnicoController.isLicenca}"
+							value="#{requerimentoUnicoController.processoExterno.processo}"
+							required="true">
+							<f:validateLength maximum="40" />
+						</p:inputMask>
+					</h:panelGrid>
+					<h:panelGrid columns="1" id="panelProcessoOutorga">
+						<h:outputText value="Número do Processo" rendered="#{!requerimentoUnicoController.isLicenca and requerimentoUnicoController.showPanelProcessosAntigos}"/>
+						<p:inputText label="Número do Processo" 
+							onkeypress="SomenteNumero(this);" 
+							onkeyup="SomenteNumero(this);"
+							rendered="#{!requerimentoUnicoController.isLicenca and requerimentoUnicoController.showPanelProcessosAntigos}"
+							value="#{requerimentoUnicoController.processoExterno.processo}"
+							required="true" maxlength="10">
+							<f:validateLength maximum="10" />
+						</p:inputText>
+					</h:panelGrid>
+				</h:panelGrid>
+				
+				
+				<h:panelGroup>
+					<div style="text-align: center;">
+				<p:commandButton type="reset" process="@form" update="@form"
+					immediate="true"
+					actionListener="#{requerimentoUnicoController.limparProcessoTramite()}"
+					value="#{bundle.geral_lbl_limpar}" />
+				<p:commandButton value="#{bundle.geral_lbl_salvar}"
+					update="formQuestionario:panelProcessoTramite @form"
+					process="@form"
+					actionListener="#{requerimentoUnicoController.incluirProcessoTramite()}" />
+			</div>
+				</h:panelGroup>
+	</h:form>
+</ui:composition>

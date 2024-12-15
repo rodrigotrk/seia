@@ -1,0 +1,447 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+	
+	<h:panelGrid id="pnlGroupRespCefirVisualizacao" rendered="${detalharImovelRuralController.respondeCefir and !detalharImovelRuralController.showPCT}">
+	
+			<!-- INICIO CEFIR -->
+		<!-- <h:panelGrid rendered="#{detalharImovelRuralController.imovelRural.imovelINCRA}">
+			<br />
+				<h3>
+					<h:outputLabel styleClass="titulo-grupo" value="#{bundle.cefir_lbl_assentamento}" />
+				</h3>
+			<br />
+			<h:panelGrid columns="2">
+				<h:outputText value="#{bundle.cefir_lbl_fase_assentamento} ?" style="font-size: 11px;font-weight: bold;"/>
+				<h:outputText value="#{detalharImovelRuralController.imovelRural.ideFaseAssentamentoImovelRural.dscFaseAssentamentoImovelRural}"  />
+			</h:panelGrid>
+		
+		</h:panelGrid> -->	
+		<h:panelGrid columns="1" rendered="#{detalharImovelRuralController.imovelRural.menorQueQuatroModulosFiscais}">
+			<h:outputText value="#{bundle.cefir_lbl_pergunta_contrato_convenio}" style="font-size: 11px;font-weight: bold;" />
+			<h:outputText value="SIM" rendered="#{detalharImovelRuralController.imovelRural.indContratoConvenio}" />
+			<h:outputText value="NÃO" rendered="#{detalharImovelRuralController.imovelRural.indContratoConvenio != null and !detalharImovelRuralController.imovelRural.indContratoConvenio}" />				
+		
+		<h:panelGrid columns="2" rendered="#{detalharImovelRuralController.imovelRural.indContratoConvenio != null and detalharImovelRuralController.imovelRural.indContratoConvenio}">
+			<h:outputText value="#{bundle.cefir_lbl_numero_contrato_convenio}" />
+			<p:spacer width="20" height="10" />
+			<h:outputText value="#{detalharImovelRuralController.imovelRural.ideContratoConvenioCefir.numContratoConvenioCefir}" />
+			<h:outputText value="#{detalharImovelRuralController.imovelRural.ideContratoConvenioCefir.nomContratoConvenioCefir}" />
+		</h:panelGrid>		
+		</h:panelGrid>
+		<h:panelGrid columns="2">
+			<h:outputText value="#{bundle.cefir_lbl_pergunta_existeTac}" style="font-size: 11px;font-weight: bold;" />
+			<h:outputText value="SIM" rendered="#{detalharImovelRuralController.imovelRural.indTac}" />
+			<h:outputText value="NÃO" rendered="#{detalharImovelRuralController.imovelRural.indTac != null and !detalharImovelRuralController.imovelRural.indTac}" />				
+		</h:panelGrid>
+		<h:panelGrid columns="2" rendered="#{detalharImovelRuralController.imovelRural.indTac}">
+			<h:outputText value="#{bundle.cefir_lbl_pergunta_orgao_emitente}" style="font-size: 11px;font-weight: bold;" />
+			<h:outputText value="#{detalharImovelRuralController.imovelRural.imovelRuralTac.dscOrgaoEmissor}" />
+		</h:panelGrid>
+		<h:panelGrid columns="2" rendered="#{detalharImovelRuralController.imovelRural.indTac}">
+			<h:outputText value="#{bundle.cefir_lbl_pergunta_data_assinatura}" style="font-size: 11px;font-weight: bold;" />
+			<h:outputText value="#{detalharImovelRuralController.imovelRural.imovelRuralTac.dtcAssinatura}">
+				<f:convertDateTime attern="dd/MM/yyyy" locale="pt,BR" timeZone="Brazil/East" />
+			</h:outputText>
+		</h:panelGrid>
+		<h:panelGrid columns="2" rendered="#{detalharImovelRuralController.imovelRural.indTac}">
+			<h:outputText value="#{bundle.cefir_lbl_pergunta_data_encerramento}" style="font-size: 11px;font-weight: bold;" />
+			<h:outputText value="#{detalharImovelRuralController.imovelRural.imovelRuralTac.dtcEncerramento}">
+				<f:convertDateTime attern="dd/MM/yyyy" locale="pt,BR" timeZone="Brazil/East" />
+			</h:outputText>
+		</h:panelGrid>
+		<br />	
+		<h:panelGrid columns="2">
+			<h:outputText value="#{bundle.cefir_lbl_pergunta_existePrad}" style="font-size: 11px;font-weight: bold;" />
+			<h:outputText value="SIM" rendered="#{detalharImovelRuralController.imovelRural.indPrad}" />
+			<h:outputText value="NÃO" rendered="#{detalharImovelRuralController.imovelRural.indPrad != null and !detalharImovelRuralController.imovelRural.indPrad}" />
+		</h:panelGrid>
+		<h:panelGrid columns="2" rendered="#{detalharImovelRuralController.imovelRural.indPrad}">
+			<h:outputText value="#{bundle.cefir_lbl_pergunta_orgao_emitente}" style="font-size: 11px;font-weight: bold;" />
+			<h:outputText value="#{detalharImovelRuralController.imovelRural.imovelRuralPrad.dscOrgaoEmissor}" />
+		</h:panelGrid>
+		<h:panelGrid columns="2" rendered="#{detalharImovelRuralController.imovelRural.indPrad}">
+			<h:outputText value="#{bundle.cefir_lbl_pergunta_data_assinatura}" style="font-size: 11px;font-weight: bold;" />
+			<h:outputText value="#{detalharImovelRuralController.imovelRural.imovelRuralPrad.dtcAssinatura}">
+				<f:convertDateTime attern="dd/MM/yyyy" locale="pt,BR" timeZone="Brazil/East" />
+			</h:outputText>
+		</h:panelGrid>
+		<h:panelGrid columns="2" rendered="#{detalharImovelRuralController.imovelRural.indPrad}">
+			<h:outputText value="#{bundle.cefir_lbl_pergunta_data_encerramento}" style="font-size: 11px;font-weight: bold;" />
+			<h:outputText value="#{detalharImovelRuralController.imovelRural.imovelRuralPrad.dtcEncerramento}">
+				<f:convertDateTime attern="dd/MM/yyyy" locale="pt,BR" timeZone="Brazil/East" />
+			</h:outputText>
+		</h:panelGrid>
+		<br />
+		<h:panelGrid columns="2">
+			<h:outputText value="#{bundle.cefir_lbl_pergunta_existemInfracoesSupressao}" style="font-size: 11px;font-weight: bold;" />
+			<h:outputText value="SIM" rendered="#{detalharImovelRuralController.imovelRural.indInfracaoSupressao}" />
+			<h:outputText value="NÃO" rendered="#{detalharImovelRuralController.imovelRural.indInfracaoSupressao != null and !detalharImovelRuralController.imovelRural.indInfracaoSupressao}" />				
+		</h:panelGrid>
+		<h:panelGrid columns="2">
+			<h:outputText value="#{bundle.cefir_lbl_pergunta_possui_crf}" style="font-size: 11px;font-weight: bold;" />
+			<h:outputText value="SIM" rendered="#{detalharImovelRuralController.imovelRural.indCrf}" />
+			<h:outputText value="NÃO" rendered="#{detalharImovelRuralController.imovelRural.indCrf != null and !detalharImovelRuralController.imovelRural.indCrf}" />
+		</h:panelGrid>			
+		<h:panelGrid columns="2">
+			<h:outputText value="#{bundle.cefir_lbl_pergunta_ocorreu_alteracao_tamanho}" style="font-size: 11px;font-weight: bold;" />
+			<h:outputText value="SIM" rendered="#{detalharImovelRuralController.imovelRural.indAlteracaoTamanho}" />
+			<h:outputText value="NÃO" rendered="#{detalharImovelRuralController.imovelRural.indAlteracaoTamanho != null and !detalharImovelRuralController.imovelRural.indAlteracaoTamanho}" />
+		</h:panelGrid>
+		<h:panelGrid columns="2" rendered="#{detalharImovelRuralController.imovelRural.indAlteracaoTamanho}">
+			<h:outputText value="Qual era a área (ha) do imóvel em 22/07/2008?" style="font-size: 11px;font-weight: bold;" />
+			<h:outputText value="#{detalharImovelRuralController.imovelRural.valAlteracaoTamanho}">
+				<f:converter converterId="doubleQuatroCasasDecimaisConverter" />
+			</h:outputText>
+		</h:panelGrid>
+		<h:panelGrid rendered="#{(detalharImovelRuralController.imovelRural.ideTipoCadastroImovelRural.ideTipoCadastroImovelRural == 3 or detalharImovelRuralController.imovelRural.ideTipoCadastroImovelRural.ideTipoCadastroImovelRural == 4) and detalharImovelRuralController.imovelRural.menorQueQuatroModulosFiscais}">
+			<h3>
+				<h:outputLabel styleClass="titulo-grupo"
+					value="#{bundle.empreendimento_lbl_reserva_legal}" />
+			</h3>
+			<br />					
+  			<h:panelGrid columns="2">
+				<h:outputText value="#{bundle.cefir_lbl_pergunta_existia_remanescente_vn}" style="font-size: 11px;font-weight: bold;" />
+				<h:outputText value="SIM" rendered="#{detalharImovelRuralController.imovelRural.indExistiaRemanescenteVegetacaoNativa}" />
+				<h:outputText value="NÃO" rendered="#{detalharImovelRuralController.imovelRural.indExistiaRemanescenteVegetacaoNativa != null and !detalharImovelRuralController.imovelRural.indExistiaRemanescenteVegetacaoNativa}" />
+			</h:panelGrid>
+		</h:panelGrid>
+		<br />
+		<h3>
+			<h:outputLabel styleClass="titulo-grupo"
+				value="#{bundle.cefir_lbl_app}" />
+		</h3>
+		<br />
+
+		<h:panelGrid columns="2">
+			<h:outputText
+				value="O imóvel possui área de preservação permanente?"
+				style="font-size: 11px;font-weight: bold;" />
+			<h:outputText value="SIM" rendered="#{detalharImovelRuralController.imovelRural.indApp}" />
+			<h:outputText value="NÃO"
+				rendered="#{detalharImovelRuralController.imovelRural.indApp != null and !detalharImovelRuralController.imovelRural.indApp}" />
+		</h:panelGrid>
+
+		<br />
+		<h3>
+			<h:outputLabel styleClass="titulo-grupo"
+				value="#{bundle.cefir_lbl_area_produtiva}" />
+		</h3>
+		<br />
+
+		<h:panelGrid columns="2">
+			<h:outputText value="#{bundle.cefir_msg_atividade_desenvolvida}"
+				style="font-size: 11px;font-weight: bold;" />
+			<h:outputText value="SIM"
+				rendered="#{detalharImovelRuralController.imovelRural.indAreaProdutiva}" />
+			<h:outputText value="NÃO"
+				rendered="#{detalharImovelRuralController.imovelRural.indAreaProdutiva != null and !detalharImovelRuralController.imovelRural.indAreaProdutiva}" />
+		</h:panelGrid>
+
+		<h:panelGrid columns="2">
+			<h:outputText value="É utilizado Agrotoxico?"
+				style="font-size: 11px;font-weight: bold;" />
+			<h:outputText value="SIM"
+				rendered="#{detalharImovelRuralController.imovelRural.indAgrotoxico}" />
+			<h:outputText value="NÃO"
+				rendered="#{detalharImovelRuralController.imovelRural.indAgrotoxico != null and !detalharImovelRuralController.imovelRural.indAgrotoxico}" />
+		</h:panelGrid>
+		
+		<h:panelGrid columns="2" rendered="#{detalharImovelRuralController.imovelRural.imovelINCRA}">
+			<br />
+				<h3><h:outputLabel styleClass="titulo-grupo" value="#{bundle.cefir_lbl_area_consolidada}" /></h3>
+			<br />
+			
+			<h:panelGrid columns="2">
+				<h:outputText value="#{bundle.cefir_msg_area_consolidada} ?" style="font-weight: bold;"/>
+				<h:outputText value="SIM"
+					rendered="#{detalharImovelRuralController.imovelRural.indAreaRuralConsolidada != null and detalharImovelRuralController.imovelRural.indAreaRuralConsolidada}" />
+				<h:outputText value="NÃO"
+					rendered="#{detalharImovelRuralController.imovelRural.indAreaRuralConsolidada != null and !detalharImovelRuralController.imovelRural.indAreaRuralConsolidada}" />
+			</h:panelGrid>
+		</h:panelGrid>
+		
+		<br />
+		<h3>
+			<h:outputLabel styleClass="titulo-grupo"
+				value="#{bundle.cefir_lbl_vegetacao_nativa}" />
+		</h3>
+		<br />
+
+		<h:panelGrid columns="2">
+			<h:outputText
+				value="#{bundle.cefir_msg_vegetacao_nativa}"
+				style="font-size: 11px;font-weight: bold;" />
+			<h:outputText value="SIM"
+				rendered="#{detalharImovelRuralController.imovelRural.indVegetacaoNativa}" />
+			<h:outputText value="NÃO"
+				rendered="#{detalharImovelRuralController.imovelRural.indVegetacaoNativa != null and !detalharImovelRuralController.imovelRural.indVegetacaoNativa}" />
+		</h:panelGrid>
+
+		<h:panelGrid columns="2">
+			<h:outputText
+				value="Houve supressão de vegetação nativa depois de 22/07/2008?"
+				style="font-size: 11px;font-weight: bold;" />
+			<h:outputText value="SIM"
+				rendered="#{detalharImovelRuralController.imovelRural.indSupressaoVegetacao}" />
+			<h:outputText value="NÃO"
+				rendered="#{detalharImovelRuralController.imovelRural.indSupressaoVegetacao != null and !detalharImovelRuralController.imovelRural.indSupressaoVegetacao}" />
+		</h:panelGrid>
+
+		<h:panelGrid columns="2"
+			rendered="#{detalharImovelRuralController.imovelRural.indSupressaoVegetacao}">
+			<h:outputText value="Área da Supressão de Vegetação Nativa (ha):"
+				style="font-size: 11px;font-weight: bold;" />
+			<h:outputText
+				value="#{detalharImovelRuralController.imovelRural.supressaoVegetacao.valArea}">
+				<f:converter converterId="doubleQuatroCasasDecimaisConverter" />
+			</h:outputText>
+		</h:panelGrid>
+
+		<h:panelGrid columns="2"
+			rendered="#{detalharImovelRuralController.imovelRural.indSupressaoVegetacao}">
+			<h:outputText value="A supressão foi autorizada por órgão ambiental competente?"
+				style="font-size: 11px;font-weight: bold;" />
+			<h:outputText value="SIM"
+				rendered="#{detalharImovelRuralController.imovelRural.supressaoVegetacao.indProcesso}" />
+			<h:outputText value="NÃO"
+				rendered="#{detalharImovelRuralController.imovelRural.supressaoVegetacao.indProcesso != null and !detalharImovelRuralController.imovelRural.supressaoVegetacao.indProcesso}" />
+		</h:panelGrid>
+		<h:panelGrid columns="2"
+			rendered="#{detalharImovelRuralController.imovelRural.supressaoVegetacao.indProcesso}">
+			<h:outputText value="Número do Processo de Autorização:"
+				style="font-size: 11px;font-weight: bold;" />
+			<h:outputText
+				value="#{detalharImovelRuralController.imovelRural.supressaoVegetacao.numProcesso}" />
+		</h:panelGrid>
+
+		<br />
+		<h:outputLabel value="RESERVA PARTICULAR DO PATRIMÔNIO NATURAL" styleClass="titulo-grupo"/>
+		<h:panelGrid columns="2">
+			<h:outputText value="#{bundle.cefir_lbl_pergunta_reservaParticularPatrimonioNatural}"
+				style="font-size: 11px;font-weight: bold;" />
+			<h:outputText value="SIM"
+				rendered="#{detalharImovelRuralController.imovelRural.indRppn!= null and detalharImovelRuralController.imovelRural.indRppn}" />
+			<h:outputText value="NÃO"
+				rendered="#{detalharImovelRuralController.imovelRural.indRppn!= null and detalharImovelRuralController.imovelRural.indRppn != true}" />
+		</h:panelGrid>
+
+		<br />
+		<h3>
+			<h:outputLabel styleClass="titulo-grupo"
+				value="INFORMAÇÕES DE USO DA ÁGUA" />
+		</h3>
+		<br />
+
+		<h:panelGrid columns="1">
+			<h:outputText value="Qual(is) a(s) origem(ns) da Água utilizada(s)?"
+				style="font-size: 11px;font-weight: bold;" />
+			<h:selectManyCheckbox
+				label="#{bundle.requerimentoUnicoLabelPergunta5}"
+				layout="pageDirection"
+				value="#{detalharImovelRuralController.listTipoCaptacao}" disabled="true">
+				<f:selectItems value="#{detalharImovelRuralController.collTipoCaptacao}" />
+			</h:selectManyCheckbox>
+		</h:panelGrid>
+
+		<h:panelGrid columns="2">
+			<h:outputText
+				value="Existe lançamento de resíduos líquidos no imóvel?"
+				style="font-size: 11px;font-weight: bold;" />
+			<h:outputText value="SIM"
+				rendered="#{detalharImovelRuralController.indLancamentoResiduosLiquidos}" />
+			<h:outputText value="NÃO"
+				rendered="#{!detalharImovelRuralController.indLancamentoResiduosLiquidos}" />
+		</h:panelGrid>
+
+		<h:panelGrid columns="1"
+			rendered="#{detalharImovelRuralController.imovelRural.indLancamentoConcessionaria or detalharImovelRuralController.imovelRural.indLancamentoManancial}">
+			<h:outputText
+				value="Qual(is) o(s) receptor(es) dos resíduos líquidos?"
+				style="font-size: 11px;font-weight: bold;" />
+			<h:panelGrid columns="2">
+				<h:selectBooleanCheckbox label="Concessionária Pública"
+					layout="pageDirection"
+					value="#{detalharImovelRuralController.imovelRural.indLancamentoConcessionaria}"
+					disabled="true" />
+				<h:outputLabel value="Concessionária Pública" />
+				<h:selectBooleanCheckbox label="Manacial/Corpo Hídrico"
+					layout="pageDirection"
+					value="#{detalharImovelRuralController.imovelRural.indLancamentoManancial}" disabled="true" />
+				<h:outputLabel value="Manacial/Corpo Hídrico" />
+			</h:panelGrid>
+		</h:panelGrid>
+
+		<h:panelGrid columns="2">
+			<h:outputText value="Existe intervenção em corpo hídrico no imóvel tais com barragem, ponte ou desvio de curso de rio?"
+				style="font-size: 11px;font-weight: bold;" />
+			<h:outputText value="SIM"
+				rendered="#{detalharImovelRuralController.imovelRural.indIntervencao}" />
+			<h:outputText value="NÃO"
+				rendered="#{detalharImovelRuralController.imovelRural.indIntervencao != null and !detalharImovelRuralController.imovelRural.indIntervencao}" />
+		</h:panelGrid>
+
+		<br />
+		<h3>
+			<h:outputLabel styleClass="titulo-grupo"
+				value="OUTROS PASSIVOS AMBIENTAIS" />
+		</h3>
+		<br />
+
+		<h:panelGrid columns="2">
+			<h:outputText
+				value="Existem Outros Passivos Ambientais fora de APP e RL?"
+				style="font-size: 11px;font-weight: bold;" />
+			<h:outputText value="SIM" rendered="#{detalharImovelRuralController.imovelRural.indOutrosPassivos}" />
+			<h:outputText value="NÃO" rendered="#{detalharImovelRuralController.imovelRural.indOutrosPassivos != null and !detalharImovelRuralController.imovelRural.indOutrosPassivos}" />
+		</h:panelGrid>
+	</h:panelGrid>
+	
+	
+	
+	
+	
+	
+	
+	
+<!-- 	cefir pct -->
+
+
+	<h:panelGrid rendered="${detalharImovelRuralController.respondeCefir and detalharImovelRuralController.showPCT}">
+
+		<h3>
+			<h:outputLabel styleClass="titulo-grupo"
+				value="#{bundle.cefir_lbl_app}" />
+		</h3>
+		<br />
+
+		<h:panelGrid columns="2">
+			<h:outputText value="O imóvel possui área de preservação permanente?"
+				style="font-size: 11px;font-weight: bold;" />
+			<h:outputText value="SIM"
+				rendered="#{detalharImovelRuralController.imovelRural.indApp}" />
+			<h:outputText value="NÃO"
+				rendered="#{detalharImovelRuralController.imovelRural.indApp != null and !detalharImovelRuralController.imovelRural.indApp}" />
+		</h:panelGrid>
+
+
+
+
+		<br />
+		<h3>
+			<h:outputLabel styleClass="titulo-grupo"
+				value="#{bundle.cefir_lbl_vegetacao_nativa}" />
+		</h3>
+		<br />
+
+		<h:panelGrid columns="1">
+			<h:outputText value="#{bundle.cefir_msg_vegetacao_nativa}"
+				style="font-size: 11px;font-weight: bold;" />
+			<h:outputText value="SIM"
+				rendered="#{detalharImovelRuralController.imovelRural.indVegetacaoNativa}" />
+			<h:outputText value="NÃO"
+				rendered="#{detalharImovelRuralController.imovelRural.indVegetacaoNativa != null and !detalharImovelRuralController.imovelRural.indVegetacaoNativa}" />
+		</h:panelGrid>
+
+
+
+
+
+		<br />
+		<h3>
+			<h:outputLabel styleClass="titulo-grupo"
+				value="#{bundle.cefir_lbl_area_produtiva}" />
+		</h3>
+		<br />
+
+		<h:panelGrid columns="2">
+			<h:outputText value="#{bundle.cefir_msg_atividade_desenvolvida}"
+				style="font-size: 11px;font-weight: bold;" />
+			<h:outputText value="SIM"
+				rendered="#{detalharImovelRuralController.imovelRural.indAreaProdutiva}" />
+			<h:outputText value="NÃO"
+				rendered="#{detalharImovelRuralController.imovelRural.indAreaProdutiva != null and !detalharImovelRuralController.imovelRural.indAreaProdutiva}" />
+		</h:panelGrid>
+
+
+
+		<h:panelGrid columns="4">
+			<h:outputText value="#{bundle.cefir_msg_area_consolidada}?" style="font-size: 11px;font-weight: bold;"/>
+			<h:graphicImage value="/resources/img/ico-ajuda.png"
+				id="hintAreaConsolidadaPCT" />
+			<p:tooltip for="hintAreaConsolidadaPCT"
+				value="#{bundle.cefir_hint_area_consolidada}" showEffect="fade"
+				hideEffect="fade" />
+			
+			<h:outputText value="SIM"
+				rendered="#{detalharImovelRuralController.imovelRural.indAreaRuralConsolidada}" />
+			<h:outputText value="NÃO"
+				rendered="#{detalharImovelRuralController.imovelRural.indAreaRuralConsolidada != null and !detalharImovelRuralController.imovelRural.indAreaRuralConsolidada}" />	
+		</h:panelGrid>
+
+		
+		<br />
+		<h3>
+			<h:outputLabel styleClass="titulo-grupo"
+				value="INFORMAÇÕES DE USO DA ÁGUA" />
+		</h3>
+		<br />
+
+		<h:panelGrid columns="1">
+			<h:outputText value="Qual(is) a(s) origem(ns) da Água utilizada(s)?"
+				style="font-size: 11px;font-weight: bold;" />
+			<h:selectManyCheckbox
+				label="#{bundle.requerimentoUnicoLabelPergunta5}"
+				layout="pageDirection"
+				value="#{detalharImovelRuralController.listTipoCaptacao}" disabled="true">
+				<f:selectItems value="#{detalharImovelRuralController.collTipoCaptacao}" />
+			</h:selectManyCheckbox>
+		</h:panelGrid>
+
+		<h:panelGrid columns="2">
+			<h:outputText
+				value="Existe lançamento de resíduos líquidos no imóvel?"
+				style="font-size: 11px;font-weight: bold;" />
+			<h:outputText value="SIM"
+				rendered="#{detalharImovelRuralController.indLancamentoResiduosLiquidos}" />
+			<h:outputText value="NÃO"
+				rendered="#{!detalharImovelRuralController.indLancamentoResiduosLiquidos}" />
+		</h:panelGrid>
+
+		<h:panelGrid columns="1"
+			rendered="#{detalharImovelRuralController.imovelRural.indLancamentoConcessionaria or detalharImovelRuralController.imovelRural.indLancamentoManancial}">
+			<h:outputText
+				value="Qual(is) o(s) receptor(es) dos resíduos líquidos?"
+				style="font-size: 11px;font-weight: bold;" />
+			<h:panelGrid columns="2">
+				<h:selectBooleanCheckbox label="Concessionária Pública"
+					layout="pageDirection"
+					value="#{detalharImovelRuralController.imovelRural.indLancamentoConcessionaria}"
+					disabled="true" />
+				<h:outputLabel value="Concessionária Pública" />
+				<h:selectBooleanCheckbox label="Manacial/Corpo Hídrico"
+					layout="pageDirection"
+					value="#{detalharImovelRuralController.imovelRural.indLancamentoManancial}" disabled="true" />
+				<h:outputLabel value="Manacial/Corpo Hídrico" />
+			</h:panelGrid>
+		</h:panelGrid>
+
+		<h:panelGrid columns="2">
+			<h:outputText value="Existe intervenção em corpo hídrico no imóvel tais com barragem, ponte ou desvio de curso de rio?"
+				style="font-size: 11px;font-weight: bold;" />
+			<h:outputText value="SIM"
+				rendered="#{detalharImovelRuralController.imovelRural.indIntervencao}" />
+			<h:outputText value="NÃO"
+				rendered="#{detalharImovelRuralController.imovelRural.indIntervencao != null and !detalharImovelRuralController.imovelRural.indIntervencao}" />
+		</h:panelGrid>
+		
+
+
+	</h:panelGrid>
+
+
+</ui:composition>

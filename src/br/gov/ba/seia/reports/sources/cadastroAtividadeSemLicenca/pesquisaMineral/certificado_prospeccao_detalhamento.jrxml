@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="certificado_prospeccao_detalhamento" language="java" pageWidth="525" pageHeight="802" columnWidth="525" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" isIgnorePagination="true" uuid="2a7ceea7-fb3f-41a8-96ee-61c3be3a4f53">
+	<property name="ireport.zoom" value="1.6105100000000017"/>
+	<property name="ireport.x" value="56"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="ide_processo_dnpm_prospecao" class="java.lang.Integer"/>
+	<parameter name="ide_metodo_prospeccao" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT
+prospeccao.nom_identificacao,
+prospeccao.ide_localizacao_geografica
+FROM prospecao_detalhamento prospeccao
+WHERE prospeccao.ide_processo_dnpm_prospecao = $P{ide_processo_dnpm_prospecao}]]>
+	</queryString>
+	<field name="nom_identificacao" class="java.lang.String"/>
+	<field name="ide_localizacao_geografica" class="java.lang.Integer">
+		<fieldDescription><![CDATA[Identificar da localização geográfica da Área de Preservação Permanente]]></fieldDescription>
+	</field>
+	<variable name="sondagem" class="java.lang.Integer">
+		<variableExpression><![CDATA[1]]></variableExpression>
+	</variable>
+	<variable name="poco" class="java.lang.Integer">
+		<variableExpression><![CDATA[2]]></variableExpression>
+	</variable>
+	<variable name="trincheira" class="java.lang.Integer">
+		<variableExpression><![CDATA[3]]></variableExpression>
+	</variable>
+	<variable name="isPoco" class="java.lang.Boolean">
+		<variableExpression><![CDATA[$P{ide_metodo_prospeccao}.equals( $V{poco} )]]></variableExpression>
+	</variable>
+	<variable name="isSondagem" class="java.lang.Boolean">
+		<variableExpression><![CDATA[$P{ide_metodo_prospeccao}.equals( $V{sondagem} )]]></variableExpression>
+	</variable>
+	<variable name="isTrincheira" class="java.lang.Boolean">
+		<variableExpression><![CDATA[$P{ide_metodo_prospeccao}.equals($V{trincheira})]]></variableExpression>
+	</variable>
+	<detail>
+		<band height="36" splitType="Stretch">
+			<textField>
+				<reportElement uuid="d4947234-8510-47fb-a0f5-ddfbee54a710" x="0" y="0" width="150" height="36" isPrintWhenDetailOverflows="true">
+					<printWhenExpression><![CDATA[$V{isSondagem}]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="1" leftPadding="5" bottomPadding="1" rightPadding="1"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA["Identificação do furo:"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="0d4e8e6b-887b-452c-b5ea-67dbf86fd94d" x="0" y="0" width="150" height="36" isPrintWhenDetailOverflows="true">
+					<printWhenExpression><![CDATA[$V{isTrincheira}]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="1" leftPadding="5" bottomPadding="1" rightPadding="1"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA["Identificação da trincheira:"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="ff81e190-d5d8-4718-8b54-8d36ca21b2c8" x="0" y="0" width="150" height="36" isPrintWhenDetailOverflows="true">
+					<printWhenExpression><![CDATA[$V{isPoco}]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="1" leftPadding="5" bottomPadding="1" rightPadding="1"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA["Identificação do poço:"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="7e237062-d78a-4b06-872b-d5736113b7b3" x="150" y="0" width="125" height="36"/>
+				<box topPadding="1" leftPadding="5" bottomPadding="1" rightPadding="1"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{nom_identificacao}]]></textFieldExpression>
+			</textField>
+			<subreport>
+				<reportElement uuid="b00d7108-6f61-46b6-9d61-c84f184c83e1" x="275" y="0" width="250" height="36" isPrintWhenDetailOverflows="true"/>
+				<subreportParameter name="ide_localizacao_geografica">
+					<subreportParameterExpression><![CDATA[$F{ide_localizacao_geografica}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "localizacao_geografica.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+	</detail>
+</jasperReport>

@@ -1,0 +1,423 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core" xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui" template="../../layout/template.xhtml">
+	<ui:define name="titulo-pagina">
+		<h3>Consultar Processo</h3>
+	</ui:define>
+	<ui:define name="conteudo-principal">
+
+		<ui:include src="/paginas/manter-lac/erb/cadastro.xhtml" />
+		<ui:include src="/paginas/manter-lac/posto/cadastro.xhtml" />
+		
+		<ui:include src="/paginas/manter-processo/cronograma.xhtml" />
+		<ui:include src="/paginas/manter-processo/visualizarEquipe.xhtml" />
+		<ui:include src="/paginas/manter-processo/formarEquipe.xhtml" />
+		<ui:include src="/paginas/manter-processo/fluxoAlternativo.xhtml" />
+		
+		<ui:include src="/paginas/manter-fce/include-fce.xhtml" />
+		<ui:include src="/paginas/manter-processo/detalhe-processo/detalharProcesso.xhtml" />
+		<ui:include src="/paginas/manter-processo/notificacaoaprovacao.xhtml" />
+		<ui:include src="/paginas/manter-processo/dlgApensarDocumento.xhtml" />
+		
+		<ui:include	src="/paginas/manter-processo/autorizacaoManejoCabruca.xhtml" />
+		
+		<ui:include src="/paginas/manter-processo/dado-concedido/asv/dadoConcedidoAsv.xhtml" />
+		
+		<ui:include src="/paginas/atos-declaratorios/include-atos.xhtml" />
+		
+		<h3>
+			<h:outputLabel styleClass="titulo-grupo" style="font-weight:bold;" value="INSTRUÇÕES" />
+		</h3>
+		<p class="titulo-grupo">
+			<h:outputText value="#{bundle.processo_lbl_consulta}" /> <br/>
+			<h:outputText value="#{bundle.processo_lbl_consulta_status}" />
+			<br />
+		</p>
+		<br />
+		<h3>
+			<h:outputLabel styleClass="titulo-grupo" style="font-weight:bold;" value="PARÂMETROS DA CONSULTA" />
+		</h3>
+		<h:form id="formConsultarProcesso">
+		    <h:panelGrid columns="1" id="panel" >
+			   	<h:panelGrid columns="4">
+				 	<h:outputLabel id="lblRequerente" value="#{bundle.consulta_empree_requerente}" rendered="#{!contextoController.usuarioLogado.usuarioExterno}" />
+				 	<p:spacer width="75" height="0"/>
+				 	<h:outputText  value="Empreendimento:" rendered="#{!contextoController.usuarioLogado.usuarioExterno}"/>
+ 					<h:outputText value="Municipio:" rendered="#{contextoController.usuarioLogado.MP}" />
+			   	</h:panelGrid>
+			   	<h:panelGrid>
+				<h:panelGrid columns="4" rendered="#{!contextoController.usuarioLogado.usuarioExterno}">			 
+					<p:inputText value="#{processoController.descnome}" disabled="true" />
+					<p:commandLink type="button" id="requerenteModal"
+					
+					actionListener="#{requerenteController.load(novoRequerimentoController.metodoExterno)}" 
+					 onclick="requerente.show();">
+					 <h:graphicImage url="/resources/img/ico-pesquisa.png"/> 
+					 </p:commandLink>
+					<p:selectOneMenu id="comboEmpreendimento" value="#{processoController.empreendimento.ideEmpreendimento}" disabled="#{processoController.requerente == null or processoController.requerente.idePessoa == null}" style="width:220px;">
+						<f:selectItem itemValue="0" itemLabel="Selecione..." />
+						<f:selectItems value="#{processoController.collEmpreendimento}" />
+					</p:selectOneMenu>
+						
+					<p:spacer width="110" height="0"/>
+				</h:panelGrid>
+			   </h:panelGrid>
+		    </h:panelGrid>
+			<h:panelGrid columns="3" >
+				<h:panelGrid columns="1">
+					<h:outputText value="Nº do Processo:" />
+					<p:inputText value="#{processoController.numProcesso}" />
+				</h:panelGrid>
+				<h:panelGrid rendered="#{processoController.visualizaFiltro}">
+					<h:outputText value="Status Atual:" />
+					<p:selectOneMenu id="comboStatusFluxo" value="#{processoController.statusFluxo}" styleClass="form-input form-select" converter="simpleEntityConverter">
+						<f:selectItem itemLabel="Selecione..." />
+						<f:selectItems value="#{processoController.status}" var="status" itemValue="#{status}" itemLabel="#{status.dscStatusFluxo}" />
+					</p:selectOneMenu>
+				</h:panelGrid>
+				<h:panelGrid columns="4">
+					<h:outputText value="Período de Formação:" />
+					<h:outputText />
+					<h:outputText />
+					<h:outputText />
+					<h:panelGroup>
+						<h:outputText value="De   " />
+						<p:calendar showOn="button" size="10" value="#{processoController.periodoInicio}" locale="pt" pattern="dd/MM/yyyy" navigator="true" yearRange="c-50:c+10" />
+					</h:panelGroup>
+					<h:outputText value="Até" />
+					<p:calendar showOn="button" size="10" value="#{processoController.periodoFim}" locale="pt" pattern="dd/MM/yyyy" navigator="true" yearRange="c-50:c+10" />
+				</h:panelGrid>
+			</h:panelGrid>
+			
+			<h:panelGrid columns="2">
+				<h:panelGrid rendered="${security.temAcesso('5.18') or security.temAcesso('5.19') or contextoController.usuarioLogado.MP}">
+			
+				</h:panelGrid>
+			</h:panelGrid>
+
+			<h:panelGrid id="gridComboFiltro" columns="4" rendered="${security.temAcesso('5.18') or security.temAcesso('5.19') or contextoController.usuarioLogado.MP}">
+				<h:outputText value="Categoria:" />
+				<h:outputText value="Ato:" />
+				<h:outputText value="Tipologia:" />
+				<h:outputText value="Finalidade:" />
+				
+				<p:selectOneMenu 
+					id="comboTipoAto" 
+					value="#{processoController.tipoAto}"
+					valueChangeListener="#{processoController.changeCategoria()}" 
+					converter="simpleEntityConverter" 
+					styleClass="form-input form-select">
+					<f:selectItem itemLabel="Selecione..." />
+					<f:selectItems value="#{processoController.tiposAto}" var="tipoAto" itemValue="#{tipoAto}" itemLabel="#{tipoAto.nomTipoAto}" />
+					<p:ajax event="change" update="gridComboFiltro" />
+				</p:selectOneMenu>
+				
+				<p:selectOneMenu 
+					id="comboAto" 
+					value="#{processoController.atoAmbiental}" 
+					converter="simpleEntityConverter" 
+					valueChangeListener="#{processoController.changeAtoAmbiental()}" 
+					styleClass="form-input form-select"
+					style="max-width:262px;"
+					disabled="#{processoController.comboAtoBlocked}">
+					<f:selectItem itemLabel="Selecione..." />
+					<f:selectItems value="#{processoController.atos}" var="ato" itemValue="#{ato}" itemLabel="#{ato.nomAtoAmbiental}"/>
+					<p:ajax event="change" update="gridComboFiltro" process="@this"/>
+				</p:selectOneMenu>				
+				
+				<p:selectOneMenu 
+					id="lstTipologia" 
+					value="#{processoController.tipologia}"							
+					converter="tipologiaConverter" 					
+					valueChangeListener="#{processoController.changeTipologia()}"
+					styleClass="form-input form-select"
+					style="max-width:180px;"
+					disabled="#{processoController.comboTipologiaBlocked}">
+					<f:selectItem itemLabel="Selecione..."/>
+					<f:selectItems value="#{processoController.listaTipologia}" var="tipologia" itemLabel="#{tipologia.desTipologia}" itemValue="#{tipologia}"/>					
+					<p:ajax event="change" update="gridComboFiltro" process="@this"/> 
+				</p:selectOneMenu>
+
+				<p:selectOneMenu 
+					id="lstFinalidade" 
+					value="#{processoController.finalidadeUsoAgua}"
+					converter="simpleEntityConverter" 
+					styleClass="form-input form-select"
+					style="max-width:190px;"
+					disabled="#{processoController.comboFinalidadeBlocked}">
+					<f:selectItem itemLabel="Selecione..."/>
+					<f:selectItems value="#{processoController.listaFinalidadeUsoAgua}" var="finalidade" itemLabel="#{finalidade.nomTipoFinalidadeUsoAgua}" itemValue="#{finalidade}"/>
+					<p:ajax event="change" process="@this"/> 
+				</p:selectOneMenu>
+			</h:panelGrid>
+			
+			<h:panelGrid columns="2" style="margin-left: -4px;" rendered="#{!contextoController.usuarioLogado.usuarioExterno}">
+				<h:panelGrid id="pnlDivisao" columns="1">
+					<h:outputText  value="Divisao:" />
+					<p:selectOneMenu id="comboDivisao" value="#{processoController.tipologiaDivisao}" converter="simpleEntityConverter">
+						<f:selectItem itemLabel="Selecione..." />
+						<f:selectItems value="#{processoController.listaTipologiaDivisao}" var="tipologia" itemLabel="#{tipologia.desTipologia}" itemValue="#{tipologia}" />
+						<p:ajax event="change" listener="#{processoController.carregarAtividade()}" process="@this" update="formConsultarProcesso:comboAtividade" />
+					</p:selectOneMenu>
+				</h:panelGrid>
+				<h:panelGrid id="pnlAtividade" columns="1">
+					<h:outputText  value="Atividade:" />
+					<p:selectOneMenu id="comboAtividade" value="#{processoController.tipologiaAtividade}" disabled="#{processoController.disabledComboAtividade}" converter="simpleEntityConverter">
+						<f:selectItem itemLabel="Selecione..." />
+						<f:selectItems value="#{processoController.listaTipologiaAtividade}" var="tipologia" itemLabel="#{tipologia.desTipologia}" itemValue="#{tipologia}" />
+						<p:ajax event="change" process="@this" />
+					</p:selectOneMenu>
+				</h:panelGrid>
+			</h:panelGrid>
+			
+			<h:panelGrid rendered="#{processoController.visualizaFiltro}">
+					<h:outputText value="Localidade:" />
+					<p:selectOneMenu id="comboMunicipio"  value="#{processoController.municipioSelecionado}"  converter="municipioConverter" styleClass="form-input form-select" >
+	                	<f:selectItem itemLabel="Selecione..."/>
+	                	<f:selectItems value="#{processoController.listaMunicipios}" var="municipio" itemValue="#{municipio}" itemLabel="#{municipio.nomMunicipio}"/>                               
+	                </p:selectOneMenu>
+			</h:panelGrid>
+							
+			<br />
+			<h:panelGrid columns="2" rendered="#{processoController.isUsuarioInterno and !contextoController.usuarioLogado.MP}">
+				<h:outputText rendered="${security.temAcesso('5.18') or security.temAcesso('5.19')}" value="Área dos Técnicos:" />
+				<h:outputText rendered="${security.temAcesso('5.18') or security.temAcesso('5.19')}" value="Técnico:" />
+				
+				<p:autoComplete  id="autoCompleteArea" rendered="${security.temAcesso('5.18') or security.temAcesso('5.19')}" 
+				                dropdown="true" value="#{processoController.area}" minQueryLength="3"
+				                completeMethod="#{processoController.autoCompleteArea()}" converter="areaAutoCompleteConverter"
+				                forceSelection="true" var="area" itemValue="#{area}" itemLabel="#{area.nomArea}" scrollHeight="300" >
+				       <p:ajax event="itemSelect" process="@this,formConsultarProcesso:autoCompleteTecnico" update="formConsultarProcesso:autoCompleteTecnico" />
+				</p:autoComplete>
+				<p:autoComplete id="autoCompleteTecnico" rendered="${security.temAcesso('5.18') or security.temAcesso('5.19')}" dropdown="true" minQueryLength="3" value="#{processoController.funcionario}"
+					var="funcionario" itemValue="#{funcionario}" itemLabel="#{funcionario.pessoaFisica.nomPessoa}" completeMethod="#{processoController.autoCompleteFuncionario()}" forceSelection="true"
+					converter="funcionarioAutoCompleteConverter" scrollHeight="100" >
+					<p:ajax event="itemSelect" process="@this,formConsultarProcesso:botao_consultar" update="formConsultarProcesso:botao_consultar" />
+				</p:autoComplete>
+			</h:panelGrid>
+			<h:panelGrid columns="2">
+				<p:commandButton id="botao_consultar" value="Consultar" actionListener="#{processoController.consultarProcesso()}" process="@form" update="tabelaProcessos" />
+				<p:commandButton id="botao_limpar" value="Limpar" actionListener="#{processoController.limparTela()}" process="@this" update="formConsultarProcesso" />
+			</h:panelGrid>
+			
+			<h:panelGrid id="tabelaProcessos" columns="1">
+				<p:dataTable id="dataTableProcesso" var="vwProcesso" value="#{processoController.dataModelProcessos}" lazy="true" paginator="true" rows="8" 
+					paginatorPosition="bottom" paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}" 
+					currentPageReportTemplate="Registro(s) {startRecord}/{endRecord} de {totalRecords} registro(s)"
+					emptyMessage="#{bundle.msg_lista_vazia}" widgetVar="dataTableProcesso" rendered="#{processoController.showTable}">
+					
+					<p:column>
+						<f:facet name="header">Nº do Processo</f:facet>
+						<p:commandLink action="#{detalharProcessoController.visualizarProcesso()}" update=":formDetalharProcesso:tabviewprocesso" 
+							process="@this" oncomplete="dialogdetalharProcesso.show()" type="button">
+							
+							<f:ajax execute="@this" />
+							<h:outputText value="#{vwProcesso.numProcesso}" />
+							<f:setPropertyActionListener value="#{vwProcesso}" target="#{detalharProcessoController.vwProcesso}" />
+							<f:setPropertyActionListener value="#{vwProcesso}" target="#{historicoTramitacaoProcessoController.vwProcesso}" />	
+							<f:setPropertyActionListener value="#{null}" target="#{detalharProcessoController.processoReenquadramento}" />	
+						</p:commandLink>
+						<h:graphicImage value="/resources/imagens/emergencia.png" rendered="#{vwProcesso.indEstadoEmergencia and !contextoController.usuarioLogado.usuarioExterno}" title="#{bundle.geral_lbl_title_seca}" alt=" * #{bundle.geral_lbl_title_seca}"/>
+					</p:column>
+					
+					<p:column>
+                        <f:facet name="header">Nome /<br />Razão Social</f:facet>
+                        <h:outputText value="#{vwProcesso.nomRequerente}" />
+                    </p:column>
+					
+					<p:column>
+						<f:facet name="header">Porte</f:facet>
+						<h:outputText value="#{vwProcesso.nomPorte}" />
+					</p:column>
+					
+					<p:column>
+						<f:facet name="header">Data<br />Formação</f:facet>
+						<h:outputText id="dtcFormacao" value="#{vwProcesso.dtcFormacao}">
+							<f:convertDateTime for="dtcFormacao" pattern="dd/MM/yyyy" locale="pt,BR" timeZone="Brazil/East" />
+						</h:outputText>
+					</p:column>
+					
+					<p:column>
+						<f:facet name="header">Status</f:facet>
+						<h:outputText value="#{vwProcesso.statusFluxo.dscStatusFluxo}" rendered="#{!contextoController.usuarioLogado.usuarioExterno}" />
+						<h:outputText value="#{vwProcesso.statusFluxo.dscStatusFluxoExterno}" rendered="#{contextoController.usuarioLogado.usuarioExterno and !(vwProcesso.statusFluxo.dscStatusFluxoExterno eq null)}" />
+						<h:outputText value="#{vwProcesso.statusFluxo.dscStatusFluxo}" rendered="#{contextoController.usuarioLogado.usuarioExterno and (vwProcesso.statusFluxo.dscStatusFluxoExterno eq null)}" />
+					</p:column>
+					
+					<p:column rendered="${security.temAcesso('5.18') or security.temAcesso('5.19')}" >
+						<f:facet name="header">Equipe</f:facet>
+						<h:panelGroup style="width:10px;color:white;text-align:left;">
+							<p:commandLink 
+								title="Visualizar Equipe"
+								disabled="${!(vwProcesso.statusFluxo.ideStatusFluxo eq 6)}" 
+								oncomplete="dialogVisualizarEquipe.show()"
+								actionListener="#{visualizarEquipeController.load(vwProcesso)}"
+								process="@this" 
+								update=":formVisualizarEquipe">
+									<h:graphicImage title="Visualizar Equipe" value="/resources/img/ico-pesquisa.png" />
+							</p:commandLink>
+						</h:panelGroup>
+						<p:commandLink 
+							disabled="${processoController.habilitarCronogramaFormacaoEquipe(vwProcesso)}"
+							actionListener="#{formarEquipeController.load(vwProcesso,null)}" title="Formar Equipe" 
+							update=":formEquipeProcesso:panelFormacaoEquipe" oncomplete="dlgFormarEquipe.show()" process="@this">
+							<h:graphicImage title="Formar Equipe" value="/resources/img/ico-alterar.png" />
+						</p:commandLink>
+					</p:column>
+					
+					<p:column style="text-align:center;" rendered="${security.temAcesso('5.18') or security.temAcesso('5.19')}">
+						<f:facet name="header">Cronograma</f:facet>
+						<h:panelGroup style="width:10px;color:white;text-align:center;">
+							<p:commandLink
+								disabled="${processoController.habilitarCronogramaFormacaoEquipe(vwProcesso)}"
+								action="#{cronogramaController.novoCronograma}" title="Cronograma" update="_dialogCronograma" oncomplete="dlgCronograma.show()" process="@this">
+								<h:graphicImage title="Editar" value="/resources/img/ico-alterar.png" />
+								<f:setPropertyActionListener value="#{vwProcesso}" target="#{cronogramaController.vwProcesso}" />
+							</p:commandLink>
+						</h:panelGroup>
+					</p:column>
+					
+					<p:column rendered="${security.temAcesso('5.18') or security.temAcesso('5.19') or security.temAcesso('5.20.62') or security.temAcesso('5.20.63')}" >
+						<f:facet name="header">Ações</f:facet>
+						<h:panelGroup layout="block" style="text-align: center;">
+							<p:commandLink action="#{fluxoAlternativoController.load(false,false,vwProcesso)}"
+								disabled="#{!processoController.isCoordenador or !(vwProcesso.podeEncaminhar and (vwProcesso.statusFluxo.ideStatusFluxo eq 6))}" 
+								oncomplete="dialogEncaminhar.show()" update="formFluxoAlternativo" process="@this">
+								<h:graphicImage title="Encaminhar" value="/resources/img/ico-encaminhar.png" />
+							</p:commandLink>
+							<p:commandLink 
+								actionListener="#{notificacaoAprovacaoController.load(vwProcesso,null)}"
+								disabled="#{!processoController.isCoordenador or !(vwProcesso.podeAprovarNotificacao and (vwProcesso.statusFluxo.ideStatusFluxo eq 6))}" 
+								onclick="dialogAprovarNotificacao.show()" update=":panelDialog3" process="@this">
+								<h:graphicImage title="Aprovar Notificação" value="/resources/img/ico-aprovar-not2.png" />
+							</p:commandLink>
+							<p:commandLink actionListener="#{apensarDocumentoController.load()}"
+								disabled="#{!processoController.isCoordenador or !(vwProcesso.podeApensarDocumento and (vwProcesso.statusFluxo.ideStatusFluxo eq 6))}" 
+								oncomplete="dlgApensarDocumento.show()" update=":panelDialog4 formUploadDocumento:tableUpload" process="@this">
+								<f:attribute  name="vwProcesso" value="#{vwProcesso}"  />
+								<h:graphicImage title="Apensar Documento" value="/resources/img/ico-upload.gif" />
+							</p:commandLink>
+							<!-- REABERTURA DE PROCESSO -->
+							<p:commandLink actionListener="#{reaberturaProcessoController.limparTela()}" 
+								disabled="#{!vwProcesso.podeReabrirProcesso}" 
+								oncomplete="dialogReaberturaProcesso.show();"
+								update=":_dialogReaberturaProcesso">
+															
+								<h:graphicImage title="Reabrir Processo" value="/resources/img/voltar.png" />
+								<f:setPropertyActionListener value="#{vwProcesso}" target="#{reaberturaProcessoController.vwProcesso}" />
+							</p:commandLink>
+							<p:commandLink 
+								oncomplete="dialogAtualizarPassivo.show();" 
+								action="#{atualizarPassivoController.carregarProcessoAto()}" 
+								update=":_dialogAtualizarPassivo" disabled="#{!security.temAcesso('5.20.63') or !vwProcesso.podeAtualizarPassivo}">
+								
+								<h:graphicImage title="Atualizar Passivo" value="/resources/img/ico-shuffle.png" />
+								<f:setPropertyActionListener value="#{vwProcesso}" target="#{atualizarPassivoController.vwProcesso}" />
+							</p:commandLink>
+							<h:commandLink rendered="#{vwProcesso.renderedLacErb}">
+								<h:graphicImage title="Relatório Lac de ERB" value="/resources/img/licon.png" />
+								<p:fileDownload value="#{processoController.imprimirRelatorioLacErb(vwProcesso.ideRequerimento)}" />
+							</h:commandLink>
+							<h:commandLink rendered="#{vwProcesso.renderedLacPosto}">
+								<h:graphicImage title="Relatório Lac de Posto" value="/resources/img/licon.png" />
+								<p:fileDownload value="#{processoController.imprimirRelatorioLacPosto(vwProcesso.ideRequerimento)}" />
+							</h:commandLink>
+							<h:commandLink rendered="#{vwProcesso.renderedLacTransportadora}">
+								<h:graphicImage title="Relatório Lac de Transportadora" value="/resources/img/licon.png" />
+								<p:fileDownload value="#{processoController.imprimirRelatorioLacTransportadora(vwProcesso.ideRequerimento)}" />
+							</h:commandLink>
+							<h:commandLink rendered="#{vwProcesso.renderedLacErb}">
+								<h:graphicImage title="Gerar Certificado Lac de ERB" value="/resources/img/cicon.png" />
+								<p:fileDownload value="#{processoController.imprimirCertificadoLacErb(vwProcesso.ideRequerimento)}" />
+							</h:commandLink>
+							<h:commandLink rendered="#{vwProcesso.renderedLacPosto}">
+								<h:graphicImage title="Gerar Certificado Lac de Posto" value="/resources/img/cicon.png" />
+								<p:fileDownload value="#{processoController.imprimirCertificadoLacPosto(vwProcesso.ideRequerimento)}" />
+							</h:commandLink>
+							<h:commandLink rendered="#{vwProcesso.renderedLacTransportadora}">
+								<h:graphicImage title="Gerar Certificado Lac de Transportadora" value="/resources/img/cicon.png" />
+								<p:fileDownload value="#{processoController.imprimirCertificadoLacTransportadora(vwProcesso.ideRequerimento)}" />
+							</h:commandLink>
+							<h:commandLink rendered="#{vwProcesso.renderedRlac}">
+								<h:graphicImage title="Gerar Certificado RLAC" value="/resources/img/cicon.png" />
+								<p:fileDownload value="#{processoController.imprimirCertificadoRLAC(vwProcesso.ideRequerimento)}" />
+							</h:commandLink>
+							<h:commandLink rendered="#{vwProcesso.renderedRcfp}">
+								<h:graphicImage title="Gerar Certificado de Registro de Corte de Floresta" value="/resources/img/ico-tesoura.png" />
+								<p:fileDownload value="#{processoController.imprimirRelatorioCorteFloresta(vwProcesso.ideRequerimento)}" />
+							</h:commandLink>
+							<h:commandLink rendered="#{vwProcesso.renderedRfp}">
+								<h:graphicImage title="Gerar Certificado de Registro de Floresta de Produção Plantada" value="/resources/img/ico-pdf.png" />
+								<p:fileDownload value="#{processoController.imprimirRegistroCorteFlorestaProducaoPlantada(vwProcesso.ideRequerimento)}" />
+							</h:commandLink>
+							<h:commandLink rendered="#{vwProcesso.renderedDqc}">
+								<h:graphicImage title="Gerar Certificado DQC" value="/resources/img/ico-pdf.png" />
+								<p:fileDownload value="#{processoController.imprimirDQC(vwProcesso.ideRequerimento)}" />
+							</h:commandLink>
+							<h:commandLink rendered="#{vwProcesso.renderedAPE and security.temAcesso('4.68.14')}">
+								<h:graphicImage title="Gerar Certificado de APE" value="/resources/img/ico-pdf.png" />
+								<p:fileDownload value="#{processoController.imprimirCertificadoAPE(vwProcesso.ideRequerimento)}" />
+							</h:commandLink>
+							
+							<h:commandLink rendered="#{processoController.isExisteDiap(vwProcesso.ideRequerimento) and security.temAcesso('4.68.14')}" ajax="false" >
+								<h:graphicImage title="Gerar Certificado de DIAP" value="/resources/img/ico-pdf.png" />
+								<p:fileDownload value="#{processoController.getImprimirCertificadoDIAP(vwProcesso.ideRequerimento)}" />
+							</h:commandLink>
+							
+						</h:panelGroup>
+					</p:column>
+				</p:dataTable>
+			</h:panelGrid>
+		</h:form>
+		
+		<p:dialog header="Selecionar Requerente" widgetVar="requerente" modal="true" style="text-align:center;" resizable="false"  position="center">  
+			<ui:include src="/paginas/manter-processo/processo_requerente.xhtml" />
+        </p:dialog>
+        
+		<!-- DIALOG REABERTURA PROCESSO -->
+		<p:dialog id="_dialogReaberturaProcesso" header="Reabertura de Processo" closable="true" draggable="true" width="600" height="450"
+			widgetVar="dialogReaberturaProcesso" modal="true" resizable="false" style="position: absolute;">
+			
+			<ui:include src="/paginas/manter-processo/reaberturaProcesso.xhtml" />
+		</p:dialog>
+		
+		<!-- CONFIRM DIALOG REABERTURA PROCESSO -->
+		<p:confirmDialog id="_confirmacaoReaberturaProcesso" widgetVar="confirmacaoReaberturaProcesso" closable="false" 
+			message="Deseja realmente reabrir o processo?" header="#{bundle.geral_lbl_mensagem}">
+				
+			<h:form id="formConfirmacaoReaberturaProcesso">
+				<h:panelGroup>
+					<div style="text-align: center;"> 
+						<p:commandButton value="#{bundle.btn_sim}" actionListener="#{reaberturaProcessoController.salvar()}" 
+							onclick="confirmacaoReaberturaProcesso.hide();" process="@this" update="formConsultarProcesso"/>
+							
+						<p:commandButton value="#{bundle.btn_nao}" onclick="confirmacaoReaberturaProcesso.hide();" />
+					</div>
+				</h:panelGroup>
+			</h:form>
+		</p:confirmDialog>
+		
+		<!-- DIALOG ATUALIZAR PASSIVO -->
+		<p:dialog id="_dialogAtualizarPassivo" header="Atualizar Passivo" closable="true" draggable="true" width="610"  position="center" widgetVar="dialogAtualizarPassivo" modal="true" resizable="false" >
+			<ui:include src="/paginas/manter-processo/atualizarPassivo.xhtml" />
+		</p:dialog>
+		
+		<!-- CONFIRM DIALOG ATUALIZAR PASSIVO -->
+		<p:confirmDialog id="_confirmacaoAtualizarPassivo" widgetVar="confirmacaoAtualizarPassivo" closable="false" 
+			message="Deseja realmente atualizar o passivo?" header="#{bundle.geral_lbl_mensagem}">
+				
+			<h:form id="formConfirmacaoAtualizarPassivo">
+				<h:panelGroup>
+					<div style="text-align: center;"> 
+						<p:commandButton value="#{bundle.btn_sim}" process="@this"
+						actionListener="#{atualizarPassivoController.salvar()}" update="formConsultarProcesso" />
+							
+						<p:commandButton value="#{bundle.btn_nao}" onclick="confirmacaoAtualizarPassivo.hide();" />
+					</div>
+				</h:panelGroup>
+			</h:form>
+		</p:confirmDialog>
+		
+	</ui:define>
+</ui:composition>

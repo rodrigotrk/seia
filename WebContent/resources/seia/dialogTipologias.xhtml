@@ -1,0 +1,60 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html 
+   xmlns="http://www.w3.org/1999/xhtml" 
+   xmlns:ui="http://java.sun.com/jsf/facelets"  
+   xmlns:h="http://java.sun.com/jsf/html" 
+   xmlns:cc="http://java.sun.com/jsf/composite"
+   xmlns:c="http://java.sun.com/jsp/jstl/core"
+   xmlns:s="http://java.sun.com/jsf/composite/seia">
+     
+    <cc:interface>
+    
+    
+    </cc:interface>
+     
+	<cc:implementation>
+		<ui:repeat var="substanciaMineralDTO" value="#{fceAutorizacaoMineracaoController.listaSubstanciaMineralDTO}">
+				<h:panelGrid id="gridAutMinSubstanciaMineral">
+					
+					<p:commandLink 
+						id="pnlCheckIncluirSubstanciaMineralUnchecked"
+						actionListener="#{substanciaMineralDTO.marcar()}"
+						update="gridAutMinSubstanciaMineral"
+						rendered="#{!substanciaMineralDTO.checked}"
+						disabled="#{fceLicenciamentoMineracaoController.desabilitarTudo}">
+						<h:graphicImage value="/resources/img/ico-adicionar.png" />
+						<h:outputText value="#{substanciaMineralDTO.tipologia.desTipologia}" style="margin-left:10px;"/>
+					</p:commandLink>
+				
+					<p:commandLink id="pnlCheckIncluirSubstanciaMineralChecked"
+						actionListener="#{substanciaMineralDTO.desmarcar()}"
+						update="gridAutMinSubstanciaMineral"
+						rendered="#{substanciaMineralDTO.checked}"
+						disabled="#{fceLicenciamentoMineracaoController.desabilitarTudo}">
+						<h:graphicImage value="/resources/img/ico-retrair.png"/>
+						<h:outputText value="#{substanciaMineralDTO.tipologia.desTipologia}" style="margin-left:10px;"/>
+					</p:commandLink>
+					
+					<h:panelGroup style="overflow-y:auto; overflow:auto; max-height:85px; max-width:200px; margin-top:10px !important;" layout="block">
+						<p:selectManyCheckbox 
+							value="#{substanciaMineralDTO.substanciasMineraisSelected}"
+							layout="pageDirection"
+							converter="simpleEntityConverter"
+							rendered="#{substanciaMineralDTO.checked}"
+							disabled="#{fceLicenciamentoMineracaoController.desabilitarTudo}">
+							<f:selectItems value="#{substanciaMineralDTO.substanciasMinerais}" var="substanciaMineral" itemLabel="#{substanciaMineral.nomSubstanciaMineral}" itemValue="#{substanciaMineral}" />
+							<p:ajax event="change"  process="@this" listener="#{fceAutorizacaoMineracaoController.exibirAlertaOutrosSubstanciaMineral(substanciaMineral)}"/>
+						</p:selectManyCheckbox>			
+					</h:panelGroup>
+					
+				</h:panelGrid>
+	
+			</ui:repeat>
+		
+			<s:divConteudoCentralizado>
+				<p:commandButton value="Inserir" actionListener="#{fceAutorizacaoMineracaoController.inserirSubstanciaMineralDTO()}" update=":tabAutMineracao:minAutDadosGerais:dataTableMinAutSubstancia" onclick="incluirSubstanciaMineral.hide()" />
+			</s:divConteudoCentralizado>
+				
+	</cc:implementation>
+ 
+ </html>

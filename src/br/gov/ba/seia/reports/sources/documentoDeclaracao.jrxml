@@ -1,0 +1,477 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="documento_declaracao" pageWidth="595" pageHeight="842" whenNoDataType="NoDataSection" columnWidth="495" leftMargin="50" rightMargin="50" topMargin="50" bottomMargin="50" uuid="4d26b65b-a174-4db8-bf8f-6a407caede6e">
+	<property name="ireport.zoom" value="1.3310000000000015"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="576"/>
+	<style name="table">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<subDataset name="Vertices Localização Geográfica" uuid="547d77be-46fd-4c59-a73f-61f7bad8e18e">
+		<parameter name="ide_localizacao_geografica" class="java.lang.Integer"/>
+		<queryString>
+			<![CDATA[select v.des_vertice,
+	v.num_coordenada_geometrica
+from vertice v
+WHERE v.ide_localizacao_geografica = $P{ide_localizacao_geografica}]]>
+		</queryString>
+		<field name="des_vertice" class="java.lang.String"/>
+		<field name="num_coordenada_geometrica" class="java.lang.String"/>
+	</subDataset>
+	<parameter name="LOGO_INEMA" class="java.lang.String"/>
+	<parameter name="LOGO_SEIA" class="java.lang.String"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="ide_requerimento" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[0]]></defaultValueExpression>
+	</parameter>
+	<parameter name="MARCA_DAGUA" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[select distinct
+
+	coalesce(pj.ide_pessoa_juridica, pf.ide_pessoa_fisica) as ide_pessoa_,
+	prc.num_processo,
+	initcap(coalesce(pj.nom_razao_social, pf.nom_pessoa)) as nome,
+	COALESCE(
+	'CNPJ - ' || SUBSTR(PJ.NUM_CNPJ, 1, 2) || '.' || SUBSTR(PJ.NUM_CNPJ, 3, 3) || '.' ||
+	SUBSTR(PJ.NUM_CNPJ, 6, 3) || '/' || SUBSTR(PJ.NUM_CNPJ, 9, 4) || '-' ||
+	SUBSTR(PJ.NUM_CNPJ, 13),
+	'CPF - ' || SUBSTR(PF.NUM_CPF, 1, 3) || '.' || SUBSTR(PF.NUM_CPF, 4, 3) || '.' ||
+	SUBSTR(PF.NUM_CPF, 7, 3) || '-' || SUBSTR(PF.NUM_CPF, 10)) AS NUM_DOCUMENTO,ct.num_certificado,
+	tl.nom_tipo_logradouro || ' ' || l.nom_logradouro || coalesce(e.des_complemento, '', (' ' || e.des_complemento)) || ', ' || br.nom_bairro || '. CEP: ' || overlay(coalesce(l.num_cep, mp.num_cep)::character varying placing '-' from 6 for 0) || ' - ' || mp.nom_municipio || '/' || et.des_sigla as endereco,
+	aa.ide_ato_ambiental,
+	aa.nom_ato_ambiental,
+	aa.sgl_ato_ambiental,
+	aa.ind_declaratorio,
+	rq.ide_requerimento,
+	rq.nom_contato,
+	rq.num_telefone,
+	rq.des_email,
+	rq.num_requerimento,
+	lg.ide_localizacao_geografica,
+	lg.des_localizacao_geografica,
+	csg.nom_classificacao_secao,
+	sc.nom_sistema_coordenada,
+	csg.ide_classificacao_secao,
+	coalesce((SELECT array_to_string(array(select ola.nom_objetivo_limpeza_area from objetivo_limpeza_area ola inner join objetivo_requerimento_limpeza_area orla on orla.ide_objetivo_limpeza_area = ola.ide_objetivo_limpeza_area where orla.ide_requerimento = rq.ide_requerimento),', ')),'Não Informado') nom_objetivo_limpeza_area,
+	coalesce(rqu.dsc_outrosobjt_limp_area,'Não Informado') dsc_outrosobjt_limp_area,
+	coalesce(to_char(rqu.dtc_inicio_limp_area,'dd/MM/yyyy'),'__/__/____') dtc_inicio_limp_area,
+	coalesce(to_char(rqu.dtc_final_limp_area,'dd/MM/yyyy'),'__/__/____') dtc_final_limp_area,
+	overlay(overlay(overlay(num_token placing '-' from 25 for 0) placing '-' from 17 for 0) placing '-' from 9 for 0) as num_token,emp.ide_empreendimento,ct.dtc_emissao_certificado
+	,(select sum(vlr_area) from requerimento_imovel where ide_requerimento = 4616 and ide_tipo_imovel_requerimento = 1) as valor_total
+from  requerimento rq
+	LEFT JOIN processo prc ON prc.ide_requerimento = rq.ide_requerimento
+	left join requerimento_unico rqu on rqu.ide_requerimento_unico = rq.ide_requerimento
+	inner join certificado ct on ct.ide_requerimento = rq.ide_requerimento
+	inner join empreendimento_requerimento er on er.ide_requerimento = rq.ide_requerimento
+	inner join empreendimento emp on emp.ide_empreendimento = er.ide_empreendimento
+	left join imovel_empreendimento ie on emp.ide_empreendimento = ie.ide_empreendimento
+	left join imovel_rural ir on ir.ide_imovel_rural = ie.ide_imovel
+	left join requerimento_imovel ri on ri.ide_requerimento = rq.ide_requerimento and ide_tipo_imovel_requerimento = 1
+	and ri.ide_imovel = ie.ide_imovel
+	left join enquadramento eq on eq.ide_requerimento_unico = rqu.ide_requerimento_unico
+	left join enquadramento eq_req on eq_req.ide_requerimento = rq.ide_requerimento
+	left join enquadramento_ato_ambiental eaa on eaa.ide_enquadramento = eq.ide_enquadramento or eaa.ide_enquadramento = eq_req.ide_enquadramento
+	inner join ato_ambiental aa on aa.ide_ato_ambiental = eaa.ide_ato_ambiental
+	inner join requerimento_pessoa rp on rp.ide_requerimento = rq.ide_requerimento
+	inner join pessoa p on p.ide_pessoa = rp.ide_pessoa
+	LEFT JOIN localizacao_geografica lg on lg.ide_localizacao_geografica = emp.ide_localizacao_geografica
+	LEFT JOIN dado_geografico dg on lg.ide_localizacao_geografica = dg.ide_localizacao_geografica
+	LEFT JOIN classificacao_secao_geometrica csg on csg.ide_classificacao_secao = lg.ide_classificacao_secao
+	LEFT JOIN sistema_coordenada sc on sc.ide_sistema_coordenada = lg.ide_sistema_coordenada
+	left join pessoa_juridica pj on pj.ide_pessoa_juridica = p.ide_pessoa
+	left join pessoa_fisica pf on pf.ide_pessoa_fisica = p.ide_pessoa
+	left join endereco_empreendimento eem on eem.ide_empreendimento = emp.ide_empreendimento and eem.ide_tipo_endereco = 4
+	left join endereco e on e.ide_endereco = eem.ide_endereco
+	left join logradouro l on l.ide_logradouro = e.ide_logradouro
+	left join tipo_logradouro tl on tl.ide_tipo_logradouro = l.ide_tipo_logradouro
+	left join bairro br on br.ide_bairro = l.ide_bairro
+	left join municipio mp on mp.ide_municipio = l.ide_municipio
+	left join estado et on et.ide_estado = mp.ide_estado
+	left join pais ps on ps.ide_pais = et.ide_pais
+where e.ind_excluido = false
+	and rq.ide_requerimento = $P{ide_requerimento}
+	and rp.ide_tipo_pessoa_requerimento = 1
+	and aa.ide_ato_ambiental not in (18,19,39,45,118,122,127)
+	and ct.ide_ato_ambiental = aa.ide_ato_ambiental
+	and aa.ind_declaratorio = true
+order by aa.ide_ato_ambiental]]>
+	</queryString>
+	<field name="ide_pessoa_" class="java.lang.Integer"/>
+	<field name="num_processo" class="java.lang.String">
+		<fieldDescription><![CDATA[Número do processo de licenciamento da área produtiva]]></fieldDescription>
+	</field>
+	<field name="nome" class="java.lang.String"/>
+	<field name="num_documento" class="java.lang.String"/>
+	<field name="num_certificado" class="java.lang.String"/>
+	<field name="endereco" class="java.lang.String"/>
+	<field name="ide_ato_ambiental" class="java.lang.Integer"/>
+	<field name="nom_ato_ambiental" class="java.lang.String"/>
+	<field name="sgl_ato_ambiental" class="java.lang.String"/>
+	<field name="ind_declaratorio" class="java.lang.Boolean"/>
+	<field name="ide_requerimento" class="java.lang.Integer"/>
+	<field name="nom_contato" class="java.lang.String"/>
+	<field name="num_telefone" class="java.lang.String">
+		<fieldDescription><![CDATA[Telefone da associação INCRA]]></fieldDescription>
+	</field>
+	<field name="des_email" class="java.lang.String">
+		<fieldDescription><![CDATA[Email da associação INCRA]]></fieldDescription>
+	</field>
+	<field name="num_requerimento" class="java.lang.String"/>
+	<field name="ide_localizacao_geografica" class="java.lang.Integer">
+		<fieldDescription><![CDATA[Identificar da localização geográfica da Área de Preservação Permanente]]></fieldDescription>
+	</field>
+	<field name="des_localizacao_geografica" class="java.lang.String"/>
+	<field name="nom_classificacao_secao" class="java.lang.String"/>
+	<field name="nom_sistema_coordenada" class="java.lang.String"/>
+	<field name="ide_classificacao_secao" class="java.lang.Integer"/>
+	<field name="nom_objetivo_limpeza_area" class="java.lang.String"/>
+	<field name="dsc_outrosobjt_limp_area" class="java.lang.String"/>
+	<field name="dtc_inicio_limp_area" class="java.lang.String"/>
+	<field name="dtc_final_limp_area" class="java.lang.String"/>
+	<field name="num_token" class="java.lang.String"/>
+	<field name="ide_empreendimento" class="java.lang.Integer"/>
+	<field name="dtc_emissao_certificado" class="java.sql.Timestamp"/>
+	<field name="valor_total" class="java.math.BigDecimal"/>
+	<group name="imovel" isStartNewPage="true" isReprintHeaderOnEachPage="true">
+		<groupExpression><![CDATA[]]></groupExpression>
+		<groupHeader>
+			<band/>
+		</groupHeader>
+		<groupFooter>
+			<band/>
+		</groupFooter>
+	</group>
+	<group name="atoAmbiental" isStartNewPage="true" isReprintHeaderOnEachPage="true">
+		<groupExpression><![CDATA[$F{ide_ato_ambiental}]]></groupExpression>
+		<groupHeader>
+			<band height="86">
+				<textField isBlankWhenNull="true">
+					<reportElement uuid="ca727261-1dd1-450c-8a02-a18d559a1bc3" x="0" y="18" width="495" height="13"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{nom_ato_ambiental}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement uuid="5dc370f5-31ed-4381-a723-87780cec2096" x="0" y="1" width="495" height="17"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="SansSerif" size="10" isBold="true"/>
+						<paragraph leftIndent="2" rightIndent="2" spacingBefore="2" spacingAfter="2"/>
+					</textElement>
+					<text><![CDATA[DOCUMENTO DE DECLARAÇÃO]]></text>
+				</staticText>
+				<line>
+					<reportElement uuid="93c331cb-f41c-409e-9f91-ac100822e106" x="0" y="0" width="495" height="1"/>
+				</line>
+				<line>
+					<reportElement uuid="708c4f3b-ddb8-4bf7-aa20-7fe554542248" x="0" y="49" width="495" height="1"/>
+				</line>
+				<textField isBlankWhenNull="true">
+					<reportElement uuid="ca727261-1dd1-450c-8a02-a18d559a1bc3" x="0" y="31" width="495" height="17"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font isBold="true"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{num_certificado}]]></textFieldExpression>
+				</textField>
+				<image isLazy="true" onErrorType="Blank">
+					<reportElement uuid="19a93141-7836-4273-a80c-496aea1992a7" x="396" y="1" width="99" height="41" forecolor="#FFFFFF"/>
+					<box>
+						<topPen lineWidth="1.0"/>
+						<leftPen lineWidth="1.0"/>
+						<bottomPen lineWidth="1.0"/>
+						<rightPen lineWidth="1.0"/>
+					</box>
+					<graphicElement>
+						<pen lineWidth="0.0"/>
+					</graphicElement>
+					<imageExpression><![CDATA[$P{LOGO_INEMA}]]></imageExpression>
+				</image>
+				<image isLazy="true" onErrorType="Blank">
+					<reportElement uuid="ee4dbec8-ce13-43eb-8896-5fd840c0f779" x="0" y="1" width="99" height="41" forecolor="#FFFFFF"/>
+					<box>
+						<topPen lineWidth="1.0"/>
+						<leftPen lineWidth="1.0"/>
+						<bottomPen lineWidth="1.0"/>
+						<rightPen lineWidth="1.0"/>
+					</box>
+					<graphicElement>
+						<pen lineWidth="1.0" lineStyle="Solid" lineColor="#FFFFFF"/>
+					</graphicElement>
+					<imageExpression><![CDATA[$P{LOGO_SEIA}]]></imageExpression>
+				</image>
+				<textField>
+					<reportElement uuid="2fa4da0c-5c8c-4921-87ec-364cc74b21f6" x="2" y="62" width="241" height="20"/>
+					<textElement/>
+					<textFieldExpression><![CDATA["Requerimento: "+ $F{num_requerimento}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement uuid="81cefab0-8d62-4e5c-8ce4-08fa5f1a6d6f" x="243" y="62" width="250" height="20"/>
+					<textElement/>
+					<textFieldExpression><![CDATA["Processo: " +$F{num_processo}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band/>
+		</groupFooter>
+	</group>
+	<background>
+		<band height="50" splitType="Stretch">
+			<image scaleImage="RealHeight" onErrorType="Blank">
+				<reportElement uuid="0c5820f5-3397-4ba5-a5f2-0d72295c5827" positionType="Float" x="0" y="0" width="493" height="50" isRemoveLineWhenBlank="true" isPrintWhenDetailOverflows="true">
+					<printWhenExpression><![CDATA[$P{MARCA_DAGUA} != null && !$P{MARCA_DAGUA}.isEmpty()]]></printWhenExpression>
+				</reportElement>
+				<imageExpression><![CDATA[$P{MARCA_DAGUA}]]></imageExpression>
+			</image>
+		</band>
+	</background>
+	<detail>
+		<band height="26" splitType="Stretch">
+			<textField isStretchWithOverflow="true">
+				<reportElement uuid="0e70b801-7468-4fc6-8333-5ca636e596c8" positionType="Float" isPrintRepeatedValues="false" x="2" y="1" width="493" height="25"/>
+				<textElement textAlignment="Justified" markup="none"/>
+				<textFieldExpression><![CDATA["O Instituto do Meio Ambiente e de Recursos Hídricos – INEMA, conforme competência atribuída pela Lei Estadual 12.212/11 "+
+"e Lei Estadual 10.431/06 alterada pela Lei Estadual 12.377/11, regulamentada pelo Decreto Estadual nº 14.024/12 alterado pelo Decreto Estadual 14.032/12, e de acordo com a Resolução CEPRAM nº 4.260/12, certifica que:"]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="50">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="df08d0f9-5b9a-48ae-bee2-06f8b96edc8d" positionType="Float" stretchType="RelativeToTallestObject" isPrintRepeatedValues="false" x="0" y="0" width="495" height="44" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[new Boolean($F{ide_ato_ambiental}.intValue() != 40 && $F{ide_ato_ambiental}.intValue() != 15)]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Justified"/>
+				<textFieldExpression><![CDATA[$F{nome} + ", " + $F{num_documento} + " declarou ao Instituto do Meio Ambiente - INEMA que realizará a atividade " + $F{nom_ato_ambiental} + " no(s) imóvel(is) rural(is) abaixo relacionados com respectiva coordenada de referência e endereço."]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="64">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="45534eca-37b7-4f8d-8e28-44094cca9cf1" positionType="Float" stretchType="RelativeToTallestObject" isPrintRepeatedValues="false" x="1" y="0" width="495" height="64" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$F{ide_ato_ambiental}.equals(40)]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Justified"/>
+				<textFieldExpression><![CDATA[$F{nome} + " , "+ $F{num_documento}
++" declarou ao Instituto de Meio Ambiente - INEMA que realizará atividade de " +  $F{nom_ato_ambiental}.replace( "Declaração de", "" )+ " com o objetivo de "+$F{nom_objetivo_limpeza_area}+" nos imóveis rurais abaixo relacionado(s) com respectiva coordenada de referência e endereço, em uma área total de "+$F{valor_total}+" ha"]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="44">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="fceed433-bb70-475e-91e0-06aedc5f9eda" positionType="Float" stretchType="RelativeToTallestObject" isPrintRepeatedValues="false" x="0" y="0" width="495" height="44" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$F{ide_ato_ambiental}.equals(15)]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Justified"/>
+				<textFieldExpression><![CDATA[$F{nome} + " , "+ $F{num_documento}+" declarou ao Instituto de Meio Ambiente – INEMA que realizará a atividade de Queimada Controlada no prazo máximo de 45 dias contados da data de emissão deste comprovante."]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="16">
+			<printWhenExpression><![CDATA[$F{ide_ato_ambiental}.intValue() == 15]]></printWhenExpression>
+			<subreport>
+				<reportElement uuid="3ea366f4-8796-4566-a021-01f805cb8ffa" x="1" y="0" width="495" height="15"/>
+				<subreportParameter name="ide_requerimento">
+					<subreportParameterExpression><![CDATA[$P{ide_requerimento}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "documentoDeclaracao_dados_imovel_dqc.jasper"]]></subreportExpression>
+			</subreport>
+			<staticText>
+				<reportElement uuid="c71708b7-f640-4d9d-af08-365751efc819" x="393" y="0" width="100" height="16">
+					<printWhenExpression><![CDATA[false]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Imóvel DQC]]></text>
+			</staticText>
+		</band>
+		<band height="30">
+			<printWhenExpression><![CDATA[$F{ide_ato_ambiental}.intValue() != 15]]></printWhenExpression>
+			<staticText>
+				<reportElement uuid="b6724316-9de4-48ea-b153-3e068f5aeecb" positionType="Float" mode="Transparent" x="1" y="0" width="495" height="15" backcolor="#DDDDDD"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Verdana" isBold="true"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<text><![CDATA[Imóveis]]></text>
+			</staticText>
+			<subreport>
+				<reportElement uuid="f67c7729-bbcf-47c6-924e-178e928ac266" x="0" y="15" width="495" height="15"/>
+				<subreportParameter name="SUBREPORT_DIR">
+					<subreportParameterExpression><![CDATA[$P{SUBREPORT_DIR}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="ide_empreendimento">
+					<subreportParameterExpression><![CDATA[$F{ide_empreendimento}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="ide_requerimento">
+					<subreportParameterExpression><![CDATA[$F{ide_requerimento}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "resumo_requerimento_imovel.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+		<band/>
+		<band height="25">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="8b6ba06c-fc2a-4dfc-8992-841f4bf62d4f" x="2" y="10" width="494" height="15" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$F{ide_ato_ambiental}.equals(15)]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Justified" markup="html"/>
+				<textFieldExpression><![CDATA["A atividade declarada será realizada mediante o cumprimento dos compromissos abaixo elencados:"]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="50">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="991bb555-454d-46cf-87b9-6f5d76af60d4" x="2" y="0" width="494" height="50" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$F{ide_ato_ambiental}.equals(15)]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Justified" markup="html">
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA["<ul>" +
+"<li>Adotar medidas de proteção à fauna e de conservação dos exemplares das espécies da fauna e da flora nativas, especialmente as raras, endêmicas ou ameaçadas de extinção.</li>" +
+"<li>Realizar a queimada com distância mínima adequada à segurança de residências ou equipamentos urbanos, estradas, rodovias, rede de transmissão, distribuição e subestação de energia elétrica, aeródromo e aeroportos.</li>" +
+"<li>Enviar comunicado, por escrito, aos confrontantes da área onde se dará a queimada controlada, informando sobre o local, dia e hora do início da atividade, com prazo mínimo de 03 (três) dias de antecedência.</li>" +
+"<li>Construir aceiros de proteção, nos limites da área a ser queimada e ao longo das faixas de servidão de linhas de transmissão elétrica, com, no mínimo, 04 (quatro) metros de largura, consideradas as condições topográficas, climáticas e o material combustível.</li>" +
+"<li>Não realizar a queimada em dias de muito vento ou de temperatura elevada ou ainda em períodos de baixa umidade do ar.</li>" +
+"<li>Adotar medidas de proteção para as áreas sob proteção legal, em especial as áreas de preservação permanente de Reserva Legal.</li>" +
+"<li>Adotar medidas para promover a conservação e recuperação do solo por meio de práticas de manejo agropastoril, e uso de técnicas edáficas e mecânicas, com o objetivo de conservar e/ou recuperar as condições físicas, químicas e biológicas do solo e manter a sua capacidade produtiva.</li>"+
+"<li>Planejar cuidadosamente a operação de queimada controlada e incluir equipamentos adequados, mão-de-obra treinada e medidas de segurança necessárias para garantir a integridade das pessoas e das áreas circunvizinhas</li>" +
+"<li>O responsável está ciente de que a falsidade de quaisquer dados informados ao INEMA constitui prática de crime e resultará na aplicação das sanções penais cabíveis, nos termos dispostos no Código Penal (Decreto-Lei nº 2.848/40), na Lei de Crimes Ambientais (Lei nº 9.605/98) e nas suas normas regulamentadoras. Fica também ciente de que a inobservância de quaisquer das normas, ora acordadas, ensejará a aplicação das penalidades previstas na Lei.</li>"+
+"</ul>"]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="13">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="0e70b801-7468-4fc6-8333-5ca636e596c8" positionType="Float" isPrintRepeatedValues="false" x="2" y="0" width="493" height="13" isRemoveLineWhenBlank="true"/>
+				<textElement textAlignment="Justified" markup="none">
+					<font fontName="SansSerif"/>
+				</textElement>
+				<textFieldExpression><![CDATA["\nAs informações contidas neste documento são de inteira responsabilidade do declarante.\n"+
+"\nEste Comprovante refere-se exclusivamente à situação da regulação ambiental no âmbito da atividade descrita, não abrangendo outros empreendimentos ou atividades do mesmo requerente.\n"+
+"\nA autenticidade deste comprovante pode ser atestada na internet, no endereço: http://www.seia.ba.gov.br em Serviços On-line/Atestar Certificado,  utilizando a chave de segurança deste comprovante."]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="48">
+			<textField isStretchWithOverflow="true">
+				<reportElement uuid="0e70b801-7468-4fc6-8333-5ca636e596c8" positionType="Float" isPrintRepeatedValues="false" x="0" y="12" width="495" height="25"/>
+				<textElement textAlignment="Justified" markup="none"/>
+				<textFieldExpression><![CDATA["\nComprovante emitido às "+new SimpleDateFormat("HH:mm:ss").format($F{dtc_emissao_certificado})+" do dia "+new SimpleDateFormat("dd/MM/yyyy").format($F{dtc_emissao_certificado})+" <hora e data de Brasília>, válido por "+
+(!$F{ide_ato_ambiental}.equals(15) ? "dois anos" : "quarenta e cinco dias")
++" contados da data da emissão."]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="0e70b801-7468-4fc6-8333-5ca636e596c8" positionType="Float" isPrintRepeatedValues="false" x="0" y="0" width="495" height="12" isRemoveLineWhenBlank="true"/>
+				<textElement textAlignment="Center" markup="none">
+					<font fontName="SansSerif" size="9" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["\n"+$F{num_token}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="24" splitType="Stretch">
+			<textField pattern="EEEEE dd MMMMM yyyy">
+				<reportElement uuid="09aa0c8c-8236-408c-b878-8c2f77339633" positionType="Float" x="2" y="0" width="79" height="19"/>
+				<textElement verticalAlignment="Top">
+					<font fontName="Arial" size="6"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Impresso em: "+new SimpleDateFormat("dd/MM/yyyy").format(new java.util.Date())]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="199af036-0438-4705-8f8d-9fda771a58a1" positionType="Float" x="468" y="0" width="14" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Top">
+					<font fontName="Arial" size="6"/>
+				</textElement>
+				<text><![CDATA[de]]></text>
+			</staticText>
+			<textField evaluationTime="Report">
+				<reportElement uuid="289b569a-eb79-4a74-95fd-c4af99775ca2" x="125" y="9" width="263" height="12"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Chave de Segurança: "+$F{num_token}]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement uuid="64f04528-a5e8-4c0a-8667-ee63ba59333a" positionType="Float" x="482" y="0" width="13" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Top">
+					<font fontName="Arial" size="6"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="de5894e4-8761-4994-9f40-2b9192410784" positionType="Float" x="452" y="0" width="16" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Top">
+					<font fontName="Arial" size="6"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="4b2bc0a1-cadb-43b4-b524-421bc8589db1" positionType="Float" x="423" y="0" width="29" height="19"/>
+				<textElement textAlignment="Center" verticalAlignment="Top">
+					<font fontName="Arial" size="6"/>
+				</textElement>
+				<text><![CDATA[Pág.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="51197f20-d21d-44a5-8544-552b6758f65b" x="81" y="0" width="342" height="9"/>
+				<textElement textAlignment="Center" verticalAlignment="Top">
+					<font fontName="Arial" size="6"/>
+				</textElement>
+				<text><![CDATA[INEMA/CAB: Avenida Luís Viana Filho, 6ª Avenida, nº 600 - CAB - CEP 41.745-900 - Salvador - Bahia - Brasil.]]></text>
+			</staticText>
+		</band>
+	</pageFooter>
+	<noData>
+		<band height="14">
+			<staticText>
+				<reportElement uuid="de8e5f96-f54b-4f0e-af56-0b7395ec7d92" x="0" y="0" width="495" height="14"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Não foram encontrados dados suficientes para preencher esse relatório.]]></text>
+			</staticText>
+		</band>
+	</noData>
+</jasperReport>

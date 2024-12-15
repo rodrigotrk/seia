@@ -1,0 +1,117 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.prime.com.tr/ui" xmlns:c="http://java.sun.com/jsp/jstl/core">
+
+	<h:form id="formCnaetipologia">
+
+		<h:panelGrid columns="1">
+			<h:panelGroup>
+				<h:outputText value="#{bundle.representantelegalLabelIncluirCnae}" />
+				<p:commandLink oncomplete="dialogCnae.show()" actionListener="#{tipologiaPaiController.limparObjetos()}" update="dialogCnae">
+					<h:graphicImage title="Incluir Cnae" value="/resources/img/ico-expandir.png" />
+					<f:ajax execute="@this" />
+				</p:commandLink>
+			</h:panelGroup>
+		</h:panelGrid>
+	
+		<h:panelGrid id="pnlTabelaCne">
+				<p:dataTable id="tableCnae" widgetVar="tableCnae" 
+				             value="#{tipologiaPaiController.tipologia.cnaeCollection}" 
+				             var="cnae" 
+				             rowIndexVar="index" 
+				             paginator="true" rows="10" 
+							 paginatorAlwaysVisible="false" 
+							 paginatorPosition="bottom"
+				             emptyMessage="#{bundle.cnaeLabelTabRegitrosNaoEncontrados}" >
+				             
+					<f:facet name="header">
+						<h:outputText value="#{bundle.cnaeLabelTabHeader}" />
+					</f:facet>
+					<p:column headerText="#{bundle.cnaeLabelTabCodigo}">
+						<h:outputText value="#{cnae.codCnae}" />
+					</p:column>
+					<p:column headerText="#{bundle.cnaeLabelTabDescricao}">
+						<h:outputText value="#{cnae.desCnae}" />
+					</p:column>
+		
+					<p:column headerText="#{bundle.cnaeLabelTabAtividadeAcoes}">
+					
+						<p:commandLink update=":tabAbas:formAbaCnae:pnlCNAE" oncomplete="dialogCnae.show()" action="#{tipologiaPaiController.editarTipologiaCnae()}" title="Visualizar">
+							<h:graphicImage title="Visualizar" value="/resources/img/ico-pesquisa.png" />
+							<f:setPropertyActionListener target="#{tipologiaPaiController.cnaeSelecionado}" value="#{cnae}" />
+							<f:setPropertyActionListener target="#{tipologiaPaiController.viewMode}" value="#{false}" />
+							<f:setPropertyActionListener target="#{tipologiaPaiController.viewCnae}" value="#{false}" />
+							<f:ajax execute="@this" />
+						</p:commandLink>
+			
+						<p:commandLink update=":tabAbas" oncomplete="confirmationCnae.show()" title="Remover">
+							<h:graphicImage title="Remover" value="/resources/img/ico-excluir.png" />
+							<f:setPropertyActionListener target="#{tipologiaPaiController.cnaeSelecionado}" value="#{cnae}" />
+							<f:setPropertyActionListener target="#{tipologiaPaiController.viewCnae}" value="#{true}" />
+							<p:ajax process="@this" update="@this"/>
+						</p:commandLink>
+		
+					</p:column>
+				</p:dataTable>
+		</h:panelGrid>
+	
+		<p:dialog id="dialogCnae" header="#{bundle.cnaeLabelCabecalho}" widgetVar="dialogCnae" height="325" width="750" resizable="false" position="center" >
+			<h:panelGrid columns="1" id="paneldiaglogCnae">
+				<h:outputText value="#{bundle.cnaeLabelSecao}" />
+				<p:selectOneMenu id="comboSecao" value="#{tipologiaPaiController.cnaeSecao.ideCnae}" style="width: 700px;" disabled="#{!tipologiaPaiController.viewCnae}">
+					<f:selectItems value="#{tipologiaPaiController.listaSecao}" />
+					<p:ajax update="comboDivisao" listener="#{tipologiaPaiController.buscarDivisaoPorSecao}" />
+				</p:selectOneMenu>
+	
+				<h:outputText value="#{bundle.cnaeLabelDivisao}" />
+				<p:selectOneMenu id="comboDivisao" value="#{tipologiaPaiController.cnaeDivisao.ideCnae}" style="width: 700px;" disabled="#{!tipologiaPaiController.viewCnae}">
+					<f:selectItems value="#{tipologiaPaiController.listaDivisao}" />
+					<p:ajax update="comboGrupo" listener="#{tipologiaPaiController.buscarGrupoPorDivisao}" />
+				</p:selectOneMenu>
+	
+				<h:outputText value="#{bundle.cnaeLabelGrupo}" />
+				<p:selectOneMenu id="comboGrupo" value="#{tipologiaPaiController.cnaeGrupo.ideCnae}" style="width: 700px;" disabled="#{!tipologiaPaiController.viewCnae}">
+					<f:selectItems value="#{tipologiaPaiController.listaGrupo}" />
+					<p:ajax update="comboClasse" listener="#{tipologiaPaiController.buscarClassePorGrupo}" />
+				</p:selectOneMenu>
+	
+				<h:outputText value="#{bundle.cnaeLabelClasse}" />
+				<p:selectOneMenu id="comboClasse" value="#{tipologiaPaiController.cnaeClasse.ideCnae}" style="width: 700px;" disabled="#{!tipologiaPaiController.viewCnae}">
+					<f:selectItems value="#{tipologiaPaiController.listaClasse}" />
+					<p:ajax update="comboSubClasse" listener="#{tipologiaPaiController.buscarSubclassePorClasse}" />
+				</p:selectOneMenu>
+	
+	
+				<h:outputText value="#{bundle.cnaeLabelSubclasse}" />
+				<p:selectOneMenu id="comboSubClasse" value="#{tipologiaPaiController.cnaeSubclasse.ideCnae}" style="width: 700px;" disabled="#{!tipologiaPaiController.viewCnae}" >
+					<f:selectItems value="#{tipologiaPaiController.listaSubclasse}" />
+				</p:selectOneMenu>
+				
+				
+				<h:panelGrid columns="1">
+					<h:panelGroup>
+						<p:commandButton value="#{bundle.cnaeLabelSalvar}" actionListener="#{tipologiaPaiController.salvarCnae}" update="tableCnae paneltablecnae tabAbas:formAbaCnae:pnlCNAE  tabAbas:formCnaetipologia:paneldiaglogCnae" rendered="#{tipologiaPaiController.viewMode}"/>
+						
+						<p:commandButton value="#{bundle.cnaeLabelLimpar}" actionListener="#{tipologiaPaiController.limparObjetos()}" update="paneldiaglogCnae" disabled="#{!tipologiaPaiController.viewCnae}">
+							<p:ajax process="@form"/>						
+						</p:commandButton>
+
+
+						
+					</h:panelGroup>
+					<br/>
+					<br/>
+					<br/>
+					<h:outputText value="#{bundle.lbl_preench_obrig_asterisc}" />
+					
+				</h:panelGrid>
+			</h:panelGrid>
+		</p:dialog>
+	
+		<p:confirmDialog id="confirmationCnae" message="#{bundle.consultapf_msg_confimrexclusao}" header="#{bundle.consultapf_lbl_confirm_excluir}" widgetVar="confirmationCnae" >
+			<p:commandButton id="confirmarExcluir" value="#{bundle.consultapf_lbl_sim}" update="tableCnae paneltablecnae" actionListener="#{tipologiaPaiController.excluirCnae()}" oncomplete="confirmationCnae.hide()" process="@this" />
+			<p:commandButton value="#{bundle.consultapf_lbl_nao}" onclick="confirmationCnae.hide()" type="button" />
+		</p:confirmDialog>
+	
+	</h:form>
+	
+</html>

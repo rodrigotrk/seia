@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="resumo_requerimento_questionario_processos" language="java" pageWidth="440" pageHeight="802" columnWidth="440" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="8719f475-cd82-4e7d-beb9-997db22c6a9d">
+	<property name="ireport.zoom" value="1.9965000000000006"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="ide_requerimento" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[select f.num_area_queimada,ir.des_denominacao
+
+from florestal f
+	--inner join requerimento r on r.ide_requerimento = f.ide_requerimento
+	inner join imovel i on i.ide_imovel = f.ide_imovel
+	left outer join imovel_rural ir on ir.ide_imovel_rural = i.ide_imovel
+where f.num_area_queimada is not null
+ and  f.ide_requerimento = $P{ide_requerimento}]]>
+	</queryString>
+	<field name="num_area_queimada" class="java.math.BigDecimal"/>
+	<field name="des_denominacao" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="10"/>
+	</title>
+	<pageHeader>
+		<band height="12" splitType="Stretch">
+			<textField>
+				<reportElement uuid="70f29bb5-130d-4a77-ae03-8d83eb7df7a3" positionType="Float" mode="Opaque" x="0" y="0" width="420" height="12" backcolor="#FFFFFF">
+					<printWhenExpression><![CDATA[$F{num_area_queimada} != null]]></printWhenExpression>
+				</reportElement>
+				<textElement verticalAlignment="Middle" markup="none">
+					<font fontName="SansSerif" size="8" isBold="false" isUnderline="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Realizará queima controlada? SIM "]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="12" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="f43eab24-e7ad-41f9-aec7-ad5096e3f901" positionType="Float" mode="Opaque" x="10" y="0" width="130" height="12" backcolor="#EEECE1"/>
+				<box leftPadding="5">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle" markup="none">
+					<font fontName="SansSerif" size="8" isBold="false" isUnderline="false"/>
+				</textElement>
+				<text><![CDATA[Área a ser queimada ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="f43eab24-e7ad-41f9-aec7-ad5096e3f901" positionType="Float" mode="Opaque" x="140" y="0" width="300" height="12" backcolor="#EEECE1"/>
+				<box leftPadding="5">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle" markup="none">
+					<font fontName="SansSerif" size="8" isBold="false" isUnderline="false"/>
+				</textElement>
+				<text><![CDATA[Imovel / Matricula]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="12" splitType="Stretch">
+			<textField pattern="#,##0.0000" isBlankWhenNull="true">
+				<reportElement uuid="70f29bb5-130d-4a77-ae03-8d83eb7df7a3" positionType="Float" mode="Opaque" x="10" y="0" width="130" height="12" backcolor="#FFFFFF"/>
+				<box leftPadding="5">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle" markup="none">
+					<font fontName="SansSerif" size="8" isBold="false" isUnderline="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{num_area_queimada}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="70f29bb5-130d-4a77-ae03-8d83eb7df7a3" positionType="Float" mode="Opaque" x="140" y="0" width="300" height="12" backcolor="#FFFFFF"/>
+				<box leftPadding="5">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle" markup="none">
+					<font fontName="SansSerif" size="8" isBold="false" isUnderline="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{des_denominacao} == null? "-" : $F{des_denominacao}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

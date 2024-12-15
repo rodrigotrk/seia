@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui"
+	template="../../layout/template.xhtml">
+
+	<ui:define name="titulo-pagina">		
+		<h3>Reativar Usuários Excluídos</h3>		
+	</ui:define>	
+
+	<ui:define name="conteudo-principal">
+		
+		<!-- Dialog de confirmação -->
+		<p:confirmDialog message="#{bundle.consultapf_msg_confimrativacao}" header="Mensagem" severity="alert" widgetVar="confirmDlgAtivacaoUsuario" id="confirmDlgAtivacaoUsuario">
+			<h:form >	
+				<p:commandButton value="Sim"  actionListener="#{usuarioReativarController.reativarUsuario}"
+						oncomplete="confirmDlgAtivacaoUsuario.hide(); :dialogUsuarioReativar.hide()" 
+						 action="/paginas/controle-acesso/usuarioReativarLst.xhtml"/>
+				<p:commandButton value="Não" onclick="confirmDlgAtivacaoUsuario.hide()" type="button" />
+			</h:form>	
+		</p:confirmDialog>
+	
+		<p:dialog id="dialogUsuarioReativar" header="#{bundle.btn_reativar_usuario}" update=":formListaUsuariosReativar:dataTableUsuariosReativar" closable="true" draggable="true" resizable="false" width="420" widgetVar="dlgUsuarioReabilitar" modal="true" height="480">	
+			<ui:include src="/paginas/controle-acesso/usuarioReativar.xhtml" />
+		</p:dialog>
+		
+		<h:form id="formFiltroUsuarioReativar">
+			<h:outputFormat value="#{bundle.lbl_cpf}:"/><p:inputMask id="inpCpfFiltro" mask="#{bundle.consultapf_msk_cpf}" value="#{usuarioReativarController.cpf}" converter="cpfConverter" validator="cpfValidator" />
+			&nbsp;
+			<h:outputFormat value="#{bundle.lbl_nome}:"/><p:inputText id="inpNomePessoaFiltro" value="#{usuarioReativarController.nome}" />
+			&nbsp;
+			<p:commandButton value="#{bundle.btn_pesquisar}" action="#{usuarioReativarController.pesquisarPessoasFisica}" ajax="false" />
+			&nbsp;
+		</h:form>
+	
+		<br />
+		
+		<h:form id="formListaUsuariosReativar">				
+				<h:panelGrid id="teste1" columns="1">
+				<p:dataTable id="dataTableUsuariosReativar" widgetVar="dataTableUsuariosReativar" value="#{usuarioReativarController.modelPessoasFisica}" var="usuarioReabilitar" 
+				lazy="true" paginator="true" rows="10" paginatorPosition="bottom" paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}" rowsPerPageTemplate="5,10,15" emptyMessage="#{bundle.msg_lista_vazia}" style="width: 700px;">
+	
+	        		<f:facet name="header">
+						<h:outputText value="#{bundle.lst_usuarios_interno_excluido}" />
+					</f:facet>
+					<p:column style="width: 100px;">  
+						<f:facet name="header">
+							<h:outputText value="#{bundle.lbl_cpf}" />  
+						</f:facet>
+						<h:outputText value="#{usuarioReabilitar.numCpf}" />
+					</p:column>
+					<p:column style="width: 100px;">  
+						<f:facet name="header">
+							<h:outputText value="Login" />  
+						</f:facet>
+						<h:outputText value="#{usuarioReabilitar.usuario.dscLogin}" />
+					</p:column>
+					<p:column style="width: 265px;">  
+						<f:facet name="header">
+							<h:outputText value="#{bundle.lbl_nome}" />  
+						</f:facet>
+						<h:outputText value="#{usuarioReabilitar.nomPessoa}" />
+					</p:column>
+					<p:column>
+						<f:facet name="header">  
+							<h:outputText value="#{bundle.msg_acoes}" />  
+						</f:facet>							
+						<p:commandLink id="alterar"  disabled="${!security.temAcesso('1.30.3')}" action="#{usuarioReativarController.limparTela}" title="#{bundle.btn_reativar}" update=":formUsuarioReabilitar:panelUsuarioReabilitar" onclick="dlgUsuarioReabilitar.show()" process="alterar">
+							<h:graphicImage title="Reativar" value="/resources/img/arrow-circle.png" />
+							<f:setPropertyActionListener value="#{usuarioReabilitar}" target="#{usuarioReativarController.usuarioReativar.pessoaFisica}" />
+	            		</p:commandLink>
+	        		</p:column>
+	    		</p:dataTable>
+			   </h:panelGrid> 
+	   	</h:form>
+	   	
+	</ui:define>
+</ui:composition>

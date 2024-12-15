@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+				xmlns:h="http://java.sun.com/jsf/html" 
+				xmlns:f="http://java.sun.com/jsf/core" 
+				xmlns:ui="http://java.sun.com/jsf/facelets" 
+				xmlns:p="http://primefaces.prime.com.tr/ui">
+	<script type="text/javascript">
+		$(document).ready(function() {
+				$('table[id="formDetalharImovelRural:tabviewimovelrural:paginaCefir:tabAbasCefir:conteudoAssentado"]').hide();  
+			});
+		
+		function exibirDetalhesAssentado() {
+			$('table[id*="formDetalharImovelRural:tabviewimovelrural:paginaCefir:tabAbasCefir:conteudoAssentado"]').show();
+		}
+	</script>
+	<h:panelGrid id="visualizacaoAssentadoIncra">
+
+			<p:dataTable id="tableAssentadoIncraVisualizacao" 
+						 style="width: 100%;"
+						 styleClass="middle"
+						 value="#{detalharImovelRuralController.listAssentadoIncraImovelRural}"
+						 widgetVar="tableAssentadoIncraVisualizacao" 
+						 var="assentadoIncraImovelRural"
+						 lazy="true"
+						 paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}"
+						 paginator="true" 
+						 rows="10"  
+						 emptyMessage="#{bundle.cefir_msg_A012}"
+						 paginatorPosition="bottom">
+					
+						<p:column style="width: 445px;">
+							<f:facet name="header">
+								<h:outputText value="#{bundle.lbl_nome}" />
+							</f:facet>
+							<h:outputText value="#{assentadoIncraImovelRural.ideAssentadoIncra.idePessoaFisica.nomPessoa}"/>
+						</p:column>
+						<p:column style="width: 126px;">
+							<f:facet name="header">
+								<h:outputText value="#{bundle.consultapf_lbl_cpf}" />
+							</f:facet>
+							<h:outputText value="#{assentadoIncraImovelRural.ideAssentadoIncra.idePessoaFisica.numCpf}">
+								<f:converter converterId="cnpjConverter" />
+							</h:outputText>
+						</p:column>
+						<p:column style="text-align: center; width: 50px;">
+							<f:facet name="header">
+								<h:outputText value="#{bundle.geral_lbl_acoes}" />
+							</f:facet>
+							<h:panelGrid style="color:white;" columns="3">								
+								<p:commandLink id="btnVisualizarAssentadoIncra" 
+											   title="Visualizar"
+											   oncomplete="exibirDetalhesAssentado()"																
+											   style="margin: 0.7px;" 
+											   process="@this"
+											   update="visualizacaoAssentadoIncra"
+											   action="#{detalharImovelRuralController.visualizarAssentadoIncra()}">
+											<h:graphicImage title="Visualizar"
+															value="/resources/img/ico-pesquisa.png" />
+									<f:setPropertyActionListener value="#{assentadoIncraImovelRural}"
+											target="#{detalharImovelRuralController.assentadoIncraImovelRuralSelecionado}" />							
+								</p:commandLink>
+							</h:panelGrid>
+						</p:column>
+			</p:dataTable>
+			<p:outputPanel autoUpdate="true">
+			<h:panelGrid id="conteudoAssentado" columns="1">
+				<br />
+				<h3>
+					<h:outputLabel value="INFORMAÇÕES DO ASSENTADO" styleClass="titulo-grupo" style="font-weight:bold;"/>
+				</h3>
+			
+				<h:panelGrid columns="2">					
+					<h:outputLabel value="#{bundle.consultapf_lbl_cpf}:" style="font-size: 11px;font-weight: bold;" />
+					<h:outputLabel value="#{detalharImovelRuralController.assentadoIncraImovelRuralSelecionado.ideAssentadoIncra.idePessoaFisica.numCpf}" />
+				</h:panelGrid>
+				<h:panelGrid id="nomeAssentado" columns="2">
+					<h:outputLabel value="#{bundle.lbl_nome}:" style="font-size: 11px;font-weight: bold;" />
+					<h:outputLabel value="#{detalharImovelRuralController.assentadoIncraImovelRuralSelecionado.ideAssentadoIncra.idePessoaFisica.nomPessoa}" />
+				</h:panelGrid>
+				
+				<h:panelGrid columns="2">					
+					<h:outputLabel value="#{bundle.lbl_nome_mae}:" style="font-size: 11px;font-weight: bold;" />
+					<h:outputLabel value="#{detalharImovelRuralController.assentadoIncraImovelRuralSelecionado.ideAssentadoIncra.idePessoaFisica.nomMae}" />
+				</h:panelGrid>
+								
+				<h:panelGrid columns="2">					
+					<h:outputLabel value="#{bundle.lbl_data_nascimento}:" style="font-size: 11px;font-weight: bold;" />
+					<h:outputLabel value="#{detalharImovelRuralController.assentadoIncraImovelRuralSelecionado.ideAssentadoIncra.idePessoaFisica.dtcNascimento}" >
+						<f:convertDateTime attern="dd/MM/yyyy" locale="pt,BR" timeZone="Brazil/East" />
+					</h:outputLabel>
+				</h:panelGrid>
+				
+				<h:panelGrid columns="2">
+					<h:outputLabel value="Código SIPRA do assentado:" style="font-size: 11px;font-weight: bold;"/>
+					<h:outputLabel value="#{detalharImovelRuralController.assentadoIncraImovelRuralSelecionado.ideAssentadoIncra.codSipra}"/>				
+				</h:panelGrid>		
+				<h:panelGrid>
+					<h:outputText value="Localização Geográfica" style="font-size:12px;"/>
+					<br />
+					<h:panelGrid columns="2">
+						<h:outputLabel value="#{bundle.empreendimento_lbl_latitude}:" style="font-size: 11px;font-weight: bold;"/>
+						<h:outputLabel value="#{detalharImovelRuralController.assentadoIncraImovelRuralSelecionado.latitude}"/>								
+					</h:panelGrid>
+					<h:panelGrid columns="2">
+						<h:outputLabel value="#{bundle.empreendimento_lbl_longitude}:" style="font-size: 11px;font-weight: bold;"/>
+						<h:outputLabel value="#{detalharImovelRuralController.assentadoIncraImovelRuralSelecionado.longitude}"/>
+					</h:panelGrid>	
+				</h:panelGrid>
+				<h:panelGrid id="panelAssociacoesIncra">
+					<h:outputText value="Associações" style="font-size:12px;"/>				
+					<h:panelGrid>
+						<p:dataTable id="tableAssentadoAssociacaoIncra" 
+									 value="#{detalharImovelRuralController.assentadoIncraImovelRuralSelecionado.associacaoAssentadoImovelRuralIncraCollection}"
+									 widgetVar="tableAssociacaoAssentadoIncra" 
+									 var="associacaoAssentadoIncra"
+									 paginator="true" 
+									 rows="5" 
+									 paginatorAlwaysVisible="false" 
+									 emptyMessage="#{bundle.cefir_msg_A012}"
+									 paginatorPosition="bottom">						
+							<p:column style="width: 445px;">
+								<f:facet name="header">
+									<h:outputText value="#{bundle.lbl_nome}" />
+								</f:facet>
+								<h:outputText value="#{associacaoAssentadoIncra.ideAssociacaoIncraImovelRural.ideAssociacaoIncra.idePessoaJuridica.nomRazaoSocial}"/>
+							</p:column>
+						</p:dataTable>
+					</h:panelGrid>
+				</h:panelGrid>
+			</h:panelGrid>
+		</p:outputPanel>
+	</h:panelGrid>
+</ui:composition>

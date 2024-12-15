@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui"
+	xmlns:sec="http://www.springframework.org/security/facelets/tags"
+	template="/layout/template.xhtml">
+	
+	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"> </script>
+	
+	<ui:define name="titulo-pagina">
+	<script >	    
+		$(document).ready(function() {
+	    	$(this).delegate('.has_doc','keyup',function() { 
+		    	var texto = $('.has_doc').val();
+		    	texto = texto.replace(/[^0-9]+/gi,'');
+		    	texto = texto.toLowerCase();
+	    		$('.has_doc').val(texto);    		
+		    });
+	    });
+	</script>
+	
+	<h3>Consulta pública</h3>
+			
+	</ui:define>
+	<ui:define name="conteudo-principal">
+		
+		<ui:include src="/paginas/manter-fce/include-fce.xhtml" />
+		<ui:include src="/paginas/manter-processo/detalhe-processo/detalharProcesso.xhtml" />
+		<ui:include src="/paginas/manter-processo/dado-concedido/asv/dadoConcedidoAsv.xhtml"/> 
+		
+		<div>
+			<h:form id="conteudo">
+				<h:panelGrid columns="5" style="margin: 10px 0px 0px;">
+					<h:panelGrid>
+						<h:outputText value="Nº do processo:" />
+						<p:inputText id="numeroProcesso" style="width: 200px;" value="#{consultaPublicaController.numeroProcesso}" />						
+					</h:panelGrid>
+					
+					<p:spacer style="width: 30px;"/>
+					<h:panelGrid>
+						<h:outputText value="CPF/CNPJ:" />
+						<p:inputText id="numDocumento" style="width: 200px;" styleClass="has_doc" value="#{consultaPublicaController.numDocumento}" maxlength="18" />						
+					</h:panelGrid>
+					
+					<p:spacer style="width: 30px;"/>
+					<h:panelGrid>
+						<h:outputText value="Nome/Razão social/Nome fantasia:" />
+						<p:inputText id="nome" style="width: 200px;" value="#{consultaPublicaController.nome}"/>
+					</h:panelGrid>
+				</h:panelGrid>
+				<h:panelGrid columns="3" style="margin: 10px 0px;">
+					<h:panelGrid>	
+						<h:outputText value="Nome do empreendimento:" />
+						<p:inputText id="nomEmpreendimento" style="width: 200px;" value="#{consultaPublicaController.nomEmpreendimento}"/>
+					</h:panelGrid>					
+					
+					<p:spacer style="width: 30px;"/>
+					<h:panelGrid>
+						<h:outputText value="Localidade:" />
+						<p:selectOneMenu id="comboMunicipio" value="#{consultaPublicaController.municipioSelecionado}"  converter="municipioConverter" styleClass="form-input form-select" style="width: 208px;">
+								<f:selectItem itemLabel="Selecione..."/>
+								<f:selectItems value="#{novoRequerimentoController.listaMunicipios}" var="municipio" itemValue="#{municipio}" itemLabel="#{municipio.nomMunicipio}"/>								
+						</p:selectOneMenu>
+					</h:panelGrid>
+				</h:panelGrid>
+				<h:panelGrid columns="2">
+					<p:commandButton action="#{consultaPublicaController.consultar()}" value="Consultar" update="tabelaProcessos,dataTableProcesso"  global="true" />
+					<p:commandButton value="Limpar" actionListener="#{consultaPublicaController.limparTela()}" update=":conteudo"  global="true" />
+				</h:panelGrid>
+				
+				<h:panelGrid id="tabelaProcessos" columns="1" style="width:100%;">
+					<p:dataTable id="dataTableProcesso" var="consultaPublica" value="#{consultaPublicaController.dataModelConsultaPublica}"  lazy="true" paginator="true" rows="10" paginatorPosition="bottom"
+						paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}" currentPageReportTemplate="Registro(s) {startRecord}/{endRecord} de {totalRecords} registro(s)"
+						emptyMessage="#{bundle.msg_lista_vazia}" widgetVar="dataTableProcesso" rendered="#{consultaPublicaController.showProcessos}" style="border-style:none !important;">
+
+						<p:column style="width:100px;">
+							<f:facet name="header">N° requerimento</f:facet>
+							<h:outputText rendered="#{consultaPublica.requerimento.numRequerimento ne null}" style="word-wrap: break-word;" value="#{consultaPublica.requerimento.numRequerimento}" />
+							<h:panelGroup rendered="#{consultaPublica.requerimento.numRequerimento eq null}"><div style="text-align:center;">----------</div></h:panelGroup>
+						</p:column>
+						
+						<p:column style="width:70px;text-align: center;">
+							<f:facet name="header">Abertura</f:facet>
+							<h:outputText value="#{consultaPublica.dtcAberturaRequerimento}">
+								<f:convertDateTime pattern="dd/MM/yyyy"/>
+							</h:outputText>
+						</p:column>
+						
+						<p:column style="width:100px;">
+							<f:facet name="header">Requerente</f:facet>
+							<h:outputText style="word-wrap: break-word;" value="#{consultaPublica.requerente}" />
+						</p:column>
+						
+						<p:column style="width:100px;">
+							<f:facet name="header">Empreendimento</f:facet>
+							<h:outputText style="word-wrap: break-word;" value="#{consultaPublica.empreendimento}" />
+						</p:column>
+						
+						<p:column style="width:100px;">
+							<f:facet name="header">Status do <br/>requerimento</f:facet>
+							<h:outputText value="#{consultaPublica.statusRequerimento}" />
+						</p:column>
+
+						<p:column style="width:105px;">
+							<f:facet name="header">Nº do Processo</f:facet>
+							<p:commandLink rendered="#{consultaPublica.processo ne null}" 
+									       actionListener="#{consultaPublicaController.visualizarProcesso()}" 
+										   oncomplete="dialogdetalharProcesso.show()"
+										   update=":formDetalharProcesso" process="@this"  
+										   style="word-wrap: break-word;"
+										   title="Visualizar detalhes do processo">
+								<f:ajax execute="@this" />
+								<f:attribute name="ideProcesso" value="#{consultaPublica.processo}" />
+								<h:outputText value="#{consultaPublica.processo.numProcesso}" />								
+							</p:commandLink>
+							<h:panelGroup rendered="#{consultaPublica.processo eq null}"><div style="text-align:center;">----------</div></h:panelGroup>
+						</p:column>
+						
+						<p:column headerText="Ações" style="width:50px;text-align:center;">
+							
+							<!-- Resumo do requerimento -->
+							<h:commandLink id="resumo_Requerimento">
+								<h:graphicImage title="Gerar Resumo do Requerimento" value="/resources/img/ico-pdf.png" />
+								<p:fileDownload value="#{consultaPublicaController.gerarResumoRequerimentoPdf(consultaPublica.requerimento)}" />
+							</h:commandLink>
+							
+							<!-- Gerar Certificado de APE -->
+							<h:commandLink id="ide_requerimento" rendered="#{consultaPublicaController.isAPE(consultaPublica.processo)}" ajax="false">
+								<h:graphicImage title="Gerar Certificado de APE" value="/resources/img/ico-pdf.png" />
+							<p:fileDownload value="#{consultaPublicaController.gerarResumoAPEPdf(consultaPublica.requerimento)}" />
+							</h:commandLink>
+							
+							<!-- DLA -->
+							<h:commandLink
+								rendered="#{consultaPublicaController.isDla(consultaPublica.requerimento)}">
+								<h:graphicImage title="Gerar DLA" value="/resources/img/ico-pdf.png" />
+								<p:fileDownload value="#{consultaPublicaController.gerarDocumentoDLA(consultaPublica.requerimento)}" />
+							</h:commandLink>
+							
+							<!-- LAC -->
+							<h:commandLink rendered="#{consultaPublicaController.isLac(consultaPublica.processo) and consultaPublicaController.isRequerimentoAntigo(consultaPublica.processo)}">
+								<h:graphicImage title="Gerar Certificado LAC TCRA" value="/resources/img/cicon.png" />
+								<p:fileDownload value="#{consultaPublicaController.imprimirCertificadoLac(consultaPublica.requerimento)}" />
+							</h:commandLink>
+							
+							<!-- LAC ERB -->
+							<h:commandLink rendered="#{consultaPublicaController.isLacErb(consultaPublica.processo) and !consultaPublicaController.isRequerimentoAntigo(consultaPublica.processo)}">				
+								<h:graphicImage title="Gerar Certificado Lac de ERB" value="/resources/img/cicon.png" />
+								<f:setPropertyActionListener target="#{lacErbController.lacErb.ideRequerimento.ideRequerimento}"
+									value="#{consultaPublica.requerimento.ideRequerimento}" />
+								<p:fileDownload value="#{lacErbController.imprimirCertificado}" />
+							</h:commandLink>
+							
+							<!-- LAC Posto -->
+							<h:commandLink
+								rendered="#{consultaPublicaController.isLacPosto(consultaPublica.processo) and !consultaPublicaController.isRequerimentoAntigo(consultaPublica.processo)}">
+								<h:graphicImage title="Gerar Certificado Lac de Posto" value="/resources/img/cicon.png" />
+								<f:setPropertyActionListener target="#{lacPostoController.lacPostoCombustivel.ideRequerimento.ideRequerimento}" 
+															 value="#{consultaPublica.requerimento.ideRequerimento}" />
+								<p:fileDownload value="#{lacPostoController.imprimirCertificado}" />
+							</h:commandLink>
+							
+							<!-- LAC Transportadora -->
+							<h:commandLink rendered="#{consultaPublicaController.isLacTransportadora(consultaPublica.processo) and !consultaPublicaController.isRequerimentoAntigo(consultaPublica.processo)}">
+								<h:graphicImage title="Gerar Certificado Lac de Transportadora"
+									value="/resources/img/cicon.png" />						
+								<p:fileDownload value="#{consultaPublicaController.imprimirCertificado(consultaPublica.requerimento)}" />
+							</h:commandLink>
+							
+							<!-- Gerar Certificado RLAC -->
+							<h:commandLink rendered="#{consultaPublicaController.isRLAC(consultaPublica)}" ajax="false">
+
+								<h:graphicImage title="Gerar Certificado RLAC" value="/resources/img/cicon.png" />
+								<p:fileDownload value="#{consultaPublicaController.imprimirCertificadoRLAC(consultaPublica.requerimento)}" />
+							</h:commandLink>
+							
+							<!-- Ato declaratório -->
+							<h:commandLink rendered="#{consultaPublicaController.isAtoDeclaratorio(consultaPublica.processo) 
+								and !consultaPublicaController.isRLAC(consultaPublica)}">
+								
+								<h:graphicImage title="Gerar Relatório de Ato Declaratório"
+									value="/resources/img/ico-pdf.png" />
+								<p:fileDownload value="#{consultaPublicaController.gerarDocumentoDeclaracaoPdf(consultaPublica.requerimento)}" />
+							</h:commandLink>
+							
+							<!-- Registro de Floresta de Produção Plantada -->
+							<h:commandLink rendered="#{consultaPublicaController.isRfp(consultaPublica.processo) }">
+								<h:graphicImage title="Gerar Certificado de Registro de Floresta de Produção Plantada"
+									value="/resources/img/ico-pdf.png" />
+								<p:fileDownload value="#{consultaPublicaController.gerarRfp(consultaPublica.requerimento)}" />
+							</h:commandLink>
+							
+							<!-- Registro de Corte de Floresta Plantada -->
+							<h:commandLink rendered="#{consultaPublicaController.isRcfp(consultaPublica.processo)}">
+								<h:graphicImage title="Gerar Certificado de Registro de Corte de Floresta Plantada"
+									value="/resources/img/ico-tesoura.png" />
+								<p:fileDownload value="#{consultaPublicaController.gerarRcfp(consultaPublica.requerimento)}" />
+							</h:commandLink>
+							
+						</p:column>		
+														
+					</p:dataTable>
+				</h:panelGrid>
+			</h:form>
+		</div>
+	</ui:define>
+</ui:composition>

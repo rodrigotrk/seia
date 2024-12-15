@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui">	
+		<br/>
+		<h:form id="formEnderecoPesquisaCep" >
+			<h:panelGrid rendered="#{!responsavelCefirController.showIncluirResponsavel}" >
+				<h3>
+					<h:outputLabel id="idlblendereco" styleClass="titulo-grupo" value="ENDEREÇO" rendered="#{!responsavelCefirController.showIncluirResponsavel}"/>
+				</h3>
+				<p:remoteCommand action="#{enderecoController.filtrarPorCep()}" update=":paginaImovel:paginaCefir:tabAbasCefir:formEndereco" name="filtrarCepResponsavel"/>
+				<h:outputLabel id="idlblcep" value="* CEP" /><br/>
+				<p:inputMask value="#{enderecoController.logradouroPesquisa.numCep}" onblur="filtrarCepResponsavel();" 
+				onkeypress="blurOnEnter(event,this);" mask="99.999-999" required="true" requiredMessage="O campo CEP deve ser preenchido." disabled="#{empreendimentoController.visualizarEmpreendimento}" >
+					<f:converter converterId="cepConverter" />
+				</p:inputMask>
+			</h:panelGrid>
+		</h:form>
+		<h:form id="formEndereco">
+			<h:panelGrid rendered="#{!responsavelCefirController.showIncluirResponsavel}">
+			<h:panelGrid columns="2">
+				<h:outputText id="idlblbairro" value="#{bundle.geral_lbl_endereco_bairro}"/>
+				<h:outputText />
+				<p:selectOneMenu id="idcombobairro" value="#{enderecoController.bairro}" valueChangeListener="#{enderecoController.changeLogradouroMunicipio}"  disabled="#{!enderecoController.enableFormEndereco}" >
+					<f:selectItems value="#{enderecoController.valuesComboBairro}" />
+					<f:converter converterId="bairroConverter" />
+					<f:validator validatorId="bairroComboValidator" />
+					<p:ajax update="@form" />
+				</p:selectOneMenu>
+				<p:inputText value="#{enderecoController.bairro.nomBairro}" required="true" requiredMessage="O campo Bairro deve ser preenchido." rendered="#{enderecoController.showInputs}"/>
+			</h:panelGrid>
+			
+			<h:panelGrid columns="2">
+				<h:outputLabel id="idlbllogradouro" value="* Logradouro" />
+				<h:outputText />
+				
+				<p:selectOneMenu  id="idcombotipologradouroinput" value="#{enderecoController.tipoLogradouro}" disabled="false" rendered="#{enderecoController.showInputs or enderecoController.showInputLogradouro}" >
+					<f:selectItems value="#{tipoLogradouroController.valuesComboBox}" />
+					<f:converter converterId="tipoLogradouroConverter" />
+				</p:selectOneMenu>
+
+				<p:inputText value="#{enderecoController.logradouro.nomLogradouro}" maxlength="185" rendered="#{enderecoController.showInputs or enderecoController.showInputLogradouro}" required="true" requiredMessage="O campo Logradouro deve ser preenchido." />
+								
+				<p:selectOneMenu  id="idcombotipologradouro" value="#{enderecoController.tipoLogradouro}" disabled="true"
+					rendered="#{!enderecoController.showInputs and !enderecoController.showInputLogradouro}">
+					<f:selectItems value="#{tipoLogradouroController.valuesComboBox}" />
+					<f:converter converterId="tipoLogradouroConverter" />
+				</p:selectOneMenu>
+				
+				<p:selectOneMenu id="idcombologradouro" value="#{enderecoController.logradouro}" rendered="#{!enderecoController.showInputs and !enderecoController.showInputLogradouro}"
+					 valueChangeListener="#{enderecoController.changeLogradouro}" disabled="#{enderecoController.desabilitarLogradouro}">
+					<f:selectItems value="#{enderecoController.valuesComboLogradouro}" />
+					<f:converter converterId="logradouroConverter" />
+					<f:validator validatorId="logradouroComboValidator" />
+					<p:ajax update="@form" />
+				</p:selectOneMenu>
+			</h:panelGrid>
+			
+			<h:panelGrid columns="2" id="panelmunicipioestado" width="100%">
+				<h:outputText id="idlblnumero" value="* Número"/>
+				<h:outputLabel id="idlblcomplemento" value="Complemento" />
+				<p:inputText style="width: 70%" disabled="#{!enderecoController.enableFormEndereco}" value="#{enderecoController.endereco.numEndereco}" maxlength="5" size="5" required="true" requiredMessage="O campo Número deve ser preenchido." />
+				<p:inputText style="width: 100%" value="#{enderecoController.endereco.desComplemento}" disabled="#{!enderecoController.enableFormEndereco}" />
+			</h:panelGrid>
+			
+			<h:panelGrid columns="2">
+			
+				<h:outputText id="idlbluf" value="* UF"/>
+				<h:outputLabel id="idlblmunicipio" value="* Município" />
+				
+				<p:selectOneMenu id="idcombouf" value="#{enderecoController.estado}" disabled="#{!enderecoController.showInputs}"  required="true" requiredMessage="O campo UF deve ser selecionado." 
+					valueChangeListener="#{estadoMunicipioController.changeEstado()}">
+					<f:selectItems itemLabel="#{bundle.geral_lbl_selecione}" />
+					<f:selectItems value="#{estadoMunicipioController.valuesComboBoxEstado}" var="#{estadoSelecionado}"/>
+					<f:converter converterId="estadoConverter" />
+					<f:validator validatorId="estadoValidator"/>
+					<p:ajax update="idcombomunicipio" />
+				</p:selectOneMenu>
+				
+				<p:selectOneMenu id="idcombomunicipio" value="#{enderecoController.municipio}" disabled="#{!enderecoController.showInputs}"  required="true" requiredMessage="O campo Município deve ser selecionado." >
+					<f:selectItems value="#{estadoMunicipioController.valuesComboBoxMunicipio}" />
+					<f:converter converterId="municipioConverter" />
+					<f:validator validatorId="municipioValidator"/>
+				</p:selectOneMenu>
+			</h:panelGrid>
+			
+			<h:panelGrid columns="1" width="100%">
+				<h:outputText id="idlblpontoreferencia" value="Ponto de Referência"  />
+				<p:inputText style="width: 100%" value="#{enderecoController.endereco.desPontoReferencia}" disabled="#{!enderecoController.enableFormEndereco}"/>
+			</h:panelGrid>
+			<h:panelGrid columns="2">	
+				<p:commandButton value="Salvar" actionListener="#{enderecoController.salvarEndereco}" 
+				                 action="#{responsavelCefirController.esconderFormulario()}" 
+				                 disabled="#{!enderecoController.enableFormEndereco}" ajax="tabAbas:abaResponsavelTecnico"/>
+			</h:panelGrid>
+			<h:outputLabel value="#{bundle.lbl_preench_obrig_asterisc}" style="float: left;" />
+			</h:panelGrid>
+		</h:form>	
+</ui:composition>

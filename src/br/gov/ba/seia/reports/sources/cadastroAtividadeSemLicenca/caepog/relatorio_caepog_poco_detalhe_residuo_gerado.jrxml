@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="relatorio_caepog_poco_detalhe_residuo_gerado" language="java" pageWidth="555" pageHeight="802" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="f5d483db-0b59-4f25-bc13-c216732dbae3">
+	<property name="ireport.zoom" value="2.1435888100000016"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="ide_caepog_poco" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[select
+	cfp.seq_caepog_perfuracao_poco,
+
+
+	-- TPH
+	(select to_char(cfv_i.num_valor_fase_variavel,'9G999G990D99')
+		from caepog_fase_perfuracao cfp_i
+	inner join caepog_fase_variavel cfv_i on cfv_i.ide_caepog_fase_perfuracao = cfp_i.ide_caepog_fase_perfuracao
+	inner join caepog_variavel cv_i on cv_i.ide_caepog_variavel = cfv_i.ide_caepog_variavel
+		where cfp_i.ide_caepog_fase_perfuracao in (cfp.ide_caepog_fase_perfuracao)
+	and cv_i.ide_caepog_variavel = 4) TPH,
+
+	-- Volume estimado
+	(select to_char(cfv_i.num_valor_fase_variavel,'9G999G990D99')
+		from caepog_fase_perfuracao cfp_i
+	inner join caepog_fase_variavel cfv_i on cfv_i.ide_caepog_fase_perfuracao = cfp_i.ide_caepog_fase_perfuracao
+	inner join caepog_variavel cv_i on cv_i.ide_caepog_variavel = cfv_i.ide_caepog_variavel
+		where cfp_i.ide_caepog_fase_perfuracao in (cfp.ide_caepog_fase_perfuracao)
+	and cv_i.ide_caepog_variavel = 5) volume_estimado,
+
+	-- Salinidade
+	(select to_char(cfv_i.num_valor_fase_variavel,'9G999G990D99')
+		from caepog_fase_perfuracao cfp_i
+	inner join caepog_fase_variavel cfv_i on cfv_i.ide_caepog_fase_perfuracao = cfp_i.ide_caepog_fase_perfuracao
+	inner join caepog_variavel cv_i on cv_i.ide_caepog_variavel = cfv_i.ide_caepog_variavel
+		where cfp_i.ide_caepog_fase_perfuracao in (cfp.ide_caepog_fase_perfuracao)
+	and cv_i.ide_caepog_variavel = 6) salinidade,
+
+	pj.nom_razao_social,
+	clr.nom_classe_residuo
+
+from caepog_fase_perfuracao cfp
+left join caepog_classe_residuo clr on clr.ide_caepog_classe_residuo = cfp.ide_caepog_classe_residuo
+inner join pessoa_juridica pj on pj.ide_pessoa_juridica = cfp.ide_pessoa_juridica_destino
+where cfp.ide_caepog_poco = $P{ide_caepog_poco}
+order by cfp.seq_caepog_perfuracao_poco]]>
+	</queryString>
+	<field name="seq_caepog_perfuracao_poco" class="java.lang.Integer">
+		<fieldDescription><![CDATA[Sequencial da fase da perfuração para cada poço]]></fieldDescription>
+	</field>
+	<field name="tph" class="java.lang.String"/>
+	<field name="volume_estimado" class="java.lang.String"/>
+	<field name="salinidade" class="java.lang.String"/>
+	<field name="nom_razao_social" class="java.lang.String"/>
+	<field name="nom_classe_residuo" class="java.lang.String">
+		<fieldDescription><![CDATA[Nome da classificação do fluido]]></fieldDescription>
+	</field>
+	<detail>
+		<band height="60" splitType="Stretch">
+			<textField>
+				<reportElement uuid="dab49edd-3531-41d7-a161-12d9346a7bbd" x="0" y="0" width="220" height="20"/>
+				<box leftPadding="5">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement verticalAlignment="Middle" markup="html">
+					<font fontName="Arial" size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Fase: <b>"+
+($F{seq_caepog_perfuracao_poco} != null ? $F{seq_caepog_perfuracao_poco} : " --- " )
++"<b>"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="0042d250-1445-4be4-9a29-ced659fb6564" x="0" y="20" width="220" height="20"/>
+				<box leftPadding="5">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement verticalAlignment="Middle" markup="html">
+					<font fontName="Arial" size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Volume estimado (m³): <b>"+
+($F{volume_estimado} != null ?
+
+  $F{volume_estimado}
+
+
+
+    : " --- " )
++"<b>"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="688584e7-5dcd-40c0-8bdd-184a3cc0405c" x="0" y="40" width="220" height="20"/>
+				<box leftPadding="5">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement verticalAlignment="Middle" markup="html">
+					<font fontName="Arial" size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Classificação resíduos: <b>" +
+($F{nom_classe_residuo}!=null ? $F{nom_classe_residuo} : " --- " )
++"<b>"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="548b8b05-e01c-44c2-9dc0-00aef18b0b37" x="220" y="0" width="220" height="20"/>
+				<box leftPadding="5">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement verticalAlignment="Middle" markup="html">
+					<font fontName="Arial" size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA["TPH: <b>" +
+( $F{tph} != null ?
+
+$F{tph}
+
+    : " --- " )
++"<b>"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="58a01903-fb90-40c3-b730-170e846071d0" x="220" y="20" width="220" height="20"/>
+				<box leftPadding="5">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement verticalAlignment="Middle" markup="html">
+					<font fontName="Arial" size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Salinidade (mg/l): <b>" +
+($F{salinidade} !=  null ?$F{salinidade} : " --- ")
++"<b>"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="50a7ca71-090c-4e49-89d9-70e27e288387" x="220" y="40" width="220" height="20"/>
+				<box leftPadding="5">
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.25"/>
+					<bottomPen lineWidth="0.25"/>
+					<rightPen lineWidth="0.25"/>
+				</box>
+				<textElement verticalAlignment="Middle" markup="html">
+					<font fontName="Arial" size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Destino: <b>" +
+$F{nom_razao_social}
++"<b>"]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

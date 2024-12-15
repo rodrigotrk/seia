@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="resumo_quantitativo_detalhe_tipo_intervencao_ponto_detalhe_captacao" pageWidth="180" pageHeight="60" columnWidth="180" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="5cad87ab-1224-42f1-a609-69980d77f669">
+	<property name="ireport.zoom" value="3.138428376721004"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<property name="net.sf.jasperreports.export.csv.field.delimiter" value=";"/>
+	<property name="net.sf.jasperreports.export.xls.detect.cell.type" value="true"/>
+	<parameter name="ide_cerh_localizacao_geografica" class="java.lang.Integer"/>
+	<queryString>
+		<![CDATA[select
+	ccc.ide_cerh_captacao_caracterizacao,
+	max (ccvs.val_tempo_captacao * ccvs.val_vazao_captacao) as vazao_maxima,
+	ccc.nom_corpo_hidrico, array_to_string(regexp_split_to_array(tfua.nom_tipo_finalidade_uso_agua, ','),',') finalidades
+from cerh_captacao_vazao_sazonalidade ccvs
+	left join cerh_captacao_caracterizacao ccc on ccc.ide_cerh_captacao_caracterizacao = ccvs.ide_cerh_captacao_caracterizacao
+	left join cerh_captacao_caracterizacao_finalidade cccf on cccf.ide_cerh_captacao_caracterizacao = ccc.ide_cerh_captacao_caracterizacao
+	left join tipo_finalidade_uso_agua tfua on cccf.ide_tipo_finalidade_uso_agua = tfua.ide_tipo_finalidade_uso_agua
+where ccc.ide_cerh_localizacao_geografica  = $P{ide_cerh_localizacao_geografica}
+group by tfua.nom_tipo_finalidade_uso_agua, ccc.ide_cerh_captacao_caracterizacao, ccc.nom_corpo_hidrico]]>
+	</queryString>
+	<field name="ide_cerh_captacao_caracterizacao" class="java.lang.Integer"/>
+	<field name="vazao_maxima" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[Vazão máxima da taxa de outorga em m3/dia]]></fieldDescription>
+	</field>
+	<field name="nom_corpo_hidrico" class="java.lang.String"/>
+	<field name="finalidades" class="java.lang.String"/>
+	<detail>
+		<band height="20">
+			<textField>
+				<reportElement uuid="618914da-fa7c-4cf8-8056-fb08b928de35" x="0" y="0" width="60" height="20"/>
+				<box>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{finalidades} == null ?
+"-":
+($F{finalidades})]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="6aaa9268-f29a-479a-ae91-23b1978e2b16" isPrintRepeatedValues="false" x="60" y="0" width="60" height="20"/>
+				<box>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nom_corpo_hidrico}
+
+!= null ?
+($F{nom_corpo_hidrico}):(" - ")]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="beef5996-fbfa-4d71-83d1-cdda55d9c530" positionType="Float" isPrintRepeatedValues="false" x="120" y="0" width="60" height="20"/>
+				<box>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{vazao_maxima}
+
+!= null ?
+(new DecimalFormat("#,##0.00").format($F{vazao_maxima}).toString()):(" - ")]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

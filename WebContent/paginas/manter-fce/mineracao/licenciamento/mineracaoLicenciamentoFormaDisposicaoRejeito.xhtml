@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui">
+	
+	<h:form id="minLicIncluirDisposicaoRejeito">
+		
+		<h:panelGrid style="margin-left:10px;">
+			<h:outputText styleClass="titulo-grupo-bold" value="#{bundle.fce_lic_min_tipo_estrutura}" />
+			<p:selectOneMenu id="selectTipoEstrutura" 
+				value="#{fceLicenciamentoMineracaoController.formaDisposicaoRejeito.tipoEstrutura}"
+				valueChangeListener="#{fceLicenciamentoMineracaoController.changeTipoEstrutura()}"
+				converter="simpleEntityConverter"
+	    		disabled="#{fceLicenciamentoMineracaoController.desabilitarTudo}" >
+				<f:selectItem itemLabel="Selecione"/>
+				<f:selectItems value="#{fceLicenciamentoMineracaoController.listaTipoEstrutura}" var="tipoEstrutura" itemLabel="#{tipoEstrutura.nomTipoEstrutura}" itemValue="#{tipoEstrutura}"/>
+				<p:ajax event="change" update="minLicIncluirDisposicaoRejeito"/>
+			</p:selectOneMenu>
+		</h:panelGrid>
+		
+		<h:panelGrid style="margin-left:10px; margin-top:10px;">
+			<h:outputText styleClass="titulo-grupo-bold" value="#{bundle.fce_lic_min_area_ocupada}" />
+			<p:inputText id="areaOcupada" 
+				value="#{fceLicenciamentoMineracaoController.formaDisposicaoRejeito.areaOcupada}" 
+				style="width:150px;"
+				onkeyup="mascararNumeroAndAddZeros(this, event, 9, 4, '.', ',', 3);"  maxlength="34" 
+	    		disabled="#{fceLicenciamentoMineracaoController.desabilitarTudo 
+	    		or fceLicenciamentoMineracaoController.formaDisposicaoRejeito.naoSeAplica 
+	    		or fceLicenciamentoMineracaoController.formaDisposicaoRejeito.outros}">
+				<f:convertNumber integerOnly="false" minFractionDigits="4"/>
+				<!-- <p:ajax event="blur" /> -->
+			</p:inputText>
+		</h:panelGrid>
+			
+		<h:panelGrid style="margin-left:10px; margin-top:10px;">
+			<h:outputText styleClass="titulo-grupo-bold" value="#{bundle.fce_lic_min_classe_rejeito}" />
+			<p:selectOneMenu id="selectClasseRejeito" 
+				value="#{fceLicenciamentoMineracaoController.formaDisposicaoRejeito.tipoResiduoGerado}" 
+				converter="simpleEntityConverter"
+	    		disabled="#{fceLicenciamentoMineracaoController.desabilitarTudo 
+	    		or fceLicenciamentoMineracaoController.formaDisposicaoRejeito.naoSeAplica
+	    		or fceLicenciamentoMineracaoController.formaDisposicaoRejeito.outros}" >
+				<f:selectItem itemLabel="Selecione"/>
+				<f:selectItems value="#{fceLicenciamentoMineracaoController.listaTipoResiduoGerado}" var="residuos" itemLabel="#{residuos.dscTipoResiduoGerado}" itemValue="#{residuos}" />
+				<p:ajax event="change"/>
+			</p:selectOneMenu>
+		</h:panelGrid>
+		
+		<h:panelGrid style="margin-left:10px; margin-top:10px;">
+			<h:outputText styleClass="titulo-grupo-bold" value="#{bundle.fce_lic_min_sistema_impermebealizado}?" />
+			<p:selectOneRadio id="sistemaImpermebealizado" 
+				value="#{fceLicenciamentoMineracaoController.formaDisposicaoRejeito.indSistemaImpermeabilizacao}"
+				disabled="#{fceLicenciamentoMineracaoController.desabilitarTudo 
+				or fceLicenciamentoMineracaoController.formaDisposicaoRejeito.cavaExaurida
+				or fceLicenciamentoMineracaoController.formaDisposicaoRejeito.naoSeAplica 
+				or fceLicenciamentoMineracaoController.formaDisposicaoRejeito.outros}">
+				<f:selectItem itemLabel="Sim" itemValue="true" />
+				<f:selectItem itemLabel="Não" itemValue="false" />
+				<p:ajax event="change"/>
+			</p:selectOneRadio>
+		</h:panelGrid>
+		
+		<h:panelGrid style="margin-left:10px; margin-top:10px;">
+			<h:outputText styleClass="titulo-grupo-bold" value="#{bundle.fce_lic_min_classificacao_portaria}" />
+			<p:selectOneMenu id="selectRejeitoDnpm" 
+				value="#{fceLicenciamentoMineracaoController.formaDisposicaoRejeito.classificacaoRejeitoDnpm}" 
+				converter="simpleEntityConverter"
+	    		disabled="#{fceLicenciamentoMineracaoController.desabilitarTudo 
+	    		or fceLicenciamentoMineracaoController.formaDisposicaoRejeito.empilhamentoDrenado 
+	    		or fceLicenciamentoMineracaoController.formaDisposicaoRejeito.naoSeAplica
+	    		or fceLicenciamentoMineracaoController.formaDisposicaoRejeito.outros}" >
+				<f:selectItem itemLabel="Selecione"/>
+				<f:selectItems value="#{fceLicenciamentoMineracaoController.listaClassificacaoRejeitoDnpm}" var="rejeitoDnpm" itemLabel="#{rejeitoDnpm.desClassificacaoRejeitoDnpm}" itemValue="#{rejeitoDnpm}"/>
+				<p:ajax event="change"/>
+			</p:selectOneMenu>
+		</h:panelGrid>
+	
+		<h:panelGrid id="gridBotoes" rendered="#{!fceLicenciamentoMineracaoController.desabilitarTudo}" columns="2" style="margin-top:40px; margin-left:100px;">
+			<p:commandButton id="btnLimpar" value="Limpar"  style="width:90px;" update="minLicIncluirDisposicaoRejeito" actionListener="#{fceLicenciamentoMineracaoController.limparFormaDisposicaoRejeito()}"/>
+			<p:commandButton id="btnSalvar" value="Salvar" style="width:90px;" update="minLicIncluirDisposicaoRejeito tabLicMineracao:minLicCaracterizacaoAtividades:gridBeneficiamento" process="minLicIncluirDisposicaoRejeito" actionListener="#{fceLicenciamentoMineracaoController.salvarFormaDisposicaoRejeito()}"/> 
+		</h:panelGrid>
+	</h:form>
+</ui:composition>

@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.prime.com.tr/ui">
+	<h:form id="minLicQuadroAreas">
+
+		<h:panelGrid id="gridAreaDnpm" style="margin-left:10px;">
+			<h:outputText styleClass="titulo-grupo-bold" value="* #{bundle.fce_lic_min_informacao_area_dnpm}" />
+			<p:commandLink id="dnpm" oncomplete="dialogIncluirProcessoDNPM.show()" 
+				actionListener="#{fceLicenciamentoMineracaoController.incluirProcessoDnpm()}"
+				disabled="#{fceLicenciamentoMineracaoController.desabilitarTudo}"
+				update="minLicIncluirProcessoDnpm">
+				<h:graphicImage title="#{bundle.lbl_cpm_incluir} #{bundle.fce_lic_min_processo_dnpm}" value="/resources/img/ico-expandir.png" style="margin-right: 2px;" />
+				<h:outputText value="#{bundle.lbl_cpm_incluir} #{bundle.fce_lic_min_processo_dnpm}" style="cursor: initial;" />
+			</p:commandLink>
+			
+			<p:dataTable id="dataTableProcessoDnpm" 
+				widgetVar="dataTableProcessoDnpm"
+				value="#{fceLicenciamentoMineracaoController.listaProcessoDnpm}"
+				var="processoDnpm" lazy="true" paginator="true" rows="10"
+				paginatorPosition="bottom"
+				paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}"
+				rowsPerPageTemplate="5,10,15"
+				style="width: 364px; margin-left:5px;"
+				rendered="#{fceLicenciamentoMineracaoController.processoDnpmAdicionado}">
+				<p:column style="width: 100px; text-align:center; vertical-align: middle;">
+					<f:facet name="header">
+						Número do<br/>Processo
+					</f:facet>
+					<h:outputText value="#{processoDnpm.numProcessoDnpm}" />
+				</p:column>
+				
+				<p:column style="width: 160px; vertical-align: middle;" headerText="Área (ha)">
+					<p:inputText value="#{processoDnpm.areaProcessoDnpm}" onblur="mascararNumeroAndAddZeros(this, event, 9, 4, '.', ',', 3);" maxlength="13" disabled="#{true}">
+						<f:convertNumber integerOnly="false" maxIntegerDigits="9" maxFractionDigits="4"/>
+					</p:inputText>
+				</p:column>
+				
+				<p:column style="width: 40px; text-align:center; vertical-align: middle;" headerText="Ação">
+					<h:panelGroup>
+						<p:commandLink style="cursor: pointer; margin-left:5px;"
+							onclick='javascript:${fceLicenciamentoMineracaoController.visualizarLocalizacao(processoDnpm.ideLocalizacaoGeografica)}'
+							global="false" accesskey="VISUALIZAR GEOBAHIA">
+							<h:graphicImage title="#{bundle.fce_lic_aqui_visualizar_dados_geobahia}" value="/resources/img/ico-arl-relocacao.png" />
+						</p:commandLink>
+					
+						<p:commandLink oncomplete="confirmaExclusaoProcessoDnpm.show()" 
+							title="Excluir" 
+							process="@this" 
+							disabled="#{fceLicenciamentoMineracaoController.desabilitarTudo}">
+							<h:graphicImage title="Excluir" value="/resources/img/ico-excluir.png" />
+							<f:setPropertyActionListener target="#{fceLicenciamentoMineracaoController.processoDnpm}" value="#{processoDnpm}" />
+						</p:commandLink>
+					</h:panelGroup>
+				</p:column>
+			</p:dataTable>
+		</h:panelGrid>	
+		
+		<!-- <p:outputPanel autoUpdate="true"> -->
+			<h:panelGrid id="gridLavra" style="margin-left:10px; margin-top:20px;">
+				<h:panelGroup>
+					<h:outputText styleClass="titulo-grupo-bold" value="* #{bundle.fce_lic_min_poligonais_lavra}" />
+					<h:graphicImage value="/resources/img/ico-ajuda.png" id="poligonalAreaLavra" style="margin: 3px 1px 2px 4px;" />
+					<p:tooltip for="poligonalAreaLavra" value="#{bundle.fce_lic_min_hint_area_lavra}" showEffect="fade" hideEffect="fade" />
+				</h:panelGroup>
+				
+				<p:commandLink id="shapeLavra" oncomplete="dlgLocalizacaoGeograficaGeneric.show();"
+					action="#{localizacaoGeograficaGenericController.carregarTela()}" 
+					actionListener="#{localizacaoGeograficaGenericController.limparLocalizacaoGeografSelecionada()}" 
+					process="@this"
+					rendered="#{!fceLicenciamentoMineracaoController.poligonalAreaEfetivaLavraSalva}"
+					disabled="#{fceLicenciamentoMineracaoController.desabilitarTudo or !fceLicenciamentoMineracaoController.processoDnpmAdicionado}">
+					<f:setPropertyActionListener target="#{localizacaoGeograficaGenericController.tipoSecaoGeometrica}" value="#{fceLicenciamentoMineracaoController.somenteShape}" />
+					<f:setPropertyActionListener target="#{localizacaoGeograficaGenericController.empreendimento}" value="#{fceLicenciamentoMineracaoController.empreendimento}" />
+					<f:setPropertyActionListener target="#{localizacaoGeograficaGenericController.localizacaoGeograficaSelecionada}" value="#{fceLicenciamentoMineracaoController.fceLicenciamentoMineral.ideLocalizacaoGeograficaLavra}" />
+					<f:setPropertyActionListener target="#{localizacaoGeograficaGenericController.objetoLocalizacao}" value="#{fceLicenciamentoMineracaoController.fceLicenciamentoMineral}" />
+					<f:setPropertyActionListener target="#{localizacaoGeograficaGenericController.idDoComponenteParaSerAtualizado}" value="tabLicMineracao:minLicQuadroAreas:gridLavra" />
+					<h:graphicImage title="#{bundle.fce_lic_min_incluir_shape}" value="/resources/img/ico-expandir.png" style="margin-right: 2px;" />
+					<h:outputText value="#{bundle.fce_lic_min_incluir_shape}" style="cursor: initial;" />
+				</p:commandLink>
+				
+				<h:panelGrid id="gridAreaLavra" columns="5" rendered="#{fceLicenciamentoMineracaoController.poligonalAreaEfetivaLavraSalva}">
+					<h:outputText value="Área" />
+					<p:inputText value="#{fceLicenciamentoMineracaoController.fceLicenciamentoMineral.areaDeLavra}"
+						style="width:100px; margin-left:5px;"
+						disabled="true">
+						<f:converter converterId="doubleQuatroCasasDecimaisConverter" />
+					</p:inputText>
+					<h:outputText value="   (ha)"/>
+					
+					<p:commandLink style="cursor: pointer; margin-left:5px;"
+						onclick='javascript:${fceLicenciamentoMineracaoController.visualizarLocalizacao(fceLicenciamentoMineracaoController.fceLicenciamentoMineral.ideLocalizacaoGeograficaLavra)}'
+						global="false"
+						accesskey="VISUALIZAR GEOBAHIA">
+						<h:graphicImage title="#{bundle.fce_lic_aqui_visualizar_dados_geobahia}" value="/resources/img/ico-arl-relocacao.png" />
+					</p:commandLink>
+					<p:commandLink process="@this" global="false"
+						onclick="confirmaExclusaoPoligonalLavra.show()"
+						disabled="#{fceLicenciamentoMineracaoController.desabilitarTudo or fceLicenciamentoMineracaoController.poligonalAreaServidaoSalva}">
+						<f:setPropertyActionListener target="#{localizacaoGeograficaGenericController.localizacaoGeograficaSelecionada}" value="#{fceLicenciamentoMineracaoController.fceLicenciamentoMineral.ideLocalizacaoGeograficaLavra}" />
+						<h:graphicImage title="Excluir" value="/resources/img/ico-excluir.png" />
+					</p:commandLink>
+				</h:panelGrid>
+			</h:panelGrid>
+		<!-- </p:outputPanel> -->
+					
+		<h:panelGrid id="gridServidao" style="margin-left:10px; margin-top:20px;">
+			<h:panelGroup>
+				<h:outputText styleClass="titulo-grupo-bold" value="* #{bundle.fce_lic_min_poligonais_servidao}" rendered="#{!fceLicenciamentoMineracaoController.licencaPrevia}"/>
+				<h:outputText styleClass="titulo-grupo-bold" value="#{bundle.fce_lic_min_poligonais_servidao}" rendered="#{fceLicenciamentoMineracaoController.licencaPrevia}"/>
+				<h:graphicImage value="/resources/img/ico-ajuda.png" id="poligonalAreaServidao" style="margin: 3px 1px 2px 4px;" />
+				<p:tooltip for="poligonalAreaServidao" value="#{bundle.fce_lic_min_hint_area_servidao}" showEffect="fade" hideEffect="fade" />
+			</h:panelGroup>
+			<p:commandLink id="shapeServidao" oncomplete="dlgLocalizacaoGeograficaGeneric.show();"
+				action="#{localizacaoGeograficaGenericController.carregarTela()}" 
+				actionListener="#{localizacaoGeograficaGenericController.limparLocalizacaoGeografSelecionada()}" 
+				process="@this"
+				rendered="#{!fceLicenciamentoMineracaoController.poligonalAreaServidaoSalva}"
+				disabled="#{fceLicenciamentoMineracaoController.desabilitarTudo or !fceLicenciamentoMineracaoController.poligonalAreaEfetivaLavraSalva}">
+				<f:setPropertyActionListener target="#{localizacaoGeograficaGenericController.tipoSecaoGeometrica}" value="#{fceLicenciamentoMineracaoController.somenteShape}" />
+				<f:setPropertyActionListener target="#{localizacaoGeograficaGenericController.empreendimento}" value="#{fceLicenciamentoMineracaoController.empreendimento}" />
+				<f:setPropertyActionListener target="#{localizacaoGeograficaGenericController.localizacaoGeograficaSelecionada}" value="#{fceLicenciamentoMineracaoController.fceLicenciamentoMineral.ideLocalizacaoGeograficaServidao}" />
+				<f:setPropertyActionListener target="#{localizacaoGeograficaGenericController.objetoLocalizacao}" value="#{fceLicenciamentoMineracaoController.fceLicenciamentoMineral}" />
+				<f:setPropertyActionListener target="#{localizacaoGeograficaGenericController.idDoComponenteParaSerAtualizado}" value="tabLicMineracao:minLicQuadroAreas:gridServidao" />
+				<h:graphicImage title="#{bundle.fce_lic_min_incluir_shape}" value="/resources/img/ico-expandir.png" style="margin-right: 2px;" />
+				<h:outputText value="#{bundle.fce_lic_min_incluir_shape}" style="cursor: initial;" />
+			</p:commandLink>
+			<h:panelGrid id="gridAreaServidao" columns="5" rendered="#{fceLicenciamentoMineracaoController.poligonalAreaServidaoSalva}">
+				<h:outputText value="Área" />
+				<p:inputText value="#{fceLicenciamentoMineracaoController.fceLicenciamentoMineral.areaDeServidao}"
+					style="width:100px; margin-left:5px;"
+					disabled="true">
+					<f:converter converterId="doubleQuatroCasasDecimaisConverter" />
+				</p:inputText>
+				<h:outputText value="   (ha)"/>
+			
+				<p:commandLink style="cursor: pointer; margin-left:5px;"
+					onclick='javascript:${fceLicenciamentoMineracaoController.visualizarLocalizacao(fceLicenciamentoMineracaoController.fceLicenciamentoMineral.ideLocalizacaoGeograficaServidao)}'
+					global="false"
+					accesskey="VISUALIZAR GEOBAHIA">
+					<h:graphicImage title="#{bundle.fce_lic_aqui_visualizar_dados_geobahia}" value="/resources/img/ico-arl-relocacao.png" />
+				</p:commandLink>
+				<p:commandLink process="@this" global="false"
+					onclick="confirmaExclusaoPoligonalServidao.show()"
+					disabled="#{fceLicenciamentoMineracaoController.desabilitarTudo}">
+					<f:setPropertyActionListener target="#{localizacaoGeograficaGenericController.localizacaoGeograficaSelecionada}" value="#{fceLicenciamentoMineracaoController.fceLicenciamentoMineral.ideLocalizacaoGeograficaServidao}" />
+					<h:graphicImage title="Excluir" value="/resources/img/ico-excluir.png" />
+				</p:commandLink>
+			</h:panelGrid>
+		</h:panelGrid>
+		
+		<!-- PANELGRID BOTOES -->
+		<h:panelGrid id="gridBotoes" rendered="#{!fceLicenciamentoMineracaoController.desabilitarTudo}" columns="2" style="margin-top:40px; margin-left:575px;">
+			<p:commandButton id="btnVoltar" value="Voltar"  style="width:90px;" update="tabLicMineracao" action="#{fceLicenciamentoMineracaoController.voltarAba()}" global="false"/>
+			<p:commandButton id="btnAvancar" value="Avançar" style="width:90px;" update="tabLicMineracao" process="minLicQuadroAreas" action="#{fceLicenciamentoMineracaoController.avancarAba()}" /> 
+		</h:panelGrid>
+		<!-- FIM DO PANELGRID BOTOES -->
+	</h:form>
+</ui:composition>

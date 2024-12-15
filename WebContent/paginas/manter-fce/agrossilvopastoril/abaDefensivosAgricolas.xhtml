@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui">
+	
+
+	<h:form id="formAbaDefensivosAgricolas">
+		<h:panelGrid id="gridDefensivosAgricolas">
+			<h:outputText value="Utiliza defensivos agrícolas?" styleClass="titulo-grupo" style="font-weight:bold;"/>
+			<p:selectOneRadio id="selDefensivoAgricol"	value="#{defensivosAgricolasController.pergunta_1}">
+				<f:selectItem itemLabel="Sim" itemValue="true" />
+				<f:selectItem itemLabel="Não" itemValue="false" />
+				<p:ajax global="false" update="tabAbasId_Agro:formAbaDefensivosAgricolas:gridDefensivos tabAbasId_Agro:formAbaDefensivosAgricolas:gridClassificacaoToxicologica"/>
+			</p:selectOneRadio>
+		</h:panelGrid>
+		<br />
+		<h:panelGrid id="gridDefensivos" style="margin-left:15px;">
+			<p:selectManyCheckbox layout="pageDirection" value="#{defensivosAgricolasController.listaDefensivosAgricolasSelecionada}" 
+				rendered="#{defensivosAgricolasController.pergunta_1}">
+				<f:selectItems value="#{defensivosAgricolasController.listaDefensivosAgricolas}" var="def" itemLabel="#{def}" itemValue="#{def}"/>
+			</p:selectManyCheckbox>
+			<br />
+			<br />
+			<h:outputText value="Classificação"  rendered="#{defensivosAgricolasController.pergunta_1}" styleClass="titulo-grupo" style="font-weight:bold;"/>
+			<p:selectOneRadio layout="pageDirection" value="#{defensivosAgricolasController.classificacaoDefensivosAgricolas}" 
+				rendered="#{defensivosAgricolasController.pergunta_1}">
+				<f:selectItem itemLabel="Naturais/Alternativas" itemValue="1"/>
+				<f:selectItem itemLabel="Sintéticos" itemValue="2"/>
+				<p:ajax update="tabAbasId_Agro:formAbaDefensivosAgricolas:gridClassificacaoToxicologica" global="false"/>
+			</p:selectOneRadio>
+		</h:panelGrid>
+		<!-- <h:panelGrid id="gridClassificacaoToxicologica" style="margin-left:20px;">
+			<p:selectManyCheckbox layout="pageDirection" value="#{defensivosAgricolasController.listaClassificacaoAgricolaSelecionada}" 
+				rendered="#{defensivosAgricolasController.classificacaoDefensivosAgricolas==2 and defensivosAgricolasController.pergunta_1}">
+				<f:selectItems value="#{defensivosAgricolasController.listaClassificacaoToxicologica}" var="classTox" itemLabel="#{classTox}" itemValue="#{classTox}"/>
+			</p:selectManyCheckbox>
+			<br />
+		</h:panelGrid> -->		
+		<h:panelGrid columns="3">
+			<p:commandButton id="btnVoltar" value="Voltar" global="false" action="#{defensivosAgricolasController.agrossilvopastorilController.voltarAba()}" update="tabAbasId_Agro"/>
+			<p:spacer width="15" height="0"/>
+		 	<p:commandButton id="btnAvancar" value="Avançar" action="#{defensivosAgricolasController.salvarAbaDefensivosAgricolas()}" process="@form" global="false" update="tabAbasId_Agro"/>
+		</h:panelGrid>
+	</h:form>
+</ui:composition>

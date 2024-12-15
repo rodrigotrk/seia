@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="fce_licenciamento_mineracao_aspectos_ambientais" pageWidth="495" pageHeight="817" whenNoDataType="AllSectionsNoDetail" columnWidth="495" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="80b78396-35cc-4e26-aaf9-1207b1892468">
+	<property name="ireport.zoom" value="2.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="ide_fce_licenciamento_mineral" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[$P{ide_fce_licenciamento_mineral}]]></defaultValueExpression>
+	</parameter>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[select ide_fce_licenciamento_mineral   from fce_licenciamento_mineral where ide_fce_licenciamento_mineral = $P{ide_fce_licenciamento_mineral}]]>
+	</queryString>
+	<field name="ide_fce_licenciamento_mineral" class="java.lang.Integer"/>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band height="27" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="b9da6465-e687-4c1f-bd1b-c0c3e8474271" positionType="Float" mode="Opaque" x="0" y="10" width="495" height="17" backcolor="#DDDDDD"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif" size="9" isBold="false"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<text><![CDATA[Aspectos Ambientais]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<detail>
+		<band height="45" splitType="Stretch">
+			<subreport runToBottom="false">
+				<reportElement uuid="40094adf-ff40-4241-9237-122dda711bc2" positionType="Float" stretchType="RelativeToTallestObject" isPrintRepeatedValues="false" x="15" y="25" width="480" height="20" isRemoveLineWhenBlank="true" isPrintWhenDetailOverflows="true"/>
+				<subreportParameter name="ide_fce_licenciamento_mineral">
+					<subreportParameterExpression><![CDATA[$P{ide_fce_licenciamento_mineral}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "fce_licenciamento_mineracao_sistema_tratamento.jasper"]]></subreportExpression>
+			</subreport>
+			<staticText>
+				<reportElement uuid="7748f9e1-a0bb-437f-8ef3-b4f9b5ecdc4d" x="0" y="5" width="305" height="20"/>
+				<box topPadding="3" leftPadding="2"/>
+				<textElement>
+					<font size="9" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Sistema de tratamento de efluentes]]></text>
+			</staticText>
+		</band>
+		<band height="45">
+			<staticText>
+				<reportElement uuid="d5099368-9ad4-4b48-9aea-2835193597cf" x="0" y="5" width="232" height="20"/>
+				<box topPadding="3" leftPadding="2"/>
+				<textElement>
+					<font size="9" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Emissões atmosféricas]]></text>
+			</staticText>
+			<subreport runToBottom="false">
+				<reportElement uuid="056d4d6b-8813-4bf8-90ce-8ed98179eb10" positionType="Float" stretchType="RelativeToBandHeight" isPrintRepeatedValues="false" x="15" y="25" width="480" height="20" isRemoveLineWhenBlank="true" isPrintWhenDetailOverflows="true"/>
+				<subreportParameter name="ide_fce_licenciamento_mineral">
+					<subreportParameterExpression><![CDATA[$P{ide_fce_licenciamento_mineral}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "fce_licenciamento_mineracao_emissao_atmosferica.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+		<band height="45">
+			<staticText>
+				<reportElement uuid="c61e6a0c-6852-4423-990d-fec8c4fb6191" x="0" y="5" width="232" height="20"/>
+				<box topPadding="3" leftPadding="2"/>
+				<textElement>
+					<font size="9" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Resíduos gerados ou a serem gerados]]></text>
+			</staticText>
+			<subreport runToBottom="false">
+				<reportElement uuid="c3b15719-e73a-4871-abad-2018fc8d084b" positionType="Float" stretchType="RelativeToTallestObject" isPrintRepeatedValues="false" x="15" y="25" width="480" height="20" isRemoveLineWhenBlank="true" isPrintWhenDetailOverflows="true"/>
+				<subreportParameter name="ide_fce_licenciamento_mineral">
+					<subreportParameterExpression><![CDATA[$P{ide_fce_licenciamento_mineral}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "fce_licenciamento_mineracao_residuo_gerado.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+		<band height="45">
+			<staticText>
+				<reportElement uuid="f438c93f-fc22-4ccc-a9a7-97596407e652" x="0" y="5" width="232" height="20"/>
+				<box topPadding="3" leftPadding="2"/>
+				<textElement>
+					<font size="9" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Destino dos resíduos]]></text>
+			</staticText>
+			<subreport runToBottom="false">
+				<reportElement uuid="fb88255d-46fb-4b89-a8ce-0c1f9d017033" positionType="Float" stretchType="RelativeToTallestObject" isPrintRepeatedValues="false" x="15" y="25" width="480" height="20" isRemoveLineWhenBlank="true" isPrintWhenDetailOverflows="true"/>
+				<subreportParameter name="ide_fce_licenciamento_mineral">
+					<subreportParameterExpression><![CDATA[$P{ide_fce_licenciamento_mineral}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "fce_licenciamento_mineracao_destino_residuo.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+	</detail>
+</jasperReport>

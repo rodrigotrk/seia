@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui">
+
+	<p:dialog id="_dlgVisualizarComunicacao" dynamic="true" 
+		resizable="false" modal="true" widgetVar="dlgVisualizarComunicacao"
+		position="center" closable="true" width="800" height="590"
+		appendToBody="true"
+		header="#{bundle.comunicacao_lbl_visualizar}">
+
+		<h:form id="formVisualizar1">
+
+			<h:panelGrid columns="1">
+				
+					<h:panelGrid columns="2">
+							<h:outputLabel value="Tipo de Comunicação"/>
+							<h:outputLabel value="Situação"/>
+						<p:selectOneRadio id="tpComunicacaoVisualizacao" disabled="true"
+							value="#{comunicacaoController.comunicacao.tpComunicacao}"
+							unselectable="true">
+							<f:selectItem itemLabel="Notificação" itemValue="N" />
+							<f:selectItem itemLabel="Temporária" itemValue="T" />
+						</p:selectOneRadio>
+						<p:selectOneRadio id="indAtivaVisualizacao" disabled="true"
+							value="#{comunicacaoController.comunicacao.indAtiva}"
+							unselectable="true">
+							<f:selectItem itemLabel="Ativo" itemValue="#{true}" />
+							<f:selectItem itemLabel="Inativo" itemValue="#{false}" />
+						</p:selectOneRadio>
+					</h:panelGrid>
+					<h:panelGrid>
+					<h:outputLabel value="Perfil"/>
+						<p:pickList id="perfilVisualizacao" disabled="true"
+						
+							value="#{comunicacaoController.perfilDualList}" var="perfil"
+							itemLabel="#{perfil.dscPerfil}" itemValue="#{perfil}"
+							addLabel="Adicionar"
+							addAllLabel="Adicionar todos"  			 
+							removeLabel="Remover"  			 
+							removeAllLabel="Remover Todos"   />
+
+					</h:panelGrid>
+			
+				<h:panelGrid columns="4">
+					<h:outputText value="Período" />
+					<h:outputText />
+					<h:outputText />
+					<h:outputText />
+					<h:panelGroup>
+						<h:outputText value="Data Inicial   " />
+						<p:calendar showOn="button" size="10" disabled="true"
+							value="#{comunicacaoController.comunicacao.dtcPeriodoInicio}"
+							locale="pt" pattern="dd/MM/yyyy" navigator="true"
+							yearRange="c-50:c+10" style="font-color:grey;" />
+					</h:panelGroup>
+					<h:outputText value="Data Final" />
+					<p:calendar showOn="button" size="10" disabled="true"
+						value="#{comunicacaoController.comunicacao.dtcPeriodoFim}"
+						locale="pt" pattern="dd/MM/yyyy" navigator="true"
+						yearRange="c-50:c+10" style="font-color:grey;"/>
+				</h:panelGrid>
+
+				<h:panelGrid columns="2">
+					<h:outputText value="Título" />
+					<p:inputText value="#{comunicacaoController.comunicacao.dscTitulo}" style="width:720px"
+						disabled="true" />
+				</h:panelGrid>
+
+			<h:outputLabel value="Texto da Comunicação"/>
+				<p:inputTextarea rows="10" cols="124"
+					value="#{comunicacaoController.comunicacao.txtConteudo}"
+				 autoResize="true" disabled="true" />
+
+			</h:panelGrid>
+
+			<h:panelGrid columns="1" style="float: right;">
+				<p:commandButton id="btnVoltar" value="#{bundle.geral_lbl_voltar}"
+					process="@this" oncomplete="dlgVisualizarComunicacao.hide()" />
+			</h:panelGrid>
+
+
+		</h:form>
+	</p:dialog>
+
+
+</ui:composition>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="fce_linha_energia_localizacao_geografica_principal_subreport_municipios" language="java" pageWidth="752" pageHeight="572" orientation="Landscape" columnWidth="752" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="26c2096d-893f-417f-b522-b6d4fe2e1dc8">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="ide_fce_linha_energia" class="java.lang.Integer"/>
+	<queryString>
+		<![CDATA[select nom_municipio from municipio where cod_ibge_municipio in (select CAST(sp_get_municipio(a.ide_localizacao_geografica) AS numeric) from fce_linha_energia_localizacao_geografica a where ide_fce_linha_energia = $P{ide_fce_linha_energia})
+order by 1]]>
+	</queryString>
+	<field name="nom_municipio" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField pattern="" isBlankWhenNull="false">
+				<reportElement uuid="e69915d5-8a7b-4d9c-b545-1093ad8680c9" mode="Transparent" x="8" y="0" width="212" height="20" forecolor="#000000" backcolor="#FFFFFF"/>
+				<textElement verticalAlignment="Middle" rotation="None" markup="none">
+					<font fontName="SansSerif" size="9" isBold="false" isItalic="false" isUnderline="false" isStrikeThrough="false" pdfEncoding="Cp1252" isPdfEmbedded="false"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nom_municipio}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

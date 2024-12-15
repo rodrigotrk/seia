@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="documentoDeclaracao_dqc_florestal" language="java" pageWidth="495" pageHeight="802" columnWidth="495" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="bd224b9c-3a7f-419c-a2c4-11a36ef01cbc">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="ide_requerimento" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[0]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT
+DISTINCT I.IDE_IMOVEL ,
+	IR.DES_DENOMINACAO AS DENOMINACAO,
+	L.NOM_LOGRADOURO AS ENDERECO,
+	EN.DES_COMPLEMENTO AS COMPLEMENTO,
+	M.NOM_MUNICIPIO AS MUNICIPIO,
+	ES.NOM_ESTADO AS ESTADO,
+	L.NUM_CEP AS CEP,
+	COALESCE(IR.NUM_MATRICULA,IR.NUM_REGISTRO) AS MATRICULA,
+	DQCIOQC.VAL_AREA_PREVISTA_QUEIMA AS AREA_QUEIMA
+FROM
+DECLARACAO_QUEIMA_CONTROLADA DQC
+	INNER JOIN ATO_DECLARATORIO A ON A.IDE_ATO_DECLARATORIO = DQC.IDE_ATO_DECLARATORIO
+	INNER JOIN DECLARACAO_QUEIMA_CONTROLADA_IMOVEL DQCI ON DQC.IDE_DECLARACAO_QUEIMA_CONTROLADA = DQCI.IDE_DECLARACAO_QUEIMA_CONTROLADA
+	LEFT JOIN DECLARACAO_QUEIMA_CONTROLADA_IMOVEL_OBJETIVO_QUEIMA_CONTROLADA DQCIOQC ON DQCIOQC.IDE_DECLARACAO_QUEIMA_CONTROLADA_IMOVEL = DQCI.IDE_DECLARACAO_QUEIMA_CONTROLADA_IMOVEL
+	INNER JOIN IMOVEL I ON I.IDE_IMOVEL = DQCI.IDE_IMOVEL
+	LEFT JOIN IMOVEL_RURAL IR ON IR.IDE_IMOVEL_RURAL = I.IDE_IMOVEL
+--	LEFT JOIN IMOVEL_EMPREENDIMENTO IE ON IE.IDE_IMOVEL = I.IDE_IMOVEL
+--	LEFT JOIN EMPREENDIMENTO E ON E.IDE_EMPREENDIMENTO = IE.IDE_EMPREENDIMENTO
+--	LEFT JOIN ENDERECO_EMPREENDIMENTO EE ON EE.IDE_EMPREENDIMENTO = E.IDE_EMPREENDIMENTO
+	LEFT JOIN ENDERECO EN ON I.IDE_ENDERECO = EN.IDE_ENDERECO
+	LEFT JOIN LOGRADOURO L ON L.IDE_LOGRADOURO = EN.IDE_LOGRADOURO
+	LEFT JOIN MUNICIPIO M ON M.IDE_MUNICIPIO = L.IDE_MUNICIPIO
+	LEFT JOIN ESTADO ES ON ES.IDE_ESTADO = M.IDE_ESTADO
+WHERE A.IDE_REQUERIMENTO = $P{ide_requerimento}]]>
+	</queryString>
+	<field name="ide_imovel" class="java.lang.Integer"/>
+	<field name="denominacao" class="java.lang.String"/>
+	<field name="endereco" class="java.lang.String"/>
+	<field name="complemento" class="java.lang.String"/>
+	<field name="municipio" class="java.lang.String"/>
+	<field name="estado" class="java.lang.String"/>
+	<field name="cep" class="java.math.BigDecimal"/>
+	<field name="matricula" class="java.lang.String"/>
+	<field name="area_queima" class="java.math.BigDecimal"/>
+	<detail>
+		<band height="172" splitType="Stretch">
+			<textField>
+				<reportElement uuid="1933448b-1e5a-4ba3-819e-90fc4ad6beb2" x="231" y="131" width="139" height="20"/>
+				<box leftPadding="5">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA["Estado: "+$F{estado}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="false">
+				<reportElement uuid="79b8628e-dfa2-4281-bbc1-b67c8d9994e0" x="231" y="151" width="262" height="21"/>
+				<box leftPadding="5">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA["Área de queima: " + ($F{area_queima} != null ? $F{area_queima} : "-")]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="4828c93d-8e1a-4b3e-aeeb-10597142a3d7" x="370" y="131" width="123" height="20"/>
+				<box leftPadding="5">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA["CEP: " + $F{cep}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="ccb2267a-98e9-4595-88e6-cb02317a6b41" x="2" y="132" width="229" height="20"/>
+				<box leftPadding="5">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA["Município: "+ $F{municipio}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="c92edc3d-760c-4791-9912-ca4556d47df1" x="2" y="89" width="491" height="22"/>
+				<box leftPadding="5">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA["Denominação: "+ $F{denominacao}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="fd69baf7-a06e-46a0-8333-a87b6fe4b23a" x="2" y="151" width="229" height="21"/>
+				<box leftPadding="5">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA["Registro/Matrícula: " +$F{matricula}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="83f0dcea-b2b4-48f6-a122-f07545420084" x="2" y="111" width="229" height="20"/>
+				<box leftPadding="5">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA["Endereço: "+$F{endereco}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="96c0d4f9-c151-48bb-9891-a283d73e9a36" x="231" y="111" width="262" height="20"/>
+				<box leftPadding="5">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA["Complemento: "+$F{complemento}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

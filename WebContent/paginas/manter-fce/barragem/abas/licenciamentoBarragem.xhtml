@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui">
+	<br/>
+	<h:outputText styleClass="titulo-grupo" style="font-weight:bold;" value="Licenciamento de Barragem" />
+	<div class="line"/>
+	<br/>
+	<h3>Dados Geográficos</h3>
+	<div class="line"/>
+	<br/>
+	<h:panelGrid columns="1" id="pgDadosGeograficos">
+		<p:commandLink oncomplete="dialogIncluirPonto.show();"
+			process="@this" 
+			immediate="true"
+			rendered="#{!fceBarragemController.desabilitarTudo}"
+			action="#{fceBarragemController.limparPonto()}"
+			update="formPonto">
+			<h:graphicImage title="Incluir Pontos" value="/resources/img/ico-expandir.png" style="margin-right: 2px;" />
+			<h:outputText value="Incluir pontos" />
+		</p:commandLink>
+		<br/>
+		<br/>
+
+		<p:dataTable id="dtDadosGeograficos" rendered="#{not empty fceBarragemController.fceBarragem.fceBarragemLicenciamento.barragemLicenciamentoLocalizacaoGeo}" value="#{fceBarragemController.fceBarragem.fceBarragemLicenciamento.barragemLicenciamentoLocalizacaoGeo}" var="localizacaoLicencimento">
+			<p:column headerText="Inicio do Eixo">
+	  			<h:outputText value="#{localizacaoGeograficaGenericController.getLatitude(fceBarragemController.getDadoGeograficoInCollection(localizacaoLicencimento.ideLocalGeoInicioEixo.dadoGeograficoCollection, 0))}" />
+				<h:outputText value="#{localizacaoGeograficaGenericController.getLongitude(fceBarragemController.getDadoGeograficoInCollection(localizacaoLicencimento.ideLocalGeoInicioEixo.dadoGeograficoCollection, 0))}" />
+			</p:column>
+			<p:column headerText="Fim do Eixo">
+	  			<h:outputText value="#{localizacaoGeograficaGenericController.getLatitude(fceBarragemController.getDadoGeograficoInCollection(localizacaoLicencimento.ideLocalGeoFimEixo.dadoGeograficoCollection, null))}" />
+				<h:outputText value="#{localizacaoGeograficaGenericController.getLongitude(fceBarragemController.getDadoGeograficoInCollection(localizacaoLicencimento.ideLocalGeoFimEixo.dadoGeograficoCollection, null))}" />
+			</p:column>
+			<p:column headerText="Nome do Rio">
+				<p:inputText value="#{localizacaoLicencimento.nomeRio}" disabled="#{fceBarragemController.desabilitarTudo or localizacaoLicencimento.confirmar}" />
+			</p:column>
+			<p:column headerText="Bacia hidrografica">
+				<h:outputText value="#{fceBarragemController.getBacia(localizacaoLicencimento.ideLocalGeoFimEixo)}" />
+			</p:column>
+			<p:column headerText="Ações">
+				<p:commandLink disabled="#{fceBarragemController.desabilitarTudo}" process="@form" action="#{fceBarragemController.desabilitarNomeRio(localizacaoLicencimento, true)}" 
+					update="formFcebarragem" rendered="#{!localizacaoLicencimento.confirmar}">
+                    <h:graphicImage title="Confirmar" value="/resources/img/ico-msg-sucesso.png" />
+                </p:commandLink>
+
+                <p:commandLink disabled="#{fceBarragemController.desabilitarTudo}" process="@form" action="#{fceBarragemController.desabilitarNomeRio(localizacaoLicencimento, false)}" 
+					update="formFcebarragem" rendered="#{localizacaoLicencimento.confirmar}">
+                    <h:graphicImage title="Editar" value="/resources/img/ico-editar.png" />
+                </p:commandLink>
+                                            
+				<a onclick="javascript:${localizacaoGeograficaGenericController.retornarUrl(localizacaoLicencimento.ideLocalGeoInicioEixo)}">
+					<h:graphicImage title="Geobahia" value="/resources/img/ico-arl-relocacao.png" />
+				</a>
+				<p:commandLink update="formFcebarragem" rendered="#{!fceBarragemController.desabilitarTudo}" oncomplete="dialogExcluirLocGeoPonto.show();">
+					<h:graphicImage title="Excluir" value="/resources/img/ico-excluir.png" />
+					<f:setPropertyActionListener target="#{fceBarragemController.fceBarragLicencLocaGeoExclusao}" value="#{localizacaoLicencimento}" />
+				</p:commandLink>
+			</p:column>
+		</p:dataTable>
+
+	</h:panelGrid>
+	<br/>
+	<b>Material(ais) utilizado(s)</b>
+	<div class="line"/>
+	<table>
+		<tr>
+			<ui:repeat var="material" value="#{fceBarragemController.buildMateriaisUtilizados()}">
+				<td>
+					<h:panelGrid columns="2">
+						<p:selectBooleanCheckbox value="#{material.selecionado}" disabled="#{fceBarragemController.desabilitarTudo}">
+							<p:ajax event="change" listener="#{fceBarragemController.addMateriaisUtilizados(material)}"/>
+						</p:selectBooleanCheckbox>
+						<h:outputText style="margin-left:5px;" value="#{material.materialUtilizado}" /> 
+					</h:panelGrid>
+				</td>
+			</ui:repeat>
+		</tr>
+	</table>
+	<br/>
+	<b>Obras de infraestrutura e complementares</b>
+	<br/>
+	<ui:repeat var="obra"
+		value="#{fceBarragemController.buildObrasInfraComplementares}"
+		varStatus="index">
+		<h:panelGrid columns="2">
+			<p:selectBooleanCheckbox value="#{obra.selecionado}" disabled="#{fceBarragemController.desabilitarTudo}">
+				<p:ajax event="change"
+					listener="#{fceBarragemController.addObrasInfraComplementares(obra)}" />
+			</p:selectBooleanCheckbox>
+			<h:outputText style="margin-left:5px;" value="#{obra.nome}" />
+		</h:panelGrid>
+	</ui:repeat>
+	<br/>
+	<b>APP do reservatório</b>
+	<div class="line"/>
+	<br/>
+	<p:commandLink oncomplete="dlgLocalizacaoGeograficaGeneric.show();"
+		action="#{localizacaoGeograficaGenericController.carregarTela()}"
+		actionListener="${localizacaoGeograficaGenericController.limparLocalizacaoGeografSelecionada()}"
+		process="@this" immediate="true"
+		rendered="#{empty fceBarragemController.fceBarragem.fceBarragemLicenciamento.poligonalApp}">
+		
+		<f:setPropertyActionListener target="#{fceBarragemController.localizacaoGeograficaAppReservatorio}" value="#{fceBarragemController.novaLocalizacao}" />
+		<f:setPropertyActionListener target="#{localizacaoGeograficaGenericController.tipoSecaoGeometrica}" value="#{fceBarragemController.somenteShape}" />
+		<f:setPropertyActionListener target="#{localizacaoGeograficaGenericController.requerimento}" value="#{fceBarragemController.requerimento.ideRequerimento}" />
+		<f:setPropertyActionListener target="#{localizacaoGeograficaGenericController.localizacaoGeograficaSelecionada}" value="#{fceBarragemController.localizacaoGeograficaAppReservatorio}" />
+		<f:setPropertyActionListener target="#{localizacaoGeograficaGenericController.metodoAtualizarExterno}" value="#{fceBarragemController.metodoRetornoAppReservatorio}" />
+		
+		<h:graphicImage title="Incluir" value="/resources/img/ico-expandir.png" style="margin-right: 2px;" />
+		<h:outputText value="Incluir poligonal da APP" />
+	</p:commandLink>
+	<p:dataTable rendered="#{not empty fceBarragemController.fceBarragem.fceBarragemLicenciamento.poligonalApp}" value="#{fceBarragemController.getLocalizacaoGeograficaList(fceBarragemController.fceBarragem.fceBarragemLicenciamento.poligonalApp)}" var="poligonal">
+		<p:column headerText="Tipo">
+			#{poligonal.ideClassificacaoSecao.nomClassificacaoSecao}
+		</p:column>
+		<p:column headerText="Sistemas de coordenadas">
+			#{poligonal.ideSistemaCoordenada.nomSistemaCoordenada}
+		</p:column>
+		<p:column headerText="Área(ha)">
+			#{fceBarragemController.getAreaShape(poligonal)}
+		</p:column>
+		<p:column headerText="Bioma">
+			<h:outputText value="#{fceBarragemController.getBioma(poligonal)}" />
+		</p:column>
+		<p:column headerText="Ações">
+			<a onclick="javascript:${localizacaoGeograficaGenericController.retornarUrl(poligonal)}">
+				<h:graphicImage title="Geobahia" value="/resources/img/ico-arl-relocacao.png" />
+			</a>
+			<p:commandLink process="@form" rendered="#{!fceBarragemController.desabilitarTudo}" oncomplete="dialogExcluirPoligonalApp.show();" >
+				<h:graphicImage title="Excluir" value="/resources/img/ico-excluir.png" />
+			</p:commandLink>
+		</p:column>
+	</p:dataTable>
+	<br/>
+	<br/>
+	
+	<h:panelGrid rendered="#{fceBarragemController.lp}" style="width: 100%">
+		<b>Estimativa da área a ser suprimida</b>
+		<div class="line"/>
+		<br/>
+		<p:commandLink oncomplete="dlgLocalizacaoGeograficaGeneric.show();"
+			action="#{localizacaoGeograficaGenericController.carregarTela()}"
+			actionListener="${localizacaoGeograficaGenericController.limparLocalizacaoGeografSelecionada()}"
+			process="@this" immediate="true"
+			rendered="#{fceBarragemController.fceBarragem.fceBarragemLicenciamento.poligonalAreaSuprimida == null}">
+			
+			<f:setPropertyActionListener target="#{localizacaoGeograficaGenericController.requerimento}" value="#{fceBarragemController.requerimento.ideRequerimento}" />
+			<f:setPropertyActionListener target="#{localizacaoGeograficaGenericController.tipoSecaoGeometrica}" value="#{fceBarragemController.somenteShape}" />
+			<f:setPropertyActionListener target="#{fceBarragemController.localizacaoGeograficaSuprimida}" value="#{fceBarragemController.novaLocalizacao}" />
+			<f:setPropertyActionListener target="#{localizacaoGeograficaGenericController.localizacaoGeograficaSelecionada}" value="#{fceBarragemController.localizacaoGeograficaSuprimida}" />
+			<f:setPropertyActionListener target="#{localizacaoGeograficaGenericController.metodoAtualizarExterno}" value="#{fceBarragemController.metodoRetornoSuprimida}" />
+			
+			<h:graphicImage title="Incluir" value="/resources/img/ico-expandir.png" style="margin-right: 2px;" />
+			<h:outputText value="Incluir poligonal da área estimada a ser suprimida" />
+		</p:commandLink>
+		<p:dataTable rendered="#{fceBarragemController.fceBarragem.fceBarragemLicenciamento.poligonalAreaSuprimida != null}" value="#{fceBarragemController.getLocalizacaoGeograficaList(fceBarragemController.fceBarragem.fceBarragemLicenciamento.poligonalAreaSuprimida)}" var="poligonal">
+			<p:column headerText="Tipo">
+				#{poligonal.ideClassificacaoSecao.nomClassificacaoSecao}
+			</p:column>
+			<p:column headerText="Sistemas de coordenadas">
+				#{poligonal.ideSistemaCoordenada.nomSistemaCoordenada}
+			</p:column>
+			<p:column headerText="Área(ha)">
+				#{fceBarragemController.getAreaShape(poligonal)}
+			</p:column>
+			<p:column headerText="Bioma">
+				<h:outputText value="#{fceBarragemController.getBioma(poligonal)}" />
+			</p:column>
+			<p:column headerText="Ações">
+				<a onclick="javascript:${localizacaoGeograficaGenericController.retornarUrl(poligonal)}">
+					<h:graphicImage title="Geobahia" value="/resources/img/ico-arl-relocacao.png" />
+				</a>
+				<p:commandLink rendered="#{!fceBarragemController.desabilitarTudo}" oncomplete="dialogExcluirSuprimida.show();">
+					<h:graphicImage title="Excluir" value="/resources/img/ico-excluir.png" />
+				</p:commandLink>
+			</p:column>
+		</p:dataTable>
+	</h:panelGrid>
+	<br/>
+	<h:panelGroup>
+		<p:commandButton value="Voltar" style="float:left;" actionListener="#{fceBarragemController.voltarAba()}" update="formFcebarragem"/>
+		<p:commandButton value="Finalizar" style="float:right;" actionListener="#{fceBarragemController.finalizar()}" update="formFcebarragem" rendered="#{!fceBarragemController.desabilitarTudo}"/>
+	</h:panelGroup>
+	<br/>
+	<br/>
+</ui:composition>

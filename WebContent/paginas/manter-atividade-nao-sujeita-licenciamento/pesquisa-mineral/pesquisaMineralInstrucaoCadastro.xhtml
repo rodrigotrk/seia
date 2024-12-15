@@ -1,0 +1,83 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui">
+	
+	<p:dialog header="#{bundle.lbl_cansla_instrucao_cadastro}" 
+		widgetVar="dialogInstrucoes" 
+		modal="true" 
+		style="text-align:center;" 
+		resizable="false"  
+		position="center" 
+		closable="true"
+		width="750" 
+		height="475">
+
+		<p:ajax event="close" listener="#{pesquisaMineralController.fecharInstrucoesCadastro()}"/>
+		
+		<div style="width:700px; margin-left: 10px;">
+			<p class="font-req-declaracao">
+				De acordo com o Art. 142-C do Regulamento da Lei Estadual 10.431/2012 
+				aprovado pelo Decreto Estadual 14.024/2012 e alterado pelo Decreto Estadual
+				15.682/2014, a pesquisa mineral, sem Guia de Utilização, envolvendo
+				sondagem e trincheiras, dentre outros métodos, estará dispensada do
+				licenciamento ambiental, mediante prévio cadastramento da atividade
+				no SEIA, quando ocorrerem as seguintes situações:
+			</p>
+		</div>
+
+		<div style="width:635px; margin-left: 30px; text-align: left;">
+			<ul class="lista">
+					<li class="lista"> 
+						<h:outputLabel styleClass="font-req-declaracao" value="for realizada em áreas antropizadas;" />
+					</li>
+					<li class="lista">
+						<h:outputLabel styleClass="font-req-declaracao" value="não ocorram intervenções em áreas de vegetação nativa;"/>
+					</li>
+					<li class="lista">
+						<h:outputLabel styleClass="font-req-declaracao" value="não implique na relocação de pessoas;"/>
+					</li>
+					<li class="lista">
+						<h:outputLabel styleClass="font-req-declaracao" value="não ocorra intervenção em unidade de conservação, zona de amortecimento, áreas de preservação permanente, áreas costeiras, sítios e/ou ocorrências arqueológicas, espeleológicas e paleontológicas;"/>
+					</li>
+					<li class="lista">
+						<h:outputLabel styleClass="font-req-declaracao" value="não interfira em terras indígenas e/ou comunidades tradicionais, conforme legislação pertinente;" />
+					</li>
+					<li class="lista">
+						<h:outputLabel styleClass="font-req-declaracao" value="não impliquem em assoreamentos, desvios e/ou intervenções nos cursos d’água e uso de substâncias químicas que venham contaminar e/ou alterar a qualidade dos recursos hídricos." />
+					</li>
+			</ul>
+		</div>
+
+		<div style="width:700px; margin-left: 10px;">
+			<p class="font-req-declaracao">
+				Caso o empreendimento não se enquadre nas situações elencadas nos itens acima, a atividade não é passível a este cadastro e a
+				mesma deve ser regularizada mediante a formação de processo de Autorização Ambiental.
+			</p>
+		</div>
+			
+		<p:spacer width="0" height="10" />
+
+		<h:form >
+			<h:panelGrid columns="2" width="700">
+				<p:selectBooleanCheckbox value="#{pesquisaMineralController.aceite}" >
+					<p:ajax event="change" />
+				</p:selectBooleanCheckbox>
+				<h:outputText style="margin-right: -20px;" value="#{bundle.lbl_cansla_aceite}" /> 
+				
+			</h:panelGrid>
+			
+			<h:panelGrid style="float:right;">
+				<p:commandButton value="Salvar" 
+					id="botaoSalvarInstrucoes" 
+					actionListener="#{pesquisaMineralController.salvarInstrucoesCadastro()}"
+					oncomplete="validaTela(xhr, status, args, dialogInstrucoes);"
+					style="margin-left : 10px;"/>
+			</h:panelGrid>
+		</h:form>
+		
+	</p:dialog>
+	
+</ui:composition>

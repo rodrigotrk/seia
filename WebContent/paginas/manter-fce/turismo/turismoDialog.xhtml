@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui">
+	<h:form id="formTurismo">
+		<div align="center">
+			<h:outputText styleClass="titulo-grupo" style="font-weight:bold;" value="#{bundle.fce_tur_lulp}" rendered="#{!fceTurismoController.li}"/>
+			<h:outputText styleClass="titulo-grupo" style="font-weight:bold;" value="#{bundle.fce_tur_li}" rendered="#{fceTurismoController.li}"/>
+		</div>
+		
+  		<ui:include src="/paginas/manter-fce/turismo/turismoShapeEmpreendimento.xhtml"/>
+		
+	 	<h:outputText styleClass="titulo-grupo" style="font-weight:bold; margin-left:10px;" value="#{bundle.fce_tur_zona}" />
+		<h:panelGrid columns="2" style="margin-left:20px;">
+			<p:selectBooleanCheckbox value="#{fceTurismoController.zonaRural}" disabled="true"/>
+			<h:outputText value="#{bundle.fce_tur_zona_rural}" />
+			
+			<p:selectBooleanCheckbox value="#{fceTurismoController.zonaUrbana}" disabled="true"/>
+			<h:outputText value="#{bundle.fce_tur_zona_urbana}" />
+			
+			<p:selectBooleanCheckbox value="#{fceTurismoController.fceTurismo.indZonaExtensao}" valueChangeListener="#{fceTurismoController.changeZonaExpansaoUrbana()}" disabled="#{fceTurismoController.desabilitarTudo}">
+				<p:ajax global="false" update="formTurismo:expansaoUrbana"/>
+			</p:selectBooleanCheckbox>
+			<h:outputText value="#{bundle.fce_tur_zona_expansao}" />
+		</h:panelGrid>
+		
+		<h:panelGrid id="expansaoUrbana" style="margin-left:30px; margin-top:10px;">
+			<h:outputText value="#{bundle.fce_tur_plano_diretor}" rendered="#{fceTurismoController.temZonaUrbana}"/>
+			<p:selectOneRadio value="#{fceTurismoController.fceTurismo.indPlanoDiretor}" valueChangeListener="#{fceTurismoController.changePlanoDiretor()}" layout="pageDirection" style="margin-left:5px;" rendered="#{fceTurismoController.temZonaUrbana}" disabled="#{fceTurismoController.desabilitarTudo}">
+				<f:selectItem itemLabel="Sim" itemValue="true" />
+				<f:selectItem itemLabel="Não" itemValue="false" />
+				<p:ajax global="false" update="expansaoUrbana" />
+			</p:selectOneRadio>
+			
+			<h:panelGroup id="leiMunicipal" rendered="#{fceTurismoController.fceTurismoComPlanoDiretor}">
+				<h:outputText value="#{bundle.fce_tur_lei_municipal}" />
+				<p:inputText value="#{fceTurismoController.fceTurismo.dscLeiMunicipal}" style="margin-left:10px;" maxlength="50" disabled="#{fceTurismoController.desabilitarTudo}">
+					<p:ajax event="blur" global="false" />
+				</p:inputText>
+			</h:panelGroup>		
+		</h:panelGrid>
+		
+		<br /> <br />
+		
+		<h:outputText styleClass="titulo-grupo" style="font-weight:bold; margin-left:10px;" value="#{bundle.fce_tur_categoria_empreendimento}" />
+		<br />
+		<h:panelGrid id="categoriaEmpreendimentoG11" style="margin-left:20px; margin-top:10px;" rendered="#{fceTurismoController.tipologiaG11}">
+			<h:outputText styleClass="titulo-grupo" style="font-weight:bold;" value="#{bundle.fce_tur_g11}" />
+			<p:selectManyCheckbox value="#{fceTurismoController.listaTipologiaG11selected}" layout="pageDirection" style="margin-left:10px;" converter="simpleEntityConverter" disabled="#{fceTurismoController.desabilitarTudo}">
+				<f:selectItems value="#{fceTurismoController.listaTipologiaG11}" var="categTurismo" itemValue="#{categTurismo}" itemLabel="#{categTurismo.dscCategoriaTurismo}"/>
+				<p:ajax global="false"/>
+			</p:selectManyCheckbox>
+		</h:panelGrid>
+		<br />
+		
+		<h:panelGrid id="categoriaEmpreendimentoG21" style="margin-left:20px;" rendered="#{fceTurismoController.tipologiaG21}">
+			<h:outputText styleClass="titulo-grupo" style="font-weight:bold;" value="#{bundle.fce_tur_g21}" />
+			<p:selectManyCheckbox value="#{fceTurismoController.listaTipologiaG21selected}" layout="pageDirection" style="margin-left:10px;" converter="simpleEntityConverter" disabled="#{fceTurismoController.desabilitarTudo}">
+				<f:selectItems value="#{fceTurismoController.listaTipologiaG21}" var="categTurismo" itemValue="#{categTurismo}" itemLabel="#{categTurismo.dscCategoriaTurismo}"/>
+				<p:ajax global="false"/>
+			</p:selectManyCheckbox>
+		</h:panelGrid>	
+		
+		<h:panelGrid id="categoriaEmpreendimentoG22" style="margin-left:20px;" rendered="#{fceTurismoController.tipologiaG22}">
+			<h:outputText styleClass="titulo-grupo" style="font-weight:bold;" value="#{bundle.fce_tur_g22}" />
+			<p:selectManyCheckbox value="#{fceTurismoController.listaTipologiaG22selected}" layout="pageDirection" style="margin-left:10px;" converter="simpleEntityConverter" disabled="#{fceTurismoController.desabilitarTudo}">
+				<f:selectItems value="#{fceTurismoController.listaTipologiaG22}" var="categTurismo" itemValue="#{categTurismo}" itemLabel="#{categTurismo.dscCategoriaTurismo}"/>
+				<p:ajax global="false"/>
+			</p:selectManyCheckbox>
+		</h:panelGrid>
+		
+		<h:outputText styleClass="titulo-grupo" style="font-weight:bold; margin-left:20px;" value="#{bundle.fce_tur_g23}" rendered="#{fceTurismoController.tipologiaG23}"/>		
+		<h:panelGrid id="categoriaEmpreendimentoG23" columns="2" style="margin-left:35px; margin-top: 5px;;" rendered="#{fceTurismoController.tipologiaG23}">
+			<p:selectBooleanCheckbox value="#{fceTurismoController.conjuntoHabitacional}" disabled="true"/>
+			<h:outputText value="#{bundle.fce_tur_g23_con_hab}" style="margin-left:5px;" />
+		</h:panelGrid>	
+					
+		<h:outputText styleClass="titulo-grupo" style="font-weight:bold; margin-left:20px;" value="#{bundle.fce_tur_g24}" rendered="#{fceTurismoController.tipologiaG24}"/>		
+		<h:panelGrid id="categoriaEmpreendimentoG24" columns="2" style="margin-left:35px; margin-top: 5px;;" rendered="#{fceTurismoController.tipologiaG24}">			
+			<p:selectBooleanCheckbox value="#{fceTurismoController.habilitacaoInteresseSocial}" disabled="true"/>
+			<h:outputText value="#{bundle.fce_tur_g24_hab_int}" style="margin-left:5px;" />
+		</h:panelGrid>
+		<br /> <br />
+		
+		<h:outputText styleClass="titulo-grupo" style="font-weight:bold; margin-left:10px;" value="#{bundle.fce_tur_areas}" />
+		<h:panelGrid id="areas" style="margin-left:20px;" >
+			<h:panelGrid id="areaG11" columns="3" rendered="#{fceTurismoController.tipologiaG11}">
+				<h:outputText value="#{bundle.fce_tur_area_emp_g11}" />
+				<p:inputText value="#{fceTurismoController.areaEmpreendimentoG11}" style="width:100px; margin-left:5px;" disabled="true">
+					<f:convertNumber integerOnly="false" minFractionDigits="2" pattern="#,##0.00"/>
+				</p:inputText>
+				<h:outputText value="  (ha)" />
+			</h:panelGrid>
+			
+			<h:panelGrid id="areaG21" columns="3" rendered="#{fceTurismoController.tipologiaG21}">
+				<h:outputText value="#{bundle.fce_tur_area_emp_g21}" />
+				<p:inputText value="#{fceTurismoController.areaEmpreendimentoG21}" style="width:100px; margin-left:5px;" disabled="true">
+					<f:convertNumber integerOnly="false" minFractionDigits="2" pattern="#,##0.00"/>
+				</p:inputText>
+				<h:outputText value="  (ha)" />
+			</h:panelGrid>
+
+			<h:panelGrid id="areaG22" columns="3" rendered="#{fceTurismoController.tipologiaG22}">
+				<h:outputText value="#{bundle.fce_tur_area_emp_g22}" />
+				<p:inputText value="#{fceTurismoController.areaEmpreendimentoG22}" style="width:100px; margin-left:5px;" disabled="true">
+					<f:convertNumber integerOnly="false" minFractionDigits="2" pattern="#,##0.00"/>
+				</p:inputText>
+				<h:outputText value="  (ha)" />
+			</h:panelGrid>
+
+			<h:panelGrid id="areaG23" columns="3" rendered="#{fceTurismoController.tipologiaG23}">
+				<h:outputText value="#{bundle.fce_tur_area_emp_g23}" />
+				<p:inputText value="#{fceTurismoController.areaEmpreendimentoG23}" style="width:100px; margin-left:5px;" disabled="true">
+					<f:convertNumber integerOnly="false" minFractionDigits="2" pattern="#,##0.00"/>
+				</p:inputText>
+				<h:outputText value="  (ha)" />
+			</h:panelGrid>
+
+			<h:panelGrid id="areaG24" columns="3" rendered="#{fceTurismoController.tipologiaG24}">
+				<h:outputText value="#{bundle.fce_tur_area_emp_g24}" />
+				<p:inputText value="#{fceTurismoController.areaEmpreendimentoG24}" style="width:100px; margin-left:5px;" disabled="true">
+					<f:convertNumber integerOnly="false" minFractionDigits="2" pattern="#,##0.00"/>
+				</p:inputText>
+				<h:outputText value="  (ha)" />
+			</h:panelGrid>
+			
+			<h:panelGrid columns="3" >
+				<h:outputText value="#{bundle.fce_tur_area_construida}" />
+				<p:inputText value="#{fceTurismoController.fceTurismo.numAreaConstruida}" onkeyup="mascararNumeroAndAddZeros(this, event, 9, 2, '.', ',', 3);"  maxlength="14" style="width:100px; margin-left:162px;" disabled="#{fceTurismoController.desabilitarTudo}">
+					<f:convertNumber integerOnly="false" minFractionDigits="2"/>
+					<p:ajax event="blur" global="false"/>
+				</p:inputText>
+				<h:outputText value="  (m²)" />
+			</h:panelGrid>
+		</h:panelGrid>
+		
+  		<ui:include src="/paginas/manter-fce/turismo/turismoApp.xhtml"/>
+		
+		<br /> <br />
+		
+		<p:outputPanel autoUpdate="true" rendered="#{!fceTurismoController.cessionario}">
+			<h:panelGrid columns="3" style="margin-left:25px;">	
+				<h:outputText value="#{bundle.fce_tur_area_app}" />
+				
+				<p:inputText value="#{fceTurismoController.fceTurismo.numAreaApp}" onkeyup="mascararNumeroAndAddZeros(this, event, 9, 2, '.', ',', 3);" 
+					maxlength="14" style="width:100px;" disabled="#{true}">
+					
+					<f:convertNumber integerOnly="false" minFractionDigits="2"/>
+					<p:ajax event="blur" global="false"/>
+				</p:inputText>
+				
+				<h:outputText value="  (ha)" />
+			</h:panelGrid>
+		</p:outputPanel>
+		
+        <h:panelGrid style="margin-left:20px; margin-top: 10px;" rendered="#{!fceTurismoController.li}">
+	     	<h:outputText value="#{bundle.fce_tur_sup_energia}"/>
+        	<p:selectManyCheckbox value="#{fceTurismoController.listaTipoOrigemEnergiaEscolhidos}" style="margin-left:10px;" converter="simpleEntityConverter" layout="pageDirection"  valueChangeListener="#{fceTurismoController.changeTipoOrigemEnergia()}" disabled="#{fceTurismoController.desabilitarTudo}">
+        		<f:selectItems value="#{fceTurismoController.listaTipoOrigemEnergia}" var="energia" itemValue="#{energia}" itemLabel="#{energia.dscTipoOrigemEnergia}" />
+        		<p:ajax event="change" global="false"/>
+        	</p:selectManyCheckbox>
+        </h:panelGrid>
+        
+        <br /> <br />
+        
+        <h:panelGroup style="margin-left:10px;  margin-top: 10px;">
+			<h:outputText styleClass="titulo-grupo" style="font-weight:bold; " value="#{bundle.fce_tur_dados_adicionais}" />
+			<h:graphicImage title="#{bundle.fce_tur_dados_adicionais_hint}" value="/resources/img/ico-ajuda.png" id="ajuda" style="margin:0px 0px 4px 10px; text-align:justify;" />
+			<p:commandButton value="Download" ajax="false" global="false" process="@this" immediate="true" style="margin-left:85px;" disabled="#{fceTurismoController.desabilitarTudo}">
+				<p:fileDownload value="#{fceTurismoController.dadosAdicionais}" />
+			</p:commandButton>
+		</h:panelGroup>
+		<!-- 
+        <h:panelGrid id="dadoAdicional" style="margin-left:15px; margin-top: 15px; width:337px;">
+			<p:fileUpload id="btnUpload" widgetVar="btnUpload" label="Upload dos Dados Adicionais" fileUploadListener="#{envioDocumentoController.trataUploadDocumentoObrigatorioRequerimento}"
+				mode="advanced" oncomplete="updateDataTableDoc()" auto="true" allowTypes="/(\.|\/)(pdf|gif|jpeg|png|jpg)$/"
+				invalidFileMessage="Tipo de arquivo inválido."  process="@this"	disabled="#{envioDocumentoController.temArquivo}"/>
+			<p:remoteCommand name="updateDataTableDoc" update="tblDoc btnUpload"/>
+			<p:dataTable id="dtDocumentos" rendered="#{envioDocumentoController.temArquivo}" widgetVar="dtDocumentos" value="#{envioDocumentoController.listaArquivo}" var="arquivo"
+						 lazy="true" emptyMessage="#{bundle.msg_lista_vazia}" style="width:333px;">
+		        <p:column style="width:252px;">
+		            <h:outputText value="#{arquivo}"/>
+		        </p:column>
+		         <p:column style="width:35px;">
+		            <h:commandButton value="#{arquivo}" image="/resources/img/ico-download.png" immediate="true" title="Download do arquivo">
+		           		<p:fileDownload value="#{envioDocumentoController.documentoObrigatorioRequerimentoUpado}" />				              
+		            </h:commandButton>
+		            <p:commandLink oncomplete="confirmaExclusaoDadosAdicionaisTurismo.show()" title="Excluir Dados Adicionais" process="@this" global="false">
+          				<h:graphicImage title="Excluir" value="/resources/img/ico-excluir.png" />
+	            	</p:commandLink>
+		        </p:column>	
+	    	</p:dataTable>
+		</h:panelGrid>
+ 		 -->
+ 		 
+ 		 <ui:include src="/paginas/manter-fce/uploadDocumentoAdicionalGeneric.xhtml" />
+ 		 
+		<!-- INICIO DA GRID BOTOES -->
+		<h:panelGrid id="gridBotoes" columns="2" style="margin-top:40px;" rendered="#{!fceTurismoController.desabilitarTudo}" >
+			<p:commandButton id="btnVoltar" value="Voltar" style="width:90px;" process="formTurismo" onclick="confirmationVoltarTurismo.show();" global="false" />
+			<p:commandButton id="btnFinalizar" value="Finalizar" style="width:90px;" update="formTurismo" process="formTurismo" action="#{fceTurismoController.finalizar()}" global="true"/>
+		</h:panelGrid>
+		<!-- FINAL DA GRID BOTOES -->
+	</h:form>
+</ui:composition>

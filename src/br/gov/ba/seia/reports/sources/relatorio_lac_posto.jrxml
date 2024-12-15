@@ -1,0 +1,873 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="relatorio_lac_posto" pageWidth="595" pageHeight="842" columnWidth="455" leftMargin="70" rightMargin="70" topMargin="50" bottomMargin="50" uuid="a84833a8-a3d8-4784-91e0-d634161fbc2b">
+	<property name="ireport.zoom" value="1.3286707500000008"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="753"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="LOGO_INEMA" class="java.lang.String"/>
+	<parameter name="LOGO_SEIA" class="java.lang.String"/>
+	<parameter name="ide_lac" class="java.lang.Integer"/>
+	<parameter name="legislacao" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[select distinct
+	lp.ide_lac_posto_combustivel, lc.ide_documento_obrigatorio ,lp.cod_anp,lp.dtc_validade_contrato_distribuidora,
+	lc.ide_requerimento ,  rq.nom_contato ,  rq.num_telefone, rq.ide_orgao,  rq.num_requerimento,  rq.ide_endereco_contato,  rq.ind_declaracao, rq.ide_tipo_requerimento, rqu.ide_requerimento_unico,
+	rqu.ide_fase_empreendimento,fe.nom_fase_empreendimento,lp.qtd_area_ampliacao,lp.qtd_area_total,lp.qtd_area_construida,
+    tb.dsc_tipo_bandeira_posto_combustivel,cn.dsc_classe_nbr_posto,dp.dsc_distribuidora_posto,lp.dsc_outros_distribuidora,
+    lp.ind_flutuante,lp.ind_area_indigena,lp.dtc_inicio_operacao,lp.qtd_prof_lencol,
+    lp.ind_controle_automatico,lp.qtd_troca_oleo,lp.dsc_ocorrencia_acidente,
+	pt.ide_porte,  pt.sgl_porte,  pt.nom_porte, rp.ide_tipo_pessoa_requerimento,p.ide_pessoa,
+	pj.ide_pessoa_juridica,pj.ide_natureza_juridica ,pj.nom_razao_social ,pj.nom_nome_fantasia , pj.dtc_abertura, pj.num_cnpj, pj.num_inscricao_municipal, pj.num_inscricao_estadual ,
+	pf.ide_pessoa_fisica ,  pf.ide_estado_civil,  pf.ide_escolaridade ,  pf.ide_ocupacao ,  pf.ide_pais ,  pf.nom_pessoa,  pf.tip_sexo ,  pf.dtc_nascimento ,  pf.des_naturalidade,  pf.nom_pai ,
+	pf.nom_mae  ,  pf.num_cpf, er.ide_empreendimento_requerimento,em.ide_empreendimento,  em.ide_localizacao_geografica ,  em.nom_empreendimento,  em.val_investimento ,
+	em.qtd_funcionarios ,  em.num_cadastro_tecnico_federal ,  em.dtc_validade_ctf,  em.ind_correspondencia,
+	ereq.num_endereco as num_endereco_req,ereq.des_complemento as des_complemento_req,lreq.nom_logradouro as nom_logradouro_req,
+	tlreq.nom_tipo_logradouro as nom_tipo_logradouro_req,tlreq.sgl_tipo_logradouro as sgl_tipo_logradouro_req,
+	brreq.nom_bairro as nom_bairro_req,mpreq.nom_municipio as nom_municipio_req,etreq.nom_estado as nom_estado_req,
+	preq.nom_pais as nom_pais_req,
+	eemp.num_endereco as num_endereco_emp,eemp.des_complemento as des_complemento_emp,lemp.nom_logradouro as nom_logradouro_emp,
+	tlemp.nom_tipo_logradouro as nom_tipo_logradouro_emp,tlemp.sgl_tipo_logradouro as sgl_tipo_logradouro_emp,
+	bremp.nom_bairro as nom_bairro_emp,mpemp.nom_municipio as nom_municipio_emp,etemp.nom_estado as nom_estado_emp,
+	pemp.nom_pais as nom_pais_emp,upper(COALESCE(pj.nom_razao_social,pf.nom_pessoa)) as requerente,
+    upper(COALESCE(pj2.nom_razao_social,pf2.nom_pessoa)) as procurador,
+    upper(COALESCE(pj3.nom_razao_social,pf3.nom_pessoa)) as representante
+from lac_posto_combustivel lp
+	inner join tipo_bandeira_posto_combustivel tb on tb.ide_tipo_bandeira_posto_combustivel = lp.ide_tipo_bandeira_posto_combustivel
+	left join classe_nbr_posto cn on cn.ide_classe_nbr_posto = lp.ide_classe_nbr_posto
+    left join distribuidora_posto dp on dp.ide_distribuidora_posto = lp.ide_distribuidora_posto
+	inner join lac lc on lc.ide_lac = lp.ide_lac_posto_combustivel
+	inner join requerimento rq on lc.ide_requerimento = rq.ide_requerimento
+	inner join requerimento_unico rqu on rqu.ide_requerimento_unico = rq.ide_requerimento
+	inner join porte pt on pt.ide_porte = rqu.ide_porte
+  	left join empreendimento_requerimento er on er.ide_requerimento = rq.ide_requerimento
+	left join empreendimento em on em.ide_empreendimento = er.ide_empreendimento
+	inner join fase_empreendimento fe on fe.ide_fase_empreendimento = rqu.ide_fase_empreendimento
+    inner join requerimento_pessoa rp on rp.ide_requerimento = rq.ide_requerimento
+	inner join pessoa p on p.ide_pessoa = em.ide_pessoa
+	left join pessoa_juridica pj on pj.ide_pessoa_juridica = p.ide_pessoa
+	left join pessoa_fisica pf on pf.ide_pessoa_fisica = p.ide_pessoa
+
+    left join requerimento_pessoa rp2 on rp2.ide_requerimento = rq.ide_requerimento and rp2.ide_tipo_pessoa_requerimento = 2
+	left join pessoa p2 on p2.ide_pessoa = rp2.ide_pessoa
+	left join pessoa_juridica pj2 on pj2.ide_pessoa_juridica = p.ide_pessoa
+	left join pessoa_fisica pf2 on pf2.ide_pessoa_fisica = p.ide_pessoa
+
+    left join requerimento_pessoa rp3 on rp3.ide_requerimento = rq.ide_requerimento and rp3.ide_tipo_pessoa_requerimento = 3
+	left join pessoa p3 on p3.ide_pessoa = rp3.ide_pessoa
+	left join pessoa_juridica pj3 on pj3.ide_pessoa_juridica = p3.ide_pessoa
+	left join pessoa_fisica pf3 on pf3.ide_pessoa_fisica = p3.ide_pessoa
+
+	left join endereco_pessoa ep on ep.ide_pessoa = p.ide_pessoa
+	left join endereco ereq on ereq.ide_endereco = ep.ide_endereco_pessoa
+	left join logradouro lreq on lreq.ide_logradouro = ereq.ide_logradouro
+	left join tipo_logradouro tlreq on tlreq.ide_tipo_logradouro = lreq.ide_tipo_logradouro
+	left join bairro brreq on brreq.ide_bairro = lreq.ide_bairro
+	left join municipio mpreq on mpreq.ide_municipio = lreq.ide_municipio
+	left join estado etreq on etreq.ide_estado = mpreq.ide_estado
+	left join pais preq on preq.ide_pais = etreq.ide_pais
+	left join endereco_empreendimento eem on eem.ide_empreendimento = er.ide_empreendimento
+	left join endereco eemp on eemp.ide_endereco = eem.ide_endereco_empreendimento
+	left join logradouro lemp on lemp.ide_logradouro = eemp.ide_logradouro
+	left join tipo_logradouro tlemp on tlemp.ide_tipo_logradouro = lemp.ide_tipo_logradouro
+	left join bairro bremp on bremp.ide_bairro = lemp.ide_bairro
+	left join municipio mpemp on mpemp.ide_municipio = lemp.ide_municipio
+	left join estado etemp on etemp.ide_estado = mpemp.ide_estado
+	left join pais pemp on pemp.ide_pais = etemp.ide_pais
+where lp.ide_lac_posto_combustivel = $P{ide_lac} and p.ind_excluido = false and rp.ide_tipo_pessoa_requerimento =1]]>
+	</queryString>
+	<field name="ide_lac_posto_combustivel" class="java.lang.Integer"/>
+	<field name="ide_documento_obrigatorio" class="java.lang.Integer"/>
+	<field name="cod_anp" class="java.lang.String"/>
+	<field name="dtc_validade_contrato_distribuidora" class="java.sql.Timestamp"/>
+	<field name="ide_requerimento" class="java.lang.Integer"/>
+	<field name="nom_contato" class="java.lang.String"/>
+	<field name="num_telefone" class="java.lang.String"/>
+	<field name="ide_orgao" class="java.lang.Integer"/>
+	<field name="num_requerimento" class="java.lang.String"/>
+	<field name="ide_endereco_contato" class="java.lang.Integer"/>
+	<field name="ind_declaracao" class="java.lang.Boolean"/>
+	<field name="ide_tipo_requerimento" class="java.lang.Integer"/>
+	<field name="ide_requerimento_unico" class="java.lang.Integer"/>
+	<field name="ide_fase_empreendimento" class="java.lang.Integer"/>
+	<field name="nom_fase_empreendimento" class="java.lang.String"/>
+	<field name="qtd_area_ampliacao" class="java.math.BigDecimal"/>
+	<field name="qtd_area_total" class="java.math.BigDecimal"/>
+	<field name="qtd_area_construida" class="java.math.BigDecimal"/>
+	<field name="dsc_tipo_bandeira_posto_combustivel" class="java.lang.String"/>
+	<field name="dsc_classe_nbr_posto" class="java.lang.String"/>
+	<field name="dsc_distribuidora_posto" class="java.lang.String"/>
+	<field name="dsc_outros_distribuidora" class="java.lang.String"/>
+	<field name="ind_flutuante" class="java.lang.Boolean"/>
+	<field name="ind_area_indigena" class="java.lang.Boolean"/>
+	<field name="dtc_inicio_operacao" class="java.sql.Date"/>
+	<field name="qtd_prof_lencol" class="java.math.BigDecimal"/>
+	<field name="ind_controle_automatico" class="java.lang.Boolean"/>
+	<field name="qtd_troca_oleo" class="java.lang.Integer"/>
+	<field name="dsc_ocorrencia_acidente" class="java.lang.String"/>
+	<field name="ide_porte" class="java.lang.Integer"/>
+	<field name="sgl_porte" class="java.lang.String"/>
+	<field name="nom_porte" class="java.lang.String"/>
+	<field name="ide_tipo_pessoa_requerimento" class="java.lang.Integer"/>
+	<field name="ide_pessoa" class="java.lang.Integer"/>
+	<field name="ide_pessoa_juridica" class="java.lang.Integer"/>
+	<field name="ide_natureza_juridica" class="java.lang.Integer"/>
+	<field name="nom_razao_social" class="java.lang.String"/>
+	<field name="nom_nome_fantasia" class="java.lang.String"/>
+	<field name="dtc_abertura" class="java.sql.Timestamp"/>
+	<field name="num_cnpj" class="java.lang.String"/>
+	<field name="num_inscricao_municipal" class="java.lang.String"/>
+	<field name="num_inscricao_estadual" class="java.lang.String"/>
+	<field name="ide_pessoa_fisica" class="java.lang.Integer"/>
+	<field name="ide_estado_civil" class="java.lang.Integer"/>
+	<field name="ide_escolaridade" class="java.lang.Integer"/>
+	<field name="ide_ocupacao" class="java.lang.Integer"/>
+	<field name="ide_pais" class="java.lang.Integer"/>
+	<field name="nom_pessoa" class="java.lang.String"/>
+	<field name="tip_sexo" class="java.lang.Integer"/>
+	<field name="dtc_nascimento" class="java.sql.Date"/>
+	<field name="des_naturalidade" class="java.lang.String"/>
+	<field name="nom_pai" class="java.lang.String"/>
+	<field name="nom_mae" class="java.lang.String"/>
+	<field name="num_cpf" class="java.lang.String"/>
+	<field name="ide_empreendimento_requerimento" class="java.lang.Integer"/>
+	<field name="ide_empreendimento" class="java.lang.Integer"/>
+	<field name="ide_localizacao_geografica" class="java.lang.Integer"/>
+	<field name="nom_empreendimento" class="java.lang.String"/>
+	<field name="val_investimento" class="java.math.BigDecimal"/>
+	<field name="qtd_funcionarios" class="java.lang.Integer"/>
+	<field name="num_cadastro_tecnico_federal" class="java.lang.String"/>
+	<field name="dtc_validade_ctf" class="java.sql.Date"/>
+	<field name="ind_correspondencia" class="java.lang.Boolean"/>
+	<field name="num_endereco_req" class="java.lang.String"/>
+	<field name="des_complemento_req" class="java.lang.String"/>
+	<field name="nom_logradouro_req" class="java.lang.String"/>
+	<field name="nom_tipo_logradouro_req" class="java.lang.String"/>
+	<field name="sgl_tipo_logradouro_req" class="java.lang.String"/>
+	<field name="nom_bairro_req" class="java.lang.String"/>
+	<field name="nom_municipio_req" class="java.lang.String"/>
+	<field name="nom_estado_req" class="java.lang.String"/>
+	<field name="nom_pais_req" class="java.lang.String"/>
+	<field name="num_endereco_emp" class="java.lang.String"/>
+	<field name="des_complemento_emp" class="java.lang.String"/>
+	<field name="nom_logradouro_emp" class="java.lang.String"/>
+	<field name="nom_tipo_logradouro_emp" class="java.lang.String"/>
+	<field name="sgl_tipo_logradouro_emp" class="java.lang.String"/>
+	<field name="nom_bairro_emp" class="java.lang.String"/>
+	<field name="nom_municipio_emp" class="java.lang.String"/>
+	<field name="nom_estado_emp" class="java.lang.String"/>
+	<field name="nom_pais_emp" class="java.lang.String"/>
+	<field name="requerente" class="java.lang.String"/>
+	<field name="procurador" class="java.lang.String"/>
+	<field name="representante" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="184" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="da50d289-0443-41be-b530-b3d1686977e7" x="149" y="167" width="305" height="17"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement>
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[(conforme o Ministério da Fazenda)]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement uuid="691324cd-d5bf-4c39-90e5-6bfd2c0db8dd" x="0" y="0" width="107" height="48"/>
+			</rectangle>
+			<staticText>
+				<reportElement uuid="62fc82f1-346b-406a-848d-c54f30ea0f98" x="328" y="145" width="126" height="22"/>
+				<box>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<text><![CDATA[excepcional]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement uuid="1d7cb48e-1ddc-45f8-aca4-892cbffca2fe" x="313" y="151" width="12" height="10" backcolor="#FFFFFF"/>
+			</rectangle>
+			<staticText>
+				<reportElement uuid="19ca778e-7499-464e-b968-d6c348c8564b" x="0" y="128" width="454" height="17"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<text><![CDATA[Postos de venda de gasolina e outros combustíveis
+]]></text>
+			</staticText>
+			<image isLazy="true" onErrorType="Blank">
+				<reportElement uuid="1859334a-0b87-41e2-9ecd-66ee74b0f652" x="3" y="4" width="99" height="41" forecolor="#FFFFFF"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<graphicElement>
+					<pen lineWidth="1.0" lineStyle="Solid" lineColor="#FFFFFF"/>
+				</graphicElement>
+				<imageExpression><![CDATA[$P{LOGO_INEMA}]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement uuid="b0463314-8823-46f7-9db8-1b60bfe2cbad" x="107" y="0" width="239" height="48"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="2f17a102-4882-4155-93db-8528d305604d" x="0" y="111" width="295" height="17"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font isBold="true"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<text><![CDATA[DIVISÃO E SERVIÇOS]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="47437719-e573-47c6-820e-7634bf3921eb" x="295" y="60" width="59" height="17"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Arial" size="9" isBold="true"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<text><![CDATA[CPF/CNPJ:]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement uuid="8c7ea39e-09f9-4d43-9b34-330ee1a88c59" x="108" y="151" width="12" height="10" backcolor="#000000">
+					<printWhenExpression><![CDATA[new Boolean($F{ide_porte}.intValue() == 2)]]></printWhenExpression>
+				</reportElement>
+			</rectangle>
+			<staticText>
+				<reportElement uuid="2eecb2a6-a725-40be-b009-bb41341a7672" x="0" y="94" width="150" height="17"/>
+				<box>
+					<leftPen lineWidth="1.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Arial" size="9" isBold="true"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<text><![CDATA[Endereço do empreendimento:]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement uuid="5c613054-bacd-409a-9a52-cc6e81e3fefd" x="48" y="151" width="12" height="10"/>
+			</rectangle>
+			<rectangle>
+				<reportElement uuid="e9f7dfa2-d784-4207-a77a-b74f8be9c398" x="346" y="0" width="108" height="48"/>
+			</rectangle>
+			<staticText>
+				<reportElement uuid="3d3014df-569e-4ed0-800c-77cba5bb408c" x="125" y="145" width="57" height="22"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[pequeno]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="c3faa595-cd12-4828-a86a-38a3b9130a9b" x="149" y="77" width="305" height="17"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Arial" size="9"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new String($F{nom_logradouro_req}.equals("null")? " ":  $F{nom_tipo_logradouro_req}+" "+$F{nom_logradouro_req}+", N° "+  $F{num_endereco_req}+", "+$F{nom_bairro_req}
++", "+$F{nom_municipio_req}+", "+$F{nom_estado_req}+", "+$F{nom_pais_req})]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="48c33cb4-62d7-440d-aadd-5cd55062d159" x="67" y="145" width="39" height="22"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[micro]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="e5011fa7-41c9-4a21-8d9c-8cc99d4e106d" x="0" y="145" width="40" height="22"/>
+				<box>
+					<leftPen lineWidth="1.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<text><![CDATA[Porte:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="fdeabffe-a1f0-4164-b9c3-9eedb2defd13" x="252" y="145" width="42" height="22"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[grande]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="87dd4879-d16d-4362-874a-ed6e4a972ab1" x="100" y="60" width="196" height="17"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Arial" size="9"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA["null".equals($F{nom_pessoa}) ? $F{nom_razao_social}:$F{nom_pessoa}]]></textFieldExpression>
+			</textField>
+			<image isLazy="true" onErrorType="Blank">
+				<reportElement uuid="0227c21d-7ff7-4d14-893e-a4c42bf42da4" x="352" y="3" width="99" height="41" forecolor="#FFFFFF"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<graphicElement>
+					<pen lineWidth="0.0"/>
+				</graphicElement>
+				<imageExpression><![CDATA[$P{LOGO_SEIA}]]></imageExpression>
+			</image>
+			<rectangle>
+				<reportElement uuid="51d6e52b-8139-486f-825f-2441c59da033" x="182" y="151" width="12" height="10"/>
+			</rectangle>
+			<staticText>
+				<reportElement uuid="387a2af7-3bac-453a-b23e-52e962caf03b" x="0" y="77" width="149" height="17"/>
+				<box>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Arial" size="9" isBold="true"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<text><![CDATA[Endereço do empreendedor:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="78947740-790f-45bb-a468-ae0c179f8f8a" x="108" y="0" width="238" height="24"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[LICENCIAMENTO AMBIENTAL POR ADESÃO E COMPROMISSO]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement uuid="73d02be6-926f-424d-b105-da0008339bae" x="238" y="151" width="12" height="10"/>
+			</rectangle>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="176eab10-c7d3-4cc3-bd2c-ebb4d229e84b" x="354" y="60" width="100" height="17"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Arial" size="9"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA["null".equals($F{num_cpf}) ? $F{num_cnpj}:$F{num_cpf}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="05af5d43-7919-48be-9e6c-d9615bea27d8" x="150" y="94" width="304" height="17"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Arial" size="9"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new String($F{nom_logradouro_emp}.equals("null")? " ":$F{nom_tipo_logradouro_emp}+" "+$F{nom_logradouro_emp}+", N° "+  $F{num_endereco_emp}+", "+$F{nom_bairro_emp}
++", "+$F{nom_municipio_emp}+", "+$F{nom_estado_emp}+", "+$F{nom_pais_emp})]]></textFieldExpression>
+			</textField>
+			<rectangle>
+				<reportElement uuid="39704ce8-e922-48a7-818d-b8906072b664" x="313" y="151" width="12" height="10" backcolor="#000000">
+					<printWhenExpression><![CDATA[new Boolean($F{ide_porte}.intValue() == 5)]]></printWhenExpression>
+				</reportElement>
+			</rectangle>
+			<rectangle>
+				<reportElement uuid="9c6f8bbc-6d9e-480d-8173-503c9be07884" x="238" y="151" width="12" height="10" backcolor="#000000">
+					<printWhenExpression><![CDATA[new Boolean($F{ide_porte}.intValue() == 4)]]></printWhenExpression>
+				</reportElement>
+			</rectangle>
+			<staticText>
+				<reportElement uuid="4c7c4d15-c5e2-4087-b418-d7bcdaf049b3" x="295" y="111" width="159" height="17"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement>
+					<font isBold="true"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<text><![CDATA[]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement uuid="68a8ea6b-9149-42ec-8843-1a0349a49de3" x="108" y="151" width="12" height="10"/>
+			</rectangle>
+			<staticText>
+				<reportElement uuid="fd766ad6-e557-48d8-a7b0-cde6cb83ca15" x="0" y="167" width="149" height="17"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+				</box>
+				<textElement>
+					<font isBold="true"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<text><![CDATA[Código de Atividade:]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement uuid="04bff868-0a92-4023-87df-58dcef8df854" x="182" y="151" width="12" height="10" backcolor="#000000">
+					<printWhenExpression><![CDATA[new Boolean($F{ide_porte}.intValue() == 3)]]></printWhenExpression>
+				</reportElement>
+			</rectangle>
+			<rectangle>
+				<reportElement uuid="9f998790-54c3-489a-acc3-b5224aecec64" x="48" y="151" width="12" height="10" backcolor="#000000">
+					<printWhenExpression><![CDATA[new Boolean($F{ide_porte}.intValue() == 1)]]></printWhenExpression>
+				</reportElement>
+			</rectangle>
+			<staticText>
+				<reportElement uuid="b162ba5f-63ea-4224-9c9e-cbfb62634d4d" x="155" y="37" width="152" height="15"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" size="9" isBold="true" isUnderline="true"/>
+				</textElement>
+				<text><![CDATA[DOCUMENTO DE ADESÃO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="edf504f6-bb6f-4c28-a899-134319d61638" x="0" y="60" width="100" height="17"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Arial" size="9" isBold="true"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<text><![CDATA[Nome/Razão Social:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="fd36963b-95e5-4d29-ba8f-0cf9c8c133e7" x="108" y="24" width="238" height="15"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[POSTO DE COMBUSTÍVEL]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="be385baa-352b-47fa-a89f-85be8d7cfeee" x="198" y="145" width="38" height="22"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[médio]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement uuid="c4a50fef-bd33-4ff3-ad2d-34e63a478ffd" x="108" y="151" width="12" height="10" backcolor="#000000">
+					<printWhenExpression><![CDATA[new Boolean($F{ide_porte}.intValue() == 2)]]></printWhenExpression>
+				</reportElement>
+			</rectangle>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="438" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="2d19fca1-4965-4692-9553-87a77d965bef" positionType="Float" x="20" y="2" width="105" height="15"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Cadastro da ANP:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="84a367df-69fc-4e53-b3d6-4d001cf42e28" positionType="Float" x="20" y="19" width="153" height="15"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Fase do Empreendimento:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="ca17a40a-21b6-45eb-aade-82df4401893f" positionType="Float" x="30" y="35" width="219" height="15" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[new Boolean($F{dtc_inicio_operacao} != null)]]></printWhenExpression>
+				</reportElement>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Data prevista para início de operação:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="becb5a5a-fbc0-4ea0-b274-2326d227cef9" positionType="Float" x="20" y="51" width="111" height="15"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Bandeira do Posto:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="6abdfb51-647d-4840-b5ee-57fa3257a365" positionType="Float" x="77" y="67" width="129" height="15">
+					<printWhenExpression><![CDATA[new Boolean($F{dsc_distribuidora_posto} != null)]]></printWhenExpression>
+				</reportElement>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Vigência do Contrato:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="2952feb2-5b6c-4fbb-971e-8be8b9297848" positionType="Float" x="0" y="83" width="206" height="15"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Classificação conforme NBR 13.786:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="a5233a07-bc68-454a-82b6-c87c94dfbc9c" positionType="Float" x="0" y="100" width="169" height="15"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Trata-se de posto flutuante?]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="227b0960-9099-4bec-b864-7a48fe1a0a7d" positionType="Float" x="0" y="115" width="249" height="15"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Serviços prestados ou a serem prestados]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="ce6c4905-ef5b-45e4-892a-6ae9253f5b21" positionType="Float" x="0" y="169" width="155" height="15"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Área do empreendimento:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="f653bb6c-7f3c-4fd8-90d5-4ed8758b0794" positionType="Float" x="0" y="247" width="313" height="15"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[O empreendimento está localizado em área indígena?]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="8e2f727a-cc47-4f2e-92fc-5b9f4417706e" positionType="Float" x="1" y="263" width="336" height="15"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[O empreendimento está localizado em sítio arqueológico?]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="4c1442b4-f936-4897-b21e-fce0119e6485" positionType="Float" x="0" y="306" width="194" height="15"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Profundidade do lençol freático:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="0e916d79-5b0c-4cf2-ac12-94cca0751fab" positionType="Float" x="0" y="324" width="135" height="15"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Sistemas de Controle]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="d2f63f14-c8d3-4082-b3cc-7c80f8526d2e" positionType="Float" x="19" y="340" width="253" height="15"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Controle de estoque, conforme NBR 13.784:]]></text>
+			</staticText>
+			<subreport>
+				<reportElement uuid="b777781c-0b08-4b68-8b03-4e044b3e0a63" positionType="Float" x="4" y="202" width="448" height="20"/>
+				<subreportParameter name="ide_lac">
+					<subreportParameterExpression><![CDATA[$F{ide_lac_posto_combustivel}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "lac_posto_produtos_comercializados.jasper"]]></subreportExpression>
+			</subreport>
+			<staticText>
+				<reportElement uuid="bd2d6cdf-3ec1-4960-8589-3a2efa7c79fb" positionType="Float" x="4" y="185" width="67" height="15"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Área total:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="b2db32d7-3238-419f-9115-7c522fcb3158" positionType="Float" x="130" y="185" width="96" height="15"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Área construída:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="c5087ca7-a6d3-4d83-beae-df30bfa3552e" positionType="Float" x="285" y="185" width="130" height="15"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Área para ampliação:]]></text>
+			</staticText>
+			<subreport>
+				<reportElement uuid="a15bd0b8-6682-46f3-a183-1b1f4f07cd29" positionType="Float" x="5" y="225" width="447" height="18"/>
+				<subreportParameter name="ide_lac">
+					<subreportParameterExpression><![CDATA[$F{ide_lac_posto_combustivel}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "lac_posto_tanques.jasper"]]></subreportExpression>
+			</subreport>
+			<subreport>
+				<reportElement uuid="5b0c2370-1832-4bbd-997e-95f705c5935b" positionType="Float" x="4" y="282" width="449" height="19"/>
+				<subreportParameter name="ide_lac">
+					<subreportParameterExpression><![CDATA[$F{ide_lac_posto_combustivel}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "lac_posto_fator_agravamento.jasper"]]></subreportExpression>
+			</subreport>
+			<textField>
+				<reportElement uuid="1767d65d-4f45-4f06-85e0-273b736ef6f4" positionType="Float" x="125" y="2" width="100" height="15"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{cod_anp}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="afa73978-750e-4c31-b86f-a6dbb6f4e0cb" positionType="Float" x="172" y="19" width="100" height="15"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{nom_fase_empreendimento}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement uuid="8702b16e-e623-40b9-95f1-356d1ff4ffe1" positionType="Float" x="206" y="67" width="204" height="15">
+					<printWhenExpression><![CDATA[new Boolean($F{dsc_distribuidora_posto} != null)]]></printWhenExpression>
+				</reportElement>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{dtc_validade_contrato_distribuidora}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="91fb0e4f-79de-475f-88a7-7e9120e4d0fa" positionType="Float" x="215" y="83" width="202" height="15"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{dsc_classe_nbr_posto}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="a235fc92-532c-4614-92d0-be75383bba6c" positionType="Float" x="71" y="185" width="58" height="15"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{qtd_area_total}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="b0a74c7c-956d-4ccd-88ec-ec0b1ae1f8aa" positionType="Float" x="226" y="185" width="58" height="15"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{qtd_area_construida}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="43045244-bbb2-4545-87ff-1a0d89041901" positionType="Float" x="416" y="185" width="39" height="15"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{qtd_area_ampliacao}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="4b146b92-2010-4741-aaa9-ef78f08ace68" positionType="Float" x="132" y="51" width="100" height="15"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{dsc_tipo_bandeira_posto_combustivel}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="79a8d81e-2c3b-4b73-b24e-dc5c9c4f1c75" positionType="Float" x="313" y="247" width="85" height="15"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{ind_area_indigena} ? "SIM" : "NÃO"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="45c633e2-59ee-4f4d-a019-282b36f96ee4" positionType="Float" x="337" y="263" width="78" height="15"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{ind_area_indigena} ? "SIM" : "NÃO"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="04c1bf7c-5f6c-4133-995f-90f31aa2989e" positionType="Float" x="173" y="100" width="85" height="15"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{ind_flutuante} ? "SIM" : "NÃO"]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
+				<reportElement uuid="ae7efcd2-23c1-4af2-b31a-ca4c8bb3959e" positionType="Float" x="249" y="35" width="100" height="15" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[new Boolean($F{dtc_inicio_operacao} != null)]]></printWhenExpression>
+				</reportElement>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{dtc_inicio_operacao}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="8c08d092-5c76-4da2-92a2-ebbe7bba191a" positionType="Float" x="319" y="51" width="117" height="15">
+					<printWhenExpression><![CDATA[new Boolean($F{dsc_distribuidora_posto} != null)]]></printWhenExpression>
+				</reportElement>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{dsc_distribuidora_posto}.equals("Outros") ? $F{dsc_outros_distribuidora}:$F{dsc_distribuidora_posto}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="98ff4bf6-1845-44b6-a37a-8cc2fc0aa86c" positionType="Float" x="236" y="51" width="83" height="15">
+					<printWhenExpression><![CDATA[new Boolean($F{dsc_distribuidora_posto} != null)]]></printWhenExpression>
+				</reportElement>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Distribuidora:]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="36c8e843-d497-4670-98bd-61ccef065778" positionType="Float" x="194" y="306" width="78" height="15"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{qtd_prof_lencol}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="a6f8abee-380a-4272-9434-00410a5b2e50" positionType="Float" x="272" y="340" width="78" height="15"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{ind_controle_automatico} ? "Automático" : "Manual"]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="8314f700-11e9-4be0-a864-afe7af4e2d27" positionType="Float" x="9" y="382" width="289" height="15">
+					<printWhenExpression><![CDATA[new Boolean($F{dsc_ocorrencia_acidente} != null)]]></printWhenExpression>
+				</reportElement>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Observação sobre acidente ocorrido]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="e07390b3-df41-435b-9249-5ea0794583db" positionType="Float" stretchType="RelativeToTallestObject" x="14" y="397" width="433" height="35" isRemoveLineWhenBlank="true" isPrintWhenDetailOverflows="true">
+					<printWhenExpression><![CDATA[new Boolean($F{dsc_ocorrencia_acidente} != null)]]></printWhenExpression>
+				</reportElement>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{dsc_ocorrencia_acidente}]]></textFieldExpression>
+			</textField>
+			<subreport>
+				<reportElement uuid="511ad80b-5fea-4d76-b866-9144968c136d" positionType="Float" x="5" y="358" width="446" height="19"/>
+				<subreportParameter name="ide_lac">
+					<subreportParameterExpression><![CDATA[$F{ide_lac_posto_combustivel}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "lac_posto_sistema_controle.jasper"]]></subreportExpression>
+			</subreport>
+			<subreport>
+				<reportElement uuid="53a69e30-2b23-465c-b98b-aa1644962534" positionType="Float" x="4" y="130" width="446" height="32"/>
+				<subreportParameter name="ide_lac">
+					<subreportParameterExpression><![CDATA[$F{ide_lac_posto_combustivel}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "lac_posto_servicos.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+		<band height="21">
+			<textField isStretchWithOverflow="true" evaluationTime="Auto">
+				<reportElement uuid="e8842774-7faf-4ee6-9237-806729edf842" positionType="Float" stretchType="RelativeToTallestObject" x="9" y="1" width="438" height="20" isPrintWhenDetailOverflows="true"/>
+				<textElement markup="none"/>
+				<textFieldExpression><![CDATA[$P{legislacao}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="26" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="eda6e927-6e5c-4ba7-ae2c-665e77ffdeeb" x="104" y="6" width="260" height="19"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="5"/>
+				</textElement>
+				<text><![CDATA[INEMA/CAB: Avenida Luís Viana Filho, 6ª Avenida, nº 600 - CAB - CEP 41.745-900 - Salvador - Bahia - Brasil.]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="e33d7873-e59b-4fd3-9881-705d12aca396" x="393" y="5" width="24" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="ac4f62a3-6c61-46f0-bde1-4a22aa807727" x="364" y="6" width="29" height="19"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<text><![CDATA[Pág.]]></text>
+			</staticText>
+			<textField pattern="EEEEE dd MMMMM yyyy">
+				<reportElement uuid="5641403f-ef55-4301-b998-bf00fd3ee554" x="1" y="6" width="100" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="899cdc98-99ab-4f77-bec2-59da8894b5a6" x="417" y="5" width="14" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<text><![CDATA[de]]></text>
+			</staticText>
+			<textField evaluationTime="Report">
+				<reportElement uuid="157e0a92-1b53-4a9f-957a-2f2ff75646cc" x="431" y="5" width="24" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement uuid="806d47c3-975b-40fb-a48c-df33872be215" x="0" y="4" width="455" height="1"/>
+			</line>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="62" splitType="Stretch">
+			<textField isStretchWithOverflow="true">
+				<reportElement uuid="859b9722-97eb-4fb4-a214-d80a6e6b731c" positionType="Float" stretchType="RelativeToTallestObject" x="24" y="38" width="412" height="24"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{representante} != null ? $F{representante} : $F{requerente}.equals($F{representante}) ? $F{representante} : $F{procurador} == null ? $F{requerente} : $F{requerente}.equals($F{procurador}) ?  $F{requerente} : $F{requerente}+" ou "+ $F{procurador}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement uuid="718e8a57-1fa2-4ae9-b16b-13748e75f7d0" positionType="Float" x="10" y="37" width="437" height="1"/>
+			</line>
+			<staticText>
+				<reportElement uuid="18d87d2f-05f7-4c4c-b148-b5ebb1abb088" x="8" y="4" width="27" height="20"/>
+				<textElement>
+					<font fontName="Arial" size="9"/>
+				</textElement>
+				<text><![CDATA[Data:]]></text>
+			</staticText>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement uuid="92381a3d-567b-42c2-be77-dfe600215713" x="35" y="4" width="100" height="20"/>
+				<textElement>
+					<font fontName="Arial" size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new Date()]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
+</jasperReport>

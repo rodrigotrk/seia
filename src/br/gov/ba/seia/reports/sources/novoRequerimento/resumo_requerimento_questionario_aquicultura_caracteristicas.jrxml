@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="resumo_requerimento_questionario_aquicultura_caracteristicas" language="java" pageWidth="135" pageHeight="802" columnWidth="135" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="73e4bd36-b76d-4aca-998a-0cdf306e0f5a">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="ide_requerimento" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="ide_outorga_localizacao_geografica" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[select
+	case
+    	when pr.ide_pergunta = 33 then
+        	'É outorga preventiva;<br/>'
+    	when pr.ide_pergunta = 34 then
+        	'A captação é em barragem;<br/>'
+    	when pr.ide_pergunta = 35 then
+        	'A barragem está construída;<br/>'
+    	when pr.ide_pergunta = 36 then
+        	'O requerente é o proprietário da barragem;<br/>'
+    	when pr.ide_pergunta = 37 and olg.dtc_publicacao_portaria_barragem is not null then
+        	'Tem outorga para construção da barragem Nº da Portaria: '|| olg.num_portaria_barragem
+            ||' Data de publicação: '||to_char(olg.dtc_publicacao_portaria_barragem,'dd/MM/yyyy')
+        when pr.ide_pergunta = 37 and olg.dtc_emissao_oficio is not null then
+        	'Tem dispensa para construção da barragem <br/>Nº do Ofício / Declaração:'|| olg.num_oficio
+            ||'<br/> Data: '||to_char(olg.dtc_emissao_oficio,'dd/MM/yyyy') ||
+            '<br/> Nº do processo da construção da barragem: ' || olg.num_processo_barragem ||
+            '<br/> Volume de acumulação da barragem: ' || olg.num_volume_acumulacao_barragem ||
+            '<br/> Descarga de fundo: ' || olg.num_volume_acumulacao_barragem ||
+            '<br/>  Vazão da captação: ' || olg.num_vazao
+    end as caracteristica
+ from pergunta_requerimento pr
+	inner join outorga_localizacao_geografica olg on  pr.ide_localizacao_geografica = olg.ide_localizacao_geografica
+	where pr.ide_pergunta in (33,34,35,36,37) and pr.ide_requerimento = $P{ide_requerimento} and pr.ind_resposta = true
+union all
+select distinct case
+        when ide_tipo_barragem = 1 then
+        	' A barragem é de nível;'
+        when ide_tipo_barragem = 2 then
+        	' A barragem é de regulação;'
+    end as caracteristica
+from outorga_localizacao_geografica olg
+	inner join outorga o on  o.ide_outorga = olg.ide_outorga
+where olg.ide_outorga_localizacao_geografica = $P{ide_outorga_localizacao_geografica} and olg.ide_tipo_barragem is not  null]]>
+	</queryString>
+	<field name="caracteristica" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="12" splitType="Stretch">
+			<textField isStretchWithOverflow="true">
+				<reportElement uuid="70f29bb5-130d-4a77-ae03-8d83eb7df7a3" positionType="Float" stretchType="RelativeToTallestObject" mode="Opaque" x="0" y="0" width="135" height="12" isPrintWhenDetailOverflows="true" backcolor="#FFFFFF"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="html">
+					<font fontName="Arial" size="8" isBold="false" isUnderline="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{caracteristica}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

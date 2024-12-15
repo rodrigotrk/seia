@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="relatorio_responsavel_tecnico" language="java" pageWidth="495" pageHeight="50" columnWidth="495" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="3579ef72-68f9-420d-975e-3020547c3321">
+	<property name="ireport.zoom" value="1.771561000000001"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="ide_declaracao_queima_controlada" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT DISTINCT pf.nom_pessoa, pf.num_cpf
+
+FROM pessoa_fisica pf
+
+INNER JOIN declaracao_queima_controlada_responsavel_tecnico dqcRt on dqcRt.ide_pessoa_fisica = pf.ide_pessoa_fisica
+
+where dqcRt.ide_declaracao_queima_controlada = $P{ide_declaracao_queima_controlada}]]>
+	</queryString>
+	<field name="nom_pessoa" class="java.lang.String"/>
+	<field name="num_cpf" class="java.lang.String"/>
+	<pageHeader>
+		<band height="30">
+			<staticText>
+				<reportElement uuid="800a6ff5-5a1d-4ec0-be8a-0bd745ef0c8a" positionType="Float" mode="Opaque" x="0" y="0" width="495" height="20" backcolor="#DDDDDD"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif" isBold="true"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<text><![CDATA[Dados do(s) responsável(eis) técnico]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement uuid="1ca485ae-0ebb-422b-8ddc-5e207fcff50e" x="0" y="0" width="361" height="20"/>
+				<box topPadding="3"/>
+				<textElement verticalAlignment="Middle" markup="html"/>
+				<textFieldExpression><![CDATA["<b>Nome: </b>" +$F{nom_pessoa}]]></textFieldExpression>
+			</textField>
+			<textField pattern="###.###.###-##000.000.000-00">
+				<reportElement uuid="05bd869c-cd68-4f2c-b8c4-55438be5eaa0" x="361" y="0" width="134" height="20"/>
+				<box topPadding="3"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle" markup="html">
+					<font isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA["<b>CPF: </b>" +
+
+($F{num_cpf}.substring(0, 3)+"."+
+$F{num_cpf}.substring(3, 6)+"."+
+$F{num_cpf}.substring(6, 9)+"-"+
+$F{num_cpf}.substring(9, 11))]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>
