@@ -1,1 +1,0 @@
-ALTER TABLE declaracao_intervencao_app_caracteristca ADD COLUMN ind_documento_validado boolean NOT NULL DEFAULT false

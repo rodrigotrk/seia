@@ -1,2 +1,0 @@
-alter table documento_obrigatorio add column ind_formulario_digital boolean not null default false;
-update documento_obrigatorio set ind_formulario_digital=true where ind_formulario and dsc_caminho_arquivo is null;

@@ -1,1 +1,0 @@
-﻿delete from fce where ide_fce = 14622;

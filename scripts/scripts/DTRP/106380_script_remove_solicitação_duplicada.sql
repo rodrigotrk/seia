@@ -1,1 +1,0 @@
-﻿delete from declaracao_transporte_destinatario_residuo where ide_declaracao_transporte_destinatario_residuo = 546;
