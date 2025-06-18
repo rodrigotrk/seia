@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="resumo_requerimento_atividades" pageWidth="479" pageHeight="802" columnWidth="479" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="c647e089-b206-4405-b7a6-3662848e5484">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="ide_requerimento" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[select
+	t.cod_tipologia,
+	t.des_tipologia,
+	rt.val_atividade,
+	um.nom_unidadade_medida as nom_unidadade_medida,
+	rt.ind_tipologia_principal
+from requerimento_tipologia rt
+left join unidade_medida_tipologia_grupo umtg on umtg.ide_unidade_medida_tipologia_grupo = rt.ide_unidade_medida_tipologia_grupo
+left join unidade_medida um on um.ide_unidade_medida = umtg.ide_unidade_medida
+inner join tipologia_grupo tg on tg.ide_tipologia_grupo = umtg.ide_tipologia_grupo
+inner join tipologia t on t.ide_tipologia = tg.ide_tipologia
+where rt.ide_requerimento = $P{ide_requerimento}]]>
+	</queryString>
+	<field name="cod_tipologia" class="java.lang.String"/>
+	<field name="des_tipologia" class="java.lang.String"/>
+	<field name="val_atividade" class="java.math.BigDecimal"/>
+	<field name="nom_unidadade_medida" class="java.lang.String"/>
+	<field name="ind_tipologia_principal" class="java.lang.Boolean"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="12" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="e6a39864-63f7-4a3c-99f4-a27ac8919a27" x="245" y="0" width="51" height="12"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<text><![CDATA[Principal?]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="ec4e2f03-c2f0-482a-a2c3-512223657819" x="0" y="0" width="155" height="12"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<text><![CDATA[Atividade]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="6a0c899d-8b00-44bc-a5c8-55725d25436b" x="155" y="0" width="88" height="12"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<text><![CDATA[Unidade de Medida]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="58f074cb-dfdf-41d3-b927-2d0d036c382c" x="296" y="0" width="183" height="12"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<text><![CDATA[Capacidade/Produção/Área/Volume]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="12" splitType="Stretch">
+			<textField isStretchWithOverflow="true" pattern="#,##0.00">
+				<reportElement uuid="430c1e46-79f8-48ff-957d-dcfbc6e7612f" positionType="Float" stretchType="RelativeToTallestObject" x="296" y="0" width="183" height="12" isPrintWhenDetailOverflows="true"/>
+				<box>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="9"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{val_atividade}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement uuid="ffca2411-ae21-48c3-8dcf-e9b60fe0db3f" positionType="Float" stretchType="RelativeToTallestObject" x="244" y="0" width="52" height="12" isPrintWhenDetailOverflows="true"/>
+				<box>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="9"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ind_tipologia_principal} ? "Sim" : "Não"]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement uuid="8c67fd44-3316-4b6a-9e05-a2b491eb181f" positionType="Float" stretchType="RelativeToTallestObject" x="155" y="0" width="88" height="12" isPrintWhenDetailOverflows="true"/>
+				<box>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="9"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nom_unidadade_medida}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement uuid="4c7b766d-09e7-43ed-83e3-10ca7fa747f1" positionType="Float" stretchType="RelativeToTallestObject" x="0" y="0" width="155" height="12" isPrintWhenDetailOverflows="true"/>
+				<box>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="8"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new String($F{cod_tipologia} + " " + $F{des_tipologia})]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

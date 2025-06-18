@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui">
+<ui:composition template="/layout/template.xhtml">
+
+	
+	<ui:define name="titulo-pagina">
+		<h3>Tipo de Cadastro</h3>
+	</ui:define>
+
+	<ui:define name="conteudo-principal">
+
+		
+		<p:spacer height="20"/>
+		
+		<p:fieldset>
+		<h:form>
+				<h:panelGrid columns="3" cellspacing="25" style="text-align: center;">
+					<h:panelGroup style="margin:bottom:20px">
+						<p:commandLink action="#{listarImovelRuralController.redirecionarTipoCadastroImovelRuralAssentamento()}" ajax="false" style="text-decoration: none;">
+							<h:graphicImage title="IMÓVEL RURAL"
+								value="/resources/img/imagem1.jpg" width="205" style="margin-bottom:10px"/>
+							<f:setPropertyActionListener value="#{false}"
+								target="#{contextoController.imprimindoImovel}" />
+							<f:setPropertyActionListener value="#{1}" target="#{identificarPapelController.indiceTela}"/>
+							<f:setPropertyActionListener value="#{false}" target="#{identificarPapelController.indPct}"/>
+							<h:outputText value="IMÓVEL RURAL" />
+							
+							<h:panelGroup style="margin-top:10px;">
+								<h:graphicImage value="/resources/img/ico-ajuda.png" id="hint" style="margin-left:10px"/>
+								<p:tooltip for="hint"
+									value="Imóveis localizados em zonas rurais, que não se enquadram como território tradicional de PCT ou imóvel de assentamento de reforma agrária. "
+									showEffect="fade" hideEffect="fade" />
+
+							</h:panelGroup>
+
+						</p:commandLink>
+						
+						
+					</h:panelGroup>
+					
+					<h:panelGroup>
+						<p:commandLink action="#{listarImovelRuralController.redirecionarTipoCadastroPCT()}" ajax="false" style=" text-decoration: none;">
+							<h:graphicImage
+								title="TERRITÓRIO TRADICIONAL DE POVOS E COMUNIDADES TRADICIONAIS"
+								value="/resources/img/imagem2.jpg" width="215" height="315" style="margin-bottom:10px"/>
+							<f:setPropertyActionListener value="#{false}"
+								target="#{contextoController.imprimindoImovel}" />
+							<f:setPropertyActionListener value="#{true}" target="#{identificarPapelController.disableAbaDependencias}"/>
+							<f:setPropertyActionListener value="#{5}" target="#{identificarPapelController.indiceTela}"/>
+							<f:param value="true" name="pct"/>
+							<f:setPropertyActionListener value="#{true}" target="#{identificarPapelController.indPct}"/>	
+							
+							<h:outputText value="TERRITÓRIO TRADICIONAL DE POVOS E COMUNIDADES TRADICIONAIS" />
+						</p:commandLink>
+
+						<h:panelGroup style="margin-top:10px;">
+							<h:graphicImage value="/resources/img/ico-ajuda.png" id="hint1" style="margin-left:10px"/>
+							<p:tooltip for="hint1"
+								value="Territórios tradicionais são os espaços necessários à reprodução cultural, social e econômica dos Povos e Comunidades Tradicionais (PCT), definidos como &#34;grupos culturalmente diferenciados, tais como povos indígenas, povos ciganos, povos de terreiro, comunidades quilombolas, geraizeiros, marisqueiras, comunidades de fundos e fechos de pasto, pescadores artesanais e extrativistas que ocupam ou reivindicam seus territórios tradicionais (...).&#34; (Decreto Estadual nº 15.634/2014).  "
+								showEffect="fade" hideEffect="fade" />
+
+						</h:panelGroup>
+					</h:panelGroup>
+
+					<h:panelGroup>
+						<p:commandLink action="#{listarImovelRuralController.redirecionarTipoCadastroImovelRuralAssentamento()}" ajax="false" style=" text-decoration: none;">
+							<h:graphicImage title="ASSENTAMENTO"
+								value="/resources/img/imagem3.jpg" width="205" style="margin-bottom:10px"/>
+							<f:setPropertyActionListener value="#{false}"
+								target="#{contextoController.imprimindoImovel}" />
+							<f:setPropertyActionListener value="#{1}" target="#{identificarPapelController.indiceTela}"/>
+							<f:setPropertyActionListener value="#{false}" target="#{identificarPapelController.indPct}"/>
+							<h:outputText value="ASSENTAMENTO" />
+						</p:commandLink>
+						
+						<h:panelGroup style="margin-top:10px;">
+							<h:graphicImage value="/resources/img/ico-ajuda.png" id="hint2" style="margin-left:10px"/>
+							<p:tooltip for="hint2"
+								value="Imóvel pertencente aos assentamentos rurais instituídos pelos órgãos federais, estaduais e municipais.  "
+								showEffect="fade" hideEffect="fade" />
+
+						</h:panelGroup>
+					</h:panelGroup>
+					
+				</h:panelGrid>
+			</h:form>
+		</p:fieldset>
+		<p:spacer height="20"/>
+
+
+
+	</ui:define>
+
+</ui:composition>
+
+
+
+</html>

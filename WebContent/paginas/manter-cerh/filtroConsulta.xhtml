@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui">
+	
+	
+	<p:remoteCommand name="atualizarBtnResumoQuantitativo" global="false" update="frmConsultaCerh:btnResumo"/>
+	<h:panelGrid columns="3" >
+	
+		<h:panelGrid columns="1">
+			<h:outputText value="#{bundle.cerh_lbl_usuário}:" />
+			<h:panelGroup>
+				<p:inputText  id="nomeRazaoSocial" style="width:200px;" value="#{consultarCerhController.requerenteSelecionado.nomeRazao}" disabled="true"/>
+				<p:commandLink  oncomplete="dialogselecionarRequerente.show()" type="button" actionListener="#{requerenteController.load(consultarCerhController.metodoExterno)}" update="form_dialog_requerente" >
+					<h:graphicImage title="Selecionar Usuário" value="/resources/img/ico-pesquisa.png" />
+				</p:commandLink>
+			</h:panelGroup>
+		</h:panelGrid>
+		
+		<h:panelGrid columns="1">
+			<h:outputText  value="#{bundle.cerh_lbl_numero_cadastro}:" />
+			<p:inputText  onkeyup="atualizarBtnResumoQuantitativo();" style="width:220px;" id="numCadastro" value="#{consultarCerhController.numCadastro}" />
+		</h:panelGrid>
+		
+		<h:panelGrid columns="1">
+			<h:outputText value="#{bundle.cerh_lbl_contrato_convenio}:" />
+			<p:selectOneMenu style="width:220px;" id="contratoConvenio" value="#{consultarCerhController.contratoConvenioSelecionado}" converter="simpleEntityConverter">
+				<f:selectItem itemLabel="#{bundle.geral_lbl_selecione}"/>
+				<f:selectItems value="#{consultarCerhController.listaContratoConvenio}" var="contrato" itemLabel="#{contrato.nomContratoConvenio}" itemValue="#{contrato}" />
+				<p:ajax event="change" global="false" update="frmConsultaCerh:btnResumo" /> 
+			</p:selectOneMenu>
+		</h:panelGrid>
+		
+		<h:panelGrid columns="1">
+			<h:outputText value="#{bundle.geral_lbl_status}:" />
+			<p:selectOneMenu valueChangeListener="#{consultarCerhController.atualizarBtnResumoQuantitativo()}" id="tipoStatus" style="width:220px;" value="#{consultarCerhController.cerhTipoStatusSelecionado}" converter="simpleEntityConverter">
+				<f:selectItem itemLabel="#{bundle.geral_lbl_selecione}"/>
+				<f:selectItems value="#{consultarCerhController.listaCerhTipoStatus}" var="cerhTipoStatus" itemLabel="#{cerhTipoStatus.dscStatus}" itemValue="#{cerhTipoStatus}" />
+				<p:ajax event="change" global="false" update="frmConsultaCerh:btnResumo" />  
+			</p:selectOneMenu>
+		</h:panelGrid>
+		
+		<h:panelGrid columns="1">
+			<h:outputText value="#{bundle.geral_lbl_periodo}:" />
+			<h:panelGroup>
+				<h:outputText value="#{bundle.geral_lbl_periodo_de} " /> 
+				<p:calendar 
+				 	id="periodoInicio" value="#{consultarCerhController.periodoInicio}" 
+				 	navigator="true" showOn="button" locale="pt" pattern="dd/MM/yyyy" readOnlyInputText="true" 
+					mindate="01/01/1900" maxdate="#{consultarCerhController.dataHoje}" size="7">
+					<p:ajax event="dateSelect" process="@this" update="frmConsultaCerh:btnResumo"/>
+				</p:calendar>
+				
+				<h:outputText value=" #{bundle.geral_lbl_periodo_ate} " /> 
+				<p:calendar 
+					id="periodoFim" value="#{consultarCerhController.periodoFim}" 
+					navigator="true" showOn="button" locale="pt" pattern="dd/MM/yyyy" readOnlyInputText="true" 
+					mindate="01/01/1900" maxdate="#{consultarCerhController.dataHoje}" size="7">
+					<p:ajax event="dateSelect" process="@this" update="frmConsultaCerh:btnResumo" />
+				</p:calendar>
+			</h:panelGroup>
+		</h:panelGrid>
+		
+		
+		<h:panelGrid columns="1">
+			<h:outputText value="#{bundle.cerh_lbl_rpga}:" />
+			<p:selectOneMenu 
+				id="idComboRPGA" 
+				value="#{consultarCerhController.rpgaSelecionado}"
+				style="width:220px;" converter="simpleEntityConverter">
+				<f:selectItem itemLabel="#{bundle.geral_lbl_selecione}" />
+				<f:selectItems value="#{consultarCerhController.listaRpga}"
+					var="rpga" itemValue="#{rpga}" itemLabel="#{rpga.nome}" />
+				<p:ajax event="change" global="false"  update="frmConsultaCerh:btnResumo"/>
+			</p:selectOneMenu>
+		</h:panelGrid>
+	
+		<h:panelGrid columns="1">
+			<h:outputText value="#{bundle.geral_lbl_localidade}:" />
+			<p:selectOneMenu 
+				style="width:220px;" id="localidade" value="#{consultarCerhController.municipioSelecionado}" converter="simpleEntityConverter">
+				<f:selectItem itemLabel="#{bundle.geral_lbl_selecione}"/>
+				<f:selectItems value="#{consultarCerhController.listaMunicipio}" var="municipio" itemLabel="#{municipio.nomMunicipio}" itemValue="#{municipio}" />
+				<p:ajax event="change" global="false" update="frmConsultaCerh:btnResumo" />  
+			</p:selectOneMenu>
+		</h:panelGrid>
+		
+		<h:panelGrid columns="1">
+			<h:outputText value="#{bundle.cerh_lbl_nome_empreendimento}:" />
+			<p:inputText onkeyup="atualizarBtnResumoQuantitativo();" style="width:220px;" id="nomEmpreendimento" value="#{consultarCerhController.nomEmpreendimento}" />
+		</h:panelGrid>
+	
+		<p:spacer/>
+	
+		<h:panelGrid columns="2" style="margin-top:25px;">
+			<p:commandButton id="btnConsultar" value="#{bundle.geral_lbl_consultar}" process="@form" actionListener="#{consultarCerhController.consultar()}" update="frmConsultaCerh" />
+			<p:commandButton id="btnNovoCadastro" value="#{bundle.cerh_lbl_novo_cadastro}" action="#{consultarCerhController.novo()}" ajax="false" />
+		</h:panelGrid>
+
+		<h:panelGrid  columns="2" style="margin-top:25px;">
+			<p:commandButton  id="btnLimpar" value="#{bundle.geral_lbl_limpar}" actionListener="#{consultarCerhController.limpar()}" process="@this" update="frmConsultaCerh" />
+		
+			<p:commandButton id="btnResumo" value="Resumo" onclick="aviso.show();" disabled="#{!consultarCerhController.existeParametro}"/>
+			
+		
+		</h:panelGrid>
+	</h:panelGrid>
+	
+	<p:spacer height="25"/>
+	
+	
+</ui:composition>

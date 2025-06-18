@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="relatorio_padrao_empreendimento" language="java" pageWidth="555" pageHeight="802" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="348cc11b-bc83-4d35-9067-f04ff6b8926f">
+	<property name="ireport.zoom" value="2.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["/home/alexandre/workspace/seia/src/br/gov/ba/seia/reports/sources/generic/"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="IDE_EMPREENDIMENTO" class="java.lang.Integer"/>
+	<queryString>
+		<![CDATA[SELECT
+	e.ide_empreendimento,
+	e.nom_empreendimento,
+	coalesce(e.des_email, p.des_email) as des_email,
+	en.ide_endereco,
+	ee_c.ide_endereco as endereco_correspondecia
+FROM empreendimento e
+	INNER JOIN endereco_empreendimento ee ON ee.ide_empreendimento = e.ide_empreendimento
+	left JOIN endereco en on en.ide_endereco = ee.ide_endereco
+	left JOIN endereco_empreendimento ee_c ON ee_c.ide_empreendimento = e.ide_empreendimento
+	LEFT JOIN pessoa p on p.ide_pessoa = e.ide_pessoa
+WHERE e.ide_empreendimento = $P{IDE_EMPREENDIMENTO}
+AND ee.ide_tipo_endereco = 4
+and ee_c.ide_tipo_endereco = 2]]>
+	</queryString>
+	<field name="ide_empreendimento" class="java.lang.Integer"/>
+	<field name="nom_empreendimento" class="java.lang.String"/>
+	<field name="des_email" class="java.lang.String">
+		<fieldDescription><![CDATA[Email da associação INCRA]]></fieldDescription>
+	</field>
+	<field name="ide_endereco" class="java.lang.Integer"/>
+	<field name="endereco_correspondecia" class="java.lang.Integer"/>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="78285af7-9a9b-485e-af71-0d383b0c06fe" positionType="Float" mode="Opaque" x="0" y="0" width="555" height="20" backcolor="#DDDDDD"/>
+				<box leftPadding="10">
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif" isBold="true" isStrikeThrough="false"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<text><![CDATA[Dados do Empreendimento]]></text>
+			</staticText>
+		</band>
+		<band height="34">
+			<textField>
+				<reportElement uuid="ec67dcf5-6349-485c-be6a-377dae816cc8" x="0" y="10" width="555" height="12"/>
+				<box leftPadding="10"/>
+				<textElement verticalAlignment="Middle">
+					<font size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Nome: " + $F{nom_empreendimento}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="ddba7502-41da-49cb-b517-8be7f360cba7" x="0" y="22" width="555" height="12"/>
+				<box leftPadding="10"/>
+				<textElement verticalAlignment="Middle">
+					<font size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA["E-mail: " + $F{des_email}]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="34">
+			<subreport>
+				<reportElement uuid="dc74eaf9-4884-429e-9772-e5bdb9c0d592" x="10" y="22" width="545" height="12"/>
+				<subreportParameter name="SUBREPORT_DIR">
+					<subreportParameterExpression><![CDATA[$P{SUBREPORT_DIR}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="IDE_ENDERECO">
+					<subreportParameterExpression><![CDATA[$F{ide_endereco}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "relatorio_padrao_empreendimento_endereco.jasper"]]></subreportExpression>
+			</subreport>
+			<textField>
+				<reportElement uuid="58d62355-0fc6-4f47-92cb-d521cf9751ae" x="10" y="10" width="545" height="12"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Endereço:"]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="24">
+			<subreport>
+				<reportElement uuid="25c76ac0-e230-4c3e-a781-1be7769124ff" x="10" y="12" width="545" height="12"/>
+				<subreportParameter name="SUBREPORT_DIR">
+					<subreportParameterExpression><![CDATA[$P{SUBREPORT_DIR}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="IDE_ENDERECO">
+					<subreportParameterExpression><![CDATA[$F{endereco_correspondecia}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "relatorio_padrao_empreendimento_endereco.jasper"]]></subreportExpression>
+			</subreport>
+			<textField>
+				<reportElement uuid="2b161184-c11a-4cea-8ffb-5f48475be5d4" x="10" y="0" width="545" height="12"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Endereço de Correspondência:"]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="20">
+			<subreport>
+				<reportElement uuid="dba4cdd4-e7a3-43de-93e4-e526adfe3a06" x="10" y="0" width="545" height="20"/>
+				<subreportParameter name="SUBREPORT_DIR">
+					<subreportParameterExpression><![CDATA[$P{SUBREPORT_DIR}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="IDE_EMPREENDIMENTO">
+					<subreportParameterExpression><![CDATA[$F{ide_empreendimento}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "relatorio_padrao_empreendimento_tipologia.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+		<band height="10"/>
+	</detail>
+</jasperReport>

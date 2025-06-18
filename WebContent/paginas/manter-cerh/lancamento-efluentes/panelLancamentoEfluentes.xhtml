@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui">
+
+	<p:dataTable 
+		id="dtLancamento"
+		style="width:100%" 
+		value="#{cerhController.abaLancamentoEfluentes.cerhCaracterizacao.cerhLancamentoEfluenteSazonalidadeCollection}"
+		var="sazonalidade">
+		
+		<p:column>
+			<f:facet name="header">Mês</f:facet>
+			<h:outputText value="#{sazonalidade.ideMes.nomMes}" />
+		</p:column>
+	
+		<p:column>
+			<f:facet name="header">Vazão do Efluente<br/>(m³/h)</f:facet>
+
+			<p:inputText 
+				id="colVazaoEfluente"
+				maxlength="13"
+				onkeyup="mascararNumeroAndAddZeros(this, event, 8, 2, '.', ',', 3);"
+				onblur="mascararNumeroAndAddZeros(this, event, 8, 2, '.', ',', 3);"
+				disabled="#{cerhController.abaLancamentoEfluentes.dto.caracterizacaoDTO.visualizacao}" 
+				value="#{sazonalidade.valVazaoEfluente}" 
+				style="width:75%" >
+				<p:ajax event="keyup" global="false" listener="#{cerhController.abaLancamentoEfluentes.calcularVazoes()}"/>
+				<f:attribute name="sazonalidade" value="#{sazonalidade}"/>
+				<f:convertNumber integerOnly="false" maxIntegerDigits="8" maxFractionDigits="2" pattern="#,##0.00" locale="pt_BR"/>
+			</p:inputText>
+
+			<p:commandLink 
+				rendered="#{sazonalidade.ideMes.nomMes eq 'Janeiro'}"
+				process="@this" 
+				disabled="#{cerhController.abaLancamentoEfluentes.dto.caracterizacaoDTO.visualizacao}" 
+				update="formLancamentoEfluentes:panellancamento"
+				actionListener="#{cerhController.abaLancamentoEfluentes.replicarVazao()}">
+				<h:graphicImage title="Replicar valor para todos meses" value="/resources/img/ico-replicar-valores.png" />
+			</p:commandLink>
+
+		</p:column>
+	
+		<p:column>
+			<f:facet name="header">Tempo de lançamento<br/>(horas/dia)</f:facet>
+			
+			<p:inputText
+				id="colTempoLancamento"
+				onkeyup="SomenteDecimal(this);"
+				styleClass="valorMaximo-24"
+				disabled="#{cerhController.abaLancamentoEfluentes.dto.caracterizacaoDTO.visualizacao}" 
+				value="#{sazonalidade.valTempoLancamento}"
+				style="width:75%" maxlength="2" >
+				<f:attribute name="sazonalidade" value="#{sazonalidade}"/>
+				<p:ajax event="keyup" process="formLancamentoEfluentes:panellancamento" listener="#{cerhController.abaLancamentoEfluentes.calcularVazoes()}" />
+			</p:inputText>
+			
+			<p:commandLink 
+				rendered="#{sazonalidade.ideMes.nomMes eq 'Janeiro'}"
+				disabled="#{cerhController.abaLancamentoEfluentes.dto.caracterizacaoDTO.visualizacao}"
+				process="formLancamentoEfluentes:panellancamento" 
+				actionListener="#{cerhController.abaLancamentoEfluentes.replicarTempo()}" 
+				update="formLancamentoEfluentes:panellancamento">
+				<h:graphicImage title="Replicar valor para todos meses" value="/resources/img/ico-replicar-valores.png" />
+			</p:commandLink>
+		</p:column>
+	
+	
+		<p:column headerText="Dias/Mês"> 
+
+			<p:inputText 
+				id="colDiasMes"	
+				onkeyup="SomenteDecimal(this);"
+				disabled="#{cerhController.abaLancamentoEfluentes.dto.caracterizacaoDTO.visualizacao}" 
+			    value="#{sazonalidade.valDiaMes}"
+			    style="width:75%" maxlength="2">
+			    <f:attribute name="sazonalidade" value="#{sazonalidade}"/>
+				<p:ajax  event="keyup" process="formLancamentoEfluentes:panellancamento" listener="#{cerhController.abaLancamentoEfluentes.calcularVazoes()}"/>
+			</p:inputText>
+			
+			<p:commandLink 
+				rendered="#{sazonalidade.ideMes.nomMes eq 'Janeiro'}"
+				disabled="#{cerhController.abaLancamentoEfluentes.dto.caracterizacaoDTO.visualizacao}"
+				process="formLancamentoEfluentes:panellancamento" 
+				update="formLancamentoEfluentes:panellancamento"
+				actionListener="#{cerhController.abaLancamentoEfluentes.replicarDiasMes()}" >
+				<h:graphicImage title="Replicar valor para todos meses" value="/resources/img/ico-replicar-valores.png" />
+			</p:commandLink>
+		</p:column>
+
+		
+		<p:column>
+			<f:facet name="header">Vazão do efluente<br/>(m³/dia)</f:facet>
+			<p:inputText id="vazaoDia"
+				styleClass="campoNumericoComDecimal-2"
+				value="#{sazonalidade.valVazaoEfluenteDias}"
+				disabled="true"> 
+			 	<f:convertNumber/>
+		 	</p:inputText>
+		</p:column>
+		
+		
+		<p:column>
+			<f:facet name="header">Vazão do efluente<br/>(m³/mes)</f:facet>
+			<p:inputText 
+				id="vazaoMes"
+				styleClass="campoNumericoComDecimal-2"
+				value="#{sazonalidade.valVazaoEfluenteMes}" disabled="true">
+				<f:convertNumber/>
+			</p:inputText>
+		</p:column>
+
+	</p:dataTable>
+
+</ui:composition>

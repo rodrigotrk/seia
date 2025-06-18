@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui">
+	
+	<h:form id="formDadosAbsIndustrialSubterranea">
+		<h:panelGrid columns="3">
+			
+			<p:spacer height="10"/>
+			<h:outputText value="* #{bundle.cerh_finalidade_dados_consumo_agua}:" style="position: absolute;" rendered="#{cerhController.abaCaptacaoSubterranea.usuarioExterno}"/>
+			<h:outputText value="#{bundle.cerh_finalidade_dados_consumo_agua}:" style="position: absolute;" rendered="#{!cerhController.abaCaptacaoSubterranea.usuarioExterno}"/>
+			<p:spacer width="5"/>
+	
+			<h:outputText value="* #{bundle.geral_lbl_produto}:" rendered="#{cerhController.abaCaptacaoSubterranea.usuarioExterno}"/>
+			<h:outputText value="#{bundle.geral_lbl_produto}:" rendered="#{!cerhController.abaCaptacaoSubterranea.usuarioExterno}"/>
+			<p:spacer height="15"/>
+			<p:spacer height="15"/>
+			
+			<p:inputText value="#{cerhController.abaCaptacaoSubterranea.cerhCaptacaoAbastecimentoIndustrial.nomProduto}"
+				maxlength="40"
+				disabled="#{cerhController.abaCaptacaoSubterranea.dto.caracterizacaoDTO.visualizacao}"/>
+			
+			<p:inputText value="#{cerhController.abaCaptacaoSubterranea.cerhCaptacaoAbastecimentoIndustrial.valConsumoAgua}"
+				maxlength="13" 
+				onblur="mascararNumeroAndAddZeros(this, event, 8, 2, '.', ',', 3);"
+				onkeyup="mascararNumeroAndAddZeros(this, event, 8, 2, '.', ',', 3);"
+				disabled="#{cerhController.abaCaptacaoSubterranea.dto.caracterizacaoDTO.visualizacao}">
+				<f:convertNumber integerOnly="false" maxIntegerDigits="8" maxFractionDigits="2" pattern="#,##0.00" locale="pt_BR"/>
+			</p:inputText>
+			
+			<p:spacer width="5"/>
+			
+			<h:outputText value="* #{bundle.cerh_finalidade_dados_abs_industrial_producao_diaria}:" rendered="#{cerhController.abaCaptacaoSubterranea.usuarioExterno}"/>
+			<h:outputText value="#{bundle.cerh_finalidade_dados_abs_industrial_producao_diaria}:" rendered="#{!cerhController.abaCaptacaoSubterranea.usuarioExterno}"/>
+			
+			<h:outputText value="* #{bundle.cerh_finalidade_dados_abs_industrial_producao_anual}:" rendered="#{cerhController.abaCaptacaoSubterranea.usuarioExterno}"/>
+			<h:outputText value="#{bundle.cerh_finalidade_dados_abs_industrial_producao_anual}:" rendered="#{!cerhController.abaCaptacaoSubterranea.usuarioExterno}"/>
+			
+			<h:outputText value="* #{bundle.geral_lbl_unidade}:" rendered="#{cerhController.abaCaptacaoSubterranea.usuarioExterno}"/>
+			<h:outputText value="#{bundle.geral_lbl_unidade}:" rendered="#{!cerhController.abaCaptacaoSubterranea.usuarioExterno}"/>
+			
+			<p:inputText value="#{cerhController.abaCaptacaoSubterranea.cerhCaptacaoAbastecimentoIndustrial.valProducaoDiaria}"
+				maxlength="13"
+				onblur="mascararNumeroAndAddZeros(this, event, 8, 2, '.', ',', 3);"
+				onkeyup="mascararNumeroAndAddZeros(this, event, 8, 2, '.', ',', 3);"
+				disabled="#{cerhController.abaCaptacaoSubterranea.dto.caracterizacaoDTO.visualizacao}">
+				<f:convertNumber integerOnly="false" maxIntegerDigits="8" maxFractionDigits="2" pattern="#,##0.00" locale="pt_BR"/>
+			</p:inputText>
+			
+			<p:inputText value="#{cerhController.abaCaptacaoSubterranea.cerhCaptacaoAbastecimentoIndustrial.valProducaoAnual}"
+				maxlength="13"
+				onblur="mascararNumeroAndAddZeros(this, event, 8, 2, '.', ',', 3);"
+				onkeyup="mascararNumeroAndAddZeros(this, event, 8, 2, '.', ',', 3);" 
+				disabled="#{cerhController.abaCaptacaoSubterranea.dto.caracterizacaoDTO.visualizacao}">
+				<f:convertNumber integerOnly="false" maxIntegerDigits="8" maxFractionDigits="2" pattern="#,##0.00" locale="pt_BR"/>
+			</p:inputText>
+			
+			<p:selectOneMenu value="#{cerhController.abaCaptacaoSubterranea.cerhCaptacaoAbastecimentoIndustrial.ideUnidadeMedida}"
+				converter="simpleEntityConverter"
+				disabled="#{cerhController.abaCaptacaoSubterranea.dto.caracterizacaoDTO.visualizacao}">
+				<f:selectItem itemLabel="Selecione" itemValue="#{null}"/>
+				<f:selectItems value="#{cerhController.abaCaptacaoSubterranea.unidadeMedidaCollection}" var="unidade" itemValue="#{unidade}" itemLabel="#{unidade.nomUnidadadeMedida}"/>
+			</p:selectOneMenu>
+			
+			<p:spacer width="5"/>
+			<p:spacer width="5"/>
+			
+			<p:commandButton value="#{bundle.geral_lbl_incluir}" 
+				actionListener="#{cerhController.abaCaptacaoSubterranea.incluirDadosAbastecimentoIndustrial()}"
+				process="@form"
+				style="margin-left:10px; margin-top:20px; width:90px;"
+				update="formCaracterizacaoSubterranea:finalidadeSelecionadasSubterranea"
+				disabled="#{cerhController.abaCaptacaoSubterranea.dto.caracterizacaoDTO.visualizacao}"/>
+		</h:panelGrid>
+	</h:form>
+	
+</ui:composition>

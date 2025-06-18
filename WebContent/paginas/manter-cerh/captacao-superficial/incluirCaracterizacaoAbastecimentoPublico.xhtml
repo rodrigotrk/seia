@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui">
+
+	<h:panelGrid id="gridAbsPublico" columns="2" style="width:90%;" styleClass="grid-border-15">
+		
+		<h:outputText value="* #{bundle.cerh_finalidade_dados_abs_publico_prestador_servico}" />
+		<h:outputText value="* #{bundle.cerh_finalidade_dados_abs_publico_perda_distribuicao}" style="margin-left:15px;"/>
+
+		<p:selectOneMenu id="prestador" 
+	    	layout="pageDirection"
+	    	value="#{cerhController.abaCaptacaoSuperficial.cerhFinalidadeAbastecimentoPublico.ideCerhCaptacaoAbastecimentoPublico.ideCerhTipoPrestadorServico}"
+			converter="simpleEntityConverter"
+			disabled="#{cerhController.abaCaptacaoSuperficial.dto.caracterizacaoDTO.visualizacao}">
+	    	<f:selectItem itemLabel="Selecione" itemValue="#{null}"/>
+	    	<f:selectItems value="#{cerhController.abaCaptacaoSuperficial.cerhTipoPrestadorServicoCollection}" 
+	    		var="prestadorServico"
+	    		itemValue="#{prestadorServico}"
+	    		itemLabel="#{prestadorServico.dscTipoPrestadorServico}"/>
+			<p:ajax event="change" process="@this"/>
+	    </p:selectOneMenu>
+	    
+	    <p:selectOneRadio value="#{cerhController.abaCaptacaoSuperficial.cerhFinalidadeAbastecimentoPublico.ideCerhCaptacaoAbastecimentoPublico.tipoPerda}" 
+	    	style="margin-left:15px;"
+	    	valueChangeListener="#{cerhController.abaCaptacaoSuperficial.changeFinalidadeAbsPublicoPerdaDistribuica()}"
+	    	disabled="#{cerhController.abaCaptacaoSuperficial.dto.caracterizacaoDTO.visualizacao}">
+	    	<f:selectItem itemLabel="Sim" itemValue="1"/>
+	    	<f:selectItem itemLabel="Não" itemValue="2"/>
+	    	<f:selectItem itemLabel="Incerto/Desconhecido" itemValue="3"/>
+	    	<p:ajax event="change" update="gridAbsPublico"/>
+	    </p:selectOneRadio>
+		
+		<p:spacer width="20"  height="20"/>
+		<h:outputText value="* #{bundle.cerh_finalidade_dados_abs_publico_valor_indice_perda}:" style="margin-left:15px;" rendered="#{cerhController.abaCaptacaoSuperficial.cerhFinalidadeAbastecimentoPublico.ideCerhCaptacaoAbastecimentoPublico.indPerdaDistribuicao}"/>
+		
+		<p:spacer width="20"  height="20"/>
+		<p:inputText value="#{cerhController.abaCaptacaoSuperficial.cerhFinalidadeAbastecimentoPublico.ideCerhCaptacaoAbastecimentoPublico.valIndicePerdaDistribuicao}" 
+			style="margin-left:15px;"
+			rendered="#{cerhController.abaCaptacaoSuperficial.cerhFinalidadeAbastecimentoPublico.ideCerhCaptacaoAbastecimentoPublico.indPerdaDistribuicao}"
+			disabled="#{cerhController.abaCaptacaoSuperficial.dto.caracterizacaoDTO.visualizacao}" maxlength="3">
+			<f:convertNumber integerOnly="true" maxIntegerDigits="3"/>
+			<p:ajax event="blur"/>
+		</p:inputText>
+		
+	</h:panelGrid>
+
+</ui:composition>

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui">
+	<h:form id="upDadoAdicionalLancamento" style="width:650px;" rendered="#{fceOutorgaAquiculturaLancamentoController.temLancamento}">
+		<!-- INICIO GROUP INFO VIVEIRO - LANÇAMENTO -->
+		<h:panelGroup style="margin-left:10px;">
+			<h:outputText styleClass="titulo-grupo" style="font-weight:bold;" value="#{bundle.fce_out_aqui_da_viveiro_lancamento}" />
+			<h:graphicImage title="#{bundle.fce_out_aqui_da_ajuda_lancamento}" value="/resources/img/ico-ajuda.png" id="ajudaLancamento" style="margin:1px 1px 1px 4px; text-align:justify;" />
+			<p:commandButton value="Download" ajax="false" global="false" process="@this" disabled="#{fceOutorgaAquiculturaLancamentoController.desabilitarTudo}"
+			immediate="true" style="margin-left:25px;">
+				<p:fileDownload value="#{fceOutorgaAquiculturaLancamentoController.dadosAdicionaisViveiroLancamento}" />
+			</p:commandButton>
+		</h:panelGroup>
+		<!-- FINAL GROUP INFO VIVEIRO - LANÇAMENTO -->
+		<br /><br />
+		<!-- INICIO DA GRID COM DOCUMENTO UPADO DE VIVEIRO - LANÇAMENTO -->
+		<h:panelGrid id="adicionalLancamento" style="margin-left:15px;">
+			<p:fileUpload id="upAdicionallancamento" widgetVar="upAdicionallancamento" label="#{bundle.fce_out_aqui_da_upload_lancamento}" fileUploadListener="#{fceOutorgaAquiculturaLancamentoController.tratarUploadLancamento()}"
+				mode="advanced" oncomplete="updateGridLancamento()" auto="true" allowTypes="/(\.|\/)(pdf|png|jpg)$/" invalidFileMessage="Tipo de arquivo inválido." 
+				process="@this" disabled="#{fceOutorgaAquiculturaLancamentoController.docAdicionalLancamentoUpado or fceOutorgaAquiculturaLancamentoController.desabilitarTudo}" />
+			<p:remoteCommand name="updateGridLancamento" update="adicionalLancamento" />
+			<p:dataTable id="docLancamentoUpado" widgetVar="docLancamentoUpado" rendered="#{fceOutorgaAquiculturaLancamentoController.docAdicionalLancamentoUpado}" value="#{fceOutorgaAquiculturaLancamentoController.fceAquiculturaLancamento.uploadCaminhoArquivo}" var="lanUpado" lazy="true" style="width:590px;">
+				<p:column style="width:500px;">
+					<h:outputText value="#{lanUpado}" />
+				</p:column>
+				<p:column style="width:35px;">
+					<h:commandButton value="#{lanUpado}" image="/resources/img/ico-download.png" disabled="#{fceOutorgaAquiculturaLancamentoController.desabilitarTudo}"
+					immediate="true" title="Download do arquivo">
+						<p:fileDownload value="#{fceOutorgaAquiculturaLancamentoController.getDocumentoAdicionalUpado(lanUpado)}" />
+					</h:commandButton>
+					<p:commandLink oncomplete="confirmaExclusaoDadosAdicionaisAquiculturaLancamento.show()" disabled="#{fceOutorgaAquiculturaLancamentoController.desabilitarTudo or fceOutorgaAquiculturaLancamentoController.fceTecnico}"
+					title="Excluir Dados Adicionais" process="@this" global="false">
+						<h:graphicImage title="Excluir" value="/resources/img/ico-excluir.png" />
+					</p:commandLink>
+				</p:column>
+			</p:dataTable>
+		</h:panelGrid>
+		<!-- FINAL DA GRID COM DOCUMENTO UPADO DE VIVEIRO - LANÇAMENTO -->
+	</h:form>
+</ui:composition>

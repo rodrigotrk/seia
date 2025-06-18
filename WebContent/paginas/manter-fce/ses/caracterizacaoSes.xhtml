@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui">
+		
+		<ui:include src="/paginas/manter-fce/ses/dadosElevatoria.xhtml"/>
+		<ui:include src="/paginas/manter-fce/ses/dadosTratamentoEsgoto.xhtml"/>
+		<ui:include src="/paginas/manter-fce/ses/dadosLancamentoEfluente.xhtml"/>
+		
+		<p:confirmDialog id="confimarImpressaoRelatorioSes" widgetVar="confimarImpressaoRelatorioSes" header="Imprimir Relatório" appendToBody="true" message="#{bundle.msg_imprimir_relatorio_fce_ses}" severity="alert" >
+			<h:form>			
+				<p:commandButton id="imprimirRelatorioSes" value="#{bundle.btn_sim}" ajax="false" global="false" process="@this" onclick="confimarImpressaoRelatorioSes.hide();" style="margin-right:10px;">
+					<p:fileDownload value="#{fceSesController.imprimirRelatorio}"/>
+				</p:commandButton>
+										
+				<p:commandButton value="#{bundle.btn_nao}" onclick="confimarImpressaoRelatorioSes.hide()" type="button" />
+			</h:form>
+		</p:confirmDialog>
+		
+		<p:confirmDialog id="confirmaExclusaoDadosTratamento" widgetVar="confirmaExclusaoDadosTratamento" header="#{bundle.geral_lbl_mensagem}" appendToBody="true"
+				 message="#{bundle.msg_confirma_exclusao}" severity="alert">
+			<h:form id="formConfirmaExclusaoDadosTratamento">
+				<div style="text-align: center;">
+					<p:commandButton actionListener="${fceSesController.excluirDadosEstacaoTratamento()}" 
+						 update="pnlSes" onclick="confirmaExclusaoDadosTratamento.hide()" value="#{bundle.btn_sim}" id="btnConfirmaExclusaoTratamentoDeSes" />
+					<p:commandButton value="#{bundle.btn_nao}" type="button" onclick="confirmaExclusaoDadosTratamento.hide()" />
+				</div>
+			</h:form>
+		</p:confirmDialog>
+		
+		<p:confirmDialog id="confirmaExclusaoLocalizacaoElevatoria" widgetVar="confirmaExclusaoLocalizacaoElevatoria" header="#{bundle.geral_lbl_mensagem}" appendToBody="true"
+				 message="#{bundle.msg_confirma_exclusao}" severity="alert">
+			<h:form id="formConfirmaExclusaoLocalizacaoElevatoria">
+				<div style="text-align: center;">
+					<p:commandButton actionListener="${fceSesController.excluirDadosLocalizacaoElevatoria()}" 
+						 update="formSes:tabSes:pngEstacaoElevatoria, formSes:tabSes:tableLocalizacaoDadosElevatoria" onclick="confirmaExclusaoLocalizacaoElevatoria.hide()" value="#{bundle.btn_sim}" id="btnConfirmaExclusaoLocalizacaoElevatoria" />
+					<p:commandButton value="#{bundle.btn_nao}" type="button" onclick="confirmaExclusaoLocalizacaoElevatoria.hide()" />
+				</div>
+			</h:form>
+		</p:confirmDialog>
+		
+		<p:confirmDialog id="confirmaExclusaoCoordenadaLancamento" widgetVar="confirmaExclusaoCoordenadaLancamento" header="#{bundle.geral_lbl_mensagem}" appendToBody="true"
+				 message="#{bundle.msg_confirma_exclusao}" severity="alert">
+			<h:form id="formconfirmaExclusaoCoordenadaLancamento">
+				<div style="text-align: center;">
+					<p:commandButton actionListener="${fceSesController.excluirCoordenadaLancamento()}" 
+						 update="pnlSes" onclick="confirmaExclusaoCoordenadaLancamento.hide()" value="#{bundle.btn_sim}" id="btnconfirmaExclusaoCoordenadaLancamento" />
+					<p:commandButton value="#{bundle.btn_nao}" type="button" onclick="confirmaExclusaoCoordenadaLancamento.hide()" />
+				</div>
+			</h:form>
+		</p:confirmDialog>
+		
+		<p:confirmDialog id="confirmaExclusaoLocGeoDeSes" widgetVar="confirmaExclusaoLocGeoDeSes" header="#{bundle.geral_lbl_mensagem}" appendToBody="true"
+				 message="#{bundle.msg_confirma_exclusao}" severity="alert">
+			<h:form id="formConfirmaExclusaoLocGeoDeSes">
+				<div style="text-align: center;">
+					<p:commandButton actionListener="${fceSesController.excluirLocGeoSelecionada()}" 
+						 update="pnlSes" onclick="confirmaExclusaoLocGeoDeSes.hide()" value="#{bundle.btn_sim}" id="btnConfirmaExclusaoLocGeoDeSes" />
+					<p:commandButton value="#{bundle.btn_nao}" type="button" onclick="confirmaExclusaoLocGeoDeSes.hide()" />
+				</div>
+			</h:form>
+		</p:confirmDialog>
+		
+		<p:dialog id="caracterizacaoSes" 
+				  widgetVar="caracterizacaoSes" 
+				  position="center" 
+				  appendToBody="false" 
+				  draggable="true" 
+				  dynamic="true" 
+				  width="850" 
+				  height="650"
+				  resizable="false" 
+				  header="#{fceSesController.headerFce('Sistema de Esgotamento Sanitário (SES)')}" 
+				  modal="true" closable="false">
+			
+		
+		  	<h:panelGroup id="pnlSes" layout="block">
+		  	
+			  		
+			  	<h:form id="formSes">
+	
+	
+					<p:tabView id="tabSes" activeIndex="#{fceSesController.activeTab}" widgetVar="saaAbas" cache="false" dynamic="true">
+						<p:ajax event="tabChange" listener="#{fceSesController.changeAba()}" update="formSes:pngButoes" global="false"  />
+						<p:tab id="tabCaracterizacao" title="Caracterização">
+		 					<ui:include src="/paginas/manter-fce/ses/sesAbaCaracterizacao.xhtml"/>
+						</p:tab>
+						
+						<p:tab id="tabLancamentoEfluentes" title="Lançamento de Efluentes" rendered="#{fceSesController.fceTecnico}">
+		 					<ui:include src="/paginas/manter-fce/ses/sesAbaLancamentoEfluentes.xhtml"/>
+						</p:tab>
+												
+					</p:tabView>
+	
+					<h:panelGroup id="pngButoes">
+					<br/>
+						<p:commandButton value="Voltar" 
+						actionListener="#{fceSesController.voltarAba()}"
+						update="pnlSes formAvancarVoltar" process="@this" immediate="true" />
+						<p:commandButton id="btnAvancar" 
+						value="Avançar" 
+						rendered="#{!fceSesController.btnFinalizar}"
+						action="#{fceSesController.avancarAba()}"
+						update="pnlSes"/>
+						<p:commandButton id="btnFinalizar" 
+						value="Finalizar" 
+						rendered="#{fceSesController.btnFinalizar and !fceSesController.desabilitarTudo}"
+						action="#{fceSesController.finalizar()}"
+						update="pnlSes"/>							
+					</h:panelGroup>
+						
+				</h:form>
+						
+		  	</h:panelGroup>
+		</p:dialog>
+		
+  		<p:dialog id="efluentes_dialog_ses" 
+				  widgetVar="efluentes_dialog_ses" 
+				  position="center" 
+				  appendToBody="false" 
+				  draggable="true" 
+				  dynamic="true" 
+				  width="850" 
+				  height="510"
+				  resizable="false" 
+				  header="Características do Ponto concedido na Outorga" 
+				  modal="true">
+				  
+	<h:form id="formLancamentoSes">
+		<p:fieldset style="margin-bottom:10px;">
+		
+		<h:panelGrid>
+			<h1 class="titulo-grupo" style="font-weight:bold;">Dados do Efluente</h1> 
+			<hr style="margin-top: 0;"/>
+		</h:panelGrid>
+		
+		<h:panelGrid id="checkBoxCaracterizacaoEfluenteSes" style="margin-left:20px;">
+			<h:outputText value="Caracterização do Efluente" />
+			<p:selectManyCheckbox layout="pageDirection" converter="simpleEntityConverter" value="#{fceLancamentoEfluentesController.listaCaracterizacaoEfluentesEscolhidos}" disabled="true">
+				<f:selectItems itemValue="#{efluente}" itemLabel="#{efluente.dscCaracterizacaoEfluente}" value="#{fceLancamentoEfluentesController.listaCaracterizacaoEfluentes}" var="efluente"/>					      
+				<p:ajax global="false" event="change" update="gridPeriodoLancamento" />
+			</p:selectManyCheckbox>
+		</h:panelGrid> 
+		
+		<h:panelGrid id="gridPeriodoLancamentoSes">
+	      	<h:panelGroup>
+				<h:outputText value="Vazão do Efluente  " style="margin-left:20px;"/>
+				<p:inputText value="#{fceLancamentoEfluentesController.fceLancamentoEfluente.numVazaoEfluente}" disabled="true" onkeyup="mascararNumeroAndAddZeros(this, event, 9, 3, '.', ',', 3);" 
+				style="margin-left:5px; width:80px;" maxlength="15">
+					<f:convertNumber integerOnly="false" minFractionDigits="3"/>
+					<p:ajax event="blur" global="false"/>
+				</p:inputText>
+				<h:outputText value="   (m³/dia)" />
+			</h:panelGroup> 
+			<br /><br />
+			<h:panelGroup>
+				<h:outputText style="margin-left:20px;" value="Período de Lançamento" />
+			</h:panelGroup>
+			
+			<p:selectOneRadio id="periodoLancamentoSes" style="margin-left:30px; width:120px;" layout="pageDirection" value="#{fceLancamentoEfluentesController.fceLancamentoEfluente.ideTipoPeriodoDerivacao}" 
+			converter="simpleEntityConverter" valueChangeListener="#{fceLancamentoEfluentesController.changePeriodoDerivacao()}" disabled="true">  
+	        	<f:selectItems value="#{fceLancamentoEfluentesController.listaTipoPeriodoDerivacao}" var="periodo" itemLabel="#{periodo.dscTipoPeriodoDerivacao}" itemValue="#{periodo}"/> 
+	        	<p:ajax global="false" update="gridPeriodoLancamento" process="@this" immediate="true"/>
+	    	</p:selectOneRadio>
+	    	       
+			<h:panelGroup id="tempoLancamentoSes" rendered="#{fceLancamentoEfluentesController.periodoDerivacaoIntermitente}" style="margin-left:40px;">
+				<h:outputText value="Tempo de Lançamento   " />
+				<p:inputText id="tempoSes" value="#{fceLancamentoEfluentesController.fceLancamentoEfluente.numTempoLancamento}" disabled="true"
+				onkeyup="SomenteNumero(this);" converter="integerConverter" style="width:20px;" maxlength="2">
+					<p:ajax event="blur" global="false"/>
+				</p:inputText>
+				<h:outputText value="   (h/dia)"/>
+			</h:panelGroup>         
+			<br />
+		</h:panelGrid>
+    	
+    	<h:panelGrid style="margin-left:20px;">
+    		<p:dataTable id="tabEfluentesSes" value="#{fceLancamentoEfluentesController.listaFceLancamentoEfluenteCaracteristicas}" var="fceCaracteristica" >
+    			<p:columnGroup type="header">
+    				<p:row>
+    					<p:column rowspan="2" headerText="Principais Características"/>
+    					<p:column colspan="2" headerText="Efluente"/>
+    					<p:column rowspan="2" headerText="Eficiência de Remoção"/>
+    				</p:row>
+    				<p:row>
+    					<p:column headerText="Bruto"/>
+    					<p:column headerText="Tratado"/>
+    				</p:row>
+    			</p:columnGroup>
+    			<p:column>
+	    			<h:outputText value="#{fceCaracteristica.ideCaracteristicaEfluente.nomCaracteristicaEfluente}" />
+    			</p:column>
+    			<p:column>
+	    			<p:inputText id="brutoSes" value="#{fceCaracteristica.numBruto}" style="width:115px;" onkeyup="mascararNumeroAndAddZeros(this, event, 9, 3, '.', ',', 3);" disabled="true" maxlength="15">
+	    				<f:convertNumber integerOnly="false" minFractionDigits="3"/>
+						<p:ajax event="blur" global="false"/>
+					</p:inputText>
+					<h:outputText value=" (UFC/100ml)" rendered="#{fceCaracteristica.ideCaracteristicaEfluente.coliformes}"/>
+					<h:outputText value=" (mg/l)" rendered="#{!fceCaracteristica.ideCaracteristicaEfluente.coliformes}"/>
+    			</p:column>
+
+				<p:column>
+					<p:inputText value="#{fceCaracteristica.numTratado}" onkeyup="mascararNumeroAndAddZeros(this, event, 9, 3, '.', ',', 3);" 
+					style="margin-left:5px; width:80px;" disabled="true" maxlength="15">
+						<f:convertNumber integerOnly="false" minFractionDigits="3"/>
+						<p:ajax event="blur" global="false"/>
+					</p:inputText>
+					<h:outputText value=" (UFC/100ml)" rendered="#{fceCaracteristica.ideCaracteristicaEfluente.coliformes}"/>
+					<h:outputText value=" (mg/l)" rendered="#{!fceCaracteristica.ideCaracteristicaEfluente.coliformes}"/>	
+    			</p:column>
+    			
+    			<p:column>
+					<p:inputText value="#{fceCaracteristica.numEficienciaRemocao}" onkeyup="mascararNumeroAndAddZeros(this, event, 6, 3, '.', ',', 2)" style="margin-left:5px; width:80px;" disabled="true" maxlength="7">
+						<f:convertNumber integerOnly="false" minFractionDigits="3"/>
+						<p:ajax event="blur" global="false"/>
+					</p:inputText>
+					<h:outputText value=" (%)" />
+    			</p:column>
+    			
+    		</p:dataTable>
+    	</h:panelGrid>
+    	
+    	 </p:fieldset>
+	</h:form>
+		</p:dialog>	
+</ui:composition>

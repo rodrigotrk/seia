@@ -1,0 +1,397 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="relatorio_historico_pessoa_juridica" pageWidth="842" pageHeight="595" orientation="Landscape" whenNoDataType="NoDataSection" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="b8f2a552-4b9f-4e86-b27c-3e2f719c3445">
+	<property name="ireport.zoom" value="1.2100000000000006"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="idePessoaJuridica" class="java.lang.Integer"/>
+	<parameter name="LOGO_SEIA" class="java.lang.String"/>
+	<parameter name="LOGO_INEMA" class="java.lang.String"/>
+	<parameter name="dataInicio" class="java.sql.Timestamp"/>
+	<parameter name="dataFim" class="java.sql.Timestamp"/>
+	<queryString>
+		<![CDATA[SELECT
+	pj.num_cnpj AS numCnpj,
+	pj.nom_razao_social AS nomPessoa,
+	pjh.nom_razao_social AS nomPessoaHist,
+   	CASE WHEN status_procurador
+	THEN 'Adicionado: ' || pfpr.nom_pessoa || ' / ' || pfpr.num_cpf
+	WHEN NOT status_procurador
+	THEN 'Removido: ' || pfpr.nom_pessoa || ' / ' || pfpr.num_cpf
+	ELSE NULL
+	END AS mudancaProcurador,
+   	CASE WHEN status_representante
+	THEN 'Adicionado: ' || pfrl.nom_pessoa || ' / ' || pfrl.num_cpf
+	WHEN NOT status_representante
+	THEN 'Removido: ' || pfrl.nom_pessoa || ' / ' || pfrl.num_cpf
+	ELSE NULL
+	END AS mudancaRepresentante,
+	u.dsc_login AS dscLogin,
+	pjh.dtc_historico AS dtcHistorico
+FROM pessoa_juridica_historico pjh
+INNER JOIN pessoa_juridica pj ON pj.ide_pessoa_juridica = pjh.ide_pessoa_juridica
+INNER JOIN usuario u ON u.ide_pessoa_fisica = pjh.ide_usuario_alteracao
+LEFT JOIN representante_legal rl ON rl.ide_representante_legal = pjh.ide_representante_legal
+LEFT JOIN pessoa_fisica pfrl ON pfrl.ide_pessoa_fisica = rl.ide_pessoa_fisica
+LEFT JOIN procurador_representante pr ON pr.ide_procurador_representante = pjh.ide_procurador_representante
+LEFT JOIN pessoa_fisica pfpr ON pfpr.ide_pessoa_fisica = pr.ide_procurador
+WHERE pjh.ide_pessoa_juridica = $P{idePessoaJuridica}
+AND pjh.dtc_historico BETWEEN $P{dataInicio} AND $P{dataFim};]]>
+	</queryString>
+	<field name="numCnpj" class="java.lang.String"/>
+	<field name="nomPessoa" class="java.lang.String"/>
+	<field name="nomPessoaHist" class="java.lang.String"/>
+	<field name="mudancaProcurador" class="java.lang.String"/>
+	<field name="mudancaRepresentante" class="java.lang.String"/>
+	<field name="dscLogin" class="java.lang.String"/>
+	<field name="dtcHistorico" class="java.sql.Timestamp"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="79" splitType="Stretch">
+			<rectangle>
+				<reportElement positionType="Float" x="603" y="10" width="199" height="46" uuid="586de587-3d57-4e43-80d0-b6debc65baf9"/>
+			</rectangle>
+			<rectangle>
+				<reportElement positionType="Float" x="0" y="10" width="602" height="46" uuid="5e35af18-c586-4ef1-92fe-509855ce0258"/>
+			</rectangle>
+			<image isLazy="true" onErrorType="Blank">
+				<reportElement x="606" y="21" width="93" height="24" forecolor="#FFFFFF" uuid="c31ff981-b498-4dde-9347-6356eec91499"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<graphicElement>
+					<pen lineWidth="0.0"/>
+				</graphicElement>
+				<imageExpression><![CDATA[$P{LOGO_INEMA}]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement positionType="Float" x="0" y="23" width="602" height="22" uuid="178bb2bf-a4e8-4252-8667-994814fe41ee"/>
+				<textElement textAlignment="Center" verticalAlignment="Top">
+					<font fontName="SansSerif" size="14" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Relatório de Histórico de Alterações de Pessoas Jurídicas]]></text>
+			</staticText>
+			<image scaleImage="RealHeight" hAlign="Center" vAlign="Middle" isUsingCache="false" onErrorType="Blank">
+				<reportElement x="696" y="18" width="107" height="27" forecolor="#FFFFFF" uuid="73444d69-1c01-4510-89b8-aa87f6a8ad0e"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<graphicElement>
+					<pen lineWidth="0.0" lineStyle="Solid" lineColor="#FFFFFF"/>
+				</graphicElement>
+				<imageExpression><![CDATA[$P{LOGO_SEIA}]]></imageExpression>
+			</image>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="52" splitType="Stretch">
+			<rectangle>
+				<reportElement x="0" y="10" width="301" height="35" uuid="255e2aff-c886-4394-92e9-cd02e1c3da9c"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="7" y="11" width="90" height="14" uuid="3eeef917-66d0-473a-8dc4-e6afc44603f1"/>
+				<textElement>
+					<font fontName="Arial" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Nome da Pessoa:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="14" y="25" width="287" height="20" uuid="dc06e072-3f81-48fa-b843-12043337dd33"/>
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nomPessoa}]]></textFieldExpression>
+			</textField>
+			<rectangle>
+				<reportElement x="301" y="10" width="200" height="35" uuid="1b410295-33ad-4808-9caa-8e1bb6962d4d"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="306" y="10" width="83" height="14" uuid="3a907873-50ee-4481-8c66-5ad7963536ca"/>
+				<textElement>
+					<font fontName="Arial" isBold="true"/>
+				</textElement>
+				<text><![CDATA[CPNJ:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="307" y="25" width="194" height="20" uuid="a8df0809-bb4d-4951-9136-3cb54ad55796"/>
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{numCnpj}]]></textFieldExpression>
+			</textField>
+			<rectangle>
+				<reportElement x="490" y="10" width="158" height="35" uuid="11273911-ceea-488c-9645-7cf9e1948d55"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="494" y="11" width="90" height="14" uuid="9a182983-de22-4bbb-a81e-33f3dd8a8468"/>
+				<textElement>
+					<font fontName="Arial" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Data inicial]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="500" y="24" width="144" height="20" uuid="9e3db724-ffed-48bb-9d4e-af8ad062e176"/>
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{dataInicio}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="652" y="10" width="90" height="14" uuid="dc4a6dd3-5492-476d-abae-c4a099ba6045"/>
+				<textElement>
+					<font fontName="Arial" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Data Início]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement x="648" y="10" width="154" height="35" uuid="01238b19-c0e9-4832-8eab-55c8f05e7586"/>
+			</rectangle>
+			<textField>
+				<reportElement x="658" y="24" width="144" height="20" uuid="535869f2-0ab0-4a18-9e51-910812d0846c"/>
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{dataFim}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="652" y="11" width="90" height="14" uuid="feaa8a89-9b31-4b57-a7a9-565721f43163"/>
+				<textElement>
+					<font fontName="Arial" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Data final]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<detail>
+		<band height="125" splitType="Stretch">
+			<rectangle>
+				<reportElement x="0" y="10" width="357" height="50" uuid="95005529-a5a2-4b86-beba-cb08bb9b6d3e"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="5" y="13" width="92" height="14" uuid="ac131d3b-0091-4b85-b906-177c5079ac15"/>
+				<textElement>
+					<font fontName="Arial" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Mudança de nome:]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement x="357" y="10" width="357" height="50" uuid="9946acf3-992c-4fdc-b056-eb2907db8692"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="715" y="10" width="87" height="105" uuid="52e2b43c-eb46-468b-87c9-43efdb9be64f"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="357" y="61" width="357" height="54" uuid="5add804d-54fc-4553-8c06-29ab3575a53b"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="0" y="61" width="357" height="54" uuid="24acba8f-b3ca-47d3-af56-f3754272560a"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="5" y="64" width="122" height="14" uuid="86818649-6bd7-4062-90cb-1de25191a29b"/>
+				<textElement>
+					<font fontName="Arial" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Mudança de Procurador:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="362" y="64" width="83" height="14" uuid="b9c4d062-4c75-46cb-9cf4-bc365b86df44"/>
+				<textElement>
+					<font fontName="Arial" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Usuário:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="362" y="16" width="171" height="14" uuid="b643b8ec-8fed-4d36-91e5-b2b2b31e6069"/>
+				<textElement>
+					<font fontName="Arial" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Mudança de Representante Legal:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="7" y="30" width="345" height="20" uuid="deaf1e18-ac91-400b-96a0-cf63893baf83"/>
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nomPessoaHist} != null ? $F{nomPessoaHist} : "-"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="364" y="30" width="340" height="20" uuid="d94c64d9-cb73-4d5a-ad25-76d6a913dfb4"/>
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{mudancaRepresentante} != null ? $F{mudancaRepresentante} : "-"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="362" y="78" width="342" height="20" uuid="88d4d02b-8873-4e19-978b-44a886f40920"/>
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dscLogin}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="7" y="78" width="340" height="20" uuid="3c6f439e-1689-4062-9c8a-0121591b28d4"/>
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{mudancaProcurador} != null ? $F{mudancaProcurador} : "-"]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="714" y="13" width="89" height="14" uuid="c420c759-07c3-4566-8a04-525bcd60b6ce"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Data do histórico:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="715" y="30" width="87" height="85" uuid="2c5afb3a-0bd3-4067-985a-a8179b68c268"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dtcHistorico}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="66" splitType="Stretch">
+			<textField pattern="EEEEE dd MMMMM yyyy">
+				<reportElement positionType="Float" x="5" y="49" width="160" height="11" uuid="61700eac-8f5a-4669-a0ca-74abcd366980"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<rectangle>
+				<reportElement positionType="Float" mode="Opaque" x="0" y="10" width="802" height="35" uuid="236a5dd9-0937-4607-9ea3-a9ed1bdfd7aa"/>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</rectangle>
+			<textField evaluationTime="Report">
+				<reportElement positionType="Float" x="771" y="24" width="24" height="12" uuid="52bdbc9a-96e2-4e12-9407-277ebad6841d"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement positionType="Float" x="756" y="24" width="14" height="12" uuid="11641de8-ec1e-4e9b-a813-32c5ed671f10"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<text><![CDATA[|]]></text>
+			</staticText>
+			<textField>
+				<reportElement positionType="Float" x="732" y="24" width="24" height="12" uuid="af34e496-2feb-4e4c-8478-4aaa6832ef66"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement positionType="Float" x="350" y="49" width="450" height="12" uuid="3920a285-0a17-475a-9b66-589bb89ccf44"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8"/>
+				</textElement>
+				<text><![CDATA[INEMA/CAB: Avenida Luís Viana Filho, 6ª Avenida, nº 600 CAB. CEP:41.746-900 - Salvador  - Bahia - Brasil]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="Float" x="14" y="20" width="287" height="16" uuid="c6546841-174b-49dd-a1cf-349011252606"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="10" isBold="false" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Relatório de Histórico de Alterações de Pessoas Jurídicas ]]></text>
+			</staticText>
+		</band>
+	</pageFooter>
+	<noData>
+		<band height="167">
+			<rectangle>
+				<reportElement x="419" y="65" width="154" height="35" uuid="2eb6e431-c786-4fbb-8748-1300f52a97d4"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="261" y="65" width="158" height="35" uuid="0106b587-9038-4372-a121-468822bfe5a7"/>
+			</rectangle>
+			<rectangle>
+				<reportElement positionType="Float" x="1" y="10" width="602" height="45" uuid="31a8d55f-053a-4a90-b50d-fb69f84405f4"/>
+			</rectangle>
+			<rectangle>
+				<reportElement positionType="Float" x="603" y="10" width="199" height="45" uuid="3f64bc35-620d-43b0-9864-83481840045b"/>
+			</rectangle>
+			<textField>
+				<reportElement x="429" y="79" width="144" height="20" uuid="d473b949-1e8a-496c-9de6-c15a2777e24b"/>
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{dataFim}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="423" y="66" width="90" height="14" uuid="920d5911-3788-4200-ae71-63fb66609bb1"/>
+				<textElement>
+					<font fontName="Arial" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Data final]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="271" y="79" width="144" height="20" uuid="16d6bb39-7412-4d27-a2d6-95625e535d8c"/>
+				<textElement>
+					<font fontName="Arial"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{dataInicio}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="265" y="66" width="90" height="14" uuid="7e6f052e-6a3d-4a54-b020-051cc4f9fbee"/>
+				<textElement>
+					<font fontName="Arial" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Data inicial]]></text>
+			</staticText>
+			<image scaleImage="RealHeight" hAlign="Center" vAlign="Middle" isUsingCache="false" onErrorType="Blank">
+				<reportElement x="697" y="21" width="104" height="27" forecolor="#FFFFFF" uuid="18cb5fba-e90e-4b33-8d08-59a3733b924e"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<graphicElement>
+					<pen lineWidth="0.0" lineStyle="Solid" lineColor="#FFFFFF"/>
+				</graphicElement>
+				<imageExpression><![CDATA[$P{LOGO_SEIA}]]></imageExpression>
+			</image>
+			<image isLazy="true" onErrorType="Blank">
+				<reportElement x="607" y="24" width="93" height="24" forecolor="#FFFFFF" uuid="55aa3ec6-442b-47f3-bf85-ac587b1ae5f8"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<graphicElement>
+					<pen lineWidth="0.0"/>
+				</graphicElement>
+				<imageExpression><![CDATA[$P{LOGO_INEMA}]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement positionType="Float" x="1" y="10" width="602" height="45" uuid="85e0b9ae-7556-4d8e-ac72-f0d8ed5a4263"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="14" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Relatório de Histórico de Alterações de Pessoas Jurídicas]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="114" width="802" height="50" uuid="671a4a88-3028-4502-b724-437bb32f7a05"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="20" isBold="true" isItalic="true" isUnderline="true"/>
+				</textElement>
+				<text><![CDATA[SEM REGISTROS DE HISTÓRICO NO PERÍODO SELECIONADO.]]></text>
+			</staticText>
+		</band>
+	</noData>
+</jasperReport>

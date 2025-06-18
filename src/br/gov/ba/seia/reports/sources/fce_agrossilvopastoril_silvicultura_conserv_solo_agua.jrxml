@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="lac_transportadora_residuos_transportados" language="java" pageWidth="495" pageHeight="802" whenNoDataType="AllSectionsNoDetail" columnWidth="495" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="80b78396-35cc-4e26-aaf9-1207b1892468">
+	<property name="ireport.zoom" value="2.143588810000003"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="ide_fce" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[select distinct tcsa.dsc_tipo_conservacao_solo_agua from  fce_agrossilvopastoril fa
+inner join fce_agro_tipo_conservacao fatc
+on fa.ide_fce_agrossilvopastoril = fatc.ide_fce_agrossilvopastoril
+inner join tipo_conservacao_solo_agua tcsa on fatc.ide_tipo_conservacao_solo_agua = tcsa.ide_tipo_conservacao_solo_agua
+where fa.ide_fce = $P{ide_fce} order by tcsa.dsc_tipo_conservacao_solo_agua asc]]>
+	</queryString>
+	<field name="dsc_tipo_conservacao_solo_agua" class="java.lang.String"/>
+	<columnHeader>
+		<band height="8"/>
+	</columnHeader>
+	<detail>
+		<band height="21" splitType="Stretch">
+			<textField isStretchWithOverflow="true">
+				<reportElement uuid="89d1f565-5094-486c-8e98-06cf19ed2463" x="3" y="0" width="162" height="21"/>
+				<box>
+					<topPen lineWidth="0.25"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif" size="10"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dsc_tipo_conservacao_solo_agua}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="9" splitType="Stretch"/>
+	</pageFooter>
+</jasperReport>

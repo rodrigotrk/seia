@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="relatorio_silos_armazens" language="java" pageWidth="515" pageHeight="752" columnWidth="515" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="a2c0938d-1df3-452c-833f-777ea8f94a5c">
+	<property name="ireport.zoom" value="1.4641000000000006"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="ide_cadastro" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT sa.*
+FROM cadastro_atividade_nao_sujeita_lic c
+INNER JOIN silos_armazens sa on sa.ide_cadastro_atividade_nao_sujeita_lic = c.ide_cadastro_atividade_nao_sujeita_lic
+WHERE c.ide_cadastro_atividade_nao_sujeita_lic = $P{ide_cadastro}]]>
+	</queryString>
+	<field name="ide_silos_armazens" class="java.lang.Integer"/>
+	<field name="ind_industrializacao" class="java.lang.Boolean">
+		<fieldDescription><![CDATA[No início do cadastro tem a tela de orietações com o aceite: "Declaro que o empreendimento não é realizado processo de industrialização.":
+Sim=true
+Não= False]]></fieldDescription>
+	</field>
+	<field name="ind_existe_comunidade" class="java.lang.Boolean">
+		<fieldDescription><![CDATA[* Existe alguma comunidade num raio de 1 km do empreendimento?
+Sim=true
+False=Não]]></fieldDescription>
+	</field>
+	<field name="ind_empreendimento_caldeira" class="java.lang.Boolean">
+		<fieldDescription><![CDATA[No empreendimento é utilizada caldeira?
+Sim=True
+Não= False]]></fieldDescription>
+	</field>
+	<field name="val_area_total_terreno" class="java.math.BigDecimal"/>
+	<field name="ind_queima_combustivel" class="java.lang.Boolean">
+		<fieldDescription><![CDATA[*No empreendimento é realizada a queima de combustíveis para secagem?
+Sim= true
+Não = False]]></fieldDescription>
+	</field>
+	<field name="ind_aceite_declaracao_final" class="java.lang.Boolean">
+		<fieldDescription><![CDATA[No final do cadastro o usuário precisa concordar com uma declaração de veracidade das informações preenchidas.
+Sim- True
+Não - False]]></fieldDescription>
+	</field>
+	<field name="ind_aceite_instrucoes" class="java.lang.Boolean">
+		<fieldDescription><![CDATA[No início do cadastro tem um tela de aceite:
+Declaro que estou ciente quanto às instruções acima.
+SIM= TRUE
+NÃO= FALSE]]></fieldDescription>
+	</field>
+	<field name="val_area_total_construida" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[Esse valor não pode ser maior que o campo val_area_total_terreno]]></fieldDescription>
+	</field>
+	<field name="ind_aceite_empreendimento_area_protegida" class="java.lang.Boolean">
+		<fieldDescription><![CDATA[No início do cadastro tem um tela de aceite:
+"Declaro que o empreendimento não está localizado em áreas protegidas, como as citadas nas instruções acima."
+Sim=true
+Não= False]]></fieldDescription>
+	</field>
+	<field name="ide_cadastro_atividade_nao_sujeita_lic" class="java.lang.Integer"/>
+	<field name="ide_empreendimento" class="java.lang.Integer"/>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="40cd446f-d8e6-4f0e-9c9d-b723a66d1af3" mode="Opaque" x="0" y="0" width="515" height="20" backcolor="#DDDDDD"/>
+				<box leftPadding="5">
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Dados Básicos]]></text>
+			</staticText>
+		</band>
+		<band height="40" splitType="Stretch">
+			<subreport>
+				<reportElement uuid="d2092795-4d84-47e2-887b-7fdfbb5e3fe8" x="0" y="25" width="515" height="15"/>
+				<subreportParameter name="SUBREPORT_DIR">
+					<subreportParameterExpression><![CDATA[$P{SUBREPORT_DIR}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="ide_silos_armazens">
+					<subreportParameterExpression><![CDATA[$F{ide_silos_armazens}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "relatorio_silos_armazens_imovel_rural.jasper"]]></subreportExpression>
+			</subreport>
+			<staticText>
+				<reportElement uuid="4725e10b-08e3-4c89-888d-9b3465e3014d" x="0" y="0" width="515" height="20"/>
+				<box>
+					<bottomPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Imóvel(eis) Rural(ais)]]></text>
+			</staticText>
+		</band>
+		<band height="40">
+			<staticText>
+				<reportElement uuid="e4587f43-72a4-411d-986a-cccff62aa3cc" x="0" y="0" width="515" height="20"/>
+				<box>
+					<bottomPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Existe alguma comunidade num raio de 1km do empreendimento?]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="cd8073a1-6a67-4fe7-bbc3-54f791fc9270" x="5" y="20" width="30" height="20">
+					<printWhenExpression><![CDATA[!$F{ind_existe_comunidade}]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[Não]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="0cae2e32-0961-42e0-86e5-7d8709713225" x="5" y="20" width="30" height="20">
+					<printWhenExpression><![CDATA[$F{ind_existe_comunidade}]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[Sim]]></text>
+			</staticText>
+		</band>
+		<band height="20">
+			<textField pattern="#,##0.00">
+				<reportElement uuid="5c969852-c298-4b0e-aaea-221943478474" x="107" y="0" width="135" height="20"/>
+				<box>
+					<bottomPen lineWidth="0.0"/>
+				</box>
+				<textElement verticalAlignment="Middle" markup="html">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{val_area_total_construida}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00">
+				<reportElement uuid="3214d49c-40f7-40f2-8414-4a125f0e804c" x="363" y="0" width="151" height="20"/>
+				<box>
+					<bottomPen lineWidth="0.0"/>
+				</box>
+				<textElement verticalAlignment="Middle" markup="html">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{val_area_total_terreno}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="64ceb5e4-d791-40f6-b531-f7fb3d75393d" x="0" y="0" width="107" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Área total construída:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="b4d71c14-568e-49f1-a068-64c0ac6977f0" x="255" y="0" width="108" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Área total do terreno:]]></text>
+			</staticText>
+		</band>
+		<band height="41">
+			<subreport>
+				<reportElement uuid="5a405d56-2abf-4eee-8133-8b7eed885c85" x="1" y="20" width="514" height="20"/>
+				<subreportParameter name="SUBREPORT_DIR">
+					<subreportParameterExpression><![CDATA[$P{SUBREPORT_DIR}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="ide_silos_armazens">
+					<subreportParameterExpression><![CDATA[$F{ide_silos_armazens}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "relatorio_silos_armazens_operavao_desenvolvida.jasper"]]></subreportExpression>
+			</subreport>
+			<staticText>
+				<reportElement uuid="90d17452-6a64-4c4f-9ad9-d0a214d8765e" x="0" y="0" width="514" height="20"/>
+				<box>
+					<bottomPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Operações desenvolvidas no empreendimento?]]></text>
+			</staticText>
+		</band>
+		<band height="60">
+			<staticText>
+				<reportElement uuid="ac911cc6-4148-4d48-9ab4-ed9990d40d10" x="1" y="0" width="513" height="20"/>
+				<box>
+					<bottomPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[No empreendimento é realizada a queima de combustíveis para secagem?]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="5870c29a-0e33-41d5-ad54-4d408c175133" x="5" y="20" width="30" height="20">
+					<printWhenExpression><![CDATA[$F{ind_queima_combustivel}]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Sim]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="4a788b4e-221d-4241-b3e3-bc9aefe95223" x="5" y="20" width="30" height="20">
+					<printWhenExpression><![CDATA[!$F{ind_queima_combustivel}]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Não]]></text>
+			</staticText>
+			<subreport>
+				<reportElement uuid="ee34fbf7-bf92-428f-8e6e-fa50db83323e" x="0" y="40" width="514" height="20" isRemoveLineWhenBlank="true"/>
+				<subreportParameter name="SUBREPORT_DIR">
+					<subreportParameterExpression><![CDATA[$P{SUBREPORT_DIR}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="ide_silos_armazens">
+					<subreportParameterExpression><![CDATA[$F{ide_silos_armazens}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "relatorio_silos_armazens_tipo_combustivel_utilizado.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+		<band height="40">
+			<staticText>
+				<reportElement uuid="baefc110-78e2-46be-a381-4ce3bdda6f4d" x="1" y="0" width="513" height="20"/>
+				<box>
+					<bottomPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[No empreendimento é utilizado caldeira?]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="ac9da4ff-576e-4948-87b5-6fe2f2183230" x="5" y="20" width="30" height="20">
+					<printWhenExpression><![CDATA[$F{ind_empreendimento_caldeira}]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Sim]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="97d1c38c-4bcb-4ac7-b344-4dad5ffa51c0" x="5" y="20" width="30" height="20">
+					<printWhenExpression><![CDATA[!$F{ind_empreendimento_caldeira}]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Não]]></text>
+			</staticText>
+		</band>
+	</detail>
+</jasperReport>

@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="fce_geracao_energia_relatorios_termoeletrica" language="java" pageWidth="520" pageHeight="802" columnWidth="520" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="bbb6aa04-014f-4151-b9c4-afbf702cf20e">
+	<property name="ireport.zoom" value="2.593742460100008"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="IDE_FCE_ENERGIA" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT DES_IDENTIFICACAO_UNIDADE,
+ VAL_AREA_UNIDADE, QTD_AGUA_ENERGIA_TERMOELETRICA_UNIDADE, VAPOR_GERADO_ENERGIA_TERMOELETRICA_UNIDADE,
+val_eficiencia_controle_emissao,
+(SELECT SUM(FETUG.VAL_POTENCIA_GERADOR) FROM FCE_ENERGIA_TERMOELETRICA_UNIDADE_GERADOR FETUG
+WHERE FETU.IDE_FCE_ENERGIA_TERMOELETRICA_UNIDADE = FETUG.IDE_FCE_ENERGIA_TERMOELETRICA_UNIDADE) AS POTENCIA ,
+(SELECT count(ide_fce_energia_termoeletrica_unidade_gerador) FROM FCE_ENERGIA_TERMOELETRICA_UNIDADE_GERADOR FETUG
+WHERE FETU.IDE_FCE_ENERGIA_TERMOELETRICA_UNIDADE = FETUG.IDE_FCE_ENERGIA_TERMOELETRICA_UNIDADE) AS QTD_GERADOR,
+array_to_string(array
+(select DISTINCT(LTRIM(RTRIM(comb.des_tipo_Combustivel))) from fce_energia_termoeletrica_unidade_combustivel FCE_UC,
+     TIPO_COMBUSTIVEL COMB
+     where
+COMB.IDE_TIPO_COMBUSTIVEL = FCE_UC.ide_tipo_combustivel
+AND FCE_UC.ide_fce_energia_termoeletrica_unidade = FETU.IDE_FCE_ENERGIA_TERMOELETRICA_UNIDADE) ,',')
+ as tipocombustivel
+FROM FCE_ENERGIA_TERMOELETRICA FET,
+     FCE_ENERGIA_TERMOELETRICA_UNIDADE FETU
+WHERE FET.IDE_FCE_ENERGIA_TERMOELETRICA = FETU.IDE_FCE_ENERGIA_TERMOELETRICA
+AND FET.IDE_FCE_ENERGIA = $P{IDE_FCE_ENERGIA}]]>
+	</queryString>
+	<field name="des_identificacao_unidade" class="java.lang.String"/>
+	<field name="val_area_unidade" class="java.math.BigDecimal"/>
+	<field name="qtd_agua_energia_termoeletrica_unidade" class="java.math.BigDecimal"/>
+	<field name="vapor_gerado_energia_termoeletrica_unidade" class="java.math.BigDecimal"/>
+	<field name="val_eficiencia_controle_emissao" class="java.math.BigDecimal"/>
+	<field name="potencia" class="java.math.BigDecimal"/>
+	<field name="qtd_gerador" class="java.lang.Long"/>
+	<field name="tipocombustivel" class="java.lang.String"/>
+	<variable name="TOTAL_UNIDADE" class="java.lang.Integer" calculation="Count">
+		<variableExpression><![CDATA[$F{des_identificacao_unidade}]]></variableExpression>
+	</variable>
+	<variable name="POTENCIA_TOTAL" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{potencia}]]></variableExpression>
+	</variable>
+	<variable name="TOTAL_GERADOR" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{qtd_gerador}]]></variableExpression>
+	</variable>
+	<variable name="TOTAL_AREA" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{val_area_unidade}]]></variableExpression>
+	</variable>
+	<variable name="val_eficiencia_controle_emissao_1" class="java.math.BigDecimal" resetType="Column" calculation="Sum">
+		<variableExpression><![CDATA[$F{val_eficiencia_controle_emissao}]]></variableExpression>
+	</variable>
+	<variable name="val_eficiencia_controle_emissao_2" class="java.math.BigDecimal" resetType="Column" calculation="First">
+		<variableExpression><![CDATA[$F{val_eficiencia_controle_emissao}]]></variableExpression>
+	</variable>
+	<detail>
+		<band height="69">
+			<textField>
+				<reportElement uuid="d9014a46-82c0-4401-ad53-5ee8f6156b37" stretchType="RelativeToBandHeight" x="0" y="0" width="83" height="69"/>
+				<box leftPadding="5">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{des_identificacao_unidade}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.0000">
+				<reportElement uuid="bd52d017-b3fa-4c51-bfe6-6b2779ef8a85" stretchType="RelativeToBandHeight" x="83" y="0" width="58" height="69"/>
+				<box leftPadding="5">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{val_area_unidade}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement uuid="51dabbd3-40d4-46f2-a8b0-e29c0f2e365f" stretchType="RelativeToBandHeight" x="141" y="0" width="66" height="69" isPrintWhenDetailOverflows="true"/>
+				<box leftPadding="5">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{tipocombustivel}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00">
+				<reportElement uuid="a8995d06-dc47-462b-873f-1ad915730650" stretchType="RelativeToBandHeight" x="207" y="0" width="55" height="69"/>
+				<box leftPadding="5">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9" isStrikeThrough="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{qtd_gerador}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00">
+				<reportElement uuid="d476bc44-c361-4338-a6a7-6164120b2d84" stretchType="RelativeToBandHeight" x="430" y="0" width="74" height="69"/>
+				<box leftPadding="5">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{potencia}]]></textFieldExpression>
+			</textField>
+			<textField pattern="###0.00">
+				<reportElement uuid="70a6fd38-f30c-4e16-8e97-ba9234a4d492" stretchType="RelativeToBandHeight" x="358" y="0" width="72" height="69"/>
+				<box leftPadding="5">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9" isStrikeThrough="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{val_eficiencia_controle_emissao} != null ? $F{val_eficiencia_controle_emissao}.toString().replace(".", ",").concat(" %") : "--"]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00">
+				<reportElement uuid="6afd5f1a-c27a-4924-ab5d-c04b0b4252d9" stretchType="RelativeToBandHeight" x="262" y="0" width="43" height="69"/>
+				<box leftPadding="5">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9" isStrikeThrough="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{qtd_agua_energia_termoeletrica_unidade}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00">
+				<reportElement uuid="143ee57c-16c1-4796-889d-9fcef836d47b" stretchType="RelativeToBandHeight" x="305" y="0" width="53" height="69"/>
+				<box leftPadding="5">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9" isStrikeThrough="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{vapor_gerado_energia_termoeletrica_unidade}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="51">
+			<staticText>
+				<reportElement uuid="8ebbbbb6-5048-4c14-af91-5f9f98cfd2f0" x="16" y="10" width="119" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Total de unidades:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="aeff350d-ea8b-47cc-ad4a-324121cb4b84" x="16" y="30" width="119" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Total Geradores:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="61bf8b0a-e9ce-497c-a78d-1536fa7c5a28" x="134" y="10" width="100" height="20" isRemoveLineWhenBlank="true"/>
+				<textElement verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{TOTAL_UNIDADE}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00" isBlankWhenNull="true">
+				<reportElement uuid="ae203949-301b-4545-91d0-dd752ee53943" x="393" y="29" width="100" height="20" isRemoveLineWhenBlank="true"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{POTENCIA_TOTAL}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="6d3efa64-4888-42af-9a0d-94584cf16c55" x="287" y="10" width="105" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Área Total (ha):]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="084837f7-708e-4187-8103-f32c7db8a0c8" x="287" y="29" width="105" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Potência Total (MW):]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="8740937d-b187-439a-9c9c-d47da6fa4bef" x="134" y="30" width="100" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{TOTAL_GERADOR}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.0000">
+				<reportElement uuid="22058281-29ce-45e6-8422-a02d8927b27e" x="393" y="10" width="100" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{TOTAL_AREA}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+</jasperReport>

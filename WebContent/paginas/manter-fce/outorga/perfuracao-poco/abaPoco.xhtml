@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui">
+ 	<h:panelGroup style="margin-left:10px;">
+		<h:outputText styleClass="titulo-grupo" style="font-weight:bold;" value="* Coordenadas de Perfuração" />
+	</h:panelGroup>
+	<br/><br/><br/>
+	<p:outputPanel id="pnl2">
+		<p:dataTable id="tableOutorgaLocGeo"
+			style="margin-left:20px;"
+			emptyMessage="#{bundle.lac_dadosGerais_msg007}" 
+			value="#{fceLocalizacaoGeograficaController.listaFceLocGeo}"  
+			var="fceLocalizacaoGeografica" 
+			rendered="#{!fceLocalizacaoGeograficaController.semPontoAdicionado}">
+		   	<p:column headerText="Poço N°" style="text-align:center;">
+				<h:outputText value="#{fceLocalizacaoGeograficaController.listaFceLocGeo.indexOf(fceLocalizacaoGeografica) + 1}" />
+			</p:column>
+			
+ 		    <p:column id="latPtIni" style="text-align:center;" headerText="Latitude">
+ 		    	<h:outputText value="#{fceLocalizacaoGeografica.ideLocalizacaoGeografica.latitudeInicial}"/>
+ 		    </p:column>
+ 		    
+ 		    <p:column id="longPtIni" style="text-align:center;" headerText="Longitude">
+	 			<h:outputText value="#{fceLocalizacaoGeografica.ideLocalizacaoGeografica.longitudeInicial}"/>
+ 		    </p:column>
+ 		    
+ 		    <p:column id="sisCoord" style="text-align:center;" headerText="Sistema de Coordenada">
+ 		    	<h:outputText value="#{fceLocalizacaoGeografica.ideLocalizacaoGeografica.nomeSistemaCoordenadas}"/>
+ 		    </p:column>
+ 		  	<p:column id="baciaHidrografica" style="text-align:center;"  headerText="Bacia Hidrográfica">
+ 		    	<h:outputText value="#{fceLocalizacaoGeografica.ideLocalizacaoGeografica.baciaHidrografica}"/>
+ 		  	</p:column>
+ 		  	<p:column id="expectativaCaptacao" style="text-align:center;">
+ 		    	<f:facet name="header">
+   	 		   		* Expectativa  <br/> de Captação
+   	 		  	</f:facet>
+ 		    	<h:outputText value="#{fceLocalizacaoGeografica.maskNumExpectativaCaptacao}" style="width:45px;"/> 
+ 		    	<p:inputText value="#{fceLocalizacaoGeografica.numExpectativaCaptacao}" 
+ 		    		disabled="#{fceLocalizacaoGeografica.confirmado}"
+ 		    		onkeyup="maskIt(this, event, '99.999.999,99', true)" 
+ 		    		size="8">
+ 		    		<p:ajax event="blur" global="false" />
+					<f:convertNumber integerOnly="false" minFractionDigits="2" />
+				</p:inputText>
+				<h:outputText value=" (m³/dia)"/>
+ 		    </p:column>
+ 		  	<p:column id="subBacia" style="text-align:center;"  headerText="Sub-Bacia">
+ 		    	<h:outputText value="#{fceLocalizacaoGeografica.ideLocalizacaoGeografica.subBacia}"/>
+ 		    </p:column>
+ 		    <p:column id="rpga" style="text-align:center;"  headerText="RPGA">
+ 		    	<h:outputText value="#{fceLocalizacaoGeografica.ideLocalizacaoGeografica.rpga}"/>
+ 		    </p:column>
+ 		  
+ 		    <p:column style="text-align:center;"  headerText="Ações" >
+
+ 		  		<p:commandLink rendered="#{!fceLocalizacaoGeografica.confirmado and !fceLocalizacaoGeograficaController.desabilitarTudo}" update="formTabPerfuracaoPoco" action="#{fceLocalizacaoGeograficaController.editarVazao()}">
+					<h:graphicImage title="Confirmar vazão" value="/resources/img/ico-aprovar-notificacao.png" />
+					<f:setPropertyActionListener target="#{fceLocalizacaoGeograficaController.fceLocalizacaoGeograficaSelecionada}" value="#{fceLocalizacaoGeografica}"/>
+				</p:commandLink>
+ 	   			<p:commandLink rendered="#{fceLocalizacaoGeografica.confirmado and !fceLocalizacaoGeograficaController.desabilitarTudo}" update="formTabPerfuracaoPoco" action="#{fceLocalizacaoGeograficaController.editarVazao()}" >
+					<h:graphicImage title="Editar vazão" value="/resources/img/ico-editar.png" />
+					<f:setPropertyActionListener target="#{fceLocalizacaoGeograficaController.fceLocalizacaoGeograficaSelecionada}" value="#{fceLocalizacaoGeografica}"/>
+				</p:commandLink>
+				<a onclick="javascript:${localizacaoGeograficaGenericController.retornarUrl(fceLocalizacaoGeografica.ideLocalizacaoGeografica)}">
+					<h:graphicImage title="Localização do Ponto no Geobahia" value="/resources/img/ico-arl-relocacao.png" />
+				</a>
+				<p:commandLink rendered="#{!fceLocalizacaoGeograficaController.desabilitarTudo and fceLocalizacaoGeograficaController.fceTecnico}" oncomplete="dlgLocalizacaoGeograficaGeneric.show();" process="@this" actionListener="#{localizacaoGeograficaGenericController.editarLocGeoComActionEvent()}" >
+					<f:attribute name="ideLocalizacaoGeografica" value="#{fceLocalizacaoGeografica.ideLocalizacaoGeografica}"/>
+					<f:attribute name="ideTipoInsercao" value="#{fceLocalizacaoGeograficaController.somentePonto}"/>
+					<f:attribute name="ideRequerimento" value="#{fceLocalizacaoGeografica.ideFce.ideRequerimento.ideRequerimento}"/>
+					<f:attribute name="analiseTecnica" value="#{fceLocalizacaoGeograficaController.fceTecnico}"/>
+					<f:attribute name="objetoLocalizacao" value="#{fceLocalizacaoGeografica.ideLocalizacaoGeografica}"/>
+					<h:graphicImage title="Editar localização geográfica" value="/resources/img/edit_loc_geo.png" />
+				</p:commandLink>
+				<p:commandLink oncomplete="confirmaExclusao_PerfuracaoPoco.show()"
+					title="Excluir"
+					process="@this" 
+					global="false"
+					update="formTabPerfuracaoPoco"
+					disabled="#{fceLocalizacaoGeograficaController.desabilitarTudo}"
+					rendered="#{!fceLocalizacaoGeografica.novoRequerimento}">
+					<f:setPropertyActionListener target="#{fceLocalizacaoGeograficaController.fceLocalizacaoGeograficaSelecionada}" value="#{fceLocalizacaoGeografica}" />
+					<h:graphicImage title="Excluir" value="/resources/img/ico-excluir.png" />
+				</p:commandLink>
+			</p:column>
+			<p:column rendered="#{fceLocalizacaoGeograficaController.fceTecnico}">
+				<f:facet name="header">
+					<h:outputText value="#{bundle.relocacao_reverva_legal_lbl_concedido}" />
+				</f:facet>
+				<p:selectBooleanCheckbox disabled="#{fceLocalizacaoGeograficaController.desabilitarTudo or !fceLocalizacaoGeograficaController.fceTecnico}" value="#{fceLocalizacaoGeografica.indConcedido}" style="margin-left: 20px;">
+				</p:selectBooleanCheckbox>
+			</p:column>
+		</p:dataTable> 
+		<br/><br/>
+	 	<h:panelGroup style="margin-left:20px;">
+			<h:outputText value="* Campo de preenchimento obrigatório para os municípios inseridos no aquífero Urucuia. Caso a coordenada não esteja inserida neste aquífero o campo deverá ser preenchido com valor '0'." />
+		<br /><br />
+	</h:panelGroup>
+	</p:outputPanel>
+
+	<h:panelGrid id="gridBotoes" rendered="#{!fceLocalizacaoGeograficaController.desabilitarTudo}" columns="2" style="margin-top:40px;">
+		<p:commandButton id="btnVoltar" value="Voltar" onclick="confirmationVoltarPerfuracaoPoco.show();" style="width:90px;" update="formTabPerfuracaoPoco" global="false"/>
+		<p:commandButton id="btnAvancar" value="Avançar" style="width:90px;" update="formTabPerfuracaoPoco:tabAbasId_fcePerfuracaoPoco" actionListener="#{fceLocalizacaoGeograficaController.avancarAba()}" global="false"/> 
+	</h:panelGrid>
+</ui:composition>

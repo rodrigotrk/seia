@@ -1,0 +1,347 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core"
+	template="../../layout/template.xhtml">
+	
+	<ui:define name="titulo-pagina">
+		<h3>Cumprimento de Reposição Florestal</h3>
+	</ui:define>
+
+	<ui:define name="conteudo-principal">
+		<h:form id="formReposicaoFlorestal">
+			<h:panelGrid id="pnlReposicaoFlorestal" columns="1">
+				<h:outputText value="O pagamento da reposição florestal se refere a:" style="font-weight: bold" />
+		        <p:selectOneRadio id="pagamento" layout="pageDirection" value="#{cumprimentoReposicaoFlorestalController.cumprimentoReposicaoFlorestalDTO.pagamentoReposicaoFlorestal}"
+		        	disabled="#{cumprimentoReposicaoFlorestalController.desabilitarTudo}">
+		       	   <f:converter converterId="simpleEntityConverter" />
+		           <f:selectItems value="#{cumprimentoReposicaoFlorestalController.listaPagamentoReposicaoFlorestal}" var="item" itemLabel="#{item.nomPagamentoReposicaoFlorestal}" itemValue="#{item}"/> 
+				   <f:ajax listener="#{cumprimentoReposicaoFlorestalController.carregarFomulario()}" event="click"></f:ajax>
+		        </p:selectOneRadio>
+		        
+		        <br />
+		        
+		        <h:panelGrid id="pnlDetentor" columns="1" rendered="#{cumprimentoReposicaoFlorestalController.detentor}">
+		        	<h:outputText value="Selecione o respectivo ato relacionado a reposição florestal:" style="font-weight: bold" />
+		        	<p:selectOneRadio id="respectivoAto" layout="pageDirection" columns="1" value="#{cumprimentoReposicaoFlorestalController.cumprimentoReposicaoFlorestalDTO.pagamentoReposicaoFlorestalFilho}"
+		        		disabled="#{cumprimentoReposicaoFlorestalController.desabilitarTudo}">
+			       	   <f:converter converterId="simpleEntityConverter" />
+			           <f:selectItems value="#{cumprimentoReposicaoFlorestalController.listaPagamentoReposicaoFlorestalFilho}" var="item" itemLabel="#{item.nomPagamentoReposicaoFlorestal}" itemValue="#{item}"/> 
+					   <p:ajax update="formReposicaoFlorestal" event="change" listener="#{cumprimentoReposicaoFlorestalController.gerarTipoAtoRelacionado()}" />
+			        </p:selectOneRadio>
+			        
+			        <br />
+			        
+			        <h:panelGrid columns="2" rendered="#{not empty cumprimentoReposicaoFlorestalController.cumprimentoReposicaoFlorestalDTO.pagamentoReposicaoFlorestalFilho}">
+			        	<h:outputText value="Informe o número da portaria #{cumprimentoReposicaoFlorestalController.tipoAtoRelacionado}:" />
+			        	<p:inputText value="#{cumprimentoReposicaoFlorestalController.cumprimentoReposicaoFlorestalDTO.detentorReposicaoFlorestal.numPortaria}"
+			        		disabled="#{cumprimentoReposicaoFlorestalController.desabilitarTudo}">
+			        		<p:ajax event="change" process="@this" />
+			        	</p:inputText>
+
+			        	<h:outputText value="Informe a data da publicação da portaria #{cumprimentoReposicaoFlorestalController.tipoAtoRelacionado}:" />
+			        	<p:calendar locale="pt" showOn="button" size="7"  pattern="dd/MM/yyyy"  readOnlyInputText="true" 
+			        		value="#{cumprimentoReposicaoFlorestalController.cumprimentoReposicaoFlorestalDTO.detentorReposicaoFlorestal.dataPublicacaoPortaria}" 
+			        		mindate="01/01/1900" navigator="true" maxdate="#{cumprimentoReposicaoFlorestalController.dataAtual}" 
+			        		disabled="#{cumprimentoReposicaoFlorestalController.desabilitarTudo}"
+			        		styleClass="#{cumprimentoReposicaoFlorestalController.desabilitarTudo?'ui-state-disabled':''}"/>
+
+			        	<h:outputText value="Informe o número do processo #{cumprimentoReposicaoFlorestalController.tipoAtoRelacionado}:" />
+			        	<p:inputText value="#{cumprimentoReposicaoFlorestalController.cumprimentoReposicaoFlorestalDTO.detentorReposicaoFlorestal.numProcesso}"
+			        		disabled="#{cumprimentoReposicaoFlorestalController.desabilitarTudo}">
+			        		<p:ajax event="change" process="@this" listener="#{cumprimentoReposicaoFlorestalController.verificarProcessoSEIAPorAtoAmbiental()}" />
+			        	</p:inputText>
+			        	<h:outputText value="Informe o volume de reposição florestal a ser cumprido:" />
+			        	<h:panelGrid columns="2" style="margin-left: -4px">
+				        	<p:inputText id="detentorInput" size="10"  value="#{cumprimentoReposicaoFlorestalController.cumprimentoReposicaoFlorestalDTO.detentorReposicaoFlorestal.volumeAutorizado}" 
+				        		disabled="#{cumprimentoReposicaoFlorestalController.desabilitarTudo}" onkeyup="maskItQuatro(this, event, '99.999.999,9999')">
+				        		<f:converter converterId="bigConverterQuatroDecimais"/>
+								<p:ajax event="change" process="@this" update="formReposicaoFlorestal:ValorTotalPecuniario formReposicaoFlorestal:pgMemoriaCalculo formReposicaoFlorestal:detentorUnidade" listener="#{cumprimentoReposicaoFlorestalController.calcular(cumprimentoReposicaoFlorestalController.cumprimentoReposicaoFlorestalDTO.detentorReposicaoFlorestal.ideUnidadeMedida, cumprimentoReposicaoFlorestalController.cumprimentoReposicaoFlorestalDTO.detentorReposicaoFlorestal.volumeAutorizado)}" />
+				        	</p:inputText>
+				        	
+				        	<p:selectOneMenu value="#{cumprimentoReposicaoFlorestalController.cumprimentoReposicaoFlorestalDTO.detentorReposicaoFlorestal.ideUnidadeMedida}" disabled="#{cumprimentoReposicaoFlorestalController.desabilitarTudo}">
+								<f:converter converterId="simpleEntityConverter" />
+								<f:selectItem itemLabel="Selecione..." />
+								<f:selectItems value="#{cumprimentoReposicaoFlorestalController.listaUnidadeMedida}" var="item" itemLabel="#{item.codUnidadeMedida}" itemValue="#{item}" />
+								<p:ajax process="@this" event="change" update="formReposicaoFlorestal:ValorTotalPecuniario formReposicaoFlorestal:pgMemoriaCalculo formReposicaoFlorestal:detentorUnidade" listener="#{cumprimentoReposicaoFlorestalController.calcular(cumprimentoReposicaoFlorestalController.cumprimentoReposicaoFlorestalDTO.detentorReposicaoFlorestal.ideUnidadeMedida, cumprimentoReposicaoFlorestalController.cumprimentoReposicaoFlorestalDTO.detentorReposicaoFlorestal.volumeAutorizado)}"/>
+							</p:selectOneMenu>
+			        	</h:panelGrid>
+			        	
+			        	<p:spacer />
+			        	<h:panelGrid id="detentorUnidade" columns="2">
+				        	<ui:repeat value="#{cumprimentoReposicaoFlorestalController.cumprimentoReposicaoFlorestalDTO.unidadeMedidaCalculoDTO}" var="unidade">
+					        	<h:panelGrid columns="2" style="margin-left: -4px">
+					        		<h:outputText value="#{unidade.unidadeMedida.descricao}:" style="font-weight: bold"/>
+					        		<h:outputText value="#{unidade.valor}">
+					        			<f:converter converterId="doubleQuatroCasasDecimaisConverter" />
+					        		</h:outputText>
+					        	</h:panelGrid>
+				        	</ui:repeat>
+			        	</h:panelGrid>
+			        </h:panelGrid>
+			        
+			         <h:panelGrid columns="1" id="reconhecimentoVolumeFlorestal" rendered="#{cumprimentoReposicaoFlorestalController.reconhecimentoFlorestalRemanescente}">
+			         	<h:outputText value="O reconhecimento de volume florestal remanescente é:" style="font-weight: bold" />
+			         	<p:selectOneRadio id="florestalRemanescente" layout="pageDirection" columns="1" value="#{cumprimentoReposicaoFlorestalController.cumprimentoReposicaoFlorestalDTO.detentorReposicaoFlorestal.ideTipoVolumeFlorestalRemanescente}"
+			         		disabled="#{cumprimentoReposicaoFlorestalController.desabilitarTudo}">
+				       	   <f:converter converterId="simpleEntityConverter" />
+				           <f:selectItems value="#{cumprimentoReposicaoFlorestalController.listaTipoVolumeFlorestalRemanescente}" var="item" itemLabel="#{item.nomTipoVolumeFlorestalRemanescente}" itemValue="#{item}"/>
+				           <p:ajax process="@this" event="change" />
+				        </p:selectOneRadio>
+				        <h:panelGrid columns="2">
+				        	<h:outputText value="Informe o número do processo da ASV ou AML:" />
+				        	<p:inputText value="#{cumprimentoReposicaoFlorestalController.cumprimentoReposicaoFlorestalDTO.detentorReposicaoFlorestal.numProcessoAsvAml}"
+				        		disabled="#{cumprimentoReposicaoFlorestalController.desabilitarTudo}">
+				        		<p:ajax event="change" process="@this" />
+				        	</p:inputText>
+				        </h:panelGrid>
+			         </h:panelGrid>
+		        </h:panelGrid>
+
+		        <h:panelGrid id="pnlConsumidor" rendered="#{cumprimentoReposicaoFlorestalController.consumidor}">
+			        <h:panelGrid columns="2">
+			       		<h:outputText value="Informe o volume de material lenhoso a ser consumido:" />
+			        	<h:panelGrid id="consumidorInput" columns="2" style="margin-left: -4px">
+				        	<p:inputText value="#{cumprimentoReposicaoFlorestalController.cumprimentoReposicaoFlorestalDTO.consumidorReposicaoFlorestal.vlmMaterialLenhosoConsumido}"
+				        		disabled="#{cumprimentoReposicaoFlorestalController.desabilitarTudo}" onkeyup="maskItQuatro(this, event, '99.999.999,9999')">
+				        		<f:converter converterId="bigConverterQuatroDecimais"/>
+								<p:ajax event="change" process="@this" update="formReposicaoFlorestal:ValorTotalPecuniario formReposicaoFlorestal:pgMemoriaCalculo formReposicaoFlorestal:consumidorUnidade" listener="#{cumprimentoReposicaoFlorestalController.calcular(cumprimentoReposicaoFlorestalController.cumprimentoReposicaoFlorestalDTO.consumidorReposicaoFlorestal.ideUnidadeMedida, cumprimentoReposicaoFlorestalController.cumprimentoReposicaoFlorestalDTO.consumidorReposicaoFlorestal.vlmMaterialLenhosoConsumido)}"/>
+				        	</p:inputText>
+				        	<p:selectOneMenu value="#{cumprimentoReposicaoFlorestalController.cumprimentoReposicaoFlorestalDTO.consumidorReposicaoFlorestal.ideUnidadeMedida}" disabled="#{cumprimentoReposicaoFlorestalController.desabilitarTudo}">
+								<f:selectItem itemLabel="Selecione..." />
+								<f:selectItems value="#{cumprimentoReposicaoFlorestalController.listaUnidadeMedida}" var="item" itemLabel="#{item.codUnidadeMedida}" itemValue="#{item}" />
+								<p:ajax process="@this" event="change" update="formReposicaoFlorestal:ValorTotalPecuniario formReposicaoFlorestal:pgMemoriaCalculo formReposicaoFlorestal:consumidorUnidade" listener="#{cumprimentoReposicaoFlorestalController.calcular(cumprimentoReposicaoFlorestalController.cumprimentoReposicaoFlorestalDTO.consumidorReposicaoFlorestal.ideUnidadeMedida, cumprimentoReposicaoFlorestalController.cumprimentoReposicaoFlorestalDTO.consumidorReposicaoFlorestal.vlmMaterialLenhosoConsumido)}"/>
+								<f:converter converterId="simpleEntityConverter" />
+							</p:selectOneMenu>
+				        </h:panelGrid>
+				        <p:spacer />
+				        <h:panelGrid id="consumidorUnidade" columns="2">
+				        	<ui:repeat value="#{cumprimentoReposicaoFlorestalController.cumprimentoReposicaoFlorestalDTO.unidadeMedidaCalculoDTO}" var="unidade">
+				        		<h:panelGrid columns="2" style="margin-left: -4px">
+					        		<h:outputText value="#{unidade.unidadeMedida.descricao}:" style="font-weight: bold" />
+					        		<h:outputText value="#{unidade.valor}">
+					        			<f:converter converterId="doubleQuatroCasasDecimaisConverter" />
+					        		</h:outputText>
+				        		</h:panelGrid>
+				        	</ui:repeat>
+			        	</h:panelGrid>
+				        	
+			        	<h:outputText value="Informe o número da portaria do ato que originou o volume adquirido:" />
+			        	<p:inputText value="#{cumprimentoReposicaoFlorestalController.cumprimentoReposicaoFlorestalDTO.consumidorReposicaoFlorestal.numPortariaAtoAdquirido}"
+					        		disabled="#{cumprimentoReposicaoFlorestalController.desabilitarTudo}">
+					        <p:ajax process="@this" event="change" />
+					    </p:inputText>
+			        	<h:outputText value="Informe a data da publicação da portaria:" />
+			        	<p:calendar 
+						 	value="#{cumprimentoReposicaoFlorestalController.cumprimentoReposicaoFlorestalDTO.consumidorReposicaoFlorestal.dataPublicacaoPortaria}" 
+						 	navigator="true" showOn="button" locale="pt" pattern="dd/MM/yyyy" readOnlyInputText="true" 
+							mindate="01/01/1900" maxdate="#{cumprimentoReposicaoFlorestalController.dataAtual}" size="7"
+							disabled="#{cumprimentoReposicaoFlorestalController.desabilitarTudo}" >
+							<p:ajax event="dateSelect" process="@this" update="formReposicaoFlorestal"/>
+						</p:calendar>
+			        	
+			        	
+			        	<h:outputText value="Informe o número do processo que originou o ato:" />
+			        	<p:inputText value="#{cumprimentoReposicaoFlorestalController.cumprimentoReposicaoFlorestalDTO.consumidorReposicaoFlorestal.numProcessoOriginal}"
+					        		disabled="#{cumprimentoReposicaoFlorestalController.desabilitarTudo}">
+					        <p:ajax event="change" process="@this" listener="#{cumprimentoReposicaoFlorestalController.verificarProcessoSEIAPorAtoAmbiental()}" />
+					    </p:inputText>
+			        </h:panelGrid>
+			        <!-- 
+					<h:panelGrid columns="1">
+						<h:outputText value="O imóvel possui número CAR?" style="font-weight: bold" />
+						
+						<p:selectOneRadio columns="1" value="#{cumprimentoReposicaoFlorestalController.cumprimentoReposicaoFlorestalDTO.consumidorReposicaoFlorestal.indPossuiNumeroCAR}"
+			         		disabled="#{cumprimentoReposicaoFlorestalController.desabilitarTudo}">
+				       	   <f:selectItem itemLabel="Sim" itemValue="true" />
+				       	   <f:selectItem itemLabel="Não" itemValue="false" />
+				       	   <p:ajax update="formReposicaoFlorestal" event="change" />
+				        </p:selectOneRadio>
+				        
+				        <h:panelGrid columns="1" rendered="#{cumprimentoReposicaoFlorestalController.cumprimentoReposicaoFlorestalDTO.consumidorReposicaoFlorestal.indPossuiNumeroCAR}">
+							<p:commandLink oncomplete="dialogIncluirCAR.show();"
+								rendered="#{!cumprimentoReposicaoFlorestalController.desabilitarTudo}"
+								action="#{cumprimentoReposicaoFlorestalController.limparNumeroCAR()}"
+								update="formPonto">
+								<h:graphicImage title="Incluir CAR" value="/resources/img/ico-expandir.png" style="margin-right: 2px;" />
+								<h:outputText value="Incluir CAR" />
+							</p:commandLink>
+							
+							<p:dataTable id="tblNumeroCar" 
+								rendered="#{!empty cumprimentoReposicaoFlorestalController.cumprimentoReposicaoFlorestalDTO.consumidorReposicaoFlorestal.numeroCarReposicaoFlorestalCollection}"
+								value="#{cumprimentoReposicaoFlorestalController.cumprimentoReposicaoFlorestalDTO.consumidorReposicaoFlorestal.numeroCarReposicaoFlorestalCollection}" 
+								var="mumeroCar" 
+								emptyMessage="Nenhuma especie supressão encontrado.">
+								<p:column style="text-align:justify; width: 400px;">
+									<f:facet name="header">
+										<h:outputText value="Número" />
+									</f:facet>
+									<h:outputText value="#{mumeroCar.numCAR}"/>
+								</p:column>
+								<p:column style="text-align:center; width: 45px;">
+									<f:facet name="header">  
+										<h:outputText value="#{bundle.lbl_acao}" />  
+									</f:facet>
+									<p:commandLink oncomplete="dialogExcluirCAR.show()" rendered="#{!cumprimentoReposicaoFlorestalController.desabilitarTudo}">
+										<h:graphicImage title="#{bundle.diap_lbl_legenda_excluir}" value="/resources/img/ico-excluir.png" />
+										<f:setPropertyActionListener target="#{cumprimentoReposicaoFlorestalController.numeroCarReposicaoFlorestal}" value="#{mumeroCar}" />
+									</p:commandLink>	
+								</p:column>
+							</p:dataTable>
+						</h:panelGrid>
+					</h:panelGrid>
+					 -->
+		        </h:panelGrid> 
+
+		        <h:panelGrid id="pnlDevedor" columns="1" rendered="#{cumprimentoReposicaoFlorestalController.devedor}">
+
+		        	<h:outputText value="Qual o órgão emissor do auto?" style="font-weight: bold"/>
+		        	
+		         	<p:selectOneRadio id="orgaoEmissorAuto" layout="pageDirection" columns="1" value="#{cumprimentoReposicaoFlorestalController.cumprimentoReposicaoFlorestalDTO.devedorReposicaoFlorestal.ideOrgaoEmissorAuto}"
+		         		disabled="#{cumprimentoReposicaoFlorestalController.desabilitarTudo}">
+			       	   <f:converter converterId="simpleEntityConverter" />
+			           <f:selectItems value="#{cumprimentoReposicaoFlorestalController.listaOrgaoEmissorAuto}" var="orgaoEmissorAuto" itemLabel="#{orgaoEmissorAuto.nomOrgaoEmissorAuto}" itemValue="#{orgaoEmissorAuto}"/>
+			           <p:ajax process="@this" update="formReposicaoFlorestal" event="change" />
+			        </p:selectOneRadio>
+
+			        <h:panelGrid columns="2" rendered="#{cumprimentoReposicaoFlorestalController.secretariaMunicipal}">
+			        	<h:outputText value="Município:" />
+				        <p:selectOneMenu disabled="#{cumprimentoReposicaoFlorestalController.desabilitarTudo}" style="width:183px !important;" maxlength="70"
+							value="#{cumprimentoReposicaoFlorestalController.cumprimentoReposicaoFlorestalDTO.devedorReposicaoFlorestal.ideMunicipio}" >
+							<f:selectItem itemLabel="Selecione..." />
+							<f:selectItems value="#{cumprimentoReposicaoFlorestalController.listaMunicipio}" var="item" itemLabel="#{item.nomMunicipio}" itemValue="#{item}"/>
+							<f:converter converterId="simpleEntityConverter" />
+						</p:selectOneMenu>
+				        
+			        </h:panelGrid>
+			        
+			        <h:panelGrid columns="2">
+				        <h:outputText value="Infome o número do Auto de Infração:" />
+			        	<p:inputText value="#{cumprimentoReposicaoFlorestalController.cumprimentoReposicaoFlorestalDTO.devedorReposicaoFlorestal.numAutoInfracao}"
+				        		disabled="#{cumprimentoReposicaoFlorestalController.desabilitarTudo}">
+				        	<p:ajax process="@this" event="change" />
+				        </p:inputText>
+			        </h:panelGrid>
+			        
+			        <h:outputText value="Infome o Bioma onde ocorreu a supressão:" style="font-weight: bold" />
+		         	<p:selectOneRadio id="bioma" columns="1" value="#{cumprimentoReposicaoFlorestalController.cumprimentoReposicaoFlorestalDTO.devedorReposicaoFlorestal.ideBioma}"
+		         		disabled="#{cumprimentoReposicaoFlorestalController.desabilitarTudo}">
+			       	   <f:converter converterId="simpleEntityConverter" />
+			           <f:selectItems value="#{cumprimentoReposicaoFlorestalController.listaBioma}" var="item" itemLabel="#{item.nomBioma}" itemValue="#{item}"/>
+			           <p:ajax process="@this" event="change" update="formReposicaoFlorestal:ValorTotalPecuniario formReposicaoFlorestal:pgMemoriaCalculo" listener="#{cumprimentoReposicaoFlorestalController.calcularValorPecuniario()}" />
+			        </p:selectOneRadio>
+			        
+				    <h:panelGrid columns="2">
+					    <h:outputText value="Área suprimida:" />
+						<h:panelGrid columns="2">
+				        	<p:inputText id="devedorInput" value="#{cumprimentoReposicaoFlorestalController.cumprimentoReposicaoFlorestalDTO.devedorReposicaoFlorestal.vlrAreaSuprimida}"
+				        		disabled="#{cumprimentoReposicaoFlorestalController.desabilitarTudo}" onkeyup="maskItQuatro(this, event, '99.999.999,9999')" size="10">
+				        		<f:converter converterId="bigConverterQuatroDecimais"/>
+								<p:ajax event="change" process="@this" update="formReposicaoFlorestal:ValorTotalPecuniario formReposicaoFlorestal:pgMemoriaCalculo" listener="#{cumprimentoReposicaoFlorestalController.calcularValorPecuniario(null, cumprimentoReposicaoFlorestalController.cumprimentoReposicaoFlorestalDTO.devedorReposicaoFlorestal.vlrAreaSuprimida)}" />
+				        	</p:inputText>
+				        	<h:outputText value="(ha)" />
+				        </h:panelGrid>
+				    </h:panelGrid>
+		        </h:panelGrid>
+		        <h:panelGrid rendered="#{cumprimentoReposicaoFlorestalController.detentor or cumprimentoReposicaoFlorestalController.consumidor or cumprimentoReposicaoFlorestalController.devedor}">
+		        
+		          <h:panelGrid id="pgMemoriaCalculo" >
+		        	<p:dataTable 
+						id="memoriaCalculo" 
+						var="memoriaCalculo" 
+						value="#{cumprimentoReposicaoFlorestalController.listaMemoriaCalculoDTO}"
+						rendered="#{not empty cumprimentoReposicaoFlorestalController.listaMemoriaCalculoDTO}"
+						style="width:730px;">
+								
+							<f:facet name="header">
+								Memória de cálculo
+							</f:facet>
+							<p:column headerText="Parâmetros" style="padding: 4px 5px;">
+								<h:outputText value="#{memoriaCalculo.nomTipo}" />
+							</p:column>
+							<p:column headerText="Fórmula" style="text-align:center;">
+								<h:outputText value="#{memoriaCalculo.formula}" />
+							</p:column>
+						</p:dataTable>
+						
+						<h:panelGrid rendered="#{not empty cumprimentoReposicaoFlorestalController.listaMemoriaCalculoDTO}">
+							<h:outputText value="Legenda" style="font-weight: bold"/>
+					
+							<ui:repeat value="#{cumprimentoReposicaoFlorestalController.listaLegenda}" var="detalhe">
+								<h:panelGrid columns="1">
+									<h:outputText value="#{detalhe}"/>
+								</h:panelGrid>
+							</ui:repeat>
+						</h:panelGrid>
+			        </h:panelGrid>
+		        
+		        
+			         <h:panelGrid columns="2" id="ValorTotalPecuniario">
+						<h:outputText value="Valor pecuniário referente a ser recolhido para cumprimento da reposição florestal: " style="font-weight: bold" />
+						<h:outputText value="R$ #{cumprimentoReposicaoFlorestalController.cumprimentoReposicaoFlorestalDTO.valorPecuniarioFormatado}" />
+					</h:panelGrid>
+			        
+			        <h:panelGrid columns="2">
+						<p:selectBooleanCheckbox value="#{cumprimentoReposicaoFlorestalController.cumprimentoReposicaoFlorestalDTO.indCiente}" disabled="#{cumprimentoReposicaoFlorestalController.desabilitarTudo}">
+							<p:ajax process="@this"/>
+						</p:selectBooleanCheckbox>
+	
+						<h:outputText value="Tenho ciência que a prestação de informação falsas ao INEMA constitui prática de crime e resulta na aplicação das sanções penais cabíveis, nos termos dispostos no Código Penal(Decreto-Lei nº 2.848/40), na lei de crimes ambientais (Lei Federal nº 9.605/98) e no seu regulamento e na nulidade do presente ato."/> 
+					</h:panelGrid>
+			        
+			        <h:panelGrid columns="4">
+						<h:outputText style="padding-right: 620px;" />
+						<h:outputText />
+						<h:panelGroup>
+							<p:commandButton value="Finalizar" actionListener="#{cumprimentoReposicaoFlorestalController.finalizar()}" disabled="#{cumprimentoReposicaoFlorestalController.desabilitarTudo}"/>
+						</h:panelGroup>
+					</h:panelGrid>
+			        
+			        </h:panelGrid>
+
+			</h:panelGrid>
+			
+		</h:form>
+		
+		<p:dialog id="_dialogIncluirCAR" widgetVar="dialogIncluirCAR"
+			modal="true" showHeader="true" appendToBody="true" width="500"
+			position="center" resizable="false" draggable="false" header="Incluir CAR">
+			
+			<h:form id="formCAR">
+				<h:outputText value="Informe o número CAR:" />
+				<p:inputText value="#{cumprimentoReposicaoFlorestalController.numeroCarReposicaoFlorestal.numCAR}" disabled="#{cumprimentoReposicaoFlorestalController.desabilitarTudo}"/>
+				
+				<br />
+				<br />
+				
+				<h:panelGroup id="pnlBotao" layout="block" style="height: 32px">
+					<p:commandButton value="Voltar" style="float:left;" global="false" onclick="dialogIncluirCAR.hide();"/>
+					<p:commandButton value="Salvar" style="float:right;" global="true" action="#{cumprimentoReposicaoFlorestalController.addNumeroCar()}" />
+				</h:panelGroup>
+			</h:form>
+		</p:dialog>
+		
+		<p:confirmDialog header="Confirmação" 
+			id="dialogExcluirCAR"  
+			widgetVar="dialogExcluirCAR" 
+			appendToBody="true" 
+			message="#{bundle.messagem_004}" 
+			severity="alert">
+			<h:form>
+				<p:commandButton value="Sim" 
+					onclick="dialogExcluirCAR.hide()"
+					actionListener="#{cumprimentoReposicaoFlorestalController.removerCar()}"
+					process="@this">
+				</p:commandButton>
+				<p:commandButton value="Não" 
+					onclick="dialogExcluirCAR.hide();" 
+					type="button" 
+					global="false" />
+			</h:form>
+		</p:confirmDialog>	
+	</ui:define>
+</ui:composition>

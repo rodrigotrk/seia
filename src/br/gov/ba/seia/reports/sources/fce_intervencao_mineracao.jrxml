@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="fce_captacao_subterranea" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="495" leftMargin="50" rightMargin="50" topMargin="20" bottomMargin="20" isFloatColumnFooter="true" uuid="23d2a5f4-60dd-470e-8e00-a51d516775d2">
+	<property name="template.type" value="columnar"/>
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="Title" forecolor="#000000" fontName="Times New Roman" fontSize="50" isBold="false" pdfFontName="Times-Bold"/>
+	<style name="SubTitle" forecolor="#666666" fontName="Times New Roman" fontSize="18" isBold="false" pdfFontName="Times-Roman"/>
+	<style name="Column header" forecolor="#666666" fontName="Times New Roman" fontSize="14" isBold="true" pdfFontName="Times-Roman"/>
+	<style name="Detail" mode="Transparent" fontName="Times New Roman" pdfFontName="Times-Roman"/>
+	<style name="Row" mode="Transparent" fontName="Times New Roman" pdfFontName="Times-Roman">
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$V{REPORT_COUNT}%2 == 0]]></conditionExpression>
+			<style mode="Opaque" backcolor="#F0EFEF"/>
+		</conditionalStyle>
+	</style>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String"/>
+	<parameter name="LOGO_SEIA" class="java.lang.String"/>
+	<parameter name="LOGO_INEMA" class="java.lang.String"/>
+	<parameter name="ide_fce" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[0]]></defaultValueExpression>
+	</parameter>
+	<parameter name="ide_origem_fce" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[1]]></defaultValueExpression>
+	</parameter>
+	<parameter name="TIPO_DOC" class="java.lang.String"/>
+	<parameter name="NOM_DOC" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[select a.dtc_criacao as data,
+       b.dsc_tratamento_efluente,
+       b.ide_fce_intervencao_mineracao,
+
+       (select exists
+	(select ide_lancamento_efluente_localizacao_geografica
+	from lancamento_efluente_localizacao_geografica lg
+	where lg.ide_fce_intervencao_mineracao=b.ide_fce_intervencao_mineracao)
+       ) as existeLancamentoEfluenteLocGeo
+
+from fce a
+inner join fce_intervencao_mineracao b on a.ide_fce = b.ide_fce
+where a.ide_fce = $P{ide_fce} AND a.ide_origem_fce = $P{ide_origem_fce}]]>
+	</queryString>
+	<field name="data" class="java.sql.Timestamp"/>
+	<field name="dsc_tratamento_efluente" class="java.lang.String"/>
+	<field name="ide_fce_intervencao_mineracao" class="java.lang.Integer"/>
+	<field name="existelancamentoefluentelocgeo" class="java.lang.Boolean"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<pageHeader>
+		<band height="18">
+			<subreport>
+				<reportElement uuid="5139fbfd-472a-4c64-ba09-ff12ce7043e6" x="0" y="0" width="495" height="18"/>
+				<subreportParameter name="SUBREPORT_DIR">
+					<subreportParameterExpression><![CDATA[$P{SUBREPORT_DIR}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="NOM_DOC">
+					<subreportParameterExpression><![CDATA[$P{NOM_DOC}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="TIPO_DOC">
+					<subreportParameterExpression><![CDATA[$P{TIPO_DOC}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="LOGO_SEIA">
+					<subreportParameterExpression><![CDATA[$P{LOGO_SEIA}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="LOGO_INEMA">
+					<subreportParameterExpression><![CDATA[$P{LOGO_INEMA}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "fce_cabecalho.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+	</pageHeader>
+	<detail>
+		<band height="20">
+			<subreport runToBottom="false">
+				<reportElement uuid="378089c8-8f63-4b9f-afa4-b5007ba7bd93" positionType="Float" isPrintRepeatedValues="false" x="1" y="0" width="494" height="15" isRemoveLineWhenBlank="true"/>
+				<subreportParameter name="ide_fce">
+					<subreportParameterExpression><![CDATA[$P{ide_fce}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "fce_dados_requerente.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+		<band height="38">
+			<subreport>
+				<reportElement uuid="73bc2f13-a9df-48ce-b255-1aad50470628" x="0" y="0" width="495" height="36"/>
+				<subreportParameter name="SUBREPORT_DIR">
+					<subreportParameterExpression><![CDATA[$P{SUBREPORT_DIR}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="ide_fce_intervencao_mineracao">
+					<subreportParameterExpression><![CDATA[$F{ide_fce_intervencao_mineracao}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "fce_intervencao_mineracao_subreport_fonte_coordenadas.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+		<band height="50">
+			<printWhenExpression><![CDATA[$F{existelancamentoefluentelocgeo}]]></printWhenExpression>
+			<staticText>
+				<reportElement uuid="258e6a62-a8fa-4b65-8a48-9360c4ea3f9c" positionType="Float" mode="Opaque" x="0" y="0" width="495" height="15" isRemoveLineWhenBlank="true" isPrintWhenDetailOverflows="true" backcolor="#DDDDDD"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif" isBold="true"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<text><![CDATA[Coordenadas de lançamento do efluente]]></text>
+			</staticText>
+			<subreport>
+				<reportElement uuid="73afc226-5d98-414d-9bab-82ff75e03d7c" x="8" y="20" width="487" height="25" isRemoveLineWhenBlank="true" isPrintWhenDetailOverflows="true"/>
+				<subreportParameter name="ide_fce_intervencao_mineracao">
+					<subreportParameterExpression><![CDATA[$F{ide_fce_intervencao_mineracao}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "fce_intervencao_mineracao_subreport_localizacao_geografica.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+		<band height="43" splitType="Prevent">
+			<printWhenExpression><![CDATA[$F{dsc_tratamento_efluente} != null && !$F{dsc_tratamento_efluente}.equals("")]]></printWhenExpression>
+			<staticText>
+				<reportElement uuid="3e96a23d-f4f6-4268-8cf3-32ff95cc95d8" positionType="Float" mode="Opaque" x="0" y="0" width="495" height="15" isRemoveLineWhenBlank="true" isPrintWhenDetailOverflows="true" backcolor="#DDDDDD">
+					<printWhenExpression><![CDATA[$F{dsc_tratamento_efluente} != null && !$F{dsc_tratamento_efluente}.equals("")]]></printWhenExpression>
+				</reportElement>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif" isBold="true"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<text><![CDATA[Descrição do tratamento do efluente]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="2497a9d0-d481-48f9-b346-5c43f9587938" stretchType="RelativeToBandHeight" x="8" y="20" width="487" height="20" isRemoveLineWhenBlank="true" isPrintWhenDetailOverflows="true">
+					<printWhenExpression><![CDATA[$F{dsc_tratamento_efluente} != null && !$F{dsc_tratamento_efluente}.equals("")]]></printWhenExpression>
+				</reportElement>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dsc_tratamento_efluente}]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="20">
+			<staticText>
+				<reportElement uuid="997d9e59-9b56-4145-8852-a3ff1cc2e750" x="8" y="0" width="68" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8"/>
+				</textElement>
+				<text><![CDATA[Data de Criação:]]></text>
+			</staticText>
+			<textField pattern="dd &apos;de&apos; MMMMM  &apos;de&apos; yyyy">
+				<reportElement uuid="cc3bea38-2f23-4e5a-809e-99a4d6ca22ec" x="76" y="0" width="206" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{data}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="13">
+			<staticText>
+				<reportElement uuid="34670993-83cd-4f96-96d2-1dd6fba7b4ca" x="1" y="0" width="494" height="13"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="5"/>
+				</textElement>
+				<text><![CDATA[Avenida Luis Viana Filho, 6° Avenida n° 600 - CAB - CEP 41.745-900. Salvador - BA]]></text>
+			</staticText>
+			<textField pattern="EEEEE dd MMMMM yyyy">
+				<reportElement uuid="c7a496ee-8dc8-4be2-99b8-c43bb3d61b91" style="Column header" mode="Opaque" x="1" y="0" width="147" height="13" forecolor="#000000"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="8" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="b076d875-b29c-436c-ba7a-074c9431890c" style="Column header" mode="Opaque" x="419" y="0" width="46" height="13" forecolor="#000000"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Arial" size="10" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Pág "+$V{PAGE_NUMBER}+" de"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement uuid="7cf90333-521b-4978-bcc4-ebb87c133c4e" style="Column header" mode="Opaque" x="465" y="0" width="15" height="13" forecolor="#000000"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="10" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+</jasperReport>

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui">
+
+	<h:form id="formAreaMunicipio" binding="#{areaMunicipioController.formularioASerLimpoPermissao}">
+		<h:panelGrid id="panelAreaMunicipio" columns="1">
+			<h:outputLabel value="* Área:" />
+	        <p:selectOneMenu id="selectOneArea" value="#{areaMunicipioController.areaMunicipio.area}" style="width: 300px;" converter="areaConverter" required="true" requiredMessage="O campo Órgão é de preenchimento obrigatório." disabled="#{areaMunicipioController.desabilitaCampos}">
+	        	<f:selectItem itemLabel="Selecione..." />
+	            <f:selectItems value="#{areaMunicipioController.colAreas}" var="area" itemLabel="#{area.nomArea}" itemValue="#{area}"/>  
+	        </p:selectOneMenu>
+			<h:outputLabel value="* Localidade:" />
+	        <p:selectOneMenu id="selectOneMunicipio" value="#{areaMunicipioController.areaMunicipio.municipio}" style="width: 300px;" converter="municipioConverter" required="true" requiredMessage="O campo Localidade é de preenchimento obrigatório." disabled="#{areaMunicipioController.desabilitaCampos}">
+	        	<f:selectItem itemLabel="Selecione..." />
+	            <f:selectItems value="#{areaMunicipioController.colMunicipios}" var="municipio" itemLabel="#{municipio.nomMunicipio}" itemValue="#{municipio}"/>  
+	        </p:selectOneMenu>
+	        <h:outputLabel value="* Tipo:" />
+	         <p:selectOneMenu id="selectOneTipo" value="#{areaMunicipioController.areaMunicipio.tipoAreaMunicipio}" style="width: 300px;" converter="tipoAreaMunicipioConverter">
+	        	<f:selectItem itemLabel="Selecione..." />
+	            <f:selectItems value="#{areaMunicipioController.colTipoAreaMunicipio}" var="tipoAreaMunicipio" itemLabel="#{tipoAreaMunicipio.nomTipoAreaMunicipio}" itemValue="#{tipoAreaMunicipio}"/>  
+	        </p:selectOneMenu>
+	        <h:panelGroup>
+				<p:commandButton value="#{bundle.btn_cancelar}" onclick="dlgAreaMunicipio.hide()" />
+				<p:commandButton action="#{areaMunicipioController.salvarAtualizarAreaMunicipio}" value="#{bundle.btn_salvar}" oncomplete="validaTela(xhr, status, args, dlgAreaMunicipio)" update=":formListaAreasMunicipios:dataTableAreasMunicipios panelAreaMunicipio" />
+			</h:panelGroup>
+		</h:panelGrid>
+	</h:form>
+
+</ui:composition>

@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="resumo_quantitativo_detalhe_tipo_intervencao_ponto_detalhe_vazao" pageWidth="180" pageHeight="200" columnWidth="180" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="81d2ecc0-7e5a-4818-ab9a-d9cee0f3ffa6">
+	<property name="ireport.zoom" value="3.4522712143931042"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="ide_cerh_localizacao_geografica" class="java.lang.Integer"/>
+	<parameter name="iteracao_coluna" class="java.lang.Integer"/>
+	<queryString>
+		<![CDATA[select
+	------ Vazão Media
+	case
+		when (ccvs.ide_cerh_captacao_caracterizacao is not null )
+		then (
+			select
+				avg(ccvs_.val_vazao_captacao * ccvs_.val_tempo_captacao)
+			from cerh_captacao_vazao_sazonalidade ccvs_
+			where ccvs_.ide_cerh_captacao_caracterizacao = ccc.ide_cerh_captacao_caracterizacao
+			group by ccvs_.ide_cerh_captacao_caracterizacao
+		     )
+
+		when (clevs.ide_cerh_lancamento_efluente_caracterizacao is not null)
+		then (
+			select
+				avg(cles_.val_vazao_efluente * cles_.val_tempo_lancamento )
+			from cerh_lancamento_efluente_sazonalidade cles_
+			where cles_.ide_cerh_lancamento_efluente_caracterizacao = cl.ide_cerh_lancamento_efluente_caracterizacao
+			group by cles_.ide_cerh_lancamento_efluente_caracterizacao
+		)
+	end as vazao_media,
+
+	------ Media Horas
+	case
+
+		when (ccvs.ide_cerh_captacao_caracterizacao is not null )
+		then (
+			select
+				((trunc(avg(ccvs_.val_tempo_captacao))) + (60*((avg(ccvs_.val_tempo_captacao)%1))/100))
+			from cerh_captacao_vazao_sazonalidade ccvs_
+			where ccvs_.ide_cerh_captacao_caracterizacao = ccc.ide_cerh_captacao_caracterizacao
+			group by ccvs_.ide_cerh_captacao_caracterizacao
+		     )
+
+		when (clevs.ide_cerh_lancamento_efluente_caracterizacao is not null)
+		then (
+			select
+				((trunc(avg(cles_.val_tempo_lancamento))) + (60*((avg(cles_.val_tempo_lancamento)%1))/100))
+			from cerh_lancamento_efluente_sazonalidade cles_
+			where cles_.ide_cerh_lancamento_efluente_caracterizacao = clevs.ide_cerh_lancamento_efluente_caracterizacao
+			group by cles_.ide_cerh_lancamento_efluente_caracterizacao
+		)
+	end as horas,
+
+
+	------ Vazao_maxima_anual
+	case
+		when (ccvs.ide_cerh_captacao_caracterizacao is not null )
+		then (
+			select
+				max(ccvs_.val_vazao_captacao * ccvs_.val_tempo_captacao )
+			from cerh_captacao_vazao_sazonalidade ccvs_
+			where ccvs_.ide_cerh_captacao_caracterizacao = ccc.ide_cerh_captacao_caracterizacao
+			group by ccvs_.ide_cerh_captacao_caracterizacao
+		     )
+
+		when (clevs.ide_cerh_lancamento_efluente_caracterizacao is not null)
+		then (
+			select
+				max(cles_.val_vazao_efluente * cles_.val_tempo_lancamento )
+			from cerh_lancamento_efluente_sazonalidade cles_
+			where cles_.ide_cerh_lancamento_efluente_caracterizacao = cl.ide_cerh_lancamento_efluente_caracterizacao
+			group by cles_.ide_cerh_lancamento_efluente_caracterizacao
+		)
+	end as vazao_maxima
+
+
+from cerh_localizacao_geografica clg
+	left join cerh_lancamento_efluente_caracterizacao cl on cl.ide_cerh_localizacao_geografica = clg.ide_cerh_localizacao_geografica
+	left join cerh_lancamento_efluente_sazonalidade clevs on clevs.ide_cerh_lancamento_efluente_caracterizacao = cl.ide_cerh_lancamento_efluente_caracterizacao
+	left join cerh_captacao_caracterizacao ccc on ccc.ide_cerh_localizacao_geografica = clg.ide_cerh_localizacao_geografica
+	left join cerh_captacao_vazao_sazonalidade ccvs on ccvs.ide_cerh_captacao_caracterizacao = ccc.ide_cerh_captacao_caracterizacao
+where clg.ide_cerh_localizacao_geografica = $P{ide_cerh_localizacao_geografica}
+
+group by
+	clg.ide_cerh_localizacao_geografica,
+	cl.ide_cerh_lancamento_efluente_caracterizacao,
+	clevs.ide_cerh_lancamento_efluente_caracterizacao,
+	ccc.ide_cerh_captacao_caracterizacao,
+	ccvs.ide_cerh_captacao_caracterizacao]]>
+	</queryString>
+	<field name="vazao_media" class="java.math.BigDecimal"/>
+	<field name="horas" class="java.math.BigDecimal"/>
+	<field name="vazao_maxima" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[Vazão máxima da taxa de outorga em m3/dia]]></fieldDescription>
+	</field>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField pattern="">
+				<reportElement uuid="08902c3d-7899-45e4-85c6-b49a1b588b0a" x="0" y="0" width="60" height="20"/>
+				<box topPadding="0" leftPadding="0"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{horas} == null ?
+"-":
+(new DecimalFormat("###0.00").format($F{horas}))]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="224308b1-0f55-4ed0-8c22-3ce63534b468" x="60" y="0" width="60" height="20"/>
+				<box topPadding="0" leftPadding="0"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{vazao_media} != null ?
+(new DecimalFormat("#,##0.00").format($F{vazao_media}).toString()):(" - ")]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="92d31506-45aa-4906-9491-675c502486e1" x="120" y="0" width="60" height="20"/>
+				<box topPadding="0" leftPadding="0"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{vazao_maxima} != null ?
+(new DecimalFormat("#,##0.00").format($F{vazao_maxima}).toString()):(" - ")]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement uuid="5ef373dc-fea6-4707-9917-12859a125bbe" x="0" y="0" width="180" height="1">
+					<printWhenExpression><![CDATA[$P{iteracao_coluna} >1]]></printWhenExpression>
+				</reportElement>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</line>
+		</band>
+	</detail>
+</jasperReport>

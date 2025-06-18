@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="certificado_crf" pageWidth="535" pageHeight="842" columnWidth="495" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="049b68ba-ba4e-426d-a891-7f1452ebace9">
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="9"/>
+	<parameter name="LOGO_SEIA" class="java.lang.String"/>
+	<parameter name="LOGO_INEMA" class="java.lang.String"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="IDE_REQUERIMENTO" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="valor_por_extenso" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[select ct.dtc_emissao_certificado,
+ct.num_token,
+ct.num_certificado,
+req.ide_requerimento,
+req.num_requerimento,
+req.dtc_criacao,
+florestal.ide_pagamento_reposicao_florestal,
+prf.ide_pagamento_reposicao_florestal_pai
+from requerimento req
+inner join cumprimento_reposicao_florestal florestal on florestal.ide_requerimento = req.ide_requerimento
+LEFT JOIN certificado ct ON ct.ide_requerimento = req.ide_requerimento
+inner join pagamento_reposicao_florestal prf on prf.ide_pagamento_reposicao_florestal = florestal.ide_pagamento_reposicao_florestal
+where req.ide_requerimento = $P{IDE_REQUERIMENTO}]]>
+	</queryString>
+	<field name="dtc_emissao_certificado" class="java.sql.Timestamp"/>
+	<field name="num_token" class="java.lang.String"/>
+	<field name="num_certificado" class="java.lang.String"/>
+	<field name="ide_requerimento" class="java.lang.Integer"/>
+	<field name="num_requerimento" class="java.lang.String"/>
+	<field name="dtc_criacao" class="java.sql.Timestamp"/>
+	<field name="ide_pagamento_reposicao_florestal" class="java.lang.Integer"/>
+	<field name="ide_pagamento_reposicao_florestal_pai" class="java.lang.Integer"/>
+	<title>
+		<band height="69">
+			<image isLazy="true" onErrorType="Blank">
+				<reportElement uuid="131b2347-8f7a-42ef-bade-3ff38a0c0e9f" positionType="Float" x="397" y="4" width="99" height="41" forecolor="#FFFFFF"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<graphicElement>
+					<pen lineWidth="0.0"/>
+				</graphicElement>
+				<imageExpression><![CDATA[$P{LOGO_INEMA}]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement uuid="cc2656a9-9c8c-4dbd-9baa-fcce91eefe51" x="101" y="9" width="296" height="32"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="10" isBold="true" isUnderline="false"/>
+				</textElement>
+				<text><![CDATA[CERTIFICADO DE CUMPRIMENTO DA REPOSIÇÃO FLORESTAL]]></text>
+			</staticText>
+			<image isLazy="true" onErrorType="Blank">
+				<reportElement uuid="178b80cf-2d57-4f94-b727-2a60fe2ed1ef" positionType="Float" x="2" y="4" width="98" height="41" forecolor="#FFFFFF"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<graphicElement>
+					<pen lineWidth="1.0" lineStyle="Solid" lineColor="#FFFFFF"/>
+				</graphicElement>
+				<imageExpression><![CDATA[$P{LOGO_SEIA}]]></imageExpression>
+			</image>
+			<line>
+				<reportElement uuid="76f19aa5-4aa2-4873-8cb3-54b93194f9fb" x="0" y="66" width="495" height="1"/>
+			</line>
+			<line>
+				<reportElement uuid="a34c4dae-337d-4c11-b77b-141a9d493d41" x="0" y="1" width="495" height="1"/>
+			</line>
+			<textField>
+				<reportElement uuid="d29f46eb-2a51-44c6-8bd2-9d61b3b556e7" x="245" y="45" width="292" height="20"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA["Nº Requerimento: " + $F{num_requerimento}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="b5563532-3009-463d-9495-1fb7d15f53f8" x="7" y="45" width="213" height="20"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA["Nº Certificado: " + $F{num_certificado}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<detail>
+		<band height="73" splitType="Stretch">
+			<subreport>
+				<reportElement uuid="10888bc0-604f-43a1-ba5e-9bab70893934" positionType="Float" x="1" y="0" width="478" height="24" isRemoveLineWhenBlank="true" isPrintWhenDetailOverflows="true">
+					<printWhenExpression><![CDATA[$F{ide_pagamento_reposicao_florestal} == 1 || $F{ide_pagamento_reposicao_florestal} == 3 || $F{ide_pagamento_reposicao_florestal} == 4 || $F{ide_pagamento_reposicao_florestal} == 5 || $F{ide_pagamento_reposicao_florestal_pai} == 1]]></printWhenExpression>
+				</reportElement>
+				<subreportParameter name="valor_por_extenso">
+					<subreportParameterExpression><![CDATA[$P{valor_por_extenso}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="IDE_REQUERIMENTO">
+					<subreportParameterExpression><![CDATA[$F{ide_requerimento}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "reposicaoFlorestal/certificado_crf_detentor.jasper"]]></subreportExpression>
+			</subreport>
+			<subreport>
+				<reportElement uuid="edd6647b-32ca-4197-b6d1-29dff0f8be51" positionType="Float" x="0" y="46" width="479" height="24" isRemoveLineWhenBlank="true" isPrintWhenDetailOverflows="true">
+					<printWhenExpression><![CDATA[$F{ide_pagamento_reposicao_florestal} == 3]]></printWhenExpression>
+				</reportElement>
+				<subreportParameter name="IDE_REQUERIMENTO">
+					<subreportParameterExpression><![CDATA[$F{ide_requerimento}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="valor_por_extenso">
+					<subreportParameterExpression><![CDATA[$P{valor_por_extenso}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "reposicaoFlorestal/certificado_crf_devedor.jasper"]]></subreportExpression>
+			</subreport>
+			<subreport>
+				<reportElement uuid="446e64ef-60bf-4567-89c5-7629a76b2cb6" positionType="Float" x="1" y="24" width="478" height="22" isRemoveLineWhenBlank="true" isPrintWhenDetailOverflows="true">
+					<printWhenExpression><![CDATA[$F{ide_pagamento_reposicao_florestal} == 2]]></printWhenExpression>
+				</reportElement>
+				<subreportParameter name="valor_por_extenso">
+					<subreportParameterExpression><![CDATA[$P{valor_por_extenso}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="IDE_REQUERIMENTO">
+					<subreportParameterExpression><![CDATA[$P{IDE_REQUERIMENTO}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "reposicaoFlorestal/certificado_crf_consumidor.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+		<band height="59">
+			<staticText>
+				<reportElement uuid="fea415ab-a677-4253-9c9b-e1b1fd986eb7" x="1" y="5" width="494" height="30"/>
+				<textElement/>
+				<text><![CDATA[A autenticidade deste certificado pode ser atestada na internet, no endereço: http://www.seia.ba.gov.br em Serviços On-line/Atestar Certificado, utilizando a chave de segurança deste certificado.]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="da12e98b-0ff6-4fcc-a0ac-278ec0a642ba" x="106" y="36" width="270" height="20"/>
+				<textElement textAlignment="Center" markup="html">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{num_token}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="35">
+			<staticText>
+				<reportElement uuid="ca112b4c-32a3-462e-b1ca-28db1a98032d" x="1" y="0" width="100" height="10" forecolor="#7D7D7D"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Certificado de Cadastro]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true">
+				<reportElement uuid="2e7e3e44-e454-4ad6-a2d8-fe422e1d67fe" x="110" y="0" width="385" height="10" forecolor="#7D7D7D"/>
+				<textElement textAlignment="Justified">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Certificado emitido às: "+
+new SimpleDateFormat("HH:mm:ss").format(new java.util.Date()) +
+" do dia "
++new SimpleDateFormat("dd/MM/yyyy").format(new java.util.Date())+
+" (Hora e Data de Brasília)."]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="4b8ef4f7-cc12-464d-8c11-3d5462485041" x="1" y="10" width="494" height="10" forecolor="#7D7D7D"/>
+				<textElement textAlignment="Center">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[INEMA/CAB: Avenida Luís Viana Filho, 6ª Avenida, nº 600 CAB. CEP:41.746-900 - Salvador - Bahia - Brasil]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="e847985d-5b90-4715-b1c0-cb0c0849160a" x="1" y="20" width="100" height="15" forecolor="#7D7D7D"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Chave de segurança]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="3244cd0c-0223-44d3-89b8-2356a61d02c5" x="105" y="19" width="200" height="15" forecolor="#7D7D7D"/>
+				<textElement>
+					<font size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{num_token}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+</jasperReport>

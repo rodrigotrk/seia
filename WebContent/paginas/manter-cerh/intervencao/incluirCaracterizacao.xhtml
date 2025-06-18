@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui">
+
+	<h:form id="formCaracterizacaoIntervencao">
+	
+		<h:panelGrid id="gridLocalizacaoGeografica" style="width:100%;">
+
+			<p:dataTable id="tableGeobahia"
+				value="#{cerhController.abaIntervencao.dto.lista}" 
+				var="caracterizacaoDTO" >
+				
+				<p:column headerText="#{bundle.cerh_aba_cap_sup_nom_hidrico}" id="corpoHidrico" style="text-align:center;">
+	 		    	<p:inputText style="width:90%;"
+	 		    		maxlength="200"
+	 		    		value="#{cerhController.abaIntervencao.cerhCaracterizacao.nomCorpoHidrico}"
+	 		    		disabled="#{cerhController.abaIntervencao.dto.caracterizacaoDTO.visualizacao or cerhController.abaIntervencao.dto.caracterizacaoDTO.confirmaNomeRio}">
+	 		    	</p:inputText>
+	 		    </p:column>
+	 		    
+	 		    <p:column headerText="#{bundle.cerh_aba_cap_sup_tipo_hidrico}" id="tipoCorpoHidrico" style="text-align:center;">
+	 		    	<p:selectOneMenu value="#{cerhController.abaIntervencao.cerhCaracterizacao.ideTipoCorpoHidrico}"
+		 		    	converter="simpleEntityConverter"
+						disabled="#{cerhController.abaIntervencao.dto.caracterizacaoDTO.visualizacao or cerhController.abaIntervencao.dto.caracterizacaoDTO.confirmaNomeRio}">  
+						<f:selectItem itemLabel="Selecione" itemValue="#{null}"/>
+						<f:selectItems value="#{cerhController.abaIntervencao.tipoCorpoHidricoCollection}"
+							var="corpoHidrico"
+							itemValue="#{corpoHidrico}"
+							itemLabel="#{corpoHidrico.nomTipoCorpoHidrico}"/>
+					</p:selectOneMenu>
+	 		    </p:column>
+	 		    
+	   		    <p:column headerText="#{bundle.geral_lbl_rpga}" id="rpga" style="text-align:center;">
+	 		    	<h:outputText value="#{cerhController.abaIntervencao.cerhCaracterizacao.ideCerhLocalizacaoGeografica.ideLocalizacaoGeografica.rpga}" />
+	 		    </p:column>
+	 		    
+	  	 		<p:column headerText="#{bundle.geral_lbl_bacia}" id="bacia" style="text-align:center;">
+	 		    	<h:outputText value="#{cerhController.abaIntervencao.cerhCaracterizacao.ideCerhLocalizacaoGeografica.ideLocalizacaoGeografica.baciaHidrografica}" />
+	 		    </p:column>
+	 		    
+	  	 		<p:column headerText="Ações" style="width:45px; text-align:center;">
+					<p:commandLink actionListener="#{cerhController.abaIntervencao.confirmarNomeRio()}"
+						process="formCaracterizacaoIntervencao:gridLocalizacaoGeografica"
+						update="formCaracterizacaoIntervencao:tableGeobahia"
+						rendered="#{!cerhController.abaIntervencao.dto.caracterizacaoDTO.confirmaNomeRio}"
+						disabled="#{cerhController.abaIntervencao.dto.caracterizacaoDTO.visualizacao}">
+						<h:graphicImage title="Confirmar" value="/resources/img/ico-aprovar-notificacao.png" />
+					</p:commandLink>
+					
+					<p:commandLink actionListener="#{cerhController.abaIntervencao.editarNomeRio()}"
+						process="formCaracterizacaoIntervencao:gridLocalizacaoGeografica" 
+						update="formCaracterizacaoIntervencao:tableGeobahia"
+						rendered="#{cerhController.abaIntervencao.dto.caracterizacaoDTO.confirmaNomeRio}"
+						disabled="#{cerhController.abaIntervencao.dto.caracterizacaoDTO.visualizacao}">
+						<h:graphicImage title="Editar" value="/resources/img/ico-editar.png" />
+					</p:commandLink>
+				</p:column>
+				
+			</p:dataTable>
+
+		</h:panelGrid>
+		
+		<h:panelGrid id="gridSelectOneMenu" columns="2" style="margin-top:15px;">
+			
+			<h:panelGrid style="width:250px;">
+				<h:outputText value="* #{bundle.cerh_aba_int_tipo}:" /> 
+				<p:selectOneMenu id="tipo"
+					value="#{cerhController.abaIntervencao.cerhTipoIntervencaoDTO.ideCerhTipoIntervencao}"
+					disabled="#{cerhController.abaIntervencao.dto.caracterizacaoDTO.visualizacao}">
+					<f:selectItem itemValue="0" itemLabel="Selecione"/>  
+					<f:selectItems value="#{cerhController.abaIntervencao.cerhTipoIntervencaoDTOCollection}"/>
+					<p:ajax event="change" 
+						update="formCaracterizacaoIntervencao:gridTipoIntervencao" 
+						listener="#{cerhController.abaIntervencao.changeTipoIntervencao()}"/>
+				</p:selectOneMenu>
+			</h:panelGrid>
+			
+			<h:panelGrid style="margin-left:15px;">
+				<h:outputText value="* #{bundle.cerh_aba_int_situacao}:" /> 
+				<p:selectOneMenu id="situacao" 
+					value="#{cerhController.abaIntervencao.cerhCaracterizacao.ideCerhSituacaoTipoUso}"
+					converter="simpleEntityConverter"
+					disabled="#{cerhController.abaIntervencao.dto.caracterizacaoDTO.visualizacao}">
+					<f:selectItem itemLabel="Selecione"/>
+					<f:selectItems value="#{cerhController.abaIntervencao.cerhSituacaoTipoUsoCollection}" 
+						var="situacao"
+						itemValue="#{situacao}"
+						itemLabel="#{situacao.dscSituacaoTipoUso}"/>
+				</p:selectOneMenu>
+			</h:panelGrid>
+		</h:panelGrid>
+		
+		<h:panelGrid id="gridTipoIntervencao" style="width:100%; margin-top:15px;" >
+			<h:panelGroup rendered="#{cerhController.abaIntervencao.tipoIntervencaoNecessitaInformacoesDeUso}">
+				<fieldset id="informcaoTipoIntervencao" >
+					<legend> #{cerhController.abaIntervencao.header} </legend>
+					<h:panelGrid rendered="#{cerhController.abaIntervencao.tipoIntervencaoObrasHidraulicas}" style="width:90%;" styleClass="grid-border-15">
+						<ui:include src="/paginas/manter-cerh/intervencao/incluirCaracterizacaoObrasHidraulicas.xhtml" />
+					</h:panelGrid>
+					<h:panelGrid id="gridCultura" rendered="#{cerhController.abaIntervencao.tipoIntervencaoServicos}" style="width:90%;" styleClass="grid-border-15">
+						<ui:include src="/paginas/manter-cerh/intervencao/incluirCaracterizacaoServicos.xhtml" />
+					</h:panelGrid>
+				</fieldset>		
+			</h:panelGroup>
+		</h:panelGrid>
+		
+		<h:panelGrid id="gridObservacao" style="width:70%; margin-top:15px;" rendered="#{cerhController.abaIntervencao.usuarioInterno and (cerhController.abaIntervencao.processoOutorgado or cerhController.abaIntervencao.processoDispensado)}">
+			<h:outputText value="#{bundle.geral_lbl_observacao}:" />
+			<p:inputTextarea id="inputObs" 
+				value="#{cerhController.abaIntervencao.cerhCaracterizacao.dscObservacao}" 
+				cols="9" 
+				autoResize="false"
+				maxLength="500" 
+				styleClass="maxlength500 limitedTextArea"
+				style="width:70%; height:130px;" 
+				disabled="#{cerhController.abaIntervencao.dto.caracterizacaoDTO.visualizacao}"/>
+		</h:panelGrid>
+		
+		<div align="right" style="margin-right: 25px; margin-top:25px;">
+			<p:commandButton id="btnSalvarCaracterizacao" 
+				value="#{bundle.geral_lbl_salvar}" 
+				actionListener="#{cerhController.abaIntervencao.salvarCaracterizacao()}"
+				style="width:90px;" 
+				update="formCaracterizacaoIntervencao" 
+				process="@form" 
+				rendered="#{!cerhController.abaIntervencao.dto.caracterizacaoDTO.visualizacao}"/> 
+		</div>			
+		
+	</h:form>
+
+</ui:composition>

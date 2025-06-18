@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="relatorio_dados_queima_objetivos_queima" language="java" pageWidth="346" pageHeight="20" columnWidth="346" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="ba0b9b35-3f49-4d48-8f09-0e19854dd4e7">
+	<property name="ireport.zoom" value="1.771561000000001"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="ide_declaracao_queima_controlada_imovel" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT DISTINCT oqc.des_objetivo_queima_controlada, dqcIOqc.val_area_prevista_queima
+
+FROM objetivo_queima_controlada oqc
+
+INNER JOIN declaracao_queima_controlada_imovel_objetivo_queima_controlada dqcIOqc on dqcIOqc.ide_objetivo_queima_controlada = oqc.ide_objetivo_queima_controlada
+
+WHERE dqcIOqc.ide_declaracao_queima_controlada_imovel = $P{ide_declaracao_queima_controlada_imovel}]]>
+	</queryString>
+	<field name="des_objetivo_queima_controlada" class="java.lang.String"/>
+	<field name="val_area_prevista_queima" class="java.math.BigDecimal"/>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement uuid="2c6087a2-9d7c-425f-b5be-13d502b1c11d" x="0" y="0" width="162" height="20"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{des_objetivo_queima_controlada} != null ? $F{des_objetivo_queima_controlada} : "-"]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.0000">
+				<reportElement uuid="f280546c-20b5-467b-968b-8372a40a25eb" x="162" y="0" width="184" height="20"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<paragraph leftIndent="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{val_area_prevista_queima} != null ? $F{val_area_prevista_queima} : "-"]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

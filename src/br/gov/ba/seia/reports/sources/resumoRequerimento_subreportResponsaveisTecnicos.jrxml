@@ -1,0 +1,406 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="resumoRequerimento_subreportResponsaveisTecnicos" pageWidth="555" pageHeight="802" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0">
+	<property name="ireport.zoom" value="1.9487171000000014"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="table">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table 1_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<subDataset name="Documentos Pessoa_1">
+		<parameter name="ide_pessoa" class="java.lang.Integer"/>
+		<queryString>
+			<![CDATA[select ti.nom_tipo_identificacao,
+	di.num_documento,
+	di.dtc_emissao,
+	di.dtc_validade
+from documento_identificacao di
+INNER JOIN tipo_identificacao ti on ti.ide_tipo_identificacao = di.ide_tipo_identificacao
+where di.ide_pessoa = $P{ide_pessoa}]]>
+		</queryString>
+		<field name="nom_tipo_identificacao" class="java.lang.String"/>
+		<field name="num_documento" class="java.lang.String"/>
+		<field name="dtc_emissao" class="java.sql.Timestamp"/>
+		<field name="dtc_validade" class="java.sql.Timestamp"/>
+	</subDataset>
+	<subDataset name="Telefones Pessoa Física_1">
+		<parameter name="ide_pessoa" class="java.lang.Integer"/>
+		<queryString>
+			<![CDATA[select tt.nom_tipo_telefone,
+	t.num_telefone
+from telefone t
+INNER join telefone_pessoa tp on tp.ide_telefone = t.ide_telefone
+INNER JOIN tipo_telefone tt on tt.ide_tipo_telefone = t.ide_tipo_telefone
+WHERE tp.ide_pessoa = $P{ide_pessoa}]]>
+		</queryString>
+		<field name="nom_tipo_telefone" class="java.lang.String"/>
+		<field name="num_telefone" class="java.lang.String"/>
+	</subDataset>
+	<parameter name="ide_empreendimento" class="java.lang.Integer"/>
+	<queryString>
+		<![CDATA[select pf.ide_pessoa_fisica,
+	pf.nom_pessoa,
+	pf.num_cpf,
+	pf.des_naturalidade,
+	p.des_email,
+	o.nom_ocupacao,
+	l.nom_logradouro,
+	e.num_endereco,
+	b.nom_bairro,
+	e.des_complemento,
+	m.nom_municipio,
+	est.des_sigla,
+	e.des_ponto_referencia,
+	l.num_cep
+from responsavel_empreendimento re
+INNER JOIN empreendimento emp on emp.ide_empreendimento = re.ide_empreendimento
+INNER JOIN pessoa_fisica pf on pf.ide_pessoa_fisica = re.ide_pessoa_fisica
+INNER JOIN pessoa p on p.ide_pessoa = pf.ide_pessoa_fisica
+INNER JOIN ocupacao o on o.ide_ocupacao = pf.ide_ocupacao
+INNER JOIN endereco_pessoa ep on ep.ide_pessoa = pf.ide_pessoa_fisica
+INNER JOIN endereco e on e.ide_endereco = ep.ide_endereco
+INNER JOIN logradouro l on l.ide_logradouro = e.ide_logradouro
+INNER JOIN bairro b ON b.ide_bairro = l.ide_bairro
+INNER JOIN municipio m ON m.ide_municipio = l.ide_municipio
+INNER JOIN estado est on est.ide_estado = m.ide_estado
+WHERE re.ide_empreendimento = $P{ide_empreendimento}]]>
+	</queryString>
+	<field name="ide_pessoa_fisica" class="java.lang.Integer"/>
+	<field name="nom_pessoa" class="java.lang.String"/>
+	<field name="num_cpf" class="java.lang.String"/>
+	<field name="des_naturalidade" class="java.lang.String"/>
+	<field name="des_email" class="java.lang.String"/>
+	<field name="nom_ocupacao" class="java.lang.String"/>
+	<field name="nom_logradouro" class="java.lang.String"/>
+	<field name="num_endereco" class="java.lang.String"/>
+	<field name="nom_bairro" class="java.lang.String"/>
+	<field name="des_complemento" class="java.lang.String"/>
+	<field name="nom_municipio" class="java.lang.String"/>
+	<field name="des_sigla" class="java.lang.String"/>
+	<field name="des_ponto_referencia" class="java.lang.String"/>
+	<field name="num_cep" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="113" splitType="Stretch">
+			<frame>
+				<reportElement x="0" y="0" width="555" height="113"/>
+				<textField>
+					<reportElement x="220" y="34" width="335" height="12"/>
+					<textElement verticalAlignment="Middle">
+						<font size="9" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{num_cpf}]]></textFieldExpression>
+				</textField>
+				<textField>
+					<reportElement x="220" y="56" width="335" height="12"/>
+					<textElement verticalAlignment="Middle">
+						<font size="9" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{nom_ocupacao}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement x="0" y="45" width="219" height="12"/>
+					<textElement verticalAlignment="Middle" markup="none">
+						<font size="9" isBold="true" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<text><![CDATA[Naturalidade]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="0" y="89" width="555" height="12"/>
+					<textElement verticalAlignment="Middle" markup="none">
+						<font size="9" isBold="true" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<text><![CDATA[Documentos]]></text>
+				</staticText>
+				<textField>
+					<reportElement x="0" y="34" width="219" height="12"/>
+					<textElement verticalAlignment="Middle">
+						<font size="9" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{nom_pessoa}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement x="220" y="45" width="335" height="12"/>
+					<textElement verticalAlignment="Middle" markup="none">
+						<font size="9" isBold="true" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<text><![CDATA[Formação]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="220" y="23" width="335" height="12"/>
+					<textElement verticalAlignment="Middle" markup="none">
+						<font size="9" isBold="true" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<text><![CDATA[CPF]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="0" y="23" width="219" height="12"/>
+					<textElement verticalAlignment="Middle" markup="none">
+						<font size="9" isBold="true" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<text><![CDATA[Nome]]></text>
+				</staticText>
+				<textField>
+					<reportElement x="0" y="56" width="219" height="12"/>
+					<textElement verticalAlignment="Middle">
+						<font size="9" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{des_naturalidade}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement x="0" y="67" width="555" height="12"/>
+					<textElement verticalAlignment="Middle" markup="none">
+						<font size="9" isBold="true" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<text><![CDATA[E-mail]]></text>
+				</staticText>
+				<textField>
+					<reportElement x="0" y="78" width="555" height="12"/>
+					<textElement verticalAlignment="Middle">
+						<font size="9" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{des_email}]]></textFieldExpression>
+				</textField>
+				<componentElement>
+					<reportElement key="table" style="table" x="0" y="100" width="555" height="13"/>
+					<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
+						<datasetRun subDataset="Documentos Pessoa_1">
+							<datasetParameter name="ide_pessoa">
+								<datasetParameterExpression><![CDATA[$F{ide_pessoa_fisica}]]></datasetParameterExpression>
+							</datasetParameter>
+							<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+						</datasetRun>
+						<jr:column width="236">
+							<jr:columnHeader style="table_CH" height="20" rowSpan="1">
+								<staticText>
+									<reportElement x="0" y="0" width="236" height="20"/>
+									<textElement textAlignment="Center" verticalAlignment="Middle">
+										<font fontName="SansSerif" size="9" isBold="true"/>
+									</textElement>
+									<text><![CDATA[Tipo de Documento]]></text>
+								</staticText>
+							</jr:columnHeader>
+							<jr:detailCell style="table_TD" height="15" rowSpan="1">
+								<textField>
+									<reportElement x="0" y="0" width="236" height="15"/>
+									<textElement verticalAlignment="Middle">
+										<font size="9"/>
+									</textElement>
+									<textFieldExpression><![CDATA[$F{nom_tipo_identificacao}]]></textFieldExpression>
+								</textField>
+							</jr:detailCell>
+						</jr:column>
+						<jr:column width="118">
+							<jr:columnHeader style="table_CH" height="20" rowSpan="1">
+								<staticText>
+									<reportElement x="0" y="0" width="118" height="20"/>
+									<textElement textAlignment="Center" verticalAlignment="Middle">
+										<font size="9" isBold="true"/>
+									</textElement>
+									<text><![CDATA[Número do Documento]]></text>
+								</staticText>
+							</jr:columnHeader>
+							<jr:detailCell style="table_TD" height="15" rowSpan="1">
+								<textField>
+									<reportElement x="0" y="0" width="118" height="15"/>
+									<textElement textAlignment="Center" verticalAlignment="Middle">
+										<font size="9"/>
+									</textElement>
+									<textFieldExpression><![CDATA[$F{num_documento}]]></textFieldExpression>
+								</textField>
+							</jr:detailCell>
+						</jr:column>
+						<jr:column width="76">
+							<jr:columnHeader style="table_CH" height="20" rowSpan="1">
+								<staticText>
+									<reportElement x="0" y="0" width="76" height="20"/>
+									<textElement textAlignment="Center" verticalAlignment="Middle">
+										<font size="9" isBold="true"/>
+									</textElement>
+									<text><![CDATA[Data de Emissão]]></text>
+								</staticText>
+							</jr:columnHeader>
+							<jr:detailCell style="table_TD" height="15" rowSpan="1">
+								<textField>
+									<reportElement x="0" y="0" width="76" height="15"/>
+									<textElement textAlignment="Center" verticalAlignment="Middle">
+										<font size="9"/>
+									</textElement>
+									<textFieldExpression><![CDATA[$F{dtc_emissao}]]></textFieldExpression>
+								</textField>
+							</jr:detailCell>
+						</jr:column>
+						<jr:column width="76">
+							<jr:columnHeader style="table_CH" height="20" rowSpan="1">
+								<staticText>
+									<reportElement x="0" y="0" width="76" height="20"/>
+									<textElement textAlignment="Center" verticalAlignment="Middle">
+										<font size="9" isBold="true"/>
+									</textElement>
+									<text><![CDATA[Data de Validade]]></text>
+								</staticText>
+							</jr:columnHeader>
+							<jr:detailCell style="table_TD" height="15" rowSpan="1">
+								<textField>
+									<reportElement x="0" y="0" width="76" height="15"/>
+									<textElement textAlignment="Center" verticalAlignment="Middle">
+										<font size="9"/>
+									</textElement>
+									<textFieldExpression><![CDATA[$F{dtc_validade} != null ? $F{dtc_validade} : "-"]]></textFieldExpression>
+								</textField>
+							</jr:detailCell>
+						</jr:column>
+					</jr:table>
+				</componentElement>
+				<staticText>
+					<reportElement x="0" y="1" width="555" height="16"/>
+					<textElement verticalAlignment="Middle" markup="none">
+						<font size="11" isBold="true" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<text><![CDATA[Responsáveis Técnicos]]></text>
+				</staticText>
+				<line>
+					<reportElement x="0" y="0" width="555" height="1"/>
+				</line>
+			</frame>
+		</band>
+		<band height="24">
+			<frame>
+				<reportElement x="0" y="0" width="555" height="24"/>
+				<staticText>
+					<reportElement positionType="Float" x="0" y="0" width="555" height="12"/>
+					<textElement verticalAlignment="Middle" markup="none">
+						<font size="9" isBold="true" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<text><![CDATA[Telefones]]></text>
+				</staticText>
+				<componentElement>
+					<reportElement key="table 1" style="table" positionType="Float" x="0" y="11" width="555" height="13"/>
+					<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
+						<datasetRun subDataset="Telefones Pessoa Física_1">
+							<datasetParameter name="ide_pessoa">
+								<datasetParameterExpression><![CDATA[$F{ide_pessoa_fisica}]]></datasetParameterExpression>
+							</datasetParameter>
+							<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+						</datasetRun>
+						<jr:column width="149">
+							<jr:columnHeader style="table 1_CH" height="20" rowSpan="1">
+								<staticText>
+									<reportElement x="0" y="0" width="149" height="20"/>
+									<textElement textAlignment="Center" verticalAlignment="Middle">
+										<font size="9"/>
+									</textElement>
+									<text><![CDATA[Tipo]]></text>
+								</staticText>
+							</jr:columnHeader>
+							<jr:detailCell style="table 1_TD" height="15" rowSpan="1">
+								<textField>
+									<reportElement x="1" y="0" width="148" height="15"/>
+									<textElement verticalAlignment="Middle">
+										<font size="9"/>
+									</textElement>
+									<textFieldExpression><![CDATA[$F{nom_tipo_telefone}]]></textFieldExpression>
+								</textField>
+							</jr:detailCell>
+						</jr:column>
+						<jr:column width="139">
+							<jr:columnHeader style="table 1_CH" height="20" rowSpan="1">
+								<staticText>
+									<reportElement x="0" y="0" width="139" height="20"/>
+									<textElement textAlignment="Center" verticalAlignment="Middle">
+										<font size="9"/>
+									</textElement>
+									<text><![CDATA[Número]]></text>
+								</staticText>
+							</jr:columnHeader>
+							<jr:detailCell style="table 1_TD" height="15" rowSpan="1">
+								<textField>
+									<reportElement x="1" y="0" width="138" height="15"/>
+									<textElement verticalAlignment="Middle">
+										<font size="9"/>
+									</textElement>
+									<textFieldExpression><![CDATA[$F{num_telefone}]]></textFieldExpression>
+								</textField>
+							</jr:detailCell>
+						</jr:column>
+					</jr:table>
+				</componentElement>
+			</frame>
+		</band>
+		<band height="23">
+			<frame>
+				<reportElement x="0" y="0" width="555" height="23"/>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="0" y="11" width="555" height="12" isRemoveLineWhenBlank="true" isPrintInFirstWholeBand="true" isPrintWhenDetailOverflows="true"/>
+					<textElement verticalAlignment="Top">
+						<font size="9" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[new String($F{nom_logradouro}.concat(", ").concat($F{num_endereco} != null ? "N° " + $F{num_endereco} + ", " : "").concat($F{nom_bairro} + ", ").concat($F{des_complemento} != null ? $F{des_complemento} + ", " : "").concat($F{nom_municipio} + ", ").concat($F{des_sigla} + ". ").concat($F{des_ponto_referencia} != null ? $F{des_ponto_referencia} + ". " : "").concat("CEP " + $F{num_cep}.substring(0,2).concat("." + $F{num_cep}.substring(2,5)).concat("-" + $F{num_cep}.substring(5,8)) + "."))]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement positionType="Float" x="0" y="0" width="555" height="12"/>
+					<textElement verticalAlignment="Middle" markup="none">
+						<font size="9" isBold="true" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<text><![CDATA[Endereço]]></text>
+				</staticText>
+			</frame>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

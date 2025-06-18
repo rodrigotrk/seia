@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core" xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui">
+<h:form id="formModelProcurador">
+	<h:panelGrid id="paneltableproc">
+		<p:dataTable value="#{procuradorRepresentanteController.modelProcuradorRepresentante}" paginatorPosition="bottom" paginator="true" paginatorAlwaysVisible="false" rows="5"
+			style="padding-left:-1px;padding-top: 3px;" var="procurador" id="modelProcurador" widgetVar="modelProcurador" rendered="#{procuradorRepresentanteController.emptyList}">
+			<f:facet name="header">
+				<h:outputText value="Lista de Procuradores" />
+			</f:facet>
+			<p:column>
+				<f:facet name="header">
+					<h:outputText value="CPF:" />
+				</f:facet>
+				<h:outputText value="#{procurador.ideProcurador.numCpf}">
+					<f:converter converterId="cpfConverter" />
+				</h:outputText>
+			</p:column>
+			<p:column>
+				<f:facet name="header">
+					<h:outputText value="Nome:" />
+				</f:facet>
+				<h:outputText value="#{procurador.ideProcurador.nomPessoa}" />
+			</p:column>
+			<p:column>
+				<f:facet name="header">
+					<h:outputText value="Ações" />
+				</f:facet>
+				<h:panelGroup layout="block" style="text-align: center;">
+					<p:commandLink oncomplete="tabviewpj:formconfirmExclusaoProcurador:confirmExclusaoProcurador.show()" type="button" disabled="#{pessoaJuridicaController.disableFormVisualizar}">
+						<h:graphicImage title="Excluir" value="/resources/img/ico-excluir.png" />
+						<f:setPropertyActionListener target="#{procuradorRepresentanteController.procuradorRepresentanteSelecionado}" value="#{procurador}" />
+					</p:commandLink>
+				</h:panelGroup>
+			</p:column>
+		</p:dataTable>
+	</h:panelGrid>
+</h:form>
+</html>

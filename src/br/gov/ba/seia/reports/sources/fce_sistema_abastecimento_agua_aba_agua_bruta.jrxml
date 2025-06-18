@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="fce_sistema_abastecimento_agua_aba_agua_bruta" pageWidth="495" pageHeight="817" whenNoDataType="BlankPage" columnWidth="495" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="80b78396-35cc-4e26-aaf9-1207b1892468">
+	<property name="ireport.zoom" value="2.253944402704733"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<subDataset name="Dataset_localizacao" uuid="a53f7503-1bd4-42d0-acb9-f86bcc41509d">
+		<parameter name="ide_requerimento" class="java.lang.Integer"/>
+		<parameter name="ide_fce_saa" class="java.lang.Integer"/>
+		<queryString>
+			<![CDATA[SELECT this_.ide_fce_saa_localizacao_geografica_elevatoria_bruta,
+       replace(split_part(f_get_vertices(this_.ide_localizacao_geografica), ' ', 2), '(', '') as latitude,
+       replace(split_part(f_get_vertices(this_.ide_localizacao_geografica), ' ', 3), ')', '') as longitude,
+       this_.val_vazao,
+       sis.nom_sistema_coordenada
+FROM fce_saa_localizacao_geografica_elevatoria_bruta this_
+INNER JOIN localizacao_geografica lg1_ ON this_.ide_localizacao_geografica=lg1_.ide_localizacao_geografica
+INNER JOIN sistema_coordenada sis on sis.ide_sistema_coordenada = lg1_.ide_sistema_coordenada
+INNER JOIN fce_saa saa on this_.ide_fce_saa = saa.ide_fce_saa
+INNER JOIN fce on saa.ide_fce = fce.ide_fce
+INNER JOIN requerimento r7_ ON fce.ide_requerimento = r7_.ide_requerimento
+WHERE r7_.ide_requerimento=  $P{ide_requerimento}
+and saa.ide_fce_saa = $P{ide_fce_saa}]]>
+		</queryString>
+		<field name="ide_fce_saa_localizacao_geografica_elevatoria_bruta" class="java.lang.Integer">
+			<fieldDescription><![CDATA[Chave primária da tabela]]></fieldDescription>
+		</field>
+		<field name="latitude" class="java.lang.String"/>
+		<field name="longitude" class="java.lang.String"/>
+		<field name="val_vazao" class="java.math.BigDecimal">
+			<fieldDescription><![CDATA[Vazão ou vazão média dependendo do tipo de captação.]]></fieldDescription>
+		</field>
+		<field name="nom_sistema_coordenada" class="java.lang.String"/>
+	</subDataset>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String"/>
+	<parameter name="ide_fce_saa" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[$P{ide_fce_saa}]]></defaultValueExpression>
+	</parameter>
+	<parameter name="ide_requerimento" class="java.lang.Integer"/>
+	<queryString>
+		<![CDATA[select saa.ide_fce_saa, val_ext_total_adutora_bruta, faixa.dsc_faixa_diametro_adutora, material.dsc_material_utilizado from fce_saa saa
+INNER JOIN faixa_diametro_adutora faixa
+	ON faixa.ide_faixa_diametro_adutora = saa.ide_faixa_diametro_adutora_bruta
+INNER JOIN tipo_material_utilizado material
+	ON material.ide_tipo_material_utilizado = saa.ide_tipo_material_utilizado_bruta
+	where ide_fce_saa = $P{ide_fce_saa}]]>
+	</queryString>
+	<field name="ide_fce_saa" class="java.lang.Integer">
+		<fieldDescription><![CDATA[Chave primária artificial da tabela]]></fieldDescription>
+	</field>
+	<field name="val_ext_total_adutora_bruta" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[Extensão total da adutora da água bruta.]]></fieldDescription>
+	</field>
+	<field name="dsc_faixa_diametro_adutora" class="java.lang.String">
+		<fieldDescription><![CDATA[Descrição da faixa do diâmetro utilizado na adutora.]]></fieldDescription>
+	</field>
+	<field name="dsc_material_utilizado" class="java.lang.String"/>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band height="27" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="a9bc1f7b-2831-4626-a0d9-766c22f99fbd" positionType="Float" mode="Opaque" x="0" y="10" width="495" height="17" backcolor="#DDDDDD"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif" isBold="true"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<text><![CDATA[Água bruta]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<detail>
+		<band height="102">
+			<staticText>
+				<reportElement uuid="23d5a723-f8a8-4463-9d7d-dd9650b8ae23" x="341" y="62" width="153" height="12"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Vazão(m³/dia)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="686165d5-c8af-4e55-9b6f-de48ba55c830" x="2" y="62" width="100" height="12"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Latitude]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="24d6f7e4-aee3-4e3e-8292-a1ed970ff8dc" x="106" y="62" width="85" height="12"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Longitude]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="f2237030-1fc8-4f91-9dd6-0434325c86ae" x="194" y="62" width="140" height="12"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Sistema de Coordenadas]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="99c57819-010f-45f9-b4fb-a8f2c69592a0" x="0" y="42" width="333" height="20"/>
+				<box topPadding="3" leftPadding="2"/>
+				<textElement>
+					<font fontName="SansSerif" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Coordenadas da elevatória]]></text>
+			</staticText>
+			<line>
+				<reportElement uuid="d0716305-a941-4d1c-9264-395358869a77" x="0" y="74" width="495" height="1"/>
+			</line>
+			<staticText>
+				<reportElement uuid="2411e629-780c-46be-8d43-f19d7090af3c" x="0" y="10" width="333" height="20"/>
+				<box topPadding="3" leftPadding="2"/>
+				<textElement>
+					<font fontName="SansSerif" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Elevatória de água bruta]]></text>
+			</staticText>
+			<line>
+				<reportElement uuid="9aa3cf4d-47ef-4e56-acd0-6fca47d6ec26" x="0" y="62" width="495" height="1"/>
+			</line>
+			<line>
+				<reportElement uuid="fb9dd910-0109-4709-be35-d92ece098f48" x="0" y="62" width="1" height="13"/>
+			</line>
+			<line>
+				<reportElement uuid="edf55ddd-22f4-42d7-9022-f4355fc37271" x="103" y="62" width="1" height="12"/>
+			</line>
+			<line>
+				<reportElement uuid="2a33e710-3b6d-40cc-bcef-21c0ec792553" x="191" y="62" width="1" height="12"/>
+			</line>
+			<line>
+				<reportElement uuid="723a6d84-e43c-472d-89ec-83f9b5413c7b" x="339" y="62" width="1" height="12"/>
+			</line>
+			<line>
+				<reportElement uuid="16bfa537-0f12-4581-b95b-cc7059dc160a" x="494" y="62" width="1" height="12"/>
+			</line>
+			<line>
+				<reportElement uuid="10fa3dc1-1a04-4994-9fe8-5eba720d23f8" x="0" y="29" width="495" height="1"/>
+			</line>
+			<componentElement>
+				<reportElement uuid="798c05e2-c6c5-4aec-bf65-f6e381f4f0f2" x="0" y="75" width="495" height="13"/>
+				<jr:list xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" printOrder="Vertical">
+					<datasetRun subDataset="Dataset_localizacao" uuid="7c3df7fe-0f30-4a8f-931d-f8a9b4833418">
+						<datasetParameter name="ide_requerimento">
+							<datasetParameterExpression><![CDATA[$P{ide_requerimento}]]></datasetParameterExpression>
+						</datasetParameter>
+						<datasetParameter name="ide_fce_saa">
+							<datasetParameterExpression><![CDATA[$P{ide_fce_saa}]]></datasetParameterExpression>
+						</datasetParameter>
+					</datasetRun>
+					<jr:listContents height="13" width="495">
+						<textField>
+							<reportElement uuid="a74464af-3aaa-48b8-bd48-5d2a0a76a727" x="3" y="0" width="100" height="12"/>
+							<textElement textAlignment="Center"/>
+							<textFieldExpression><![CDATA[$F{latitude}]]></textFieldExpression>
+						</textField>
+						<textField>
+							<reportElement uuid="f73c8dea-4c0d-4726-bfb3-aded1f51700c" x="106" y="0" width="85" height="12"/>
+							<textElement textAlignment="Center"/>
+							<textFieldExpression><![CDATA[$F{longitude}]]></textFieldExpression>
+						</textField>
+						<textField>
+							<reportElement uuid="f630a05b-0033-40c0-a3cf-8dd5ab5ce634" x="194" y="0" width="140" height="12"/>
+							<textElement textAlignment="Center"/>
+							<textFieldExpression><![CDATA[$F{nom_sistema_coordenada}]]></textFieldExpression>
+						</textField>
+						<textField>
+							<reportElement uuid="8c1f8741-7953-4569-b8b3-13363deee8e1" x="341" y="0" width="153" height="12"/>
+							<textElement textAlignment="Center"/>
+							<textFieldExpression><![CDATA[$F{val_vazao}]]></textFieldExpression>
+						</textField>
+						<line>
+							<reportElement uuid="5f5559a9-e4eb-498e-9688-255f7b81aa53" x="0" y="12" width="495" height="1"/>
+						</line>
+						<line>
+							<reportElement uuid="333f5fd2-37d2-443d-89e2-19052ea85037" x="494" y="0" width="1" height="12"/>
+						</line>
+						<line>
+							<reportElement uuid="10e0ccd8-dc1a-4094-aaa0-077054703599" x="339" y="0" width="1" height="13"/>
+						</line>
+						<line>
+							<reportElement uuid="b27bc83d-d420-443c-80f5-aace4e41b292" x="191" y="0" width="1" height="13"/>
+						</line>
+						<line>
+							<reportElement uuid="2211ea78-8cd5-4343-ada0-10f7abf116d9" x="103" y="0" width="1" height="13"/>
+						</line>
+						<line>
+							<reportElement uuid="843c8d16-f34a-4b74-a243-bb2ce975009c" x="0" y="0" width="1" height="13"/>
+						</line>
+					</jr:listContents>
+				</jr:list>
+			</componentElement>
+		</band>
+		<band height="34" splitType="Prevent">
+			<subreport runToBottom="false">
+				<reportElement uuid="413e3158-daa1-48e6-8ad7-a316e1bebba9" positionType="Float" isPrintRepeatedValues="false" x="0" y="0" width="495" height="26" isRemoveLineWhenBlank="true" isPrintWhenDetailOverflows="true"/>
+				<subreportParameter name="SUBREPORT_DIR">
+					<subreportParameterExpression><![CDATA[$P{SUBREPORT_DIR}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="ide_fce_saa">
+					<subreportParameterExpression><![CDATA[$P{ide_fce_saa}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="ide_requerimento">
+					<subreportParameterExpression><![CDATA[$P{ide_requerimento}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "fce_sistema_abastecimento_agua_elevatoria_bruta.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+	</detail>
+</jasperReport>

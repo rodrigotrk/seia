@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="resumo_requerimento_questionario_origem_agua_subterranea_caracteristicas" pageWidth="150" pageHeight="802" columnWidth="150" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="3b87335d-026a-415b-817b-86786c21d9dc">
+	<property name="ireport.zoom" value="3.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="102"/>
+	<parameter name="ide_requerimento" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[0]]></defaultValueExpression>
+	</parameter>
+	<parameter name="ide_outorga_localizacao_geografica" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[0]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[select
+ ide_pergunta,
+ olg.num_vazao,
+ olg.dtc_perfuracao_poco,
+ olg.dtc_emissao_oficio,
+ olg.num_oficio,
+ olg.num_area_irrigada_captacao
+
+from pergunta_requerimento pr
+inner join outorga_localizacao_geografica olg on pr.ide_localizacao_geografica = olg.ide_localizacao_geografica
+
+where pr.ide_pergunta in (30,31,32)
+and pr.ide_requerimento = $P{ide_requerimento}
+and pr.ind_resposta = true
+and olg.ide_outorga_localizacao_geografica =  $P{ide_outorga_localizacao_geografica}]]>
+	</queryString>
+	<field name="ide_pergunta" class="java.lang.Integer"/>
+	<field name="num_vazao" class="java.math.BigDecimal"/>
+	<field name="dtc_perfuracao_poco" class="java.sql.Timestamp"/>
+	<field name="dtc_emissao_oficio" class="java.sql.Timestamp"/>
+	<field name="num_oficio" class="java.lang.String"/>
+	<field name="num_area_irrigada_captacao" class="java.math.BigDecimal"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="13">
+			<printWhenExpression><![CDATA[false]]></printWhenExpression>
+			<staticText>
+				<reportElement uuid="7fdbb600-91f0-45a4-b220-95a4356db032" mode="Opaque" x="0" y="0" width="150" height="13" isRemoveLineWhenBlank="true" backcolor="#FFE900">
+					<printWhenExpression><![CDATA[false]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<text><![CDATA[<!-- Pergunta 30 -->]]></text>
+			</staticText>
+		</band>
+		<band height="11">
+			<printWhenExpression><![CDATA[$F{ide_pergunta}.equals(30)]]></printWhenExpression>
+			<staticText>
+				<reportElement uuid="325057f4-34be-4206-bfc5-6b7c9e0d84be" x="0" y="0" width="150" height="11" isRemoveLineWhenBlank="true"/>
+				<box leftPadding="5"/>
+				<textElement>
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<text><![CDATA[[X] É outorga preventiva]]></text>
+			</staticText>
+		</band>
+		<band height="13">
+			<printWhenExpression><![CDATA[false]]></printWhenExpression>
+			<staticText>
+				<reportElement uuid="03d400a2-90f2-48a4-a760-1fba0a4f4199" mode="Opaque" x="0" y="0" width="150" height="13" isRemoveLineWhenBlank="true" backcolor="#FFE600">
+					<printWhenExpression><![CDATA[false]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<text><![CDATA[<!-- Pergunta 31 -->]]></text>
+			</staticText>
+		</band>
+		<band height="11">
+			<printWhenExpression><![CDATA[$F{ide_pergunta}.equals(31)]]></printWhenExpression>
+			<staticText>
+				<reportElement uuid="f7c7df57-42a8-4bbd-92c1-a69853644286" x="0" y="0" width="150" height="11" isRemoveLineWhenBlank="true"/>
+				<box leftPadding="4"/>
+				<textElement>
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<text><![CDATA[[X] O poço de captação já está perfurado]]></text>
+			</staticText>
+		</band>
+		<band height="11">
+			<printWhenExpression><![CDATA[$F{ide_pergunta}.equals(31)]]></printWhenExpression>
+			<textField pattern="#,##0.00">
+				<reportElement uuid="781e3ae9-5b6e-498f-9684-5b1920b02f56" x="30" y="0" width="60" height="11" isRemoveLineWhenBlank="true"/>
+				<box leftPadding="4"/>
+				<textElement textAlignment="Right">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{num_vazao}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="11cecc0c-9e84-4a4d-be09-4c91f2a6c087" x="4" y="0" width="26" height="11" isRemoveLineWhenBlank="true"/>
+				<textElement>
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<text><![CDATA[Vazão: ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="c1501bee-9598-40ad-b6aa-c60db799e856" x="89" y="0" width="38" height="11" isRemoveLineWhenBlank="true"/>
+				<textElement>
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<text><![CDATA[ m3/dia.]]></text>
+			</staticText>
+		</band>
+		<band height="11">
+			<printWhenExpression><![CDATA[$F{ide_pergunta}.equals(31)]]></printWhenExpression>
+			<staticText>
+				<reportElement uuid="dd7cc59e-38a8-4ac2-8298-2a0124ebd478" x="0" y="0" width="75" height="11" isRemoveLineWhenBlank="true"/>
+				<box leftPadding="4"/>
+				<textElement>
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<text><![CDATA[Data da perfuração: ]]></text>
+			</staticText>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement uuid="aff60fd8-b8b0-4391-bdc6-4d1c6ce2c4d3" x="75" y="0" width="75" height="11" isRemoveLineWhenBlank="true"/>
+				<textElement>
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dtc_perfuracao_poco}]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="13">
+			<printWhenExpression><![CDATA[false]]></printWhenExpression>
+			<staticText>
+				<reportElement uuid="3801830c-88af-43ef-a810-a2f7478e10fa" mode="Opaque" x="0" y="0" width="150" height="13" isRemoveLineWhenBlank="true" backcolor="#FFE800">
+					<printWhenExpression><![CDATA[false]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<text><![CDATA[<!-- Pergunta 32 -->]]></text>
+			</staticText>
+		</band>
+		<band height="22">
+			<printWhenExpression><![CDATA[$F{ide_pergunta}.equals(32)]]></printWhenExpression>
+			<staticText>
+				<reportElement uuid="9fbfda82-3739-4b0f-9229-294777f0344a" x="0" y="0" width="150" height="22" isRemoveLineWhenBlank="true"/>
+				<box leftPadding="4"/>
+				<textElement>
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<text><![CDATA[[X] Tem ofício/autorização para  perfuração do poço]]></text>
+			</staticText>
+		</band>
+		<band height="22">
+			<printWhenExpression><![CDATA[$F{ide_pergunta}.equals(32)]]></printWhenExpression>
+			<staticText>
+				<reportElement uuid="f253fe0d-14a9-42f9-a909-83ae5bca886f" x="0" y="0" width="150" height="11" isRemoveLineWhenBlank="true"/>
+				<box leftPadding="4"/>
+				<textElement>
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<text><![CDATA[Número do ofício/autorização:]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="53fd7f02-2e61-46e7-b388-7380d8077a9a" x="0" y="11" width="150" height="11" isRemoveLineWhenBlank="true"/>
+				<box leftPadding="4"/>
+				<textElement>
+					<font fontName="Serif" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{num_oficio}]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="11">
+			<printWhenExpression><![CDATA[$F{ide_pergunta}.equals(32)]]></printWhenExpression>
+			<staticText>
+				<reportElement uuid="f51e93ca-efb8-418b-be08-fbdd862c7c38" x="0" y="0" width="75" height="11" isRemoveLineWhenBlank="true"/>
+				<box leftPadding="4"/>
+				<textElement>
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<text><![CDATA[Data da emissão:]]></text>
+			</staticText>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement uuid="9a1fa4ea-4c36-4c82-b89b-f372fcb71c25" x="75" y="0" width="75" height="11" isRemoveLineWhenBlank="true"/>
+				<textElement>
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dtc_emissao_oficio}]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="13">
+			<printWhenExpression><![CDATA[false]]></printWhenExpression>
+			<staticText>
+				<reportElement uuid="e5bbf9f0-84cf-4066-bd9c-0c9048004cf3" mode="Opaque" x="0" y="0" width="150" height="13" isRemoveLineWhenBlank="true" backcolor="#FFE800">
+					<printWhenExpression><![CDATA[false]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<text><![CDATA[Área destinada à agricultura irrigada ]]></text>
+			</staticText>
+		</band>
+		<band height="22">
+			<printWhenExpression><![CDATA[$F{num_area_irrigada_captacao} != null]]></printWhenExpression>
+			<textField pattern="#,##0.00">
+				<reportElement uuid="9cc8a517-1944-43f5-9a83-373e08342450" x="0" y="11" width="135" height="11" isRemoveLineWhenBlank="true"/>
+				<box leftPadding="4"/>
+				<textElement textAlignment="Right">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{num_area_irrigada_captacao}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="09b4bf25-fbcc-460f-847a-5d022ecc3fce" x="0" y="0" width="150" height="11" isRemoveLineWhenBlank="true"/>
+				<box leftPadding="4"/>
+				<textElement>
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<text><![CDATA[Área destinada à agricultura irrigada: ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="8b75d36b-7861-4ba9-8700-76e02e1c0db3" x="135" y="11" width="15" height="11" isRemoveLineWhenBlank="true"/>
+				<textElement/>
+				<text><![CDATA[ ha]]></text>
+			</staticText>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

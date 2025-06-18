@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui"
+	xmlns:s="http://java.sun.com/jsf/composite/seia">
+
+	<h:form id="formRenovarPrazo" >
+		<p:remoteCommand name="calcularNovaDataVencimento" actionListener="#{tccaController.calcularNovaDataVencimento()}" global="true" update="formRenovarPrazo" />
+		
+		<h:panelGrid columns="3" style="width:100%; text-align:left;">
+			<h:outputText value="Número do TCCA:"/>
+			<p:spacer width="25" height="0"/>
+			<p:inputText value="#{tccaController.tccaRenovarPrazoDTO.numTcca}" readonly="true" />
+			
+			<h:outputText value="Data da publicação:"/>
+			<p:spacer width="25" height="0"/>
+			<p:inputText value="#{tccaController.tccaRenovarPrazoDTO.dtcPublicacao}" readonly="true">
+				<f:convertDateTime  pattern="dd/MM/yyyy" locale="pt,BR" timeZone="Brazil/East"/>
+			</p:inputText>
+			
+			<h:outputText value="Prazo de validade (meses):"/>
+			<p:spacer width="25" height="0"/>
+			<p:inputText value="#{tccaController.tccaRenovarPrazoDTO.qtdMesesPrazoValidade}" readonly="true" />
+	
+	    	<h:outputText value="Data de vencimento:" />
+	    	<p:spacer width="25" height="0"/>
+			<p:inputText value="#{tccaController.tccaRenovarPrazoDTO.dtcVencimento}" readonly="true">
+				<f:convertDateTime  pattern="dd/MM/yyyy" locale="pt,BR" timeZone="Brazil/East"/>
+			</p:inputText>
+		</h:panelGrid>
+		
+		<hr style="width:100%"/>
+		
+		<h:panelGrid columns="3" style="width:100%; text-align:left;">
+		    <h:outputText value="Data da renovação:"/>
+		    <p:spacer width="25" height="0"/>
+			<p:calendar value="#{tccaController.tccaRenovarPrazoDTO.dtcRenovacao}" onchange="calcularNovaDataVencimento();"
+				readOnlyInputText="true" locale="pt" pattern="dd/MM/yyyy" mindate="01/01/1900" showOn="button" size="16"/>
+			
+   	        <h:outputText value="Prazo de validade (meses):"/>
+   	        <p:spacer width="25" height="0"/>
+			<p:inputText value="#{tccaController.tccaRenovarPrazoDTO.qtdMesesPrazoValidadeRenovacao}" maxlength="3"
+				onkeyup="SomenteNumero(this);" onblur="SomenteNumero(this);" onchange="calcularNovaDataVencimento();"/>
+			
+			<h:outputText value="Nova data de vencimento:" />
+			<p:spacer width="25" height="0"/>
+			<p:inputText value="#{tccaController.tccaRenovarPrazoDTO.newDtcVencimento}" readonly="true">
+				<f:convertDateTime  pattern="dd/MM/yyyy" locale="pt,BR" timeZone="Brazil/East"/>
+			</p:inputText>
+		</h:panelGrid> 
+		
+		<h:panelGrid columns="2" style="width:100%; margin-top:30px;">
+			<p:commandButton title="Renovar por igual período" value="Renovar por igual período" 
+				actionListener="#{tccaController.renovarPrazoDeValidadePorIgualPeriodo()}" process="@form" styleClass="left"/>
+				
+			<p:commandButton title="Salvar" value="Salvar" actionListener="#{tccaController.salvarRenovarPrazoValidade()}" process="@form" styleClass="right"/>
+		</h:panelGrid>		
+	</h:form>
+</ui:composition>

@@ -1,0 +1,256 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="fce_pulverizacao_cultura_pulverizada" pageWidth="495" pageHeight="802" whenNoDataType="AllSectionsNoDetail" columnWidth="495" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="80b78396-35cc-4e26-aaf9-1207b1892468">
+	<property name="ireport.zoom" value="4.70764256508151"/>
+	<property name="ireport.x" value="549"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="ide_fce" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[$P{ide_fce}]]></defaultValueExpression>
+	</parameter>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[SELECT DISTINCT
+	ta.dsc_tipologia_atividade,
+	mi.dsc_metodo_irrigacao,
+	fa.num_area,
+	fa.num_volume_derivar,
+	tpd.dsc_tipo_periodo_derivacao,
+	fa.num_tempo_captacao
+FROM fce fce
+INNER JOIN fce_atividade_area fa ON fa.ide_fce = fce.ide_fce
+INNER JOIN tipologia_atividade ta ON fa.ide_tipologia_atividade = ta.ide_tipologia_atividade
+INNER JOIN metodo_irrigacao mi ON mi.ide_metodo_irrigacao = fa.ide_metodo_irrigacao
+INNER JOIN tipo_periodo_derivacao tpd ON tpd.ide_tipo_periodo_derivacao = fa.ide_tipo_periodo_derivacao
+WHERE fce.ide_fce = $P{ide_fce}]]>
+	</queryString>
+	<field name="dsc_tipologia_atividade" class="java.lang.String"/>
+	<field name="dsc_metodo_irrigacao" class="java.lang.String"/>
+	<field name="num_area" class="java.math.BigDecimal"/>
+	<field name="num_volume_derivar" class="java.math.BigDecimal"/>
+	<field name="dsc_tipo_periodo_derivacao" class="java.lang.String"/>
+	<field name="num_tempo_captacao" class="java.lang.Integer"/>
+	<variable name="areaTotal" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{num_area}]]></variableExpression>
+	</variable>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="40">
+			<staticText>
+				<reportElement uuid="6df05c6a-4098-415b-936b-738628063320" x="0" y="0" width="110" height="40"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Cultura Irrigada]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="6df05c6a-4098-415b-936b-738628063320" x="220" y="0" width="75" height="40"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Área Irrigada (ha)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="6df05c6a-4098-415b-936b-738628063320" x="110" y="0" width="110" height="40"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Método de Irrigação]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="6df05c6a-4098-415b-936b-738628063320" x="295" y="0" width="65" height="40"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Volume a Derivar (m³/dia)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="6df05c6a-4098-415b-936b-738628063320" x="360" y="0" width="75" height="40"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Período de Derivação]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="6df05c6a-4098-415b-936b-738628063320" x="435" y="0" width="60" height="40"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Tempo de Captação (h/dia)]]></text>
+			</staticText>
+			<line>
+				<reportElement uuid="2910d02e-497c-4976-a0bc-583889671746" x="0" y="0" width="495" height="1"/>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</line>
+			<line>
+				<reportElement uuid="08dd1242-12cb-45d5-86ff-a0c9ba55b56a" x="0" y="0" width="1" height="40"/>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</line>
+			<line>
+				<reportElement uuid="08dd1242-12cb-45d5-86ff-a0c9ba55b56a" x="110" y="0" width="1" height="40"/>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</line>
+			<line>
+				<reportElement uuid="08dd1242-12cb-45d5-86ff-a0c9ba55b56a" x="220" y="0" width="1" height="40"/>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</line>
+			<line>
+				<reportElement uuid="08dd1242-12cb-45d5-86ff-a0c9ba55b56a" x="294" y="0" width="1" height="40"/>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</line>
+			<line>
+				<reportElement uuid="08dd1242-12cb-45d5-86ff-a0c9ba55b56a" x="359" y="0" width="1" height="40"/>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</line>
+			<line>
+				<reportElement uuid="08dd1242-12cb-45d5-86ff-a0c9ba55b56a" x="434" y="0" width="1" height="40"/>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</line>
+			<line>
+				<reportElement uuid="08dd1242-12cb-45d5-86ff-a0c9ba55b56a" x="494" y="0" width="1" height="40"/>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</line>
+			<line>
+				<reportElement uuid="2910d02e-497c-4976-a0bc-583889671746" x="0" y="39" width="495" height="1"/>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</line>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Prevent">
+			<textField isStretchWithOverflow="true" pattern="#,##0.00;-#,##0.00">
+				<reportElement uuid="c2089125-c144-4b00-892a-f58953b7bc05" x="220" y="0" width="75" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{num_area}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement uuid="1a9efaf8-5a13-4040-b6c7-36abc9035550" x="10" y="0" width="100" height="20"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{dsc_tipologia_atividade}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="">
+				<reportElement uuid="c2089125-c144-4b00-892a-f58953b7bc05" x="110" y="0" width="110" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{dsc_metodo_irrigacao}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="#,##0.000;-#,##0.000">
+				<reportElement uuid="c2089125-c144-4b00-892a-f58953b7bc05" x="295" y="0" width="65" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{num_volume_derivar}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="###0.00;-###0.00">
+				<reportElement uuid="c2089125-c144-4b00-892a-f58953b7bc05" x="360" y="0" width="75" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{dsc_tipo_periodo_derivacao}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="###0" isBlankWhenNull="false">
+				<reportElement uuid="c2089125-c144-4b00-892a-f58953b7bc05" x="435" y="0" width="60" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{num_tempo_captacao} != null ? $F{num_tempo_captacao} : "--"]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement uuid="08dd1242-12cb-45d5-86ff-a0c9ba55b56a" stretchType="RelativeToBandHeight" x="0" y="0" width="1" height="20"/>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</line>
+			<line>
+				<reportElement uuid="08dd1242-12cb-45d5-86ff-a0c9ba55b56a" stretchType="RelativeToBandHeight" x="110" y="0" width="1" height="20"/>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</line>
+			<line>
+				<reportElement uuid="08dd1242-12cb-45d5-86ff-a0c9ba55b56a" stretchType="RelativeToBandHeight" x="220" y="0" width="1" height="20"/>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</line>
+			<line>
+				<reportElement uuid="08dd1242-12cb-45d5-86ff-a0c9ba55b56a" stretchType="RelativeToBandHeight" x="294" y="0" width="1" height="20"/>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</line>
+			<line>
+				<reportElement uuid="08dd1242-12cb-45d5-86ff-a0c9ba55b56a" stretchType="RelativeToBandHeight" x="359" y="0" width="1" height="20"/>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</line>
+			<line>
+				<reportElement uuid="08dd1242-12cb-45d5-86ff-a0c9ba55b56a" stretchType="RelativeToBandHeight" x="434" y="0" width="1" height="20"/>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</line>
+			<line>
+				<reportElement uuid="08dd1242-12cb-45d5-86ff-a0c9ba55b56a" stretchType="RelativeToBandHeight" x="494" y="0" width="1" height="20"/>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</line>
+		</band>
+	</detail>
+	<lastPageFooter>
+		<band height="30">
+			<textField pattern="#,##0.00;-#,##0.00" isBlankWhenNull="false">
+				<reportElement uuid="8c7b51ec-fa24-4e89-b918-73da3bf33c8d" isPrintRepeatedValues="false" x="238" y="0" width="257" height="20"/>
+				<box>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{areaTotal}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="6df05c6a-4098-415b-936b-738628063320" x="0" y="0" width="220" height="20"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[  Área Total Irrigada]]></text>
+			</staticText>
+			<line>
+				<reportElement uuid="2910d02e-497c-4976-a0bc-583889671746" x="0" y="20" width="495" height="1"/>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</line>
+			<line>
+				<reportElement uuid="2910d02e-497c-4976-a0bc-583889671746" x="0" y="0" width="495" height="1"/>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</line>
+		</band>
+	</lastPageFooter>
+</jasperReport>

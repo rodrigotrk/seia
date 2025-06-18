@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+
+	<h:form id="formTipoVinculo"  style="margin-bottom:-20px;">
+		
+	<h:panelGrid rendered="#{identificarPapelController.showCadastranteConvenio and identificarPapelController.renderedCadastranteConvenioPCT}">
+		
+		<h:panelGrid>
+		<h:outputText value="* Escolha o convênio" />	
+			
+		</h:panelGrid>
+		
+		<h:panelGrid>
+		<p:selectOneMenu id="contratoConvenioId" value="#{identificarPapelController.contratoConvenioSelecionado}" style="min-width:300px;" converter="simpleEntityConverter">
+				<f:selectItem itemLabel="Selecione..."/>
+					<f:selectItems
+						value="#{identificarPapelController.listaContratoConvenioPct}"
+						var="contrato" itemLabel="#{contrato.nomContratoConvenio}"
+						itemValue="#{contrato}" />
+					<p:ajax process="formTipoVinculo:contratoConvenioId" event="change"/>
+				</p:selectOneMenu>	
+				
+		</h:panelGrid>
+		
+		<p:spacer height="10"/>	
+		
+		
+		<h:panelGrid>
+		<h:outputText
+			value="* Vinculo do cadastrante com a comunidade / território"
+			style="margin-bottom:10px;" />
+		</h:panelGrid>
+			
+<!-- 		<p:spacer height="10"/>	 -->
+		<h:panelGrid>
+			<p:selectOneMenu value="#{identificarPapelController.tipoVinculoPCT}" style="min-width:300px;" >
+				<f:converter converterId="simpleEntityConverter" />
+				<f:selectItem itemLabel="Selecione..."/>
+				<f:selectItems
+					value="#{identificarPapelController.listarTipoVinculoPCT}"
+					var="tipoPCT" itemLabel="#{tipoPCT.dscTipoVinculoPCT}"
+					itemValue="#{tipoPCT}" />
+					<p:ajax process="@this" event="change" update="formTipoVinculo:vinculoText" listener="#{identificarPapelController.limparCampoDescricaoTerritorioOutros}"/>
+			</p:selectOneMenu>
+
+		</h:panelGrid>
+<!-- 		<p:spacer height="10"/> -->
+		
+		<h:panelGrid id="vinculoText">
+			<h:panelGrid rendered="#{identificarPapelController.tipoVinculoPCT.dscTipoVinculoPCT eq 'Outros'}">
+				<h:outputText value="* Descriçao do vinculo do cadastrante com a comunidade / território" />
+				<p:inputText value="#{identificarPapelController.tipoVinculoPCT.dscTipoVinculoPCTOutros}" maxlength="100" size="80" required="true" 
+				requiredMessage="O campo Descriçao do vinculo do cadastrante com a comunidade / território é de preenchimento obrigatório">
+					<p:ajax event="keyup" process="@this" immediate="true" global="false"/>
+				</p:inputText>
+				<p:spacer height="10"/>
+			</h:panelGrid>
+		</h:panelGrid>
+		
+		<h:panelGrid id="tipoPessoa">
+			<h:outputText value="* O representante da comunidade é:" />
+			<p:selectOneRadio value="#{identificarPapelController.tipoPessoa}">
+				<f:selectItem itemLabel="Pessoa Física" itemValue="fisica"/>
+				<f:selectItem itemLabel="Pessoa Jurídica" itemValue="juridica"/>
+				<p:ajax event="change" process="@this" update="panelidentificarpapel formavancar" listener="#{identificarPapelController.limpar()}"/>
+			</p:selectOneRadio>
+		</h:panelGrid>
+		<p:spacer height="10"/>
+		
+	</h:panelGrid>	
+		
+	</h:form>
+
+
+</ui:composition>	

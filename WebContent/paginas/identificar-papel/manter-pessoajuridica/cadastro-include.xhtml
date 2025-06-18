@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+				xmlns:h="http://java.sun.com/jsf/html"
+				xmlns:f="http://java.sun.com/jsf/core"
+				xmlns:ui="http://java.sun.com/jsf/facelets"
+				xmlns:p="http://primefaces.prime.com.tr/ui">
+				
+	<ui:include src="/paginas/identificar-papel/manter-pessoajuridica/documentoRepresentanteLegalDialogs.xhtml" />			
+	
+	<h:panelGrid columns="1" id="paneltabviewpj" >
+		
+		<p:tabView dynamic="true" id="tabviewpj" activeIndex="#{pessoaJuridicaController.tabAtual}" style="width: 778px;" 
+			rendered="#{identificarPapelController.showPessoaJuridica || identificarPapelController.showProcuradorPessoaJuridica || (identificarPapelController.showCadastranteConvenio and identificarPapelController.renderedCadastranteConvenioPCT and identificarPapelController.tipoPessoa eq 'juridica')
+		    || (identificarPapelController.showCadastranteConvenio and !identificarPapelController.isPCT)}">
+			<p:ajax event="tabChange" listener="#{pessoaJuridicaController.onTabChange()}" update="tabviewpj" />
+			
+			<p:tab title="Pessoa Jurídica">        
+				<ui:include src="/paginas/identificar-papel/manter-pessoajuridica/formCadastro.xhtml" />
+			</p:tab>
+			
+			<p:tab title="CNAE" id="tabcnae" disabled="#{identificarPapelController.disableAbaDependencias}" >
+				<h:panelGrid id="paneltabcnae">
+					<ui:include src="/paginas/identificar-papel/manter-pessoajuridica/modalAtividadeCnae.xhtml" />
+				</h:panelGrid>
+			</p:tab>
+			
+			<p:tab title="Comp. Acionária" id="tabcomposicaoacionaria" disabled="#{identificarPapelController.disableAbaDependencias}" >
+				<ui:include src="/paginas/identificar-papel/manter-pessoajuridica/modalComposicaoAcionaria.xhtml" />
+			</p:tab>
+			
+			<p:tab title="Rep. Legal" id="tabrepresentantelegal" disabled="#{identificarPapelController.disableAbaDependencias}" >
+				<ui:include src="/paginas/identificar-papel/manter-pessoajuridica/representanteLegal.xhtml" />
+			</p:tab>
+			
+			<p:tab title="Telefone" id="tabtelefone" disabled="#{identificarPapelController.disableAbaDependencias}" >
+				<ui:include src="/paginas/identificar-papel/manter-pessoajuridica/telefonePessoaJuridica.xhtml" />
+			</p:tab>
+			
+			<p:tab title="Endereço" id="tabendereco" disabled="#{identificarPapelController.disableAbaDependencias}" >
+				<ui:include src="/paginas/manter-endereco/endereco.xhtml" />
+			</p:tab>
+			
+			<p:tab title="Procurador" id="tabprocurador" disabled="#{identificarPapelController.disableAbaDependencias}" >
+				<ui:include src="/paginas/identificar-papel/manter-pessoajuridica/procuradorPessoaJuridica.xhtml" />
+			</p:tab>
+				
+		</p:tabView>
+	</h:panelGrid>
+	<style>
+		.centered{ position: fixed; top: 50% !important; left: 45% !important; margin-top: -50px; margin-left: -100px; } 
+	</style>
+</ui:composition>

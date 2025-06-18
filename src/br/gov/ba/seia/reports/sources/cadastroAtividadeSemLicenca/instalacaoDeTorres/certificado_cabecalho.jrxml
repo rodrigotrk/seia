@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="certificado_caepog_cabecalho" language="java" pageWidth="525" pageHeight="802" columnWidth="525" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="4a49e1e1-cf35-4911-9b0a-3f33555d5542">
+	<property name="ireport.zoom" value="1.6105100000000008"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="ide_cadastro" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[select c.num_cadastro,
+       e.nom_empreendimento
+from cadastro_atividade_nao_sujeita_lic c
+inner join empreendimento e on e.ide_empreendimento = c.ide_empreendimento
+
+where c.ide_cadastro_atividade_nao_sujeita_lic = $P{ide_cadastro}]]>
+	</queryString>
+	<field name="num_cadastro" class="java.lang.String"/>
+	<field name="nom_empreendimento" class="java.lang.String"/>
+	<title>
+		<band height="20"/>
+	</title>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField isStretchWithOverflow="true">
+				<reportElement uuid="aac648ca-7ca2-4ea1-bae6-b7207d4ac37c" stretchType="RelativeToBandHeight" x="0" y="0" width="525" height="20"/>
+				<textElement textAlignment="Justified">
+					<font fontName="SansSerif"/>
+					<paragraph lineSpacing="1_1_2"/>
+				</textElement>
+				<textFieldExpression><![CDATA["O INSTITUTO DO MEIO AMBIENTE E RECURSOS HÍDRICOS- INEMA, com fulcro nas atribuições e competências que lhe foram delegadas pela Lei Estadual nº 12.121/11 e Lei Estadual n° 10.431/06, alterada pela Lei Estadual nº 12.377/11, regulamentada pelo Decreto Estadual n° 14.024/2012 e suas devidas atualizações, considerando o disposto no anexo VIII deste regulamento e tendo em vista o que consta no cadastro de número "+$F{num_cadastro} +", RESOLVE:"]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

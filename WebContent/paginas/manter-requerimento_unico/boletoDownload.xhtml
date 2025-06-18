@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui">
+
+<h:outputLabel styleClass="titulo"
+				style="font-weight:bold;color:#5D7750;width:500px"
+				value="Download Boleto e Upload do Comprovante" />
+			<p:separator style="width:100%;" />
+			<h:form enctype="multipart/form-data" id="boletoDownloadForm"
+				style="width:570px;">
+				<h:panelGrid id="boletoDownloadCampos" columns="1" rendered="#{requerimentoUnicoController.existeBoletoPagamento}"
+					style="width:570px;">
+					<h:outputText styleClass="titulo-grupo" style="font-weight:bold;"
+						value="Faça o download do Boleto" />
+					<h:commandLink value="Download Boleto">
+						<p:fileDownload contentDisposition="inline"
+							value="#{requerimentoUnicoController.downloadBoleto}" />
+					</h:commandLink>
+					<br />
+				</h:panelGrid>
+				<h:panelGrid columns="1"  rendered="#{requerimentoUnicoController.existeBoletoPagamento}">
+					<h:outputText styleClass="titulo-grupo" style="font-weight:bold;"
+						value="#{bundle.requerimento_boleto_envie_comprovante_boleto}" />
+					<p:fileUpload id="fileUpload" widgetVar="fileUpload"
+						label="Selecionar" mode="advanced" required="true"
+						auto="true"
+						allowTypes="/(\.|\/)(pdf|gif|jpeg|png|jpg)$/" process="@this"
+						oncomplete="remoteCommandUpdateDataTable()"
+						fileUploadListener="#{requerimentoUnicoController.trataArquivo}"
+						invalidFileMessage="Tipo de arquivo inválido." />
+						<p:remoteCommand name="remoteCommandUpdateDataTable" update="tblDocumento"/> 
+					<h:panelGrid id="tblDocumento">
+						<p:dataTable id="dataTableDocumentos"
+							rendered="#{requerimentoUnicoController.temArquivo}"
+							widgetVar="dtTbDocumentos"
+							value="#{requerimentoUnicoController.listaArquivo}" var="arquivo"
+							lazy="true" emptyMessage="#{bundle.msg_lista_vazia}"
+							style="width:472px;">
+							<p:column>
+								<h:outputText value="#{arquivo}" />
+							</p:column>
+							<p:column>
+								<h:commandButton value="#{arquivo}"
+									image="/resources/img/ico-download.png">
+									<p:fileDownload
+										value="#{requerimentoUnicoController.arquivoBaixar}" />
+								</h:commandButton>
+							</p:column>
+						</p:dataTable>
+					</h:panelGrid>
+				</h:panelGrid>
+			</h:form>
+
+			<h:form enctype="multipart/form-data" id="boletoDownloadFormCert"
+				style="width:570px;">
+				<h:panelGrid
+					rendered="#{requerimentoUnicoController.showUploadComprovanteDae}"
+					columns="1" style="width:570px;">
+					<h:outputText styleClass="titulo-grupo" style="font-weight:bold;"
+						value="#{bundle.requerimento_boleto_envie_comprovante_certificado}" />
+					<p:fileUpload id="fileUploadDaeCertificado"
+						widgetVar="fileUploadDaeCertificado" label="Selecionar"
+						mode="advanced" required="true" oncomplete="remoteCommandUpdateDataTableCertificado()"
+						auto="true" process="@this"
+						allowTypes="/(\.|\/)(pdf|gif|jpeg|png|jpg)$/"
+						fileUploadListener="#{requerimentoUnicoController.trataArquivoDaeCertificado()}"
+						invalidFileMessage="Tipo de arquivo inválido." />
+						 <p:remoteCommand name="remoteCommandUpdateDataTableCertificado" immediate="true" update="tblDocumentoCertificado"/>
+					<h:panelGrid id="tblDocumentoCertificado">
+						<p:dataTable id="dataTableDocumentosCertificado"
+							rendered="#{requerimentoUnicoController.temArquivoDaeCertificado}"
+							widgetVar="dataTableDocumentosCertificado"
+							value="#{requerimentoUnicoController.listaArquivoDaeCertificado}"
+							var="arquivoCert" lazy="true"
+							emptyMessage="#{bundle.msg_lista_vazia}" style="width:472px;">
+							<p:column>
+								<h:outputText value="#{arquivoCert}" />
+							</p:column>
+							<p:column>
+								<h:commandButton value="#{arquivoCert}"
+									image="/resources/img/ico-download.png">
+									<p:fileDownload
+										value="#{requerimentoUnicoController.arquivoBaixarDaeCertificado}" />
+								</h:commandButton>
+							</p:column>
+						</p:dataTable>
+					</h:panelGrid>
+				</h:panelGrid>
+			</h:form>
+
+			<h:form enctype="multipart/form-data" id="boletoDownloadFormVist"
+				style="width:570px;">
+				<h:panelGrid
+					rendered="#{requerimentoUnicoController.showUploadComprovanteDaeVistoria}"
+					columns="1" style="width:570px;">
+					<h:outputText styleClass="titulo-grupo" style="font-weight:bold;"
+						value="#{bundle.requerimento_boleto_envie_comprovante_vistoria}" />
+					<p:fileUpload id="fileUploadDaeVistoria"
+						widgetVar="fileUploadDaeVistoria" label="Selecionar"
+						mode="advanced" required="true" oncomplete="remoteCommandUpdateDataTableVistoria()"
+						auto="true" allowTypes="/(\.|\/)(pdf|gif|jpeg|png|jpg)$/"
+						process="@this"
+						fileUploadListener="#{requerimentoUnicoController.trataArquivoDaeVistoria()}"
+						invalidFileMessage="Tipo de arquivo inválido." />
+					<p:remoteCommand name="remoteCommandUpdateDataTableVistoria" immediate="true" update="tblDocumentoVistoria"/>
+					<h:panelGrid id="tblDocumentoVistoria">
+						<p:dataTable id="dataTableDocumentosVistoria"
+							rendered="#{requerimentoUnicoController.temArquivoDaeVistoria}"
+							widgetVar="dataTableDocumentosVistoria"
+							value="#{requerimentoUnicoController.listaArquivoDaeVistoria}"
+							var="arquivoVist" lazy="true"
+							emptyMessage="#{bundle.msg_lista_vazia}" style="width:472px;">
+							<p:column>
+								<h:outputText value="#{arquivoVist}" />
+							</p:column>
+							<p:column>
+								<h:commandButton value="#{arquivoVist}"
+									image="/resources/img/ico-download.png">
+									<p:fileDownload
+										value="#{requerimentoUnicoController.arquivoBaixarDaeVistoria}" />
+								</h:commandButton>
+							</p:column>
+						</p:dataTable>
+					</h:panelGrid>
+				</h:panelGrid>
+			</h:form>
+			<h:form id="boletoDownloadSubmit" style="width:570px;">
+				<h:panelGroup styleClass="right">
+					<div style="width: 590; text-align: center;">
+						<p:commandButton value="Voltar"
+							onclick="confirmacaoVoltarComprovante.show()" />
+						<p:commandButton value="Salvar"
+							action="#{requerimentoUnicoController.salvarUploadComprovante}"
+							update="formConsultarRequerimento:tabelaRequerimentos" />
+					</div>
+				</h:panelGroup>
+			</h:form>
+
+</ui:composition>

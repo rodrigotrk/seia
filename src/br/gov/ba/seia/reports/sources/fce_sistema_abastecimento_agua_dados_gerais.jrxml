@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="fce_autorizacao_mineracao_dados_gerais" pageWidth="495" pageHeight="817" whenNoDataType="AllSectionsNoDetail" columnWidth="495" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="80b78396-35cc-4e26-aaf9-1207b1892468">
+	<property name="ireport.zoom" value="1.6500000000000006"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="ide_fce_saa" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[$P{ide_fce_saa}]]></defaultValueExpression>
+	</parameter>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[select ide_fce_saa, val_horizonte_projeto,val_populacao_atendida, val_consumo_per_capta, val_vazao_media_projeto from fce_saa where ide_fce_saa = $P{ide_fce_saa}]]>
+	</queryString>
+	<field name="ide_fce_saa" class="java.lang.Integer">
+		<fieldDescription><![CDATA[Chave primária artificial da tabela]]></fieldDescription>
+	</field>
+	<field name="val_horizonte_projeto" class="java.lang.Integer">
+		<fieldDescription><![CDATA[Horizonte do projeto em anos]]></fieldDescription>
+	</field>
+	<field name="val_populacao_atendida" class="java.lang.Integer">
+		<fieldDescription><![CDATA[Tamanho da população atendida]]></fieldDescription>
+	</field>
+	<field name="val_consumo_per_capta" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[Consumo per capta]]></fieldDescription>
+	</field>
+	<field name="val_vazao_media_projeto" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[Vazão média do projeto em m3/dia]]></fieldDescription>
+	</field>
+	<variable name="intervencao" class="java.lang.Boolean">
+		<variableExpression><![CDATA[]]></variableExpression>
+	</variable>
+	<variable name="estadual" class="java.lang.String">
+		<variableExpression><![CDATA["Estadual"]]></variableExpression>
+		<initialValueExpression><![CDATA[]]></initialValueExpression>
+	</variable>
+	<variable name="federal" class="java.lang.String">
+		<variableExpression><![CDATA["Federal"]]></variableExpression>
+		<initialValueExpression><![CDATA[]]></initialValueExpression>
+	</variable>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band height="27" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="a2cc13ca-e5e4-4727-965b-1b961b756c3c" positionType="Float" mode="Opaque" x="0" y="10" width="495" height="17" backcolor="#DDDDDD"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif" size="10" isBold="true"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<text><![CDATA[Dados Gerais]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<detail>
+		<band height="78" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="bd06cb21-a28d-4ef7-ac89-f33fc159203e" x="0" y="0" width="232" height="20"/>
+				<box topPadding="3" leftPadding="2"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Informações preliminares]]></text>
+			</staticText>
+			<line>
+				<reportElement uuid="6e85032d-9071-46d4-95a5-fe3896e9e796" x="0" y="23" width="495" height="4"/>
+			</line>
+			<staticText>
+				<reportElement uuid="4942fe1a-9ebf-45c8-b31c-9145ca1a557c" x="3" y="31" width="123" height="20"/>
+				<textElement/>
+				<text><![CDATA[Horizonte do projeto:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="34ee98f7-1c2a-487a-b1d1-4b9815a83762" x="231" y="31" width="123" height="20"/>
+				<textElement/>
+				<text><![CDATA[População atendida:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="b08d7dde-916a-4fa6-b804-ccb070131c17" x="3" y="57" width="123" height="20"/>
+				<textElement/>
+				<text><![CDATA[Consumo per capta:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="55156762-aa20-43fd-a483-9ade9fae5e6c" x="231" y="57" width="123" height="20"/>
+				<textElement/>
+				<text><![CDATA[Vazão média do projeto:]]></text>
+			</staticText>
+			<textField pattern="#,##0">
+				<reportElement uuid="d1c9edc0-cce4-43a9-b926-7c0f5177358d" x="125" y="31" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{val_horizonte_projeto}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0">
+				<reportElement uuid="ba944443-3c9d-40c3-9b15-095e67867019" x="353" y="31" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{val_populacao_atendida}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00">
+				<reportElement uuid="8689cbfa-15b6-490a-89c4-02c943192ab7" x="125" y="57" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{val_consumo_per_capta}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00">
+				<reportElement uuid="2198a449-a358-403a-aca4-7d81cf570f65" x="353" y="56" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{val_vazao_media_projeto}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

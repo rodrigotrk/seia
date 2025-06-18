@@ -1,0 +1,190 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+				xmlns:h="http://java.sun.com/jsf/html"
+				xmlns:f="http://java.sun.com/jsf/core"
+				xmlns:ui="http://java.sun.com/jsf/facelets"
+				xmlns:p="http://primefaces.prime.com.tr/ui">
+				
+	<script type="text/javascript" language="JavaScript">
+          var $ = jQuery;
+          
+          $(document).ready(function() {
+              $("input[id*='dataNascimentoProp']").mask('99/99/9999');
+              $("input[id*='dataAberturaProp']").mask('99/99/9999');
+          });
+     </script>
+	
+	
+		<h:form id="formProprietario" >
+			<h:panelGrid columns="1" id="paneldiaglogCompAcionaria">
+				
+				<h:selectOneRadio id="radioBtnTipoPessoaAcionario"
+								  value="#{imovelRuralControllerNew.telaCpf}"
+								  valueChangeListener="#{imovelRuralControllerNew.alterarLayoutTelaProprietario}"
+								  disabled="#{imovelRuralControllerNew.visualizarProprietario or imovelRuralControllerNew.editandoProprietario or imovelRuralControllerNew.editandoProprietarioCda}">  
+		            <f:selectItem itemLabel="#{bundle.acionistaLabelPessoaFisica}" itemValue="#{true}" />
+		            <f:selectItem itemLabel="#{bundle.acionistaLabelPessoaJuridica}" itemValue="#{false}" />
+		            <f:ajax execute="@this" render="panel"/>
+	       		</h:selectOneRadio>	
+	       		
+	       		<h:panelGrid id="panel" columns="1">		
+					<h:panelGrid id="panel1" columns="1" rendered="#{imovelRuralControllerNew.telaCpf}">
+						<h:outputText value="#{bundle.acionistaLabelCpf}" />
+						<h:panelGroup>
+							<p:inputMask id="cpfpfcompacio" 
+										 mask="#{bundle.consultapf_msk_cpf}" 
+										 required="true"
+										 disabled="#{imovelRuralControllerNew.visualizarProprietario or imovelRuralControllerNew.editandoProprietarioCda}"
+										 value="#{imovelRuralControllerNew.pessoaFisicaPersist.numCpf}"
+								 		 style="width: 140px;"
+								 		 requiredMessage="#{func:messageFormat('javax.faces.component.UISelectOne.REQUIRED', bundle.acionistaLabelTabCpfCnpj)}">
+								<f:converter converterId="cpfConverter" />
+								<f:validator validatorId="cpfValidator" />
+								<p:ajax global ="false" event="blur" listener="#{imovelRuralControllerNew.limparObjetosProprietarioImovel()}" update="panelCpf btnAcoesProprietario"/>
+							</p:inputMask>
+							<h:commandButton image="/resources/img/ico-pesquisa.png" disabled="#{imovelRuralControllerNew.editandoProprietarioCda}"
+											 actionListener="#{imovelRuralControllerNew.pesquisarPessoa()}">
+									<f:ajax execute="cpfpfcompacio" render="paneldiaglogCompAcionaria" />
+							</h:commandButton>
+						</h:panelGroup>
+						</h:panelGrid>
+						<h:panelGrid id="panelCpf" columns="1" rendered="#{imovelRuralControllerNew.telaCpf}">
+						<h:outputText value="#{bundle.acionistaLabelNome}" />
+						<p:inputText value="#{imovelRuralControllerNew.pessoaFisicaPersist.nomPessoa}" 
+									 required="true"
+									 disabled="#{imovelRuralControllerNew.visualizarProprietario or !imovelRuralControllerNew.habilitaCadastroProprietarioImovel or imovelRuralControllerNew.editandoProprietarioCda}"
+									 style="width: 400px;"
+									 requiredMessage="#{func:messageFormat('javax.faces.component.UISelectOne.REQUIRED', bundle.requerimentoUnicoLabelNome)}" />
+						<h:panelGrid columns="2">
+								<h:outputText value="#{!imovelRuralControllerNew.editandoProprietarioCda?'*':''} #{bundle.lbl_nacionalidade}" />
+								<h:outputText value="#{bundle.acionistaLabelDataNascimento}" />
+								<p:selectOneMenu value="#{imovelRuralControllerNew.pessoaFisicaPersist.idePais}" 
+												 disabled="#{imovelRuralControllerNew.visualizarProprietario or !imovelRuralControllerNew.habilitaCadastroProprietarioImovel}"
+												 style="width:240px;"
+												 required="#{!imovelRuralControllerNew.editandoProprietarioCda}"
+												 requiredMessage="#{func:messageFormat('javax.faces.component.UISelectOne.REQUIRED', bundle.lbl_nacionalidade)}">
+									<f:selectItem itemLabel="#{bundle.geral_lbl_selecione}" />
+									<f:selectItems value="#{paisController.valuesComboBox}" />
+									<f:converter converterId="paisConverter"/>
+								</p:selectOneMenu>
+								<p:calendar id="dataNascimentoProp"
+											widgetVar="dataNascimentoProp"
+											label="#{bundle.acionistaLabelDataNascimento}"
+											value="#{imovelRuralControllerNew.pessoaFisicaPersist.dtcNascimento}" 
+										    navigator="true" 
+										    accesskey="true" 
+										    showOn="button" 
+									  		pattern="dd/MM/yyyy" 
+									  		locale="pt" 
+									  		readOnlyInputText="false" 
+									  		yearRange="c-200"
+									  		mindate="01/01/1822" 
+									  		required="true"
+									  		disabled="#{imovelRuralControllerNew.visualizarProprietario or !imovelRuralControllerNew.habilitaCadastroProprietarioImovel}"
+									  		requiredMessage="#{func:messageFormat('javax.faces.component.UISelectOne.REQUIRED', bundle.lbl_data_nascimento)}">
+									<f:validator validatorId="dataMinMaxValidator"/>
+								</p:calendar>
+						</h:panelGrid>
+						<h:outputText value="#{!imovelRuralControllerNew.editandoProprietarioCda?'*':''} #{bundle.requerimentoUnicoLabelEmail}" />
+						<p:inputText value="#{imovelRuralControllerNew.pessoaPersist.desEmail}" 
+									 style="width: 400px;" 
+									 required="#{!imovelRuralControllerNew.editandoProprietarioCda}"
+									 disabled="#{imovelRuralControllerNew.visualizarProprietario or !imovelRuralControllerNew.habilitaCadastroProprietarioImovel}"
+									 validator="emailValidator"
+									 requiredMessage="#{func:messageFormat('javax.faces.component.UISelectOne.REQUIRED', bundle.requerimentoUnicoLabelEmail)}"/>
+						<h:panelGrid columns="1"/>
+					</h:panelGrid>
+
+					<!-- Tela de	CNPJ  -->
+					<h:panelGrid id="panel2" columns="1" rendered="#{imovelRuralControllerNew.telaCnpj}">	
+						<h:outputText value="#{bundle.acionistaLabelCnpj}" />
+						<h:panelGroup>
+							<p:inputMask  id="cnpjpjcompacio" 
+										  widgetVar="cnpjpjcompacio"
+										  value="#{imovelRuralControllerNew.pessoaJuridicaPersist.numCnpj}" 
+										  mask="#{bundle.consultapj_msk_cnpj}" 
+										  style="width: 140px;"
+										  required="true"
+										  disabled="#{imovelRuralControllerNew.visualizarProprietario or imovelRuralControllerNew.editandoProprietarioCda}" 
+										  requiredMessage="#{func:messageFormat('javax.faces.component.UISelectOne.REQUIRED', bundle.consultapj_lbl_cnpj)}">
+								<f:converter converterId="cnpjConverter" />
+								<f:validator validatorId="cnpjValidator" />
+								<p:ajax global ="false" event="blur" update="panelCnpj btnAcoesProprietario" listener="#{imovelRuralControllerNew.limparObjetosProprietarioImovel()}"/>
+							</p:inputMask>
+							<h:commandButton image="/resources/img/ico-pesquisa.png" disabled="#{imovelRuralControllerNew.visualizarProprietario}"
+											 actionListener="#{imovelRuralControllerNew.pesquisarPessoa()}" >
+								<f:ajax execute="cnpjpjcompacio" render="paneldiaglogCompAcionaria" />
+							</h:commandButton>
+						</h:panelGroup>
+						</h:panelGrid>
+						<h:panelGrid id="panelCnpj" columns="1" rendered="#{imovelRuralControllerNew.telaCnpj}">
+						<h:outputText value="#{bundle.acionistaLabelRazaoSocial}" />
+						<p:inputText value="#{imovelRuralControllerNew.pessoaJuridicaPersist.nomRazaoSocial}"
+									 style="width: 400px;"
+									 required="true"
+									 disabled="#{imovelRuralControllerNew.visualizarProprietario or !imovelRuralControllerNew.habilitaCadastroProprietarioImovel or imovelRuralControllerNew.editandoProprietarioCda}"
+									 requiredMessage="#{func:messageFormat('javax.faces.component.UISelectOne.REQUIRED', bundle.consulta_empree_razaonome)}" />
+						<h:outputText value="#{bundle.acionistaLabelNomeFantasia}" />
+						<p:inputText value="#{imovelRuralControllerNew.pessoaJuridicaPersist.nomeFantasia}" 
+									 disabled="#{imovelRuralControllerNew.visualizarProprietario or !imovelRuralControllerNew.habilitaCadastroProprietarioImovel or imovelRuralControllerNew.editandoProprietarioCda}"
+									 required="true" 
+									 style="width: 400px;"
+									 requiredMessage="#{func:messageFormat('javax.faces.component.UISelectOne.REQUIRED', bundle.cefir_lbl_nome_fantasia)}" />
+						<h:panelGrid columns="2">
+							<h:outputText value="#{bundle.acionistaLabelNaturezaJuridica}" />
+							<h:outputText value="#{bundle.representantelegalLabelDataAbertura}" />
+							<p:selectOneMenu id="idnaturezajuridicapa" 
+											 value="#{imovelRuralControllerNew.pessoaJuridicaPersist.ideNaturezaJuridica}"
+											 disabled="#{imovelRuralControllerNew.visualizarProprietario or !imovelRuralControllerNew.habilitaCadastroProprietarioImovel or imovelRuralControllerNew.editandoProprietarioCda}"
+											 required="true"
+											 requiredMessage="#{func:messageFormat('javax.faces.component.UISelectOne.REQUIRED', bundle.cefir_lbl_natureza_juridica)}">
+								<f:selectItems value="#{pessoaJuridicaController.naturezaJuridicaItens}" />
+								<f:converter converterId="naturezaJuridicaConverter"/>
+							</p:selectOneMenu>
+							<p:calendar id="dataAberturaProp"
+										widgetVar="dataAberturaProp"
+										label="#{bundle.representantelegalLabelDataAbertura}"
+										value="#{imovelRuralControllerNew.pessoaJuridicaPersist.dtcAbertura}" 
+										showOn="button" 
+										locale="pt" 
+										pattern="dd/MM/yyyy" 
+										navigator="true" 
+										readOnlyInputText="false" 
+										yearRange="c-100" 
+										disabled="#{imovelRuralControllerNew.visualizarProprietario or !imovelRuralControllerNew.habilitaCadastroProprietarioImovel or imovelRuralControllerNew.editandoProprietarioCda}"
+										required="true"
+										requiredMessage="#{func:messageFormat('javax.faces.component.UISelectOne.REQUIRED', bundle.cefir_lbl_data_de_abertura)}">								
+								<f:validator validatorId="dataMinMaxValidator"/>
+							</p:calendar>							
+						</h:panelGrid>
+						
+						<h:outputText value="* #{bundle.requerimentoUnicoLabelEmail}" />
+						<p:inputText value="#{imovelRuralControllerNew.pessoaPersist.desEmail}"
+									 disabled="#{imovelRuralControllerNew.visualizarProprietario or !imovelRuralControllerNew.habilitaCadastroProprietarioImovel}"
+									 style="width: 400px;" 
+									 validator="emailValidator"
+									 required="#{!imovelRuralControllerNew.editandoProprietarioCda}"
+									 requiredMessage="#{func:messageFormat('javax.faces.component.UISelectOne.REQUIRED', bundle.requerimentoUnicoLabelEmail)}"/>
+					</h:panelGrid>
+				</h:panelGrid>
+				
+				<h:panelGrid id="btnAcoesProprietario" columns="4">	
+					<h:outputText value="#{bundle.lbl_preench_obrig_asterisc}" />
+			        <h:outputText style="padding-right: 49px;" />
+					<h:outputText />
+					<h:panelGroup>
+		        		<p:commandButton value="#{bundle.geral_lbl_limpar}" 
+		        						 actionListener="#{imovelRuralControllerNew.limparObjetosProprietarioImovel()}"
+		        						 disabled="#{imovelRuralControllerNew.visualizarProprietario}"
+		        						 update="formProprietario" process="@this" immediate="true">
+						</p:commandButton>
+						<p:commandButton value="#{bundle.acionistaLabelSalvar}" 
+										 actionListener="#{imovelRuralControllerNew.salvarProprietario()}" 
+										 disabled="#{imovelRuralControllerNew.visualizarProprietario or !imovelRuralControllerNew.habilitaBotaoSalvarProprietario}" >
+							<p:ajax process="@this"/>
+						</p:commandButton>		        		
+			        </h:panelGroup>
+				</h:panelGrid>
+			</h:panelGrid>
+		</h:form>
+</ui:composition>

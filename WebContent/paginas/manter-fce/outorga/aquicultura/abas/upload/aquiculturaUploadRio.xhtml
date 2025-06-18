@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui">
+	<h:form id="upDadoAdicionalRio" style="width:650px;" rendered="#{fceOutorgaAquiculturaRioController.temRio}">
+		<!-- INICIO GROUP INFO TANQUE - RIO -->
+		<h:panelGroup style="margin-left:10px;">
+			<h:outputText styleClass="titulo-grupo" style="font-weight:bold;" value="#{bundle.fce_out_aqui_da_rede_rio}" />
+			<h:graphicImage title="#{bundle.fce_out_aqui_da_ajuda_rio}" value="/resources/img/ico-ajuda.png" id="ajudaRio" style="margin:1px 1px 1px 4px; text-align:justify;" />
+			<p:commandButton value="Download" ajax="false" global="false" process="@this" disabled="#{fceOutorgaAquiculturaRioController.desabilitarTudo}"
+			immediate="true" style="margin-left:25px;">
+				<p:fileDownload value="#{fceOutorgaAquiculturaRioController.dadosAdicionaisTanqueRio}" />
+			</p:commandButton>
+		</h:panelGroup>
+		<!-- FINAL GROUP INFO TANQUE - RIO -->
+		<br /><br />
+		<!-- INICIO DA GRID COM DOCUMENTO UPADO DE TANQUE - RIO -->
+		<h:panelGrid id="adicionalRio" style="margin-left:15px;">
+			<p:fileUpload id="upAdicionalRio" widgetVar="upAdicionalRio" label="#{bundle.fce_out_aqui_da_upload_rio}" fileUploadListener="#{fceOutorgaAquiculturaRioController.tratarUploadRio()}"
+				mode="advanced" oncomplete="updateGridRio()" auto="true" allowTypes="/(\.|\/)(pdf|png|jpg)$/" invalidFileMessage="Tipo de arquivo inválido." 
+				process="@this" disabled="#{fceOutorgaAquiculturaRioController.docAdicionalRioUpado or fceOutorgaAquiculturaRioController.desabilitarTudo}" />
+			<p:remoteCommand name="updateGridRio" update="adicionalRio" />
+			<p:dataTable id="docRioUpado" widgetVar="docRioUpado" rendered="#{fceOutorgaAquiculturaRioController.docAdicionalRioUpado}" value="#{fceOutorgaAquiculturaRioController.fceAquiculturaRio.uploadCaminhoArquivo}" var="rioUpado" lazy="true" style="width:590px;">
+				<p:column style="width:500px;">
+					<h:outputText value="#{rioUpado}" />
+				</p:column>
+				<p:column style="width:35px;">
+					<h:commandButton value="#{rioUpado}" image="/resources/img/ico-download.png" disabled="#{fceOutorgaAquiculturaRioController.desabilitarTudo}"
+					immediate="true" title="Download do arquivo">
+						<p:fileDownload value="#{fceOutorgaAquiculturaRioController.getDocumentoAdicionalUpado(rioUpado)}" />
+					</h:commandButton>
+					<p:commandLink oncomplete="confirmaExclusaoDadosAdicionaisAquiculturaRio.show()" disabled="#{fceOutorgaAquiculturaRioController.desabilitarTudo or fceOutorgaAquiculturaRioController.fceTecnico}"
+					title="Excluir Dados Adicionais" process="@this" global="false">
+						<h:graphicImage title="Excluir" value="/resources/img/ico-excluir.png" />
+						<f:setPropertyActionListener target="#{fceOutorgaAquiculturaRioController.fceAquicultura}" value="#{fceOutorgaAquiculturaRioController.fceAquiculturaRio}"/>
+					</p:commandLink>
+				</p:column>
+			</p:dataTable>
+		</h:panelGrid>
+		<!-- FINAL DA GRID COM DOCUMENTO UPADO DE TANQUE - RIO -->
+	</h:form>
+</ui:composition>

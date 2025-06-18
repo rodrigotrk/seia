@@ -1,0 +1,30 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui">
+	
+	<p:dialog id="termos" styleClass="dialog_termos_erb" widgetVar="termos"  position="left" resizable="true" draggable="true" width="400">
+		<p:ajax event="close" listener="#{lacErbController.resetarTermos()}" update="termos"/>
+		<div align="center" style="width: 320px;">
+			<h:outputText value="ATENÇÃO" style="color:red;margin-left:60px;" />
+		</div>
+		<div align="left" style="width: 380px;margin-left:0px;color:red;">
+			<h:outputText value="Para prosseguir com o procedimento de regularização ambiental do empreendimento é necessário declarar concordância com os itens abaixo:" />
+		</div>  
+		<ui:repeat value="#{lacErbController.legislacoes}" var="leg">
+			<h:panelGrid columns="2">
+				<p:selectBooleanCheckbox value="#{leg.indAceitacao}">
+					<p:ajax event="change" global="false" listener="#{lacErbController.aceitarTermo(leg,leg.indAceitacao)}" process="@this" update="form_termos_erb:termos_erb"/>
+				</p:selectBooleanCheckbox>
+				<h:outputText value="#{leg.legislacao.dscLegislacao}"  />
+			</h:panelGrid>
+		</ui:repeat>
+		<div align="center">
+			<p:commandButton value="Não Aceito" action="${lacErbController.negarTermos('termos')}"   process="@this" />
+			<p:commandButton value="Aceito (Prosseguir)" disabled="${!lacErbController.todosTermosAceites}" id="termos_erb" action="#{lacErbController.salvar}" process="@all" update="form_lac,:formulariosdownload,:formulariosUpload" immediate="true"  />
+		</div>
+	</p:dialog>
+
+</ui:composition>

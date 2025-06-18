@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui"
+	template="../../layout/template.xhtml">
+
+	<ui:define name="titulo-pagina">
+		<h3>Disparar Notificação de Geração de DAE</h3>
+	</ui:define>
+
+	<ui:define name="conteudo-principal">
+
+		<p:dialog id="dialogselecionarUsuarioAgua" dynamic="true"
+			header="Selecionar Usuário Água" widgetVar="dialogselecionarUsuarioAgua"
+			modal="true" position="center" resizable="false">
+			<ui:include
+				src="/paginas/manter-notificacao-geracaoDae-cerh/selecionarUsuarioAgua.xhtml" />
+		</p:dialog>
+			
+			
+		<h:form id="formNotificacaoDae">
+			<h:panelGrid id="filtro">
+
+				<h:panelGrid columns="3">
+					<h:outputLabel value="* RPGA" />
+					<h:outputLabel id="lblNomeUsuarioAgua" value="Usuário da Água" style="margin-left:30px" />
+					<h:outputLabel  value="Empreendimento" style="margin-left:30px" />
+					
+					<p:selectOneMenu
+						value="#{cerhNotificacaoDaeController.rpgaSelecionado}" converter="simpleEntityConverter">
+						<f:selectItem itemLabel="Selecione..." itemValue="" />
+						<f:selectItems value="#{cerhNotificacaoDaeController.listaRpga}" var="rpga" itemValue="#{rpga}" itemLabel="#{rpga.nome}" />
+							<p:ajax event="change" listener="#{cerhNotificacaoDaeController.limpar}" global="false"  update="formNotificacaoDae" />
+					</p:selectOneMenu>
+					
+					<h:panelGroup>
+						<p:inputText id="nomPessoa" style="margin-left:30px"
+							value="${cerhNotificacaoDaeController.requerente.pessoaFisica.nomPessoa}"
+							disabled="true" size = "30"
+							rendered="#{requerenteController.tipoPessoaDTO.tipoPessoaEnum.equals(requerenteController.tipoPessoaDTO.fisica)}" />
+						<p:inputText id="razaoSocial" style="margin-left:30px"
+							value="${cerhNotificacaoDaeController.requerente.pessoaJuridica.nomRazaoSocial}"
+							disabled="true" size = "30"
+							rendered="#{requerenteController.tipoPessoaDTO.tipoPessoaEnum.equals(requerenteController.tipoPessoaDTO.juridica)}" />
+
+					
+					 <!-- action="${requerenteController.limpar}" -->
+						<p:commandLink oncomplete="dialogselecionarUsuarioAgua.show()"
+							type="button"
+							update="form_dialog_usuario-agua">
+							<h:graphicImage title="Selecionar Usuário da Água"
+								value="/resources/img/ico-pesquisa.png" />
+						</p:commandLink>
+					</h:panelGroup>
+					
+						<p:selectOneMenu
+							value="${cerhNotificacaoDaeController.empreendimento}"
+							disabled="${cerhNotificacaoDaeController.requerente == null}" style="margin-left:30px">
+							<f:converter converterId="empreendimentoConverter" />
+							<f:selectItems
+								value="${cerhNotificacaoDaeController.empreendimentos}" />
+						</p:selectOneMenu>
+
+				</h:panelGrid>
+				
+				<h:panelGrid columns="2">
+				
+					<p:commandButton actionListener="#{cerhNotificacaoDaeController.prepararEnvio}" value="Enviar notificações" />
+					<p:commandButton actionListener="#{cerhNotificacaoDaeController.carregarHistorico}" value="Histórico de envios" update="pnlDataTable"/>
+					
+				</h:panelGrid>
+			</h:panelGrid>
+			
+			
+			<h:panelGrid id="pnlDataTable">
+				
+				<p:dataTable id="dataTable" style="width:830px \0/;" lazy="true" rendered="#{cerhNotificacaoDaeController.renderedTableHistorico}"
+					paginator="true" rows="8" paginatorPosition="bottom"
+					paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}"
+					emptyMessage="Não existem dados para esta consulta."
+					value="#{cerhNotificacaoDaeController.listHistorico}"
+					var="historico">
+					<f:facet name="header">Histórico de envio de Notificações</f:facet>
+					<p:column>
+						<f:facet name="header">RPGA</f:facet>
+						<h:outputText value="#{cerhNotificacaoDaeController.rpgaSelecionado.nome}"/>
+					</p:column>
+					<p:column>
+						<f:facet name="header">Usuário da Água</f:facet>
+						<h:outputText value="-" rendered="#{historico.ideUsuarioAgua.nomeRazao == null}"/>
+						<h:outputText value="#{historico.ideUsuarioAgua.nomeRazao}"/>
+					</p:column>
+					<p:column>
+						<f:facet name="header">Empreendimento</f:facet>
+						<h:outputText value="-" rendered="#{historico.ideEmpreendimento == null}"/>
+						<h:outputText value="#{historico.ideEmpreendimento.nomEmpreendimento}"/>
+					</p:column>
+					<p:column>
+						<f:facet name="header">Data Envio</f:facet>
+						<h:outputText value="#{historico.dataEnvio}">
+							 <f:convertDateTime locale="pt,BR" dateStyle="long" pattern="dd/MM/yyyy" />
+						</h:outputText>
+					</p:column>
+					
+					<p:column>
+						<f:facet name="header">Quantidade</f:facet>
+						<h:outputText value="#{historico.quantidadeEnvio}" pattern="dd/MM/yyyy"/>
+					</p:column>
+					
+					
+				</p:dataTable>
+				
+			</h:panelGrid>
+
+		</h:form>
+		<h:panelGrid id="pnlDialog">
+			<p:confirmDialog header="Disparar Notificação de Geração de DAE" 
+				id="dialogEnviarNotificacoes"  
+				widgetVar="dialogEnviarNotificacoes" 
+				appendToBody="true" 
+				message="#{cerhNotificacaoDaeController.mensagemEnvioEmail}" 
+				severity="alert">
+				<h:form>
+					<p:commandButton value="Sim" 
+						onclick="dialogEnviarNotificacoes.hide()"
+						actionListener="#{cerhNotificacaoDaeController.enviarEmail()}"
+						update="formNotificacaoDae">
+					</p:commandButton>
+					<p:commandButton value="Não" 
+						onclick="dialogEnviarNotificacoes.hide();" 
+						type="button" 
+						global="false" />
+				</h:form>
+			</p:confirmDialog>	
+		</h:panelGrid>
+		
+	</ui:define>
+</ui:composition>

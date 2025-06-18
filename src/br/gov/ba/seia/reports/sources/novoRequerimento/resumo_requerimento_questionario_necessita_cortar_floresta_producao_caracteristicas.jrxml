@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="resumo_requerimento_questionario_necessita_cortar_floresta_producao_caracteristicas" language="java" pageWidth="173" pageHeight="802" columnWidth="173" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="e5f61364-c571-4e18-bb74-edaa00fb3059">
+	<property name="ireport.zoom" value="2.853116706110003"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="ide_requerimento" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[0]]></defaultValueExpression>
+	</parameter>
+	<parameter name="ide_imovel" class="java.lang.Integer"/>
+	<queryString>
+		<![CDATA[select nom_caracteristica_floresta_producao
+	 from florestal f
+		left join imovel_rural ir on f.ide_imovel = ir.ide_imovel_rural
+		inner join florestal_caracteristica_floresta_producao fcfp on fcfp.ide_florestal = f.ide_florestal
+		inner join caracteristica_floresta_producao cfp on cfp.ide_caracteristica_floresta_producao = fcfp.ide_caracteristica_floresta_producao
+	where f.ide_requerimento  = $P{ide_requerimento} and f.ide_imovel = $P{ide_imovel}]]>
+	</queryString>
+	<field name="nom_caracteristica_floresta_producao" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="12" splitType="Stretch">
+			<textField isStretchWithOverflow="true">
+				<reportElement uuid="70f29bb5-130d-4a77-ae03-8d83eb7df7a3" positionType="Float" stretchType="RelativeToBandHeight" mode="Opaque" x="0" y="0" width="173" height="12" backcolor="#FFFFFF"/>
+				<box leftPadding="5"/>
+				<textElement verticalAlignment="Middle" markup="none">
+					<font fontName="SansSerif" size="8" isBold="false" isUnderline="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA["[X] "+$F{nom_caracteristica_floresta_producao}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+				xmlns:h="http://java.sun.com/jsf/html" 
+				xmlns:f="http://java.sun.com/jsf/core" 
+				xmlns:ui="http://java.sun.com/jsf/facelets" 
+				xmlns:p="http://primefaces.prime.com.tr/ui">
+				
+				
+		<h:panelGrid id="gridDocumentos">
+			<p:dataTable 
+			id="dataTableDocumentosSilos" 
+			var="doc" 
+			value="#{silosArmazensController.cadastroAtividadeNaoSujeitaLicDocApensadosDocumentosList}" 
+			lazy="true"
+			paginator="false" 
+			widgetVar="dataTableDocumentos" 
+			style="margin: 10px;">
+			
+			<p:column  headerText="#{bundle.lbl_cpm_documento}" style="width: 290px;" rendered="#{doc.exibir or empty doc.exibir}">
+				<h:outputText value="#{doc.ideDocumentoObrigatorio.nomDocumentoObrigatorio}" />
+			</p:column>
+			
+			<p:column headerText="#{bundle.validacao_previa_lbl_nome_arquivo}" style="word-wrap: break-word; width:200px;" rendered="#{doc.exibir or empty doc.exibir}">
+				<h:outputText value="#{doc.nomeDocEnviado}"/>
+			</p:column>
+			
+			<p:column headerText="#{bundle.validacao_previa_lbl_tamanho_kb}" style="width:115px;" rendered="#{doc.exibir or empty doc.exibir}">
+				<h:outputText value="#{doc.tamanhoDoc}"/>
+			</p:column>
+			
+			<p:column headerText="#{bundle.geral_lbl_acoes}" style="text-align: center; width:45px;" rendered="#{doc.exibir or empty doc.exibir}">
+				
+				<h:panelGrid columns="2">
+					<h:commandButton title="Baixar o modelo ART" 
+						image="/resources/img/ico_download_form.png" 
+						style="vertical-align: middle;" 
+						rendered="#{silosArmazensController.isDocumentoToDownload(doc)}" 
+						immediate="true">
+						<p:fileDownload value="#{silosArmazensController.getArquivoBaixar(doc.ideDocumentoObrigatorio.dscCaminhoArquivo)}"/>
+					</h:commandButton>
+				
+					<!-- Upload -->
+					<p:commandLink oncomplete="fileUpload.show();" 
+						style="vertical-align: middle;" 
+						process="@this"
+						disabled="#{silosArmazensController.isVisivel}"
+						rendered="#{!doc.indValidado}">
+						<h:graphicImage title="Upload do Arquivo" value="/resources/img/ico-upload.gif" />
+						<f:setPropertyActionListener  value="#{doc}" target="#{silosArmazensController.cadastroAtividadeNaoSujeitaLicDocApensado}"  />
+					</p:commandLink>
+					
+					<!-- Download -->
+					<h:commandButton title="Download do Arquivo" 
+						image="/resources/img/ico-download.png" 
+						style="vertical-align: middle;" 
+						rendered="#{silosArmazensController.isDocumentoEnviado(doc)}"
+						immediate="true">
+						<p:fileDownload value="#{silosArmazensController.getArquivoBaixar(doc.urlDocumento)}" />
+					</h:commandButton>
+				</h:panelGrid>
+			</p:column>
+		</p:dataTable>
+				
+		</h:panelGrid>		
+			
+			
+		<h:panelGrid id="gridEstudos">
+		<p:dataTable 
+			id="dataTableEstudosSilos" 
+			var="doc" 
+			value="#{silosArmazensController.cadastroAtividadeNaoSujeitaLicDocApensadosEstudosList}" 
+			lazy="true"
+			paginator="false" 
+			widgetVar="dataTableDocumentos" 
+			style="margin: 10px;">
+			
+			<p:column  headerText="Estudos" style="width: 290px;">
+				<h:outputText value="#{doc.ideDocumentoObrigatorio.nomDocumentoObrigatorio}"/>
+			</p:column>
+			
+			<p:column headerText="#{bundle.validacao_previa_lbl_nome_arquivo}" style="word-wrap: break-word; width:200px;">
+				<h:outputText value="#{doc.nomeDocEnviado}"/>
+			</p:column>
+			
+			<p:column headerText="#{bundle.validacao_previa_lbl_tamanho_kb}" style="width:115px;">
+				<h:outputText value="#{doc.tamanhoDoc}"/>
+			</p:column>
+			
+			<p:column headerText="#{bundle.geral_lbl_acoes}" style="text-align: center; width:45px;">
+				
+				<h:panelGrid columns="2">
+					<h:commandButton title="Baixar o modelo ART" 
+						image="/resources/img/ico_download_form.png" 
+						style="vertical-align: middle;" 
+						rendered="#{silosArmazensController.isDocumentoToDownload(doc)}" 
+						immediate="true">
+						<p:fileDownload value="#{silosArmazensController.getArquivoBaixar(doc.ideDocumentoObrigatorio.dscCaminhoArquivo)}"/>
+					</h:commandButton>
+				
+					<!-- Upload -->
+					<p:commandLink oncomplete="fileUpload.show();" 
+						style="vertical-align: middle;" 
+						process="@this"
+						disabled="#{silosArmazensController.isVisivel}"
+						rendered="#{!doc.indValidado}">
+						<h:graphicImage title="Upload do Arquivo" value="/resources/img/ico-upload.gif" />
+						<f:setPropertyActionListener  value="#{doc}" target="#{silosArmazensController.cadastroAtividadeNaoSujeitaLicDocApensado}"  />
+					</p:commandLink>
+					
+					<!-- Download -->
+					<h:commandButton title="Download do Arquivo" 
+						image="/resources/img/ico-download.png" 
+						style="vertical-align: middle;" 
+						rendered="#{silosArmazensController.isDocumentoEnviado(doc)}"
+						immediate="true">
+						<p:fileDownload value="#{silosArmazensController.getArquivoBaixar(doc.urlDocumento)}" />
+					</h:commandButton>
+				</h:panelGrid>
+			</p:column>
+		</p:dataTable>		
+		</h:panelGrid>		
+				
+		<p:spacer height="50"/>
+				
+</ui:composition>

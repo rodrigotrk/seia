@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui">
+	
+	<p:dialog header="Telefone"
+		id="dialogTelefoneLac" 
+		dynamic="true"
+		widgetVar="dialogTelefoneLac" 
+		closable="true" 
+		resizable="false" 
+		width="290">
+		<h:form id="frmDialogTelefone" >
+			<h:panelGrid id="display"  columns="2">
+				<h:outputLabel id="idlabeltipotelefone" class="form-label" value="#{bundle.LabelTipoTelefone}" />
+				<h:outputLabel id="idlabelnumerotelefone" class="form-label" value="#{bundle.LabelNumeroTelefone}"/>
+				<h:panelGroup>
+				<!-- TIPO TELEFONE -->
+				<p:selectOneMenu id="idcombotipotelefone" 
+					disabled="#{lacTransporteController.telefone.visualizacao}" 
+					styleClass="form-input" 
+					value="#{lacTransporteController.telefone.ideTipoTelefone}" style="width:120px;"
+					converter="simpleEntityConverter">
+					<f:selectItem itemLabel="Selecione..."  />
+					<f:selectItems value="#{lacTransporteController.listaTiposTelefone}" var="tipo" itemValue="#{tipo}" itemLabel="#{tipo.nomTipoTelefone}"/> 
+				</p:selectOneMenu>
+				<!-- FIM TIPO TELEFONE -->
+				</h:panelGroup>	
+				
+				<h:panelGroup>
+				<!-- NUMERO TELEFONE -->					
+					<p:inputMask id="numero"
+						widgetVar="numero" 
+						mask="#{bundle.MascaraTelefone}"  
+						value="#{lacTransporteController.telefone.numTelefone}" 
+						style="width:110px;"
+						disabled="#{lacTransporteController.telefone.visualizacao}" />
+				<!-- FIM NUMERO TELEFONE -->
+				</h:panelGroup>	
+				
+				<p:commandButton value="#{bundle.LabelBotaoLimpar}" 
+					actionListener="#{lacTransporteController.limparTelefone()}"
+					update="frmDialogTelefone:display" 
+					rendered="#{!lacTransporteController.telefone.visualizacao}" 
+					style="float:right;"/>
+				
+				<p:commandButton value="#{bundle.LabelBotaoSalvar}" 
+					actionListener="#{lacTransporteController.adicionarTelefone()}"  				        
+					update="tabAbasId:formDadosGerais:formconteudotelefonepj frmDialogTelefone:display" 
+					rendered="#{!lacTransporteController.telefone.visualizacao}"/>
+			</h:panelGrid>	
+		<h:outputLabel value="#{bundle.lbl_preench_obrig_asterisc}" style="float:left;"/>
+		</h:form>
+	</p:dialog>
+		
+	<p:confirmDialog header="#{bundle.geral_lbl_mensagem}" appendToBody="true" message="#{bundle.lac_dadosGerais_msg004}" severity="alert" widgetVar="confirmationTelefone" id="confirmationTelefone">
+		<h:form>
+			<p:commandButton value="Sim" 
+				update=":tabAbasId:formDadosGerais:panelTerceiros" 
+				actionListener="#{lacTransporteController.excluirTelefone()}" 
+				oncomplete="confirmationTelefone.hide()" />
+			<p:commandButton value="Não" 
+				onclick="confirmationTelefone.hide()" 
+				type="button" 
+				global="false"/>
+		</h:form>
+	</p:confirmDialog>
+	
+	<p:confirmDialog message="Deseja imprimir o relatório da LAC Transportadora" widgetVar="rel_transportadora" header="Mensagem">
+		<h:form>
+			<div align="center">
+				<p:commandButton value="Sim" ajax="false" global="false" process="@this" id="imprimir_rel_transporte"  onclick="rel_transportadora.hide();" style="margin-right:10px;">
+					<p:fileDownload value="#{lacTransporteController.imprimirRelatorio}"/>
+				</p:commandButton>			
+				<p:commandButton value="Não" oncomplete="rel_transportadora.hide();" process="@this"/>
+			</div>
+		</h:form>
+	</p:confirmDialog> 
+	
+	<p:confirmDialog id="confirmaExclusaoProduto" widgetVar="confirmaExclusaoProduto" header="#{bundle.geral_lbl_mensagem}" appendToBody="true" message="#{bundle.lac_dadosGerais_msg004}" severity="alert">
+		<h:form id="formExclusaoProduto">
+			<p:commandButton id="excluirProduto" value="#{bundle.btn_sim}" actionListener="#{lacTransporteController.removerProdutoLista()}" onclick="confirmaExclusaoProduto.hide()" 
+	 		update="tabAbasId:formDadosGerais:dataTableProdutos 
+				    tabAbasId:formDadosGerais:gridProdutos" global="false" process="@this"/>
+			<p:commandButton value="#{bundle.btn_nao}" onclick="confirmaExclusaoProduto.hide()" type="button"/>
+		</h:form>
+	</p:confirmDialog>
+	
+	
+	<p:confirmDialog id="confirmaExclusaoResiduo" widgetVar="confirmaExclusaoResiduo" header="#{bundle.geral_lbl_mensagem}" appendToBody="true" message="#{bundle.lac_dadosGerais_msg004}" severity="alert" >
+		<h:form id="formExclusaoResiduo">
+			<p:commandButton id="excluirResiduo" value="#{bundle.btn_sim}" actionListener="#{lacTransporteController.removerResiduoLista()}" onclick="confirmaExclusaoResiduo.hide()" 
+			update="tabAbasId:formDadosGerais:dataTableResiduos
+					tabAbasId:formDadosGerais:gridResiduos" global="false" process="@this"/>
+			<p:commandButton value="#{bundle.btn_nao}" onclick="confirmaExclusaoResiduo.hide()" type="button" global="false"/>
+		</h:form>
+	</p:confirmDialog>
+	
+	<p:confirmDialog header="Confirmação" appendToBody="true" message="#{bundle.geral_msg_informacoes_nao_foram_salvas_deseja_continuar}"
+		severity="alert" widgetVar="confirmationVoltarLAC" id="confirmationVoltarLAC">
+		<h:form>
+			<p:commandButton value="Sim" update="formDadosGerais" oncomplete="confirmationVoltarLAC.hide();lac_transporte.hide();" global="false"/>
+			<p:commandButton value="Não" onclick="confirmationVoltarLAC.hide();" type="button" global="false"/>
+		</h:form>
+	</p:confirmDialog>
+	
+</ui:composition>

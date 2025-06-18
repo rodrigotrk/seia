@@ -1,0 +1,1023 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+	
+	<script type="text/javascript" language="JavaScript">
+          var $ = jQuery;
+          []
+          $(document).ready(function() {
+              $("input[id*='dataAprovacaoRl']").mask('99/99/9999');
+          });
+          
+          function addMaskDataAprovacao() {
+        	  var $ = jQuery;
+        	  $("input[id*='dataAprovacaoRl']").mask('99/99/9999');
+          }
+    </script>
+		<h:panelGrid id="panelRl">
+			<h:panelGrid id="panelDetalhesRl" columns="1">
+				<h:panelGrid id="panelTipoRl">
+					<h:outputLabel value="#{reservaLegalController.imovelRural.obrigatorioRl ? '*' : ''} #{bundle.cefir_lbl_tipo_reserva}" />
+					<p:selectOneMenu id="tipoRl"
+						value="#{reservaLegalController.reservaLegal.ideTipoArl}"
+						disabled="#{reservaLegalController.disabledTipoARL and !reservaLegalController.editavelParaUsuarioSemRestricao}"
+						required="#{reservaLegalController.imovelRural.obrigatorioRl and !imovelRuralControllerNew.showPCT}"
+						requiredMessage="#{func:messageFormat('javax.faces.component.UISelectOne.REQUIRED', bundle.cefir_lbl_tipo_reserva)}"
+						valueChangeListener="#{reservaLegalController.changeTipoArl()}">
+			
+						<c:if test="#{reservaLegalController.exibeSelecioneTipoArl()}">
+							<f:selectItem itemLabel="#{bundle.geral_lbl_selecione}" />
+						</c:if>
+						<f:selectItems 
+							value="#{reservaLegalController.listTipoArl}"
+							var="tipoRl" 
+							itemLabel="#{tipoRl.dscTipoArl}" 
+							itemValue="#{tipoRl}" />
+						<f:converter converterId="tipoArlConverter" />
+						
+						<p:ajax event="change" process="@this" update="panelRl" listener="#{reservaLegalController.verificarTipoArl()}" />
+					</p:selectOneMenu>
+				</h:panelGrid>
+				
+				<h:panelGrid id="panelAreaRl">
+					<h:outputLabel value="* #{bundle.cefir_lbl_area_reserva}" />
+					<p:inputText id="areaRl"
+						value="#{reservaLegalController.reservaLegal.valArea}"
+						maxlength="15"
+						disabled="#{reservaLegalController.disabledAreaAverbada and !reservaLegalController.editavelParaUsuarioSemRestricao}"
+						required="true"
+						requiredMessage="#{func:messageFormat('javax.faces.component.UISelectOne.REQUIRED', bundle.cefir_lbl_area_reserva)}"
+						onkeypress="mascararNumeroLR(this, event, 10, 4, '.', ',', 3);desabilitarBotaoProximoMesmoFinalizado()"
+						onkeyup="mascararNumeroLR(this, event, 10, 4, '.', ',', 3);"
+						converter="doubleQuatroCasasDecimaisConverter">
+						<p:ajax event="blur" process="@this" oncomplete="desabilitarBotaoProximoMesmoFinalizado()" global="false" />
+					</p:inputText>
+				</h:panelGrid>
+				
+				<ui:include src="/paginas/manter-imoveis/cefir/includes/includes-questionario/reservaLegalAverbada.xhtml" />
+	
+				<h:panelGrid id="panelAprovacaoAverbacaoRl">
+					<h:panelGrid id="panelTemAprovado">
+						<h:outputLabel value="* #{bundle.empreendimento_msg_imovel_possui_reserva_legal_aprovada}" />
+						<h:selectOneRadio id="temAprovado"
+							value="#{reservaLegalController.imovelRural.indReservaLegal}"
+							disabled="#{reservaLegalController.imovelRural.reservaLegalAprovadaOuAverbada
+							 	and !reservaLegalController.editavelParaUsuarioSemRestricao
+							 	and reservaLegalController.indAprovadaDesabilitada}"
+							required="true"
+							requiredMessage="#{func:messageFormat('javax.faces.component.UISelectOne.REQUIRED', bundle.empreendimento_msg_imovel_possui_reserva_legal_aprovada)}"
+							valueChangeListener="#{reservaLegalController.changeReservaLegalAprovada}"
+							onchange="desabilitarBotaoProximoMesmoFinalizado()">
+							
+							<f:selectItem itemLabel="#{bundle.geral_lbl_sim}" itemValue="#{true}" />
+							<f:selectItem itemLabel="#{bundle.geral_lbl_nao}" itemValue="#{false}" />
+							
+							<p:ajax event="change" process="@this" update="panelAprovacaoAverbacaoRl" oncomplete="addMaskDataAprovacao();" />
+						</h:selectOneRadio>
+					</h:panelGrid>
+					
+					<h:panelGrid id="panelTemProcesso"
+						rendered="#{reservaLegalController.imovelRural.indReservaLegal != null 
+							and !reservaLegalController.imovelRural.indReservaLegal}">
+						
+						<h:outputLabel value="#{!reservaLegalController.rlCdaOuBndes ? '*' : ''} #{bundle.empreendimento_msg_imovel_possui_processo_regularizacao_reserva_legal}" />
+						<h:selectOneRadio id="temProcesso"
+							value="#{reservaLegalController.reservaLegal.indProcessoTramite}"
+							disabled="#{reservaLegalController.imovelRural.reservaLegalAprovadaOuAverbada
+								 and !reservaLegalController.editavelParaUsuarioSemRestricao
+								 and (reservaLegalController.reservaLegal.indProcessoTramite != null
+								 and reservaLegalController.indAprovadaDesabilitada)}"
+							required="#{!reservaLegalController.rlCdaOuBndes}"
+							requiredMessage="#{func:messageFormat('javax.faces.component.UISelectOne.REQUIRED', bundle.empreendimento_msg_imovel_possui_processo_regularizacao_reserva_legal)}"
+							onchange="desabilitarBotaoProximoMesmoFinalizado()"
+							valueChangeListener="#{reservaLegalController.changeProcessoTramite}">
+							
+							<f:selectItem itemLabel="#{bundle.geral_lbl_sim}" itemValue="#{true}" />
+							<f:selectItem itemLabel="#{bundle.geral_lbl_nao}" itemValue="#{false}" />
+							
+							<p:ajax event="change" process="@this" update="panelAprovacaoAverbacaoRl" />
+						</h:selectOneRadio>
+					</h:panelGrid>
+					
+					<h:panelGrid id="panelCertificadoRl" rendered="#{reservaLegalController.exibePerguntasRLAprovada}">
+						<h:outputLabel value="#{!reservaLegalController.reservaLegal.indAverbada and !reservaLegalController.rlCdaOuBndes ? '*' : ''} #{bundle.cefir_lbl_origem_certificado}" />
+						<p:selectOneMenu id="tipoOrigemCertificado"
+							value="#{reservaLegalController.reservaLegal.ideTipoOrigemCertificado}"
+							disabled="#{reservaLegalController.imovelRural.reservaLegalAprovadaOuAverbada
+								 and !reservaLegalController.editavelParaUsuarioSemRestricao
+								 and (reservaLegalController.reservaLegal.ideTipoOrigemCertificado != null
+								 and reservaLegalController.indAprovadaDesabilitada)}"
+							required="#{!reservaLegalController.reservaLegal.indAverbada and !reservaLegalController.rlCdaOuBndes}"
+							requiredMessage="#{func:messageFormat('javax.faces.component.UISelectOne.REQUIRED', bundle.cefir_lbl_origem_certificado)}"
+							style="width: 260px;">
+							
+							<f:selectItem itemLabel="#{bundle.geral_lbl_selecione}" />
+							<f:selectItems
+								value="#{reservaLegalController.listTipoOrigemCertificado}"
+								var="tipoOrigemCertificado"
+								itemLabel="#{tipoOrigemCertificado.dscTipoOrigemCertificado}"
+								itemValue="#{tipoOrigemCertificado}" />
+							<f:converter converterId="tipoOrigemCertificadoConverter" />
+							
+							<p:ajax event="change" process="@this" oncomplete="desabilitarBotaoProximoMesmoFinalizado()" global="false" />
+						</p:selectOneMenu>
+						
+						<h:outputLabel value="#{!reservaLegalController.reservaLegal.indAverbada or reservaLegalController.rlCdaOuBndes ? '*' : ''} #{bundle.cefir_lbl_numero_certificado}" />
+						<p:inputText id="numCertificado" 
+							widgetVar="numCertificado"
+							value="#{reservaLegalController.reservaLegal.numCertificado}"
+							label="#{bundle.cefir_lbl_numero_certificado}" 
+							maxlength="30"
+							style="width: 215px;"
+							required="#{(!reservaLegalController.reservaLegal.indAverbada or reservaLegalController.rlCdaOuBndes)}"
+							rendered="#{reservaLegalController.exibePerguntasRLAprovada}"
+							requiredMessage="#{func:messageFormat('javax.faces.component.UISelectOne.REQUIRED', bundle.cefir_lbl_numero_certificado)}"
+							disabled="#{reservaLegalController.imovelRural.reservaLegalAprovadaOuAverbada
+								 and !reservaLegalController.editavelParaUsuarioSemRestricao
+								 and (reservaLegalController.reservaLegal.numCertificado != ''
+								 and reservaLegalController.indAprovadaDesabilitada)}">
+							<p:ajax event="change" process="@this" oncomplete="desabilitarBotaoProximoMesmoFinalizado()" global="false" />
+						</p:inputText>
+	
+						<h:outputLabel value="#{!reservaLegalController.reservaLegal.indAverbada? '*' : ''} #{bundle.cefir_lbl_data_aprovacao}" />
+						<p:calendar id="dataAprovacaoRl" 
+							widgetVar="dataAprovacaoRl"
+							label="#{bundle.cefir_lbl_data_aprovacao}" size="15"
+							showOn="button" locale="pt" pattern="dd/MM/yyyy" navigator="true"
+							readOnlyInputText="false"
+							value="#{reservaLegalController.reservaLegal.dtcAprovacaoDeclarada}"
+							required="#{!reservaLegalController.reservaLegal.indAverbada}"		
+							disabled="#{reservaLegalController.imovelRural.reservaLegalAprovadaOuAverbada
+								 and !reservaLegalController.editavelParaUsuarioSemRestricao
+								 and (reservaLegalController.reservaLegal.dtcAprovacaoDeclarada != null
+								 and reservaLegalController.indAprovadaDesabilitada)}"
+							requiredMessage="#{func:messageFormat('javax.faces.component.UISelectOne.REQUIRED', bundle.cefir_lbl_data_aprovacao)}">
+							<f:validator validatorId="dataMinMaxValidator" />
+							<p:ajax event="dateSelect" process="numCertificado"	oncomplete="desabilitarBotaoProximoMesmoFinalizado();" global="true" />
+						</p:calendar>
+					</h:panelGrid>
+	
+					<h:panelGrid id="panelProcessoRl">
+						<h:outputLabel value="#{!reservaLegalController.reservaLegal.indAverbada and !reservaLegalController.rlCdaOuBndes ? '*' : ''} #{bundle.cefir_lbl_numero_processo}"
+							rendered="#{reservaLegalController.exibePerguntasRLAprovada 
+								or reservaLegalController.imovelRural.reservaLegal.indProcessoTramite}"/>
+							
+						<p:inputText id="numeroProcessoRL"
+							value="#{reservaLegalController.reservaLegal.numProcesso}"
+							label="#{bundle.cefir_lbl_numero_processo}" 
+							maxlength="50"
+							style="width: 215px;"
+							rendered="#{reservaLegalController.exibePerguntasRLAprovada}"
+							disabled="#{reservaLegalController.imovelRural.reservaLegalAprovadaOuAverbada
+								 and !reservaLegalController.editavelParaUsuarioSemRestricao
+								 and reservaLegalController.reservaLegal.numProcesso != ''
+								 and reservaLegalController.indAprovadaDesabilitada}"
+							required="#{!reservaLegalController.reservaLegal.indAverbada and !reservaLegalController.rlCdaOuBndes}"
+							requiredMessage="#{func:messageFormat('javax.faces.component.UISelectOne.REQUIRED', bundle.cefir_lbl_numero_processo)}">
+							<p:ajax event="change" process="@this" oncomplete="desabilitarBotaoProximoMesmoFinalizado()" global="false" />
+						</p:inputText>
+	
+						<p:inputText id="numeroInemaProcesso"
+							value="#{reservaLegalController.reservaLegal.numProcesso}"
+							label="#{bundle.cefir_lbl_numero_processo}" 
+							maxlength="50"
+							style="width: 215px;"
+							rendered="#{reservaLegalController.reservaLegal.indProcessoTramite 
+								and !reservaLegalController.imovelRural.indReservaLegal}"
+							disabled="#{reservaLegalController.imovelRural.reservaLegalAprovadaOuAverbada
+								 and !reservaLegalController.editavelParaUsuarioSemRestricao
+								 and reservaLegalController.reservaLegal.numProcesso != null
+								 and reservaLegalController.indAprovadaDesabilitada}"
+							required="#{reservaLegalController.reservaLegal.indProcessoTramite}"
+							requiredMessage="#{func:messageFormat('javax.faces.component.UISelectOne.REQUIRED', bundle.cefir_lbl_numero_processo)}">
+							<p:ajax event="change" process="@this" oncomplete="desabilitarBotaoProximoMesmoFinalizado()" global="false" />
+						</p:inputText>
+					</h:panelGrid>
+	
+					<p:outputPanel autoUpdate="true">
+						<h:panelGrid id="panelUploadDocumentoAprovacao" columns="2"
+							rendered="#{reservaLegalController.exibePerguntasRLAprovada	
+								and empty reservaLegalController.listDocumentoAprovacaoReserva}">
+								
+							<h:outputLabel value="#{!reservaLegalController.exibePerguntasRLAprovada ? '*' : ''} #{bundle.cefir_lbl_documento_comprova_aprovacao}" />
+							<p:commandLink id="uploadDocumentoAprovacao" 
+								onclick="dlgUploadDocumentoAprovacao.show()"
+								process="@this"
+								disabled="#{reservaLegalController.imovelRural.reservaLegalAprovadaOuAverbada
+									 and !reservaLegalController.editavelParaUsuarioSemRestricao
+									 and not empty reservaLegalController.listDocumentoAprovacaoReserva
+									 and reservaLegalController.indAprovadaDesabilitada}">
+								<h:graphicImage title="" value="/resources/img/ico-expandir.png" />
+								<f:ajax execute="@this" update="iddlgPontoPesquisa" />
+							</p:commandLink>
+						</h:panelGrid>
+	
+						<h:panelGrid columns="2" 
+							rendered="#{reservaLegalController.exibePerguntasRLAprovada	
+								and not empty reservaLegalController.listDocumentoAprovacaoReserva}">
+							<h:outputLabel value="#{!reservaLegalController.reservaLegal.indAverbada ? '*' : ''} #{bundle.cefir_lbl_documento_comprova_aprovacao}" />
+						</h:panelGrid>
+	
+						<h:panelGrid id="panelTableDocumentoReservaRegularizada" rendered="#{reservaLegalController.exibePerguntasRLAprovada}">
+							<p:dataTable id="dataTableDocumentoReservaRegularizada"
+								widgetVar="dtTbDocumentosReservaRegularizada"
+								value="#{reservaLegalController.listDocumentoAprovacaoReserva}"
+								var="documentoAprovacaoReserva" 
+								lazy="true"
+								emptyMessage="#{bundle.cefir_msg_A012}">
+								
+								<p:column>
+									<h:outputLabel value="Documento aprovação" />
+								</p:column>
+	
+								<p:column style="width:60px;">
+									<h:panelGrid columns="2" style="color:white;">
+										<h:commandButton image="/resources/img/ico-download.png">
+											<p:fileDownload value="#{reservaLegalController.getFileDownload(documentoAprovacaoReserva.dscCaminhoArquivo)}" />
+										</h:commandButton>
+	
+										<p:commandLink
+											oncomplete="confirmaExclusaoAprovacao.show()"
+											process="@this" 
+											title="#{bundle.btn_remover}"
+											disabled="#{reservaLegalController.imovelRural.reservaLegalAprovadaOuAverbada
+												 and !reservaLegalController.editavelParaUsuarioSemRestricao
+												 and reservaLegalController.listDocumentoAprovacaoReserva != null
+												 and reservaLegalController.indAprovadaDesabilitada}">
+											<h:graphicImage title="Excluir" value="/resources/img/ico-excluir.png" />
+										</p:commandLink>
+									</h:panelGrid>
+								</p:column>
+							</p:dataTable>
+						</h:panelGrid>
+					</p:outputPanel>
+				</h:panelGrid>
+				
+				<h:panelGrid id="panelRlProprioImovelOuCompensacao"
+					rendered="#{reservaLegalController.reservaLegal.ideTipoArl.ideTipoArl == 2 
+						or reservaLegalController.reservaLegal.ideTipoArl.ideTipoArl == 3}">
+						
+					<h:panelGrid id="panerlSicarCompensacao" rendered="#{reservaLegalController.reservaLegal.ideTipoArl.ideTipoArl == 3}">
+						<h:outputLabel value="* #{bundle.cefir_lbl_num_car_imovel_compensacao}" />
+						<p:inputMask id="numSicarCompensacao"
+							value="#{reservaLegalController.reservaLegal.numSicarCompensacao}"
+							size="80"
+							mask="BA-9999999-****.****.****.****.****.****.****.****"
+							required="true"
+							onblur="this.value=this.value.toUpperCase()"
+							requiredMessage="#{func:messageFormat('javax.faces.component.UISelectOne.REQUIRED', bundle.cefir_lbl_num_car_imovel_compensacao)}"
+							onchange="desabilitarBotaoProximoMesmoFinalizado()" />
+					</h:panelGrid>
+					
+					<h:panelGrid id="panelTipoEstadoConservacaoRl">
+						<h:outputLabel value="#{!reservaLegalController.rlCdaOuBndes ? '*' : ''} Estado de conservação" />
+						<p:selectOneMenu id="tipoEstadoConservacaoRl" 
+							value="#{reservaLegalController.reservaLegal.ideTipoEstadoConservacao}"
+							required="#{!reservaLegalController.rlCdaOuBndes}" 
+							requiredMessage="O campo Estado de conservação é de preenchimento obrigatório."
+							disabled="#{!reservaLegalController.habilitaCadastroAmbiental}"
+							style="width: 260px;" 
+							valueChangeListener="#{reservaLegalController.changeTipoEstadoConservacao()}"
+							onchange="desabilitarBotaoProximoMesmoFinalizado()">
+							
+							<f:selectItem itemLabel="#{bundle.geral_lbl_selecione}" />
+							<f:selectItems 
+								value="#{reservaLegalController.listaTipoEstadoConservacao}" 
+								var="tipoEstadoConservacaoRl"
+								itemLabel="#{tipoEstadoConservacaoRl.dscTipoEstadoConservacao}" 
+								itemValue="#{tipoEstadoConservacaoRl}" />
+							<f:converter converterId="simpleEntityConverter" />
+							
+							<p:ajax event="change" process="@this" update="panelCronogramaRl" />
+						</p:selectOneMenu>
+					</h:panelGrid>
+				</h:panelGrid>
+			</h:panelGrid>
+			<h:panelGrid id="panelCronogramaRl" rendered="#{reservaLegalController.reservaLegal.ideTipoArl.ideTipoArl == 2 
+						or reservaLegalController.reservaLegal.ideTipoArl.ideTipoArl == 3}">
+				<p:fieldset rendered="#{reservaLegalController.mostraDesejaCadastrarCronogramaRl || reservaLegalController.cadastrarCronogramaRl}">
+					<h:panelGrid id="panelDesejaCadastrarPrad" rendered="#{reservaLegalController.mostraDesejaCadastrarCronogramaRl}">
+						<h:outputLabel value="* Deseja cadastrar o Plano de Recuperação de Áreas Degradadas?" rendered="#{!reservaLegalController.rlCdaOuBndes}" />
+						<p:selectOneRadio id="desejaCadastrarPrad"
+							value="#{reservaLegalController.reservaLegal.indDesejaCadPrad}"
+							required="#{!reservaLegalController.rlCdaOuBndes}"
+							requiredMessage="O campo Sua área está em processo de recuperação é de preenchimento obrigatório.">
+							
+							<f:selectItem itemLabel="#{bundle.geral_lbl_sim}" itemValue="#{true}" />
+							<f:selectItem itemLabel="#{bundle.geral_lbl_nao}" itemValue="#{false}" />
+							
+							<p:ajax event="change" process="@this" update="panelCronogramaRl" listener="#{reservaLegalController.changeDesejaCadastrarCronograma()}"/>
+						</p:selectOneRadio>
+					</h:panelGrid>
+					
+					<h:panelGrid rendered="#{reservaLegalController.cadastrarCronogramaRl}" columns="2">
+						<h:outputLabel value="CRONOGRAMA DE RECUPERAÇÃO DE ÁREAS DEGRADADAS" styleClass="titulo-grupo" />
+						<h:graphicImage id="hintCronogramaRl" value="/resources/img/ico-ajuda.png" />
+						<p:tooltip for="hintCronogramaRl"
+							value="#{bundle.cefir_hint_cronograma_recuperacao_areas_degradadas}"
+							showEffect="fade" hideEffect="fade" />
+					</h:panelGrid>
+					
+					<h:panelGrid id="panelCondicoesRecuperacaoRl" columns="3" rendered="#{reservaLegalController.cadastrarCronogramaRl}">
+						<a onclick="dialogTermoRecuperacaoRl.show()" href="#">Condições	para recuperação de áreas degradadas</a>
+						
+						<h:selectBooleanCheckbox id="chkAceiteCondicoesRl"
+							value="#{reservaLegalController.reservaLegal.aceiteCondicoesRecuperacaoRl}"
+							required="true"
+							requiredMessage="É preciso aceitar o termo de recuperação para salvar!"
+							onchange="desabilitarBotaoProximoMesmoFinalizado()" />
+							
+						<h:outputLabel value="Aceito" />
+					</h:panelGrid>
+					 <p:outputPanel autoUpdate="true">
+						<h:panelGrid id="panelTableCronogramaRl" rendered="#{reservaLegalController.cadastrarCronogramaRl}">
+							<p:dataTable id="dataTableCronogramaRl" 
+								var="cronogramaEtapa"
+								value="#{reservaLegalController.reservaLegal.cronogramaRecuperacao.cronogramaEtapaCollection}"
+								lazy="true" paginator="true" rows="10" paginatorPosition="bottom"
+								paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}"
+								emptyMessage="#{bundle.cefir_msg_A012}" style="width:600px;"
+								widgetVar="dataTableCronogramaRl">
+								
+								<f:facet name="header">
+									<h:outputLabel value="Cronogramas" />
+								</f:facet>
+								
+								<p:column>
+									<f:facet name="header">
+										<h:outputLabel value="Atividade" />
+									</f:facet>
+									<h:outputLabel value="#{(cronogramaEtapa.ideTipoRecuperacao.ideTipoRecuperacao == 9) ? cronogramaEtapa.dscOutroTipoRecuperacao : cronogramaEtapa.ideTipoRecuperacao.dscTipoRecuperacao}" />
+								</p:column>
+								
+								<p:column>
+									<f:facet name="header">
+										<h:outputLabel value="Início" />
+									</f:facet>
+									<h:outputLabel value="#{cronogramaEtapa.mesInicio}/#{cronogramaEtapa.anoInicio}" />
+								</p:column>
+								
+								<p:column>
+									<f:facet name="header">
+										<h:outputLabel value="Fim" />
+									</f:facet>
+									<h:outputLabel value="#{cronogramaEtapa.mesFim}/#{cronogramaEtapa.anoFim}" />
+								</p:column>
+								
+								<p:column>
+									<f:facet name="header">
+										<h:outputLabel value="Realizado" />
+									</f:facet>
+									<h:outputLabel value="#{cronogramaEtapa.percentual}%" />
+								</p:column>
+								
+								<p:column>
+									<f:facet name="header">
+										<h:outputLabel value="Ações" />
+									</f:facet>
+		
+									<p:commandLink id="EditarcronogramaEtapaRl" 
+										title="Editar" 
+										process="@this"
+										oncomplete="dlgCronogramaEtapa.show()"
+										update="formCronogramaEtapa">
+										<h:graphicImage title="Editar" value="/resources/img/ico-editar.png" />
+										<f:setPropertyActionListener value="#{cronogramaEtapa}" target="#{imovelRuralControllerNew.cronogramaEtapaSelecionado}" />
+										<f:setPropertyActionListener value="true" target="#{imovelRuralControllerNew.isEdicaoCronogramaEtapa}" />
+										<f:setPropertyActionListener value="1" target="#{imovelRuralControllerNew.tipoCronogramaEtapa}" />
+									</p:commandLink>
+									
+									<p:commandLink id="ExcluirCronogramaRl"
+										onclick="confirmaExclusaoCronogramaEtapaRl.show(); confirmaExclusaoCronogramaEtapaRl.content.parent().css('top',  '80px'); confirmaExclusaoCronogramaEtapaRl.content.parent().css('left',  '500px'); desabilitarBotaoProximoMesmoFinalizado();"
+										ajax="true" 
+										global="false" 
+										process="@this">
+										<h:graphicImage title="Excluir" value="/resources/img/ico-excluir.png" />
+										<f:setPropertyActionListener value="#{cronogramaEtapa}" target="#{reservaLegalController.cronogramaEtapaSelecionado}" />
+									</p:commandLink>
+								</p:column>
+							</p:dataTable>
+		
+							<p:commandButton id="btnIncluirEtapa"
+								value="Incluir Etapa" 
+								process="@this"
+								oncomplete="dlgCronogramaEtapa.show()"
+								onclick="desabilitarBotaoProximoMesmoFinalizado()"
+								action="#{imovelRuralControllerNew.limparFormCronogramaEtapa(1)}"
+								update="formCronogramaEtapa">
+								<f:setPropertyActionListener value="false" target="#{imovelRuralControllerNew.isEdicaoCronogramaEtapa}" />
+							</p:commandButton>
+						</h:panelGrid>
+					</p:outputPanel>
+					<h:panelGrid id="panelPradMesmoRl" rendered="#{reservaLegalController.cadastrarCronogramaRl}">
+						<h:outputLabel value="* O Plano de Recuperação Ambiental - PRA é o mesmo informado anteriormente?" />
+						<p:selectOneRadio id="radioPradMesmoRl"
+							value="#{reservaLegalController.reservaLegal.cronogramaRecuperacao.indPradImportada}"
+							onchange="desabilitarBotaoProximoMesmoFinalizado()">
+							
+							<f:selectItem itemLabel="#{bundle.geral_lbl_sim}" itemValue="#{true}" />
+							<f:selectItem itemLabel="#{bundle.geral_lbl_nao}" itemValue="#{false}" />
+							
+							<p:ajax event="change" process="@this" update="formUploadPradRl:panelUploadPradRl panelArquivoPradRl" listener="#{reservaLegalController.carregarListaPradImportado(1)}" />
+						</p:selectOneRadio>
+					</h:panelGrid>
+	
+					<h:panelGrid id="panelArquivoPradRl" rendered="#{reservaLegalController.cadastrarCronogramaRl}">
+						<h:outputLabel value="Informe o Plano de Recuperação Ambiental - PRA a ser associado"
+							rendered="#{reservaLegalController.reservaLegal.cronogramaRecuperacao != null
+								and reservaLegalController.reservaLegal.cronogramaRecuperacao.indPradImportada != null  
+								and reservaLegalController.reservaLegal.cronogramaRecuperacao.indPradImportada}" />
+							
+						<p:selectOneMenu id="listPradsRl"
+							value="#{reservaLegalController.reservaLegal.cronogramaRecuperacao.ideDocumentoObrigatorio}"
+							required="true"
+							requiredMessage="O campo Informe o  Plano de Recuperação Ambiental - PRA a ser associado é de preenchimento obrigatório."
+							immediate="true"
+							rendered="#{reservaLegalController.reservaLegal.cronogramaRecuperacao != null
+								and reservaLegalController.reservaLegal.cronogramaRecuperacao.indPradImportada != null
+								and reservaLegalController.reservaLegal.cronogramaRecuperacao.indPradImportada}"
+							style="width: 260px;"
+							onchange="desabilitarBotaoProximoMesmoFinalizado()">
+							
+							<f:selectItem itemLabel="#{bundle.geral_lbl_selecione}" />
+							<f:selectItems
+								value="#{reservaLegalController.listaPradImportadosRl}"
+								var="prad" 
+								itemValue="#{prad}"
+								itemLabel="#{prad.nomDocumentoObrigatorio}" />
+							<f:converter converterId="documentoImovelRuralConverter" />
+						</p:selectOneMenu>
+						
+						<h:panelGrid id="panelUploadArquivoPradRl"
+							rendered="#{reservaLegalController.reservaLegal.cronogramaRecuperacao != null
+								and reservaLegalController.reservaLegal.cronogramaRecuperacao.ideDocumentoObrigatorio == null
+								and reservaLegalController.reservaLegal.cronogramaRecuperacao.indPradImportada != null
+								and !reservaLegalController.reservaLegal.cronogramaRecuperacao.indPradImportada}">
+								 
+							<p:commandButton id="btnUploadArquivoPradRl"
+								value="#{bundle.cefir_lbl_upload_pra}"
+								onclick="dlgUploadPradRl.show(); desabilitarBotaoProximoMesmoFinalizado();"
+								title="#{bundle.cefir_lbl_upload_pra}"
+								process="@this">
+							</p:commandButton>
+						</h:panelGrid>
+		
+						<h:panelGrid rendered="#{reservaLegalController.reservaLegal.cronogramaRecuperacao != null
+							and reservaLegalController.reservaLegal.cronogramaRecuperacao.ideDocumentoObrigatorio != null
+							and reservaLegalController.reservaLegal.cronogramaRecuperacao.indPradImportada != null
+							and !reservaLegalController.reservaLegal.cronogramaRecuperacao.indPradImportada}">
+							
+							<h:outputLabel value="Arquivo do PRA" style="float:left; width:330px;" />
+						</h:panelGrid>
+		
+						<h:panelGrid id="panelTableArquivoPradRl">
+							<p:dataTable id="dataTableArquivoPradRl"
+								rendered="#{reservaLegalController.reservaLegal.cronogramaRecuperacao != null
+									and reservaLegalController.reservaLegal.cronogramaRecuperacao.ideDocumentoObrigatorio != null
+									and reservaLegalController.reservaLegal.cronogramaRecuperacao.indPradImportada != null
+									and !reservaLegalController.reservaLegal.cronogramaRecuperacao.indPradImportada}"
+								widgetVar="dtTbArquivoPradRl"
+								value="#{reservaLegalController.listaPradRl}" 
+								var="arquivo"
+								lazy="true" emptyMessage="#{bundle.cefir_msg_A012}"
+								style="width:472px;">
+									
+								<p:column>
+									<h:outputLabel value="#{arquivo.nomDocumentoObrigatorio}" />
+								</p:column>
+								
+								<p:column>
+									<h:commandButton value="#{arquivo}" image="/resources/img/ico-download.png" immediate="true">
+										<p:fileDownload value="#{reservaLegalController.getFileDownload(arquivo.dscCaminhoArquivo)}" />
+									</h:commandButton>
+									
+									<p:commandLink id="ExcluirArquivoPradRl"
+										onclick="confirmaExclusaoDocumentoPradRl.show(); confirmaExclusaoDocumentoPradRl.content.parent().css('top',  '80px'); confirmaExclusaoDocumentoPradRl.content.parent().css('left',  '500px'); desabilitarBotaoProximoMesmoFinalizado();"
+										ajax="true" 
+										global="false" 
+										process="@this">
+										<h:graphicImage title="Excluir" value="/resources/img/ico-excluir.png" />
+									</p:commandLink>
+								</p:column>
+							</p:dataTable>
+						</h:panelGrid>
+					</h:panelGrid>
+				
+					<h:panelGrid id="localizacaoGeograficaPradRl" columns="1" rendered="#{reservaLegalController.cadastrarCronogramaRl}">
+						<h3><h:outputLabel value="POLIGONAL DA ÁREA A SER RECUPERADA NA RESERVA LEGAL" styleClass="titulo-grupo" /></h3>
+						<h:panelGrid id="panelDetalhesLocalizacaoPrad" columns="3">
+							<h:outputLabel styleClass="form-label" value="* #{bundle.empreendimento_lbl_secao_geometrica}" />
+							
+							<h:outputLabel styleClass="form-label" value="* #{bundle.empreendimento_lbl_datum}"
+								rendered="#{imovelRuralControllerNew.renderedLabelSRID(reservaLegalController.imovelRural.reservaLegal.cronogramaRecuperacao.localizacaoGeografica)}"/>
+		
+							<p:spacer width="10px" rendered="#{!imovelRuralControllerNew.renderedLabelSRID(reservaLegalController.imovelRural.reservaLegal.cronogramaRecuperacao.localizacaoGeografica)}" />
+							
+							<h:outputLabel styleClass="form-label" value="Descrição" />
+							
+							<p:selectOneMenu id="tipoSecaoGeometricaShapePradRl"
+								value="#{reservaLegalController.reservaLegal.cronogramaRecuperacao.localizacaoGeografica.ideClassificacaoSecao}"
+								disabled="#{!reservaLegalController.habilitaCadastroAmbiental
+									 or reservaLegalController.existeTheGeomPradRl()
+									 or (reservaLegalController.reservaLegal.cronogramaRecuperacao.localizacaoGeografica != null
+									 	and not empty reservaLegalController.reservaLegal.cronogramaRecuperacao.localizacaoGeografica.listArquivosShape)
+									 and (!reservaLegalController.editavelParaUsuarioSemRestricao)}"
+								required="true"
+								requiredMessage="O campo Tipo de Inserção é de preenchimento obrigatório."
+								style="width: 160px;"
+								onchange="desabilitarBotaoProximoMesmoFinalizado()">
+								
+								<f:selectItem itemLabel="#{bundle.geral_lbl_selecione}" />
+								<f:selectItems
+									value="#{reservaLegalController.listaSecaoGeometricaRl}"
+									var="secaoGeometricaPrad"
+									itemLabel="#{secaoGeometricaPrad.nomClassificacaoSecao}"
+									itemValue="#{secaoGeometricaPrad}" />
+								<f:converter converterId="secaoGeometricaConverter" />
+								
+								<p:ajax event="change" process="@this" update="localizacaoGeograficaPradRl" listener="#{reservaLegalController.verificaTipoSecaoGeometricaShape(22)}" />
+							</p:selectOneMenu>
+							
+							<h:outputLabel style="margin-left:10px;" 
+								value="#{reservaLegalController.imovelRural.reservaLegal.cronogramaRecuperacao.localizacaoGeografica.ideSistemaCoordenada.nomSistemaCoordenada}"
+								rendered="#{reservaLegalController.renderedLabelSRID(reservaLegalController.imovelRural.reservaLegal.cronogramaRecuperacao.localizacaoGeografica)}" />
+	
+							<p:spacer width="10px" rendered="#{!reservaLegalController.renderedLabelSRID(reservaLegalController.imovelRural.reservaLegal.cronogramaRecuperacao.localizacaoGeografica)}" />
+							
+							<p:inputText id="descLocGeoShapePradRl"
+								value="#{reservaLegalController.reservaLegal.cronogramaRecuperacao.localizacaoGeografica.desLocalizacaoGeografica}"
+								maxlength="150"
+								onchange="desabilitarBotaoProximoMesmoFinalizado()"
+								title="Descrição da Localização do PRAD" 
+								disabled="#{!reservaLegalController.habilitaCadastroAmbiental
+									 or reservaLegalController.existeTheGeomPradRl()
+									 or (reservaLegalController.reservaLegal.cronogramaRecuperacao != null
+									 and not empty reservaLegalController.reservaLegal.cronogramaRecuperacao.localizacaoGeografica.listArquivosShape)
+									 and (!reservaLegalController.editavelParaUsuarioSemRestricao)}"/>
+						</h:panelGrid>
+	
+						<h:panelGrid id="panelUploadShapefilePradRl" columns="1" style="width:360px"
+							rendered="#{reservaLegalController.reservaLegal.cronogramaRecuperacao.localizacaoGeografica.ideClassificacaoSecao.ideClassificacaoSecao == 2
+	 							and !reservaLegalController.existeTheGeomPradRl()}">
+	 							
+							<h:panelGrid rendered="${reservaLegalController.mostrarBotaoUploadShapePradRl()}">
+								<p:commandButton id="btnUploadShapefilePradRl"
+									value="+ Upload dos Shapes"
+									onclick="dlgUploadShapePradRl.show(); desabilitarBotaoProximoMesmoFinalizado();"
+									title="Upload dos Shapes" 
+									process="@this localizacaoGeograficaPradRl">
+								</p:commandButton>
+							</h:panelGrid>
+							
+							<h:panelGrid rendered="#{reservaLegalController.reservaLegal.cronogramaRecuperacao != null
+								and reservaLegalController.reservaLegal.cronogramaRecuperacao.localizacaoGeografica != null  
+								and reservaLegalController.reservaLegal.cronogramaRecuperacao.localizacaoGeografica.listArquivosShape != null  
+								and not empty reservaLegalController.reservaLegal.cronogramaRecuperacao.localizacaoGeografica.listArquivosShape}">
+								
+								<h:outputLabel value="#{bundle.cefir_lbl_localizacao_geografica_shp}" style="float:left; width:360px;" />
+							</h:panelGrid>
+							
+							<h:panelGrid id="panelTableArquivosShapePradRl" style="float:right;">
+								<p:dataTable id="dataTableArquivosShapePradRl"
+									rendered="#{reservaLegalController.reservaLegal.cronogramaRecuperacao != null
+										and reservaLegalController.reservaLegal.cronogramaRecuperacao.localizacaoGeografica != null  
+										and reservaLegalController.reservaLegal.cronogramaRecuperacao.localizacaoGeografica.listArquivosShape != null  
+	 									and not empty reservaLegalController.reservaLegal.cronogramaRecuperacao.localizacaoGeografica.listArquivosShape}"
+									widgetVar="dtTbDocumentosRl"
+									value="#{reservaLegalController.reservaLegal.cronogramaRecuperacao.localizacaoGeografica.listArquivosShape}"
+									var="arquivoPradRl" 
+									lazy="true"
+									emptyMessage="#{bundle.cefir_msg_A012}" style="width:472px;">
+									
+									<p:column>
+										<h:outputLabel value="#{arquivoPradRl}" />
+									</p:column>
+									
+									<p:column>
+										<p:commandLink
+											onclick="confirmaExclusaoArquivoShapeFileLocGeoPradRl.show(); confirmaExclusaoArquivoShapeFileLocGeoPradRl.content.parent().css('top',  '80px'); confirmaExclusaoArquivoShapeFileLocGeoPradRl.content.parent().css('left',  '500px'); desabilitarBotaoProximoMesmoFinalizado();"
+											process="@this"
+											disabled="#{!reservaLegalController.editavelParaUsuarioSemRestricao}">
+											<h:graphicImage title="Excluir" value="/resources/img/ico-excluir.png" />
+											<f:setPropertyActionListener value="${arquivoPradRl}" target="#{reservaLegalController.arquivoShapeExcluir}"></f:setPropertyActionListener>
+										</p:commandLink>
+									</p:column>
+								</p:dataTable>
+							</h:panelGrid>
+						</h:panelGrid>
+							
+						<h:panelGrid id="uploadDesenhoPradRl" columns="1" style="width:370px" 
+							rendered="#{reservaLegalController.reservaLegal.cronogramaRecuperacao.localizacaoGeografica.ideClassificacaoSecao.ideClassificacaoSecao == 3 
+								and !reservaLegalController.existeTheGeomPradRl()}">
+								
+							<h:outputLink
+								value="#{reservaLegalController.caminhoNovoGeoBahia}"
+								title="NOVO GEOBAHIA"
+								target="_blank"
+								onclick="desabilitarBotaoProximoMesmoFinalizado()">
+								<h:outputLabel value="DESENHAR NO NOVO GEOBAHIA" />
+								<f:param name="action" value="draw" />
+								<f:param name="id_imovel" value="#{reservaLegalController.imovelRural.ideImovelRural}" />
+								<f:param name="type" value="rl" />
+								<f:param name="token" value="#{imovelRuralControllerNew.token}" />
+							</h:outputLink>
+						</h:panelGrid>
+						
+						<h:panelGrid id="panelTheGeomPradRl" rendered="#{reservaLegalController.existeTheGeomPradRl()}" columns="1">
+							<h:panelGrid id="panelAcoesVisualizarShapesPradRl" columns="3">
+								<h:outputLink
+									value="#{reservaLegalController.caminhoNovoGeoBahia}"
+									title="NOVO GEOBAHIA"
+									target="_blank">
+									<h:outputLabel value="VISUALIZAR SHAPE DO PRAD DA RESERVA LEGAL" />
+									<f:param name="action" value="view" />
+									<f:param name="id_imovel" value="#{reservaLegalController.imovelRural.ideImovelRural}" />
+									<f:param name="type" value="rl" />
+									<f:param name="token" value="#{imovelRuralControllerNew.token}" />
+								</h:outputLink>
+								
+								<h:outputLink
+									value="#{reservaLegalController.caminhoNovoGeoBahia}"
+									title="NOVO GEOBAHIA"
+									target="_blank">
+									<h:graphicImage title="Visualizar" value="/resources/img/ico-arl-relocacao.png" />
+									<f:param name="action" value="view" />
+									<f:param name="id_imovel" value="#{reservaLegalController.imovelRural.ideImovelRural}" />
+									<f:param name="type" value="rl" />
+									<f:param name="token" value="#{imovelRuralControllerNew.token}" />
+								</h:outputLink>
+								
+								<p:commandLink process="@this"
+									onclick="confirmaExclusaoGeometriaPradRl.show(); confirmaExclusaoGeometriaPradRl.content.parent().css('top', '80px'); confirmaExclusaoGeometriaPradRl.content.parent().css('left', '500px'); desabilitarBotaoProximoMesmoFinalizado();"
+									disabled="#{reservaLegalController.disabledExcluirPoligonal}">
+									<h:graphicImage title="Excluir" value="/resources/img/ico-excluir.png" />
+								</p:commandLink>
+							</h:panelGrid>
+						</h:panelGrid>
+					</h:panelGrid>
+				</p:fieldset>
+			</h:panelGrid>
+	
+			<h:panelGrid id="localizacaoGeograficaRl" columns="1" 
+				rendered="#{reservaLegalController.reservaLegal.ideTipoArl.ideTipoArl == 2
+					or reservaLegalController.reservaLegal.ideTipoArl.ideTipoArl == 3}">
+				
+				<h3><h:outputLabel value="POLIGONAL DA RESERVA LEGAL" styleClass="titulo-grupo" /></h3>
+				<h:panelGrid id="panelDetalhesLocalizacao" columns="3">
+					<h:outputLabel styleClass="form-label" value="* #{bundle.empreendimento_lbl_secao_geometrica}" />
+					
+					<h:outputLabel styleClass="form-label" value="* #{bundle.empreendimento_lbl_datum}"
+						rendered="#{reservaLegalController.renderedLabelSRID(reservaLegalController.imovelRural.reservaLegal.ideLocalizacaoGeografica)}"/>
+	
+					<p:spacer width="10px" rendered="#{!reservaLegalController.renderedLabelSRID(reservaLegalController.imovelRural.reservaLegal.ideLocalizacaoGeografica)}" />
+					
+					<h:outputLabel styleClass="form-label" value="Descrição" />
+					
+					<p:selectOneMenu id="tipoSecaoGeometricaShapeRl"
+						value="#{reservaLegalController.reservaLegal.ideLocalizacaoGeografica.ideClassificacaoSecao}"
+						disabled="#{!reservaLegalController.habilitaCadastroAmbiental
+							 or reservaLegalController.existeTheGeomRl()
+							 or (reservaLegalController.reservaLegal != null
+							 and not empty reservaLegalController.reservaLegal.ideLocalizacaoGeografica.listArquivosShape)
+							 or reservaLegalController.imovelRural.reservaLegalAprovadaOuAverbada
+							 and !reservaLegalController.editavelParaUsuarioSemRestricao}"
+						required="true"
+						requiredMessage="O campo Tipo de Inserção é de preenchimento obrigatório."
+						style="width: 160px;"
+						onchange="desabilitarBotaoProximoMesmoFinalizado()">
+						
+						<f:selectItem itemLabel="#{bundle.geral_lbl_selecione}" />
+						<f:selectItems
+							value="#{reservaLegalController.listaSecaoGeometricaRl}"
+							var="secaoGeometrica"
+							itemLabel="#{secaoGeometrica.nomClassificacaoSecao}"
+							itemValue="#{secaoGeometrica}" />
+						<f:converter converterId="secaoGeometricaConverter" />
+						
+						<p:ajax event="change" process="@this" update="localizacaoGeograficaRl" listener="#{reservaLegalController.verificaTipoSecaoGeometricaShape(2)}" />
+					</p:selectOneMenu>
+					
+					<h:outputLabel style="margin-left:10px;"
+						value="#{reservaLegalController.imovelRural.reservaLegal.ideLocalizacaoGeografica.ideSistemaCoordenada.nomSistemaCoordenada}"
+						rendered="#{reservaLegalController.renderedLabelSRID(reservaLegalController.imovelRural.reservaLegal.ideLocalizacaoGeografica)}" />
+	
+					<p:spacer width="10px" rendered="#{!reservaLegalController.renderedLabelSRID(reservaLegalController.imovelRural.reservaLegal.ideLocalizacaoGeografica)}" />
+					
+					<p:inputText id="descLocGeoShapeRl"
+						value="#{reservaLegalController.reservaLegal.ideLocalizacaoGeografica.desLocalizacaoGeografica}"
+						maxlength="150"
+						onchange="desabilitarBotaoProximoMesmoFinalizado()"
+						title="Descrição da Localização"
+						disabled="#{!reservaLegalController.habilitaCadastroAmbiental
+							 or reservaLegalController.existeTheGeomRl()
+							 or reservaLegalController.imovelRural.reservaLegalAprovadaOuAverbada
+							 and !reservaLegalController.editavelParaUsuarioSemRestricao}" />
+				</h:panelGrid>
+	
+				<h:panelGrid id="panelUploadShapefileRl" columns="1" style="width:360px"
+					rendered="#{reservaLegalController.reservaLegal.ideLocalizacaoGeografica.ideClassificacaoSecao.ideClassificacaoSecao == 2
+						and !reservaLegalController.existeTheGeomRl()}">
+						
+					<h:panelGrid rendered="${reservaLegalController.mostrarBotaoUploadShapeRl()}">
+						<p:commandButton id="btnUploadShapefileRl"
+							value="+ Upload dos Shapes"
+							onclick="dlgUploadShapeRl.show(); desabilitarBotaoProximoMesmoFinalizado();"
+							disabled="#{reservaLegalController.imovelRural.reservaLegalAprovadaOuAverbada and !reservaLegalController.editavelParaUsuarioSemRestricao}"
+							title="Upload dos Shapes" 
+							process="@this localizacaoGeograficaRl">
+						</p:commandButton>
+					</h:panelGrid>
+					
+					<h:panelGrid rendered="#{reservaLegalController.reservaLegal != null 
+						and reservaLegalController.reservaLegal.ideLocalizacaoGeografica != null 
+						and not empty reservaLegalController.reservaLegal.ideLocalizacaoGeografica.listArquivosShape}">
+						
+						<h:outputLabel value="#{bundle.cefir_lbl_localizacao_geografica_shp}" style="float:left; width:360px;" />
+					</h:panelGrid>
+					
+					<h:panelGrid id="panelTableArquivosShapeRl" style="float:right;">
+						<p:dataTable id="dataTableArquivosShapeRl" 
+							rendered="#{reservaLegalController.reservaLegal != null and not empty reservaLegalController.reservaLegal.ideLocalizacaoGeografica.listArquivosShape}"
+							widgetVar="dtTbDocumentosRl"
+							value="#{reservaLegalController.reservaLegal.ideLocalizacaoGeografica.listArquivosShape}"
+							var="arquivoRl" 
+							lazy="true"
+							emptyMessage="#{bundle.cefir_msg_A012}" style="width:472px;">
+							
+							<p:column>
+								<h:outputLabel value="#{arquivoRl}" />
+							</p:column>
+							
+							<p:column>
+								<p:commandLink
+									onclick="confirmaExclusaoArquivoShapeFileLocGeoRl.show(); confirmaExclusaoArquivoShapeFileLocGeoRl.content.parent().css('top',  '80px'); confirmaExclusaoArquivoShapeFileLocGeoRl.content.parent().css('left',  '500px'); desabilitarBotaoProximoMesmoFinalizado();"
+									process="@this"
+									disabled="#{DisabledExcluirPoligonal}">
+									<h:graphicImage title="Excluir" value="/resources/img/ico-excluir.png" />
+									<f:setPropertyActionListener value="${arquivoRl}" target="#{reservaLegalController.arquivoShapeExcluir}"></f:setPropertyActionListener>
+								</p:commandLink>
+							</p:column>
+						</p:dataTable>
+					</h:panelGrid>
+				</h:panelGrid>
+	
+				<h:panelGrid id="uploadDesenhoRl" columns="1" style="width:370px" 
+					rendered="#{reservaLegalController.reservaLegal.ideLocalizacaoGeografica.ideClassificacaoSecao.ideClassificacaoSecao == 3
+						and !reservaLegalController.existeTheGeomRl()}">
+						
+					<h:outputLink
+						value="#{reservaLegalController.caminhoGeoBahia}"
+						title="GEOBAHIA"
+						disabled="${reservaLegalController.imovelRural.reservaLegalAprovadaOuAverbada and !reservaLegalController.editavelParaUsuarioSemRestricao}"
+						target="_blank"
+						onclick="desabilitarBotaoProximoMesmoFinalizado()">
+						<h:outputLabel value="DESENHAR NO GEOBAHIA" />
+						<f:param name="secao" value="cefir" />
+						<f:param name="acao" value="draw" />
+						<f:param name="id" value="#{reservaLegalController.imovelRural.ideImovelRural}" />
+						<f:param name="tema" value="2" />
+						<f:param name="token" value="#{imovelRuralControllerNew.token}" />
+					</h:outputLink>
+				</h:panelGrid>
+	
+				<h:panelGrid id="panelTheGeomRl" rendered="#{reservaLegalController.existeTheGeomRl()}" columns="1">
+					<h:panelGrid id="pnlAcoesVisualizarShapesRl" columns="3">
+						<h:outputLink
+							value="#{reservaLegalController.caminhoGeoBahia}"
+							title="GEOBAHIA"
+							target="_blank">
+							<h:outputLabel value="VISUALIZAR SHAPE DA RESERVA LEGAL" />
+							<f:param name="secao" value="cefir" />
+							<f:param name="acao" value="view" />
+							<f:param name="id" value="#{reservaLegalController.imovelRural.ideImovelRural}" />
+							<f:param name="tema" value="2" />
+							<f:param name="token" value="#{imovelRuralControllerNew.token}" />
+						</h:outputLink>
+						
+						<h:outputLink
+							value="#{reservaLegalController.caminhoGeoBahia}"
+							title="GEOBAHIA"
+							target="_blank">
+							<h:graphicImage title="Visualizar" value="/resources/img/ico-arl-relocacao.png" />
+							<f:param name="secao" value="cefir" />
+							<f:param name="acao" value="view" />
+							<f:param name="id" value="#{reservaLegalController.imovelRural.ideImovelRural}" />
+							<f:param name="tema" value="2" />
+							<f:param name="token" value="#{imovelRuralControllerNew.token}" />
+						</h:outputLink>
+						
+						<p:commandLink process="@this"
+							onclick="confirmaExclusaoGeometriaRl.show(); confirmaExclusaoGeometriaRl.content.parent().css('top',  '80px'); confirmaExclusaoGeometriaRl.content.parent().css('left',  '500px'); desabilitarBotaoProximoMesmoFinalizado();"
+							disabled="${reservaLegalController.imovelRural.reservaLegalAprovadaOuAverbada and !reservaLegalController.editavelParaUsuarioSemRestricao}">
+							<h:graphicImage title="Excluir" value="/resources/img/ico-excluir.png" />
+						</p:commandLink>
+					</h:panelGrid>
+				</h:panelGrid>
+			</h:panelGrid>
+			
+			<h:panelGrid>
+				<p:commandButton id="btnSalvarRl"
+					value="#{bundle.btn_salvar}"
+					actionListener="#{reservaLegalController.salvarReservaLegal()}"
+					process="formCadImovelRural:tabAbasDadosEspecificos:panelRl"
+					disabled="#{!reservaLegalController.habilitaCadastroAmbiental}"
+					oncomplete="habilitarBotaoProximo()"
+					update="formCadImovelRural:tabAbasDadosEspecificos:panelRl"
+					rendered="#{reservaLegalController.renderedBotaoSalvar}">
+				</p:commandButton>
+			</h:panelGrid>
+		</h:panelGrid>
+		
+		<p:confirmDialog id="confirmaExclusaoAprovacao"
+			widgetVar="confirmaExclusaoAprovacao"
+			header="#{bundle.geral_lbl_mensagem}" 
+			message="#{bundle.consultapf_msg_confimrexclusao}"
+			severity="alert">
+			
+			<p:commandButton id="btnConfirmaExclusaoAprovacao"
+				value="#{bundle.consultapf_lbl_sim}"
+				action="#{reservaLegalController.excluirDocumentoAprovacaoReserva()}"
+				update="panelTableDocumentoReservaRegularizada" 
+				onclick="confirmaExclusaoAprovacao.hide()"
+				process="@this" />
+				
+			<p:commandButton 
+				value="#{bundle.consultapf_lbl_nao}" 
+				onclick="confirmaExclusaoAprovacao.hide()" />
+		</p:confirmDialog>
+	
+		<p:dialog id="dialogTermoRecuperacaoRl"
+			header="Condições para recuperação de áreas degradadas"
+			closable="true" 
+			draggable="true" 
+			resizable="false" 
+			width="600"
+			widgetVar="dialogTermoRecuperacaoRl" 
+			modal="true" 
+			height="300">
+			
+			<h:panelGrid id="panelTermoRl" columns="1">
+				<h4>O Plano para recuperação de área degradada deverá conter:</h4>
+				<br />
+				<b>1.</b> Diagnóstico das áreas a serem recuperadas, contemplando os seguintes aspectos: caracterizando a, com análise dos seus aspectos físicos (clima, solo, topografia, recursos hídricos) e bióticos (fauna, flora) e outros<br />
+				<br />
+				&nbsp;&nbsp;&nbsp;&nbsp;a) Caracterização do fato gerador da degradação e/ou da sua ocupação atual<br />
+				&nbsp;&nbsp;&nbsp;&nbsp;b) Estado de conservação da área objeto do Plano com indicação de:<br />
+				<br />
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i) Condições do relevo, indicando ocorrência de erosão<br />
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ii) Condições do solo<br />
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;iii) Condições da cobertura vegetal<br />
+				<br />
+				&nbsp;&nbsp;&nbsp;&nbsp;c) Extensão da área a ser recuperada<br />
+				<br />
+	
+				<b>2.</b> Caracterização da fitofisionomia da região:<br />
+				<br />
+				&nbsp;&nbsp;&nbsp;&nbsp;a) Bioma<br />
+				&nbsp;&nbsp;&nbsp;&nbsp;b) Estado de conservação da vegetação do entorno<br />
+				&nbsp;&nbsp;&nbsp;&nbsp;c) Ocorrências relevantes, a exemplo de áreas que possam servir de porta sementes<br />
+				<br />
+	
+				<b>3.</b> Indicação do(s) Sistema(s) de Plantio de Espécies Nativas<br />
+				<br />
+				&nbsp;&nbsp;&nbsp;&nbsp;a) Implantação<br />
+				&nbsp;&nbsp;&nbsp;&nbsp;b) Enriquecimento<br />
+				&nbsp;&nbsp;&nbsp;&nbsp;c) Regeneração Natural<br />
+				<br />
+	
+				<b>4.</b> Descrição da metodologia para recuperação da área comtemplando os itens abaixo, conforme a necessidade.<br />
+				<br />
+				&nbsp;&nbsp;&nbsp;&nbsp;a) Correções topográficas<br />
+				&nbsp;&nbsp;&nbsp;&nbsp;b) Correções do solo<br />
+				&nbsp;&nbsp;&nbsp;&nbsp;c) Isolamento da Área<br />
+				&nbsp;&nbsp;&nbsp;&nbsp;d) Retirada dos fatores de degradação<br />
+				&nbsp;&nbsp;&nbsp;&nbsp;e) Técnica de plantio<br />
+				&nbsp;&nbsp;&nbsp;&nbsp;f) Preparação e espaçamento das covas<br />
+				&nbsp;&nbsp;&nbsp;&nbsp;g) Listagem de espécies a serem plantadas por categorias regenerativas (pioneiras, secundárias e tardias);<br />
+				&nbsp;&nbsp;&nbsp;&nbsp;h) Esquema do plantio por categoria regenerativa (distribuição das espécies)<br />
+				&nbsp;&nbsp;&nbsp;&nbsp;i) Manutenção, contemplando: controle de pragas, adubação ou irrigação, quando couber<br />
+				&nbsp;&nbsp;&nbsp;&nbsp;j) Implementação de equipamentos atrativos para a avifauna <br />
+				<br />
+	
+				O PRAD deve ser acompanhado da competente Anotação de Responsabilidade Técnica (ART), ou documento equivalente, do responsável pela elaboração, devidamente registrada no competente conselho de classe.
+				<br />
+				<br />
+				As áreas degradadas fora de APP e RL, deverão ser objetos de PRAD específico, com cronograma físico e execução máximo de 5 anos, em percentuais mínimos de 10% no primeiro ano, 25% no segundo ano, 50% no terceiro ano, 75% no quarto ano e 100% no quinto ano.
+				<br />
+				<br />
+			</h:panelGrid>
+		</p:dialog>
+		
+		<p:confirmDialog id="confirmaExclusaoCronogramaEtapaRl"
+			widgetVar="confirmaExclusaoCronogramaEtapaRl"
+			header="#{bundle.geral_lbl_mensagem}"
+			message="#{bundle.msg_confirma_exclusao}" 
+			severity="alert">
+			
+			<p:commandButton id="btnConfirmaExclusaoCronogramaEtapaRl"
+				value="#{bundle.btn_sim}"
+				action="#{reservaLegalController.excluirCronogramaEtapaRl()}"
+				update="panelRl"
+				onclick="confirmaExclusaoCronogramaEtapaRl.hide();"
+				process="@this" />
+				
+			<p:commandButton 
+				value="#{bundle.btn_nao}" 
+				onclick="confirmaExclusaoCronogramaEtapaRl.hide()" />
+		</p:confirmDialog>
+		
+		<p:confirmDialog id="confirmaExclusaoDocumentoPradRl"
+			widgetVar="confirmaExclusaoDocumentoPradRl"
+			header="#{bundle.geral_lbl_mensagem}"
+			message="#{bundle.msg_confirma_exclusao}" 
+			severity="alert">
+			
+			<p:commandButton id="btnConfirmaExclusaoDocumentoPradRl" 
+				value="#{bundle.btn_sim}"
+				action="#{reservaLegalController.excluirDocumentoPrad(1)}"
+				update="panelRl"
+				onclick="confirmaExclusaoDocumentoPradRl.hide();"
+				process="@this" />
+				
+			<p:commandButton 
+				value="#{bundle.btn_nao}" 
+				onclick="confirmaExclusaoDocumentoPradRl.hide()" />
+		</p:confirmDialog>
+	
+		<p:confirmDialog id="confirmaExclusaoArquivoShapeFileLocGeoRl"
+			widgetVar="confirmaExclusaoArquivoShapeFileLocGeoRl"
+			header="#{bundle.geral_lbl_mensagem}"
+			message="#{bundle.msg_confirma_exclusao}" 
+			severity="alert">
+			
+			<p:commandButton id="btnConfirmaExclusaoArquivoShapeFileLocGeoRl"
+				value="#{bundle.btn_sim}"
+				action="${reservaLegalController.excluirArquivo(2)}"
+				update="localizacaoGeograficaRl"
+				onclick="confirmaExclusaoArquivoShapeFileLocGeoRl.hide()"
+				process="@this" />
+				
+			<p:commandButton 
+				value="#{bundle.btn_nao}"  
+				onclick="confirmaExclusaoArquivoShapeFileLocGeoRl.hide()" />
+		</p:confirmDialog>
+		
+		<p:confirmDialog id="confirmaExclusaoArquivoShapeFileLocGeoPradRl"
+			widgetVar="confirmaExclusaoArquivoShapeFileLocGeoPradRl"
+			header="#{bundle.geral_lbl_mensagem}"
+			message="#{bundle.msg_confirma_exclusao}" 
+			severity="alert">
+			
+			<p:commandButton id="btnConfirmaExclusaoArquivoShapeFileLocGeoPradRl"
+				value="#{bundle.btn_sim}"
+				action="${reservaLegalController.excluirArquivo(22)}"
+				update="localizacaoGeograficaPradRl"
+				onclick="confirmaExclusaoArquivoShapeFileLocGeoPradRl.hide()"
+				process="@this" />
+				
+			<p:commandButton 
+				value="#{bundle.btn_nao}" 
+				onclick="confirmaExclusaoArquivoShapeFileLocGeoPradRl.hide()" />
+		</p:confirmDialog>
+	
+		<p:confirmDialog id="confirmaExclusaoGeometriaRl"
+			widgetVar="confirmaExclusaoGeometriaRl"
+			header="#{bundle.hdr_confirma_exclusao}"
+			message="#{bundle.msg_confirma_exclusao}" 
+			severity="alert">
+			
+			<p:commandButton id="btnConfirmaExclusaoGeometriaRl"
+				value="#{bundle.btn_sim}"
+				action="#{reservaLegalController.excluirShape(reservaLegalController.reservaLegal.ideLocalizacaoGeografica, 2)}"
+				update="localizacaoGeograficaRl"
+				onclick="confirmaExclusaoGeometriaRl.hide();" 
+				process="@this" />
+				
+			<p:commandButton 
+				value="#{bundle.btn_nao}" 
+				onclick="confirmaExclusaoGeometriaRl.hide()" />
+		</p:confirmDialog>
+		
+		<p:confirmDialog id="confirmaExclusaoGeometriaPradRl"
+			widgetVar="confirmaExclusaoGeometriaPradRl"
+			header="#{bundle.hdr_confirma_exclusao}"
+			message="#{bundle.msg_confirma_exclusao}" 
+			severity="alert">
+			
+			<p:commandButton id="btnConfirmaExclusaoGeometriaPradRl"
+				value="#{bundle.btn_sim}"
+				action="#{reservaLegalController.excluirShape(reservaLegalController.reservaLegal.cronogramaRecuperacao.localizacaoGeografica, 22)}"
+				update="localizacaoGeograficaPradRl"
+				onclick="confirmaExclusaoGeometriaPradRl.hide();" 
+				process="@this" />
+				
+			<p:commandButton 
+				value="#{bundle.btn_nao}" 
+				onclick="confirmaExclusaoGeometriaPradRl.hide()" />
+		</p:confirmDialog>
+</ui:composition>

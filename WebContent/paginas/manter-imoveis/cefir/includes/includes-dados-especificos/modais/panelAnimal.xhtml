@@ -1,0 +1,65 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+	
+<h:panelGrid id="pnlAnimal" columns="3" rendered="#{imovelRuralControllerNew.pnlAnimal}">					
+	<h:outputLabel value="* #{bundle.cefir_lbl_capacidade_instalada}" />
+	<h:outputLabel value="Uso da água" />
+	<h:outputLabel value="* Manejo" />
+	<p:inputText id="valNumCabeca"
+				 value="#{imovelRuralControllerNew.qtdCabeca}"
+				 maxlength="9"
+				 onkeyup="mascararNumeroAndAddZeros(this, event, 9, 0, '.', ',', 3);"
+				 onkeypress="mascararNumeroAndAddZeros(this, event, 9, 0, '.', ',', 3);"
+				 onblur="mascararNumeroAndAddZeros(this, event, 9, 0, '.', ',', 3);"
+				 style="width: 60px;"
+				 disabled="#{!imovelRuralControllerNew.imovelRural.indAreaProdutiva}" 
+				 required="true" 
+				 requiredMessage="O campo nº de Cabeças é de preenchimento obrigatório.">
+		<f:convertNumber  integerOnly="true" locale="pt_BR" />
+	</p:inputText>
+	
+	<h:panelGrid columns="2" width="100%">
+		<h:selectBooleanCheckbox id="chkUsoDessedentacao" value="#{imovelRuralControllerNew.temUsoDessedentacao}" />
+		<h:outputLabel value="Dessedentação" for="chkUsoDessedentacao" />
+		
+		<h:selectBooleanCheckbox id="chkUsoLimpeza" value="#{imovelRuralControllerNew.temUsoLimpeza}" />
+		<h:outputLabel value="Limpeza" for="chkUsoLimpeza" />
+	</h:panelGrid>
+	
+	<h:panelGrid columns="2" width="100%">
+
+		<h:selectBooleanCheckbox id="chkManejoCria" value="#{imovelRuralControllerNew.indManejoCria}" />
+		<h:outputLabel value="Cria" for="chkManejoCria" />
+		
+		<h:selectBooleanCheckbox id="chkManejoEngorda" value="#{imovelRuralControllerNew.indManejoEngorda}" />
+		<h:outputLabel value="Engorda" for="chkManejoEngorda" />
+		
+		<h:selectBooleanCheckbox id="chkManejoRecria" value="#{imovelRuralControllerNew.indManejoRecria}" />
+		<h:outputLabel value="Recria" for="chkManejoRecria" />
+		
+		<h:selectBooleanCheckbox id="chkManejoReproducao" value="#{imovelRuralControllerNew.indManejoReproducao}" />
+		<h:outputLabel value="Reprodução" for="chkManejoReproducao" />
+		
+	</h:panelGrid>
+	
+	<!-- <p:selectOneMenu id="manejo" 
+					 value="#{imovelRuralControllerNew.manejo}" 
+					 disabled="#{!imovelRuralControllerNew.imovelRural.indAreaProdutiva}" 
+					 required="true" 
+					 requiredMessage="O campo Manejo é de preenchimento obrigatório." 
+					 style="width: 220px;">
+		<f:selectItem itemLabel="#{bundle.geral_lbl_selecione}" />
+		<f:selectItems value="#{imovelRuralControllerNew.listaManejo}" 
+					   var="manejo" 
+					   itemLabel="#{manejo.dscManejo}" 
+					   itemValue="#{manejo}" />
+		<f:converter converterId="manejoConverter" />
+	</p:selectOneMenu> -->
+</h:panelGrid>
+		
+</html>

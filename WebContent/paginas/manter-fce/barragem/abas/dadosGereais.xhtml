@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui">
+	<br />
+	<h:outputText styleClass="titulo-grupo" style="font-weight:bold;"
+		value="Caracterização geral da barragem" />
+	<div class="line" />
+	<br />
+	<b>Uso do reservatório</b>
+	<div class="line" />
+	<table>
+		<tr>
+			<ui:repeat var="uso"
+				value="#{fceBarragemController.buildUsoReservatorios()}">
+				<td><h:panelGrid columns="2">
+						<p:selectBooleanCheckbox value="#{uso.selecionado}"
+							disabled="#{fceBarragemController.desabilitarTudo}">
+							<p:ajax event="change"
+								listener="#{fceBarragemController.addUsoReservatorio(uso)}" />
+						</p:selectBooleanCheckbox>
+						<h:outputText style="margin-left:5px;"
+							value="#{uso.usoReservatorio}" />
+					</h:panelGrid></td>
+			</ui:repeat>
+		</tr>
+	</table>
+	<br />
+	<b>Vazão(ões) do projeto</b>
+	<div class="line" />
+	<h:panelGrid columns="3">
+		<h:outputLabel value="Vazão máxima" />
+		<p:inputText converter="doubleConverterNaoPermitirZero"
+			value="#{fceBarragemController.fceBarragem.vazaoMaxima}"
+			onkeyup="maskIt(this, event, '99.999.999,99', true)" maxlength="13"
+			disabled="#{fceBarragemController.desabilitarTudo}"/>
+		<h:outputLabel value="(m³/s)" />
+		<h:outputLabel value="Vazão regularizada" />
+		<p:inputText converter="doubleConverterNaoPermitirZero"
+			value="#{fceBarragemController.fceBarragem.vazaoRegularizada}"
+			onkeyup="maskIt(this, event, '99.999.999,99', true)" maxlength="13"
+			disabled="#{fceBarragemController.desabilitarTudo}"/>
+		<h:outputLabel value="(m³/s)" />
+		<h:outputLabel value="Descarga de fundo" />
+		<p:inputText converter="doubleConverterNaoPermitirZero"
+			value="#{fceBarragemController.fceBarragem.descargaFundo}"
+			onkeyup="maskIt(this, event, '99.999.999,99', true)" maxlength="13"
+			disabled="#{fceBarragemController.desabilitarTudo}"/>
+		<h:outputLabel value="(m³/s)" />
+	</h:panelGrid>
+	<br />
+	<b>Eixo do barramento</b>
+	<div class="line" />
+	<h:panelGrid columns="3">
+		<h:outputLabel value="Altura máxima" />
+		<p:inputText converter="doubleConverterNaoPermitirZero"
+			value="#{fceBarragemController.fceBarragem.alturaMaxima}"
+			onkeyup="maskIt(this, event, '99.999.999,99', true)" maxlength="13"
+			disabled="#{fceBarragemController.desabilitarTudo}"/>
+		<h:outputLabel value="(m)" />
+		<h:outputLabel value="Volume máximo acumulado" />
+		<p:inputText converter="doubleConverterNaoPermitirZero"
+			value="#{fceBarragemController.fceBarragem.volumeMaximoAcumuldao}"
+			onkeyup="maskIt(this, event, '999.999.999,99', true)" maxlength="14"
+			disabled="#{fceBarragemController.desabilitarTudo}"/>
+		<h:outputLabel value="(m³)" />
+	</h:panelGrid>
+	<br />
+	<div class="line" />
+	<b>Área máxima de inundação</b>
+	<br />
+	<h:panelGrid columns="1" id="pgAreaMaxima">
+		<p:commandLink oncomplete="dlgLocalizacaoGeograficaGeneric.show();"
+			action="#{localizacaoGeograficaGenericController.carregarTela()}"
+			actionListener="${localizacaoGeograficaGenericController.limparLocalizacaoGeografSelecionada()}"
+			process="@this" immediate="true"
+			rendered="#{empty fceBarragemController.fceBarragem.localizacaoGeografica}">
+			<!-- <f:setPropertyActionListener target="#{fceBarragemController.fceBarragem.localizacaoGeografica}" value="#{fceBarragemController.novaLocalizacao()}" /> -->
+			<f:setPropertyActionListener
+				target="#{localizacaoGeograficaGenericController.requerimento}"
+				value="#{fceBarragemController.requerimento.ideRequerimento}" />
+			<f:setPropertyActionListener
+				target="#{localizacaoGeograficaGenericController.tipoSecaoGeometrica}"
+				value="#{fceBarragemController.somenteShape}" />
+			<f:setPropertyActionListener
+				target="#{localizacaoGeograficaGenericController.localizacaoGeograficaSelecionada}"
+				value="#{fceBarragemController.localizacaoGeograficaInundacao}" />
+			<f:setPropertyActionListener
+				target="#{localizacaoGeograficaGenericController.objetoLocalizacao}"
+				value="#{fceBarragemController.localizacaoGeograficaInundacao}" />
+			<!-- <f:setPropertyActionListener target="#{localizacaoGeograficaGenericController.idDoComponenteParaSerAtualizado}" value="formFcebarragem:_tabAbasFcebarragem:pgAreaMaxima" /> -->
+
+			<f:setPropertyActionListener
+				target="#{localizacaoGeograficaGenericController.metodoAtualizarExterno}"
+				value="#{fceBarragemController.metodoRetornoInundacao}" />
+
+			<h:graphicImage title="Incluir coordenada"
+				value="/resources/img/ico-expandir.png" style="margin-right: 2px;" />
+			<h:outputText value="Incluir poligonal da área máxima de inundação" />
+		</p:commandLink>
+		<br />
+		<p:dataTable
+			rendered="#{not empty fceBarragemController.fceBarragem.localizacaoGeografica}"
+			value="#{fceBarragemController.getLocalizacaoGeograficaList(fceBarragemController.fceBarragem.localizacaoGeografica)}"
+			var="localizacao">
+			<p:column headerText="Tipo">
+				<h:outputText
+					value="#{localizacao.ideClassificacaoSecao.nomClassificacaoSecao}" />
+			</p:column>
+			<p:column headerText="Sistema de coordenadas">
+				<h:outputText
+					value="#{localizacao.ideSistemaCoordenada.nomSistemaCoordenada}" />
+			</p:column>
+			<p:column headerText="Área(ha)">
+				<h:outputText
+					value="#{fceBarragemController.getAreaShape(localizacao)}" />
+			</p:column>
+			<p:column headerText="Bioma">
+				<h:outputText value="#{fceBarragemController.getBioma(localizacao)}" />
+			</p:column>
+			<p:column headerText="RPGA">
+				<h:outputText value="#{fceBarragemController.getRPGA(localizacao)}" />
+			</p:column>
+			<p:column headerText="Ações">
+				<a
+					onclick="javascript:${localizacaoGeograficaGenericController.retornarUrl(localizacao)}">
+					<h:graphicImage title="Geobahia"
+						value="/resources/img/ico-arl-relocacao.png" />
+				</a>
+
+				<p:commandLink oncomplete="dialogExcluirInundacao.show();"
+					rendered="#{!fceBarragemController.desabilitarTudo}">
+					<h:graphicImage title="Excluir"
+						value="/resources/img/ico-excluir.png" />
+				</p:commandLink>
+			</p:column>
+		</p:dataTable>
+	</h:panelGrid>
+	<br />
+	<b>Níveis e cotas de operação</b>
+	<div class="line" />
+	<h:panelGrid columns="3">
+		<h:panelGrid columns="3">
+			<h:outputLabel value="Cota máxima" />
+			<p:inputText converter="doubleConverterNaoPermitirZero"
+				value="#{fceBarragemController.fceBarragem.cotaMaxima}"
+				onkeyup="maskIt(this, event, '99.999.999,99', true)" maxlength="13"
+				disabled="#{fceBarragemController.desabilitarTudo}"/>
+			<h:outputLabel value="(m)" />
+		</h:panelGrid>
+		<h:panelGrid columns="3">
+			<h:outputLabel value="Cota mínima" />
+			<p:inputText converter="doubleConverterNaoPermitirZero"
+				value="#{fceBarragemController.fceBarragem.cotaMinima}"
+				onkeyup="maskIt(this, event, '99.999.999,99', true)" maxlength="13"
+				disabled="#{fceBarragemController.desabilitarTudo}"/>
+			<h:outputLabel value="(m)" />
+		</h:panelGrid>
+		<h:panelGrid columns="3">
+			<h:outputLabel value="Cota média diárias" />
+			<p:inputText converter="doubleConverterNaoPermitirZero"
+				value="#{fceBarragemController.fceBarragem.cotaMediaDiarias}"
+				onkeyup="maskIt(this, event, '99.999.999,99', true)" maxlength="13"
+				disabled="#{fceBarragemController.desabilitarTudo}"/>
+			<h:outputLabel value="(m)" />
+		</h:panelGrid>
+	</h:panelGrid>
+	<br />
+	<h:panelGroup>
+		<p:commandButton value="Voltar" style="float:left;"
+			actionListener="#{fceBarragemController.voltarAba()}"
+			update="formFcebarragem" />
+		<p:commandButton value="Avançar" style="float:right;"
+			actionListener="#{fceBarragemController.avancarAba()}"
+			update="formFcebarragem" />
+	</h:panelGroup>
+	<br />
+	<br />
+</ui:composition>

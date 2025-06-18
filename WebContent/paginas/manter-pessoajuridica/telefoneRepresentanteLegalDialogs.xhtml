@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui">	
+	
+	<p:dialog id="telefoneDialogRepLegal" widgetVar="telefoneDialogRepLegal" header="Telefone" resizable="false" modal="true" dynamic="true" position="center">
+	<h:form id="telefoneDialogRepLegalForm">
+		  	<h:panelGrid id="panelcadtelefone">
+				<h:panelGrid id="display" columns="2" class="ui-dialog-title-dialog-telefone" cellpadding="0">
+					
+					<h:outputLabel id="idlabeltipotelefone" class="form-label" value="#{bundle.LabelTipoTelefone}" />
+					
+					<h:outputLabel id="idlabelnumerotelefone" class="form-label" value="#{bundle.LabelNumeroTelefone}" />
+										
+					<h:panelGroup>
+					<!-- TIPO TELEFONE -->
+									
+					<p:selectOneMenu id="idcombotipotelefone" disabled="#{telefoneController.visualiza}"
+						styleClass="form-input" value="#{telefoneController.telefone.ideTipoTelefone}"
+						>
+						<f:selectItem itemLabel="Selecione..."  />
+						<f:selectItems	value="#{telefoneController.listaTiposTelefone}" var="tipo" itemValue="#{tipo}" itemLabel="#{tipo.nomTipoTelefone}" /> 
+						<f:converter converterId="tipoTelefoneConverter" />
+					</p:selectOneMenu>
+					
+					
+					<!-- FIM TIPO TELEFONE -->
+					</h:panelGroup>	
+					
+					<h:panelGroup>
+					<!-- NUMERO TELEFONE -->					
+					
+					<p:inputMask mask="#{bundle.MascaraTelefone}" id="numero" disabled="#{telefoneController.visualiza}"
+						widgetVar="numero"
+						value="#{telefoneController.telefone.numTelefone}" 
+						/>
+					
+					
+					
+					<!-- FIM NUMERO TELEFONE -->
+					</h:panelGroup>	
+					
+					<h:outputText />
+					<h:panelGroup layout="block">
+						
+						<p:commandButton styleClass="form-button" id="resetFormTelefone" rendered="#{!telefoneController.visualiza}"
+							widgetVar="resetFormTelefone" value="#{bundle.LabelBotaoLimpar}"
+							action="#{telefoneController.limparTelefoneAction()}" update="display"/>
+							
+						<p:commandButton styleClass="form-button"
+							value="#{bundle.LabelBotaoSalvar}"
+							action="#{telefoneController.adicionaTelefoneRepresentanteLegal()}"
+							rendered="#{!telefoneController.visualiza}" >
+						</p:commandButton>
+					
+					</h:panelGroup>	
+				</h:panelGrid>
+				<h:outputLabel value="#{bundle.lbl_preench_obrig_asterisc}" style="float: left;" />	
+			</h:panelGrid>
+			</h:form>
+			</p:dialog>
+		
+</ui:composition>

@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="rel_ger_res_end" pageWidth="495" pageHeight="817" whenNoDataType="AllSectionsNoDetail" columnWidth="495" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="80b78396-35cc-4e26-aaf9-1207b1892468">
+	<property name="ireport.zoom" value="1.652892561983471"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="ide_declaracao_transporte" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[$P{ide_declaracao_transporte}]]></defaultValueExpression>
+	</parameter>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[select dtre.ind_possui_licenca_autorizacao, dtre.num_processo_licenca_autorizacao,
+lgr.nom_logradouro as end_ger_res,
+lgr.num_cep as cep_ger_res,
+bgr.nom_bairro as bairro_ger_res,
+mgr.nom_municipio as cidad_ger_res,
+ufgr.des_sigla as uf_ger_res,
+tlgr.nom_tipo_logradouro as tip_log_ger_res
+from declaracao_transporte_residuo_endereco dtre
+inner join endereco e on dtre.ide_endereco = e.ide_endereco
+left join logradouro lgr on lgr.ide_logradouro = e.ide_logradouro
+left join tipo_logradouro tlgr on tlgr.ide_tipo_logradouro = lgr.ide_tipo_logradouro
+left join bairro bgr on bgr.ide_bairro = lgr.ide_bairro
+left join municipio mgr on mgr.ide_municipio = lgr.ide_municipio
+left join estado ufgr on ufgr.ide_estado = mgr.ide_estado
+where dtre.ide_declaracao_transporte = $P{ide_declaracao_transporte}
+and dtre.ide_tipo_endereco = 5]]>
+	</queryString>
+	<field name="ind_possui_licenca_autorizacao" class="java.lang.Boolean"/>
+	<field name="num_processo_licenca_autorizacao" class="java.lang.String"/>
+	<field name="end_ger_res" class="java.lang.String"/>
+	<field name="cep_ger_res" class="java.math.BigDecimal"/>
+	<field name="bairro_ger_res" class="java.lang.String"/>
+	<field name="cidad_ger_res" class="java.lang.String"/>
+	<field name="uf_ger_res" class="java.lang.String"/>
+	<field name="tip_log_ger_res" class="java.lang.String"/>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<detail>
+		<band height="27" splitType="Stretch">
+			<elementGroup>
+				<staticText>
+					<reportElement uuid="180a0963-a2aa-4a95-ae31-a0411eb610dc" positionType="Float" x="4" y="1" width="149" height="12"/>
+					<box>
+						<topPen lineWidth="0.0"/>
+						<bottomPen lineWidth="0.0"/>
+					</box>
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font fontName="SansSerif" size="9" isBold="false"/>
+						<paragraph leftIndent="2"/>
+					</textElement>
+					<text><![CDATA[Endereço da geração do resíduo:]]></text>
+				</staticText>
+				<textField isBlankWhenNull="true">
+					<reportElement uuid="f13fdba2-f66a-47a3-a8c0-5413f98daff3" positionType="Float" x="156" y="1" width="335" height="12" isRemoveLineWhenBlank="true"/>
+					<box>
+						<topPen lineWidth="0.0"/>
+						<bottomPen lineWidth="0.0"/>
+						<rightPen lineWidth="0.0"/>
+					</box>
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font fontName="SansSerif" size="9"/>
+						<paragraph leftIndent="2"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{tip_log_ger_res} + " " + $F{end_ger_res}]]></textFieldExpression>
+				</textField>
+			</elementGroup>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="1431066f-ce55-4e0c-ad03-9e0a25fd8916" positionType="Float" x="89" y="13" width="113" height="12" isRemoveLineWhenBlank="true"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="9"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{bairro_ger_res}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="612d3c0f-119a-456a-b1b6-e478d2f41594" positionType="Float" x="4" y="13" width="79" height="12"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="9" isBold="false"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<text><![CDATA[Bairro/Distrito:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="c0f86587-7f94-4b1e-9ff4-1a2fe217f0c0" positionType="Float" x="455" y="13" width="36" height="12" isRemoveLineWhenBlank="true"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="9"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{uf_ger_res}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="5bd36c4d-1101-42ba-b75f-19359e667997" positionType="Float" x="371" y="13" width="65" height="12" isRemoveLineWhenBlank="true"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif" size="9"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new String($F{cep_ger_res}.toString().substring(0,5)+"-"+$F{cep_ger_res}.toString().substring(5))]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="74857936-3d3f-47ae-9130-7a35b725b0a1" positionType="Float" x="436" y="13" width="19" height="12"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="9" isBold="false"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<text><![CDATA[UF:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="2f118632-4150-4c28-a4f8-33ef1c5efe6c" positionType="Float" x="236" y="13" width="111" height="12" isRemoveLineWhenBlank="true"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="9"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{cidad_ger_res}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="12b308e2-ee2f-44f6-8f83-96aece5b228f" positionType="Float" x="202" y="13" width="34" height="12"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="9" isBold="false"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<text><![CDATA[Cidade:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="cd9d5487-0237-4bf9-abc8-685681aa4a4a" positionType="Float" x="347" y="13" width="24" height="12"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="9" isBold="false"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<text><![CDATA[CEP:]]></text>
+			</staticText>
+			<line>
+				<reportElement uuid="ef244ca2-afb2-4db6-b8ce-eea503d2556c" x="4" y="0" width="487" height="1">
+					<printWhenExpression><![CDATA[$V{REPORT_COUNT} > 1]]></printWhenExpression>
+				</reportElement>
+			</line>
+		</band>
+	</detail>
+</jasperReport>

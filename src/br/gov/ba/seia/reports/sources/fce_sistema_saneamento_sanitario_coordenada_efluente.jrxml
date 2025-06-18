@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="fce_sistema_saneamento_sanitario_coordenada_efluente" pageWidth="495" pageHeight="817" whenNoDataType="AllSectionsNoDetail" columnWidth="495" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="80b78396-35cc-4e26-aaf9-1207b1892468">
+	<property name="ireport.zoom" value="2.4157650000000013"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="11"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String"/>
+	<parameter name="ide_requerimento" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[$P{ide_requerimento}]]></defaultValueExpression>
+	</parameter>
+	<parameter name="ide_fce_ses_lancamento_efluente" class="java.lang.Integer"/>
+	<parameter name="tipo_derivacao" class="java.lang.String"/>
+	<parameter name="vazao" class="java.math.BigDecimal"/>
+	<queryString>
+		<![CDATA[SELECT this_.ide_fce_ses_lancamento_efluente, this_.nom_corpo_hidrico, num_portaria, val_vazao_media,
+       replace(split_part(f_get_vertices(this_.ide_localizacao_geografica), ' ', 2), '(', '') as latitude,
+       replace(split_part(f_get_vertices(this_.ide_localizacao_geografica), ' ', 3), ')', '') as longitude,
+       sis.nom_sistema_coordenada, ses.ide_fce_ses,periodo.dsc_tipo_periodo_derivacao,val_vazao_media
+FROM fce_ses_lancamento_efluentes this_
+INNER JOIN localizacao_geografica lg1_ ON this_.ide_localizacao_geografica=lg1_.ide_localizacao_geografica
+INNER JOIN sistema_coordenada sis on sis.ide_sistema_coordenada = lg1_.ide_sistema_coordenada
+INNER JOIN fce_ses ses on this_.ide_fce_ses = ses.ide_fce_ses
+INNER JOIN fce on ses.ide_fce = fce.ide_fce
+LEFT OUTER JOIN fce_ses_caracteristica_lancamento fscl on this_.ide_fce_ses_lancamento_efluente = fscl.ide_fce_ses_lancamento_efluente
+LEFT OUTER JOIN tipo_periodo_derivacao periodo on this_.ide_tipo_periodo_derivacao = periodo.ide_tipo_periodo_derivacao
+INNER JOIN requerimento r7_ ON fce.ide_requerimento = r7_.ide_requerimento
+WHERE r7_.ide_requerimento=  $P{ide_requerimento}
+group by this_.ide_fce_ses_lancamento_efluente,this_.nom_corpo_hidrico,
+num_portaria, val_vazao_media,latitude,longitude,sis.nom_sistema_coordenada,ses.ide_fce_ses,periodo.dsc_tipo_periodo_derivacao]]>
+	</queryString>
+	<field name="ide_fce_ses_lancamento_efluente" class="java.lang.Integer"/>
+	<field name="nom_corpo_hidrico" class="java.lang.String"/>
+	<field name="num_portaria" class="java.lang.String"/>
+	<field name="val_vazao_media" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[Vazão média da elevatória]]></fieldDescription>
+	</field>
+	<field name="latitude" class="java.lang.String"/>
+	<field name="longitude" class="java.lang.String"/>
+	<field name="nom_sistema_coordenada" class="java.lang.String"/>
+	<field name="ide_fce_ses" class="java.lang.Integer"/>
+	<field name="dsc_tipo_periodo_derivacao" class="java.lang.String"/>
+	<title>
+		<band height="20">
+			<staticText>
+				<reportElement uuid="1feff5a9-9dd8-4b9c-995d-f9e9e9539ff9" positionType="Float" stretchType="RelativeToTallestObject" mode="Opaque" x="0" y="0" width="495" height="20" backcolor="#DDDDDD">
+					<printWhenExpression><![CDATA[]]></printWhenExpression>
+				</reportElement>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif" isBold="false"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<text><![CDATA[Lançamento de Efluentes]]></text>
+			</staticText>
+		</band>
+	</title>
+	<detail>
+		<band height="93">
+			<textField>
+				<reportElement uuid="9cf1f413-8ffb-40bf-835f-121e5e6edcc0" x="194" y="48" width="116" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{num_portaria}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="75f611b1-4eae-43b3-8b16-1271fc2739a7" x="309" y="48" width="177" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{nom_corpo_hidrico}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="0b73397b-0974-4b4e-9b46-442b2a2cb561" x="1" y="48" width="95" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{latitude}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="560d7474-050f-4708-8a7d-2de33e1af94c" x="95" y="48" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{longitude}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="d4fd0c0a-088f-492d-88c2-0be3b16893fd" x="194" y="29" width="116" height="20">
+					<printWhenExpression><![CDATA[$F{ide_fce_ses_lancamento_efluente} != null]]></printWhenExpression>
+				</reportElement>
+				<textElement/>
+				<text><![CDATA[Portaría]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="8c079c88-765f-428f-b52d-cba9bf2c46a6" x="309" y="29" width="177" height="20">
+					<printWhenExpression><![CDATA[$F{ide_fce_ses_lancamento_efluente} != null]]></printWhenExpression>
+				</reportElement>
+				<textElement/>
+				<text><![CDATA[Corpo hídrico]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="6fc307ac-9f09-4651-9d52-d6d78fdb7d1c" x="1" y="29" width="95" height="20">
+					<printWhenExpression><![CDATA[$F{ide_fce_ses_lancamento_efluente} != null]]></printWhenExpression>
+				</reportElement>
+				<textElement/>
+				<text><![CDATA[Latitude]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="1adde073-e2d8-4bfd-abae-62f361a91f28" x="95" y="29" width="100" height="20">
+					<printWhenExpression><![CDATA[$F{ide_fce_ses_lancamento_efluente} != null]]></printWhenExpression>
+				</reportElement>
+				<textElement/>
+				<text><![CDATA[Longitude]]></text>
+			</staticText>
+			<subreport>
+				<reportElement uuid="9bb0a4cc-843b-4323-be5e-d8f154be2945" positionType="Float" isPrintRepeatedValues="false" x="0" y="68" width="494" height="20" isRemoveLineWhenBlank="true" isPrintWhenDetailOverflows="true"/>
+				<subreportParameter name="SUBREPORT_DIR">
+					<subreportParameterExpression><![CDATA[$P{SUBREPORT_DIR}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="ide_fce_ses_lancamento_efluente">
+					<subreportParameterExpression><![CDATA[$F{ide_fce_ses_lancamento_efluente}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "fce_ses_caracterizacao.jasper"]]></subreportExpression>
+			</subreport>
+			<staticText>
+				<reportElement uuid="1d10584c-8661-498a-aeeb-e68816c5fd1b" x="1" y="4" width="333" height="20">
+					<printWhenExpression><![CDATA[$F{ide_fce_ses_lancamento_efluente} != null]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="3" leftPadding="2"/>
+				<textElement>
+					<font fontName="SansSerif" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Coordenada do lançamento]]></text>
+			</staticText>
+			<line>
+				<reportElement uuid="659c3044-3a3e-46b8-a29c-d2975db464e1" x="0" y="22" width="495" height="2"/>
+			</line>
+		</band>
+		<band height="24">
+			<textField>
+				<reportElement uuid="fca87535-6383-4c01-bb92-0dea253dcd5b" x="130" y="0" width="112" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{dsc_tipo_periodo_derivacao} != null ? $F{dsc_tipo_periodo_derivacao} : "Não informado"]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="72619026-e84a-4a26-9a91-c65ecd12c889" x="2" y="0" width="128" height="20"/>
+				<textElement/>
+				<text><![CDATA[Período de Lançamento:]]></text>
+			</staticText>
+		</band>
+		<band height="23">
+			<subreport>
+				<reportElement uuid="ba8a3e2d-d907-45ec-88d3-4da8c40f5793" positionType="Float" isPrintRepeatedValues="false" x="1" y="0" width="494" height="20" isRemoveLineWhenBlank="true" isPrintWhenDetailOverflows="true"/>
+				<subreportParameter name="SUBREPORT_DIR">
+					<subreportParameterExpression><![CDATA[$P{SUBREPORT_DIR}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="ide_fce_ses_lancamento_efluente">
+					<subreportParameterExpression><![CDATA[$F{ide_fce_ses_lancamento_efluente}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "fce_lancamento_efluentes_caracteristicas.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+		<band height="30">
+			<textField>
+				<reportElement uuid="d1f6df38-5a08-4e65-bad5-a956bab071f3" x="130" y="0" width="112" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{val_vazao_media} != null ? $F{val_vazao_media} : "Não informado"]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="daff4888-f777-488f-a66b-e718cbf657aa" x="2" y="0" width="128" height="20"/>
+				<textElement/>
+				<text><![CDATA[Vazão média do efluente:]]></text>
+			</staticText>
+			<line>
+				<reportElement uuid="6d4c13d3-7dc1-405d-b259-99c4e168b30d" x="1" y="22" width="490" height="1"/>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</line>
+		</band>
+	</detail>
+</jasperReport>

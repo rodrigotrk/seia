@@ -1,0 +1,626 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="resumo_requerimento_empreendimento" pageWidth="495" pageHeight="802" columnWidth="495" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="ec28a94d-38a8-4a32-9343-b3a9b6ed12cc">
+	<property name="ireport.zoom" value="1.5026296018031562"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="ide_empreendimento" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="nom_tipo_imovel" class="java.lang.String"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT distinct
+	emp.ide_empreendimento,
+	emp.nom_empreendimento,
+	emp.val_investimento,
+	emp.ind_correspondencia,
+	emp.ind_endereco_correspondencia,
+	emp.ind_base_operacional,
+	case
+      		when emp.ind_unidade_conservacao is null  then 'Não identificado'
+      		when emp.ind_unidade_conservacao = true  then 'Sim'
+		when emp.ind_unidade_conservacao = false  then 'Não'
+   	end as ind_unidade_conservacao,
+	coalesce(emp.des_email, p.des_email) as des_email,
+	l.nom_logradouro,
+	e.num_endereco,
+	b.nom_bairro,
+	e.des_complemento,
+	m.nom_municipio,
+	est.des_sigla,
+	e.des_ponto_referencia,
+	l.num_cep as cep,
+	est.des_sigla as uf,
+	tl.nom_tipo_logradouro,
+
+	l_c.nom_logradouro as nom_logradouro_c,
+	e_c.num_endereco as num_endereco_c,
+	b_c.nom_bairro as nom_bairro_c,
+	e_c.des_complemento as des_complemento_c,
+	m_c.nom_municipio as nom_municipio_c,
+	est_c.des_sigla as des_sigla_c,
+	e_c.des_ponto_referencia as des_ponto_referencia_c,
+	l_c.num_cep as num_cep_c,
+	est_c.des_sigla as uf_c,
+	tl_c.nom_tipo_logradouro as nom_tipo_logradouro_c,
+	ee.ide_endereco_empreendimento,
+
+
+(select
+	 count(m.ide_municipio)
+from empreendimento e
+inner join endereco_empreendimento ee on ee.ide_empreendimento = e.ide_empreendimento
+inner join endereco_empreendimento_municipio eem on eem.ide_endereco_empreendimento  = ee.ide_endereco_empreendimento
+inner join municipio m on m.ide_municipio = eem.ide_municipio
+where e.ide_empreendimento = $P{ide_empreendimento} ) as count_num_municipios
+
+
+
+
+
+FROM empreendimento emp
+INNER JOIN endereco_empreendimento ee ON ee.ide_empreendimento = emp.ide_empreendimento
+left JOIN endereco e on e.ide_endereco = ee.ide_endereco
+left JOIN logradouro l ON l.ide_logradouro = e.ide_logradouro
+left JOIN bairro b ON b.ide_bairro = l.ide_bairro
+left JOIN municipio m ON m.ide_municipio = l.ide_municipio
+left JOIN estado est on est.ide_estado = m.ide_estado
+left JOIN tipo_logradouro tl ON l.ide_tipo_logradouro = tl.ide_tipo_logradouro
+
+left JOIN endereco_empreendimento ee_c ON ee_c.ide_empreendimento = emp.ide_empreendimento and ee_c.ide_tipo_endereco = 2
+left JOIN endereco e_c ON e_c.ide_endereco = ee_c.ide_endereco
+left JOIN logradouro l_c ON l_c.ide_logradouro = e_c.ide_logradouro
+left JOIN bairro b_c ON b_c.ide_bairro = l_c.ide_bairro
+left JOIN municipio m_c ON m_c.ide_municipio = l_c.ide_municipio
+left JOIN estado est_c on est_c.ide_estado = m_c.ide_estado
+left JOIN tipo_logradouro tl_c ON l_c.ide_tipo_logradouro = tl_c.ide_tipo_logradouro
+
+left JOIN imovel_empreendimento ie on emp.ide_empreendimento = ie.ide_empreendimento
+left JOIN imovel i on ie.ide_imovel = i.ide_imovel
+LEFT JOIN pessoa p on p.ide_pessoa = emp.ide_pessoa
+WHERE emp.ide_empreendimento =  $P{ide_empreendimento}
+AND ee.ide_tipo_endereco = 4]]>
+	</queryString>
+	<field name="ide_empreendimento" class="java.lang.Integer">
+		<fieldDescription><![CDATA[Chave estrangeira do empreendimento associado ao cadastro CAEPOG]]></fieldDescription>
+	</field>
+	<field name="nom_empreendimento" class="java.lang.String"/>
+	<field name="val_investimento" class="java.math.BigDecimal"/>
+	<field name="ind_correspondencia" class="java.lang.Boolean"/>
+	<field name="ind_endereco_correspondencia" class="java.lang.Boolean"/>
+	<field name="ind_base_operacional" class="java.lang.Boolean"/>
+	<field name="ind_unidade_conservacao" class="java.lang.String"/>
+	<field name="des_email" class="java.lang.String">
+		<fieldDescription><![CDATA[Email da associação INCRA]]></fieldDescription>
+	</field>
+	<field name="nom_logradouro" class="java.lang.String"/>
+	<field name="num_endereco" class="java.lang.String"/>
+	<field name="nom_bairro" class="java.lang.String"/>
+	<field name="des_complemento" class="java.lang.String"/>
+	<field name="nom_municipio" class="java.lang.String"/>
+	<field name="des_sigla" class="java.lang.String"/>
+	<field name="des_ponto_referencia" class="java.lang.String"/>
+	<field name="cep" class="java.math.BigDecimal"/>
+	<field name="uf" class="java.lang.String"/>
+	<field name="nom_tipo_logradouro" class="java.lang.String"/>
+	<field name="nom_logradouro_c" class="java.lang.String"/>
+	<field name="num_endereco_c" class="java.lang.String"/>
+	<field name="nom_bairro_c" class="java.lang.String"/>
+	<field name="des_complemento_c" class="java.lang.String"/>
+	<field name="nom_municipio_c" class="java.lang.String"/>
+	<field name="des_sigla_c" class="java.lang.String"/>
+	<field name="des_ponto_referencia_c" class="java.lang.String"/>
+	<field name="num_cep_c" class="java.math.BigDecimal"/>
+	<field name="uf_c" class="java.lang.String"/>
+	<field name="nom_tipo_logradouro_c" class="java.lang.String"/>
+	<field name="ide_endereco_empreendimento" class="java.lang.Integer"/>
+	<field name="count_num_municipios" class="java.lang.Long"/>
+	<variable name="isLac" class="java.lang.Boolean">
+		<initialValueExpression><![CDATA[null]]></initialValueExpression>
+	</variable>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="82" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="6bf1afde-2229-462a-b9b4-b02157e81b03" positionType="Float" mode="Opaque" x="0" y="0" width="495" height="15" backcolor="#DDDDDD"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif" isBold="true" isStrikeThrough="false"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<text><![CDATA[Dados do Empreendimento]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="604ef808-5eac-4b76-a718-dbf77b8ec47f" positionType="Float" x="14" y="17" width="34" height="12"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8" isBold="false"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<text><![CDATA[Nome:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="604ef808-5eac-4b76-a718-dbf77b8ec47f" positionType="Float" x="14" y="29" width="34" height="12"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8" isBold="false"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<text><![CDATA[E-mail:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="604ef808-5eac-4b76-a718-dbf77b8ec47f" positionType="Float" x="368" y="29" width="36" height="12"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8" isBold="false"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<text><![CDATA[Tipo:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="dd970181-419d-40b7-9e54-3fa518a27a15" positionType="Float" x="67" y="46" width="290" height="12" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$F{nom_logradouro} != null]]></printWhenExpression>
+				</reportElement>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="9"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new String($F{nom_logradouro} == null ? "":  $F{nom_tipo_logradouro}+" "+$F{nom_logradouro})]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="bb4fc0e6-9002-4405-888a-38a36998efeb" positionType="Float" x="87" y="58" width="61" height="12" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$F{nom_logradouro} != null]]></printWhenExpression>
+				</reportElement>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8" isBold="false"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<text><![CDATA[Bairro/Distrito:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="d567e28e-52e5-4857-9c2e-d9904bcd5468" positionType="Float" x="328" y="58" width="129" height="12" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$F{nom_logradouro} != null]]></printWhenExpression>
+				</reportElement>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="9"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nom_municipio}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="36522a5f-1606-4dab-9d57-44ab28b0884d" positionType="Float" x="472" y="58" width="20" height="12" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$F{nom_logradouro} != null]]></printWhenExpression>
+				</reportElement>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="9"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{uf}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="ac1a4ed2-92d2-43e9-9b01-b290f8485a79" positionType="Float" x="458" y="58" width="15" height="12" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$F{nom_logradouro} != null]]></printWhenExpression>
+				</reportElement>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8" isBold="false"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<text><![CDATA[UF:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="25458a57-d5e0-4a67-a439-f9c8f3c767cc" positionType="Float" x="294" y="58" width="35" height="12" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$F{nom_logradouro} != null]]></printWhenExpression>
+				</reportElement>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8" isBold="false"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<text><![CDATA[Cidade:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="2d0faf34-1d03-401e-9245-30f870aef9d7" positionType="Float" x="34" y="58" width="53" height="12" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$F{nom_logradouro} != null]]></printWhenExpression>
+				</reportElement>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="9"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{cep}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="8b9aeeea-4772-4279-bd47-b60403d709fe" positionType="Float" x="14" y="58" width="21" height="12" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$F{nom_logradouro} != null]]></printWhenExpression>
+				</reportElement>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8" isBold="false"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<text><![CDATA[CEP:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="a4f3491d-0cc0-44f4-9d9b-3d671c613eb6" positionType="Float" x="14" y="46" width="53" height="12" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$F{nom_logradouro} != null]]></printWhenExpression>
+				</reportElement>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8" isBold="false"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<text><![CDATA[Logradouro:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="3717f5e5-8cd6-4a3e-8b7f-84fa5e5efcd7" positionType="Float" x="147" y="58" width="147" height="12" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$F{nom_logradouro} != null]]></printWhenExpression>
+				</reportElement>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="9"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nom_bairro}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
+				<reportElement uuid="a7a3bbce-ab7a-4971-b28d-1ac4b4d4fadd" positionType="Float" x="48" y="17" width="444" height="12"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="9"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nom_empreendimento}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
+				<reportElement uuid="a7a3bbce-ab7a-4971-b28d-1ac4b4d4fadd" positionType="Float" x="48" y="29" width="320" height="12"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="9"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{des_email}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
+				<reportElement uuid="a7a3bbce-ab7a-4971-b28d-1ac4b4d4fadd" positionType="Float" x="405" y="29" width="87" height="12"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="9"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{nom_tipo_imovel}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="ec889b44-90d4-4482-9142-ee3fc08249c9" positionType="Float" x="214" y="70" width="278" height="12" isRemoveLineWhenBlank="true"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="9"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ind_unidade_conservacao}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="c3f4fdac-1328-42ad-8453-6d069ef46ac6" positionType="Float" x="14" y="70" width="200" height="12" isRemoveLineWhenBlank="true"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8" isBold="false"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<text><![CDATA[Empreendimento em Unidade de Conservação:]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="c565fbaa-1763-493a-b94c-fbff74d557b5" x="357" y="46" width="135" height="12"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Complemento: " + $F{des_complemento}]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="38">
+			<printWhenExpression><![CDATA[($F{nom_logradouro_c} != null) && !$F{ind_endereco_correspondencia}]]></printWhenExpression>
+			<staticText>
+				<reportElement uuid="a4f3491d-0cc0-44f4-9d9b-3d671c613eb6" positionType="Float" x="14" y="12" width="53" height="12" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$F{nom_logradouro_c} != null]]></printWhenExpression>
+				</reportElement>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8" isBold="false"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<text><![CDATA[Logradouro:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="dd970181-419d-40b7-9e54-3fa518a27a15" positionType="Float" x="67" y="12" width="290" height="12" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$F{nom_logradouro_c} != null]]></printWhenExpression>
+				</reportElement>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="9"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new String($F{nom_logradouro_c} == null ? "":  $F{nom_tipo_logradouro_c}+" "+$F{nom_logradouro_c})]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="3717f5e5-8cd6-4a3e-8b7f-84fa5e5efcd7" positionType="Float" x="147" y="24" width="147" height="12" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$F{nom_logradouro_c} != null]]></printWhenExpression>
+				</reportElement>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="9"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nom_bairro_c}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="ac1a4ed2-92d2-43e9-9b01-b290f8485a79" positionType="Float" x="458" y="24" width="15" height="12" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$F{nom_logradouro_c} != null]]></printWhenExpression>
+				</reportElement>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8" isBold="false"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<text><![CDATA[UF:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="d567e28e-52e5-4857-9c2e-d9904bcd5468" positionType="Float" x="328" y="24" width="129" height="12" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$F{nom_logradouro_c} != null]]></printWhenExpression>
+				</reportElement>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="9"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nom_municipio_c}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="25458a57-d5e0-4a67-a439-f9c8f3c767cc" positionType="Float" x="294" y="24" width="35" height="12" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$F{nom_logradouro_c} != null]]></printWhenExpression>
+				</reportElement>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8" isBold="false"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<text><![CDATA[Cidade:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="36522a5f-1606-4dab-9d57-44ab28b0884d" positionType="Float" x="472" y="24" width="20" height="12" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$F{nom_logradouro_c} != null]]></printWhenExpression>
+				</reportElement>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="9"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{uf_c}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="bb4fc0e6-9002-4405-888a-38a36998efeb" positionType="Float" x="87" y="24" width="61" height="12" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$F{nom_logradouro_c} != null]]></printWhenExpression>
+				</reportElement>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8" isBold="false"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<text><![CDATA[Bairro/Distrito:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="2d0faf34-1d03-401e-9245-30f870aef9d7" positionType="Float" x="34" y="24" width="53" height="12" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$F{nom_logradouro_c} != null]]></printWhenExpression>
+				</reportElement>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="9"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{num_cep_c}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="0714cbb8-deaa-47bd-b735-19dff8ab6154" positionType="Float" mode="Transparent" x="0" y="0" width="214" height="13" backcolor="#DDDDDD">
+					<printWhenExpression><![CDATA[$F{nom_logradouro_c} != null]]></printWhenExpression>
+				</reportElement>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif" isBold="true"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<text><![CDATA[Endereço de Correspondência]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="8b9aeeea-4772-4279-bd47-b60403d709fe" positionType="Float" x="14" y="24" width="21" height="12" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$F{nom_logradouro_c} != null]]></printWhenExpression>
+				</reportElement>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8" isBold="false"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<text><![CDATA[CEP:]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="88b7ebf9-d48f-4212-afb4-520838a7c83e" x="357" y="12" width="135" height="12"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Complemento: " + $F{des_complemento_c}]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="18">
+			<subreport>
+				<reportElement uuid="c9803d11-1986-49b7-854b-dfc93ded81b4" x="0" y="2" width="492" height="16"/>
+				<subreportParameter name="ide_empreendimento">
+					<subreportParameterExpression><![CDATA[$F{ide_empreendimento}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<returnValue subreportVariable="isLac" toVariable="isLac"/>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "resumo_requerimento_empreendimento_tipologia.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+		<band height="25">
+			<printWhenExpression><![CDATA[$V{isLac}]]></printWhenExpression>
+			<textField>
+				<reportElement uuid="2ec6202c-385d-410f-932e-1ae6d8d889c5" x="14" y="5" width="478" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new String(($F{ind_base_operacional} ? "O empreendimento possui base operacional no Estado da Bahia." : "O empreendimento não possui base operacional no Estado da Bahia." ))]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="20">
+			<printWhenExpression><![CDATA[$F{count_num_municipios} != 0]]></printWhenExpression>
+			<subreport>
+				<reportElement uuid="960cea5b-df54-4939-bbd4-b7d7efbcdad9" x="0" y="0" width="492" height="20"/>
+				<subreportParameter name="SUBREPORT_DIR">
+					<subreportParameterExpression><![CDATA[$P{SUBREPORT_DIR}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="ide_empreendimento">
+					<subreportParameterExpression><![CDATA[$P{ide_empreendimento}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "resumo_requerimento_empreendimento_municipio.jasper"]]></subreportExpression>
+			</subreport>
+			<staticText>
+				<reportElement uuid="5fe823e2-9a15-4428-9423-eb7372b7acf4" x="155" y="0" width="337" height="20">
+					<printWhenExpression><![CDATA[false]]></printWhenExpression>
+				</reportElement>
+				<textElement>
+					<font fontName="SansSerif"/>
+				</textElement>
+				<text><![CDATA["O empreendimento ultrapassa os limites do município no endereço informado? Sim"]]></text>
+			</staticText>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

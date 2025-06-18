@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui">
+
+	<h:form id="formProblemaEmailUsuario">
+		<h:panelGrid id="panelProblemas_reativar_usuario" columns="1">
+			<h:outputLabel value="#{bundle.msg_problemas_reativar_usuario}" />
+			<br />
+			<br />
+			<h:outputLabel value="* #{bundle.lbl_cpf}:" />
+			<p:inputMask id="inpCpf" value="#{esquecimentoSenhaController.usuarioExterno.pessoaFisica.numCpf}" mask="#{bundle.consultapf_msk_cpf}"
+				converter="cpfConverter" validator="cpfValidator" style="width: 160px;" >
+			</p:inputMask>
+			<br />
+			<h:outputLabel value="* #{bundle.lbl_email}:" />
+			<p:inputText value="#{esquecimentoSenhaController.usuarioExterno.pessoaFisica.pessoa.desEmail}" maxlength="70" validator="emailValidator" style="width: 348px;" />
+			<br />
+			<h:panelGroup>
+				<p:commandButton action="#{esquecimentoSenhaController.reenviarEmailUsuario()}" value="#{bundle.geral_lbl_reenviar}" oncomplete="validaTela(xhr, status, args, dialogProblemaEmailUsuario)" update="formProblemaEmailUsuario" />
+			</h:panelGroup>
+		</h:panelGrid>
+	</h:form>
+
+</ui:composition>

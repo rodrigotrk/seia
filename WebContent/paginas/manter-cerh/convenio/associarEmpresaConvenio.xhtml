@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui">
+	
+	<h:form id="formIncluirConvenio">
+	
+		<h:panelGrid columns="5" id="panelEmpresa">
+			<h:outputLabel value="CNPJ" />
+			<p:inputMask id="cnpj" disabled="#{contratoConvenioController.convenioSalvo}"
+				mask="#{bundle.consultapj_msk_cnpj}"
+				value="#{contratoConvenioController.cnpj}"
+				converter="cnpjConverter"
+				validator="cnpjValidator">
+			</p:inputMask>
+			
+			<p:commandLink actionListener="#{contratoConvenioController.consultarEmpresa()}" process="@this,cnpj" disabled="#{contratoConvenioController.convenioSalvo}" >
+				<h:graphicImage title="Pesquisar Empresa" value="/resources/img/ico-pesquisa.png" />
+			</p:commandLink>
+			
+			<h:outputLabel value="Nome/Razão Social:" id="nomeOutput" style="font-weight: bold;" rendered="#{not empty contratoConvenioController.pessoaJuridica.nomRazaoSocial}" />
+			<h:outputText id="nomeInput" value="#{contratoConvenioController.pessoaJuridica.nomRazaoSocial}" rendered="#{not empty contratoConvenioController.pessoaJuridica.nomRazaoSocial}" />
+			
+		</h:panelGrid>
+		
+		<h:panelGroup id="panelConvenio" layout="block" style="margin-top:20px;">
+			
+			<h:panelGrid columns="2">
+				<h:panelGrid>
+					<h:outputText value="Tipo Projeto"/>
+					<p:selectOneMenu id="listaTipoProjeto" disabled="#{contratoConvenioController.desabilitar}" required="true" requiredMessage="Tipo Projeto é de preenchimento obrigatório"
+						value="#{contratoConvenioController.contratoConvenio.ideTipoProjeto}" style="width: 317px;"
+						converter="simpleEntityConverter">
+						<f:selectItem itemLabel="Selecione..."/>
+						<f:selectItems value="#{contratoConvenioController.listTipoProjeto}" var="ltp" itemLabel="#{ltp.nomTipoProjeto}" 
+						itemValue="#{ltp}"/>
+					</p:selectOneMenu>
+				</h:panelGrid>
+				<h:panelGrid>
+					<h:outputText value="Gestor Financeiro"/>
+		 			<p:selectOneMenu id="listaGestorFinanceiro" disabled="#{contratoConvenioController.desabilitar}" required="true" requiredMessage="Gestor Financeiro é de preenchimento obrigatório"
+						value="#{contratoConvenioController.contratoConvenio.ideGestorFinanceiro}" style="width: 257px;"
+						converter="simpleEntityConverter">
+						<f:selectItem itemLabel="Selecione..."/>
+						<f:selectItems value="#{contratoConvenioController.listGestorFinanceiro}" var="lgf" itemLabel="#{lgf.nomGestorFinanceiro}" 
+						itemValue="#{lgf}"/>
+					</p:selectOneMenu>		 				
+				</h:panelGrid>
+				<h:panelGrid>
+					<h:outputText value="Nome Convênio"/>
+					<p:inputText value="#{contratoConvenioController.contratoConvenio.nomContratoConvenio}" required="true" requiredMessage="Nome Convênio é de preenchimento obrigatório" disabled="#{contratoConvenioController.desabilitar}" style="width: 310px;"/>
+				</h:panelGrid>
+				<h:panelGrid>
+					<h:outputText value="Número Contrato"/>
+					<p:inputText value="#{contratoConvenioController.contratoConvenio.numContrato}"  disabled="#{contratoConvenioController.desabilitar}" required="true" requiredMessage="Número Contrato é de preenchimento obrigatório" style="width: 250px;"/>
+				</h:panelGrid>
+				<p:commandButton actionListener="#{contratoConvenioController.salvarConvenio()}" value="Salvar" disabled="#{contratoConvenioController.desabilitar}" style="margin-left:3px"/>
+			</h:panelGrid>
+			
+		</h:panelGroup>			
+	
+		<h:panelGroup id="panelUsarioxConvenio" layout="block" style="margin-top:10px;">
+		
+			<h:panelGrid columns="2">
+				<h:panelGrid>
+					<h:outputLabel value="CPF" />
+					<p:inputMask id="cpf" disabled="#{!contratoConvenioController.adicionarUsuario}"
+						mask="#{bundle.consultapf_msk_cpf}" 
+						value="#{contratoConvenioController.numCpf}" 
+						converter="cpfConverter" 
+						validator="cpfValidator">
+					</p:inputMask>
+				</h:panelGrid>
+				<h:panelGrid>
+					<h:outputLabel value="" />
+					<p:commandButton actionListener="#{contratoConvenioController.adicionarUsuario()}" value="Adicionar" disabled="#{!contratoConvenioController.adicionarUsuario}"/>
+				</h:panelGrid>
+			</h:panelGrid>
+			
+			<h:panelGroup layout="block" style="margin-top:15px;">
+				<p:dataTable id="tableUsuarioConvenioEmpresa"
+					style="width:610px" var="usuarioConvenio"
+					value="#{contratoConvenioController.listPessoaFisicaContratoConvenio()}" emptyMessage="Não há usuários vinculados até o momento"
+					lazy="true" paginator="true" rows="10" paginatorPosition="bottom"
+					paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}">
+		
+					<f:facet name="header">
+		            	Lista de Usuários Vinculados ao Convênio
+		        	</f:facet>
+		
+					<p:column headerText="Nome" style="text-align:center;">
+						<h:outputText value="#{usuarioConvenio.idePessoaFisica.nomPessoa}" />
+					</p:column>
+					
+					
+					<p:column headerText="CPF" style="text-align:center;">
+						<h:outputText value="#{usuarioConvenio.idePessoaFisica.numCpf}" />
+					</p:column>
+		
+					<p:column headerText="Ações" style="text-align:center">
+						<p:commandLink oncomplete="confirmaExclusaoUsuario.show();" process="@this" disabled="#{contratoConvenioController.desabilitar}">
+							<f:setPropertyActionListener target="#{contratoConvenioController.pessoaFisicaContratoConvenio}" value="#{usuarioConvenio}" />
+							<h:graphicImage title="Desvincular usuário" value="/resources/img/ico-excluir.png" />
+						</p:commandLink>
+					</p:column>		
+		
+				</p:dataTable>
+			</h:panelGroup>
+			
+		</h:panelGroup>
+		
+		<h:panelGroup layout="block" style="margin-top:20px; text-align:right;">
+			<p:commandButton value="Voltar" onclick="dialogIncluirConvenio.hide()" process="@this"/>
+		</h:panelGroup>
+	
+	</h:form>
+		
+</ui:composition>

@@ -1,0 +1,400 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui"
+	xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+
+	<p:dialog id="dialogEfetuarEnquadramento"
+		style="overflow-y:auto; max-height:95%; top:20px !important;"
+		modal="true" showHeader="false" appendToBody="true"
+		widgetVar="dialogEfetuarEnquadramento" width="901" position="top"
+		resizable="false">
+		<h:form id="enquadramento">
+			<h:panelGroup id="cabecalhoEnquadramento"
+				rendered="#{!enquadramentoController.reenquadramento}">
+				<h1 style="font-size: 14px">EFETUAR ENQUADRAMENTO</h1>
+				<hr style="width: 100%; margin-top: 5px; margin-bottom: 5px; border: none; border-top: 1px solid #ccc;" />
+				<p style="margin: 5px;" class="titulo-grupo">
+					<h:outputText value="Dados do requerimento" />
+				</p>
+				<h:panelGrid columns="4">
+					<h:outputLabel value="N° Requerimento : " styleClass="tit-requerimento" />
+					<h:outputText value="#{enquadramentoController.requerimento.numRequerimento}" styleClass="dados-requerimento" />
+					<h:outputLabel value="Empreendimento : " styleClass="tit-requerimento" />
+					<h:outputText value="#{enquadramentoController.requerimento.ultimoEmpreendimento.nomEmpreendimento}" styleClass="dados-requerimento" />
+					<h:outputLabel value="CPF : " styleClass="tit-requerimento" rendered="#{enquadramentoController.requerimento.requerente.PF}" />
+					<h:outputLabel value="CNPJ : " styleClass="tit-requerimento" rendered="#{enquadramentoController.requerimento.requerente.PJ}" />
+					<h:outputText value="#{enquadramentoController.requerimento.requerente.cpfCnpj}" styleClass="dados-requerimento" />
+					<h:outputLabel value="Requerente : " styleClass="tit-requerimento" />
+					<h:outputText value="#{enquadramentoController.requerimento.requerente.nomeRazao}" styleClass="dados-requerimento" />
+				</h:panelGrid>
+			</h:panelGroup>
+
+			<h:panelGroup id="cabecalhoReenquadramento"
+				rendered="#{enquadramentoController.reenquadramento}">
+				<h1 style="font-size: 14px">EFETUAR REENQUADRAMENTO</h1>
+				<hr style="width: 100%; margin-top: 5px; margin-bottom: 5px; border: none; border-top: 1px solid #ccc;" />
+				<h:panelGrid columns="4">
+					<h:outputLabel value="N° do Processo : " styleClass="tit-requerimento" />
+					<h:outputText value="#{enquadramentoController.processoReenquadramentoDTO.processoReenquadramento.ideProcesso.numProcesso}" styleClass="dados-requerimento" />
+					<h:outputLabel value="Requerente : " styleClass="tit-requerimento" />
+					<h:outputText value="#{enquadramentoController.processoReenquadramentoDTO.requerente.nomeRazao}" styleClass="dados-requerimento" />
+					<h:outputLabel value="N° Requerimento : " styleClass="tit-requerimento" />
+					<h:outputText value="#{enquadramentoController.processoReenquadramentoDTO.requerimento.numRequerimento}" styleClass="dados-requerimento" />
+					<h:outputLabel value="Empreendimento : " styleClass="tit-requerimento" />
+					<h:outputText value="#{fn:length(enquadramentoController.processoReenquadramentoDTO.empreendimento.nomEmpreendimento) gt 55 ?
+					  enquadramentoController.processoReenquadramentoDTO.empreendimento.nomEmpreendimento.substring(0,55).concat('...') :
+					  enquadramentoController.processoReenquadramentoDTO.empreendimento.nomEmpreendimento}" styleClass="dados-requerimento" />
+				</h:panelGrid>
+			</h:panelGroup>
+
+			<h:panelGrid rendered="#{enquadramentoController.passivelOutorga}" style="margin-top:4px">
+				<h:outputText value="#{bundle.requerimentoUnicoLabelDispensaOutorga}" style="font-weight: bold; color:red;font-size:14px;" />
+			</h:panelGrid>
+
+			<hr style="width: 100%; margin-top: 5px; margin-bottom: 5px; border: none; border-top: 1px solid #ccc;" />
+
+			<!-- <h:panelGroup id="groupEnquadramento" rendered="#{!enquadramentoController.reenquadramento}"> -->
+			<h:panelGroup id="groupEnquadramento" layout="block">
+				
+				<h:panelGrid rendered="#{enquadramentoController.enquadramentoJaIniciado}">
+					<h1>O enquadramento deste requerimento já foi iniciado!</h1>
+				</h:panelGrid>
+
+				<h:panelGrid style="margin-top: 15px;">
+					<h:outputText rendered="#{!enquadramentoController.reenquadramento}" styleClass="titulo-grupo" value="Dados do enquadramento" />
+					<h:outputText rendered="#{enquadramentoController.reenquadramento}" styleClass="titulo-grupo" value="Dados do reenquadramento" />
+				</h:panelGrid>
+
+				<h:panelGroup layout="block" rendered="#{not enquadramentoController.enquadramentoJaIniciado}" style="margin-top: 15px;">
+					
+					<h:panelGrid rendered="#{enquadramentoController.outrosAtos or enquadramentoController.reenquadramento}">
+						<h:outputText rendered="#{!enquadramentoController.reenquadramento}" value="* É possível realizar o enquadramento?" />
+						<h:outputText rendered="#{enquadramentoController.reenquadramento}" value="* É possível realizar o reenquadramento?" />
+						<p:selectOneRadio value="#{enquadramentoController.enquadramento.indEnquadramentoAprovado}">
+							<f:selectItem itemLabel="Sim" itemValue="#{true}" />
+							<f:selectItem itemLabel="Não" itemValue="#{false}" />
+							<p:ajax event="change" listener="#{enquadramentoController.exibirTextoEmailReprovado()}" update="@form" />
+						</p:selectOneRadio>
+					</h:panelGrid>
+				
+					<h:panelGroup layout="block" rendered="#{!enquadramentoController.reenquadramento}">
+						
+						<h:panelGrid rendered="#{enquadramentoController.dla}">
+							<h:outputText value="Além da DLA, deseja enquadrar o requerimento em algum ato ambiental?" />
+							<p:selectOneRadio value="#{enquadramentoController.outrosAtos}">
+								<f:selectItem itemLabel="Sim" itemValue="#{true}" />
+								<f:selectItem itemLabel="Não" itemValue="#{false}" />
+								<p:ajax event="change" global="false" update="@form" />
+							</p:selectOneRadio>
+						</h:panelGrid>
+						
+						<h:panelGrid id="aprovado" rendered="#{enquadramentoController.outrosAtos and enquadramentoController.enquadramento.indEnquadramentoAprovado}" style="width:800px">
+	
+							<h:panelGrid id="uploadER">
+								<h:outputText value="O empreendimento é passível de EIA/RIMA?" />
+								<p:selectOneRadio value="#{enquadramentoController.enquadramento.indPassivelEiarima}"
+									disabled="#{not empty enquadramentoController.enquadramento.dscCaminhoArquivoRima}">
+									<f:selectItem itemLabel="Sim" itemValue="#{true}" />
+									<f:selectItem itemLabel="Não" itemValue="#{false}" />
+									<p:ajax global="false" update="uploadER" process="@this" />
+								</p:selectOneRadio>
+								<p:fileUpload uploadLabel="false" label="Upload Documento"
+									invalidFileMessage="Tipo de arquivo inválido."
+									update="aprovado"
+									fileUploadListener="#{enquadramentoController.manipularArquvio}"
+									mode="advanced" auto="true"
+									rendered="#{enquadramentoController.enquadramento.indPassivelEiarima and empty enquadramentoController.enquadramento.dscCaminhoArquivoRima}"
+									allowTypes="/(\.|\/)(pdf|gif|jpeg|png|jpg)$/" />
+								<h:panelGrid columns="3" rendered="#{not empty enquadramentoController.enquadramento.dscCaminhoArquivoRima}">
+									<h:outputText value="Arquivo EIA/RIMA : " />
+									<p:commandLink ajax="false"
+										value="#{enquadramentoController.enquadramento.nomeArquivoRima}"
+										style="color:blue;">
+										<p:fileDownload value="#{enquadramentoController.fileDownload}" />
+									</p:commandLink>
+									<p:commandLink global="false"
+										oncomplete="modalExcluirRima.show()">
+										<h:graphicImage title="Excluir" value="/resources/img/ico-excluir.png" />
+									</p:commandLink>
+								</h:panelGrid>
+							</h:panelGrid>
+						</h:panelGrid>
+					</h:panelGroup>
+					
+				</h:panelGroup>
+				
+			</h:panelGroup>
+
+			<h:panelGroup id="pnlAtoTipologia" layout="block" rendered="#{enquadramentoController.renderedPnlAtoTipologia}" style="width:100%">
+				
+				<h:panelGrid rendered="#{enquadramentoController.reenquadramento}" style="margin-top: 15px;">
+					<h:outputText value="Informe o ato ambiental a ser adicionado:" />
+				</h:panelGrid>
+				
+				<h:panelGrid id="cadastroAto" columns="2" style="width: 100%">
+					
+					<h:panelGroup layout="block" style="margin-top: 10px; width: 100%">
+						<h:panelGroup layout="block" style="width: 100%">
+							<h:outputText value="* Categoria" />
+						</h:panelGroup>
+						<h:panelGroup layout="block" style="margin-top: 5px; width: 100%">
+							<h:selectOneMenu id="lstTipoAto" converter="tipoAtoConverter"
+								value="#{enquadramentoController.enquadramentoAtoAmbiental.atoAmbiental.ideTipoAto}"
+								style="width: 428px;"
+								disabled="#{enquadramentoController.adicionandoDocumento}">
+								<f:selectItem itemValue="" itemLabel="Selecione..." />
+								<f:selectItems value="#{enquadramentoController.tiposAto}" var="tipo" itemLabel="#{tipo.nomTipoAto}" itemValue="#{tipo}" />
+								<p:ajax event="change" update="lstAto" process="@this" listener="#{enquadramentoController.listarAtos()}" />
+							</h:selectOneMenu>
+						</h:panelGroup>
+					</h:panelGroup>
+					<h:panelGroup layout="block" style="margin-top: 15px; width: 100%;">
+						<h:panelGroup layout="block" style="width: 100%">
+							<h:outputText value="* Ato Ambiental" />
+						</h:panelGroup>
+						<h:panelGroup layout="block" style="margin-top: 5px; width: 100%;">
+							<h:selectOneMenu id="lstAto" converter="simpleEntityConverter"
+								style="width: 428px;"
+								value="#{enquadramentoController.enquadramentoAtoAmbiental.atoAmbiental}"
+								disabled="#{enquadramentoController.adicionandoDocumento}">
+								<f:selectItem itemValue="" itemLabel="Selecione..." />
+								<f:selectItems value="#{enquadramentoController.atosAmbientais}" var="ato" itemLabel="#{ato.nomAtoAmbiental}" itemValue="#{ato}" />
+								<p:ajax event="change" update="lstTipologia" process="@this" listener="#{enquadramentoController.listarTipologias()}" />
+							</h:selectOneMenu>
+						</h:panelGroup>
+					</h:panelGroup>
+					<h:panelGroup layout="block" style="margin-top: 15px; width: 100%;">
+						<h:panelGroup layout="block" style="width: 100%">
+							<h:outputText value="Tipologia" />
+						</h:panelGroup>
+						<h:panelGroup layout="block" style="margin-top: 5px; width: 100%;">
+							<h:selectOneMenu id="lstTipologia" converter="tipologiaConverter"
+								style="width: 428px;"
+								value="#{enquadramentoController.enquadramentoAtoAmbiental.tipologia}"
+								disabled="#{enquadramentoController.adicionandoDocumento}">
+								<f:selectItem itemValue="" itemLabel="Selecione..." />
+								<f:selectItems value="#{enquadramentoController.tipologias}" var="tipologia" itemLabel="#{tipologia.desTipologia}" itemValue="#{tipologia}" />
+								<p:ajax event="change" update="lstFinalidade" global="false" process="@this" />
+								<!-- listener="#{enquadramentoController.listarFinalidades()}" -->
+							</h:selectOneMenu>
+						</h:panelGroup>
+					</h:panelGroup>
+					
+				</h:panelGrid>
+
+				<h:panelGroup layout="block" style="margin-top: 10px; width: 100%; text-align: right;">
+					<p:commandButton value="Adicionar"
+						disabled="#{enquadramentoController.adicionandoDocumento}"
+						actionListener="#{enquadramentoController.adicionar()}"
+						process="@this" update="pnlAtoTipologia" />
+				</h:panelGroup>
+				
+				<h:panelGroup layout="block" style="margin-top: 10px; width: 100%;">
+					<p:wizard rendered="#{enquadramentoController.exibirAtosCadastados}"
+						style="width: 100%;" step="#{enquadramentoController.step}"
+						widgetVar="wiz" id="wiz" showNavBar="false" nextLabel="Avançar"
+						backLabel="Voltar"
+						flowListener="#{enquadramentoController.onFlowProcess}"
+						showStepStatus="true">
+	
+						<p:tab id="atos" title="Atos Ambientais" style="width: 100%;">
+							<p:dataTable id="lstAtosCadastrados" var="atoTipologia"
+								value="#{enquadramentoController.enquadramentoAtoAmbientalCollection}" style="width: 100%;">
+								<f:facet name="header">  
+						           Atos Ambientais Cadastrados
+						        </f:facet>
+								<p:column headerText="Categoria" style="width:80px">
+									<h:outputText value="#{atoTipologia.atoAmbiental.ideTipoAto.nomTipoAto}" />
+								</p:column>
+								<p:column headerText="Ato Ambiental" style="width:220px">
+									<h:outputText value="#{atoTipologia.atoAmbiental.nomAtoAmbiental}" />
+								</p:column>
+								<p:column headerText="Tipologia" style="width:170px">
+									<h:outputText rendered="#{not empty atoTipologia.tipologia}" value="#{atoTipologia.tipologia.desTipologia}" />
+									<h:outputText rendered="#{empty atoTipologia.tipologia}" value="-" />
+								</p:column>
+								<p:column style="width:98px; line-height: 14px;text-align:center;">
+									<f:facet name="header">Documento(s)<br />do<br />Enquadramento</f:facet>
+									<h:outputText rendered="#{not empty atoTipologia.listaDocumentosAtos}" value="#{enquadramentoController.countDocsAtos(atoTipologia.listaDocumentosAtos)}" />
+									<h:outputText rendered="#{empty atoTipologia.listaDocumentosAtos}" value="0" />
+								</p:column>
+								<p:column style="width:110px; line-height: 14px;text-align:center;" rendered="#{enquadramentoController.reenquadramento}">
+									<f:facet name="header">Documento(s)<br />do<br />Reenquadramento</f:facet>
+									<h:outputText rendered="#{not empty atoTipologia.listaDocumentosAtos}" value="#{enquadramentoController.countDocsAtosReenquadramento(atoTipologia.listaDocumentosAtos)}" />
+									<h:outputText rendered="#{empty atoTipologia.listaDocumentosAtos}" value="0" />
+								</p:column>
+								<p:column headerText="Ações">
+									<p:commandLink global="false" action="#{enquadramentoController.carregarDocs(atoTipologia)}" process="@this" update="@form">
+										<h:graphicImage title="Adicionar Documentos" value="/resources/img/ico-anexo.png" />
+									</p:commandLink>
+									<p:commandLink global="false" oncomplete="modalExcluir.show();" rendered="#{!enquadramentoController.isAlteracaoTipoAto(atoTipologia)}">
+										<f:setPropertyActionListener target="#{enquadramentoController.enquadramentoAtoAmbientalARemover}" value="#{atoTipologia}" />
+										<h:graphicImage title="Excluir" value="/resources/img/ico-excluir.png" />
+									</p:commandLink>
+									
+									
+									<p:commandLink global="false" oncomplete="modalExcluirTipoAlteracao.show();" rendered="#{enquadramentoController.isAlteracaoTipoAto(atoTipologia)}">
+										<f:setPropertyActionListener target="#{enquadramentoController.enquadramentoAtoAmbientalARemover}" value="#{atoTipologia}" />
+										<h:graphicImage title="Excluir" value="/resources/img/ico-excluir.png" />
+									</p:commandLink>
+									
+									<p:commandLink actionListener="#{selecionarAtoAmbientalController.load()}" process="@this" rendered="#{atoTipologia.alteracao and enquadramentoController.reenquadramento}">
+										<h:graphicImage title="Selecionar novo ato ambiental..." value="/resources/img/ico-alterar-ato.png" />
+										<f:attribute name="reenquadramentoProcessoAto" value="#{atoTipologia}" />
+										<f:attribute name="metodoSelecionarAtoAmbiental" value="#{enquadramentoController.metodoSelecionarAtoAmbiental}" />
+										<f:attribute name="metodoSelecionarReenquadramentoProcessoAto" value="#{enquadramentoController.metodoSelecionarEnquadramentoAtoAmbiental}" />
+										<f:attribute name="metodoListarAtosExistentes" value="#{notificacaoFinalController.metodoListarAtosExistentes}" />
+									</p:commandLink>
+								</p:column>
+							</p:dataTable>
+						</p:tab>
+						<p:tab id="docs" title="Documentos" style="width: 100%;">
+							<h:panelGroup id="pnlDocumento" layout="block" style="width: 100%;">
+								<p:dataTable
+									value="#{enquadramentoController.enquadramentoAtoAmbiental.listaDocumentosAtos}"
+									var="documentoAto" style="width:100%" scrollable="true"
+									scrollHeight="200">
+									<f:facet name="header">  
+							           #{enquadramentoController.enquadramentoAtoAmbiental.atoAmbiental.nomAtoAmbiental}
+							        </f:facet>
+									<p:column headerText="Documento" style="width:443px !important">
+										<h:outputText
+											value="#{documentoAto.ideDocumentoObrigatorio.nomDocumentoObrigatorio}"
+											style="color: #{documentoAto.ideDocumentoObrigatorio.indFormulario ? 'blue;font-weight: bold;' : 'black' } " />
+									</p:column>
+									<p:column headerText="Tipologia" style="width:115px !important">
+										<h:outputText
+											value="#{documentoAto.descricao != '' ? documentoAto.descricao : ' - '}"
+											style="font-weight:bold" />
+									</p:column>
+									<p:column headerText="Finalidade"
+										style="width:89px !important; text-align: center;">
+										<h:outputText
+											value="#{documentoAto.ideTipoFinalidadeUsoAgua != null ? documentoAto.ideTipoFinalidadeUsoAgua.nomTipoFinalidadeUsoAgua : ' - '}"
+											style="font-weight:bold" />
+									</p:column>
+									<p:column headerText="Ações" style="width:35px">
+										<p:selectBooleanCheckbox value="#{documentoAto.checked}" disabled="#{enquadramentoController.reenquadramento}">
+											<p:ajax global="false" process="@this"
+												listener="#{enquadramentoController.armazenarDocAtoSelecionado(documentoAto)}" />
+										</p:selectBooleanCheckbox>
+									</p:column>
+									<p:column headerText="Ações" style="width:35px" rendered="#{enquadramentoController.reenquadramento}">
+										<p:selectBooleanCheckbox value="#{documentoAto.checkedReenquadramento}" disabled="#{!documentoAto.ideDocumentoObrigatorio.indAtivo}">
+											<p:ajax global="false" process="@this"
+												listener="#{enquadramentoController.armazenarDocAtoReenquadramentoSelecionado(documentoAto)}" />
+										</p:selectBooleanCheckbox>
+									</p:column>
+								</p:dataTable>
+							</h:panelGroup>
+							
+							<h:panelGroup rendered="#{enquadramentoController.adicionandoDocumento}" layout="block" style="margin-top: 10px;width:100%;text-align:right;">
+								<p:commandButton value="Voltar" update="@form" action="#{enquadramentoController.voltar()}" />
+								<p:commandButton value="Salvar Documentos" update="@form" action="#{enquadramentoController.voltar()}" />
+							</h:panelGroup>
+	
+						</p:tab>
+					</p:wizard>
+				</h:panelGroup>
+
+			</h:panelGroup>
+
+			<h:panelGroup id="reprovado" layout="block" style="margin-top:15px; width: 100%"
+				rendered="#{enquadramentoController.enquadramento.indEnquadramentoAprovado != null and !enquadramentoController.enquadramento.indEnquadramentoAprovado}">
+				<h:panelGroup layout="block" style="width: 100%">
+					<h:outputText value="Justificativa" />
+				</h:panelGroup>
+				<h:panelGroup layout="block" style="margin-top:15px; width: 100%;">
+					<p:inputTextarea style="width: 99%" rows="13" value="#{enquadramentoController.enquadramento.dscJustificativa}" />
+				</h:panelGroup>
+			</h:panelGroup>
+
+			<hr style="width: 100%; margin-top: 5px; margin-bottom: 5px; border: none; border-top: 1px solid #ccc;" />
+			<h:panelGrid columns="2" style="float:right">
+				<p:commandButton value="Voltar" style="float:right;" global="false"
+					update="@form"
+					oncomplete="modalConfirmarFechamentoDaTelaEnquadramento.show();"
+					rendered="#{!enquadramentoController.adicionandoDocumento and not enquadramentoController.somenteDLA}" />
+				<p:commandButton value="#{enquadramentoController.reenquadramento ? 'Concluir Reenquadramento' : 'Concluir Enquadramento'} "
+					actionListener="#{enquadramentoController.concluir()}"
+					style="float:right;width:216px;" global="true"
+					update="@form"
+					rendered="#{!enquadramentoController.adicionandoDocumento  and !enquadramentoController.enquadramentoJaIniciado and enquadramentoController.enquadramento.indEnquadramentoAprovado != null and !enquadramentoController.somenteDLA}" />
+			</h:panelGrid>
+			<h:panelGrid columns="2" style="float:right"
+				rendered="#{enquadramentoController.somenteDLA}">
+				<p:commandButton value="Voltar" style="float:right;" global="false"
+					update="@form"
+					oncomplete="modalConfirmarFechamentoDaTelaEnquadramento.show();"
+					rendered="#{!enquadramentoController.adicionandoDocumento}" />
+				<p:commandButton value="Finalizar Requerimento"
+					action="#{enquadramentoController.finalizarRequerimentoDLA()}"
+					style="float:right;width:200px;" global="false"
+					update="@form" />
+			</h:panelGrid>
+			<p:spacer height="20" style="width:100%" />
+		</h:form>
+	</p:dialog>
+	<p:confirmDialog widgetVar="modalExcluir" appendToBody="true"
+		header="Alerta" message="Tem certeza que deseja remover o item?"
+		severity="alert">
+		<h:form>
+			<p:commandButton value="Sim" global="false"
+				update="enquadramento"
+				action="#{enquadramentoController.excluirAto()}"
+				oncomplete="modalExcluir.hide()" />
+			<p:commandButton value="Não" global="false" oncomplete="modalExcluir.hide()" />
+		</h:form>
+	</p:confirmDialog>
+	
+	<p:confirmDialog widgetVar="modalExcluirTipoAlteracao" appendToBody="true"
+		header="Alerta" message="Existe uma solicitação de alteração do ato selecionado, deseja realmente remove-lo do processo?"
+		severity="alert">
+		<h:form>
+			<p:commandButton value="Sim" global="false"
+				update="enquadramento"
+				action="#{enquadramentoController.excluirAto()}"
+				oncomplete="modalExcluirTipoAlteracao.hide()" />
+			<p:commandButton value="Não" global="false" oncomplete="modalExcluirTipoAlteracao.hide()" />
+		</h:form>
+	</p:confirmDialog>
+	
+	<p:confirmDialog widgetVar="modalExcluirRima" appendToBody="true"
+		header="Alerta"
+		message="Tem certeza que deseja remover o arquivo de EIA/Rima?"
+		severity="alert">
+		<h:form>
+			<p:commandButton value="Sim" global="false"
+				update="enquadramento:aprovado"
+				action="#{enquadramentoController.excluirArquivoEIA()}"
+				oncomplete="modalExcluirRima.hide()" />
+			<p:commandButton value="Não" global="false" oncomplete="modalExcluirRima.hide()" />
+		</h:form>
+	</p:confirmDialog>
+
+	<p:confirmDialog
+		widgetVar="modalConfirmarFechamentoDaTelaEnquadramento"
+		appendToBody="true" header="Alerta"
+		message="#{bundle.geral_msg_confirmar_nao_salvar}" severity="alert">
+		<h:form>
+			<p:commandButton value="Sim" global="false" oncomplete="modalConfirmarFechamentoDaTelaEnquadramento.hide();dialogEfetuarEnquadramento.hide();" />
+			<p:commandButton value="Não" global="false" oncomplete="modalConfirmarFechamentoDaTelaEnquadramento.hide();" />
+		</h:form>
+	</p:confirmDialog>
+	
+	<p:confirmDialog
+		widgetVar="modalConfirmarAletaracaoDeEnquadramentoAtoAmbiental"
+		appendToBody="true" header="Alerta"
+		message="Deseja concluir o reenquadramento sem alterar o ato sinalizado na notificação?" severity="alert">
+		<h:form>
+			<p:commandButton value="Sim" oncomplete="modalConfirmarAletaracaoDeEnquadramentoAtoAmbiental.hide();" 
+				actionListener="#{enquadramentoController.concluirSemAlterar()}" global="true" update="@form" />
+			<p:commandButton value="Não" global="false" oncomplete="modalConfirmarAletaracaoDeEnquadramentoAtoAmbiental.hide();" />
+		</h:form>
+	</p:confirmDialog>
+
+</ui:composition>

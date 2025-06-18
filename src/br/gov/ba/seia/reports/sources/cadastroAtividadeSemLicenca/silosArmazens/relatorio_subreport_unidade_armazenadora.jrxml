@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="relatorio_subreport_unidade_armazenadora" language="java" pageWidth="515" pageHeight="752" columnWidth="515" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="cd98721c-20ed-4bb7-80ec-c2cfb6ddd252">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="ide_cadastro" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="SHAPE" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[select saua.*, ta.nom_tipo_armazem, tea.nom_tipo_especie_armazem, row_number() over () as num from silos_armazens sa
+inner join cadastro_atividade_nao_sujeita_lic c
+on sa.ide_cadastro_atividade_nao_sujeita_lic = c.ide_cadastro_atividade_nao_sujeita_lic
+inner join silos_armazens_unidade_armazenadora saua
+on saua.ide_silos_armazens = sa.ide_silos_armazens
+inner join tipo_armazem ta
+on ta.ide_tipo_armazem = saua.ide_tipo_armazem
+inner join tipo_especie_armazem tea
+on ta.ide_tipo_especie_armazem = tea.ide_tipo_especie_armazem
+where c.ide_cadastro_atividade_nao_sujeita_lic = $P{ide_cadastro}]]>
+	</queryString>
+	<field name="ide_silos_armazens_unidade_armazenadora" class="java.lang.Integer"/>
+	<field name="nom_unidade_armazenadora" class="java.lang.String">
+		<fieldDescription><![CDATA[nom_unidade_armazenadora= campo Idenficação da unidade armazenadora na tela.]]></fieldDescription>
+	</field>
+	<field name="cod_cda" class="java.lang.String"/>
+	<field name="val_capacidade_estatica" class="java.math.BigDecimal"/>
+	<field name="ide_tipo_armazem" class="java.lang.Integer"/>
+	<field name="ide_localizacao_geografica" class="java.lang.Integer">
+		<fieldDescription><![CDATA[Identificar da localização geográfica da Área de Preservação Permanente]]></fieldDescription>
+	</field>
+	<field name="ide_silos_armazens" class="java.lang.Integer"/>
+	<field name="nom_tipo_armazem" class="java.lang.String"/>
+	<field name="nom_tipo_especie_armazem" class="java.lang.String"/>
+	<field name="num" class="java.lang.Long"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="7d17b8c1-f323-4251-b7bf-e0443be46980" mode="Opaque" x="0" y="0" width="515" height="20" backcolor="#DDDDDD"/>
+				<box leftPadding="5">
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Unidade Armazenadora]]></text>
+			</staticText>
+		</band>
+		<band height="446" splitType="Stretch">
+			<textField>
+				<reportElement uuid="d43946d2-f380-4f20-867e-267feeef67f1" x="198" y="20" width="316" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nom_unidade_armazenadora}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="c1202cb9-1546-4463-ae2c-923e36bdaea9" x="2" y="20" width="186" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Identificação da unidade armazenadora:]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="2fea4f4e-45e1-47df-bbc8-d6a11c812732" x="215" y="40" width="299" height="22"/>
+				<textElement verticalAlignment="Bottom">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{cod_cda}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="ca9aef0e-5a12-4ec5-adcd-d8d3f699835d" x="2" y="40" width="213" height="22"/>
+				<textElement verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Código CDA - Cadastro Nacional de Unidades
+Armazenadoras de Produtos Agrícolas:]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="1a29a534-d185-49cd-b2ca-1fc01b3dc88e" x="215" y="63" width="299" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nom_tipo_especie_armazem}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="ec273052-62c4-4ae5-95e8-f7599fd97fe5" x="2" y="63" width="212" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Espécie do Armazém (Conforme o SICARM):]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="d6a5dfca-9aa3-4c40-870d-a2b79b98da3b" x="199" y="83" width="315" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nom_tipo_armazem}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="a7a1cdb0-e213-40a4-9d3f-43072b4e764e" x="2" y="83" width="196" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Tipo de armazém (Conforme o SICARM):]]></text>
+			</staticText>
+			<textField pattern="#,##0.00 t">
+				<reportElement uuid="bf86db45-0c7b-48ae-9ba8-1f4334f78e19" x="105" y="103" width="409" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{val_capacidade_estatica}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="81779bbb-9f94-4028-b0bb-1a1681bc23b0" x="2" y="103" width="102" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Capacidade estática:]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="5102f81e-47e5-4d0b-89ac-18f5bf57ef41" x="2" y="0" width="512" height="20"/>
+				<box>
+					<bottomPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="html">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA["<b>Unidade Armazenadora<b> " + $F{num}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="4d6a6be7-002c-48aa-91f3-fd7a8e9730f1" positionType="Float" isPrintRepeatedValues="false" mode="Opaque" x="1" y="125" width="495" height="15" isPrintInFirstWholeBand="true" isPrintWhenDetailOverflows="true" backcolor="#DDDDDD"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Verdana" isBold="true"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<text><![CDATA[Localização Geográfica]]></text>
+			</staticText>
+			<image scaleImage="FillFrame">
+				<reportElement uuid="d40e8c1e-0c2f-4550-9189-1549a9be9d30" positionType="Float" x="2" y="157" width="492" height="289" isRemoveLineWhenBlank="true" isPrintInFirstWholeBand="true" isPrintWhenDetailOverflows="true">
+					<printWhenExpression><![CDATA[!$P{SHAPE}.equals("")]]></printWhenExpression>
+				</reportElement>
+				<imageExpression><![CDATA[$P{SHAPE}]]></imageExpression>
+			</image>
+		</band>
+	</detail>
+</jasperReport>

@@ -1,0 +1,78 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+				xmlns:h="http://java.sun.com/jsf/html" 
+				xmlns:f="http://java.sun.com/jsf/core" 
+				xmlns:ui="http://java.sun.com/jsf/facelets" 
+				xmlns:p="http://primefaces.prime.com.tr/ui"
+				xmlns:t="http://myfaces.apache.org/tomahawk">				
+	
+	<ui:param name="imovelRuralController" value="#{imovelRuralControllerNew}" />
+	<h:panelGrid columns="1" cellpadding="10">		
+		<p:outputPanel autoUpdate="true" id="listaResponsaveis" >						
+			<h:panelGrid columns="2" id="tabelaResponsavel">
+				<p:dataTable value="#{imovelRuralControllerNew.imovelRural.responsavelImovelRuralCollection}" emptyMessage="#{bundle.cefir_msg_A012}" rowIndexVar="index"
+				 			 rendered="#{imovelRuralControllerNew.imovelRural.responsavelImovelRuralCollection !=null and not empty imovelRuralControllerNew.imovelRural.responsavelImovelRuralCollection}" var="responsavelTecnico" style="width:670px;">
+					<f:facet name="header">Responsáveis Técnicos Cadastrados</f:facet>
+					<p:column headerText="Número do CPF" style="width: 90px;">
+						<h:outputText value="#{responsavelTecnico.idePessoaFisica.numCpf}" />
+					</p:column>								
+					<p:column headerText="Nome" style="width: 150px;">
+						<h:outputText value="#{responsavelTecnico.idePessoaFisica.nomPessoa}" />
+					</p:column>								
+					<p:column headerText="Escolaridade" style="width: 120px;">
+						<h:outputText value="#{responsavelTecnico.idePessoaFisica.ideEscolaridade.nomEscolaridade}" />
+					</p:column>
+					<p:column headerText="Data Início" style="width: 70px;">
+						<h:outputText value="#{responsavelTecnico.dtcCriacao}" >
+							<f:convertDateTime pattern="dd/MM/yyyy"/>
+						</h:outputText>
+					</p:column>
+					<p:column headerText="Data Fim" style="width: 70px;">
+						<h:outputText value="#{responsavelTecnico.dtcExclusao}">
+							<f:convertDateTime pattern="dd/MM/yyyy"/>
+						</h:outputText>
+					</p:column>
+					<p:column headerText="Ações">						
+						<p:commandLink title="Editar" action="#{imovelRuralControllerNew.editarResponsavel()}"
+									   disabled="#{!imovelRuralControllerNew.habilitaCadastroAmbiental or responsavelTecnico.dtcExclusao != null}"									   
+									   oncomplete="dlgCadRespTecnico.show();"
+									   process="@this"
+									   update="formCadResponsavel">
+						    <h:graphicImage title="Editar" value="/resources/img/ico-editar.png" />										
+							<f:setPropertyActionListener value="#{responsavelTecnico}" target="#{imovelRuralControllerNew.responsavelTecnicoSelecionado}" />	
+						</p:commandLink>
+							
+						<h:commandButton title="Download ART" image="/resources/img/ico-download.png" immediate="true"
+										 rendered="#{responsavelTecnico.ideDocumentoResponsavel != null and responsavelTecnico.ideDocumentoResponsavel.dscCaminhoArquivo != null}">										 																	 										 							
+							<p:fileDownload value="#{imovelRuralControllerNew.getFileDownload(responsavelTecnico.ideDocumentoResponsavel.dscCaminhoArquivo)}" />							
+						</h:commandButton>
+						
+						<p:commandLink onclick="dlgResponsavel.show(); dlgResponsavel.content.parent().css('top',  '200px'); dlgResponsavel.content.parent().css('left',  '500px');" title="Remover"
+									   disabled="#{!imovelRuralControllerNew.habilitaCadastroAmbiental or responsavelTecnico.dtcExclusao != null}" 
+									   process="@this"
+									   update="formCadImovelRural:tabAbasDadosEspecificos:txtCpf formCadImovelRural:tabAbasDadosEspecificos:panelCadResponsavel">
+						    <h:graphicImage title="Remover" value="/resources/img/ico-excluir.png" />										
+							<f:setPropertyActionListener value="#{responsavelTecnico}" target="#{imovelRuralControllerNew.responsavelTecnicoSelecionado}" />	
+						</p:commandLink>			
+					</p:column>
+				</p:dataTable>
+			</h:panelGrid>			
+		</p:outputPanel>		
+		<h:panelGrid>			
+			<p:commandButton value="#{bundle.cefir_lbl_cadastrar_responsavel_tecnico}" id="ideCadastroRespTecnico"
+						     action="#{imovelRuralControllerNew.cadastrarResponsavelTecnico()}" 
+						     update="formCadResponsavel" 
+						  	process="@this" 
+						  	disabled="#{!imovelRuralControllerNew.habilitaCadastroAmbiental}"
+						  	oncomplete="dlgCadRespTecnico.show()">													   
+			</p:commandButton>		
+		</h:panelGrid>					
+		
+		<p:confirmDialog id="dlgResponsavel" widgetVar="dlgResponsavel" header="#{bundle.hdr_confirma_exclusao}" message="#{bundle.msg_confirma_exclusao}" severity="alert">
+			<p:commandButton value="Sim" action="#{imovelRuralControllerNew.removerResponsavel}"
+							 oncomplete="dlgResponsavel.hide();" process="@this"/>				
+			<p:commandButton value="Não" type="button" onclick="dlgResponsavel.hide()" />
+	</p:confirmDialog>			
+		
+	</h:panelGrid>
+</ui:composition>

@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="relatorio_questionario_aba_captacao_superficial_caracterizacao" pageWidth="545" pageHeight="802" columnWidth="545" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="be3556b6-f353-4cd4-907a-caa6e3fff9f5">
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["/home/alexandre/workspace/seia/src/br/gov/ba/seia/reports/cerh/"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="IDE_CERH_LOCALIZACAO_GEOGRAFICA" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[select
+
+	(select
+		sum(val_vazao_captacao * val_tempo_captacao* val_dia_mes)
+		from cerh_captacao_vazao_sazonalidade c
+		where ide_cerh_captacao_caracterizacao = ccc.ide_cerh_captacao_caracterizacao)vazao_anual,
+
+	(select
+		avg(val_vazao_captacao * val_tempo_captacao )
+		from cerh_captacao_vazao_sazonalidade c
+		where ide_cerh_captacao_caracterizacao = ccc.ide_cerh_captacao_caracterizacao) as media_diaria,
+
+	ccc.ind_captacao_reservatorio,
+	ccc.val_vazao_maxima_instantanea,
+	ccc.dsc_observacao,
+	ccc.ide_cerh_captacao_caracterizacao,
+	ccc.ide_barragem,
+	clg.ide_cerh_localizacao_geografica,
+	dt_inicio_captacao,
+	b.nom_barragem,
+	cstu.dsc_situacao_tipo_uso
+from
+	cerh_localizacao_geografica clg
+	INNER join cerh_captacao_caracterizacao ccc on ccc.ide_cerh_localizacao_geografica = clg.ide_cerh_localizacao_geografica
+	INNER join tipo_corpo_hidrico tch on tch.ide_tipo_corpo_hidrico =  ccc.ide_tipo_corpo_hidrico
+	left join barragem b on b.ide_barragem = ccc.ide_barragem
+	left join cerh_situacao_tipo_uso cstu on cstu.ide_cerh_situacao_tipo_uso = ccc.ide_cerh_situacao_tipo_uso
+where clg.ide_cerh_localizacao_geografica = $P{IDE_CERH_LOCALIZACAO_GEOGRAFICA}]]>
+	</queryString>
+	<field name="vazao_anual" class="java.math.BigDecimal"/>
+	<field name="media_diaria" class="java.math.BigDecimal"/>
+	<field name="ind_captacao_reservatorio" class="java.lang.Boolean"/>
+	<field name="val_vazao_maxima_instantanea" class="java.math.BigDecimal"/>
+	<field name="dsc_observacao" class="java.lang.String"/>
+	<field name="ide_cerh_captacao_caracterizacao" class="java.lang.Integer"/>
+	<field name="ide_barragem" class="java.lang.Integer"/>
+	<field name="ide_cerh_localizacao_geografica" class="java.lang.Integer"/>
+	<field name="dt_inicio_captacao" class="java.sql.Date"/>
+	<field name="nom_barragem" class="java.lang.String"/>
+	<field name="dsc_situacao_tipo_uso" class="java.lang.String"/>
+	<variable name="VAZAO_ANUAL" class="java.lang.Double"/>
+	<detail>
+		<band height="20" splitType="Prevent">
+			<subreport>
+				<reportElement uuid="db858836-b4bb-4706-be78-0fcadaa5d101" x="0" y="0" width="545" height="20"/>
+				<subreportParameter name="SUBREPORT_DIR">
+					<subreportParameterExpression><![CDATA[$P{SUBREPORT_DIR}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="IDE_CERH_LOCALIZACAO_GEOGRAFICA">
+					<subreportParameterExpression><![CDATA[$F{ide_cerh_localizacao_geografica}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "relatorio_questionario_corpo_hidrico.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+		<band height="20">
+			<textField>
+				<reportElement uuid="7c52e72e-17a0-489f-8f3f-9b5ba6006248" x="0" y="0" width="545" height="20"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA["Data de início da captação: " +
+
+new SimpleDateFormat("dd 'de' MMMMM 'de' yyyy", new Locale("pt", "BR")).format($F{dt_inicio_captacao})+ "."]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="20">
+			<textField>
+				<reportElement uuid="29deaf81-8f19-40a7-bf9b-9cfdf3b80c81" x="0" y="0" width="545" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Captação em reservatório de barragem? " +
+
+(($F{ind_captacao_reservatorio}) ? "Sim, ":"Não.")]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="40">
+			<printWhenExpression><![CDATA[$F{ind_captacao_reservatorio}]]></printWhenExpression>
+			<subreport>
+				<reportElement uuid="e725f531-ecd6-47e6-a3f8-1af937a90d5f" x="0" y="10" width="545" height="20"/>
+				<subreportParameter name="ide_barragem">
+					<subreportParameterExpression><![CDATA[$F{ide_barragem}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "relatorio_questionario_barragem.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+		<band height="20">
+			<textField>
+				<reportElement uuid="013271d1-6648-42fb-a05d-e2940b0791c4" x="0" y="0" width="545" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Situação da captação: " + $F{dsc_situacao_tipo_uso} + "."]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="40">
+			<subreport>
+				<reportElement uuid="633e54d9-304b-4359-932c-394578fc6191" x="0" y="20" width="545" height="20"/>
+				<subreportParameter name="SUBREPORT_DIR">
+					<subreportParameterExpression><![CDATA[$P{SUBREPORT_DIR}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="IDE_CERH_CAPTACAO_CARACTERIZACAO">
+					<subreportParameterExpression><![CDATA[$F{ide_cerh_captacao_caracterizacao}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "relatorio_questionario_aba_captacao_caracterizacao_finalidade.jasper"]]></subreportExpression>
+			</subreport>
+			<textField>
+				<reportElement uuid="f5b62140-8d70-4666-a905-dc9f884ed373" x="0" y="0" width="268" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Finalidade:"]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="20">
+			<subreport>
+				<reportElement uuid="4e70fd7c-1707-4572-aa22-7e53c53d8bc9" x="0" y="0" width="545" height="20"/>
+				<subreportParameter name="SUBREPORT_DIR">
+					<subreportParameterExpression><![CDATA[$P{SUBREPORT_DIR}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="IDE_CERH_CAPTACAO_CARACTERIZACAO">
+					<subreportParameterExpression><![CDATA[$F{ide_cerh_captacao_caracterizacao}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "relatorio_questionario_aba_captacao_caracterizacao_finalidade_detalhe.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+		<band height="40">
+			<textField>
+				<reportElement uuid="4f5ace27-c94c-4448-8899-77e462b86822" x="0" y="0" width="268" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Dados declarados e concedidos:"]]></textFieldExpression>
+			</textField>
+			<subreport>
+				<reportElement uuid="2cc6f43d-46e9-4ca4-ba72-37f1af793959" x="0" y="20" width="545" height="20"/>
+				<subreportParameter name="IDE_CERH_CAPTACAO_CARACTERIZACAO">
+					<subreportParameterExpression><![CDATA[$F{ide_cerh_captacao_caracterizacao}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "relatorio_questionario_aba_captacao_caractericazacao_dados_operacao.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+		<band height="60">
+			<textField>
+				<reportElement uuid="e05b6eab-66b4-4c4a-b578-4cd4441629c3" x="0" y="0" width="180" height="30"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Média da vazão diária (m³/dia)"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="7b9b01f0-1f94-4bb4-8e79-413edb6568d8" x="180" y="0" width="180" height="30"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Vazão anual (m³/dia)"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="af098d27-7546-46a6-8034-1d572ee9cead" x="360" y="0" width="185" height="30"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Vazão Maxima instantânea (m²/dia)"]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00">
+				<reportElement uuid="f0355ef4-cad2-455c-b4f7-0bd67c8c17e4" x="360" y="30" width="185" height="30"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{val_vazao_maxima_instantanea}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00">
+				<reportElement uuid="5d47083a-ce46-4d94-908c-6ff925d403a9" x="0" y="30" width="180" height="30"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{media_diaria}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00">
+				<reportElement uuid="12071463-7a05-415e-8ae0-dac086b3f1e5" x="180" y="30" width="180" height="30"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{vazao_anual}]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="39">
+			<textField>
+				<reportElement uuid="aa2f9677-cbe5-45d7-b122-73aa7f63c8be" x="0" y="0" width="77" height="20"/>
+				<textElement verticalAlignment="Top">
+					<font isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Observação:"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="f8689570-05ac-4572-8201-b9dd68480349" x="77" y="0" width="468" height="39" isPrintWhenDetailOverflows="true"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{dsc_observacao}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

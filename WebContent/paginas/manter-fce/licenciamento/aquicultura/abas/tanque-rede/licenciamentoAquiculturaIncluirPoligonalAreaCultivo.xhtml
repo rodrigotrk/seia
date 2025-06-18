@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui">
+	<h:panelGrid style="margin-bottom:2px;">
+		<h:outputText styleClass="titulo-grupo" 
+			style="font-weight:bold;"
+			value="#{bundle.fce_lic_aqui_poligonal_area_cultivo}" 
+			/>
+	</h:panelGrid>
+	<h:panelGrid columns="2">
+		<p:commandButton value="Incluir Poligonal"
+				update="licenciamentoAquiculturaAbas:formLicenciamentoAquiculturaTanque:tablePoligonalCultivo"
+				process="@this"
+				actionListener="#{tanqueRedeController.adicionarPoligonalCultivo()}"
+				global="false" 
+				style="margin-top:11px; margin-bottom:11px;"
+				disabled="#{tanqueRedeController.desabilitarTudo or !fceLicenciamentoAquiculturaDadosGeraisController.empreendimentoComShape or fceLicenciamentoAquiculturaController.desabilitarTudo}"
+				/>
+		<h:graphicImage value="/resources/img/ico-ajuda.png" style="margin: 1px 1px 2px 4px;" title="#{bundle.fce_lic_aqui_ajuda_poligonal}" rendered="#{!fceLicenciamentoAquiculturaDadosGeraisController.empreendimentoComShape}"/>
+	</h:panelGrid>
+		
+	<p:outputPanel autoUpdate="true">
+		<p:dataTable value="#{tanqueRedeController.aquiculturaAtividadeDTO.listaPoligonalCultivo}" var="poligonalCultivo" lazy="true" paginator="true" rows="10"  
+			paginatorPosition="bottom" paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}" 
+			rowsPerPageTemplate="5,10,15" emptyMessage="#{bundle.msg_lista_vazia}" style="width: 399px;" 
+			rendered="#{tanqueRedeController.poligonalAdicionada}">
+
+			<p:column headerText="Localização Geográfica"  style="width:140px;"> 
+				<p:commandLink oncomplete="dlgLocalizacaoGeograficaGeneric.show();" action="#{localizacaoGeograficaGenericController.carregarTela()}" actionListener="#{localizacaoGeograficaGenericController.limparLocalizacaoGeografSelecionada()}" process="@this" 
+					disabled="#{poligonalCultivo.shapeSalvo or tanqueRedeController.desabilitarTudo}">
+					<f:setPropertyActionListener target="#{localizacaoGeograficaGenericController.tipoSecaoGeometrica}" value="#{fceLicenciamentoAquiculturaController.somenteShape}" />
+					<f:setPropertyActionListener target="#{localizacaoGeograficaGenericController.empreendimento}" value="#{fceLicenciamentoAquiculturaController.empreendimento}" />
+					<f:setPropertyActionListener target="#{localizacaoGeograficaGenericController.localizacaoGeograficaSelecionada}" value="#{poligonalCultivo.ideLocalizacaoGeografica}" />
+					<f:setPropertyActionListener target="#{localizacaoGeograficaGenericController.objetoLocalizacao}" value="#{poligonalCultivo}" />
+					<f:setPropertyActionListener target="#{localizacaoGeograficaGenericController.isPerfuracaoPocoOuCaptacaoOuAquicuturaEmRede}" value="#{true}" />
+					<f:setPropertyActionListener target="#{localizacaoGeograficaGenericController.isLicenciamentoAquicutura}" value="#{true}" /> 
+					<h:graphicImage title="Incluir arquivo shape" value="/resources/img/ico-expandir.png" />
+					<h:outputText value="Incluir arquivo shape" />
+				</p:commandLink>
+			</p:column>
+			
+			<p:column headerText="Descrição" style="width:150px;">
+				<h:outputText value="#{poligonalCultivo.ideLocalizacaoGeografica.desLocalizacaoGeografica}" />
+			</p:column>
+			
+			<p:column headerText="Ações" style="width:45px; text-align:center;">
+				<p:commandLink style="cursor: pointer; margin-left:5px;" onclick='javascript:${tanqueRedeController.visualizarPoligonalCultivo(poligonalCultivo)}' rendered="#{poligonalCultivo.shapeSalvo}" global="false" accesskey="VISUALIZAR GEOBAHIA">
+ 					<h:graphicImage title="#{bundle.fce_lic_aqui_visualizar_dados_geobahia}" value="/resources/img/ico-arl-relocacao.png" />
+	            </p:commandLink>
+			
+				<p:commandLink title="Excluir" process="@this" global="false" onclick="confirmaExclusaoPoligonalCultivoTanqueRede.show()" disabled="#{fceLicenciamentoAquiculturaController.desabilitarTudo}">
+					<f:setPropertyActionListener target="#{tanqueRedeController.aquiculturaAtividadeDTO.poligonalCultivo}" value="#{poligonalCultivo}" />
+					<h:graphicImage title="Excluir" value="/resources/img/ico-excluir.png"/>
+				</p:commandLink>
+			</p:column>
+		</p:dataTable>
+		<br/> <br/>
+	</p:outputPanel>
+</ui:composition>

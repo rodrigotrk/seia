@@ -1,0 +1,1 @@
+delete from certificado where ide_certificado = 715920;

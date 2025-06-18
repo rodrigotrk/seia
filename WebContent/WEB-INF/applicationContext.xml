@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns="http://www.springframework.org/schema/security"
+		     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+			 xmlns:beans="http://www.springframework.org/schema/beans"
+			 xsi:schemaLocation="http://www.springframework.org/schema/beans
+								http://www.springframework.org/schema/beans/spring-beans.xsd
+								http://www.springframework.org/schema/security
+								http://www.springframework.org/schema/security/spring-security-3.1.xsd">
+	
+	<beans:bean id="accessDecisionManager" class="org.springframework.security.access.vote.ConsensusBased">
+		<beans:property name="decisionVoters">
+			<beans:list>
+				<beans:ref bean="securityVoter" />
+			</beans:list>
+		</beans:property>
+	</beans:bean>
+
+	<beans:bean id="securityVoter" class="br.gov.ba.seia.util.security.SecurityVoter"/>
+	
+	<http auto-config="true" access-decision-manager-ref="accessDecisionManager">
+	    	<intercept-url pattern="/**" access="IS_AUTHENTICATED" />
+       <form-login login-page="/login.xhtml" 
+       			   authentication-failure-url="/login.xhtml?erro=true"
+       			   authentication-failure-handler-ref="customFailureHandler"
+       			   always-use-default-target="true"
+       			   default-target-url="/login.xhtml" />
+       <access-denied-handler error-page="/acessonegado.xhtml" />
+       <!-- <session-management>
+        	<concurrency-control max-sessions="1" error-if-maximum-exceeded="true" expired-url="/login.xhtml" />
+       </session-management> -->
+	    <session-management session-authentication-strategy-ref="sas"/>
+    </http>
+    
+ 
+ 	<beans:bean id="authenticationService" class="br.gov.ba.seia.util.security.SecurityUserService" />
+ 	<beans:bean id="customFailureHandler" class="br.gov.ba.seia.util.security.CustomAuthenticationFailureHandler"/> 	
+    <authentication-manager>
+    	<authentication-provider user-service-ref="authenticationService">
+    		<password-encoder hash="md5" />
+    	</authentication-provider>
+    </authentication-manager>
+    
+    <beans:bean id="sas" class="br.gov.ba.seia.util.security.SeiaLimitUsers">
+	    <beans:constructor-arg name="sessionRegistry" ref="sessionRegistry" />
+	</beans:bean>
+	    
+    <beans:bean id="sessionRegistry" class="org.springframework.security.core.session.SessionRegistryImpl" />
+    
+</beans:beans>

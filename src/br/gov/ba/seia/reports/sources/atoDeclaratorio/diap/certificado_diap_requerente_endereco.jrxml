@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="certificado_diap_requerente_endereco" pageWidth="525" pageHeight="802" columnWidth="525" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="82ecd246-fe4b-419d-a659-8875da7513b7">
+	<property name="ireport.zoom" value="1.4641000000000008"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="ide_ato_declaratorio" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="tipo_pessoa_requerimento" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[1]]></defaultValueExpression>
+	</parameter>
+	<parameter name="tipo_endereco" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[4]]></defaultValueExpression>
+	</parameter>
+	<parameter name="representantes" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[select
+e.nom_empreendimento,
+diap.des_objetivo_intervencao_app,
+(trim (COALESCE (pj.nom_razao_social, pf.nom_pessoa ))) || ','  as nome_razao,
+
+CASE WHEN pj.num_cnpj is not null
+ THEN ('inscrito sobre o CNPJ: ') || substr(pj.num_cnpj,  1, 2) || '.' || substr(pj.num_cnpj, 3, 3) || '.' || substr(pj.num_cnpj, 6, 3) || '/' || SUBSTR(pj.num_cnpj, 9, 4) || '-' || SUBSTR(pj.num_cnpj, 13)
+ ELSE ('inscrito sobre o CPF: ') || substr(pf.num_cpf, 1, 3) || '.' || substr(pf.num_cpf, 4, 3) || '.' || substr(pf.num_cpf, 7, 3) || '-' ||  substr(pf.num_cpf, 10) END AS cpf_cnpj,
+
+ (tl.nom_tipo_logradouro ||' '|| l.nom_logradouro ||' '|| enpj.num_endereco ||', '|| b.nom_bairro ||', '|| m.nom_municipio ||' - '|| es.nom_estado ) as logradouro,
+
+ (tle.nom_tipo_logradouro ||' '|| le.nom_logradouro ||' '|| enem.num_endereco ||', '|| be.nom_bairro ||', '|| me.nom_municipio ||' - '|| ese.nom_estado ) as logradouroEmpreendimento
+
+from ato_declaratorio ad
+inner join declaracao_intervencao_app diap on diap.ide_ato_declaratorio = ad.ide_ato_declaratorio
+INNER JOIN empreendimento_requerimento er ON er.ide_requerimento = ad.ide_requerimento
+inner join empreendimento e on e.ide_empreendimento = er.ide_empreendimento
+
+inner join endereco_empreendimento ee on ee.ide_empreendimento = e.ide_empreendimento
+left join endereco enem on enem.ide_endereco = ee.ide_endereco
+left join logradouro le on le.ide_logradouro = enem.ide_logradouro
+left join tipo_logradouro tle on tle.ide_tipo_logradouro = le.ide_tipo_logradouro
+left join bairro be on be.ide_bairro = le.ide_bairro
+left join municipio me on me.ide_municipio = le.ide_municipio
+left join estado ese on ese.ide_estado = me.ide_estado
+
+inner join requerimento_pessoa rp on rp.ide_requerimento = ad.ide_requerimento
+inner join pessoa p on p.ide_pessoa = rp.ide_pessoa
+left join pessoa_juridica pj on pj.ide_pessoa_juridica = p.ide_pessoa
+left join pessoa_fisica pf on pf.ide_pessoa_fisica = p.ide_pessoa
+left join endereco_pessoa ep on ep.ide_pessoa = p.ide_pessoa
+left join endereco enpj on enpj.ide_endereco = ep.ide_endereco
+left join logradouro l on l.ide_logradouro = enpj.ide_logradouro
+left join tipo_logradouro tl on tl.ide_tipo_logradouro = l.ide_tipo_logradouro
+left join bairro b on b.ide_bairro = l.ide_bairro
+left join municipio m on m.ide_municipio = l.ide_municipio
+left join estado es on es.ide_estado = m.ide_estado
+
+ where
+	ad.ide_ato_declaratorio = $P{ide_ato_declaratorio} AND
+	rp.ide_tipo_pessoa_requerimento = $P{tipo_pessoa_requerimento} and
+	ee.ide_tipo_endereco = $P{tipo_endereco}]]>
+	</queryString>
+	<field name="nom_empreendimento" class="java.lang.String"/>
+	<field name="des_objetivo_intervencao_app" class="java.lang.String"/>
+	<field name="nome_razao" class="java.lang.String"/>
+	<field name="cpf_cnpj" class="java.lang.String"/>
+	<field name="logradouro" class="java.lang.String"/>
+	<field name="logradouroempreendimento" class="java.lang.String"/>
+	<detail>
+		<band height="30" splitType="Stretch">
+			<textField isStretchWithOverflow="true">
+				<reportElement uuid="36d6e9f7-6ec3-490e-9c75-7b7a5a2699a7" stretchType="RelativeToBandHeight" x="0" y="10" width="525" height="20"/>
+				<box leftPadding="0"/>
+				<textElement textAlignment="Justified">
+					<font fontName="SansSerif"/>
+					<paragraph lineSpacing="1_1_2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nome_razao} + " " + $F{cpf_cnpj} +", com endereço na "+ $F{logradouro} +", declara que realizará INTERVENÇÃO EM ÁREA DE PRESERVAÇÃO PERMANENTE, no empreendimento denominado " + $F{nom_empreendimento} + ", localizado em " + $F{logradouroempreendimento} + $P{representantes} + " com objetivo de " + $F{des_objetivo_intervencao_app}+"."]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

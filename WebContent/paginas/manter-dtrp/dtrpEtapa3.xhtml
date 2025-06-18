@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui"
+	xmlns:s="http://java.sun.com/jsf/composite/seia"
+	>
+
+	<h:form id="formEtapa3">
+		<h:panelGrid>
+			<h:outputLabel value="* DECLARAÇÃO" style="font-weight: bold; font-size: 12px;"/>
+			<h:panelGrid columns="2">
+				<p:selectBooleanCheckbox
+					value="#{declaracaoTransporteResiduoPerigosoController.declaracaoTransporte.indAceiteResponsabilidade}"
+					id="chkAceite"
+					disabled="#{!declaracaoTransporteResiduoPerigosoController.permiteEditar}">
+					<p:ajax event="change" update="formEtapa3:btnFinalizarDeclaracao" />
+				</p:selectBooleanCheckbox>
+
+				<h:outputText
+					value="Declaro que são verdadeiras as informações prestadas pelo(a) ora declarante neste processo de DECLARAÇÃO DE TRANSPORTE DE RESÍDUOS PERIGOSOS, e que caso contrário incorre a parte interessada em flagrante infração ao que determina o Regulamento da Lei Estadual No 10.431 de 20/12/2006 aprovado pelo Decreto Estadual Nº 14.024 de 06/06/2012, como também a Lei Federal Nº 9.605/98 e seu Regulamento aprovado pelo Decreto Federal Nº 6.514 de 22/07/2008 (LEI DE CRIMES AMBIENTAIS)." />
+			</h:panelGrid>
+		</h:panelGrid>
+
+		<br />
+		<br />
+		<br />
+
+		<p:commandButton
+			actionListener="#{declaracaoTransporteResiduoPerigosoController.voltar()}"
+			process="@this" value="Voltar" image="ui-icon-arrowthick-1-w" />
+		<p:commandButton id="btnFinalizarDeclaracao"
+			actionListener="#{declaracaoTransporteResiduoPerigosoController.finalizar()}"
+			process="@this" value="Finalizar" image="ui-icon-disk"
+			style="float:right"
+			disabled="#{!declaracaoTransporteResiduoPerigosoController.declaracaoTransporte.indAceiteResponsabilidade or !declaracaoTransporteResiduoPerigosoController.permiteEditar}" />
+	</h:form>
+</ui:composition>

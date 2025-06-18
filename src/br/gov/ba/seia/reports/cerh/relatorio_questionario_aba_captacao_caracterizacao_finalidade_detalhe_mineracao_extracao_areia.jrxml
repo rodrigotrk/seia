@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="relatorio_questionario_aba_captacao_caracterizacao_finalidade_detalhe_mineracao_extracao_areia" language="java" pageWidth="500" pageHeight="802" columnWidth="500" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="ebca25af-9018-4530-8775-cfdb94cde189">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="IDE_CERH_CAPTACAO_CARACTERIZACAO_FINALIDADE" class="java.lang.Integer"/>
+	<queryString>
+		<![CDATA[select *
+	from cerh_captacao_mineracao_extracao_areia ccmea
+
+where
+ccmea.IDE_CERH_CAPTACAO_CARACTERIZACAO_FINALIDADE = $P{IDE_CERH_CAPTACAO_CARACTERIZACAO_FINALIDADE}]]>
+	</queryString>
+	<field name="ide_cerh_captacao_mineracao_extracao_areia" class="java.lang.Integer"/>
+	<field name="val_producao_maxima_mensal" class="java.math.BigDecimal"/>
+	<field name="val_proporcao_agua_polpa" class="java.math.BigDecimal"/>
+	<field name="val_volume_medio_agua" class="java.math.BigDecimal"/>
+	<field name="val_teor_umidade" class="java.lang.Integer"/>
+	<field name="val_producao_maxima_anual" class="java.math.BigDecimal"/>
+	<field name="ide_cerh_captacao_caracterizacao_finalidade" class="java.lang.Integer"/>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField isStretchWithOverflow="true">
+				<reportElement uuid="2fd00fa8-8d46-4657-a582-2db4c1fa5cc5" x="0" y="0" width="500" height="20"/>
+				<textElement markup="html"/>
+				<textFieldExpression><![CDATA["Produção média mensal(m³) :" +
+( $F{val_producao_maxima_mensal}!=null? $F{val_producao_maxima_mensal} : " - ") +
+
+"&#09;Proporção de água na polpa :" +
+($F{val_proporcao_agua_polpa}!=null? $F{val_proporcao_agua_polpa} : " - ")]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="20">
+			<textField>
+				<reportElement uuid="d5506e5c-8242-4fc3-aec8-4c01d0cfdf9d" x="0" y="0" width="500" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA["Volume médio de água utilizada na produção (m³) :" +
+($F{val_volume_medio_agua}!=null? $F{val_volume_medio_agua} : " - ")]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="20">
+			<textField isStretchWithOverflow="true">
+				<reportElement uuid="2ba95cdb-d31b-494f-91f3-c43b81777146" x="0" y="0" width="500" height="20"/>
+				<textElement markup="html"/>
+				<textFieldExpression><![CDATA["Teor de Umidade (%) :" +
+($F{val_teor_umidade}!=null? $F{val_teor_umidade} : " - ") +
+
+"&#09;Produção máxima mensal (m³/mês) :"  +
+($F{val_producao_maxima_mensal}!=null? $F{val_producao_maxima_mensal} : " - ")]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui">
+
+	<h:panelGroup style="margin-left:10px;">
+		<h:outputText styleClass="titulo-grupo" style="font-weight:bold; " value="* Dados Adicionais" />
+        <h:graphicImage value="/resources/img/ico-ajuda.png" id="ajudaUpload" style="margin: 1px 1px 2px 4px;" />
+		<p:tooltip for="ajudaUpload" value="Favor realizar o download do arquivo e preencher as informações, depois do preenchimento será necessário enviar o arquivo na extensão '.pdf', '.jpg' ou '.png', clicando no botão 'Upload dos dados adicionais'." showEffect="fade" hideEffect="fade" />
+   		<p:commandButton value="Download" ajax="false" global="false" process="@this" disabled="#{fceAbastecimentoIndustrialController.desabilitarTudo}" immediate="true" id="downloadIndustrial" style="margin-left:25px;">
+        	<p:fileDownload value="#{fceAbastecimentoIndustrialController.dadosAdicionais}"/>
+		</p:commandButton>
+    </h:panelGroup>
+    <br /> <br />
+	<ui:include src="/paginas/manter-fce/uploadDocumentoAdicionalGeneric.xhtml" />
+
+	<h:panelGrid id="gridBotoesAbaDadosAdicionaisAbsInd" rendered="#{!fceAbastecimentoIndustrialController.desabilitarTudo}" columns="2" style="margin-top:40px;">
+		<p:commandButton id="btnVoltarDadosAdicionaisAbsInd" value="Voltar"  style="width:90px;" update="formTabAbsIndustrial" action="#{fceAbastecimentoIndustrialController.voltarAba()}" global="false"/>
+		<p:commandButton id="btnFinalizarAbsInd" value="Finalizar" style="width:90px;" update="formTabAbsIndustrial:tabAbasAbsIndustrial" process="@this" action="#{fceAbastecimentoIndustrialController.finalizar()}" global="false" /> 
+	</h:panelGrid>
+</ui:composition>

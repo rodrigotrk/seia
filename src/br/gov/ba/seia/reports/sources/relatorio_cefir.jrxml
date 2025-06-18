@@ -1,0 +1,708 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="resumo_requerimento" language="java" pageWidth="595" pageHeight="842" columnWidth="495" leftMargin="50" rightMargin="50" topMargin="20" bottomMargin="20" uuid="27a54d73-aad1-481c-8146-9d5dd26c210b">
+	<property name="ireport.zoom" value="1.9487171000000014"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="453"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="ide_requerimento" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="LOGO_INEMA" class="java.lang.String"/>
+	<parameter name="LOGO_SEIA" class="java.lang.String"/>
+	<parameter name="nom_tipo_imovel" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[select distinct pe.ide_pessoa,pe.des_email,
+pf.ide_pessoa_fisica,initcap(pf.nom_pessoa) as nom_pessoa,pf.num_cpf,pf.dtc_nascimento,pf.des_naturalidade,
+pa.nom_pais,l.nom_logradouro,tl.nom_tipo_logradouro,e.num_endereco,b.nom_bairro,e.des_complemento,m.nom_municipio,estado.des_sigla,e.des_ponto_referencia,l.num_cep,estado.des_sigla as uf,
+r.ide_requerimento,r.num_requerimento,
+r.nom_contato,r.num_telefone as num_telefone_contato,r.des_email as des_email_contato,
+overlay(overlay(overlay(pf.num_cpf placing '-' from 10 for 0) placing '.' from 7 for 0) placing '.' from 4 for 0) as num_documento,r.dtc_criacao,
+array_to_string( array(SELECT tt."nom_tipo_telefone" ||': ' ||t."num_telefone" FROM "telefone_pessoa" tp INNER JOIN "telefone" t ON tp."ide_telefone" = t."ide_telefone"
+    INNER JOIN "tipo_telefone" tt ON t."ide_tipo_telefone" = tt."ide_tipo_telefone" WHERE tp.ide_pessoa =  pe.ide_pessoa), ', ') as telefones
+from requerimento r
+     INNER JOIN REQUERimento_imovel ri on ri.ide_requerimento = r.ide_requerimento
+     INNER JOIN pessoa_imovel ip on ip.ide_imovel = ri.ide_imovel and ip.ide_tipo_vinculo_imovel = 1
+     INNER JOIN pessoa pe ON pe.ide_pessoa = ip.ide_pessoa
+     INNER JOIN endereco_pessoa ep on ep.ide_pessoa = pe.ide_pessoa
+     INNER JOIN endereco e on e.ide_endereco = ep.ide_endereco
+     INNER JOIN logradouro l ON l.ide_logradouro = e.ide_logradouro
+     INNER JOIN tipo_logradouro tl ON l.ide_tipo_logradouro = tl.ide_tipo_logradouro
+     INNER JOIN bairro b ON b.ide_bairro = l.ide_bairro
+     INNER JOIN municipio m ON m.ide_municipio = l.ide_municipio
+     INNER JOIN estado estado on estado.ide_estado = m.ide_estado
+     INNER JOIN pais pa on pa.ide_pais = estado.ide_pais
+     LEFT JOIN pessoa_fisica pf ON pf.ide_pessoa_fisica = pe.ide_pessoa
+     LEFT JOIN pessoa_juridica pj ON pj.ide_pessoa_juridica = pe.ide_pessoa
+     LEFT JOIN natureza_juridica nj on nj.ide_natureza_juridica = pj.ide_natureza_juridica
+WHERE r.ide_requerimento = $P{ide_requerimento}]]>
+	</queryString>
+	<field name="ide_pessoa" class="java.lang.Integer"/>
+	<field name="des_email" class="java.lang.String"/>
+	<field name="ide_pessoa_fisica" class="java.lang.Integer"/>
+	<field name="nom_pessoa" class="java.lang.String"/>
+	<field name="num_cpf" class="java.lang.String"/>
+	<field name="dtc_nascimento" class="java.sql.Date"/>
+	<field name="des_naturalidade" class="java.lang.String"/>
+	<field name="nom_pais" class="java.lang.String"/>
+	<field name="nom_logradouro" class="java.lang.String"/>
+	<field name="nom_tipo_logradouro" class="java.lang.String"/>
+	<field name="num_endereco" class="java.lang.String"/>
+	<field name="nom_bairro" class="java.lang.String"/>
+	<field name="des_complemento" class="java.lang.String"/>
+	<field name="nom_municipio" class="java.lang.String"/>
+	<field name="des_sigla" class="java.lang.String"/>
+	<field name="des_ponto_referencia" class="java.lang.String"/>
+	<field name="num_cep" class="java.math.BigDecimal"/>
+	<field name="uf" class="java.lang.String"/>
+	<field name="ide_requerimento" class="java.lang.Integer"/>
+	<field name="num_requerimento" class="java.lang.String"/>
+	<field name="nom_contato" class="java.lang.String"/>
+	<field name="num_telefone_contato" class="java.lang.String"/>
+	<field name="des_email_contato" class="java.lang.String"/>
+	<field name="num_documento" class="java.lang.String"/>
+	<field name="dtc_criacao" class="java.sql.Timestamp"/>
+	<field name="telefones" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band height="53" splitType="Stretch">
+			<image isLazy="true" onErrorType="Blank">
+				<reportElement uuid="42af8e38-6281-4c2b-883c-11338af97490" positionType="Float" x="1" y="7" width="98" height="41" forecolor="#FFFFFF"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<graphicElement>
+					<pen lineWidth="1.0" lineStyle="Solid" lineColor="#FFFFFF"/>
+				</graphicElement>
+				<imageExpression><![CDATA[$P{LOGO_INEMA}]]></imageExpression>
+			</image>
+			<line>
+				<reportElement uuid="8fb90e2d-5a1c-4218-bc8f-dd4ae1c15ad5" positionType="Float" x="1" y="1" width="494" height="1"/>
+			</line>
+			<line>
+				<reportElement uuid="2d035b6c-a31d-4fb2-9604-d2a93020429e" positionType="Float" x="1" y="52" width="494" height="1"/>
+			</line>
+			<image isLazy="true" onErrorType="Blank">
+				<reportElement uuid="2ce982ea-9041-4d0c-9187-6a6d68d56635" positionType="Float" x="395" y="8" width="99" height="41" forecolor="#FFFFFF"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<graphicElement>
+					<pen lineWidth="0.0"/>
+				</graphicElement>
+				<imageExpression><![CDATA[$P{LOGO_SEIA}]]></imageExpression>
+			</image>
+			<textField>
+				<reportElement uuid="84e470e9-6dff-4a96-afd5-678c784b2c0e" positionType="Float" x="99" y="2" width="298" height="35"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font fontName="Arial" size="11" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression><![CDATA["RESUMO DE INSCRIÇÃO NO CADASTRO ESTADUAL"+
+"FLORESTAL DE IMÓVEIS RURAIS"]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="114" splitType="Stretch">
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="38924300-6abb-407b-8e93-d9da2f22d054" positionType="Float" x="67" y="42" width="234" height="12">
+					<printWhenExpression><![CDATA[$F{ide_pessoa_fisica} != null]]></printWhenExpression>
+				</reportElement>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Arial" size="9"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nom_pessoa}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="64fac5af-ffc1-44a8-9f8c-5aed2f87a0f3" positionType="Float" x="178" y="54" width="54" height="12" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$F{ide_pessoa_fisica} != null]]></printWhenExpression>
+				</reportElement>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Arial" size="8" isBold="false"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<text><![CDATA[Naturalidade:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="bb4fc0e6-9002-4405-888a-38a36998efeb" positionType="Float" x="14" y="78" width="52" height="12" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$F{ide_pessoa_fisica} != null]]></printWhenExpression>
+				</reportElement>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Arial" size="8" isBold="false"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<text><![CDATA[Telefones:]]></text>
+			</staticText>
+			<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
+				<reportElement uuid="b906d600-9c5f-43b7-8c08-ca9f4550aca4" positionType="Float" x="232" y="54" width="94" height="12">
+					<printWhenExpression><![CDATA[$F{ide_pessoa_fisica} != null]]></printWhenExpression>
+				</reportElement>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Arial" size="9"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{des_naturalidade}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
+				<reportElement uuid="ac5d777a-2df5-4161-8104-330d3c451ca5" positionType="Float" x="410" y="54" width="84" height="12">
+					<printWhenExpression><![CDATA[$F{ide_pessoa_fisica} != null]]></printWhenExpression>
+				</reportElement>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Arial" size="9"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dtc_nascimento}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="b3e7bc2a-d8b8-4396-a3b7-71038c26baf1" positionType="Float" x="368" y="90" width="32" height="12" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$F{ide_pessoa_fisica} != null]]></printWhenExpression>
+				</reportElement>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Arial" size="8" isBold="false"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<text><![CDATA[CEP:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="db8eedc5-d2da-4c30-959a-ac65955165b3" positionType="Float" x="410" y="102" width="27" height="12">
+					<printWhenExpression><![CDATA[$F{ide_pessoa_fisica} != null]]></printWhenExpression>
+				</reportElement>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Arial" size="8" isBold="false"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<text><![CDATA[UF:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="912f2d75-91c7-4bd5-bb87-75e4c4b23347" positionType="Float" x="68" y="90" width="241" height="12" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$F{ide_pessoa_fisica} != null]]></printWhenExpression>
+				</reportElement>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Arial" size="9"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new String($F{nom_logradouro} == null ? " Não Informado ":  $F{nom_tipo_logradouro}+" "+$F{nom_logradouro})]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="3919ef48-041a-4ace-b8d6-e555e875d58b" positionType="Float" x="281" y="102" width="123" height="12" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$F{ide_pessoa_fisica} != null]]></printWhenExpression>
+				</reportElement>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Arial" size="9"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nom_municipio}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
+				<reportElement uuid="63e75f33-b1ad-4f03-a5d8-310fd185d19b" positionType="Float" x="72" y="54" width="105" height="12">
+					<printWhenExpression><![CDATA[$F{ide_pessoa_fisica} != null]]></printWhenExpression>
+				</reportElement>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Arial" size="9"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nom_pais}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="1a6cc144-8c85-4f69-a9cd-962ed14e2df6" positionType="Float" x="14" y="42" width="53" height="12" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$F{ide_pessoa_fisica} != null]]></printWhenExpression>
+				</reportElement>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Arial" size="8" isBold="false"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<text><![CDATA[Nome:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="fc3cc9f9-b10b-4f49-b9a7-7e0536146a71" positionType="Float" x="435" y="102" width="57" height="12" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$F{ide_pessoa_fisica} != null]]></printWhenExpression>
+				</reportElement>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Arial" size="9"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{uf}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="df104ef6-16cf-41bc-a8fe-73bbcbc85cee" positionType="Float" x="1" y="12" width="93" height="12"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Arial" size="8" isBold="false"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<text><![CDATA[N° Requerimento SEIA:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="f6d4919c-62c4-46cd-9f95-c014ad08e876" positionType="Float" x="14" y="90" width="53" height="12" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$F{ide_pessoa_fisica} != null]]></printWhenExpression>
+				</reportElement>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Arial" size="8" isBold="false"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<text><![CDATA[Logradouro:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="d9be000a-422c-49ed-8b23-49c341255a09" positionType="Float" x="328" y="42" width="115" height="12">
+					<printWhenExpression><![CDATA[$F{ide_pessoa_fisica} != null]]></printWhenExpression>
+				</reportElement>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Arial" size="9"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{num_documento}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="e3d7299c-78fa-4727-9385-587e9dfc3319" positionType="Float" x="14" y="102" width="55" height="12" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$F{ide_pessoa_fisica} != null]]></printWhenExpression>
+				</reportElement>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Arial" size="8" isBold="false"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<text><![CDATA[Bairro/Distrito:]]></text>
+			</staticText>
+			<textField pattern="dd MMMMM yyyy" isBlankWhenNull="true">
+				<reportElement uuid="2c5bc672-3ef9-48c6-8bd8-4a2d4fa3d357" positionType="Float" x="96" y="0" width="123" height="12"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Arial" size="9"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dtc_criacao}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="da172de8-0f76-46af-a6c7-ee1698f664ec" positionType="Float" x="96" y="13" width="219" height="12"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Arial" size="9"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{num_requerimento}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="390c85a2-ad0c-4fb9-aa60-18533616c3b7" positionType="Float" x="1" y="0" width="93" height="12"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Arial" size="8" isBold="false"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<text><![CDATA[Data da Solicitação:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="e976cd0d-dea4-4e2c-ab57-f5f2708ee677" positionType="Float" x="303" y="42" width="25" height="12" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$F{ide_pessoa_fisica} != null]]></printWhenExpression>
+				</reportElement>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Arial" size="8" isBold="false"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<text><![CDATA[CPF:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="2aa87b19-9e89-413b-9f16-40c9eaff7ff5" positionType="Float" x="400" y="90" width="92" height="12" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$F{ide_pessoa_fisica} != null]]></printWhenExpression>
+				</reportElement>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Arial" size="9"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{num_cep}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="859c2f34-a889-4d6c-a1c4-aa3275cb9d68" positionType="Float" x="240" y="102" width="41" height="12" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$F{ide_pessoa_fisica} != null]]></printWhenExpression>
+				</reportElement>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Arial" size="8" isBold="false"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<text><![CDATA[Cidade:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="eba61eeb-c874-4dd2-8927-12b5364c9a5c" positionType="Float" x="71" y="102" width="160" height="12" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$F{ide_pessoa_fisica} != null]]></printWhenExpression>
+				</reportElement>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Arial" size="9"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nom_bairro}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="7d7ae6e0-36c6-4491-a31d-4655fd27f945" positionType="Float" x="14" y="66" width="53" height="12" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$F{ide_pessoa_fisica} != null]]></printWhenExpression>
+				</reportElement>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Arial" size="8" isBold="false"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<text><![CDATA[E-mail:]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="3717f5e5-8cd6-4a3e-8b7f-84fa5e5efcd7" positionType="Float" x="66" y="78" width="424" height="12" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$F{ide_pessoa_fisica} != null]]></printWhenExpression>
+				</reportElement>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Arial" size="9"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA["TELEFONE"]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="0db32c3a-a65c-40e0-9fd2-69827c06fd59" positionType="Float" mode="Opaque" x="0" y="25" width="495" height="17" isRemoveLineWhenBlank="true" backcolor="#DDDDDD">
+					<printWhenExpression><![CDATA[$F{ide_pessoa_fisica} != null]]></printWhenExpression>
+				</reportElement>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Verdana" isBold="true"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<text><![CDATA[Dados do Requerente]]></text>
+			</staticText>
+			<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
+				<reportElement uuid="a7a3bbce-ab7a-4971-b28d-1ac4b4d4fadd" positionType="Float" x="67" y="66" width="403" height="12">
+					<printWhenExpression><![CDATA[$F{ide_pessoa_fisica} != null]]></printWhenExpression>
+				</reportElement>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Arial" size="9"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{des_email}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="7b5b6f90-920c-45a9-a85c-232fa69510db" positionType="Float" x="327" y="54" width="83" height="12" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$F{ide_pessoa_fisica} != null]]></printWhenExpression>
+				</reportElement>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Arial" size="8" isBold="false"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<text><![CDATA[Data de Nascimento:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="86e55160-106d-4093-998b-a9f6eaa013ca" positionType="Float" x="14" y="54" width="58" height="12" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$F{ide_pessoa_fisica} != null]]></printWhenExpression>
+				</reportElement>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Arial" size="8" isBold="false"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<text><![CDATA[Nacionalidade:]]></text>
+			</staticText>
+		</band>
+		<band/>
+		<band/>
+		<band height="31">
+			<printWhenExpression><![CDATA[]]></printWhenExpression>
+			<subreport>
+				<reportElement uuid="f67c7729-bbcf-47c6-924e-178e928ac266" x="14" y="15" width="481" height="15"/>
+				<subreportParameter name="ide_requerimento">
+					<subreportParameterExpression><![CDATA[$F{ide_requerimento}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "resumo_requerimento_imovel.jasper"]]></subreportExpression>
+			</subreport>
+			<staticText>
+				<reportElement uuid="b6724316-9de4-48ea-b153-3e068f5aeecb" positionType="Float" mode="Opaque" x="1" y="0" width="495" height="15" backcolor="#DDDDDD"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Verdana" isBold="true"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<text><![CDATA[Imóveis]]></text>
+			</staticText>
+		</band>
+		<band height="31">
+			<printWhenExpression><![CDATA[]]></printWhenExpression>
+			<subreport>
+				<reportElement uuid="e72463c4-6512-4895-bc6f-e27560deda60" x="14" y="15" width="482" height="15"/>
+				<subreportParameter name="SUBREPORT_DIR">
+					<subreportParameterExpression><![CDATA[$P{SUBREPORT_DIR}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "resumo_requerimento_responsaveis.jasper"]]></subreportExpression>
+			</subreport>
+			<staticText>
+				<reportElement uuid="b6724316-9de4-48ea-b153-3e068f5aeecb" positionType="Float" mode="Opaque" x="0" y="0" width="495" height="15" backcolor="#DDDDDD"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Verdana" isBold="true"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<text><![CDATA[Responsáveis Técnicos]]></text>
+			</staticText>
+		</band>
+		<band>
+			<printWhenExpression><![CDATA[]]></printWhenExpression>
+		</band>
+		<band height="34">
+			<subreport>
+				<reportElement uuid="ef661a42-5e3c-449d-aacb-7933abbebc9b" x="14" y="15" width="481" height="19"/>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "dados_especificos_cefir.jasper"]]></subreportExpression>
+			</subreport>
+			<staticText>
+				<reportElement uuid="b6724316-9de4-48ea-b153-3e068f5aeecb" positionType="Float" mode="Opaque" x="0" y="0" width="495" height="15" backcolor="#DDDDDD"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Verdana" isBold="true"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<text><![CDATA[Dados Específicos Cadastrados]]></text>
+			</staticText>
+		</band>
+		<band/>
+		<band/>
+		<band/>
+		<band>
+			<printWhenExpression><![CDATA[]]></printWhenExpression>
+		</band>
+		<band height="166">
+			<staticText>
+				<reportElement uuid="b6724316-9de4-48ea-b153-3e068f5aeecb" positionType="Float" mode="Opaque" x="0" y="0" width="495" height="15" backcolor="#DDDDDD"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Verdana" isBold="true"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<text><![CDATA[IMPORTANTE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="af7e77f5-f5c3-448d-b205-293c34ec50b8" x="0" y="15" width="495" height="151"/>
+				<textElement textAlignment="Justified">
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[- A Secretaria de Meio Ambiente do Estado da Bahia - SEMA não se responsabiliza por eventual uso indevido do presente CEFIR, advindo de dolo ou má fé.
+- Todos os documentos anexados ao cadastro, especialmente os pessoais e dominiais e as informações prestadas pelo (a) proprietário (a) do imóvel são de sua inteira responsabilidade, respondendo legalmente pelas mesmas de acordo com o Código Penal (Decreto Lei 2848 de 07 de dezembro de 1940);
+Da mesma forma, todos os documentos e informações técnicas anexados ao cadastro, são de inteira responsabilidade do Responsável técnico, que responde legalmente pelas mesmas de acordo com o Código Penal (Decreto Lei 2848 de 07 de dezembro de 1940).
+- Este cadastro poderá ser  suspenso ou cancelado, a qualquer tempo, por motivo de irregularidades constatadas ou em virtude da lei.
+- Este Cerificado não contem emendas ou rasuras.
+- Cópia deste Cerificado deve ser mantida na propriedade para efeito de fiscalização;
+Este documento pode ser consultado e autenticado no site da SEMA no endereço www.sema.ba.gov.br.]]></text>
+			</staticText>
+		</band>
+		<band height="52">
+			<staticText>
+				<reportElement uuid="b6724316-9de4-48ea-b153-3e068f5aeecb" positionType="Float" mode="Opaque" x="1" y="0" width="495" height="15" backcolor="#DDDDDD"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Verdana" isBold="true"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<text><![CDATA[ATENÇÃO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="f8816ade-d5c2-4cb1-9da2-01dc2ffbc22c" x="1" y="14" width="495" height="38"/>
+				<textElement textAlignment="Justified">
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[O CEFIR não se constitui em instrumento de licenciamento ambiental para implantação de novas atividades econômica no imóvel rural, bem como, não autoriza exploração florestal ou supressão de vegetação.
+O CEFIR não se constitui em prova da posse ou propriedade para fins de regularização fundiária.]]></text>
+			</staticText>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="17" splitType="Stretch">
+			<textField>
+				<reportElement uuid="feda25c7-30cc-4962-806a-43bcaaaa1c32" positionType="Float" mode="Opaque" x="432" y="4" width="46" height="13" forecolor="#000000"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font size="10" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Pág "+$V{PAGE_NUMBER}+" de"]]></textFieldExpression>
+			</textField>
+			<frame>
+				<reportElement uuid="613a42ef-ed58-47d5-b10d-5abe949b8ea3" positionType="Float" mode="Opaque" x="5" y="4" width="201" height="13" forecolor="#000000"/>
+			</frame>
+			<textField evaluationTime="Report">
+				<reportElement uuid="7a558bca-9b0a-4944-9388-e3ea8cbd19bd" positionType="Float" mode="Opaque" x="478" y="4" width="15" height="13" forecolor="#000000"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="10" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="88062e88-ac91-4c78-a179-460527707bf5" positionType="Float" x="115" y="4" width="298" height="13"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="5"/>
+				</textElement>
+				<text><![CDATA[Avenida Luis Viana Filho, 6° Avenida n° 600 - CAB - CEP 41.745-900. Salvador - BA]]></text>
+			</staticText>
+			<textField pattern="EEEEE dd MMMMM yyyy">
+				<reportElement uuid="be936b0e-c109-46f5-8854-b653e7d0cf21" positionType="Float" mode="Opaque" x="5" y="4" width="118" height="13" forecolor="#000000"/>
+				<textElement verticalAlignment="Middle">
+					<font size="10" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

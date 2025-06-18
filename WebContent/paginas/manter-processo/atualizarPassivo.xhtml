@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui">
+
+	<div style="height:auto; width:auto;  overflow: auto; margin: 0px;">
+		<h:form id="formAtualizarPassivo">
+			
+			<h:panelGrid>
+				<h:outputText value="N° do processo: " />
+				<h:outputText value="#{atualizarPassivoController.vwProcesso.numProcesso}" />
+			</h:panelGrid>
+			
+			<hr style="width:550px !important;"/>
+			
+			<h:panelGrid width="580px">
+				<p:pickList 
+					
+					id="pickListAtualizarPassivo"
+					converter="pickListProcessoAtoConverter" 
+					value="#{atualizarPassivoController.dualListAtos}" 
+					var="ato" 
+					itemLabel="#{ato.nomAtoAmbientalTipologia}" 
+					itemValue="#{ato}" 
+					addLabel="Adicionar" addAllLabel="Adicionar Todos" removeLabel="Remover" removeAllLabel="Remover Todos" >
+					
+	   				<f:facet name="sourceCaption">Atos Requeridos</f:facet>  
+	       			<f:facet name="targetCaption">Atos Deferidos</f:facet>
+	   			</p:pickList>
+			</h:panelGrid>
+			
+			<h:panelGrid columns="2">
+				<p:spacer height="50" width="465" />
+				<p:commandButton value="Salvar" onclick="confirmacaoAtualizarPassivo.show();" />
+			</h:panelGrid>
+		</h:form>
+	</div>
+</ui:composition>

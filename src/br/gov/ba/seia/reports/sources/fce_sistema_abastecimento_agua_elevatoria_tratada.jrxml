@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="fce_sistema_abastecimento_agua_elevatorio_tratada" pageWidth="495" pageHeight="817" whenNoDataType="AllSectionsNoDetail" columnWidth="495" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="80b78396-35cc-4e26-aaf9-1207b1892468">
+	<property name="ireport.zoom" value="2.2000000000000006"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String"/>
+	<parameter name="ide_requerimento" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[$P{ide_requerimento}]]></defaultValueExpression>
+	</parameter>
+	<parameter name="ide_fce_saa" class="java.lang.Integer"/>
+	<queryString>
+		<![CDATA[SELECT this_.ide_fce_saa_localizacao_geografica_elevatoria_tratada, this_.nom_identificacao,
+       replace(split_part(f_get_vertices(this_.ide_localizacao_geografica), ' ', 2), '(', '') as latitude,
+       replace(split_part(f_get_vertices(this_.ide_localizacao_geografica), ' ', 3), ')', '') as longitude,
+       this_.val_vazao_media,
+       sis.nom_sistema_coordenada
+FROM fce_saa_localizacao_geografica_elevatoria_tratada this_
+INNER JOIN localizacao_geografica lg1_ ON this_.ide_localizacao_geografica=lg1_.ide_localizacao_geografica
+INNER JOIN sistema_coordenada sis on sis.ide_sistema_coordenada = lg1_.ide_sistema_coordenada
+INNER JOIN fce_saa saa on this_.ide_fce_saa = saa.ide_fce_saa
+INNER JOIN fce on saa.ide_fce = fce.ide_fce
+INNER JOIN requerimento r7_ ON fce.ide_requerimento = r7_.ide_requerimento
+WHERE r7_.ide_requerimento=  $P{ide_requerimento}
+and saa.ide_fce_saa = $P{ide_fce_saa}]]>
+	</queryString>
+	<field name="ide_fce_saa_localizacao_geografica_elevatoria_tratada" class="java.lang.Integer">
+		<fieldDescription><![CDATA[Chave primária da tabela]]></fieldDescription>
+	</field>
+	<field name="nom_identificacao" class="java.lang.String">
+		<fieldDescription><![CDATA[Nome identificador da elevatória]]></fieldDescription>
+	</field>
+	<field name="latitude" class="java.lang.String"/>
+	<field name="longitude" class="java.lang.String"/>
+	<field name="val_vazao_media" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[Vazão média da elevatória]]></fieldDescription>
+	</field>
+	<field name="nom_sistema_coordenada" class="java.lang.String"/>
+	<title>
+		<band height="2" splitType="Stretch"/>
+	</title>
+	<columnHeader>
+		<band height="60">
+			<staticText>
+				<reportElement uuid="88f36183-36da-41d7-8acf-880da5bbea98" x="187" y="47" width="82" height="12"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Longitude]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="ba1e53b5-58fa-4565-bef5-45ad4b71029a" x="117" y="47" width="67" height="12"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Latitude]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="af4f2f1a-1ede-4cb7-9a3f-b1a68df4ca3a" x="4" y="47" width="110" height="12"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Identificação]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="99c57819-010f-45f9-b4fb-a8f2c69592a0" x="2" y="24" width="493" height="20"/>
+				<box topPadding="3" leftPadding="2"/>
+				<textElement>
+					<font fontName="SansSerif" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Coordenadas da elevatória]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="23461cac-d1b4-4462-a01e-8f78eaa5545b" x="413" y="47" width="81" height="12"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Vazão(m³/dia)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="a3b20364-0ba0-4ccd-881a-9f82fe3dc5d4" x="271" y="47" width="138" height="12"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Sistema de Coordenadas]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="c21faf88-c284-4364-b889-e0772578dff4" x="2" y="0" width="333" height="20"/>
+				<box topPadding="3" leftPadding="2"/>
+				<textElement>
+					<font fontName="SansSerif" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Elevatória de água tratada]]></text>
+			</staticText>
+			<line>
+				<reportElement uuid="d0716305-a941-4d1c-9264-395358869a77" x="0" y="20" width="495" height="1"/>
+			</line>
+			<line>
+				<reportElement uuid="047eb400-f6f8-4a31-adf3-aef0ca1f1866" x="0" y="59" width="495" height="1"/>
+			</line>
+			<line>
+				<reportElement uuid="e6b655ff-5df4-4cae-a1c3-d5f1db15e2ab" x="0" y="46" width="1" height="13"/>
+			</line>
+			<line>
+				<reportElement uuid="d8f90cd8-6140-45f7-b7af-a06fc0b7d6a7" x="115" y="46" width="1" height="13"/>
+			</line>
+			<line>
+				<reportElement uuid="e2671e4e-cfbb-4f6d-b300-89bc9a4bbbbc" x="184" y="47" width="1" height="13"/>
+			</line>
+			<line>
+				<reportElement uuid="e9bf2646-3cda-410c-a7d9-a6790d37cb20" x="269" y="47" width="1" height="13"/>
+			</line>
+			<line>
+				<reportElement uuid="f76afa15-f795-4134-bdb6-751e2cf2bdc5" x="410" y="47" width="1" height="13"/>
+			</line>
+			<line>
+				<reportElement uuid="75531e93-ae46-4c3d-8a0b-a57277cc6a5e" x="494" y="47" width="1" height="13"/>
+			</line>
+			<line>
+				<reportElement uuid="b6877733-70e2-4a41-a5f2-fab6a5a16597" x="0" y="46" width="495" height="1"/>
+			</line>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="14">
+			<line>
+				<reportElement uuid="78924685-b3aa-4980-a996-5362a7564b01" x="0" y="13" width="495" height="1"/>
+			</line>
+			<textField>
+				<reportElement uuid="033ff898-89fe-429d-8618-1ef5d31bab2d" x="118" y="1" width="66" height="12"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{latitude}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00">
+				<reportElement uuid="5c0064ba-8c7d-4bec-8431-50ab30ce0a80" x="413" y="1" width="81" height="12"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{val_vazao_media}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="0e6a5bb6-61d0-47c6-86df-53045737daa9" x="271" y="1" width="139" height="12"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{nom_sistema_coordenada}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="d96813d6-13e1-4315-b4bc-57ef4cd52ebf" x="187" y="1" width="82" height="12"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{longitude}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="7e34d226-fc22-443d-a3c0-907e27b1a417" x="2" y="1" width="112" height="12"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{nom_identificacao}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement uuid="15846d64-78f0-4908-ad7d-73e14b1b44c3" x="0" y="0" width="1" height="13"/>
+			</line>
+			<line>
+				<reportElement uuid="0364681a-ee3c-42fa-97da-9c9a34e90c94" x="115" y="0" width="1" height="13"/>
+			</line>
+			<line>
+				<reportElement uuid="929c7b5b-7b36-4244-ac47-4c223efdfeea" x="184" y="0" width="1" height="13"/>
+			</line>
+			<line>
+				<reportElement uuid="ff620b3b-8713-4669-a118-90469ee218bb" x="269" y="0" width="1" height="13"/>
+			</line>
+			<line>
+				<reportElement uuid="343288de-f6bd-408f-8fbc-01e97b41989f" x="410" y="0" width="1" height="13"/>
+			</line>
+			<line>
+				<reportElement uuid="7435e1d0-e965-481d-ab0d-019687c65ea2" x="494" y="0" width="1" height="13"/>
+			</line>
+		</band>
+	</detail>
+</jasperReport>

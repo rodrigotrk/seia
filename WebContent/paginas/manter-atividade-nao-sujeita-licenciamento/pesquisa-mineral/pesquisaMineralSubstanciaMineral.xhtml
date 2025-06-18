@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+				xmlns:h="http://java.sun.com/jsf/html" 
+				xmlns:f="http://java.sun.com/jsf/core" 
+				xmlns:ui="http://java.sun.com/jsf/facelets" 
+				xmlns:p="http://primefaces.prime.com.tr/ui">
+	
+	<h:panelGrid id="gridSubstanciaMineral">
+		<h:outputText styleClass="titulo-grupo-bold" value="* #{bundle.lbl_cpm_substancia_mineral}:" />
+		<p:commandLink title="#{bundle.fce_lic_min_incluir_substancia}" 
+			onclick ="dialogIncluirSubstanciaMineral.show()" 
+			update="formIncluirSubstancia"
+			disabled="#{pesquisaMineralController.cadastro.visualizar}">
+			<h:graphicImage title="#{bundle.fce_lic_min_incluir_substancia}" value="/resources/img/ico-expandir.png" style="margin-right: 2px;"/>
+			<h:outputText value="#{bundle.fce_lic_min_incluir_substancia}"/>
+		</p:commandLink>
+
+		<p:dataTable id="dataTableMinLicSubstancia"
+			style="margin-left:5px; min-width: 400px;"
+			value="#{pesquisaMineralController.pesquisaMineral.pesquisaMineralSubstanciaMinerals}"
+			var="substancia"
+			rendered="#{pesquisaMineralController.substanciaMineralAdicionada}">
+			<p:column headerText="Substância" style="text-align:left; min-width: 335px;">
+				<h:outputText value="#{substancia.ideSubstanciaMineral.nomSubstanciaMineral}" />
+			</p:column>
+			<p:column headerText="Ação" style="text-align:center; width:45px;">
+				<p:commandLink title="Excluir" 
+					oncomplete="confirmaExclusaoSubstanciaMineral.show()" 
+					disabled="#{pesquisaMineralController.cadastro.visualizar}">
+					<h:graphicImage title="Excluir" value="/resources/img/ico-excluir.png" />
+					<f:setPropertyActionListener target="#{pesquisaMineralController.pesquisaMineralSubstanciaMineral}" value="#{substancia}" />
+				</p:commandLink>
+			</p:column>
+		</p:dataTable>
+	</h:panelGrid>
+		
+</ui:composition>

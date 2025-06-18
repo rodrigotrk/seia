@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui">
+	
+	<p:confirmDialog header="Confirmação" appendToBody="true" message="Deseja imprimir o relatório do cadastro de Formulário de Caracterização do Empreendimento - Canais?"
+						severity="alert" widgetVar="confirmationSalvarFCECanais" id="_confirmationSalvarFCECanais" closable="false">
+		<h:form id="formConfirmaConfirmarFCE">
+			<p:commandButton value="Sim" 
+					ajax="false" 
+					global="false" 
+					process="@this" 
+					onclick="dialogFceCanais.hide();confirmationSalvarFCECanais.hide();">
+				<p:fileDownload value="#{fceCanalController.imprimirRelatorio}" />
+			</p:commandButton>
+			<p:commandButton value="Não" onclick="dialogFceCanais.hide();confirmationSalvarFCECanais.hide();" type="button" global="false"/>
+		</h:form>
+	</p:confirmDialog>
+	
+	<p:dialog id="_dialogFceCanais" widgetVar="dialogFceCanais" 
+		modal="true" showHeader="true" 
+		appendToBody="true" width="900" height="500"
+		position="center" resizable="false" draggable="false"
+		onShow="dialogFceCanais.initPosition();"
+		header="Canais">
+		<h:panelGroup id="panelGeralCanais" layout="block" style="overflow:auto;">
+			<h:form id="formFceCanais">
+				<p:tabView id="_tabAbasFceCanais" activeIndex="#{fceCanalController.activeTab}" widgetVar="tabAbasFceCanais" cache="false">
+					
+					<p:ajax event="tabChange" listener="#{fceCanalController.controlarAbas()}" update="_tabAbasFceCanais, formFceCanais" />
+					
+					<p:tab id="FceCanaisAbaDadosGerais" title="Dados Gerais" >
+						<ui:include rendered="#{fceCanalController.activeTab == 0}" src="/paginas/manter-fce/canais/canaisAbaDadosGerais.xhtml" />
+					</p:tab>
+					<p:tab id="FceCanaisAbacaracterizacaoAtividade" title="Caracterização da Atividade" disabled="#{fceCanalController.fceCanal == null or fceCanalController.fceCanal.ideFceCanal == null}">
+						<ui:include rendered="#{fceCanalController.activeTab == 1}" src="/paginas/manter-fce/canais/canaisAbaCaracterizacaoAtividade.xhtml"/>
+					</p:tab>
+					<p:tab id="FceCanaisResumo" title="Resumo" 
+						   disabled="#{(fceCanalController.fceCanal == null or fceCanalController.fceCanal.ideFceCanal == null) or empty fceCanalController.fceCanal.canalTrechos or (not empty fceCanalController.fceCanal.canalTrechos and fceCanalController.fceCanal.canalTrechos.get(0).idFceCanalTrecho == null)}">
+						<ui:include rendered="#{fceCanalController.activeTab == 2}" src="/paginas/manter-fce/canais/canaisAbaResumo.xhtml"/>
+					</p:tab>
+				</p:tabView>
+				<br/>	
+				<h:panelGroup id="pnlFcecanais" layout="block" >
+					<p:commandButton value="Voltar" style="float:left;" actionListener="#{fceCanalController.voltarAba()}" update="formFceCanais"/>
+					<p:commandButton value="#{fceCanalController.activeTab == 2? 'Finalizar': 'Avançar'}" style="float:right;"
+									actionListener="#{fceCanalController.avancarAba()}" update="formFceCanais" rendered="#{!fceCanalController.desabilitarTudo}"/>
+					<p:commandButton value="Avançar" style="float:right;" actionListener="#{fceCanalController.avancarAba()}" 
+									update="formFceCanais" rendered="#{fceCanalController.desabilitarTudo and fceCanalController.activeTab lt 2}"/>
+				</h:panelGroup>
+			</h:form>
+		</h:panelGroup>
+	</p:dialog>
+</ui:composition>

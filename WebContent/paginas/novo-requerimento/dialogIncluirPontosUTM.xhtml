@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui">
+
+	<h:form id="locGeograficaPontosUTM" style="z-index: 99999;">
+		<h:outputLabel value="Zone" />
+		<p:selectOneRadio label="#{bundle.zone}:"
+			value="#{localizacaoGeograficaGenericController.zone}">
+			<f:selectItem itemLabel="23" itemValue="23" />
+			<br />
+			<f:selectItem itemLabel="24" itemValue="24" />
+		</p:selectOneRadio>
+		<br />
+		<h:panelGrid>
+			<h:panelGrid columns="1">
+				<h:outputLabel value="* #{bundle.latitude_UTM_N}:" />
+				<p:inputText
+					value="#{localizacaoGeograficaGenericController.latitudeUTM}"
+					id="longitudeUTME"
+					onkeyup="maskItQuatro(this, event, '9999999.99', true)" required="true"
+					label="#{bundle.latitude_UTM_N}"
+					requiredMessage="Informe a Longitude da localização" />
+				<br />
+
+				<h:outputLabel value="* #{bundle.longitude_UTM_E}:" />
+				<p:inputText
+					value="#{localizacaoGeograficaGenericController.longitudeUTM}"
+					id="latitudeUTMN" onkeyup="maskItQuatro(this, event, '9999999.99', true)"
+					required="true" label="#{bundle.longitude_UTM_E}"
+					requiredMessage="Informe a Latitude da localização" />
+				<br />
+			</h:panelGrid>
+
+			<h:panelGroup>
+				<div style="text-align: center;">
+					<p:commandButton process="@this" update="@form"
+						actionListener="${localizacaoGeograficaGenericController.limparVertice()}"
+						value="#{bundle.geral_lbl_limpar}" />
+					<p:commandButton value="#{bundle.geral_lbl_salvar}"
+						update=":locGeografica:tabelaVerticesUTM locGeografica"
+						actionListener="#{localizacaoGeograficaGenericController.salvarVerticeUTM()}"
+						oncomplete="dialogIncluirVerticeUtmGeneric.hide();" />
+				</div>
+			</h:panelGroup>
+			<br />
+			<h:outputLabel value="#{bundle.lbl_preench_obrig_asterisc}"
+				style="float: left;" />
+		</h:panelGrid>
+	</h:form>
+
+</ui:composition>

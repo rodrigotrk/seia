@@ -1,0 +1,157 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.prime.com.tr/ui"
+      xmlns:s="http://java.sun.com/jsf/composite/seia">
+
+	<ui:composition template="/layout/template.xhtml">
+		<ui:define name="titulo-pagina">
+			<h3>Listar Projetos do TCCA</h3>
+		</ui:define>
+		
+		<ui:define name="conteudo-principal">
+			
+			<!-- INCLUDE DOS DIALOGS -->
+			<ui:include src="/paginas/manter-tcca/includeDialogsProjeto.xhtml" />
+			
+			<h:form>
+				<p:poll listener="#{projetoTccaController.atualizaMensagemPorPollAjax}" update="formConsultaProjeto"
+					widgetVar="projetoTccaPoll" global="true" stop="true" interval="1"/>
+			</h:form>
+				
+			<h:form id="formConsultaProjeto">
+				<h:panelGrid columns="2">
+					<h:outputText value="Número do TCCA:" styleClass="bold"/>
+					<h:outputText value="#{projetoTccaController.tcca.numTcca}" />
+				</h:panelGrid>
+					
+				<h:panelGrid columns="2">
+					<h:outputText value="Requerente:" styleClass="bold"/>
+					<h:outputText value="#{projetoTccaController.tcca.idePessoaRequerente.nomeRazao}" />
+				</h:panelGrid>
+					
+				<h:panelGrid columns="2">
+					<h:outputText value="Empreendimento:" styleClass="bold"/>
+					<h:outputText value="#{projetoTccaController.tcca.ideEmpreendimento.nomEmpreendimento}" />
+				</h:panelGrid>
+					
+				<h:panelGrid columns="2">
+					<h:outputText value="Valor do TCCA (R$):" styleClass="bold"/>
+					<h:outputText value="#{(projetoTccaController.tcca.valTcca)==null ? 0.00 : (projetoTccaController.tcca.valTcca)}"
+						styleClass="#{projetoTccaController.isValorNegativo(projetoTccaController.tcca.valTcca)}">
+						
+						<f:convertNumber pattern="#,###,##0.00" locale="pt_BR"/>
+					</h:outputText>
+				</h:panelGrid>
+				
+				<br />
+				
+				<!-- Botões -->
+				<h:panelGrid columns="1" id="panelBotoes">
+					<!--p:commandButton value="Consultar" global="false" ajax="false" actionListener="#{projetoTccaController.consultarProjeto()}"
+						update="formConsultaProjeto:dataTableProjetos"/-->
+						
+					<p:commandButton id="voltar" value="Voltar" global="false" ajax="false" action="/paginas/manter-tcca/consultaTcca.xhtml"/>
+					
+					<br />
+					
+					<p:commandButton id="botaoNovoProjeto" value="Novo Projeto" global="false" ajax="false"
+						action="/paginas/manter-tcca/cadastroProjeto.xhtml" rendered="${security.temAcesso('3.67.65')}"
+						actionListener="#{projetoTccaController.enviarTccaParaSessao(projetoTccaController.tcca, null)}"/>
+				</h:panelGrid>
+				
+				<br />
+				
+				<p:dataTable id="dataTableProjetos" lazy="true" paginator="true" rows="8" paginatorPosition="bottom" var="projeto" widgetVar="projeto"
+					paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}" emptyMessage="#{bundle.consultapf_msg_empty_list}"
+					value="#{projetoTccaController.dataModelProjeto}" binding="#{projetoTccaController.dataTableProjeto}" style="margin-left:4px;">
+					
+					<f:facet name="header">
+						<h:outputText value="Lista de Projetos Cadastrados" />
+					</f:facet>
+					
+					<p:column style="text-align: center;">
+						<f:facet name="header">
+							<h:outputText value="Nome do Projeto" />
+						</f:facet>
+						
+						<h:outputText value="#{projeto.nomProjeto}" />
+					</p:column>
+					
+					<p:column style="text-align: center;">
+						<f:facet name="header">
+							<h:outputText value="Status do Projeto" />
+						</f:facet>
+						
+						<h:outputText value="#{projeto.ultimoStatus.ideTccaProjetoTipoStatus.nomTccaTipoStatus}" />
+					</p:column>
+					
+					<p:column style="text-align: center;">
+						<f:facet name="header">
+							<h:outputText value="Saldo (R$)" />
+						</f:facet>
+						
+						<h:outputText value="#{(projeto.valorSaldo)==null ? 0.00 : (projeto.valorSaldo)}"
+							styleClass="#{projetoTccaController.isValorNegativo(projeto.valorSaldo)}">
+							
+							<f:convertNumber pattern="#,###,##0.00" locale="pt_BR"/>
+						</h:outputText>
+					</p:column>
+					
+					<p:column style="text-align: center;">
+						<f:facet name="header">
+							<h:outputText value="#{bundle.geral_lbl_acoes}" />
+						</f:facet>
+						
+						<h:panelGrid columns="2">
+							<h:commandButton title="Visualizar" action="#{projetoTccaController.editarProjeto()}" image="/resources/img/ico-pesquisa.png" 
+								style="margin: 2px;" rendered="#{security.temAcesso('3.67.66')}">
+								
+								<f:setPropertyActionListener target="#{projetoTccaController.projeto}" value="#{projeto}" />
+								<f:setPropertyActionListener target="#{projetoTccaController.projeto.visualizando}" value="#{true}" />
+							</h:commandButton>
+							
+							<h:commandButton title="Editar" action="#{projetoTccaController.editarProjeto()}" image="/resources/img/ico-alterar.png" 
+								style="margin: 2px;" rendered="#{security.temAcesso('3.67.3') and (projeto.statusCadastroIncompleto or projeto.statusPrevisto or projeto.statusEmExecucao)}">
+								
+								<f:setPropertyActionListener target="#{projetoTccaController.projeto}" value="#{projeto}" />
+								<f:setPropertyActionListener target="#{projetoTccaController.projeto.visualizando}" value="#{false}" />
+							</h:commandButton>
+							
+							<p:commandLink title="Excluir" oncomplete="dialogExcluirProjeto.show()" ajax="true" 
+								rendered="#{security.temAcesso('3.67.68') and projeto.statusCadastroIncompleto}">
+								
+								<f:setPropertyActionListener target="#{projetoTccaController.projeto}" value="#{projeto}" />
+								<h:graphicImage title="Excluir" value="/resources/img/ico-excluir.png" style="margin: 2px;"/>
+							</p:commandLink>
+							
+							<h:commandButton title="Executar Projeto" image="/resources/img/ico-executar-projeto.png" style="margin: 2px;" 
+								rendered="#{security.temAcesso('3.67.70') and (projeto.statusCadastroIncompleto or projeto.statusPrevisto or projeto.statusEmExecucao)}"
+								action="/paginas/manter-tcca/execucaoProjeto.xhtml"
+								actionListener="#{projetoTccaController.enviarTccaParaSessao(projetoTccaController.tcca, projeto)}"/>
+							
+							<p:commandLink title="Cancelar Projeto" oncomplete="dialogCancelarProjeto.show()" ajax="true" 
+								rendered="#{security.temAcesso('3.67.69') and projetoTccaController.isRenderedCancelarProjeto(projeto)}">
+								
+								<f:setPropertyActionListener target="#{projetoTccaController.projeto}" value="#{projeto}" />
+								<h:graphicImage title="Cancelar Projeto" value="/resources/img/ico-cancelar-projeto.png" style="margin: 2px;"/>
+							</p:commandLink>
+							
+							<h:commandButton title="Executar Movimentação Financeira no Projeto" style="margin: 2px;" image="/resources/img/ico-executar-movimentacao-financeira.png" 
+								action="/paginas/manter-tcca/cadastroMovimentacaoFinanceiraProjeto.xhtml" actionListener="#{projetoTccaController.enviarTccaParaSessao(projetoTccaController.tcca, projeto)}"
+								rendered="#{projeto.statusPrevisto or projeto.statusEmExecucao or projeto.statusConcluido or projeto.statusCancelado}" />
+								
+							<p:commandLink title="Consultar Histórico de Movimentação Financeira" oncomplete="dialogRelatorioMovimentacaoProjeto.show()" ajax="true"
+								actionListener="#{projetoTccaController.exibirRelatorioMovimentacaoFinanceira(projeto)}" rendered="#{!projeto.statusCadastroIncompleto}">
+								
+								<h:graphicImage title="Consultar Histórico de Movimentação Financeira" value="/resources/img/ico-consultar-historico-movimentacao-financeira.png" style="margin: 2px;"/>
+							</p:commandLink>
+						</h:panelGrid>
+					</p:column>
+				</p:dataTable>
+			</h:form>
+		</ui:define>
+	</ui:composition>
+</html>

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui">
+	<h:panelGrid id="tabsAtividade">
+		<p:tabView id="tabAquiculturaAtividade"
+			activeIndex="#{viveiroEscavadoController.abasAtividades.activeTab}"
+			widgetVar="atividadesAbas" cache="false" dynamic="true"
+			rendered="#{viveiroEscavadoController.algumaAtividadeMarcada}">
+			<p:ajax event="tabChange"
+				listener="#{viveiroEscavadoController.abasAtividades.controlarAbas}"
+				update=":atividadesAbas" />
+			<p:tab id="tabPiscicultura" title="Piscicultura"
+				disabled="#{!viveiroEscavadoController.preencherPiscicultura}">
+				<ui:include
+					src="/paginas/manter-fce/licenciamento/aquicultura/abas/viveiro-escavado/abas-atividade/licenciamentoAquiculturaPiscicultura.xhtml" />
+			</p:tab>
+			<p:tab id="tabCarcinicultura" title="Carcinicultura"
+				disabled="#{!viveiroEscavadoController.preencherCarcinicultura}">
+				<ui:include
+					src="/paginas/manter-fce/licenciamento/aquicultura/abas/viveiro-escavado/abas-atividade/licenciamentoAquiculturaCarcinicultura.xhtml" />
+			</p:tab>
+			<p:tab id="tabRanicultura" title="Ranicultura"
+				disabled="#{!viveiroEscavadoController.preencherRanicultura}">
+				<ui:include
+					src="/paginas/manter-fce/licenciamento/aquicultura/abas/viveiro-escavado/abas-atividade/licenciamentoAquiculturaRanicultura.xhtml" />
+			</p:tab>
+			<p:tab id="tabAlgicultura" title="Algicultura"
+				disabled="#{!viveiroEscavadoController.preencherAlgicultura}">
+				<ui:include
+					src="/paginas/manter-fce/licenciamento/aquicultura/abas/viveiro-escavado/abas-atividade/licenciamentoAquiculturaAlgicultura.xhtml" />
+			</p:tab>
+			<p:tab id="tabMalococultura" title="Malococultura"
+				disabled="#{!viveiroEscavadoController.preencherMalococultura}">
+				<ui:include
+					src="/paginas/manter-fce/licenciamento/aquicultura/abas/viveiro-escavado/abas-atividade/licenciamentoAquiculturaMalococultura.xhtml" />
+			</p:tab>
+		</p:tabView>
+	</h:panelGrid>
+</ui:composition>

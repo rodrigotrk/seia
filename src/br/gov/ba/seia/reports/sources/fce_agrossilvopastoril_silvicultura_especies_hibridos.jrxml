@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="lac_transportadora_residuos_transportados" language="java" pageWidth="495" pageHeight="802" whenNoDataType="AllSectionsNoDetail" columnWidth="495" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="80b78396-35cc-4e26-aaf9-1207b1892468">
+	<property name="ireport.zoom" value="2.1435888100000047"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="ide_fce" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[select distinct s.*, eh.dsc_especie_hibrido from  fce_agrossilvopastoril fa
+inner join silvicultura s on fa.ide_fce_agrossilvopastoril=s.ide_fce_agrossilvopastoril
+inner join tipo_dado_silvicultura tds on s.ide_tipo_dado_silvicultura=tds.ide_tipo_dado_silvicultura
+inner join especie_hibrido eh on s.ide_especie_hibrido = eh.ide_especie_hibrido
+where fa.ide_fce = $P{ide_fce} and tds.ide_tipo_dado_silvicultura = 3 order by eh.dsc_especie_hibrido asc]]>
+	</queryString>
+	<field name="ide_silvicultura" class="java.lang.Integer"/>
+	<field name="ind_projeto" class="java.lang.Boolean"/>
+	<field name="ind_floresta_implantada" class="java.lang.Boolean"/>
+	<field name="dtc_ano_previsao_plantio" class="java.lang.Integer"/>
+	<field name="dtc_ano_previsao_corte" class="java.lang.Integer"/>
+	<field name="num_area_total" class="java.math.BigDecimal"/>
+	<field name="num_volume_final" class="java.math.BigDecimal"/>
+	<field name="ide_tipo_dado_silvicultura" class="java.lang.Integer"/>
+	<field name="ide_especie_hibrido" class="java.lang.Integer"/>
+	<field name="ide_fce_agrossilvopastoril" class="java.lang.Integer"/>
+	<field name="dtc_mes_previsao_plantio" class="java.lang.Integer"/>
+	<field name="dtc_mes_previsao_corte" class="java.lang.Integer"/>
+	<field name="dsc_especie_hibrido" class="java.lang.String"/>
+	<columnHeader>
+		<band height="42">
+			<staticText>
+				<reportElement uuid="c354d0f3-d50a-40ca-9e1f-f380cd85b2c4" x="179" y="16" width="60" height="26"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Previsão Plantio]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="3e9120ea-ed8d-414d-8989-a544854310eb" x="296" y="16" width="74" height="26"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Área Total (ha)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="3e9120ea-ed8d-414d-8989-a544854310eb" x="370" y="16" width="106" height="26"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Top">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Estimativa do volume de produção final (m³)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="3d436841-c5fa-4954-890c-ff67cdbd5057" x="66" y="16" width="53" height="26"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Projeto]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="18179ea9-3b5d-42a1-8b8e-d617105552a1" x="119" y="16" width="60" height="26"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Floresta]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="d5f8f595-f7f9-4e3e-8c67-adb5c93f4ebc" x="239" y="16" width="57" height="26"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Previsão Corte]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="77d2f782-ca30-421f-8c0a-dc751d0e9146" x="0" y="16" width="66" height="26"/>
+				<textElement/>
+				<text><![CDATA[]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="43" splitType="Stretch">
+			<textField isStretchWithOverflow="true">
+				<reportElement uuid="89d1f565-5094-486c-8e98-06cf19ed2463" x="0" y="0" width="66" height="43"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="10"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dsc_especie_hibrido}]]></textFieldExpression>
+			</textField>
+			<textField pattern="###0.00;-###0.00">
+				<reportElement uuid="89d1f565-5094-486c-8e98-06cf19ed2463" x="119" y="0" width="60" height="43"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="10"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ind_floresta_implantada} ? "X" : ""]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="a6b6e755-938c-4bc4-b1e7-39e248473fa9" x="66" y="0" width="53" height="43"/>
+				<box>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{ind_projeto} ? "X" : ""]]></textFieldExpression>
+			</textField>
+			<textField pattern="###0">
+				<reportElement uuid="a8d0cf8e-3d8c-4db7-b526-d08600951080" x="179" y="0" width="60" height="43"/>
+				<box>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{dtc_ano_previsao_plantio} == null ? "Não há" : $F{dtc_ano_previsao_plantio}]]></textFieldExpression>
+			</textField>
+			<textField pattern="###0">
+				<reportElement uuid="0d261d5d-2e83-44e8-8832-eda0403fea27" x="239" y="0" width="57" height="43"/>
+				<box>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{dtc_ano_previsao_corte}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;-#,##0.00">
+				<reportElement uuid="633a8cfb-55bc-4979-9e96-6219ba9b58f8" x="370" y="0" width="106" height="43"/>
+				<box>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{num_volume_final}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;-#,##0.00">
+				<reportElement uuid="3e03a73b-d04c-4401-855a-dc20d7a64428" x="296" y="0" width="74" height="43"/>
+				<box>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{num_area_total}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="8" splitType="Stretch"/>
+	</pageFooter>
+</jasperReport>

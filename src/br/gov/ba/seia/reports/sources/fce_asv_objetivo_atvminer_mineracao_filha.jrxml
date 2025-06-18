@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="fce_asv_objetivo_atvminer" language="java" pageWidth="495" pageHeight="802" whenNoDataType="AllSectionsNoDetail" columnWidth="495" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="80b78396-35cc-4e26-aaf9-1207b1892468">
+	<property name="ireport.zoom" value="1.6105100000000014"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="ide_fce" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[select obj.dsc_objetivo_supressao, obj.ide_objetivo_supressao from fce fce
+inner join fce_asv fceAsv on fce.ide_fce = fceAsv.ide_fce
+inner join fce_asv_obj_supressao fceObj on fceAsv.ide_fce_asv = fceObj.ide_fce_asv
+inner join objetivo_supressao obj on fceObj.ide_objetivo_supressao = obj.ide_objetivo_supressao AND obj.ide_objetivo_supressao_pai = 13
+where fce.ide_fce = $P{ide_fce}]]>
+	</queryString>
+	<field name="dsc_objetivo_supressao" class="java.lang.String"/>
+	<field name="ide_objetivo_supressao" class="java.lang.Integer"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<columnHeader>
+		<band height="25">
+			<printWhenExpression><![CDATA[$F{dsc_objetivo_supressao} != null]]></printWhenExpression>
+			<staticText>
+				<reportElement uuid="0393a127-6c8e-41a8-956c-d09208617e17" x="10" y="10" width="100" height="15"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Mineração]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="12">
+			<printWhenExpression><![CDATA[$F{dsc_objetivo_supressao} != null]]></printWhenExpression>
+			<textField isStretchWithOverflow="true">
+				<reportElement uuid="89d1f565-5094-486c-8e98-06cf19ed2463" x="20" y="0" width="462" height="12"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Justified" verticalAlignment="Middle">
+					<font fontName="Arial" size="9"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dsc_objetivo_supressao}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

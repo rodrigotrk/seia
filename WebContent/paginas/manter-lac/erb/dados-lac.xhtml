@@ -1,0 +1,260 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui">
+
+	<div style="width: 700px;">
+		<p:selectOneRadio
+			disabled="#{lacErbController.editMode || lacErbController.viewMode}"
+			value="#{lacErbController.lacErb.ideTipoModalidadeErb.ideTipoModalidadeErb}"
+			valueChangeListener="#{lacErbController.gerenciarTipoModalidade}"
+			required="true"
+			requiredMessage="O campo Tipo de modalidade é de preenchimento obrigatório.">
+
+			<f:selectItems value="#{lacErbController.tiposModalidade}" var="tipo"
+				itemLabel="#{tipo.dscTipoModalidadeErb}"
+				itemValue="#{tipo.ideTipoModalidadeErb}" />
+			<p:ajax event="change" update="torre,edf,ind" />
+
+		</p:selectOneRadio>
+
+		<h:panelGrid id="torre">
+
+			<p:fieldset style="width:96%"
+				rendered="#{lacErbController.mostraTelaTorre}">
+
+				<h:panelGrid columns="2">
+					<h:panelGrid columns="1">
+						<h:outputLabel value="* Área total do terreno(m²)" />
+						<p:inputText converter="bigConverter" maxlength="10"
+							onkeypress="mascararNumeroLR(this, event, 9, 2, '.', ',', 3);"
+							onkeyup="mascararNumeroLR(this, event, 9, 2, '.', ',', 3);"
+							value="#{lacErbController.lacErb.vlrAreaTotalTerreno}"
+							style="width:160px;" required="#{lacErbController.mostraTelaTorre}"
+							requiredMessage="O campo Área total do terreno é de preenchimento obrigatório."
+							disabled="#{lacErbController.viewMode}" />
+						<h:outputLabel value="* Altura da torre/postes ou similares (m)" />
+						<p:inputText converter="bigConverter" maxlength="10"
+							onkeypress="mascararNumeroLR(this, event, 9, 2, '.', ',', 3);"
+							onkeyup="mascararNumeroLR(this, event, 9, 2, '.', ',', 3);"
+							value="#{lacErbController.lacErb.vlrAlturaTorre}"
+							style="width:160px;" required="#{lacErbController.mostraTelaTorre}"
+							requiredMessage="O campo Altura da torre/postes ou similares é de preenchimento obrigatório."
+							disabled="#{lacErbController.viewMode}" />
+					</h:panelGrid>
+
+					<h:panelGrid columns="1" style="margin-left:80px;">
+						<h:outputLabel
+							value="* Azimute da antena em relação à base da torre (º)" />
+						<p:inputText converter="integerConverter" maxlength="3"
+							onblur="alertaValorAzimute(this);"
+							value="#{lacErbController.lacErb.vlrAzimuteAntenaBase}"
+							style="width:160px;" required="#{lacErbController.mostraTelaTorre}"
+							requiredMessage="O campo Azimute da antena em relação à base da torre é de preenchimento obrigatório."
+							disabled="#{lacErbController.viewMode}" />
+						<h:outputLabel
+							value="* Altura da antena em relação à base da torre (m)" />
+						<p:inputText converter="bigConverter" maxlength="10"
+							onkeypress="mascararNumeroLR(this, event, 9, 2, '.', ',', 3);"
+							onkeyup="mascararNumeroLR(this, event, 9, 2, '.', ',', 3);"
+							value="#{lacErbController.lacErb.vlrAlturaAntenaBase}"
+							style="width:160px;" required="#{lacErbController.mostraTelaTorre}"
+							requiredMessage="O campo Altura da antena em relação à base da torre é de preenchimento obrigatório."
+							disabled="#{lacErbController.viewMode}" />
+					</h:panelGrid>
+				</h:panelGrid>
+
+				<h:panelGrid columns="1" width="100%">
+					<h:outputLabel
+						value="* Indicar a menor distância da base da torre até os limites do terreno ou unidade habitacional. (m)" />
+					<p:inputText converter="bigConverter" maxlength="10"
+						onkeypress="mascararNumeroLR(this, event, 9, 2, '.', ',', 3);"
+						onkeyup="mascararNumeroLR(this, event, 9, 2, '.', ',', 3);"
+						value="#{lacErbController.lacErb.vlrMenorDistLimite}"
+						style="width:160px;" required="#{lacErbController.mostraTelaTorre}"
+						requiredMessage="O campo Menor distância da base da torre é de preenchimento obrigatório."
+						disabled="#{lacErbController.viewMode}" />
+				</h:panelGrid>
+				<h:outputLabel
+					value="* Tipo de delimitação a ser utilizada na frente, fundo e laterais direita e esquerda do terreno: . (m)" />
+				<h:panelGrid id="del_terreno" columns="2" width="65%">
+					<p:selectManyCheckbox valueChangeListener="#{lacErbController.verificarTipoDelimitacao}"
+						disabled="#{lacErbController.viewMode}" converter="tipoDelimitacaoConverter"
+						value="#{lacErbController.lacErb.tipoDelimitacaoTerrenoCollection}"
+						layout="lineDirection">
+						<f:selectItems value="#{lacErbController.tiposDelimitacaoTerreno}"
+							var="delimitacao" 						
+							itemLabel="#{delimitacao.dscTipoDelimitacaoTerreno}"
+							itemValue="#{delimitacao}"  />
+							<p:ajax event="change" update="del_terreno" />
+					</p:selectManyCheckbox>
+					<p:inputText id="torre_outros"
+						disabled="#{lacErbController.viewMode}"
+						rendered="#{lacErbController.mostraOpcaoOutros}"
+						value="#{lacErbController.lacErb.dscOutrosTipoDelimitacao}"
+						style="width:160px;" />
+				</h:panelGrid>
+			</p:fieldset>
+		</h:panelGrid>
+
+		<h:panelGrid id="edf" columns="1">
+			<p:fieldset style="width:95%"
+				rendered="#{lacErbController.mostraTelaEdf}">
+				<h:panelGrid columns="1">
+					<h:outputLabel value="* Nome da edificação" />
+					<p:inputText value="#{lacErbController.lacErb.dscNomeEdificacao}"
+						required="#{lacErbController.mostraTelaEdf}"
+						disabled="#{lacErbController.viewMode}" style="width:535px;"
+						requiredMessage="O campo Nome da edificação é de preenchimento obrigatório." />
+				</h:panelGrid>
+
+				<h:panelGrid columns="1" width="48%"
+					style="float:left; padding-bottom:10px">
+					<h:outputLabel value="* Altura da edificação (m)" />
+					<p:inputText converter="bigConverter" maxlength="10"
+						onkeypress="mascararNumeroLR(this, event, 9, 2, '.', ',', 3);"
+						onkeyup="mascararNumeroLR(this, event, 9, 2, '.', ',', 3);"
+						value="#{lacErbController.lacErb.vlrAlturaEdificacao}"
+						style="width:160px;" required="#{lacErbController.mostraTelaEdf}"
+						disabled="#{lacErbController.viewMode}"
+						requiredMessage="O campo Altura da edificação é de preenchimento obrigatório." />
+				</h:panelGrid>
+
+				<h:panelGrid columns="1" width="52%"
+					style="float:left; padding-bottom:10px">
+					<h:outputLabel value="* Altura da antena (m)" />
+					<p:inputText converter="bigConverter" maxlength="10"
+						onkeypress="mascararNumeroLR(this, event, 9, 2, '.', ',', 3);"
+						onkeyup="mascararNumeroLR(this, event, 9, 2, '.', ',', 3);"
+						value="#{lacErbController.lacErb.vlrAlturaAntenaEdificacao}"
+						disabled="#{lacErbController.viewMode}"
+						required="#{lacErbController.mostraTelaEdf}" style="width:160px;"
+						requiredMessage="O campo Altura da antena é de preenchimento obrigatório." />
+				</h:panelGrid>
+
+				<h:outputText styleClass="titulo-grupo" 
+					value="* Maior e menor altura dos prédios vizinhos no entorno de 50 (cinquenta) metros. (m)" />
+				<h:panelGrid columns="2">
+					<h:panelGrid columns="1">
+						<h:outputLabel value="* Maior altura(m)" />
+						<p:inputText converter="bigConverter" maxlength="10"
+							onkeypress="mascararNumeroLR(this, event, 9, 2, '.', ',', 3);"
+							onkeyup="mascararNumeroLR(this, event, 9, 2, '.', ',', 3);"
+							value="#{lacErbController.lacErb.vlrAlturaMaior}"
+							disabled="#{lacErbController.viewMode}"
+							required="#{lacErbController.mostraTelaEdf}" style="width:160px;"
+							requiredMessage="O campo Maior altura é de preenchimento obrigatório." />
+						<h:outputLabel value="* Menor altura(m)" />
+						<p:inputText converter="bigConverter" maxlength="10"
+							onkeypress="mascararNumeroLR(this, event, 9, 2, '.', ',', 3);"
+							onkeyup="mascararNumeroLR(this, event, 9, 2, '.', ',', 3);"
+							value="#{lacErbController.lacErb.vlrAlturaMenor}"
+							disabled="#{lacErbController.viewMode}"
+							required="#{lacErbController.mostraTelaEdf}" style="width:160px;"
+							requiredMessage="O campo Menor altura é de preenchimento obrigatório." />
+					</h:panelGrid>
+
+					<h:panelGrid columns="1" style="margin-left:140px;">
+						<h:outputLabel
+							value="* Azimute da antena em relação à base da edificação(º)" />
+						<p:inputText converter="integerConverter" maxlength="3"							
+							onblur="alertaValorAzimute(this);"
+							value="#{lacErbController.lacErb.vlrAzimuteAntenaBase}"
+							disabled="#{lacErbController.viewMode}"
+							required="#{lacErbController.mostraTelaEdf}" style="width:160px;"
+							requiredMessage="O campo Azimute da antena em relação à base da edificação é de preenchimento obrigatório." />
+						<h:outputLabel
+							value="* Altura da antena em relação à base da edificação (m)" />
+						<p:inputText converter="bigConverter" maxlength="10"
+							onkeypress="mascararNumeroLR(this, event, 9, 2, '.', ',', 3);"
+							onkeyup="mascararNumeroLR(this, event, 9, 2, '.', ',', 3);"
+							value="#{lacErbController.lacErb.vlrAlturaAntenaBase}"
+							disabled="#{lacErbController.viewMode}"
+							required="#{lacErbController.mostraTelaEdf}" style="width:160px;"
+							requiredMessage="O campo Altura da antena em relação à base da edificação é de preenchimento obrigatório." />
+					</h:panelGrid>
+				</h:panelGrid>
+
+				<h:outputLabel
+					value="* Tipo de delimitação a ser utilizada na frente, fundo e laterais direita e esquerda do terreno: . (m)" />
+				<h:panelGrid id="del_edf" columns="2" width="65%">
+					<p:selectManyCheckbox valueChangeListener="#{lacErbController.verificarTipoDelimitacao}"
+						disabled="#{lacErbController.viewMode}" converter="tipoDelimitacaoConverter"
+						value="#{lacErbController.lacErb.tipoDelimitacaoTerrenoCollection}"
+						layout="lineDirection">
+						<f:selectItems value="#{lacErbController.tiposDelimitacaoTerreno}"
+							var="delimitacao" 						
+							itemLabel="#{delimitacao.dscTipoDelimitacaoTerreno}"
+							itemValue="#{delimitacao}"  />
+							<p:ajax event="change" update="del_edf" />
+					</p:selectManyCheckbox>
+					<p:inputText 
+						disabled="#{lacErbController.viewMode}"
+						rendered="#{lacErbController.mostraOpcaoOutros}"
+						value="#{lacErbController.lacErb.dscOutrosTipoDelimitacao}"
+						style="width:160px;" />
+				</h:panelGrid>
+			</p:fieldset>
+		</h:panelGrid>
+		<h:panelGrid id="ind" columns="1">
+			<p:fieldset style="width:95%"
+				rendered="#{lacErbController.mostraTelaInd}">
+				<h:panelGrid columns="1">
+					<h:outputLabel value="* Nome do estabelecimento" />
+					<p:inputText value="#{lacErbController.lacErb.dscNomeEstabelecimento}"
+						disabled="#{lacErbController.viewMode}" style="width:600px;"
+						required="#{lacErbController.mostraTelaInd}"
+						requiredMessage="O campo Nome da estabelecimento é de preenchimento obrigatório." />
+
+					<h:outputLabel
+						value="* Atividades desenvolvidas no estabelecimento" />
+					<p:inputTextarea
+						value="#{lacErbController.lacErb.dscAtividadeEstabelecimento}"
+						disabled="#{lacErbController.viewMode}"
+						required="#{lacErbController.mostraTelaInd}"
+						requiredMessage="O campo Atividades desenvolvidas no estabelecimento é de preenchimento obrigatório."
+						style="width:600px;height:100px;" />
+				</h:panelGrid>
+			</p:fieldset>
+		</h:panelGrid>
+
+		<div style="padding-top: 10px;">
+			<h:panelGrid columns="1">
+				<h:outputText styleClass="titulo-grupo" 
+					value="* Código e Nomeclatura pelos quais a operadora designa o empreendimento." />
+
+				<h:outputLabel value="* Nome da ERB" />
+				<p:inputText style="width:600px;"
+					value="#{lacErbController.lacErb.dscNomeErb}"
+					disabled="#{lacErbController.viewMode}" required="true"
+					requiredMessage="O campo Nome da ERB é de preenchimento obrigatório." />
+
+				<h:outputLabel value="* Código da ERB" />
+				<p:inputText style="width:600px;"
+					value="#{lacErbController.lacErb.codErb}"
+					disabled="#{lacErbController.viewMode}" required="true"
+					requiredMessage="O campo Código da ERB é de preenchimento obrigatório." />
+
+				<p:selectOneRadio value="#{lacErbController.lacErb.indCompartilhado}"
+					disabled="#{lacErbController.viewMode}" style="width:300px;"
+					required="#{lacErbController.mostraTelaTorre}"
+					requiredMessage="O campo Compartilhamento é de preenchimento obrigatório.">
+					<f:selectItem itemLabel="Compartilhada" itemValue="#{true}" />
+					<f:selectItem itemLabel="Não Compartilhada" itemValue="#{false}" />
+				</p:selectOneRadio>
+
+			</h:panelGrid>
+		</div>
+
+		<div align="right">
+			<p:commandButton action="#{lacErbController.controlarAbas}"
+				process="empreendimento" value="Avançar" update="form_lac">
+				<f:setPropertyActionListener target="#{lacErbController.mostraAbaEquipamento}" value="#{true}" />
+				<f:setPropertyActionListener target="#{lacErbController.activeTab}"	value="1" />
+			</p:commandButton>
+		</div>
+
+	</div>
+</ui:composition>

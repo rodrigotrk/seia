@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" 	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core" 	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui"	>
+	
+		<h:form id="formabaTipologia">
+				<h:panelGrid  id="pnlTipologia" columns="1">
+				
+					<h:outputText id="idtextCodigo" value="Código" />
+				
+					<p:inputText value="#{tipologiaPaiController.tipologia.codTipologia}" style="width: 150px;" required="true" label="Código" />
+					<h:outputText id="idtextNome" value="Nome" />
+					<p:inputText value="#{tipologiaPaiController.tipologia.desTipologia}" style="width: 470px;" required="true" label="Nome" />
+					
+					<h:outputText id="idtextTipologia" value="Tipologia Pai" />
+					<p:selectOneMenu style="width: 480px;" id="tipologia" value="#{tipologiaPaiController.tipologiaPaiSelecionado}" valueChangeListener="#{tipologiaPaiController.novoNivelTipologia()}" disabled="#{tipologiaPaiController.disbleTipologiaPai}">
+						<f:selectItems value="#{tipologiaPaiController.tipologiaItens}" />
+						<f:converter converterId="tipologiaConverter" />
+					</p:selectOneMenu>
+					
+					<h:outputText id="idtextPossuifilhos" value="Essa tipologia é uma atividade?" />
+									
+				</h:panelGrid>
+							
+				<h:panelGrid  id="pnlPossuiFilho" columns="1" >
+				
+					<p:selectOneRadio value="#{tipologiaPaiController.tipologiaTemFilhos}" valueChangeListener="#{tipologiaPaiController.temFilhosChanged}" disabled="#{tipologiaPaiController.disbleEUmAtividade}"  required="true" requiredMessage="Tipo de Solicitação é Obrigatório!" >
+							<f:selectItem itemLabel="Sim" itemValue="1" />
+							<f:selectItem itemLabel="Não" itemValue="2" />
+							<p:ajax update="pnlPossuiFilho" />
+					</p:selectOneRadio>
+					
+							
+				</h:panelGrid>
+														
+				<p:commandButton id="btSalvarTipologia"  action="#{tipologiaPaiController.salvarTipologia}"  value="Salvar Tipologia" update="panelGrid2"  rendered="#{tipologiaPaiController.disbleBtTipologia}" />
+				
+	 	 </h:form>	
+		
+			
+		
+		
+</html>

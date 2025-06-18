@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="resumo_requerimento_questionario_localizacao" language="java" pageWidth="479" pageHeight="842" columnWidth="479" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="880edb6a-33a6-411d-87e1-a1c9be82b48c">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="ide_requerimento" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[select
+sc.nom_sistema_coordenada,
+	lg.ide_localizacao_geografica,
+	lg.des_localizacao_geografica,	csg.ide_classificacao_secao,
+	csg.nom_classificacao_secao,array_to_string( array(select 'Longitude: ' ||longitude || '  Latitude: ' ||latitude from (
+		select
+			case when length(trim(f_get_vertices(ide_localizacao_geografica)):: character varying) > 0 then substring((select trim(f_get_vertices(ide_localizacao_geografica))) from (strpos((select trim(f_get_vertices(ide_localizacao_geografica))), '(') + 1) for (strpos((select trim(f_get_vertices(ide_localizacao_geografica))), ' ') - 2)) else 'valor não informado.' end as latitude ,
+			case when length(trim(f_get_vertices(ide_localizacao_geografica)):: character varying) > 0 then replace(substring((select trim(f_get_vertices(ide_localizacao_geografica))) from (strpos((select trim(f_get_vertices(ide_localizacao_geografica))), ' ') + 1) for (strpos((select trim(f_get_vertices(ide_localizacao_geografica))), ')') - 1)), ')', '') else 'valor não informado.' end as longitude
+		from
+			localizacao_geografica
+		where
+			ide_localizacao_geografica = lg.ide_localizacao_geografica) pontos), ', ') as vertices
+
+from requerimento_unico ru
+inner join requerimento r on r.ide_requerimento = ru.ide_requerimento_unico
+left join requerimento_imovel ri on ri.ide_requerimento = r.ide_requerimento
+left join tipo_imovel_requerimento tir on tir.ide_tipo_imovel_requerimento = 1
+LEFT JOIN localizacao_geografica lg on lg.ide_localizacao_geografica = ri.ide_localizacao_geografica
+	LEFT JOIN dado_geografico dg on dg.ide_localizacao_geografica = lg.ide_localizacao_geografica
+	LEFT JOIN classificacao_secao_geometrica csg on csg.ide_classificacao_secao  = lg.ide_classificacao_secao
+	LEFT JOIN sistema_coordenada sc on sc.ide_sistema_coordenada =lg.ide_sistema_coordenada
+where ru.ide_requerimento_unico = $P{ide_requerimento}]]>
+	</queryString>
+	<field name="nom_sistema_coordenada" class="java.lang.String"/>
+	<field name="ide_localizacao_geografica" class="java.lang.Integer"/>
+	<field name="des_localizacao_geografica" class="java.lang.String"/>
+	<field name="ide_classificacao_secao" class="java.lang.Integer"/>
+	<field name="nom_classificacao_secao" class="java.lang.String"/>
+	<field name="vertices" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="61" splitType="Stretch">
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="6c7b4929-8b64-4556-82c8-9c9542e7bd79" positionType="Float" x="99" y="12" width="150" height="12"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Arial" size="9"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nom_sistema_coordenada}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="604ef808-5eac-4b76-a718-dbf77b8ec47f" positionType="Float" x="14" y="24" width="52" height="12" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$F{des_localizacao_geografica} != null && !$F{des_localizacao_geografica}.isEmpty()]]></printWhenExpression>
+				</reportElement>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Arial" size="8" isBold="false"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<text><![CDATA[Descrição:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="6c7b4929-8b64-4556-82c8-9c9542e7bd79" positionType="Float" x="66" y="24" width="199" height="12" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$F{des_localizacao_geografica} != null && !$F{des_localizacao_geografica}.isEmpty()]]></printWhenExpression>
+				</reportElement>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Arial" size="9"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{des_localizacao_geografica}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="6c7b4929-8b64-4556-82c8-9c9542e7bd79" positionType="Float" x="339" y="12" width="134" height="12"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Arial" size="9"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nom_classificacao_secao}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="6c7b4929-8b64-4556-82c8-9c9542e7bd79" positionType="Float" x="14" y="48" width="462" height="12"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Arial" size="9"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{vertices}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="417f327e-8893-48de-9c6a-bfd3cf00a2bb" positionType="Float" mode="Transparent" x="14" y="36" width="463" height="12" backcolor="#DDDDDD"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Verdana" size="8" isBold="true"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<text><![CDATA[Vértices]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="604ef808-5eac-4b76-a718-dbf77b8ec47f" positionType="Float" x="14" y="12" width="85" height="12"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Arial" size="8" isBold="false"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<text><![CDATA[Sistema Coordenada:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="604ef808-5eac-4b76-a718-dbf77b8ec47f" positionType="Float" x="266" y="12" width="73" height="12"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Arial" size="8" isBold="false"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<text><![CDATA[Seção Geográfica:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="6bf1afde-2229-462a-b9b4-b02157e81b03" positionType="Float" mode="Opaque" x="0" y="0" width="478" height="12" backcolor="#DDDDDD"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Verdana" size="8" isBold="true" isStrikeThrough="false"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<text><![CDATA[Dados da Localização]]></text>
+			</staticText>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

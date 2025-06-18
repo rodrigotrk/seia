@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="fce_licenca_aquicultura_aba_dados_gerais_poligonal_cultivo" pageWidth="495" pageHeight="802" whenNoDataType="AllSectionsNoDetail" columnWidth="495" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="80b78396-35cc-4e26-aaf9-1207b1892468">
+	<property name="ireport.zoom" value="2.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="ide_fce_aquicultura_licenca" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[$P{ide_fce_aquicultura_licenca}]]></defaultValueExpression>
+	</parameter>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[SELECT sc.nom_sistema_coordenada, ata.nom_aquicultura_tipo_atividade FROM fce_aquicultura_licenca_tipo_atividade_localizacao_geografica flg
+INNER JOIN localizacao_geografica lg ON lg.ide_localizacao_geografica = flg.ide_localizacao_geografica
+INNER JOIN sistema_coordenada sc ON sc.ide_sistema_coordenada = lg.ide_sistema_coordenada
+INNER JOIN aquicultura_tipo_atividade ata ON ata.ide_aquicultura_tipo_atividade = flg.ide_aquicultura_tipo_atividade
+WHERE flg.ide_fce_aquicultura_licenca = $P{ide_fce_aquicultura_licenca}
+
+]]>
+	</queryString>
+	<field name="nom_sistema_coordenada" class="java.lang.String"/>
+	<field name="nom_aquicultura_tipo_atividade" class="java.lang.String"/>
+	<title>
+		<band height="20" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="b4dc6393-0625-4bdc-aa94-8a87a08c956f" x="0" y="0" width="138" height="20"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[Poligonal da área de Cultivo]]></text>
+			</staticText>
+		</band>
+	</title>
+	<detail>
+		<band height="84">
+			<textField>
+				<reportElement uuid="d975e294-ab9a-436f-b17b-97a7949e2657" x="10" y="49" width="64" height="35"/>
+				<box>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nom_sistema_coordenada}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="afa81cd0-3a04-4ce9-b5a1-034789f6eab1" x="10" y="10" width="64" height="39"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Sistema de Coordenada]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="afa81cd0-3a04-4ce9-b5a1-034789f6eab1" x="74" y="10" width="64" height="39"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Atividade]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="d975e294-ab9a-436f-b17b-97a7949e2657" x="74" y="49" width="64" height="35"/>
+				<box>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nom_aquicultura_tipo_atividade}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

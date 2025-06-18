@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui">
+	
+	<h:panelGroup>
+		<h:outputText value="* #{bundle.cerh_aba_int_servicos}:" />
+		<h:graphicImage value="/resources/img/ico-ajuda.png" title="#{bundle.cerh_aba_int_servicos_hint}" rendered="false"/>
+	</h:panelGroup>
+	
+	<p:selectOneMenu id="servicos" 
+    	value="#{cerhController.abaIntervencao.cerhCaracterizacao.ideCerhIntervencaoServico}"
+		converter="simpleEntityConverter"
+    	valueChangeListener="#{cerhController.abaIntervencao.changeIntervencaoServico()}"
+    	styleClass="grid-border-15"
+    	disabled="#{cerhController.abaIntervencao.dto.caracterizacaoDTO.visualizacao}">
+    	<f:selectItem itemLabel="Selecione" itemValue="#{null}"/>
+    	<f:selectItems value="#{cerhController.abaIntervencao.cerhIntervencaoServicoCollection}" 
+    		var="servico"
+    		itemValue="#{servico}"
+    		itemLabel="#{servico.dscIntervencaoServico}"/>
+		<p:ajax event="change" process="@this"/>
+    </p:selectOneMenu>
+	
+</ui:composition>

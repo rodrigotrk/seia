@@ -1,0 +1,307 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="fce_turismo_dialog" pageWidth="495" pageHeight="817" whenNoDataType="AllSectionsNoDetail" columnWidth="495" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="80b78396-35cc-4e26-aaf9-1207b1892468">
+	<property name="ireport.zoom" value="1.9965000000000006"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="ide_fce" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[$P{ide_fce}]]></defaultValueExpression>
+	</parameter>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[SELECT DISTINCT
+	fce.ide_requerimento,
+	ft.ide_fce_turismo,
+	ft.num_area_construida,
+	ft.num_area_app,
+	ft.ind_zona_extensao,
+	ft.ind_plano_diretor,
+	ft.dsc_lei_municipal
+FROM fce_turismo ft
+INNER JOIN fce fce ON ft.ide_fce = fce.ide_fce
+WHERE fce.ide_fce = $P{ide_fce}]]>
+	</queryString>
+	<field name="ide_requerimento" class="java.lang.Integer"/>
+	<field name="ide_fce_turismo" class="java.lang.Integer"/>
+	<field name="num_area_construida" class="java.math.BigDecimal"/>
+	<field name="num_area_app" class="java.math.BigDecimal"/>
+	<field name="ind_zona_extensao" class="java.lang.Boolean"/>
+	<field name="ind_plano_diretor" class="java.lang.Boolean"/>
+	<field name="dsc_lei_municipal" class="java.lang.String"/>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<detail>
+		<band height="41" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="b1d3f8e1-15d0-413f-8fae-02178bfa3ded" positionType="Float" x="20" y="1" width="49" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Zona]]></text>
+			</staticText>
+			<subreport>
+				<reportElement uuid="57b6be84-ddd5-45b7-8272-039c2b06619f" positionType="Float" isPrintRepeatedValues="false" x="40" y="21" width="154" height="20" isRemoveLineWhenBlank="true" isPrintWhenDetailOverflows="true"/>
+				<subreportParameter name="SUBREPORT_DIR">
+					<subreportParameterExpression><![CDATA[$P{SUBREPORT_DIR}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="ide_requerimento">
+					<subreportParameterExpression><![CDATA[$F{ide_requerimento}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} +"fce_turismo_zona_empreendimento.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+		<band height="20">
+			<printWhenExpression><![CDATA[$F{ind_zona_extensao} == true]]></printWhenExpression>
+			<staticText>
+				<reportElement uuid="e915be2e-1045-414d-b71a-4bec7697c14d" x="60" y="0" width="146" height="20"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[Zona de expansão urbana]]></text>
+			</staticText>
+			<ellipse>
+				<reportElement uuid="88a5af06-477b-4d2a-9ef3-1ea87c79884b" x="47" y="8" width="5" height="5" backcolor="#000000"/>
+			</ellipse>
+		</band>
+		<band height="30">
+			<printWhenExpression><![CDATA[$F{ind_plano_diretor} != null]]></printWhenExpression>
+			<textField>
+				<reportElement uuid="e8692284-4b55-4483-82a7-0264ecf1c744" x="20" y="10" width="475" height="20"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[( $F{ind_plano_diretor} ? "Existe Plano Diretor de Desenvolvimento Urbano." : "Não existe Plano Diretor de Desenvolvimento Urbano." )]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="20">
+			<printWhenExpression><![CDATA[$F{ind_plano_diretor} == true]]></printWhenExpression>
+			<textField>
+				<reportElement uuid="d076d00a-75a8-4c3a-9a80-111ee3d4371d" x="232" y="0" width="262" height="20"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{dsc_lei_municipal}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="93621323-4945-49c4-bd36-26ff3e5fc7b2" x="40" y="0" width="192" height="20"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[Lei Municipal ou outro instrumento legal:]]></text>
+			</staticText>
+		</band>
+		<band height="30">
+			<staticText>
+				<reportElement uuid="1eadf922-b884-4635-83a1-3b183412a67a" x="20" y="10" width="172" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Categoria do Empreendimento]]></text>
+			</staticText>
+		</band>
+		<band height="20">
+			<subreport>
+				<reportElement uuid="57b6be84-ddd5-45b7-8272-039c2b06619f" positionType="Float" isPrintRepeatedValues="false" x="40" y="0" width="154" height="20" isRemoveLineWhenBlank="true" isPrintWhenDetailOverflows="true"/>
+				<subreportParameter name="SUBREPORT_DIR">
+					<subreportParameterExpression><![CDATA[$P{SUBREPORT_DIR}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="ide_tipologia">
+					<subreportParameterExpression><![CDATA[388]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="ide_fce_turismo">
+					<subreportParameterExpression><![CDATA[$F{ide_fce_turismo}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} +"fce_turismo_grupo_empreendimento.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+		<band height="20">
+			<subreport>
+				<reportElement uuid="57b6be84-ddd5-45b7-8272-039c2b06619f" positionType="Float" isPrintRepeatedValues="false" x="40" y="0" width="154" height="20" isRemoveLineWhenBlank="true" isPrintWhenDetailOverflows="true"/>
+				<subreportParameter name="SUBREPORT_DIR">
+					<subreportParameterExpression><![CDATA[$P{SUBREPORT_DIR}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="ide_tipologia">
+					<subreportParameterExpression><![CDATA[389]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="ide_fce_turismo">
+					<subreportParameterExpression><![CDATA[$F{ide_fce_turismo}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} +"fce_turismo_grupo_empreendimento.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+		<band height="20">
+			<subreport>
+				<reportElement uuid="57b6be84-ddd5-45b7-8272-039c2b06619f" positionType="Float" isPrintRepeatedValues="false" x="40" y="0" width="154" height="20" isRemoveLineWhenBlank="true" isPrintWhenDetailOverflows="true"/>
+				<subreportParameter name="SUBREPORT_DIR">
+					<subreportParameterExpression><![CDATA[$P{SUBREPORT_DIR}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="ide_tipologia">
+					<subreportParameterExpression><![CDATA[390]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="ide_fce_turismo">
+					<subreportParameterExpression><![CDATA[$F{ide_fce_turismo}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} +"fce_turismo_grupo_empreendimento.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+		<band height="20">
+			<subreport>
+				<reportElement uuid="57b6be84-ddd5-45b7-8272-039c2b06619f" positionType="Float" isPrintRepeatedValues="false" x="40" y="0" width="154" height="20" isRemoveLineWhenBlank="true" isPrintWhenDetailOverflows="true"/>
+				<subreportParameter name="SUBREPORT_DIR">
+					<subreportParameterExpression><![CDATA[$P{SUBREPORT_DIR}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="ide_tipologia">
+					<subreportParameterExpression><![CDATA[391]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="ide_fce_turismo">
+					<subreportParameterExpression><![CDATA[$F{ide_fce_turismo}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} +"fce_turismo_grupo_empreendimento.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+		<band height="20">
+			<subreport>
+				<reportElement uuid="57b6be84-ddd5-45b7-8272-039c2b06619f" positionType="Float" isPrintRepeatedValues="false" x="40" y="0" width="154" height="20" isRemoveLineWhenBlank="true" isPrintWhenDetailOverflows="true"/>
+				<subreportParameter name="SUBREPORT_DIR">
+					<subreportParameterExpression><![CDATA[$P{SUBREPORT_DIR}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="ide_fce_turismo">
+					<subreportParameterExpression><![CDATA[$F{ide_fce_turismo}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="ide_tipologia">
+					<subreportParameterExpression><![CDATA[392]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} +"fce_turismo_grupo_empreendimento.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+		<band height="30">
+			<staticText>
+				<reportElement uuid="1eadf922-b884-4635-83a1-3b183412a67a" x="20" y="10" width="49" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Áreas]]></text>
+			</staticText>
+		</band>
+		<band height="20">
+			<subreport>
+				<reportElement uuid="57b6be84-ddd5-45b7-8272-039c2b06619f" positionType="Float" isPrintRepeatedValues="false" x="40" y="0" width="350" height="20" isRemoveLineWhenBlank="true" isPrintWhenDetailOverflows="true"/>
+				<subreportParameter name="SUBREPORT_DIR">
+					<subreportParameterExpression><![CDATA[$P{SUBREPORT_DIR}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="ide_requerimento">
+					<subreportParameterExpression><![CDATA[$F{ide_requerimento}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="ide_tipologia">
+					<subreportParameterExpression><![CDATA[388]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} +"fce_turismo_area_empreendimento.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+		<band height="20">
+			<subreport>
+				<reportElement uuid="57b6be84-ddd5-45b7-8272-039c2b06619f" positionType="Float" isPrintRepeatedValues="false" x="40" y="0" width="350" height="20" isRemoveLineWhenBlank="true" isPrintWhenDetailOverflows="true"/>
+				<subreportParameter name="SUBREPORT_DIR">
+					<subreportParameterExpression><![CDATA[$P{SUBREPORT_DIR}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="ide_requerimento">
+					<subreportParameterExpression><![CDATA[$F{ide_requerimento}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="ide_tipologia">
+					<subreportParameterExpression><![CDATA[389]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} +"fce_turismo_area_empreendimento.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+		<band height="20">
+			<subreport>
+				<reportElement uuid="57b6be84-ddd5-45b7-8272-039c2b06619f" positionType="Float" isPrintRepeatedValues="false" x="40" y="0" width="350" height="20" isRemoveLineWhenBlank="true" isPrintWhenDetailOverflows="true"/>
+				<subreportParameter name="SUBREPORT_DIR">
+					<subreportParameterExpression><![CDATA[$P{SUBREPORT_DIR}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="ide_requerimento">
+					<subreportParameterExpression><![CDATA[$F{ide_requerimento}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="ide_tipologia">
+					<subreportParameterExpression><![CDATA[390]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} +"fce_turismo_area_empreendimento.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+		<band height="20">
+			<subreport>
+				<reportElement uuid="57b6be84-ddd5-45b7-8272-039c2b06619f" positionType="Float" isPrintRepeatedValues="false" x="40" y="0" width="350" height="20" isRemoveLineWhenBlank="true" isPrintWhenDetailOverflows="true"/>
+				<subreportParameter name="SUBREPORT_DIR">
+					<subreportParameterExpression><![CDATA[$P{SUBREPORT_DIR}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="ide_requerimento">
+					<subreportParameterExpression><![CDATA[$F{ide_requerimento}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="ide_tipologia">
+					<subreportParameterExpression><![CDATA[391]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} +"fce_turismo_area_empreendimento.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+		<band height="20">
+			<subreport>
+				<reportElement uuid="57b6be84-ddd5-45b7-8272-039c2b06619f" positionType="Float" isPrintRepeatedValues="false" x="40" y="0" width="350" height="20" isRemoveLineWhenBlank="true" isPrintWhenDetailOverflows="true"/>
+				<subreportParameter name="SUBREPORT_DIR">
+					<subreportParameterExpression><![CDATA[$P{SUBREPORT_DIR}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="ide_requerimento">
+					<subreportParameterExpression><![CDATA[$F{ide_requerimento}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="ide_tipologia">
+					<subreportParameterExpression><![CDATA[392]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} +"fce_turismo_area_empreendimento.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+		<band height="40">
+			<staticText>
+				<reportElement uuid="94ed556a-9466-4143-beda-c53214a8d58d" x="40" y="0" width="115" height="20"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[Área construída (m²) : ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="4c2c6e5e-2316-4c08-86e1-b0df92b06ffa" x="40" y="20" width="243" height="20">
+					<printWhenExpression><![CDATA[$F{num_area_app}.compareTo( new BigDecimal(0.00) ) != 0]]></printWhenExpression>
+				</reportElement>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[Área de Preservação Permanente (APP)       (ha) :]]></text>
+			</staticText>
+			<textField pattern="#,##0.00">
+				<reportElement uuid="0cf92abd-2d9d-49d4-8203-31b394a315ae" x="155" y="0" width="100" height="20"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{num_area_construida}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00" isBlankWhenNull="true">
+				<reportElement uuid="4e60e078-98a2-47c5-b272-b026f02190d7" x="283" y="20" width="107" height="20">
+					<printWhenExpression><![CDATA[$F{num_area_app}.compareTo( new BigDecimal(0.00) ) != 0]]></printWhenExpression>
+				</reportElement>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{num_area_app}]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="20">
+			<subreport>
+				<reportElement uuid="57b6be84-ddd5-45b7-8272-039c2b06619f" positionType="Float" isPrintRepeatedValues="false" x="20" y="0" width="154" height="20" isRemoveLineWhenBlank="true" isPrintWhenDetailOverflows="true"/>
+				<subreportParameter name="SUBREPORT_DIR">
+					<subreportParameterExpression><![CDATA[$P{SUBREPORT_DIR}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="ide_fce_turismo">
+					<subreportParameterExpression><![CDATA[$F{ide_fce_turismo}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} +"fce_turismo_origem_energia.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+	</detail>
+</jasperReport>

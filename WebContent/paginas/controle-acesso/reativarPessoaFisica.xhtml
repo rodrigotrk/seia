@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui">
+
+	<h:form id="formPessoaReabilitar" binding="#{reativarPessoaFisicaController.formularioASerLimpo}">
+		<h:panelGrid id="panelPessoaReabilitar" columns="1">
+			
+			<h:outputLabel value="#{bundle.lbl_cpf}: " />
+			<p:inputMask id="inpCpf" value="#{reativarPessoaFisicaController.usuarioReativar.pessoaFisica.numCpf}" mask="#{bundle.consultapf_msk_cpf}"
+				disabled="true"	 style="width: 160px;"	>
+			</p:inputMask>
+			
+			<h:outputLabel value="#{bundle.lbl_nome}: " />
+			<p:inputText disabled="true" value="#{reativarPessoaFisicaController.usuarioReativar.pessoaFisica.nomPessoa}" maxlength="200" style="width: 348px;"  />
+					
+			<h:panelGroup>
+				<p:commandButton value="Cancelar" onclick="dlgPessoaReabilitar.hide()" 	update=":formListaPessoaReativar:dataTablePessoaReativar"/>
+				<p:commandButton  onclick="confirmDlgAtivacaoUsuario.show()"  value="#{bundle.btn_reativar}"  update="teste1:formListaPessoaReativardataTablePessoaReativar:dataTablePessoaReativar formPessoaReabilitar" />
+			</h:panelGroup>
+		</h:panelGrid>
+	</h:form>
+	
+	
+	<!-- Dialog de confirmação -->
+	<p:confirmDialog message="#{bundle.consultapf_msg_confimrativacao}" header="Mensagem" severity="alert" widgetVar="confirmDlgAtivacaoUsuario" id="confirmDlgAtivacaoUsuario">
+		<h:form >	
+			<p:commandButton value="Sim"  actionListener="#{reativarPessoaFisicaController.reativarUsuario}"
+					 oncomplete="confirmDlgAtivacaoUsuario.hide(); dlgPessoaReabilitar.hide();" 
+					 update="formListaPessoaReativar:dataTablePessoaReativar"/>
+					 
+			<p:commandButton value="Não" onclick="confirmDlgAtivacaoUsuario.hide()" 	type="button" />
+		</h:form>	
+	</p:confirmDialog>
+
+</ui:composition>

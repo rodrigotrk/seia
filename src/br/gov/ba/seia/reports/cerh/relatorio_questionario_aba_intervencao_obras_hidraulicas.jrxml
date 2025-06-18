@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="relatorio_questionario_aba_intervencao_obras_hidraulicas" language="java" pageWidth="500" pageHeight="802" columnWidth="500" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="c18be6a3-2535-49fc-b3c9-f4e2892c45f5">
+	<property name="ireport.zoom" value="1.0245201830476058"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="ide_cerh_intervencao_caracterizacao" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT coh.*
+	FROM cerh_intervencao_caracterizacao cic
+	inner join cerh_obras_hidraulicas coh on coh.ide_cerh_obras_hidraulicas = cic.ide_cerh_obras_hidraulicas
+	WHERE cic.ide_cerh_intervencao_caracterizacao = $P{ide_cerh_intervencao_caracterizacao}]]>
+	</queryString>
+	<field name="ide_cerh_obras_hidraulicas" class="java.lang.Integer"/>
+	<field name="dsc_obras_hidraulicas" class="java.lang.String"/>
+	<variable name="isNecessitaDetalhe" class="java.lang.Boolean">
+		<variableExpression><![CDATA[$F{ide_cerh_obras_hidraulicas} != null && ($F{ide_cerh_obras_hidraulicas} == 4 || $F{ide_cerh_obras_hidraulicas} == 5)]]></variableExpression>
+	</variable>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement uuid="38126cdf-8bc7-409e-ae59-4ef8f9c6833d" x="0" y="0" width="500" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Obras Hidráulicas:  " + $F{dsc_obras_hidraulicas}]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="20">
+			<printWhenExpression><![CDATA[$V{isNecessitaDetalhe}]]></printWhenExpression>
+			<subreport>
+				<reportElement uuid="d1e3699e-2a08-4fcf-857f-200c1e99f0a4" x="0" y="0" width="500" height="20">
+					<printWhenExpression><![CDATA[$F{ide_cerh_obras_hidraulicas} != null]]></printWhenExpression>
+				</reportElement>
+				<subreportParameter name="ide_cerh_intervencao_caracterizacao">
+					<subreportParameterExpression><![CDATA[$P{ide_cerh_intervencao_caracterizacao}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "relatorio_questionario_aba_intervencao_obras_hidraulicas_detalhes.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+	</detail>
+</jasperReport>

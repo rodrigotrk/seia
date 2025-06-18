@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui"
+	xmlns:s="http://java.sun.com/jsf/composite/seia">
+	
+	<h:form id="formAbaLancamentoEfluentes" >
+	
+		<h:panelGrid columns="1" >
+			<h:outputLabel value="Localização geográfica do lançamento de efluentes em corpo hídrico:" style="font-weight: bold;"/>
+		
+			<s:inputLocGeo 	
+				titulo="* Incluir Coordenadas"
+				ideTipoSecaoGeometrica="#{seiaController.classificacaoSecaoEnum('CLASSIFICACAO_SECAO_PONTO')}"
+				update="tabViewCerh:formAbaLancamentoEfluentes"
+				metodo="#{cerhController.abaLancamentoEfluentes.metodo}"
+				ideEmpreendimento="#{cerhController.abaDadosGerais.dto.cerh.ideEmpreendimento}"
+				ideObjetoLocalizacao="#{cerhController.abaLancamentoEfluentes.dto}" 
+				ideLocalizacaoGeografica="#{cerhController.abaLancamentoEfluentes.dto.localizacaoGeografica}"	
+				disabled="#{cerhController.abaLancamentoEfluentes.disableIncluirCoordenadas}"/>
+			
+		</h:panelGrid>
+		
+			<h:panelGrid  id="panelCerhLocalizacaoGeograficaDTO" style="margin-top:15px;" >
+			
+				<h:commandLink 
+					rendered="#{not empty cerhController.abaLancamentoEfluentes.dto.listaCaracterizacaoDTO}"
+					actionListener="#{cerhController.abaLancamentoEfluentes.converterPontoGeografico}">
+					<h:graphicImage title="#{bundle.geral_lbl_converter_coordenadas}" value="/resources/img/arrow-circle-double-135.png" />
+					<f:ajax execute="@form" render="formAbaLancamentoEfluentes" />
+					<h:outputText value="#{bundle.geral_lbl_converter_coordenadas}" />
+				</h:commandLink>	
+			
+				<p:dataTable
+					value="#{cerhController.abaLancamentoEfluentes.dto.listaCaracterizacaoDTO}"
+					rendered="#{not empty cerhController.abaLancamentoEfluentes.dto.listaCaracterizacaoDTO}"
+					style="width:100%" var="cerhLocalizacaoGeograficaDTO">
+					
+					<p:column headerText="Latitude" style="text-align:center;">
+						<h:outputText value="#{cerhLocalizacaoGeograficaDTO.cerhLocalizacaoGeografica.ideLocalizacaoGeografica.latitudeInicial}" />
+					</p:column>
+					
+					<p:column headerText="Longitude" style="text-align:center;">
+						<h:outputText value="#{cerhLocalizacaoGeograficaDTO.cerhLocalizacaoGeografica.ideLocalizacaoGeografica.longitudeInicial}" />
+					</p:column>
+					
+					<p:column headerText="Número do processo" style="text-align:center;">
+						<p:selectOneMenu 
+							id="selectProcesso" 
+							value="#{cerhLocalizacaoGeograficaDTO.cerhLocalizacaoGeografica.ideCerhProcesso}"
+							converter="simpleEntityConverter"
+							disabled="#{cerhController.abaLancamentoEfluentes.cerhDTO.visualizar}">
+							<f:selectItem itemLabel="Selecione..." itemValue="#{null}"/>
+							<f:selectItems value="#{cerhController.abaLancamentoEfluentes.cerhProcessoCollection}" 
+								var="processo" 
+								itemValue="#{processo}" 
+								itemLabel="#{processo.numProcesso}"/>
+							<f:attribute name="caracterizacaoDto" value="#{caracterizacaoDto}"/>
+							<p:ajax event="change" update="tabViewCerh:frmCaptacaoSuperficial:tableCaracterizacao" process="@this" listener="#{cerhController.abaLancamentoEfluentes.changeProcesso()}" />
+						</p:selectOneMenu>
+					</p:column>
+					 
+					<p:column headerText="Ações" style="text-align:center;">
+						
+						<p:commandLink style="cursor: pointer; margin-left:3px;"
+							onclick='javascript:${cerhController.visualizarGeobahia(caracterizacaoDto.cerhLocalizacaoGeografica.ideLocalizacaoGeografica)}'
+							global="false"
+							accesskey="VISUALIZAR GEOBAHIA">
+							<h:graphicImage title="#{bundle.geral_lbl_visualiza_geobahia}" value="/resources/img/ico-arl-relocacao.png" />
+						</p:commandLink>
+						
+						<p:commandLink 
+							id="caracterizacao" 
+							actionListener="#{cerhController.abaLancamentoEfluentes.informarCaracterizacao()}"
+							oncomplete="dlgLancamentoEfluentes.show();"
+							update="formLancamentoEfluentes"
+							rendered="#{!cerhController.abaLancamentoEfluentes.cerhDTO.visualizar}"
+							disabled="#{!cerhLocalizacaoGeograficaDTO.possivelCaracterizar}"
+							style="margin-left:3px;">
+							<f:attribute name="caracterizacao" value="#{cerhLocalizacaoGeograficaDTO}"/>
+							<h:graphicImage title="Editar" value="/resources/img/ico-caracterizacao-cerh.png" />
+						</p:commandLink>
+
+						<p:commandLink 
+							update="formLancamentoEfluentes"
+							actionListener="#{cerhController.abaLancamentoEfluentes.visualizarCaracterizacao()}" 
+							style="margin-left:3px;"
+							oncomplete="dlgLancamentoEfluentes.show();">
+							<h:graphicImage title="Visualizar" value="/resources/img/ico-pesquisa.png" />
+							<f:attribute name="caracterizacao" value="#{cerhLocalizacaoGeograficaDTO}"/>
+						</p:commandLink>
+				
+						<p:commandLink 
+							oncomplete="confirmDialogExcluirLancamentoEfluente.show()" 
+							rendered="#{!cerhController.abaLancamentoEfluentes.cerhDTO.visualizar and !cerhLocalizacaoGeograficaDTO.cerhLocalizacaoGeografica.ideCerhProcesso.indDadosConcedidos}"
+							style="margin-left:3px;">
+							<f:setPropertyActionListener value="#{cerhLocalizacaoGeograficaDTO}" target="#{cerhController.abaLancamentoEfluentes.dto.caracterizacaoDTO}"/>
+							<h:graphicImage title="Excluir"	value="/resources/img/ico-excluir.png" />
+						</p:commandLink>
+
+					</p:column>
+				</p:dataTable>
+			</h:panelGrid>
+		
+	</h:form>
+	
+</ui:composition>

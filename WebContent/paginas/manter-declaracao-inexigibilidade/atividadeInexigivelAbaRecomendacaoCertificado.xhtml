@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui">
+
+		<h:panelGrid id="panelRecomendacaoCertificado" columns="1">
+			<h:form id="formFiltroRecomendacao" rendered="#{!atividadeInexigivelController.visualizar}">
+			
+				<h:outputText  value="Descrição:" />
+	 			<p:inputText value="#{atividadeInexigivelController.descricaoRecomendacao}" >
+				    <p:ajax event="keyup" listener="#{atividadeInexigivelController.filtrarRecomendacoes}"
+	       				 update="tabViewDI:formLista:dataTableRecomendacoes" process="@this" />
+				</p:inputText>
+			</h:form>
+		
+			<h:form id="formLista">
+				<p:dataTable id="dataTableRecomendacoes" rendered="#{!atividadeInexigivelController.visualizar}" widgetVar="dtTbRecomendacoes" value="#{atividadeInexigivelController.modelRecomendacoes}" var="recomendacao" 
+				lazy="true" paginator="true" rows="5" paginatorPosition="bottom" paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}" rowsPerPageTemplate="5,10,15" emptyMessage="#{bundle.msg_lista_vazia}" style="width: 700px;">
+	
+	        		<f:facet name="header">
+						<h:outputText value="Recomendações" />
+					</f:facet>
+					<p:column style="width: 350px;">  
+						<f:facet name="header">
+							<h:outputText value="Descrição" />  
+						</f:facet>
+						<h:outputText value="#{recomendacao.desRecomendacaoInexigibilidade}" />  
+					</p:column>		
+					<p:column style="text-align: center;">
+						<f:facet name="header">  
+							<h:outputText value="#{bundle.msg_acoes}" />  
+						</f:facet>
+						<p:commandLink actionListener="#{atividadeInexigivelController.selecionarRecomendacao(recomendacao)}">
+							<h:graphicImage title="Selecionar Recomendacão" value="/resources/img/ico-msg-sucesso.png" />
+						</p:commandLink>
+	        		</p:column>
+	    		</p:dataTable>
+				
+	
+				<p:dataTable id="dataTableRecomendacoesSelecionadas" rendered="#{!empty atividadeInexigivelController.recomendacoesSelecionadas}" widgetVar="dtTbRecomendacoesSelecionadas" value="#{atividadeInexigivelController.recomendacoesSelecionadas}" var="recomendacao" 
+							lazy="true" paginator="true" rows="5" paginatorPosition="bottom" paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}" rowsPerPageTemplate="5,10,15" emptyMessage="#{bundle.msg_lista_vazia}" style="width: 700px;">
+	
+	        		<f:facet name="header">
+						<h:outputText value="Recomendações Selecionadas" />
+					</f:facet>
+					<p:column style="width: 350px;">  
+						<f:facet name="header">
+							<h:outputText value="Descrição" />  
+						</f:facet>
+						<h:outputText value="#{recomendacao.desRecomendacaoInexigibilidade}" />  
+					</p:column>		
+					<p:column style="text-align: center;" rendered="#{!atividadeInexigivelController.visualizar}">
+						<f:facet name="header">  
+							<h:outputText value="#{bundle.msg_acoes}" />  
+						</f:facet>
+						<p:commandLink actionListener="#{atividadeInexigivelController.removerRecomendacao(recomendacao)}">
+							<h:graphicImage title="Remover Recomendacão" value="/resources/img/ico-excluir.png" />
+						</p:commandLink>
+	        		</p:column>
+	    		</p:dataTable>
+	
+	    	</h:form>
+	    	
+	    	<h:panelGrid columns="3">
+	    	
+		    	<h:outputText value="Modelo do Certificado"/>
+		    		    <h:graphicImage value="/resources/img/ico-ajuda.png" id="titPonte" style="margin: 3px 1px 2px 4px;" />
+			            <p:tooltip for="titPonte"
+			                       value="Realize o download para visualizar o modelo do certificado."
+			                       showEffect="fade" hideEffect="fade" />
+
+			</h:panelGrid>	
+				                       
+			<h:form id="formListaModelo">
+				<p:dataTable id="dataTableModelo"  widgetVar="dtTbModelo" value="#{atividadeInexigivelController.modelModeloCertificado}" var="modelo" selection="#{atividadeInexigivelController.modeloCertificadoInexigibilidade}" rowKey="#{modelo.ideModeloCertificadoInexigibilidade}"
+				lazy="true" paginator="true" rows="6" paginatorPosition="bottom" paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}" rowsPerPageTemplate="5,10,15" emptyMessage="#{bundle.msg_lista_vazia}" style="width: 700px;">
+	
+	        		<f:facet name="header">
+						<h:outputText value="Modelos de certificado" />
+					</f:facet>
+					
+						<p:column selectionMode="single" style="width:16px;text-align:center" disableSelection="#{atividadeInexigivelController.visualizar}" />
+						
+					<p:column style="width: 50px; text-align: center;">  
+						<f:facet name="header">
+							<h:outputText value="Código" />  
+						</f:facet>
+						<h:outputText value="#{modelo.codigo}" />  
+					</p:column>						
+					<p:column style="width: 350px; text-align: center;" >  
+						<f:facet name="header">
+							<h:outputText value="Descrição"/>  
+						</f:facet>
+						<h:outputText value="#{modelo.descricao}" />  
+					</p:column>		
+					<p:column style="text-align: center;">
+						<f:facet name="header">  
+							<h:outputText value="#{bundle.msg_acoes}" />  
+						</f:facet>
+					<h:commandButton title="Download modelo" 
+						image="/resources/img/ico-download.png" 
+						style="vertical-align: middle;" 
+						immediate="true">
+						<p:fileDownload value="#{atividadeInexigivelController.getArquivoBaixar(modelo)}"/>
+					</h:commandButton>
+	        		</p:column>
+	    		</p:dataTable>
+				<br/>
+			<h:panelGroup>
+				<p:commandButton value="#{bundle.geral_lbl_voltar}" action="#{atividadeInexigivelController.voltar()}"  update=":tabViewDI"/>
+				<p:commandButton action="#{atividadeInexigivelController.salvarAtualizarAtividade}" rendered="#{!atividadeInexigivelController.visualizar}" value="#{bundle.btn_salvar}"/>
+			</h:panelGroup>	
+	
+	    	</h:form>	    	
+ 			
+		</h:panelGrid> 
+		
+</ui:composition>

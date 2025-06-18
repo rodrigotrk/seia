@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="relatorio_questionario_cerh_processo" pageWidth="555" pageHeight="802" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="410a2fd0-959b-4fb1-aa30-ad86669b4079">
+	<property name="ireport.zoom" value="1.6105100000000008"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="IDE_CERH" class="java.lang.Integer"/>
+	<queryString>
+		<![CDATA[select
+ cerhProcesso.num_processo,
+ tipoUsoRecurso.dsc_tipo_uso_recurso_hidrico
+from
+ cerh_processo cerhProcesso
+	inner join cerh_tipo_uso cerhTipoUso on (cerhProcesso.ide_cerh = cerhTipoUso.ide_cerh)
+	inner join tipo_uso_recurso_hidrico tipoUsoRecurso on (tipoUsoRecurso.ide_tipo_uso_recurso_hidrico = cerhTipoUso.ide_tipo_uso_recurso_hidrico)
+where
+ cerhTipoUso.ide_cerh_processo is not null
+ and cerhProcesso.ide_cerh = $P{IDE_CERH}
+group by cerhProcesso.num_processo, tipoUsoRecurso.dsc_tipo_uso_recurso_hidrico]]>
+	</queryString>
+	<field name="num_processo" class="java.lang.String">
+		<fieldDescription><![CDATA[Número do processo de licenciamento da área produtiva]]></fieldDescription>
+	</field>
+	<field name="dsc_tipo_uso_recurso_hidrico" class="java.lang.String"/>
+	<title>
+		<band height="27">
+			<staticText>
+				<reportElement uuid="faf4be64-eab3-4ac3-aa46-7b297dcfd25b" positionType="Float" mode="Opaque" x="10" y="10" width="300" height="17" isRemoveLineWhenBlank="true" backcolor="#DDDDDD"/>
+				<box leftPadding="5">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif" isBold="true"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<text><![CDATA[Número do Processo]]></text>
+			</staticText>
+		</band>
+	</title>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement uuid="781fa684-72c1-4a13-80dc-7f6a00da7dd3" x="10" y="0" width="300" height="20"/>
+				<box leftPadding="5">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{num_processo} + " - " + $F{dsc_tipo_uso_recurso_hidrico}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

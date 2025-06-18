@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui">
+	
+	<h:panelGrid id="gridProducao">
+		<h:outputText value="* Sistema de Produção" styleClass="titulo-grupo" style="font-weight:bold;"/>
+
+		<h:panelGrid id="pnl1" columns="2">		
+		<p:selectBooleanCheckbox style="margin-left:30px;" id="selectProducaoIntensivo" disabled="#{fceDessedentacaoAnimalController.desabilitarTudo}"
+		value="#{fceDessedentacaoAnimalController.fceDessedentacaoAnimal.indSistemaIntesivo}" >
+			<p:ajax global="false" />
+		</p:selectBooleanCheckbox>
+		<h:outputText  value="Intensivo" style="margin-left:8px;" /> 
+		</h:panelGrid>
+		
+		<h:panelGrid id="pnl2" columns="2">
+		<p:selectBooleanCheckbox style="margin-left:30px;" id="selectProdutoSemiIntensivo" disabled="#{fceDessedentacaoAnimalController.desabilitarTudo}"
+		value="#{fceDessedentacaoAnimalController.fceDessedentacaoAnimal.indSistemaSemiIntensivo}" >
+			<p:ajax global="false" />
+		</p:selectBooleanCheckbox>
+		<h:outputText value="Semi-Intensivo" style="margin-left:8px;" />
+		</h:panelGrid>
+		
+		<h:panelGrid id="pnl3" columns="2">
+		<p:selectBooleanCheckbox style="margin-left:30px;" id="selectProdutoExtensivo"  disabled="#{fceDessedentacaoAnimalController.desabilitarTudo}"
+		value="#{fceDessedentacaoAnimalController.fceDessedentacaoAnimal.indSistemaExtensivo}" >
+				<p:ajax global="false" />
+		</p:selectBooleanCheckbox>
+		<h:outputText value="Extensivo" style="margin-left:8px;" />
+		</h:panelGrid>
+
+		<br />
+	</h:panelGrid>
+
+	<h:panelGrid id="gridPesquisa">
+		<h:outputText value="Espécies" styleClass="titulo-grupo" style="margin-left:35px;"/>
+		<p:inputText id="buscaEspecie" value="#{fceDessedentacaoAnimalController.nomeEspecie}" disabled="#{fceDessedentacaoAnimalController.desabilitarTudo}"
+		onkeyup="pesquisar_especie();" style="margin-left:35px; width:180px;" >
+			<p:ajax event="blur" process="@this" global="false" immediate="true" update="formTabAbsAnimal:tabAbasAbsAnimal:tbEspecie formTabAbsAnimal:tabAbasAbsAnimal:gridTbEspecie" />
+		</p:inputText>
+		<p:watermark for="buscaEspecie" value="Pesquisar pelo nome da espécie" />
+		<p:remoteCommand name="pesquisar_especie" actionListener="#{fceDessedentacaoAnimalController.pesquisarEspecie()}" global="false" update="formTabAbsAnimal:tabAbasAbsAnimal:tbEspecie	formTabAbsAnimal:tabAbasAbsAnimal:gridTbEspecie" />
+	</h:panelGrid>
+
+	<h:panelGrid id="gridTbEspecie">
+		<p:dataTable id="tbEspecie" widgetVar="tableEspecie" value="#{fceDessedentacaoAnimalController.listaTipologiaAtividade}" var="especie" lazy="true" paginator="true" rows="10"  
+			paginatorPosition="bottom" paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}" rowsPerPageTemplate="5,10,15" 
+			emptyMessage="#{bundle.msg_lista_vazia}" style="width: 343px; margin-left:35px;">
+
+			<p:column style="width: 265px; text-align:justify;">  
+				<f:facet name="header">
+					<h:outputText value="Espécies" />  
+				</f:facet>
+				<h:outputText value="#{especie.dscTipologiaAtividade}" />
+			</p:column>
+
+			<p:column style="width: 35px; text-align:center;" headerText="Ações">		
+				<p:commandLink title="Adicionar" process="@this" disabled="#{fceDessedentacaoAnimalController.desabilitarTudo}"
+				update="formTabAbsAnimal:tabAbasAbsAnimal:gridPesquisa formTabAbsAnimal:tabAbasAbsAnimal:gridTbEspecie formTabAbsAnimal:tabAbasAbsAnimal:gridEspeciesSelecionadas formTabAbsAnimal:tabAbasAbsAnimal:gridVolumeAbsAnimal" 
+				action="#{fceDessedentacaoAnimalController.adicionarEspecieNaLista()}" global="false" immediate="true">
+					<h:graphicImage title="Adicionar Espécie" value="/resources/img/ico-adicionar.png"/>
+					<f:setPropertyActionListener target="#{fceDessedentacaoAnimalController.tipologiaAtividade}" value="#{especie}"/>
+				</p:commandLink>
+			</p:column>
+		</p:dataTable> 
+	</h:panelGrid>
+
+	<br/><br/> 
+
+	<h:panelGrid id="gridEspeciesSelecionadas">
+		<p:dataTable id="tbEspeciesSelecionadas" widgetVar="tblEspSelecionada" value="#{fceDessedentacaoAnimalController.listaFceDessedentacaoAnimalAtividadeSelecionada}" var ="fceDessedentacaoAtividade" lazy="true" 
+		emptyMessage="#{bundle.msg_lista_vazia}" style="width:450px; margin-left:35px" rendered="#{fceDessedentacaoAnimalController.temEspecieEscolhida}" >
+
+			<p:column style="text-align:center; width:130px;" headerText="Espécie" footerText="Total">
+				<h:outputText value="#{fceDessedentacaoAtividade.ideTipologiaAtividade.dscTipologiaAtividade}" />
+			</p:column>
+
+			<p:column style="text-align:center;" headerText="Nº de Cabeças" footerText="#{fceDessedentacaoAnimalController.fceDessedentacaoAnimal.numTotalCabecas}">
+				<p:inputText value="#{fceDessedentacaoAtividade.numCabecas}"  maxlength="9" converter="integerConverter" style="width:70px;"  disabled="#{fceDessedentacaoAtividade.confirmado or fceDessedentacaoAnimalController.desabilitarTudo}"  rendered="#{!fceDessedentacaoAnimalController.isTipologiaAtividadeOutros(fceDessedentacaoAtividade.ideTipologiaAtividade)}" > 
+					<p:ajax global="false" event="blur" listener="#{fceDessedentacaoAnimalController.calculaConsumoPorEspecie(fceDessedentacaoAtividade)}" update="formTabAbsAnimal:tabAbasAbsAnimal:gridEspeciesSelecionadas" />
+				</p:inputText>
+			</p:column>
+
+			<p:column style="text-align:center;" headerText="Consumo diário por cabeça">
+				<h:panelGroup  rendered="#{!fceDessedentacaoAnimalController.isTipologiaAtividadeOutros(fceDessedentacaoAtividade.ideTipologiaAtividade)}" > 
+					<p:inputText value="#{fceDessedentacaoAtividade.numConsumoDiarioCabeca}" onkeyup="maskIt(this, event, '99.999.999,99', true)" onblur="maskIt(this, event, '99.999.999,99', true)" converter="newBigConverter" style="width:70px;" disabled="#{fceDessedentacaoAtividade.confirmado or fceDessedentacaoAnimalController.desabilitarTudo}" maxlength="11">
+						<f:convertNumber integerOnly="false"  minFractionDigits="2" />
+						<p:ajax global="false" event="blur" listener="#{fceDessedentacaoAnimalController.calculaConsumoPorEspecie(fceDessedentacaoAtividade)}" update="formTabAbsAnimal:tabAbasAbsAnimal:gridEspeciesSelecionadas" />
+					</p:inputText>
+					<h:outputText value="  (l/dia)" />
+		 		</h:panelGroup> 
+			</p:column>
+
+			<p:column style="text-align:center;" headerText="Consumo diário por espécie" > 
+				<f:facet name="footer" >
+					<h:outputText value="#{fceDessedentacaoAnimalController.fceDessedentacaoAnimal.numTotalConsumoEspecie}"  onblur="maskIt(this, event, '99.999.999,99', true)" converter="newBigConverter" style="width:70px;" disabled="true"/>
+				</f:facet>
+				<h:panelGroup   rendered="#{!fceDessedentacaoAnimalController.isTipologiaAtividadeOutros(fceDessedentacaoAtividade.ideTipologiaAtividade)}"  > 
+					<p:inputText value="#{fceDessedentacaoAtividade.numConsumoDiarioEspecie}" 
+					onkeyup="maskIt(this, event, '99.999.999,99', true)" onblur="maskIt(this, event, '99.999.999,99', true)" converter="newBigConverter" style="width:70px;" disabled="true" maxlength="11">
+	 		    		<f:convertNumber integerOnly="false"  minFractionDigits="2" />
+						<p:ajax global="false" event="blur"/>
+					</p:inputText>
+					<h:outputText value="  (l/dia)" />
+				 </h:panelGroup>
+			</p:column>
+
+			<p:column style="text-align:center;" headerText="Ações">
+				<p:commandLink title="Confirmar" process="@this" disabled="#{fceDessedentacaoAnimalController.desabilitarTudo}"
+				update="formTabAbsAnimal:tabAbasAbsAnimal:gridEspeciesSelecionadas formTabAbsAnimal:tabAbasAbsAnimal:gridPesquisa	formTabAbsAnimal:tabAbasAbsAnimal:tbEspeciesSelecionadas formTabAbsAnimal:tabAbasAbsAnimal:gridVolumeAbsAnimal"    
+				action="#{fceDessedentacaoAnimalController.confirmarEspecieNaLista()}" global="false" immediate="true"  rendered="#{!fceDessedentacaoAtividade.confirmado and !fceDessedentacaoAnimalController.isTipologiaAtividadeOutros(fceDessedentacaoAtividade.ideTipologiaAtividade)}">
+					<h:graphicImage title="Confirmar" value="/resources/img/ico-aprovar-notificacao.png"/>
+					<f:setPropertyActionListener target="#{fceDessedentacaoAnimalController.fceDessedentacaoAnimalAtividade}" value="#{fceDessedentacaoAtividade}"/>
+				</p:commandLink>
+
+				<p:commandLink title="Editar" process="@this" disabled="#{fceDessedentacaoAnimalController.desabilitarTudo}"
+				update="formTabAbsAnimal:tabAbasAbsAnimal:gridEspeciesSelecionadas formTabAbsAnimal:tabAbasAbsAnimal:tbEspeciesSelecionadas"  
+				action="#{fceDessedentacaoAnimalController.editarEspecieNaLista()}" global="false" immediate="true" rendered="#{fceDessedentacaoAtividade.confirmado and !fceDessedentacaoAnimalController.isTipologiaAtividadeOutros(fceDessedentacaoAtividade.ideTipologiaAtividade)}">
+					<h:graphicImage title="Editar" value="/resources/img/ico-editar.png"/>
+					<f:setPropertyActionListener target="#{fceDessedentacaoAnimalController.fceDessedentacaoAnimalAtividade}" value="#{fceDessedentacaoAtividade}"/>
+				</p:commandLink>				
+
+				<p:commandLink title="Excluir" process="@this" disabled="#{fceDessedentacaoAnimalController.desabilitarTudo}"
+				oncomplete="confirmaExclusaoEspecie.show()" global="false" immediate="true" >
+					<h:graphicImage title="Excluir" value="/resources/img/ico-excluir.png"/>
+					<f:setPropertyActionListener target="#{fceDessedentacaoAnimalController.fceDessedentacaoAnimalAtividade}" value="#{fceDessedentacaoAtividade}"/>
+				</p:commandLink>				
+			</p:column>
+		</p:dataTable>
+	</h:panelGrid>
+
+	<br/>
+	<br/>
+
+	<h:outputText value="* Período de Derivação" styleClass="titulo-grupo" />
+	<h:panelGrid id="gridDerivacaoAbsAnimal">
+		<p:selectOneRadio layout="pageDirection" value="#{fceDessedentacaoAnimalController.fceDessedentacaoAnimal.ideTipoPeriodoDerivacao}" disabled="#{fceDessedentacaoAnimalController.desabilitarTudo}"
+		converter="simpleEntityConverter"  style="padding: 0px 0px 0px 30px;" valueChangeListener="#{fceDessedentacaoAnimalController.changeDerivacao()}" >
+			<f:selectItems  value="#{fceDessedentacaoAnimalController.listaTipoPeriodoDerivacao}" var="tipoDerivacao" itemValue="#{tipoDerivacao}" itemLabel="#{tipoDerivacao.dscTipoPeriodoDerivacao}"/>
+			<p:ajax global="false" update="formTabAbsAnimal:tabAbasAbsAnimal:gridFinalAbsAnimal formTabAbsAnimal:tabAbasAbsAnimal:gridDerivacaoAbsAnimal"/>
+		</p:selectOneRadio>
+		<h:panelGrid columns="3" id="gridFinalAbsAnimal"  rendered="#{fceDessedentacaoAnimalController.contemDerivacaoIntermitente}">
+			<h:outputText value="Tempo de Captação" style="padding: 0px 0px 0px 50px;" rendered="#{fceDessedentacaoAnimalController.contemDerivacaoIntermitente}" /> 
+			<p:inputText value="#{fceDessedentacaoAnimalController.fceDessedentacaoAnimal.numTempoCaptacao}" disabled="#{fceDessedentacaoAnimalController.desabilitarTudo}" maxlength="2" 
+			converter="integerConverter"  onkeyup="SomenteNumero(this)" style="width:20px;"  rendered="#{fceDessedentacaoAnimalController.contemDerivacaoIntermitente}"  > 
+				<p:ajax global="false" event="blur"/>			
+			</p:inputText> 
+			<h:outputText value="(h/dia)" rendered="#{fceDessedentacaoAnimalController.contemDerivacaoIntermitente}" />
+		</h:panelGrid>
+	</h:panelGrid>
+
+	<br/>
+
+	<h:panelGrid id="gridVolumeAbsAnimal" columns="3" style="padding: 0px 0px 0px 35px;">
+		<h:outputText value="Vazão de consumo " />
+		<p:inputText value="#{fceDessedentacaoAnimalController.fceDessedentacaoAnimal.numVolumeDerivar}" style="width:100px;" converter="newBigConverter" onkeyup="mascararNumeroAndAddZeros(this, event, 9, 3, '.', ',', 3);" maxlength="15" disabled="true" >
+    		<f:convertNumber integerOnly="false"  minFractionDigits="3" />
+			<p:ajax event="blur" global="false" />
+		</p:inputText>
+		<h:outputText value="(m³/dia)" />
+	</h:panelGrid>
+
+	<h:panelGrid id="gridBotoesAbaAbsAnimal" rendered="#{!fceDessedentacaoAnimalController.desabilitarTudo}" columns="2" style="margin-top:40px;">
+		<p:commandButton id="btnVoltarAbaAbsAnimal" value="Voltar"  style="width:90px;" update="formTabAbsAnimal:tabAbasAbsAnimal" action="#{fceDessedentacaoAnimalController.voltarAba()}" global="false"/>
+		<p:commandButton id="btnFinalizarAbaAbsAnimal" value="Finalizar" style="width:90px;" update="formTabAbsAnimal:tabAbasAbsAnimal" process="@this" action="#{fceDessedentacaoAnimalController.finalizar()}" global="false" /> 
+	</h:panelGrid>
+
+</ui:composition>

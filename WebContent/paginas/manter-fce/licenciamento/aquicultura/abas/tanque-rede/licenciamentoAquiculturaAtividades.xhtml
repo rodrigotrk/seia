@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui">
+
+	<h:panelGrid columns="1">
+		<h:outputText styleClass="titulo-grupo" style="font-weight:bold;" value="#{bundle.fce_lic_aqui_informe_atividade}" />
+		<h:outputText value="#{bundle.fce_lic_aqui_selec_ativ_tnq_rede}" />
+	</h:panelGrid>
+
+	<h:panelGrid id="tableAtividades" columns="10"
+		style="margin-bottom:25px; margin-top:5px;">
+		<p:selectBooleanCheckbox id="checkPiscicultura"
+			value="#{tanqueRedeController.preencherPiscicultura}"
+			disabled="#{!fceLicenciamentoAquiculturaController.temPiscicultura or tanqueRedeController.pisciculturaDaOutorga or fceLicenciamentoAquiculturaController.desabilitarTudo}"
+			valueChangeListener="#{tanqueRedeController.changePiscicultura()}">
+			<p:ajax event="change" global="true" process="@this"/>
+		</p:selectBooleanCheckbox>
+		<h:outputText value="Psicultura"/>
+
+		<p:selectBooleanCheckbox id="checkCarcinicultura"
+			value="#{tanqueRedeController.preencherCarcinicultura}"
+			style="margin-left:15px;"
+			disabled="#{!fceLicenciamentoAquiculturaController.temCarcinicultura or tanqueRedeController.carciniculturaDaOutorga or fceLicenciamentoAquiculturaController.desabilitarTudo}" 
+			valueChangeListener="#{tanqueRedeController.changeCarcinicultura()}">
+			<p:ajax event="change" global="true" process="@this"/>
+		</p:selectBooleanCheckbox>
+		<h:outputText value="Carcinicultura"/>
+
+		<p:selectBooleanCheckbox id="checkRanicultura"
+			value="#{tanqueRedeController.preencherRanicultura}"
+			style="margin-left:15px;"
+			disabled="#{!fceLicenciamentoAquiculturaController.temRanicultura or tanqueRedeController.raniculturaDaOutorga or fceLicenciamentoAquiculturaController.desabilitarTudo}"
+			valueChangeListener="#{tanqueRedeController.changeRanicultura()}">
+			<p:ajax event="change" global="true" process="@this"/>
+		</p:selectBooleanCheckbox>
+		<h:outputText value="Ranicultura"/>
+		
+		<p:selectBooleanCheckbox id="checkAlgicultura"
+			value="#{tanqueRedeController.preencherAlgicultura}"
+			style="margin-left:15px;"
+			disabled="#{!fceLicenciamentoAquiculturaController.temAlgicultura or tanqueRedeController.algiculturaDaOutorga or fceLicenciamentoAquiculturaController.desabilitarTudo}"
+			valueChangeListener="#{tanqueRedeController.changeAlgicutura()}">
+			<p:ajax event="change" global="true" process="@this"/>
+		</p:selectBooleanCheckbox>
+		<h:outputText value="Algicultura" />
+		
+		<p:selectBooleanCheckbox id="checkMalococultura"
+			value="#{tanqueRedeController.preencherMalococultura}"
+			style="margin-left:15px;"
+			disabled="#{!fceLicenciamentoAquiculturaController.temMalococultura or tanqueRedeController.malococulturaDaOutorga or fceLicenciamentoAquiculturaController.desabilitarTudo}"
+			valueChangeListener="#{tanqueRedeController.changeMalococultura()}">
+			<p:ajax event="change" global="true" process="@this"/>
+		</p:selectBooleanCheckbox>
+		<h:outputText value="Malococultura"/>
+	</h:panelGrid>
+</ui:composition>

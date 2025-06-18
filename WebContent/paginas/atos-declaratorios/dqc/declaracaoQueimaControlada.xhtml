@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui">
+	
+	<ui:include src="/paginas/atos-declaratorios/dqc/dialogIncluirImovelCAR.xhtml" />
+	<ui:include src="/paginas/atos-declaratorios/dqc/dialogDQCImovel.xhtml" />
+	<ui:include src="/paginas/atos-declaratorios/dqc/dialogDQCResponsavelTecnico.xhtml" />
+	
+	<p:dialog id="_dialogDQC" widgetVar="dialogDQC" header="Declaração de Queima Controlada - DQC" modal="true" 
+		resizable="false" position="center" closable="true" dynamic="true" width="800" height="710">
+		
+		<h:panelGroup id="panelGeralDQC" layout="block" style="overflow:auto;">
+		<br/>
+			<h:outputText value="Requerimento:" style="font-size: 11px;"/>
+			<h:outputText value="#{dqcController.dqc.ideAtoDeclaratorio.ideRequerimento.numRequerimento}" style="font-size: 11px;"/>
+			<br/><br/>
+			
+			<p:tabView id="tabViewDialogDQC" activeIndex="#{dqcController.tabAtual}" cache="false" dynamic="true">
+				<p:ajax event="tabChange" listener="#{dqcController.onTabChange}" update="tabViewDialogDQC formBotoesNavegacaoDQC" global="true"/>
+					
+				<p:tab title="Etapa 1" id="aba1TermoCompromisso">
+					<ui:include src="/paginas/atos-declaratorios/dqc/abaTermoCompromisso.xhtml" />
+				</p:tab>
+				
+				<p:tab title="Etapa 2" id="aba2DadosQueima" disabled="#{dqcController.desabilitaAbas()}">
+					<ui:include src="/paginas/atos-declaratorios/dqc/abaDadosQueima.xhtml" />
+				</p:tab>
+				
+				<p:tab title="Etapa 3" id="aba3TermoResponsabilidade" disabled="#{dqcController.desabilitaAbas()}">
+					<ui:include src="/paginas/atos-declaratorios/dqc/abaTermoResponsabilidade.xhtml" />
+				</p:tab>
+			</p:tabView>
+			
+			<h:form id="formBotoesNavegacaoDQC">
+				<p:outputPanel autoUpdate="true">
+					<div style="text-align: right;">
+						<p:commandButton value="Voltar" update="tabViewDialogDQC formBotoesNavegacaoDQC" global="true"
+							actionListener="#{dqcController.decrementaIndexAba}" rendered="#{dqcController.visualizaBotaoAnterior}" 
+							disabled="#{dqcController.dqc.ideAtoDeclaratorio.desabilitaTudo}"/>
+						
+						<p:spacer width="10" height="0"/>
+						
+						<p:commandButton value="Avançar" update="tabViewDialogDQC formBotoesNavegacaoDQC" global="true"
+							rendered="#{dqcController.visualizaBotaoAvancar}" actionListener="#{dqcController.incrementaIndexAba}" 
+							disabled="#{dqcController.dqc.ideAtoDeclaratorio.desabilitaTudo}"/>
+						
+						<p:commandButton value="Concluir" actionListener="#{dqcController.finalizarDQC()}" global="true" 
+							rendered="#{dqcController.visualizaBotaoConcluir}" disabled="#{dqcController.dqc.ideAtoDeclaratorio.desabilitaTudo}"/>
+					</div>
+				</p:outputPanel>
+			</h:form>
+		</h:panelGroup>
+	</p:dialog>
+	
+	<p:confirmDialog widgetVar="confirmDialogRelatorio" message="Deseja imprimir o relatório?" header="Mensagem" severity="alert">
+        <h:form style="text-align: center;">
+            <p:commandButton value="Sim" ajax="false" onclick="confirmDialogRelatorio.hide();" style="margin-right:30px;">
+                <p:fileDownload value="#{dqcController.imprimirRelatorio()}"/>
+            </p:commandButton>
+            
+            <p:commandButton value="Não" onclick="confirmDialogRelatorio.hide()" />
+        </h:form>
+    </p:confirmDialog>
+</ui:composition>

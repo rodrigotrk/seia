@@ -1,0 +1,324 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui">
+
+	<h:form id="formInfoAdicional">
+	
+	<h:outputLabel value="Informações Adicionais" style="font-weight:bold;" />
+	<br/><br/>
+		<h:panelGrid id="pnlLocalRealizacao" rendered="#{declaracaoInexigibilidadeController.atividadeSelecionada.permiteLocalRealizacao}">
+		
+			<h:outputLabel value="A atividade será realizada:" />
+			<!-- <p:selectOneRadio id="rdLocalRealizacao" value="#{declaracaoInexigibilidadeController.localRealizacao}" disabled="#{!declaracaoInexigibilidadeController.permiteEditar}">
+				<f:selectItem itemLabel="em um local específico dentro do estado da Bahia" itemValue="0" />
+				<f:selectItem itemLabel="em diversos municípios do estado da Bahia" itemValue="1" />
+				<p:ajax event="change" listener="#{declaracaoInexigibilidadeController.changeLocalRealizacao}" update="formInfoAdicional:pnlEndereco"/>
+			</p:selectOneRadio> -->
+			<p:selectOneRadio id="rdLocalRealizacao" value="#{declaracaoInexigibilidadeController.declaracaoInexigibilidadeInfoGeral.tipoLocalAtividadeInexigivel}" disabled="#{!declaracaoInexigibilidadeController.permiteEditar}">
+				<f:selectItems value="#{declaracaoInexigibilidadeController.listaTipoLocalAtividade}"/>
+				<f:converter converterId="tipoLocalAtividadeInexigivelConverter"/>
+				<p:ajax event="change" listener="#{declaracaoInexigibilidadeController.changeLocalRealizacao}" update="tabViewDI:formInfoAdicional:pnlEndereco"/>
+			</p:selectOneRadio>
+		</h:panelGrid>
+		
+		<h:panelGrid id="pnlEndereco" rendered="#{declaracaoInexigibilidadeController.atividadeSelecionada.permiteLocalRealizacao or declaracaoInexigibilidadeController.atividadeSelecionada.permiteEndereco}">
+			<p:commandLink oncomplete="dialogEnderecoRealizacaoAtividade.show()" actionListener="#{enderecoRealizacaoAtividadeController.limparEndereco}" 
+						update="formAtividadeEndereco formEnderecoPesquisaCep" process="@this" 
+						rendered="#{declaracaoInexigibilidadeController.atividadeSelecionada.permiteLocalRealizacao}"
+						disabled="#{!declaracaoInexigibilidadeController.permiteEditar or declaracaoInexigibilidadeController.declaracaoInexigibilidadeInfoGeral.tipoLocalAtividadeInexigivel.ideTipoLocalAtividadeInexigivel != 1}">
+				<h:graphicImage title="Incluir endereço de realização da atividade" value="/resources/img/ico-expandir.png" />
+				<h:outputText value="Incluir endereço de realização da atividade" />
+			</p:commandLink>
+				
+			<p:commandLink oncomplete="dialogEnderecoRealizacaoAtividade.show()" actionListener="#{enderecoRealizacaoAtividadeController.limparEndereco}" 
+						update="formAtividadeEndereco" process="@this" 
+						rendered="#{declaracaoInexigibilidadeController.atividadeSelecionada.permiteEndereco}"
+						disabled="#{!declaracaoInexigibilidadeController.permiteEditar}">
+				<h:graphicImage title="Incluir endereço" value="/resources/img/ico-expandir.png" />
+				<h:outputText value="Incluir endereço" />
+			</p:commandLink>
+				
+			<p:dataTable id="dtEnderecoRealizacaoAtividade"	value="#{declaracaoInexigibilidadeController.listaEnderecoRealizacaoAtividade}" 
+					var="endAtiv" emptyMessage="#{bundle.consultapf_msg_empty_list}" lazy="true">
+				<p:column headerText="CEP">
+					<h:outputText value="#{endAtiv.ideLogradouro.numCepFormatado}" />
+				</p:column>
+				<p:column headerText="Logradouro">
+					<h:outputText value="#{endAtiv.ideLogradouro.nomLogradouro}" />
+				</p:column>
+				<p:column headerText="Bairro">
+					<h:outputText value="#{endAtiv.ideLogradouro.ideBairro.nomBairro}" />
+				</p:column>
+				<p:column headerText="Localidade">
+					<h:outputText value="#{endAtiv.ideLogradouro.ideMunicipio.nomMunicipio}" />
+				</p:column>
+				<p:column headerText="UF">
+					<h:outputText value="#{endAtiv.ideLogradouro.ideMunicipio.ideEstado.desSigla}" />
+				</p:column>
+				<p:column headerText="Ações">
+					<p:commandLink title="Visualizar endereço" process="@this" update="formAtividadeEndereco" 
+						actionListener="#{enderecoRealizacaoAtividadeController.visualizarEndereco(endAtiv)}" 
+						oncomplete="dialogEnderecoRealizacaoAtividade.show()">
+	          			 <h:graphicImage title="Visualizar endereço" value="/resources/img/ico-pesquisa.png" />
+		            </p:commandLink>
+					<p:commandLink title="Editar endereço" process="@this" update="formAtividadeEndereco" 
+						actionListener="#{enderecoRealizacaoAtividadeController.editarEndereco(endAtiv)}" 
+						oncomplete="dialogEnderecoRealizacaoAtividade.show()"
+						disabled="#{!declaracaoInexigibilidadeController.permiteEditar}">
+	          			 <h:graphicImage title="Editar endereço" value="/resources/img/ico-editar.png" />
+	     			     <f:setPropertyActionListener target="#{enderecoRealizacaoAtividadeController.endereco}" value="#{endAtiv}"/>
+		            </p:commandLink>
+		          	<p:commandLink onclick="confirmaExclusaoEnderecoRealizacaoAtividade.show()" title="Excluir endereço" process="@this"
+		          					disabled="#{!declaracaoInexigibilidadeController.permiteEditar}">
+	          			 <h:graphicImage title="Excluir endereço" value="/resources/img/ico-excluir.png" />
+	     			     <f:setPropertyActionListener target="#{declaracaoInexigibilidadeController.declaracaoInexigibilidadeInfoGeral.endereco}" value="#{endAtiv}"/>
+		            </p:commandLink>
+				</p:column>
+			</p:dataTable>
+		
+		</h:panelGrid>
+		
+		<h:panelGrid id="pnlUnidade" rendered="#{declaracaoInexigibilidadeController.atividadeSelecionada.permiteUnidade}">
+			<p:commandLink oncomplete="dialogEnderecoUnidade.show()" actionListener="#{unidadeEnderecoController.limparEndereco}" 
+				update="formUnidade" process="@this" disabled="#{!declaracaoInexigibilidadeController.permiteEditar}">
+				<h:graphicImage title="Incluir unidade" value="/resources/img/ico-expandir.png" />
+				<h:outputText value="Incluir unidade" />
+			</p:commandLink>
+				
+			<p:dataTable id="dtUnidade" value="#{declaracaoInexigibilidadeController.listaUnidade}" var="und"
+				emptyMessage="#{bundle.consultapf_msg_empty_list}" lazy="true">
+				<p:column headerText="Nome">
+					<h:outputText value="#{und.nomUnidade}" />
+				</p:column>
+				<p:column>
+					<f:facet name="header">	
+						<h:outputText value="Área" rendered="#{not declaracaoInexigibilidadeController.atividadeAreaInundada()}"/>
+						<h:outputText value="(m²)" rendered="#{not declaracaoInexigibilidadeController.atividadeAreaInundada() and not declaracaoInexigibilidadeController.atividadeRecuperacaoEstrada()}"/>
+						<h:outputText value="(km)" rendered="#{declaracaoInexigibilidadeController.atividadeRecuperacaoEstrada()}"/>
+						<h:outputText value="Área Inundada" rendered="#{declaracaoInexigibilidadeController.atividadeAreaInundada()} "/>
+						<h:outputText value="(ha)" rendered="#{declaracaoInexigibilidadeController.atividadeAreaInundada()}"/>
+					</f:facet>
+					<h:outputText value="#{und.valArea}" rendered="#{!declaracaoInexigibilidadeController.atividadeAreaInundada()}">
+						<f:convertNumber integerOnly="false" maxFractionDigits="2" maxIntegerDigits="9" pattern="#,##0.00" locale="pt_BR"/>
+					</h:outputText>
+					<h:outputText value="#{und.valAreaInundada}" rendered="#{declaracaoInexigibilidadeController.atividadeAreaInundada()}"/>
+				</p:column>
+				<p:column headerText="Localidade" rendered="#{not declaracaoInexigibilidadeController.atividadeRecuperacaoEstrada()}">
+					<h:outputText value="#{und.endereco.ideLogradouro.ideBairro.ideMunicipio.nomMunicipio}" />
+				</p:column>
+				<p:column headerText="Ações">
+					<p:commandLink title="Visualizar unidade" process="@this" update="formUnidade" 
+						actionListener="#{unidadeEnderecoController.visualizarEndereco(und)}" 
+						oncomplete="dialogEnderecoUnidade.show()">
+	          			 <h:graphicImage title="Visualizar unidade" value="/resources/img/ico-pesquisa.png" />
+		            </p:commandLink>
+					<p:commandLink title="Editar unidade" process="@this" update="formUnidade" 
+						actionListener="#{unidadeEnderecoController.editarEndereco(und)}" 
+						oncomplete="dialogEnderecoUnidade.show()"
+						disabled="#{!declaracaoInexigibilidadeController.permiteEditar}">
+	          			 <h:graphicImage title="Editar unidade" value="/resources/img/ico-editar.png" />
+	     			     <f:setPropertyActionListener target="#{unidadeEnderecoController.endereco}" value="#{und.endereco}"/>
+		            </p:commandLink>
+		          	<p:commandLink onclick="confirmaExclusaoEnderecoUnidade.show()" title="Excluir unidade" process="@this"
+		          				disabled="#{!declaracaoInexigibilidadeController.permiteEditar}">
+	          			 <h:graphicImage title="Excluir unidade" value="/resources/img/ico-excluir.png" />
+	     			     <f:setPropertyActionListener target="#{declaracaoInexigibilidadeController.declaracaoInfoUnidade}" value="#{und}"/>
+		            </p:commandLink>
+				</p:column>
+			</p:dataTable>
+			
+		</h:panelGrid>
+		
+		<h:panelGrid id="pnlProjeto" rendered="#{declaracaoInexigibilidadeController.atividadeSelecionada.permiteProjeto}">
+			<p:commandLink oncomplete="dialogProjeto.show()" 
+				actionListener="#{projetoEnderecoController.limparEndereco}" 
+				update="formProjeto,formProjeto:pnlEndereco, dialogProjeto" process="@this"
+				disabled="#{!declaracaoInexigibilidadeController.permiteEditar}">
+				<h:graphicImage title="Incluir projeto" value="/resources/img/ico-expandir.png" />
+				<h:outputText value="Incluir projeto" />
+			</p:commandLink>
+				
+			<p:dataTable id="dtProjeto" value="#{declaracaoInexigibilidadeController.listaProjeto}" var="proj"
+				emptyMessage="#{bundle.consultapf_msg_empty_list}" lazy="true">
+				<p:column headerText="Nome">
+					<h:outputText value="#{proj.nomProjeto}" />
+				</p:column>
+				<p:column headerText="Localidade">
+					<h:outputText value="#{proj.endereco.ideLogradouro.ideBairro.ideMunicipio.nomMunicipio}" />
+				</p:column>
+				<p:column headerText="Ações">
+					<p:commandLink title="Visualizar projeto" process="@this" update="formProjeto" 
+						actionListener="#{projetoEnderecoController.visualizarEndereco(proj)}" 
+						oncomplete="dialogProjeto.show()">
+	          			 <h:graphicImage title="Visualizar projeto" value="/resources/img/ico-pesquisa.png" />
+		            </p:commandLink>
+					<p:commandLink title="Editar projeto" process="@this" update="formProjeto" 
+						actionListener="#{projetoEnderecoController.editarEndereco(proj)}" 
+						oncomplete="dialogProjeto.show()"
+						disabled="#{!declaracaoInexigibilidadeController.permiteEditar}">
+	          			 <h:graphicImage title="Editar projeto" value="/resources/img/ico-editar.png" />
+ 	     		    <!--   <f:setPropertyActionListener target="#{unidadeEnderecoController.endereco}" value="#{proj.endereco}"/>  --> 
+		            </p:commandLink>
+		          	<p:commandLink onclick="confirmaExclusaoProjeto.show()" title="Excluir projeto" process="@this"
+		          		disabled="#{!declaracaoInexigibilidadeController.permiteEditar}">
+	          			 <h:graphicImage title="Excluir projeto" value="/resources/img/ico-excluir.png" />
+	     			     <f:setPropertyActionListener target="#{declaracaoInexigibilidadeController.declaracaoInfoProjeto}" value="#{proj}"/>
+		            </p:commandLink>
+				</p:column>
+			</p:dataTable>
+			
+		</h:panelGrid>
+		
+		<!-- <h:panelGrid id="pnlSistema"> -->
+		<h:panelGrid id="pnlSistema" rendered="#{declaracaoInexigibilidadeController.atividadeSelecionada.permiteAbastecimento}">
+			<p:commandLink oncomplete="dialogSistema.show()" actionListener="#{sistemaEnderecoController.limparEndereco}" 
+				update="formSistema, formSistema:pnlEndereco, dialogSistema" process="@this"
+				disabled="#{!declaracaoInexigibilidadeController.permiteEditar}">
+				<h:graphicImage title="Incluir sistema" value="/resources/img/ico-expandir.png" />
+				<h:outputText value="Incluir sistema" />
+			</p:commandLink>
+				
+			<p:dataTable id="dtSistema" value="#{declaracaoInexigibilidadeController.listaSistema}" var="sist"
+				emptyMessage="#{bundle.consultapf_msg_empty_list}" lazy="true">
+				<p:column headerText="Nome">
+					<h:outputText value="#{sist.nomSistema}" />
+				</p:column>
+				<p:column headerText="Latitude">
+					<h:outputText value="#{sist.localizacaoGeografica.latitudeInicial}" />
+				</p:column>
+				<p:column headerText="Longitude">
+					<h:outputText value="#{sist.localizacaoGeografica.longitudeInicial}" />
+				</p:column>
+				<p:column headerText="Vazão (l/s)">
+					<h:outputText value="#{sist.valVazao}" />
+				</p:column>
+				<p:column headerText="Ações">
+					<p:commandLink title="Visualizar sistema" process="@this" update="formSistema" 
+						actionListener="#{sistemaEnderecoController.visualizarEndereco(sist)}" 
+						oncomplete="dialogSistema.show()">
+	          			 <h:graphicImage title="Visualizar sistema" value="/resources/img/ico-pesquisa.png" />
+		            </p:commandLink>
+					<p:commandLink title="Editar sistema" process="@this" update="formSistema" 
+						actionListener="#{sistemaEnderecoController.editarEndereco(sist)}" 
+						oncomplete="dialogSistema.show()"
+						disabled="#{!declaracaoInexigibilidadeController.permiteEditar}">
+	          			 <h:graphicImage title="Editar sistema" value="/resources/img/ico-editar.png" />
+		            </p:commandLink>
+		          	<p:commandLink onclick="confirmaExclusaoSistema.show()" title="Excluir sistema" process="@this"
+		          		disabled="#{!declaracaoInexigibilidadeController.permiteEditar}">
+	          			 <h:graphicImage title="Excluir sistema" value="/resources/img/ico-excluir.png" />
+	     			     <f:setPropertyActionListener target="#{declaracaoInexigibilidadeController.declaracaoInfoAbastecimento}" value="#{sist}"/>
+		            </p:commandLink>
+				</p:column>
+			</p:dataTable>
+			
+			<br/>
+			<h:outputLabel value="Todos os sistemas informados são simplificados de abastecimento de água?" />
+			<p:selectOneRadio id="rdSisAbAg" value="#{declaracaoInexigibilidadeController.declaracaoInexigibilidadeInfoGeral.indSistemaSimplificadoAbastecimento}"
+				disabled="#{!declaracaoInexigibilidadeController.permiteEditar}">
+				<f:selectItem itemValue="true" itemLabel="Sim"/>
+				<f:selectItem itemValue="false" itemLabel="Não"/>
+			</p:selectOneRadio>
+			
+		</h:panelGrid>
+		
+		<h:panelGrid id="pnlPonte" rendered="#{declaracaoInexigibilidadeController.atividadeSelecionada.permitePonte}">
+			<p:commandLink oncomplete="dialogPonte.show()" 
+				actionListener="#{declaracaoInexigibilidadeController.limparPonte}" 
+				update="formPonte formPonte:pnlPonte" 
+				process="@this"
+				disabled="#{!declaracaoInexigibilidadeController.permiteEditar}">
+				<h:graphicImage title="Incluir ponte" value="/resources/img/ico-expandir.png" />
+				<h:outputText value="Incluir ponte" />
+			</p:commandLink>
+				
+			<p:dataTable id="dtPonte" value="#{declaracaoInexigibilidadeController.listaPonte}" var="pnt"
+				emptyMessage="#{bundle.consultapf_msg_empty_list}" lazy="true">
+				<p:column headerText="Nome">
+					<h:outputText value="#{pnt.nomPonte}" />
+				</p:column>
+				<p:column headerText="Ações">
+					<p:commandLink title="Visualizar ponte" process="@this" update="formPonte" 
+						actionListener="#{declaracaoInexigibilidadeController.visualizarPonte(pnt)}" 
+						oncomplete="dialogPonte.show()">
+	          			 <h:graphicImage title="Visualizar Ponte" value="/resources/img/ico-pesquisa.png" />
+		            </p:commandLink>
+					<p:commandLink title="Editar ponte" process="@this" update="formPonte" 
+						actionListener="#{declaracaoInexigibilidadeController.editarPonte(pnt)}" 
+						oncomplete="dialogPonte.show()"
+						disabled="#{!declaracaoInexigibilidadeController.permiteEditar}">
+	          			 <h:graphicImage title="Editar Ponte" value="/resources/img/ico-editar.png" />
+	     			     <f:setPropertyActionListener target="#{declaracaoInexigibilidadeController.declaracaoInexigibilidadeInfoPonte}" value="#{pnt}"/>
+		            </p:commandLink>
+		          	<p:commandLink onclick="confirmaExclusaoPonte.show()" title="Excluir ponte" process="@this"
+		          		disabled="#{!declaracaoInexigibilidadeController.permiteEditar}">
+	          			 <h:graphicImage title="Excluir ponte" value="/resources/img/ico-excluir.png" />
+	     			     <f:setPropertyActionListener target="#{declaracaoInexigibilidadeController.declaracaoInexigibilidadeInfoPonte}" value="#{pnt}"/>
+		            </p:commandLink>
+				</p:column>
+			</p:dataTable>
+			
+			<br/>
+			<h:outputLabel value="A intervenção interfere na quantidade e qualidade das águas?" />
+			<p:selectOneRadio id="rdPntQtdQldAgua" value="#{declaracaoInexigibilidadeController.ponteQuantidadeQualidadeAgua}"
+				disabled="#{!declaracaoInexigibilidadeController.permiteEditar}">
+				<f:selectItem itemValue="true" itemLabel="Sim"/>
+				<f:selectItem itemValue="false" itemLabel="Não"/>
+			</p:selectOneRadio>
+			
+		</h:panelGrid>
+		
+		<h:panelGrid id="pnlLuzParaTodos" rendered="#{declaracaoInexigibilidadeController.atividadeSelecionada.permiteLuzParaTodos}">
+			<h:outputLabel value="Os projetos estão relacionados ao programa Luz Para Todos?" />
+			<p:selectOneRadio id="chkLuzParaTodos" value="#{declaracaoInexigibilidadeController.declaracaoInexigibilidadeInfoGeral.indLuzParaTodos}"
+				disabled="#{!declaracaoInexigibilidadeController.permiteEditar}">
+				<f:selectItem itemLabel="Sim" itemValue="true"/>
+				<f:selectItem itemLabel="Não" itemValue="false"/>
+			</p:selectOneRadio>
+		</h:panelGrid>
+		
+		<h:panelGrid id="pnlRioIntervencao" rendered="#{declaracaoInexigibilidadeController.atividadeSelecionada.tipoAtividadeOutorga}">
+			<h:outputLabel value="* O rio que sofrerá intervenção é:" />
+			<p:selectOneRadio id="rdRioIntervencao" value="#{declaracaoInexigibilidadeController.tipoRioIntervencao}"
+				disabled="#{!declaracaoInexigibilidadeController.permiteEditar}">
+				<f:selectItems value="#{declaracaoInexigibilidadeController.listaTipoRioIntervencao}"/>
+				<f:converter converterId="simpleEntityConverter"/>
+				<!-- <p:ajax event="change" update="tabViewDI:formInfoAdicional:pnlRioIntervencao"/> -->
+			</p:selectOneRadio>
+		</h:panelGrid>
+		
+		<h:panelGrid id="pnlBueiro" rendered="#{declaracaoInexigibilidadeController.atividadeSelecionada.permiteQtdBueiros}">
+			<h:outputLabel value="* Número de bueiros:" />
+			<p:inputText value="#{declaracaoInexigibilidadeController.numeroBueiro}" onkeyup="SomenteNumero(this);" size="10" disabled="#{!declaracaoInexigibilidadeController.permiteEditar}">
+				<p:ajax event="change" process="@this"/>
+			</p:inputText>
+			<h:outputLabel value="* Trajeto da via" />
+			<p:inputTextarea value="#{declaracaoInexigibilidadeController.descricaoTrajetoVia}" cols="70" rows="10" maxLength="255" disabled="#{!declaracaoInexigibilidadeController.permiteEditar}">
+				<p:ajax event="change" process="@this"/>
+			</p:inputTextarea>
+		</h:panelGrid>
+		
+		<p:outputPanel id="pnlFuncoesAdicional">
+		<p:commandButton actionListener="#{declaracaoInexigibilidadeController.voltar()}" value="Voltar" image="ui-icon-arrowthick-1-w">
+			<f:setPropertyActionListener value="false" target="#{declaracaoInexigibilidadeController.permiteSalvar}"/>
+		</p:commandButton>
+		<p:commandButton actionListener="#{declaracaoInexigibilidadeController.avancar}" value="Avançar" 
+			image="ui-icon-arrowthick-1-e" style="float:right; margin-left:5px;" 
+			disabled="#{empty declaracaoInexigibilidadeController.listaAtividadeSelecionada}">
+			<f:setPropertyActionListener value="false" target="#{declaracaoInexigibilidadeController.permiteSalvar}"/>
+		</p:commandButton>
+		<p:commandButton actionListener="#{declaracaoInexigibilidadeController.salvar}" value="Salvar" 
+			image="ui-icon-disk" style="float:right;" 
+			disabled="#{empty declaracaoInexigibilidadeController.listaAtividadeSelecionada or !declaracaoInexigibilidadeController.permiteEditar}">
+			<f:setPropertyActionListener value="true" target="#{declaracaoInexigibilidadeController.permiteSalvar}"/>
+		</p:commandButton>
+		</p:outputPanel>
+	</h:form>
+	
+	<br/><br/>
+		
+</ui:composition>

@@ -1,0 +1,309 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="certificado_inexibilidade_modelo06" pageWidth="535" pageHeight="842" columnWidth="495" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="049b68ba-ba4e-426d-a891-7f1452ebace9">
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="LOGO_SEIA" class="java.lang.String"/>
+	<parameter name="LOGO_INEMA" class="java.lang.String"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="IDE_REQUERIMENTO" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="MARCA_DAGUA" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[select ct.dtc_emissao_certificado,
+ct.num_certificado,
+ct.num_token,
+req.ide_requerimento,
+req.num_requerimento,
+req.dtc_criacao,
+pf.nom_pessoa as nome_pf,
+pj.nom_razao_social as nome_pj,
+pf.num_cpf as num_cpf,
+pj.num_cnpj as num_cnpj,
+logra.nom_logradouro as nom_log,
+logra.num_cep as num_cep,
+tpl.nom_tipo_logradouro as tp_log,
+bai.nom_bairro as nom_bai,
+mun.nom_municipio as nom_mun,
+uf.des_sigla as uf,
+en.num_endereco as num_endereco,
+ps.nom_pais,
+ai.ide_atividade_inexigivel,
+ai.nom_atividade_inexigivel,
+di.ide_declaracao_inexigibilidade
+from requerimento req
+inner join declaracao_inexigibilidade di on di.ide_requerimento = req.ide_requerimento
+inner JOIN atividade_inexigivel ai on di.ide_atividade_inexigivel = ai.ide_atividade_inexigivel
+LEFT JOIN certificado ct ON ct.ide_requerimento = req.ide_requerimento
+inner JOIN requerimento_pessoa rp ON rp.ide_requerimento = req.ide_requerimento
+LEFT JOIN pessoa p ON p.ide_pessoa = rp.ide_pessoa
+LEFT JOIN pessoa_juridica pj ON pj.ide_pessoa_juridica = p.ide_pessoa
+LEFT JOIN pessoa_fisica pf ON pf.ide_pessoa_fisica = p.ide_pessoa
+left join endereco_pessoa ep on ep.ide_pessoa = p.ide_pessoa
+inner join endereco en on en.ide_endereco = ep.ide_endereco
+inner join logradouro logra on logra.ide_logradouro = en.ide_logradouro
+inner join tipo_logradouro tpl on tpl.ide_tipo_logradouro = logra.ide_tipo_logradouro
+inner join bairro bai on bai.ide_bairro = logra.ide_bairro
+inner join municipio mun on mun.ide_municipio = logra.ide_municipio
+inner join estado uf on uf.ide_estado = mun.ide_estado
+inner JOIN pais ps ON ps.ide_pais = uf.ide_pais
+where req.ide_requerimento = $P{IDE_REQUERIMENTO}
+and rp.ide_tipo_pessoa_requerimento = 1
+limit 1]]>
+	</queryString>
+	<field name="dtc_emissao_certificado" class="java.sql.Timestamp"/>
+	<field name="num_certificado" class="java.lang.String"/>
+	<field name="num_token" class="java.lang.String"/>
+	<field name="ide_requerimento" class="java.lang.Integer"/>
+	<field name="num_requerimento" class="java.lang.String"/>
+	<field name="dtc_criacao" class="java.sql.Timestamp"/>
+	<field name="nome_pf" class="java.lang.String"/>
+	<field name="nome_pj" class="java.lang.String"/>
+	<field name="num_cpf" class="java.lang.String"/>
+	<field name="num_cnpj" class="java.lang.String"/>
+	<field name="nom_log" class="java.lang.String"/>
+	<field name="num_cep" class="java.math.BigDecimal"/>
+	<field name="tp_log" class="java.lang.String"/>
+	<field name="nom_bai" class="java.lang.String"/>
+	<field name="nom_mun" class="java.lang.String"/>
+	<field name="uf" class="java.lang.String"/>
+	<field name="nom_pais" class="java.lang.String"/>
+	<field name="ide_atividade_inexigivel" class="java.lang.Integer"/>
+	<field name="nom_atividade_inexigivel" class="java.lang.String"/>
+	<field name="ide_declaracao_inexigibilidade" class="java.lang.Integer"/>
+	<field name="num_endereco" class="java.lang.String"/>
+	<background>
+		<band height="50" splitType="Stretch">
+			<image scaleImage="RealHeight" onErrorType="Blank">
+				<reportElement uuid="0c5820f5-3397-4ba5-a5f2-0d72295c5827" positionType="Float" x="0" y="0" width="493" height="50" isRemoveLineWhenBlank="true" isPrintWhenDetailOverflows="true">
+					<printWhenExpression><![CDATA[$P{MARCA_DAGUA} != null && !$P{MARCA_DAGUA}.isEmpty()]]></printWhenExpression>
+				</reportElement>
+				<imageExpression><![CDATA[$P{MARCA_DAGUA}]]></imageExpression>
+			</image>
+		</band>
+	</background>
+	<title>
+		<band height="50">
+			<image isLazy="true" onErrorType="Blank">
+				<reportElement uuid="185ab665-06ad-4eb0-8956-c7f1a1f30687" positionType="Float" x="395" y="5" width="99" height="41" forecolor="#FFFFFF"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<graphicElement>
+					<pen lineWidth="0.0"/>
+				</graphicElement>
+				<imageExpression><![CDATA[$P{LOGO_SEIA}]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement uuid="2f0a5d67-f076-4c55-b227-981baf85735f" x="98" y="11" width="297" height="32"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="10" isBold="true" isUnderline="true"/>
+				</textElement>
+				<text><![CDATA[DECLARAÇÃO DE INEXIGIBILIDADE DE LICENCIAMENTO
+AMBIENTAL]]></text>
+			</staticText>
+			<image isLazy="true" onErrorType="Blank">
+				<reportElement uuid="0b0e689b-a85f-435d-9241-ecaab94aa54d" positionType="Float" x="0" y="5" width="98" height="41" forecolor="#FFFFFF"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<graphicElement>
+					<pen lineWidth="1.0" lineStyle="Solid" lineColor="#FFFFFF"/>
+				</graphicElement>
+				<imageExpression><![CDATA[$P{LOGO_INEMA}]]></imageExpression>
+			</image>
+		</band>
+	</title>
+	<detail>
+		<band height="65">
+			<staticText>
+				<reportElement uuid="01438389-29fc-4ce3-9d2b-790c4571112c" x="3" y="13" width="75" height="15"/>
+				<textElement/>
+				<text><![CDATA[Nº Certificado:]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="57db4754-7dfe-4d40-97ae-5d7dd1171eab" x="78" y="13" width="172" height="15" isRemoveLineWhenBlank="true"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{num_certificado}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="dc6f6159-dd88-48ab-b1c3-fa9f72ecc141" x="262" y="13" width="90" height="15"/>
+				<textElement/>
+				<text><![CDATA[Data de emissão:]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="a2168070-2f5f-4694-bd44-f5809fffb6b2" x="359" y="13" width="121" height="15" isRemoveLineWhenBlank="true"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{dtc_emissao_certificado}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement uuid="42fa2d74-1a14-4ce3-862a-c4ca85eeecc0" x="1" y="6" width="490" height="1"/>
+			</line>
+			<line>
+				<reportElement uuid="ea56f486-c7e4-4e0d-9232-db0314989aac" x="1" y="6" width="1" height="25"/>
+			</line>
+			<line>
+				<reportElement uuid="c8dc19a1-27f4-463e-bbaa-b5c1fb771aae" x="491" y="6" width="1" height="25"/>
+			</line>
+			<line>
+				<reportElement uuid="e36f7475-60c5-43cb-9626-1b70981fbd5d" x="250" y="6" width="1" height="25"/>
+			</line>
+			<line>
+				<reportElement uuid="4c1fd803-dd61-4ecb-b3b2-1f651229e449" x="2" y="30" width="490" height="1"/>
+			</line>
+			<textField>
+				<reportElement uuid="02757b7f-e420-464a-8a31-185b7b279df7" x="3" y="40" width="284" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA["Nº de Requerimento: " +$F{num_requerimento}]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="60" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="276d7c6d-0e67-4b84-ba3c-142b1aa3aee9" x="1" y="0" width="494" height="60"/>
+				<textElement textAlignment="Justified" markup="html"/>
+				<text><![CDATA[O INSTITUTO DO MEIO AMBIENTE E RECURSOS HÍDRICOS- INEMA, com fulcro nas atribuições e competências que lhe foram delegadas pela Lei Estadual nº 12.121/11 e Lei Estadual nº 10.431/06, alterada pela Lei Estadual nº 12.377/11, regulamentada pelo Decreto Estadual nº 14.024/2012 e suas devidas atualizações, considerando o disposto no Anexo IV do Decreto Estadual nº 15.682/14 e suas alterações, a Resolução CEPRAM nº 4.327/13 e com a Portaria INEMA nº 11.292/16, RESOLVE:]]></text>
+			</staticText>
+		</band>
+		<band height="53">
+			<textField>
+				<reportElement uuid="ed5a8dbd-c15b-4025-88a3-95b3f9e04b29" x="1" y="6" width="494" height="47"/>
+				<textElement textAlignment="Justified" markup="html"/>
+				<textFieldExpression><![CDATA["<b>Art. 1.º</b> Declarado à " +
+($F{nome_pf} != null ? $F{nome_pf} : $F{nome_pj}) +
+", inscrito no CNPJ/CPF " +
+($F{num_cnpj} == null ? new String($F{num_cpf}.substring(0,3) + "." + $F{num_cpf}.substring(3,6) + "." + $F{num_cpf}.substring(6,9) + "-" + $F{num_cpf}.substring(9,11)) : new String($F{num_cnpj}.substring(0,2) + "." + $F{num_cnpj}.substring(2,5) + "." + $F{num_cnpj}.substring(5,8) + "/" + $F{num_cnpj}.substring(8,12) + "-" + $F{num_cnpj}.substring(12,14)))
+ + ", com sede no endereço " +
+$F{tp_log} + " " + $F{nom_log} + ", Nº " + $F{num_endereco} + ", " +
+$F{num_cep}.toString().substring(0,5) + "-" + $F{num_cep}.toString().substring(5) +
+", Bairro " + $F{nom_bai} + ", " + $F{nom_mun} + "-" + $F{uf} + "-" + $F{nom_pais} +
+", que a atividade de " + $F{nom_atividade_inexigivel} +
+" das estradas/rodovias citadas a seguir é inexigível quanto ao procedimento de licenciamento ambiental, dada a especificidade do empreendimento."]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="21">
+			<subreport>
+				<reportElement uuid="0112c36c-3712-4c31-8625-9d1e0f679b64" x="1" y="1" width="494" height="20"/>
+				<subreportParameter name="IDE_DECLARACAO_INEXIGIBILIDADE">
+					<subreportParameterExpression><![CDATA[$F{ide_declaracao_inexigibilidade}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "certificado_inexigibilidade_modelo06_estradas.jasper"]]></subreportExpression>
+			</subreport>
+			<staticText>
+				<reportElement uuid="2e1bcd01-c9c0-45ca-a002-2ba3551af702" x="380" y="3" width="50" height="15">
+					<printWhenExpression><![CDATA[false]]></printWhenExpression>
+				</reportElement>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Estradas]]></text>
+			</staticText>
+		</band>
+		<band height="20">
+			<staticText>
+				<reportElement uuid="35d3a9f7-a744-42b7-a1c0-466c5fb60b06" x="1" y="5" width="494" height="15"/>
+				<textElement textAlignment="Justified" markup="html"/>
+				<text><![CDATA[Entretanto, o requerente deve adotar alguns cuidados e procedimentos, tais como:]]></text>
+			</staticText>
+		</band>
+		<band height="30">
+			<subreport>
+				<reportElement uuid="88d37f50-f6b3-45fa-ab50-3511885e010d" x="1" y="0" width="494" height="30"/>
+				<subreportParameter name="IDE_REQUERIMENTO">
+					<subreportParameterExpression><![CDATA[$P{IDE_REQUERIMENTO}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "certificado_inexigibilidade_modelo01_recomendacoes.jasper"]]></subreportExpression>
+			</subreport>
+			<staticText>
+				<reportElement uuid="ff746534-e003-4d2b-bd9d-41c99e6fcd0a" x="381" y="5" width="85" height="15">
+					<printWhenExpression><![CDATA[false]]></printWhenExpression>
+				</reportElement>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Recomendações]]></text>
+			</staticText>
+		</band>
+		<band height="55">
+			<staticText>
+				<reportElement uuid="bdbca979-483b-4722-9813-b79b5e5adaea" x="2" y="5" width="493" height="50"/>
+				<textElement textAlignment="Justified" markup="html"/>
+				<text><![CDATA[<b>Art. 2.º</b> Esta declaração não autoriza supressão de vegetação nem o uso de recursos hídricos que porventura se façam necessários para a implantação do empreendimento ou funcionamento do mesmo, devendo o requerente solicitar ao órgão ambiental competente a autorização para a realização de tais atividades quando as mesmas se fizerem necessárias.]]></text>
+			</staticText>
+		</band>
+		<band height="65">
+			<staticText>
+				<reportElement uuid="0444ded1-dc77-4410-8519-2cfe6920e5eb" x="1" y="5" width="494" height="60"/>
+				<textElement textAlignment="Justified" markup="html"/>
+				<text><![CDATA[<b>Art. 3.º</b> A inexigência de licenciamento ambiental aqui declarada não isenta o interessado do cumprimento de normas e padrões ambientais, da fiscalização exercida pelos órgãos competentes, nem de obter a Anuência e/ou Autorização das outras instâncias no Âmbito Federal, Estadual ou Municipal, quando couber, ressalvando que a referida inexigibilidade pode ser revogada nos casos de alteração da legislação vigente.]]></text>
+			</staticText>
+		</band>
+		<band height="50" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="8fec5af0-7938-40a3-bfcb-c661a6d1dfac" x="1" y="5" width="494" height="30"/>
+				<textElement textAlignment="Justified" markup="html"/>
+				<text><![CDATA[A autenticidade deste certificado pode ser atestada na internet, no endereço: http://www.seia.ba.gov.br em Serviços On-line/Atestar Certificado, utilizando a chave de segurança deste certificado.]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="54e958b9-ae4d-4abd-aa6b-332cfc686f03" x="125" y="30" width="270" height="20"/>
+				<textElement textAlignment="Center" markup="html">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{num_token}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="35">
+			<staticText>
+				<reportElement uuid="ca112b4c-32a3-462e-b1ca-28db1a98032d" x="1" y="0" width="100" height="10" forecolor="#7D7D7D"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Certificado de Cadastro]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true">
+				<reportElement uuid="2e7e3e44-e454-4ad6-a2d8-fe422e1d67fe" x="110" y="0" width="385" height="10" forecolor="#7D7D7D"/>
+				<textElement textAlignment="Justified">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Certificado emitido às: "+
+new SimpleDateFormat("HH:mm:ss").format(new java.util.Date()) +
+" do dia "
++new SimpleDateFormat("dd/MM/yyyy").format(new java.util.Date())+
+" (Hora e Data de Brasília), válido por 90 dias."]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="4b8ef4f7-cc12-464d-8c11-3d5462485041" x="1" y="10" width="494" height="10" forecolor="#7D7D7D"/>
+				<textElement textAlignment="Center">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[INEMA/CAB: Avenida Luís Viana Filho, 6ª Avenida, nº 600 CAB. CEP:41.746-900 - Salvador - Bahia - Brasil]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="e847985d-5b90-4715-b1c0-cb0c0849160a" x="1" y="20" width="100" height="15" forecolor="#7D7D7D"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Chave de segurança]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="bbda40f3-3939-4288-a947-a878b9cde38c" x="105" y="20" width="200" height="15" forecolor="#7D7D7D"/>
+				<textElement>
+					<font size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{num_token}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+</jasperReport>

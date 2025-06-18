@@ -1,0 +1,71 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui">
+	<p:dialog id="tipoBarragemSemPonto" widgetVar="tipoBarragemSemPonto" position="center" resizable="false" header="Intervenção de Barragem" appendToBody="true" 
+		dynamic="true" modal="true" width="720"> 
+		<p:ajax event="close" listener="#{fceIntervencaoBarragemControllerSemPonto.limparFceIntervencaoBarragem()}" update="formIntervencaoBarragemSemPonto formBarragemRegularizacaoSemPonto" global="false"/>  
+		<h:panelGrid id="panelBarragemSemPonto" columns="1">
+			<ui:include src="/paginas/manter-fce/outorga/intervencao/barragem/abaFceIntervencaoBarragemSemPonto.xhtml" />
+		</h:panelGrid>
+	</p:dialog>
+	
+	<p:dialog id="barragemRegularizacaoSemPonto" widgetVar="barragemRegularizacaoSemPonto" position="center" resizable="false" header="Barragem de Regularização" appendToBody="true" 
+		dynamic="true" width="830" height="705"> 
+		<p:ajax event="close" listener="#{fceIntervencaoBarragemControllerSemPonto.limpar()}" update="formIntervencaoBarragemSemPonto formBarragemRegularizacaoSemPonto" global="false"/>  
+		<h:panelGrid id="panelBarragemRegularizacaoSemPonto" columns="1">
+			<ui:include src="/paginas/manter-fce/outorga/intervencao/barragem/dialogFceBarragemRegularizacaoSemPonto.xhtml" />
+		</h:panelGrid>
+	</p:dialog>
+	
+	<p:confirmDialog header="Confirmação" appendToBody="true" message="#{bundle.geral_msg_informacoes_nao_foram_salvas_deseja_continuar}" severity="alert" widgetVar="confirmationVoltarTipoBarragemSemPonto" id="confirmationVoltarTipoBarragemSemPonto">
+		<h:form>
+			<p:commandButton value="Sim" update="formIntervencaoBarragemSemPonto" oncomplete="confirmationVoltarTipoBarragemSemPonto.hide();tipoBarragemSemPonto.hide();" global="false"/>
+			<p:commandButton value="Não" onclick="confirmationVoltarTipoBarragemSemPonto.hide();" type="button" global="false"/>
+		</h:form>
+	</p:confirmDialog> <!-- Fim do confirmar voltar TipoBarragem-->
+	
+	<p:confirmDialog message="Deseja imprimir o relatório da FCE - Intervenção Barragem?" widgetVar="rel_barragemSemPonto" header="Mensagem">
+		<div align="center">
+			<h:form>
+				<p:commandButton value="Sim" ajax="false" global="false" process="@this" immediate="true" id="imprimir_rel_barragemSemPonto"  onclick="rel_barragemSemPonto.hide();" style="margin-right:10px;" 
+					update="formulariosUpload:uploadFormulario" oncomplete="expandAll();">
+                    <p:fileDownload value="#{fceIntervencaoBarragemControllerSemPonto.imprimirRelatorio}"/>
+				</p:commandButton>			
+				<p:commandButton value="Não" onclick="rel_barragemSemPonto.hide(); tipoBarragemSemPonto.hide();" process="@this" 
+					update="formulariosUpload:uploadFormulario" oncomplete="expandAll();"/>
+			</h:form>
+		</div>
+	</p:confirmDialog> <!-- Fim do confirmar relatorio -->
+	
+	<p:confirmDialog header="Confirmação" appendToBody="true" message="#{bundle.geral_msg_informacoes_nao_foram_salvas_deseja_continuar}" severity="alert" widgetVar="confirmationVoltarFCEbarragemSemPonto" id="confirmationVoltarFCEbarragemSemPonto">
+		<h:form>
+			<p:commandButton value="Sim" update="formIntervencaoBarragemSemPonto :formulariosUpload:tabelaFormulariosDowload" oncomplete="confirmationVoltarFCEbarragemSemPonto.hide();barragemRegularizacaoSemPonto.hide();" global="false"/>
+			<p:commandButton value="Não" update=":formulariosUpload:tabelaFormulariosDowload" onclick="confirmationVoltarFCEbarragemSemPonto.hide();" type="button" global="false"/>
+		</h:form>
+	</p:confirmDialog> <!-- Fim do confirmar voltar fce intervencao-->
+	
+	<p:confirmDialog header="Confirmação" appendToBody="true" message="#{bundle.lac_dadosGerais_msg004}" severity="alert" widgetVar="confirmaExclusaoExtratoSemPonto" id="confirmaExclusaoExtratoSemPonto">
+		<h:form>
+			<p:commandButton value="Sim" update="formBarragemRegularizacaoSemPonto:tblDoc" oncomplete="confirmaExclusaoExtratoSemPonto.hide();" global="false" actionListener="#{enviarDocumentoController.limparListaArquivo()}"/>
+			<p:commandButton value="Não" onclick="confirmaExclusaoExtratoSemPonto.hide();" type="button" global="false"/>
+		</h:form>
+	</p:confirmDialog> <!-- Fim do confirmar exclusao extrato upado -->
+	
+	<p:confirmDialog header="Confirmação" appendToBody="true" message="#{bundle.lac_dadosGerais_msg004}" severity="alert" widgetVar="confirmaExclusaoIntervencaoBarragemSemPonto" id="confirmaExclusaoIntervencaoBarragemSemPonto">
+		<h:form>
+			<p:commandButton value="Sim" update="formIntervencaoBarragemSemPonto:pnl1 formIntervencaoBarragemSemPonto:pnl2" oncomplete="confirmaExclusaoIntervencaoBarragemSemPonto.hide();" global="false" actionListener="#{fceIntervencaoBarragemControllerSemPonto.excluir()}"/>
+			<p:commandButton value="Não" onclick="confirmaExclusaoIntervencaoBarragemSemPonto.hide();" type="button" global="false"/>
+		</h:form>
+	</p:confirmDialog> <!-- Fim do confirmar exclusão fce intervencao -->
+	
+	<p:confirmDialog header="Confirmação" appendToBody="true" message="#{bundle.fce_outorga_change_tipo_barragem}" severity="alert" widgetVar="changeTipoBarragemSemPonto" id="changeTipoBarragemSemPonto" width="415">
+		<h:form>
+			<p:commandButton value="Sim" update="formIntervencaoBarragemSemPonto:tableOutorgaLocGeo formIntervencaoBarragemSemPonto:pnl1 formIntervencaoBarragemSemPonto:pnl2" onclick="changeTipoBarragemSemPonto.hide();" global="false" action="#{fceIntervencaoBarragemControllerSemPonto.confirmarChange()}"/>
+			<p:commandButton value="Não" onclick="changeTipoBarragemSemPonto.hide();" global="false" action="#{fceIntervencaoBarragemControllerSemPonto.naoConfirmarChange()}"/>
+		</h:form>
+	</p:confirmDialog> <!-- Fim do confirmar Change -->
+	
+</html>

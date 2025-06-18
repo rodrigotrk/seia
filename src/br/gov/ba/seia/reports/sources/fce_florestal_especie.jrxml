@@ -1,0 +1,415 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="fce_florestal_especie" pageWidth="495" pageHeight="802" whenNoDataType="AllSectionsNoDetail" columnWidth="495" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="23a85567-1459-48ab-9145-7f14facfb1a2">
+	<property name="ireport.zoom" value="2.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="ide_fce_florestal" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT this_.ide_especie_florestal_autorizacao,
+        this_.volume_total_fora_app,
+        this_.volume_total_em_app,
+	npe4_.nom_popular_especie,
+	ef3_.nom_especie_florestal,
+	(select array_to_string (array (select dsa2.dsc_destino_socioeconomico
+from especie_florestal_aut_destino_socio_economico espe2
+inner join especie_florestal_autorizacao esa2 on (esa2.ide_especie_florestal_autorizacao=espe2.ide_especie_florestal_autorizacao)
+inner join destino_socioeconomico dsa2 on espe2.ide_destino_socioeconomico = dsa2.ide_destino_socioeconomico
+where esa2.ide_especie_florestal_autorizacao = this_.ide_especie_florestal_autorizacao),'\n')) as destinos,
+       p2_.dsc_produto
+FROM especie_florestal_autorizacao this_
+LEFT OUTER JOIN especie_florestal ef3_ ON this_.ide_especie_florestal=ef3_.ide_especie_florestal
+LEFT OUTER JOIN tipo_especie_florestal tef5_ ON ef3_.ide_tipo_especie_florestal=tef5_.ide_tipo_especie_florestal
+LEFT OUTER JOIN nome_popular_especie npe4_ ON this_.ide_nome_popular_especie=npe4_.ide_nome_popular_especie
+INNER JOIN produto p2_ ON this_.ide_produto=p2_.ide_produto
+WHERE this_.ide_fce_florestal=$P{ide_fce_florestal}
+  AND (tef5_.ide_tipo_especie_florestal=1
+       OR tef5_.ide_tipo_especie_florestal IS NULL)]]>
+	</queryString>
+	<field name="ide_especie_florestal_autorizacao" class="java.lang.Integer"/>
+	<field name="volume_total_fora_app" class="java.lang.Double"/>
+	<field name="volume_total_em_app" class="java.lang.Double"/>
+	<field name="nom_popular_especie" class="java.lang.String"/>
+	<field name="nom_especie_florestal" class="java.lang.String"/>
+	<field name="destinos" class="java.lang.String"/>
+	<field name="dsc_produto" class="java.lang.String"/>
+	<variable name="SOMA_VOL_TOTAL_FORA_M3" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[$F{volume_total_fora_app}]]></variableExpression>
+	</variable>
+	<variable name="SOMA_VOL_TOTAL_FORA_ST" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[$F{volume_total_fora_app} * 1.5]]></variableExpression>
+	</variable>
+	<variable name="SOMA_VOL_TOTAL_FORA_MDC" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[$F{volume_total_fora_app} * 0.5]]></variableExpression>
+	</variable>
+	<variable name="SOMA_VOL_TOTAL_EM_M3" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[$F{volume_total_em_app}]]></variableExpression>
+	</variable>
+	<variable name="SOMA_VOL_TOTAL_EM_ST" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[$F{volume_total_em_app} * 1.5]]></variableExpression>
+	</variable>
+	<variable name="SOMA_VOL_TOTAL_EM_MDC" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[$F{volume_total_em_app} * 0.5]]></variableExpression>
+	</variable>
+	<title>
+		<band height="49" splitType="Stretch">
+			<elementGroup>
+				<staticText>
+					<reportElement uuid="a85a25ff-e183-4728-abe4-908d5b1a0adb" x="72" y="22" width="80" height="26"/>
+					<box topPadding="0" leftPadding="0">
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.0"/>
+						<leftPen lineWidth="0.0"/>
+						<bottomPen lineWidth="0.0"/>
+						<rightPen lineWidth="0.0"/>
+					</box>
+					<textElement verticalAlignment="Middle">
+						<font fontName="SansSerif" size="8" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Nome cientifico]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="c2d8647c-e876-4a18-b76e-80f239666962" x="348" y="22" width="143" height="26"/>
+					<box topPadding="0" leftPadding="0">
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.0"/>
+						<leftPen lineWidth="0.0"/>
+						<bottomPen lineWidth="0.0"/>
+						<rightPen lineWidth="0.0"/>
+					</box>
+					<textElement verticalAlignment="Middle">
+						<font fontName="SansSerif" size="8" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Destino socioeconômico do produto]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="5027c493-2f2c-43b6-9c25-c1cba4cf4ea8" positionType="Float" mode="Opaque" x="0" y="0" width="495" height="15" isRemoveLineWhenBlank="true" backcolor="#DDDDDD"/>
+					<box>
+						<topPen lineWidth="0.0"/>
+						<leftPen lineWidth="0.0"/>
+						<bottomPen lineWidth="0.0"/>
+						<rightPen lineWidth="0.0"/>
+					</box>
+					<textElement verticalAlignment="Middle">
+						<font fontName="SansSerif" isBold="true"/>
+						<paragraph leftIndent="2"/>
+					</textElement>
+					<text><![CDATA[Especies selecionadas]]></text>
+				</staticText>
+				<line>
+					<reportElement uuid="48d56f3f-0497-4280-9d66-2fd3f0b885e9" positionType="Float" stretchType="RelativeToBandHeight" x="0" y="22" width="1" height="26"/>
+					<graphicElement>
+						<pen lineWidth="0.5"/>
+					</graphicElement>
+				</line>
+				<line>
+					<reportElement uuid="48d56f3f-0497-4280-9d66-2fd3f0b885e9" positionType="Float" stretchType="RelativeToBandHeight" x="154" y="22" width="1" height="26"/>
+					<graphicElement>
+						<pen lineWidth="0.5"/>
+					</graphicElement>
+				</line>
+				<line>
+					<reportElement uuid="48d56f3f-0497-4280-9d66-2fd3f0b885e9" positionType="Float" stretchType="RelativeToBandHeight" x="242" y="22" width="1" height="26"/>
+					<graphicElement>
+						<pen lineWidth="0.5"/>
+					</graphicElement>
+				</line>
+				<line>
+					<reportElement uuid="48d56f3f-0497-4280-9d66-2fd3f0b885e9" positionType="Float" stretchType="RelativeToBandHeight" x="494" y="22" width="1" height="26"/>
+					<graphicElement>
+						<pen lineWidth="0.5"/>
+					</graphicElement>
+				</line>
+				<line>
+					<reportElement uuid="80f8b864-8479-47fe-861e-07690e34284f" positionType="Float" x="1" y="48" width="494" height="1" isPrintWhenDetailOverflows="true"/>
+					<graphicElement>
+						<pen lineWidth="0.5"/>
+					</graphicElement>
+				</line>
+				<line>
+					<reportElement uuid="80f8b864-8479-47fe-861e-07690e34284f" positionType="Float" x="1" y="22" width="493" height="1" isPrintWhenDetailOverflows="true"/>
+					<graphicElement>
+						<pen lineWidth="0.5"/>
+					</graphicElement>
+				</line>
+				<staticText>
+					<reportElement uuid="c821ec69-7cac-44f4-8ed3-5af03d671e91" x="157" y="22" width="85" height="26"/>
+					<box topPadding="0" leftPadding="0">
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.0"/>
+						<leftPen lineWidth="0.0"/>
+						<bottomPen lineWidth="0.0"/>
+						<rightPen lineWidth="0.0"/>
+					</box>
+					<textElement verticalAlignment="Middle">
+						<font fontName="SansSerif" size="8" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Nome vulgar]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="426aae6e-f9f4-4b16-a4ec-baf9550247e1" x="244" y="22" width="103" height="26"/>
+					<box topPadding="0" leftPadding="0">
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.0"/>
+						<leftPen lineWidth="0.0"/>
+						<bottomPen lineWidth="0.0"/>
+						<rightPen lineWidth="0.0"/>
+					</box>
+					<textElement verticalAlignment="Middle">
+						<font fontName="SansSerif" size="8" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Volume total]]></text>
+				</staticText>
+				<line>
+					<reportElement uuid="49684603-7d32-48e8-b984-63a9ea4e2773" positionType="Float" stretchType="RelativeToBandHeight" x="346" y="22" width="1" height="26"/>
+					<graphicElement>
+						<pen lineWidth="0.5"/>
+					</graphicElement>
+				</line>
+				<staticText>
+					<reportElement uuid="e7329668-03ea-481b-b091-b119ad9bac5a" x="2" y="23" width="65" height="26"/>
+					<box topPadding="0" leftPadding="0">
+						<pen lineWidth="0.5"/>
+						<topPen lineWidth="0.0"/>
+						<leftPen lineWidth="0.0"/>
+						<bottomPen lineWidth="0.0"/>
+						<rightPen lineWidth="0.0"/>
+					</box>
+					<textElement verticalAlignment="Middle">
+						<font fontName="SansSerif" size="8" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Produto gerado]]></text>
+				</staticText>
+				<line>
+					<reportElement uuid="02a4ebf9-49a3-4ca2-ab15-7d5f085270f8" positionType="Float" stretchType="RelativeToBandHeight" x="69" y="23" width="1" height="26"/>
+					<graphicElement>
+						<pen lineWidth="0.5"/>
+					</graphicElement>
+				</line>
+			</elementGroup>
+		</band>
+	</title>
+	<detail>
+		<band height="38" splitType="Immediate">
+			<textField isStretchWithOverflow="true">
+				<reportElement uuid="e684d774-ae6c-4ed1-b59c-8d883c2bdd55" x="348" y="1" width="144" height="36"/>
+				<box topPadding="0" leftPadding="0">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Justified" verticalAlignment="Middle">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{destinos}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement uuid="80f8b864-8479-47fe-861e-07690e34284f" positionType="Float" x="1" y="37" width="494" height="1" isPrintWhenDetailOverflows="true"/>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</line>
+			<line>
+				<reportElement uuid="48d56f3f-0497-4280-9d66-2fd3f0b885e9" positionType="Float" stretchType="RelativeToBandHeight" x="0" y="0" width="1" height="37"/>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</line>
+			<line>
+				<reportElement uuid="48d56f3f-0497-4280-9d66-2fd3f0b885e9" positionType="Float" stretchType="RelativeToBandHeight" x="154" y="0" width="1" height="37"/>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</line>
+			<line>
+				<reportElement uuid="48d56f3f-0497-4280-9d66-2fd3f0b885e9" positionType="Float" stretchType="RelativeToBandHeight" x="242" y="0" width="1" height="37"/>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</line>
+			<line>
+				<reportElement uuid="48d56f3f-0497-4280-9d66-2fd3f0b885e9" positionType="Float" stretchType="RelativeToBandHeight" x="346" y="0" width="1" height="37"/>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</line>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="05b1fa72-10ef-459d-9cee-d56e64fb57dd" x="72" y="1" width="80" height="36" isPrintWhenDetailOverflows="true"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nom_especie_florestal}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="b8e4d3b6-8b34-428f-acd4-33ecf83a6a72" x="157" y="1" width="85" height="36" isPrintWhenDetailOverflows="true"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nom_popular_especie}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement uuid="715e7c82-728c-4af5-99b3-9acf5e207e6a" positionType="Float" stretchType="RelativeToBandHeight" x="494" y="0" width="1" height="38"/>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</line>
+			<textField pattern="#,##0.00" isBlankWhenNull="true">
+				<reportElement uuid="30750a93-7063-48b2-87b3-4827dc035f99" x="269" y="1" width="77" height="12">
+					<printWhenExpression><![CDATA[$F{volume_total_fora_app} > 0]]></printWhenExpression>
+				</reportElement>
+				<textElement>
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{volume_total_fora_app}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00" isBlankWhenNull="true">
+				<reportElement uuid="8348231f-c1f3-41d4-b11d-6a1b04e04cc1" x="269" y="13" width="77" height="12">
+					<printWhenExpression><![CDATA[$F{volume_total_fora_app} > 0]]></printWhenExpression>
+				</reportElement>
+				<textElement>
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{volume_total_fora_app} * 1.5]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00" isBlankWhenNull="true">
+				<reportElement uuid="18142652-7e36-4c5e-b0a7-42cc93ff7899" x="269" y="25" width="77" height="12">
+					<printWhenExpression><![CDATA[$F{volume_total_fora_app} > 0]]></printWhenExpression>
+				</reportElement>
+				<textElement>
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{volume_total_fora_app} * 0.5]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="93384e3f-0785-4510-897f-0d2726f9d742" x="244" y="1" width="25" height="12">
+					<printWhenExpression><![CDATA[$F{volume_total_fora_app} > 0]]></printWhenExpression>
+				</reportElement>
+				<textElement>
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<text><![CDATA[m³]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="051aabf8-da86-4d69-9be4-ddc4eb7f6807" x="244" y="13" width="25" height="12">
+					<printWhenExpression><![CDATA[$F{volume_total_fora_app} > 0]]></printWhenExpression>
+				</reportElement>
+				<textElement>
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<text><![CDATA[st]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="cc92bc85-656a-4e89-8830-934a6f13baaf" x="244" y="25" width="25" height="12">
+					<printWhenExpression><![CDATA[$F{volume_total_fora_app} > 0]]></printWhenExpression>
+				</reportElement>
+				<textElement>
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<text><![CDATA[MDC]]></text>
+			</staticText>
+			<line>
+				<reportElement uuid="68e7011c-b66c-402a-8115-74ccc8b25195" positionType="Float" stretchType="RelativeToBandHeight" x="69" y="0" width="1" height="37"/>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</line>
+			<textField>
+				<reportElement uuid="ab4ad8fe-399a-4fe0-8828-d809cb42a286" x="2" y="1" width="65" height="36" isPrintWhenDetailOverflows="true"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dsc_produto}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="40">
+			<staticText>
+				<reportElement uuid="11ba5eba-5546-44eb-a286-1cae33c55862" isPrintRepeatedValues="false" x="2" y="0" width="241" height="38" isPrintInFirstWholeBand="true"/>
+				<box topPadding="0" leftPadding="0">
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Total dos volumes]]></text>
+			</staticText>
+			<textField pattern="#,##0.00" isBlankWhenNull="true">
+				<reportElement uuid="d0038c11-d522-4558-b4ed-b3643e2690ab" x="269" y="1" width="77" height="12"/>
+				<textElement>
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{SOMA_VOL_TOTAL_FORA_M3}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="4c3f7909-e9c7-469c-b27d-77de0644e97c" x="244" y="1" width="25" height="12"/>
+				<textElement>
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<text><![CDATA[m³]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="8e89fe63-af7f-4ebd-a901-fe6fea556078" x="244" y="13" width="25" height="12"/>
+				<textElement>
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<text><![CDATA[st]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="d87698d6-0c14-4e6c-a05b-dc29ccdaf6c3" x="244" y="25" width="25" height="12"/>
+				<textElement>
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<text><![CDATA[MDC]]></text>
+			</staticText>
+			<line>
+				<reportElement uuid="8c2fa99f-8771-49f6-a2da-303b55ccd633" positionType="Float" stretchType="RelativeToBandHeight" x="1" y="38" width="493" height="1"/>
+			</line>
+			<line>
+				<reportElement uuid="f50d0737-d24b-4ddf-a9db-2c76a2db1aa5" positionType="Float" stretchType="RelativeToBandHeight" x="0" y="0" width="1" height="38"/>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</line>
+			<line>
+				<reportElement uuid="91fdae44-5e9d-47ef-9678-8158e240291f" positionType="Float" stretchType="RelativeToBandHeight" x="242" y="0" width="1" height="38"/>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</line>
+			<line>
+				<reportElement uuid="0489af12-5b90-46a8-9a0c-f761c46a5f21" positionType="Float" stretchType="RelativeToBandHeight" x="346" y="0" width="1" height="38"/>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</line>
+			<textField pattern="#,##0.00" isBlankWhenNull="true">
+				<reportElement uuid="dbf282c8-ffa9-48bd-9091-1d1bb6bb7499" x="269" y="13" width="77" height="12"/>
+				<textElement>
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{SOMA_VOL_TOTAL_FORA_ST}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00" isBlankWhenNull="true">
+				<reportElement uuid="01a8e363-8a60-47b7-9705-0f1bbb7767a1" x="269" y="25" width="77" height="12"/>
+				<textElement>
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{SOMA_VOL_TOTAL_FORA_MDC}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement uuid="aed997a1-deea-4f66-80aa-3cb53e3baaef" positionType="Float" stretchType="RelativeToBandHeight" x="494" y="0" width="1" height="38"/>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</line>
+		</band>
+	</columnFooter>
+</jasperReport>

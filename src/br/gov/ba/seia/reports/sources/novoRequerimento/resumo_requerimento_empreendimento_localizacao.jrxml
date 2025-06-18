@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="resumo_requerimento_empreendimento_localizacao" language="java" pageWidth="450" pageHeight="802" columnWidth="450" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="86805411-4c33-40fa-8ee3-a379747851ed">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="ide_empreendimento" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[select
+	sc.nom_sistema_coordenada,
+	ST_Y(dg.the_geom) as latitude,
+	ST_X(dg.the_geom) as logitude
+from empreendimento e
+inner join localizacao_geografica lg on e.ide_localizacao_geografica=lg.ide_localizacao_geografica
+inner join sistema_coordenada sc on sc.ide_sistema_coordenada = lg.ide_sistema_coordenada
+inner join dado_geografico dg on dg.ide_localizacao_geografica = lg.ide_localizacao_geografica
+where ide_classificacao_secao = 1
+and e.ide_empreendimento = $P{ide_empreendimento}]]>
+	</queryString>
+	<field name="nom_sistema_coordenada" class="java.lang.String"/>
+	<field name="latitude" class="java.lang.Double"/>
+	<field name="logitude" class="java.lang.Double"/>
+	<columnHeader>
+		<band height="15" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="d008a644-20db-4c7c-91df-e9edd3c30e05" positionType="Float" mode="Transparent" x="0" y="0" width="424" height="14" backcolor="#DDDDDD"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif" isBold="true"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<text><![CDATA[Localização Geográfica]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="34" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="246572c8-359d-4370-bb35-252ee5debfb5" x="12" y="0" width="170" height="17"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[Sistema de coordenada:]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="7f10097f-f83f-4af1-a083-5e93c7abe821" x="12" y="17" width="170" height="17"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{nom_sistema_coordenada}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="9a8fa039-3b6b-4506-a0db-9de7eafc67c5" x="182" y="0" width="109" height="17"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[Latitude:]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="17773b99-7cc5-4337-9dd7-6296afa7f7c1" x="182" y="17" width="109" height="17"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{latitude}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="78c479e5-79b9-460a-93a8-1d58dafe8cd0" x="291" y="0" width="145" height="17"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[Longitude:]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="9c8d8d21-6c2a-4ac0-87db-8e4938ac1168" x="291" y="17" width="145" height="17"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{logitude}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

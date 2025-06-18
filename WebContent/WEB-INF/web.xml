@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+			xmlns="http://java.sun.com/xml/ns/javaee" 
+			xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" 
+			xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd" 
+			id="WebApp_ID" 
+			version="3.0">
+  
+	 <display-name>SEIA</display-name>
+	 
+	 <session-config>
+	 	<session-timeout>20</session-timeout>
+	 </session-config>
+	 
+	 <welcome-file-list>
+	 	<welcome-file>index.jsp</welcome-file>
+	 </welcome-file-list>
+	 
+	 <error-page>
+	 	<exception-type>br.gov.ba.seia.exception.SeiaUserLimitException</exception-type>
+	 	<location>/erro/erro_capacidade_maxima.xhtml</location>
+	 </error-page>
+	 
+	 <error-page>
+	 	<exception-type>br.gov.ba.seia.exception.SeiaCaptchaException</exception-type>
+	 	<location>/login.xhtml?captcha_erro=true</location>
+	 </error-page>
+	 
+	 <servlet>
+	 	<servlet-name>DownloadServlet</servlet-name>
+	 	<servlet-class>br.gov.ba.seia.servlets.DownloadServlet</servlet-class>
+	 </servlet>
+	 <servlet-mapping>
+	 	<servlet-name>DownloadServlet</servlet-name>
+	 	<url-pattern>/download/*</url-pattern>
+	 </servlet-mapping>
+	 
+	 <servlet>
+	 	<servlet-name>DownloadPortariaServlet</servlet-name>
+	 	<servlet-class>br.gov.ba.seia.servlets.DownloadPortariaServlet</servlet-class>
+	 </servlet>
+	 <servlet-mapping>
+	 	<servlet-name>DownloadPortariaServlet</servlet-name>
+	 	<url-pattern>/portaria/*</url-pattern>
+	 </servlet-mapping>
+	 
+	 <servlet>
+	 	<servlet-name>DownloadAvisoCARServlet</servlet-name>
+	 	<servlet-class>br.gov.ba.seia.servlets.DownloadAvisoCARServlet</servlet-class>
+	 </servlet>
+	 <servlet-mapping>
+	 	<servlet-name>DownloadAvisoCARServlet</servlet-name>
+	 	<url-pattern>/aviso-car-lote/*</url-pattern>
+	 </servlet-mapping>
+	 
+	 <servlet>
+		<servlet-name>Faces Servlet</servlet-name>
+		<servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
+		<load-on-startup>1</load-on-startup>
+	 </servlet>
+	 <servlet>
+	 	<servlet-name>javax.ws.rs.core.Application</servlet-name>
+		<servlet-class>br.gov.ba.ws.SseApl</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>javax.ws.rs.core.Application</servlet-name>
+		<url-pattern>/sse/*</url-pattern>
+	</servlet-mapping>
+	 
+	<servlet-mapping>
+	  <servlet-name>Faces Servlet</servlet-name>
+	  <url-pattern>*.xhtml</url-pattern>
+	</servlet-mapping>  
+	 
+	 <!-- Configuração Tema Aristo Primefaces -->
+	<context-param>
+		<param-name>primefaces.THEME</param-name>
+		<param-value>aristo</param-value>
+	</context-param>
+	 <!-- Fim Configuração Tema Aristo Primefaces  -->
+	
+	<!-- Esconder os comentarios das paginas -->
+	<context-param>
+		<param-name>javax.faces.FACELETS_SKIP_COMMENTS</param-name>
+		<param-value>true</param-value>
+	</context-param>
+	<context-param>
+	   	<param-name>javax.faces.FACELETS_LIBRARIES</param-name>
+	   	<param-value>/WEB-INF/functions.taglib.xml</param-value>
+	</context-param>
+	<context-param>
+		<param-name>primefaces.PUBLIC_CAPTCHA_KEY</param-name>
+		<param-value>6LdlkqYUAAAAAAAbsjkIaRChmgo0hWa8YE00D5R_</param-value>
+	</context-param>
+	<!-- Para usar o timezone do sistema nos datetimeconverter -->
+	<context-param>
+		<param-name>javax.faces.DATETIMECONVERTER_DEFAULT_TIMEZONE_IS_SYSTEM_TIMEZONE</param-name>
+		<param-value>true</param-value>
+	</context-param>
+	  
+  	<!-- Quartz Scheduler -->
+	 <listener>
+	 	<listener-class>br.gov.ba.seia.util.schedule.SeiaScheduler</listener-class>
+	</listener>
+	 
+	<!-- <listener>
+	   	<listener-class>br.gov.ba.seia.util.schedule.ComunicacaoScheduler</listener-class>
+	</listener> -->    
+	
+	<!-- Spring security -->
+	<listener>
+	  <listener-class>
+	    org.springframework.security.web.session.HttpSessionEventPublisher
+	  </listener-class>
+	</listener>
+	<listener>
+		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+	</listener> 
+	 <filter>
+		<filter-name>springSecurityFilterChain</filter-name>
+		<filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+	 </filter>
+	<filter-mapping>
+	     <filter-name>springSecurityFilterChain</filter-name>
+	     <url-pattern>/*</url-pattern>
+	</filter-mapping> 
+	<!-- Fim spring security -->	
+	
+	<!--   Upload de arquivo -->
+	<filter>
+			<filter-name>PrimeFaces FileUpload Filter</filter-name>
+			<filter-class>
+				org.primefaces.webapp.filter.FileUploadFilter
+			</filter-class>
+	</filter>  
+	<filter-mapping>
+			<filter-name>PrimeFaces FileUpload Filter</filter-name>
+			<servlet-name>Faces Servlet</servlet-name>
+	</filter-mapping>
+	<!--   Fim Upload de arquivo -->    
+	 
+	 <filter>
+	   <filter-name>CustomCharacterEncodingFilter</filter-name>
+	   <filter-class>br.gov.ba.seia.util.CustomCharacterEncodingFilter</filter-class>
+	</filter>
+	<filter-mapping>
+	   <filter-name>CustomCharacterEncodingFilter</filter-name>
+	   <url-pattern>/*</url-pattern>
+	</filter-mapping> 
+	
+	<!-- Parar de dar erro no component xhtml s: 
+	<context-param>
+		<param-name>com.sun.faces.enableMissingResourceLibraryDetection</param-name>
+		<param-value>true</param-value>
+	</context-param>
+	-->
+	
+	<!-- HTTPS -->
+	<!-- <security-constraint>
+	
+		<web-resource-collection>
+	
+			<web-resource-name>https</web-resource-name>
+	
+			<url-pattern>/*</url-pattern>
+	
+		</web-resource-collection>
+	
+		<user-data-constraint>
+	
+			<transport-guarantee>CONFIDENTIAL</transport-guarantee>
+	
+		</user-data-constraint>
+	
+	</security-constraint> --> 
+	<!-- FIM HTTPS -->	
+</web-app>

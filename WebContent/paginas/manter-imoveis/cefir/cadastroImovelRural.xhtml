@@ -1,0 +1,697 @@
+<ui:composition
+	  xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.prime.com.tr/ui"
+      template="/layout/template.xhtml"
+      xmlns:func="http://example.com/functions">
+      
+	<ui:define name="titulo-pagina">
+		<h3><h:outputLabel styleClass="titulo-grupo" style="font-weight:bold;"	value="#{bundle.cefir_lbl_cadastro_imovel}"/></h3>
+	</ui:define>
+	
+	<ui:define name="conteudo-principal">
+		 
+		<h:form>
+<!-- 			<p:poll interval="1" listener="#{imovelRuralControllerNew.atualizarPoll}" widgetVar="imovelRuralPoll" global="false"/> -->
+		</h:form>
+	 
+		<h3><h:outputText value="#{bundle.cefir_lbl_contrato_assuntos_relacionado_cadastro}" styleClass="titulo-grupo" style="font-size: 12px; font-weight: bold;"/></h3>
+		<p:spacer width="1" height="10"/>		
+			
+		<h:panelGrid columns="3">
+			<h:outputText value="#{bundle.requerimentoUnicoLabelRequerente}" style="font-size: 11px;font-weight: bold;" rendered="#{!imovelRuralControllerNew.showPCT}"/>
+			<h:outputText value="Representante da comunidade" style="font-size: 11px;font-weight: bold;" rendered="#{imovelRuralControllerNew.showPCT}"/>
+			<p:spacer width="20" height="10" />
+			<h:outputText value="#{bundle.requerimentoUnicoLabelCNPJCPF}" style="font-size: 11px;font-weight: bold;" />
+			<h:outputText value="#{imovelRuralControllerNew.requerenteCadastro.nomeRazao}" />
+			<p:spacer width="20" height="10" />
+			<h:panelGrid>
+				<h:outputText value="#{imovelRuralControllerNew.requerenteCadastro.pessoaJuridica.numCnpj}">
+					<f:converter converterId="cnpjConverter" />
+				</h:outputText>
+				<h:outputText value="#{imovelRuralControllerNew.requerenteCadastro.pessoaFisica.numCpf}">
+					<f:converter converterId="cpfConverter" />
+				</h:outputText>
+			</h:panelGrid>
+		</h:panelGrid>
+			
+		<h:panelGrid columns="3">
+			<h:outputText value="#{bundle.requerimentoUnicoLabelTelefone}" style="font-size: 11px;font-weight: bold;" />
+		 	<p:spacer width="20" height="10" />
+			<h:outputText value="#{bundle.requerimentoUnicoLabelEmail}"  style="font-size: 11px;font-weight: bold;" />
+			<h:outputText value="#{imovelRuralControllerNew.telefoneRequerente}" />
+			<p:spacer width="20" height="10" />
+			<h:outputText value="#{imovelRuralControllerNew.requerenteCadastro.desEmail}" rendered="#{not empty imovelRuralControllerNew.requerenteCadastro.desEmail}"/>
+			<h:outputText value="#{imovelRuralControllerNew.email}" rendered="#{empty imovelRuralControllerNew.requerenteCadastro.desEmail}"/>	
+		</h:panelGrid>
+		<br />
+	
+		<h:panelGrid columns="3" rendered="#{imovelRuralControllerNew.procuradorCadastro != null}">
+			<h:outputText value="#{bundle.procuradorLabelCabecalho}/Representante Legal" style="font-size: 11px;font-weight: bold;" />
+			<p:spacer width="20" height="10" />
+			<h:outputText value="#{bundle.requerimentoUnicoLabelCNPJCPF}" style="font-size: 11px;font-weight: bold;" />	
+				
+			<h:outputText value="#{imovelRuralControllerNew.procuradorCadastro.nomeRazao}" />
+			<p:spacer width="20" height="10" />
+			<h:panelGrid>
+				<h:outputText value="#{imovelRuralControllerNew.procuradorCadastro.pessoaJuridica.numCnpj}"> 
+					<f:converter converterId="cnpjConverter" />
+				</h:outputText>
+				<h:outputText value="#{imovelRuralControllerNew.procuradorCadastro.pessoaFisica.numCpf}">
+					<f:converter converterId="cpfConverter" />
+				</h:outputText>
+			</h:panelGrid>
+		</h:panelGrid>
+		
+		
+		<h:panelGrid columns="3" rendered="#{imovelRuralControllerNew.procuradorCadastro != null}">
+			<h:outputText value="#{bundle.requerimentoUnicoLabelTelefone}" style="font-size: 11px;font-weight: bold;" />
+		 	<p:spacer width="20" height="10" />
+			<h:outputText value="#{bundle.requerimentoUnicoLabelEmail}"  style="font-size: 11px;font-weight: bold;" />
+			<h:outputText value="#{imovelRuralControllerNew.telefoneProcurador}" />
+			<p:spacer width="20" height="10" />
+			<h:outputText value="#{imovelRuralControllerNew.procuradorCadastro.desEmail}" />	
+		</h:panelGrid>
+			
+			
+			
+		<h:form id="formCadImovelRural">
+			<p:remoteCommand name="msgQuestionario" update="growMsg" process="@this"/>
+			<p:wizard widgetVar="wiz" flowListener="#{imovelRuralControllerNew.onFlowProcess}"  backLabel="Anterior" nextLabel="Próximo"  showNavBar="true" showStepStatus="true">
+				
+				<p:tab id="dadosBasicosTab" title="Dados Básicos" closable="true">
+					<ui:include src="/paginas/manter-imoveis/cefir/includes/dadosBasicos.xhtml" />
+				</p:tab>
+				
+				<p:tab id="documentacaoTab" title="Documentação">
+					<ui:include src="/paginas/manter-imoveis/cefir/includes/imovelProprietario.xhtml" />
+				</p:tab>
+	
+				<p:tab id="localizacaoGeograficaTab" title="Limite do Imóvel" titletip="Limite do assentamento rural">
+					<ui:include src="/paginas/manter-imoveis/cefir/includes/localizacaoGeografica.xhtml" />
+				</p:tab>
+												
+				<p:tab id="questionarioTab" title="Questionário">
+					<ui:include src="/paginas/manter-imoveis/cefir/includes/questionario.xhtml" />
+				</p:tab>
+				
+				<p:tab id="dadosEspecificosTab" title="Dados Específicos" rendered="#{imovelRuralControllerNew.habilitaCadastroAmbiental or imovelRuralControllerNew.imovelRural.faseAssentamentoImovelRuralImplantado}">
+					<ui:include src="/paginas/manter-imoveis/cefir/includes/dadosEspecificos.xhtml" />					
+				</p:tab>	
+							
+				<p:tab id="confirmacaoTab" title="Confirmação">
+					<ui:include src="/paginas/manter-imoveis/cefir/includes/confirmacao.xhtml" />
+				</p:tab>
+			</p:wizard>
+		</h:form>
+			
+		<p:dialog dynamic="true" id="dlgUploadShapeImovelRural"
+			header="Upload Arquivo"  closable="true" width="600" 
+			widgetVar="dlgUploadShapeImovelRural" resizable="false" modal="true" position="center">
+			<ui:include src="/paginas/manter-imoveis/cefir/includes/includes-dados-especificos/modais/uploads/dialogUploadShapeImovelRural.xhtml" />
+		</p:dialog>
+		
+		<p:dialog dynamic="true" id="dlgUploadShapeLote"
+			header="Upload Arquivo"  closable="true" width="600" 
+			widgetVar="dlgUploadShapeLote" resizable="false" modal="true" position="center">
+			<ui:include src="/paginas/manter-imoveis/cefir/includes/includes-dados-especificos/modais/uploads/dialogUploadShapeLote.xhtml" />
+		</p:dialog>
+				
+		<p:dialog dynamic="true" id="dlgUploadShapeRl"
+			header="Upload Arquivo" closable="true" width="600"
+			widgetVar="dlgUploadShapeRl" resizable="false" modal="true" position="center">
+			<ui:include src="/paginas/manter-imoveis/cefir/includes/includes-dados-especificos/modais/uploads/dialogUploadShapeRl.xhtml" />
+		</p:dialog>
+		
+		<p:dialog dynamic="true" id="dlgUploadShapePradRl"
+			header="Upload Arquivo" closable="true" width="600"
+			widgetVar="dlgUploadShapePradRl" resizable="false" modal="true" position="center">
+			<ui:include src="/paginas/manter-imoveis/cefir/includes/includes-dados-especificos/modais/uploads/dialogUploadShapePradRl.xhtml" />
+		</p:dialog>
+		
+		<p:dialog dynamic="true" id="dlgUploadPradRl"
+			header="Upload Arquivo"  closable="true" width="600"
+			widgetVar="dlgUploadPradRl" resizable="false" modal="true" position="center">
+			<ui:include src="/paginas/manter-imoveis/cefir/includes/includes-dados-especificos/modais/uploads/dialogUploadPradRl.xhtml" />
+		</p:dialog>
+		
+		<p:dialog dynamic="true" id="dlgUploadShapeVn"
+			header="Upload Arquivo"  closable="true" width="600"
+			widgetVar="dlgUploadShapeVn" resizable="false" modal="true" position="center">
+			<ui:include src="/paginas/manter-imoveis/cefir/includes/includes-dados-especificos/modais/uploads/dialogUploadShapeVn.xhtml" />
+		</p:dialog>
+
+		<p:dialog dynamic="true" id="dlgUploadShapeArc"
+			header="Upload Arquivo"  closable="true" width="600"
+			widgetVar="dlgUploadShapeArc" resizable="false" modal="true" position="center">
+			<ui:include src="/paginas/manter-imoveis/cefir/includes/includes-dados-especificos/modais/uploads/dialogUploadShapeArc.xhtml" />
+		</p:dialog>
+		
+		<p:dialog dynamic="true" id="dlgUploadShapeApp"
+			header="Upload Arquivo" closable="true" width="600"
+			widgetVar="dlgUploadShapeApp" resizable="false" modal="true" position="center">
+			<ui:include src="/paginas/manter-imoveis/cefir/includes/includes-dados-especificos/modais/uploads/dialogUploadShapeApp.xhtml" />
+		</p:dialog>
+		
+		<p:dialog dynamic="true" id="dlgUploadShapePradApp"
+			header="Upload Arquivo" closable="true" width="600"
+			widgetVar="dlgUploadShapePradApp" resizable="false" modal="true" position="center">
+			<ui:include src="/paginas/manter-imoveis/cefir/includes/includes-dados-especificos/modais/uploads/dialogUploadShapePradApp.xhtml" />
+		</p:dialog>
+		
+		<p:dialog dynamic="true" id="dlgUploadPradApp"
+			header="Upload Arquivo"  closable="true" width="600"
+			widgetVar="dlgUploadPradApp" resizable="false" modal="true" position="center">
+			<ui:include src="/paginas/manter-imoveis/cefir/includes/includes-dados-especificos/modais/uploads/dialogUploadPradApp.xhtml" />
+		</p:dialog>
+		
+		<p:dialog dynamic="true" id="dlgUploadShapeAp"
+			header="Upload Arquivo"  closable="true" width="600"
+			widgetVar="dlgUploadShapeAp" resizable="false" modal="true" position="center">
+			<ui:include src="/paginas/manter-imoveis/cefir/includes/includes-dados-especificos/modais/uploads/dialogUploadShapeAp.xhtml" />
+		</p:dialog>
+		
+		<p:dialog dynamic="true" id="dlgUploadPradOp"
+			header="Upload Arquivo"  closable="true" width="600"
+			widgetVar="dlgUploadPradOp" resizable="false" modal="true" position="center">
+			<ui:include src="/paginas/manter-imoveis/cefir/includes/includes-dados-especificos/modais/uploads/dialogUploadPradOp.xhtml" />
+		</p:dialog>
+		
+		<p:dialog dynamic="true" id="dlgCadRespTecnico"
+			header="Responsável Técnico "  closable="true"
+			widgetVar="dlgCadRespTecnico" resizable="false" modal="true" onShow="dlgCadRespTecnico.initPosition();" position="center">
+			<ui:include src="/paginas/manter-imoveis/cefir/includes/includes-dados-especificos/modais/modalResponsavelTecnico.xhtml" />
+		</p:dialog>
+		
+		<p:dialog dynamic="true" id="dlgCadApp"
+			header="#{bundle.cefir_lbl_app}" closable="true" height="500" width="675"
+			widgetVar="dlgCadApp" resizable="false" modal="true" onShow="dlgCadApp.initPosition();" position="center">
+			<ui:include src="/paginas/manter-imoveis/cefir/includes/includes-dados-especificos/modais/modalAreaPermanente.xhtml" />
+		</p:dialog>
+		
+		<p:dialog dynamic="true" id="dlgCadAreaProdutiva"
+			header="#{bundle.cefir_lbl_atividades_desenvolvidas}"  closable="true"
+			widgetVar="dlgCadAreaProdutiva" resizable="false"  modal="true" onShow="dlgCadAreaProdutiva.initPosition();" height="450">			
+			<ui:include src="/paginas/manter-imoveis/cefir/includes/includes-dados-especificos/modais/modalAreaProdutiva.xhtml" />
+		</p:dialog>
+		
+		<p:dialog dynamic="true" id="dlgCronogramaEtapa" header="Incluir Cronograma" closable="true" onShow="dlgCronogramaEtapa.initPosition();"  resizable="false" width="455" height="200" widgetVar="dlgCronogramaEtapa" modal="true">	
+			<h:form id="formCronogramaEtapa">
+				<h:panelGrid id="pnlCronogramaEtapa">
+					<h:outputLabel value="* Atividade"/>
+					
+					<h:panelGrid id="panelcronogramaEtapa" columns="2">
+						<p:selectOneMenu id="selTipoRecuperacao" 
+							value="#{imovelRuralControllerNew.cronogramaEtapaSelecionado.ideTipoRecuperacao}" 
+							disabled="#{!imovelRuralControllerNew.habilitaCadastroAmbiental}" style="width: 260px;"
+							required="true" 
+							requiredMessage="O campo Atividade é de preenchimento obrigatório." >
+							
+							<f:selectItem itemLabel="Selecione..." />
+							<f:selectItems value="#{imovelRuralControllerNew.listaTipoRecuperacao}" var="tipoRecuperacaoRl" itemLabel="#{tipoRecuperacaoRl.dscTipoRecuperacao}" itemValue="#{tipoRecuperacaoRl}" />
+							<f:converter converterId="tipoRecuperacaoConverter" />
+							<p:ajax process="@this" update="dscOutraAtividade" oncomplete="dlgCronogramaEtapa.hide(); dlgCronogramaEtapa.show();" />
+						</p:selectOneMenu>
+						
+						<p:inputText id="dscOutraAtividade" 
+							value="#{imovelRuralControllerNew.cronogramaEtapaSelecionado.dscOutroTipoRecuperacao}" 
+							maxlength="50" 
+							required="#{imovelRuralControllerNew.cronogramaEtapaSelecionado.ideTipoRecuperacao.ideTipoRecuperacao == 9}"
+							disabled="#{imovelRuralControllerNew.cronogramaEtapaSelecionado.ideTipoRecuperacao.ideTipoRecuperacao != 9}" 
+							requiredMessage="O campo Atividade é de preenchimento obrigatório" />
+					</h:panelGrid>
+					
+					<h:panelGrid columns="5">
+						<h:outputText value="Mês início" />
+						<h:outputText value="Ano início" />
+						<h:outputText value="Mês fim" />
+						<h:outputText value="Ano fim" />
+						<h:outputText value="Realizado %" />
+						
+						<p:inputText id="mesInicio" value="#{imovelRuralControllerNew.cronogramaEtapaSelecionado.mesInicio}" maxlength="2" size="5" onkeyup="SomenteNumero(this);" required="true" requiredMessage="O campo Mês Início é de preenchimento obrigatório."/>
+						<p:inputText id="anoInicio" value="#{imovelRuralControllerNew.cronogramaEtapaSelecionado.anoInicio}" maxlength="4" size="5" onkeyup="SomenteNumero(this);" required="true" requiredMessage="O campo Ano Início é de preenchimento obrigatório."/>
+						<p:inputText id="mesFim" value="#{imovelRuralControllerNew.cronogramaEtapaSelecionado.mesFim}" maxlength="2" size="5" onkeyup="SomenteNumero(this);" required="true" requiredMessage="O campo Mês Fim é de preenchimento obrigatório."/>
+						<p:inputText id="anoFim" value="#{imovelRuralControllerNew.cronogramaEtapaSelecionado.anoFim}" maxlength="4" size="5" onkeyup="SomenteNumero(this);" required="true" requiredMessage="O campo Ano Fim é de preenchimento obrigatório."/>
+						<p:inputText id="percentual" value="#{imovelRuralControllerNew.cronogramaEtapaSelecionado.percentual}" maxlength="3" size="5" onkeyup="SomenteNumero(this);" required="true" requiredMessage="O campo Percentual Realizado é de preenchimento obrigatório."/>
+					</h:panelGrid>
+					
+					<h:panelGrid columns="1">
+						<p:commandButton 
+							actionListener="#{imovelRuralControllerNew.adicionarCronogramaEtapa(1)}" 
+							process="@this pnlCronogramaEtapa" 
+							value="Salvar" 
+							rendered="#{imovelRuralControllerNew.tipoCronogramaEtapa == 1}"                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               
+							oncomplete="if(args.validationFailed) {dlgCronogramaEtapa.hide(); dlgCronogramaEtapa.show();}" />
+							<!--Por questões de funcionamento do primefaces, o update no botão acima não funcionava. Update ocorre diretamente no form.-->	
+						<p:commandButton 
+							actionListener="#{imovelRuralControllerNew.adicionarCronogramaEtapa(2)}" 
+							process="@this pnlCronogramaEtapa" 
+							value="Salvar" 
+							update="formApp:panelTableCronogramaApp" 
+							rendered="#{imovelRuralControllerNew.tipoCronogramaEtapa == 2}" 
+							oncomplete="if(args.validationFailed) {dlgCronogramaEtapa.hide(); dlgCronogramaEtapa.show();}"/>
+							
+						<p:commandButton 
+							actionListener="#{imovelRuralControllerNew.adicionarCronogramaEtapa(3)}" 
+							process="@this pnlCronogramaEtapa" 
+							value="Salvar" 
+							update="formCadImovelRural:tabAbasDadosEspecificos:panelOP" 
+							rendered="#{imovelRuralControllerNew.tipoCronogramaEtapa == 3}" 
+							oncomplete="if(args.validationFailed) {dlgCronogramaEtapa.hide(); dlgCronogramaEtapa.show();}"/>
+					</h:panelGrid>
+				</h:panelGrid>
+			</h:form>
+		</p:dialog>
+
+		<p:dialog dynamic="true" id="dialogCompAcionaria"
+			header="#{imovelRuralControllerNew.nomeTipoVinculo}"  closable="true"
+			widgetVar="dialogCompAcionaria" resizable="false" modal="true" onShow="dialogCompAcionaria.initPosition();">
+			<ui:include src="/paginas/manter-imoveis/cefir/includes/modalIncluirProprietarioImovel.xhtml" />
+		</p:dialog>
+		
+		<p:dialog dynamic="true" id="dlgUploadDocumentoPossePropriedade"
+			header="Upload Arquivo"  closable="true" width="600"
+			widgetVar="dlgUploadDocumentoPossePropriedade" resizable="false" modal="true" position="center">
+			<ui:include src="/paginas/manter-imoveis/cefir/includes/uploadDocumento.xhtml" />
+		</p:dialog>
+
+		<p:dialog dynamic="true" id="dlgUploadDocumentoProcuradorImovel"
+			header="Upload Arquivo"  closable="true" width="600"
+			widgetVar="dlgUploadDocumentoProcuradorImovel" resizable="false" modal="true" position="center">
+			<ui:include src="/paginas/manter-imoveis/cefir/includes/uploadDocumentoProcuradorImovel.xhtml" />
+		</p:dialog>
+		
+		<p:dialog dynamic="true" id="dlgUploadDocumentoAprovacao"
+			header="Documento que comprova aprovação"  closable="true" width="600"
+			widgetVar="dlgUploadDocumentoAprovacao" resizable="false" modal="true" position="center" draggable="true">
+			<ui:include src="/paginas/manter-imoveis/cefir/includes/dialogUploadDocumentoRlAprovacao.xhtml" />
+		</p:dialog>	
+		
+		<p:dialog dynamic="true" id="dlgUploadDocumentoAverbacao"
+			header="Documento que comprova averbação"  closable="true" width="600"
+			widgetVar="dlgUploadDocumentoAverbacao" resizable="false" modal="true" position="center" draggable="true">
+			<ui:include src="/paginas/manter-imoveis/cefir/includes/dialogUploadDocumentoRlAverbacao.xhtml" />
+		</p:dialog>
+
+		<p:dialog dynamic="true" id="iddlgCaptacaoSuperficial" 
+			  widgetVar="dlgCaptacaoSuperficial"
+			  header="#{imovelRuralControllerNew.labelModalUsoAgua()}"
+			  resizable="false" closable="true"
+			  modal="true"  position="center" draggable="true"
+			  onShow="dlgCaptacaoSuperficial.initPosition();">
+			<ui:include src="/paginas/manter-imoveis/cefir/includes/includes-dados-especificos/modais/modalCaptacaoSuperficial.xhtml" />
+		</p:dialog>
+		
+		<p:dialog dynamic="true" id="dialogProcessoTramiteImovelRural" 
+			  widgetVar="dialogProcessoTramiteImovelRural" 
+			  resizable="false" closable="true"
+			  modal="true" position="center" draggable="true"
+			  onShow="dialogProcessoTramiteImovelRural.initPosition();">
+			<ui:include src="/paginas/manter-imoveis/cefir/includes/includes-dados-especificos/modais/dialogProcessoTramiteImovelRural.xhtml" />			
+		</p:dialog>
+		
+		<p:dialog dynamic="true" id="iddlgIntervencao" 
+			  header="#{bundle.cefir_lbl_ponto_de_intercencao}" 
+			  widgetVar="dlgIntervencao" 
+			  resizable="false" closable="true"
+			  modal="true"  position="center" draggable="true"
+			  onShow="dlgIntervencao.initPosition();">
+			<ui:include src="/paginas/manter-imoveis/cefir/includes/includes-dados-especificos/modais/modalIntervencao.xhtml" />
+		</p:dialog>
+		
+		<!--  Finalização cadastro -->
+		<h:form id="formBntFinalizar" >
+		<p:outputPanel autoUpdate="true">
+		<p:commandButton id="btnFinalizarCadastroImovelRural" 
+						 action="#{imovelRuralControllerNew.validaFinalizaCadImovelRuralRequerimento()}" 
+						 style="float: right; margin: -1px 69px 20px 0px;"
+						 value="#{bundle.cefir_lbl_btn_finalizar}" 
+						 rendered="#{imovelRuralControllerNew.finalizarRendered}"
+						 oncomplete="validaMensagensFinalizacao(args, false, false, false, false)" 
+						 process="@this" 
+						 ajax="true">
+		</p:commandButton>
+		</p:outputPanel>
+		<p:confirmDialog id="_confirmDialogConfirmaAceite" 
+						 widgetVar="confirmDialogConfirmaAceite" 
+						 header="Confirmação para Finalizar Cadastro" 
+						 message="#{bundle.cefir_msg_confirmacao_aceite}" 
+						 severity="alert"
+						 width="940">
+					<p:commandButton id="btnConfirmaAceiteSim" 
+									 value="#{bundle.btn_sim}"
+									 process="@this"
+									 action="#{imovelRuralControllerNew.finalizaCadImovelRuralRequerimento()}" 
+									 ajax="false" 
+									 oncomplete="confirmDialogConfirmaAceite.hide()" />
+					<p:commandButton id="btnConfirmaAceiteNao" 
+									 value="#{bundle.btn_nao}"
+									 process="@this"
+									 type="button" 
+									 onclick="confirmDialogConfirmaAceite.hide()" />
+		</p:confirmDialog>
+		
+		<p:confirmDialog id="_confirmDialogPerguntaRlmenorQueVinte" widgetVar="confirmDialogPerguntaRlmenorQueVinte" 
+			header="Confirmação para Finalizar Cadastro" severity="alert" width="940">
+			
+			<f:facet name="message">
+				<p:outputPanel autoUpdate="true">
+					<h:outputText id="perguntaRlMenorQueVinte" value="#{imovelRuralControllerNew.perguntaRlMenorQueVinte()}" />
+				</p:outputPanel>
+			</f:facet>
+			
+			<p:commandButton id="btnPerguntaRlmenorQueVinteeSim" value="#{bundle.btn_sim}" ajax="true" process="@this"
+				action="#{imovelRuralControllerNew.habilitaMensagensFinalizacao()}" 
+				oncomplete="confirmDialogPerguntaRlmenorQueVinte.hide(); validaMensagensFinalizacao(args, true, false, false, false);" />
+			
+			<p:commandButton id="btnPerguntaRlmenorQueVinteNao" value="#{bundle.btn_nao}" process="@this" ajax="true" 
+				action="#{imovelRuralControllerNew.cancelaPerguntaRlMenorQueVinte()}" 
+				oncomplete="confirmDialogPerguntaRlmenorQueVinte.hide()" />	
+		</p:confirmDialog>		
+		
+		<p:confirmDialog id="_confirmDialogRlmenorQueVinte" 
+						 widgetVar="confirmDialogRlmenorQueVinte" 
+						 header="Confirmação para Finalizar Cadastro" 
+						 message="#{bundle.cefir_msg_A009}" 
+						 severity="alert"
+						 width="940">
+				<p:commandButton id="btnRlmenorQueVinteeSim" 
+							     value="#{bundle.btn_sim}" 
+							     ajax="true"
+							     process="@this"
+							     action="#{imovelRuralControllerNew.habilitaMensagensFinalizacao()}" 
+							     oncomplete="confirmDialogRlmenorQueVinte.hide(); validaMensagensFinalizacao(args, true, true, false, false);" />
+				<p:commandButton id="btnRlmenorQueVinteNao" 
+								 value="#{bundle.btn_nao}" 
+								 type="button"
+								 process="@this"
+								 onclick="confirmDialogRlmenorQueVinte.hide()" />
+		</p:confirmDialog>
+			
+			<p:confirmDialog id="_confirmDialogSobreposicaoRlApp" 
+							 widgetVar="confirmDialogSobreposicaoRlApp" 
+							 header="Confirmação para Finalizar Cadastro" 
+							 message="#{bundle.cefir_msg_A008}" 
+							 severity="alert"
+							 width="940">
+					<p:commandButton id="btnSobreposicaoRlAppSim" 
+									 value="#{bundle.btn_sim}" 
+									 ajax="true"
+									 process="@this"
+									 action="#{imovelRuralControllerNew.habilitaMensagensFinalizacao()}" 
+									 oncomplete="confirmDialogSobreposicaoRlApp.hide(); validaMensagensFinalizacao(args, true, true, true, false);" />
+					<p:commandButton id="btnSobreposicaoRlAppNao" 
+									 value="#{bundle.btn_nao}" 
+									 type="button" 
+									 process="@this"
+									 onclick="confirmDialogSobreposicaoRlApp.hide()" />
+			</p:confirmDialog>
+			
+			<p:confirmDialog id="_confirmDialogSobreposicaoRlAp" 
+							 widgetVar="confirmDialogSobreposicaoRlAp" 
+							 header="Confirmação para Finalizar Cadastro" 
+							 message="#{bundle.cefir_msg_informacao_sobreposicao_ap}" 
+							 severity="alert"
+							 width="940">
+					<p:commandButton id="btnSobreposicaoRlApSim" 
+									 value="#{bundle.btn_sim}" 
+									 ajax="true" 
+									 process="@this"
+									 action="#{imovelRuralControllerNew.habilitaMensagensFinalizacao()}" 
+									 oncomplete="confirmDialogSobreposicaoRlAp.hide(); validaMensagensFinalizacao(args, true, true, true, true);" />
+					<p:commandButton id="btnSobreposicaoRlApNao" 
+									 value="#{bundle.btn_nao}" 
+									 ajax="true"
+									 process="@this"
+									 action="#{imovelRuralControllerNew.cancelaSobreposicaoRlAp()}" 
+									 oncomplete="confirmDialogSobreposicaoRlAp.hide()" />
+			</p:confirmDialog>
+		</h:form>
+		<script>
+			function desabilitarBotaoProximo() {
+				if(!#{imovelRuralControllerNew.imovelRural.isFinalizado()}) {
+					$("[id*='_next']").hide();
+				}
+			}
+
+			function desabilitarBotaoProximoMesmoFinalizado() {				
+				$("[id*='_next']").hide();			
+			}
+			function habilitarBotaoProximo() {
+				$("[id*='_next']").show();
+			}
+		</script>
+		<p:confirmDialog id="confirmDialogImovelDuplicado" 
+							 widgetVar="confirmDialogImovelDuplicado" 
+							 header="Imóvel existente" 
+							 message="#{bundle.cefir_msg_imovel_duplicado}" 
+							 severity="alert"
+							 width="480"
+							 closable="false" 
+							 appendToBody="true">
+	    	<h:form>
+					<p:commandButton id="btnImovelDuplicadoSim" 
+									 value="#{bundle.btn_ok}"
+									 ajax="false"
+									 action="#{imovelRuralControllerNew.excluirImovelDuplicado()}" />
+			</h:form> 
+		</p:confirmDialog>
+	 							
+		<!--  Finalização cadastro Fim -->
+			<p:confirmDialog id="confirmationCompAcionaria" 
+							 message="#{bundle.consultapf_msg_confimrexclusao}" 
+							 header="Mensagem" 
+							 severity="alert" 
+							 widgetVar="confirmationCompAcionaria" >
+						 <h:form>
+					        <p:commandButton value="#{bundle.consultapf_lbl_sim}" 
+					        				 actionListener="#{imovelRuralControllerNew.excluirPessoaImovel()}" 
+					        				 oncomplete="confirmationCompAcionaria.hide()" 
+					        				 update="panelDocumentacao" process="@this" ajax="true"/>
+        					<p:commandButton value="#{bundle.consultapf_lbl_nao}" onclick="confirmationCompAcionaria.hide()" type="button" />
+        				</h:form>
+    		</p:confirmDialog>
+    		
+			<p:confirmDialog id="confirmacaoExclusaoDadosEspecificos" 
+							 widgetVar="confirmacaoExclusaoDadosEspecificos" 
+							 header="#{bundle.geral_lbl_mensagem}" 
+							 message="#{bundle.cefir_msg_A011}" 
+							 severity="alert">
+				<h:form>
+					<p:commandButton value="#{bundle.btn_sim}"
+									 action="#{imovelRuralControllerNew.excluirDadosQuestionario(true)}" process="@this"
+									 ajax="true"
+									 update="formCadImovelRural"
+									 oncomplete="confirmacaoExclusaoDadosEspecificos.hide()"/>
+					<p:commandButton value="#{bundle.btn_nao}"
+									 action="#{imovelRuralControllerNew.excluirDadosQuestionario(false)}" process="@this"
+									 ajax="true"
+									 update="formCadImovelRural"  
+									 oncomplete="confirmacaoExclusaoDadosEspecificos.hide()" />
+				</h:form>	
+			</p:confirmDialog>
+			
+		<p:dialog dynamic="true" id="dlgUploadShapeRppn"
+			header="Upload Arquivo"  closable="true" width="600" 
+			widgetVar="dlgUploadShapeRppn" resizable="false" modal="true" position="center">
+			<ui:include src="/paginas/manter-imoveis/cefir/includes/includes-dados-especificos/modais/uploads/dialogUploadShapeRppn.xhtml" />
+		</p:dialog>
+		
+		<p:dialog dynamic="true" id="dlgCadAssociacaoIncra"
+			header="Associação Incra"  closable="true"
+			widgetVar="dlgCadAssociacaoIncra" resizable="false" modal="true" onShow="dlgCadAssociacaoIncra.initPosition();" width="380" height="534">
+			<ui:include src="/paginas/manter-imoveis/cefir/includes/includes-dados-especificos/modais/modalAssociacaoIncra.xhtml" />
+		</p:dialog>
+		
+		<p:confirmDialog id="confirmaExclusaoAssociacaoIncra" 
+						 widgetVar="confirmaExclusaoAssociacaoIncra" 
+						 header="#{bundle.geral_lbl_mensagem}"  
+						 appendToBody="true" 
+						 message="#{bundle.msg_confirma_exclusao}" 
+						 severity="alert">
+						 <h:form>
+			<p:commandButton id="btnConfirmaExclusaoAssociacaoIncra" 
+							 action="#{imovelRuralControllerNew.excluirAssociacaoIncra()}" 
+				 			 oncomplete="confirmaExclusaoAssociacaoIncra.hide()" 
+				 			 value="#{bundle.btn_sim}"
+				 			 update="listaAssociacaoIncra"
+				 			 ajax="true"
+				 			 process="@this" />
+			<p:commandButton value="#{bundle.btn_nao}" 
+							 onclick="confirmaExclusaoAssociacaoIncra.hide()"
+							 type="button"
+				 			 process="@this" />
+				 			 </h:form>
+		</p:confirmDialog>
+			
+		<p:dialog dynamic="true" id="dlgCadAssentadoIncra"
+			header="Assentado Incra"  closable="true"
+			widgetVar="dlgCadAssentadoIncra" resizable="false" modal="true" onShow="dlgCadAssentadoIncra.initPosition();" width="580" height="589">
+			<p:ajax event="close" listener="#{imovelRuralControllerNew.limparModalAssentadoIncra()}"/>
+			<ui:include src="/paginas/manter-imoveis/cefir/includes/includes-dados-especificos/modais/modalAssentadoIncra.xhtml" />
+		</p:dialog>
+		
+		<p:confirmDialog id="confirmaExclusaoAssentadoIncra" 
+						 widgetVar="confirmaExclusaoAssentadoIncra" 
+						 header="#{bundle.geral_lbl_mensagem}"  
+						 appendToBody="true" 
+						 message="#{bundle.msg_confirma_exclusao}" 
+						 severity="alert">
+						 <h:form>
+			<p:commandButton id="btnConfirmaExclusaoAssentadoIncra" 
+							 action="#{imovelRuralControllerNew.excluirAssentadoIncraImovelRural()}" 
+				 			 oncomplete="confirmaExclusaoAssentadoIncra.hide()" 
+				 			 value="#{bundle.btn_sim}"
+				 			 update="listaAssentadoIncra"
+				 			 ajax="true"
+				 			 process="@this" />
+			<p:commandButton value="#{bundle.btn_nao}" 
+							 onclick="confirmaExclusaoAssentadoIncra.hide()"
+							 type="button"
+				 			 process="@this" />
+				 			 </h:form>
+		</p:confirmDialog>
+			
+		<p:dialog dynamic="true" id="dlgAssociacaoAssentadoIncra"
+			header="Incluir Associação "  closable="true"
+			widgetVar="dlgAssociacaoAssentadoIncra" resizable="false" modal="true" position="center" draggable="true">
+			<ui:include src="/paginas/manter-imoveis/cefir/includes/includes-dados-especificos/modais/modalInclusaoAssociacaoAssentadoIncra.xhtml" />
+		</p:dialog>
+
+		<p:dialog dynamic="true" id="dlgUploadListaAssentados"
+			header="Importar lista de Assentados"  closable="true"
+			widgetVar="dlgUploadListaAssentados" resizable="false" modal="true" position="center" draggable="true">
+			<ui:include src="/paginas/manter-imoveis/cefir/includes/includes-dados-especificos/modais/modalImportacaoListaAssentadosIncra.xhtml" />
+		</p:dialog>		
+			
+		<p:confirmDialog id="confirmaExclusaoAssociacaoAssentadoIncra" 
+					 widgetVar="confirmaExclusaoAssociacaoAssentadoIncra" 
+					 header="#{bundle.geral_lbl_mensagem}"  
+					 appendToBody="true" 
+					 message="#{bundle.msg_confirma_exclusao}" 
+					 severity="alert">
+			<h:form>
+				<p:commandButton id="btnConfirmaExclusaoAssociacaoAssentadoIncra" 
+								 action="#{imovelRuralControllerNew.excluirAssociacaoAssentadoImovelRuralIncra()}" 
+					 			 oncomplete="confirmaExclusaoAssociacaoAssentadoIncra.hide()" 
+					 			 value="#{bundle.btn_sim}"
+					 			 update="formAssentadoIncra:tableAssentadoAssociacaoIncra"
+					 			 ajax="true"
+					 			 process="@this" />
+				<p:commandButton value="#{bundle.btn_nao}" 
+								 onclick="confirmaExclusaoAssociacaoAssentadoIncra.hide()"
+								 type="button"
+					 			 process="@this" />
+				</h:form>
+	    </p:confirmDialog>					
+			
+   		<p:confirmDialog id="confirmaExclusaoArquivoPlanoManejo" 
+   							 widgetVar="confirmaExclusaoArquivoPlanoManejo" header="#{bundle.geral_lbl_mensagem}"  
+							 message="#{bundle.msg_confirma_exclusao}" severity="alert">		
+			<h:form id="formAreaProdutivaModal">			 
+				<p:commandButton id="btnConfirmaExclusaoArquivoPlanoManejo" 
+								 process="@this" action="#{imovelRuralControllerNew.excluirDocumentoPlanoManejo()}" 
+					 			 update=":formAreaProdutiva:panelDocumentoPlanoManejo" 
+					 			 onclick="confirmaExclusaoArquivoPlanoManejo.hide()" value="#{bundle.btn_sim}"/>
+					 			 
+				<p:commandButton value="#{bundle.btn_nao}" type="button" onclick="confirmaExclusaoArquivoPlanoManejo.hide()" />
+			</h:form>			
+		</p:confirmDialog>				
+				
+		<p:confirmDialog id="dlgAtividaDesenvolvidaIncompleta" 
+					widgetVar="dlgAtividaDesenvolvidaIncompleta" 
+					header="#{bundle.geral_lbl_mensagem}"
+					severity="alert"
+					width="600"
+					closable="false"
+					message="#{bundle.cefir_msg_validacao_licenca_area_produtiva}">
+			<h:form>
+				<p:commandButton id="btnOkAtividadeDesenvolvidaIncompleta"
+							value="#{bundle.btn_ok}"
+							onclick="dlgAtividaDesenvolvidaIncompleta.hide();"
+							style="float:right"/>
+			</h:form>
+		</p:confirmDialog>
+				
+		<p:confirmDialog header="Confirmação" 
+			id="dialogExcluirPctPessoa"  
+			widgetVar="dialogExcluirPctPessoa" 
+			appendToBody="true" 
+			message="#{bundle.messagem_004}" 
+			severity="alert">
+			<h:form>
+				<p:commandButton value="Sim" 
+					onclick="dialogExcluirPctPessoa.hide()"
+					actionListener="#{imovelRuralControllerNew.excluirPctFamilia()}"
+					process="@this" 
+					update="panelPovosComunidadesTradicionais">
+				</p:commandButton>
+				<p:commandButton value="Não" 
+					onclick="dialogExcluirPctPessoa.hide();" 
+					type="button" 
+					global="false" />
+			</h:form>
+		</p:confirmDialog>	
+				
+		<p:confirmDialog header="Confirmação" 
+			id="dialogExcluirPctPessoaJuridica"  
+			widgetVar="dialogExcluirPctPessoaJuridica" 
+			appendToBody="true" 
+			message="#{bundle.messagem_004}" 
+			severity="alert">
+			<h:form>
+				<p:commandButton value="Sim" 
+					onclick="dialogExcluirPctPessoaJuridica.hide()"
+					actionListener="#{imovelRuralControllerNew.excluirPctPessoaJuridica()}"
+					process="@this" 
+					update=":panelPovosComunidadesTradicionais">
+				</p:commandButton>
+				<p:commandButton value="Não" 
+					onclick="dialogExcluirPctPessoaJuridica.hide();" 
+					type="button" 
+					global="false" />
+			</h:form>
+		</p:confirmDialog>	
+				
+		<p:confirmDialog message="Confirma a alteração em Existem associações nessa comunidade? Os dados já declarados na tabela &#34;Associações adicionadas&#34; serão apagados. "
+				header="Mensagem" severity="alert" widgetVar="confirmacaoAlterarAssociacaoComunidade"
+				id="confirmacaoAlterarAssociacaoComunidade" width="520" closable="false">
+			<h:form>
+				<p:commandButton value="Sim" 
+					onclick="confirmacaoAlterarAssociacaoComunidade.hide()"
+					actionListener="#{imovelRuralControllerNew.atualizarGridAssociacao()}"
+					process="@this" 
+					update="formCadImovelRural:tabAbasDadosEspecificos:panelPctCnpj">
+				</p:commandButton>
+				<p:commandButton value="Não" 
+					onclick="confirmacaoAlterarAssociacaoComunidade.hide();" 
+					type="button" 
+					global="false" process="@this"/>
+			</h:form>	
+		</p:confirmDialog>		
+			
+		<p:confirmDialog header="Confirmação" 
+			id="dialogExcluirSegmento"  
+			widgetVar="dialogExcluirSegmento" 
+			appendToBody="true" 
+			message="#{bundle.messagem_004}" 
+			severity="alert">
+			<h:form>
+				<p:commandButton value="Sim" 
+					onclick="dialogExcluirSegmento.hide()"
+					actionListener="#{imovelRuralControllerNew.removerSegmento()}"
+					process="@this" 
+					update="formCadImovelRural:pgSegmento">
+				</p:commandButton>
+				<p:commandButton value="Não" 
+					onclick="dialogExcluirSegmento.hide();" 
+					type="button" 
+					global="false" />
+			</h:form>
+		</p:confirmDialog>
+		
+		<ui:include src="/paginas/manter-localizacao-geografica/localizacao-geografica-generic.xhtml" />
+	</ui:define>
+</ui:composition>   

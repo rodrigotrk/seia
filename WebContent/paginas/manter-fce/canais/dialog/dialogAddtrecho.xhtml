@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui">
+
+	<!-- CONFIRM DIALOG EXCLUIR LOCALIZACAO GEOGRAFICA -->
+	<p:confirmDialog header="Confirmação" 
+		id="_dialogExcluirLocGeoTrecho"  
+		widgetVar="dialogExcluirLocGeoTrecho" 
+		appendToBody="true" 
+		message="#{bundle.messagem_004}" 
+		severity="alert"
+		position="center">
+		<h:form>
+			<p:commandButton value="Sim" 
+				onclick="dialogExcluirLocGeoTrecho.hide();"
+				actionListener="#{fceCanalController.excluirTrecho()}"
+				update="formFceCanais">
+			</p:commandButton>
+			<p:commandButton value="Não" 
+				onclick="dialogExcluirLocGeoTrecho.hide();" 
+				type="button" 
+				global="false" />
+		</h:form>
+	</p:confirmDialog>	
+	
+	<p:dialog id="_dialogAddtrecho" widgetVar="dialogAddtrecho"
+		modal="true" showHeader="true" appendToBody="true" width="500"
+		position="center" resizable="false" draggable="false"
+		onShow="dialogAddtrecho.initPosition();" header="Incluir Trecho">
+		<h:form id="formFceCanaisTrecho">
+			<h3>Ponto Início:</h3>
+			<br/>
+			<p:commandLink oncomplete="dlgLocalizacaoGeograficaGeneric.show();"
+				action="#{localizacaoGeograficaGenericController.carregarTela()}"
+				actionListener="${localizacaoGeograficaGenericController.limparLocalizacaoGeografSelecionada()}"
+				process="@this" immediate="true"
+				rendered="#{fceCanalController.trecho.localizacaoGeograficaInicio.ideSistemaCoordenada == null}"
+				update="gridCoodenadaInicial">
+				<f:setPropertyActionListener target="#{localizacaoGeograficaGenericController.tipoSecaoGeometrica}" value="#{fceCanalController.somentePonto}" />
+	 			<f:setPropertyActionListener target="#{localizacaoGeograficaGenericController.isPerfuracaoPocoOuCaptacaoOuAquicuturaEmRede}" value="#{true}" />
+	 			<f:setPropertyActionListener target="#{localizacaoGeograficaGenericController.localizacaoGeograficaSelecionada}" value="#{fceCanalController.trecho.localizacaoGeograficaInicio}" />
+				<f:setPropertyActionListener target="#{localizacaoGeograficaGenericController.objetoLocalizacao}" value="#{fceCanalController.trecho.localizacaoGeograficaInicio}" />
+				<f:setPropertyActionListener target="#{localizacaoGeograficaGenericController.idDoComponenteParaSerAtualizado}" value="formFceCanaisTrecho" />
+				<h:graphicImage title="Incluir coordenada" value="/resources/img/ico-expandir.png" style="margin-right: 2px;" />
+				<h:outputText value="Incluir Coordenadas" />
+			</p:commandLink>
+			<h:panelGrid id="gridCoodenadaInicial" rendered="#{fceCanalController.trecho.localizacaoGeograficaInicio.ideSistemaCoordenada != null}">
+				<p:row>
+					<h3>Coordenada Geográfica</h3>
+				</p:row>
+				<p:row>
+					<p:dataTable var="ponto" value="#{fceCanalController.getTableLocalizacaoGeografica(fceCanalController.trecho.localizacaoGeograficaInicio)}">
+						<p:column headerText="Sistema de Coordenadas">
+							<h:outputText value="#{ponto.ideSistemaCoordenada.nomSistemaCoordenada}" />
+						</p:column>
+						<p:column headerText="#{bundle.empreendimento_lbl_latitude}">
+							<h:outputText value="#{localizacaoGeograficaGenericController.getLatitude(ponto.dadoGeograficoCollection.get(0))}" />
+						</p:column>
+						<p:column headerText="#{bundle.empreendimento_lbl_longitude}">
+							<h:outputText value="#{localizacaoGeograficaGenericController.getLongitude(ponto.dadoGeograficoCollection.get(0))}" />
+						</p:column>
+						<p:column headerText="#{bundle.geral_lbl_acoes}">
+							<center>
+								<p:commandLink oncomplete="dlgLocalizacaoGeograficaGeneric.show();"
+									action="#{localizacaoGeograficaGenericController.carregarTela()}"
+									process="@this" immediate="true" >
+									<f:setPropertyActionListener target="#{localizacaoGeograficaGenericController.tipoSecaoGeometrica}" value="#{fceCanalController.somentePonto}" />
+						 			<f:setPropertyActionListener target="#{localizacaoGeograficaGenericController.isPerfuracaoPocoOuCaptacaoOuAquicuturaEmRede}" value="#{true}" />
+						 			<f:setPropertyActionListener target="#{localizacaoGeograficaGenericController.localizacaoGeograficaSelecionada}" value="#{fceCanalController.trecho.localizacaoGeograficaInicio}" />
+									<f:setPropertyActionListener target="#{localizacaoGeograficaGenericController.datumSelecionado}" value="#{fceCanalController.trecho.localizacaoGeograficaInicio.ideSistemaCoordenada}" />
+									<f:setPropertyActionListener target="#{localizacaoGeograficaGenericController.objetoLocalizacao}" value="#{fceCanalController.trecho.localizacaoGeograficaInicio}" />
+									<f:setPropertyActionListener target="#{localizacaoGeograficaGenericController.idDoComponenteParaSerAtualizado}" value="formFceCanaisTrecho" />
+									<h:graphicImage title="Editar" value="/resources/img/ico-editar.png" />
+								</p:commandLink>
+							</center>
+						</p:column>
+					</p:dataTable>
+				</p:row>
+			</h:panelGrid>
+			<br />
+			<h3>Ponto Fim:</h3>
+			<br/>
+			<p:commandLink oncomplete="dlgLocalizacaoGeograficaGeneric.show();"
+				action="#{localizacaoGeograficaGenericController.carregarTela()}"
+				actionListener="${localizacaoGeograficaGenericController.limparLocalizacaoGeografSelecionada()}"
+				process="@this" immediate="true"
+				rendered="#{fceCanalController.trecho.localizacaoGeograficaFim.ideSistemaCoordenada == null}">
+				<f:setPropertyActionListener target="#{localizacaoGeograficaGenericController.tipoSecaoGeometrica}" value="#{fceCanalController.somentePonto}" />
+	 			<f:setPropertyActionListener target="#{localizacaoGeograficaGenericController.isPerfuracaoPocoOuCaptacaoOuAquicuturaEmRede}" value="#{true}" />
+	 			<f:setPropertyActionListener target="#{localizacaoGeograficaGenericController.localizacaoGeograficaSelecionada}" value="#{fceCanalController.trecho.localizacaoGeograficaFim}" />
+				<f:setPropertyActionListener target="#{localizacaoGeograficaGenericController.objetoLocalizacao}" value="#{fceCanalController.trecho.localizacaoGeograficaFim}" />
+				<f:setPropertyActionListener target="#{localizacaoGeograficaGenericController.idDoComponenteParaSerAtualizado}" value="formFceCanaisTrecho" />
+				<h:graphicImage title="Incluir coordenada" value="/resources/img/ico-expandir.png" style="margin-right: 2px;" />
+				<h:outputText value="Incluir Coordenadas" />
+			</p:commandLink>
+			<h:panelGrid id="gridCoodenadaFinal" rendered="#{fceCanalController.trecho.localizacaoGeograficaFim.ideSistemaCoordenada != null}">
+				<p:row>
+					<h3>Coordenada Geográfica</h3>
+				</p:row>
+				<p:row>
+					<p:dataTable var="ponto" value="#{fceCanalController.getTableLocalizacaoGeografica(fceCanalController.trecho.localizacaoGeograficaFim)}">
+						<p:column headerText="Sistema de Coordenadas">
+							<h:outputText value="#{ponto.ideSistemaCoordenada.nomSistemaCoordenada}" />
+						</p:column>
+						<p:column headerText="#{bundle.empreendimento_lbl_latitude}">
+							<h:outputText value="#{ponto.latitudeInicial}" />
+						</p:column>
+						<p:column headerText="#{bundle.empreendimento_lbl_longitude}">
+							<h:outputText value="#{ponto.longitudeInicial}" />
+						</p:column>
+					</p:dataTable>
+				</p:row>
+			</h:panelGrid>
+			<br/>
+			<br/>
+			<h:panelGroup id="pnlFcecanais" layout="block" >
+				<p:commandButton value="Voltar" style="float:left;" process="@this" global="false" onclick="dialogAddtrecho.hide();"/>
+				<p:commandButton value="Salvar" style="float:right;" process="@this" global="false" actionListener="#{fceCanalController.salvarTrecho}" update="dialogExcluirLocGeoTrecho, formFceCanais" />
+			</h:panelGroup>
+		</h:form>
+	</p:dialog>
+</ui:composition>

@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="resumo_requerimento_empreendimento_municipio" language="java" pageWidth="555" pageHeight="802" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="ea02d44a-de7b-4854-acb7-2b30d0ec72b5">
+	<property name="ireport.zoom" value="1.4641000000000008"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="ide_empreendimento" class="java.lang.Integer"/>
+	<queryString>
+		<![CDATA[select
+
+	case (
+		select count(m.ide_municipio)
+			from empreendimento e
+		inner join endereco_empreendimento ee on ee.ide_empreendimento = e.ide_empreendimento
+		inner join endereco_empreendimento_municipio eem on eem.ide_endereco_empreendimento  = ee.ide_endereco_empreendimento
+		inner join municipio m on m.ide_municipio = eem.ide_municipio
+		where e.ide_empreendimento = $P{ide_empreendimento}
+		)
+	when 0 then (' - ')
+	when 1 then (select
+				trim(m.nom_municipio)
+			from empreendimento e
+			inner join endereco_empreendimento ee on ee.ide_empreendimento = e.ide_empreendimento
+			inner join endereco_empreendimento_municipio eem on eem.ide_endereco_empreendimento  = ee.ide_endereco_empreendimento
+			inner join municipio m on m.ide_municipio = eem.ide_municipio
+			where e.ide_empreendimento = $P{ide_empreendimento} )
+	else (
+		replace ((
+		reverse(
+			overlay (
+				reverse(
+						(array_to_string(
+							array(
+								select
+									trim(m.nom_municipio)
+								from empreendimento e
+								inner join endereco_empreendimento ee on ee.ide_empreendimento = e.ide_empreendimento
+								inner join endereco_empreendimento_municipio eem on eem.ide_endereco_empreendimento  = ee.ide_endereco_empreendimento
+								inner join municipio m on m.ide_municipio = eem.ide_municipio
+								where e.ide_empreendimento = $P{ide_empreendimento} ),','
+								) -- array
+						)--array_to_string
+					)--reverse
+
+			 placing '!' from
+
+				(strpos(
+					reverse(
+						(array_to_string(
+							array(
+								select
+									trim(m.nom_municipio)
+								from empreendimento e
+								inner join endereco_empreendimento ee on ee.ide_empreendimento = e.ide_empreendimento
+								inner join endereco_empreendimento_municipio eem on eem.ide_endereco_empreendimento  = ee.ide_endereco_empreendimento
+								inner join municipio m on m.ide_municipio = eem.ide_municipio
+								where e.ide_empreendimento = $P{ide_empreendimento} ),','
+								) -- array
+						)--array_to_string
+					)--reverse
+				,',' )) --strpos
+
+				)
+			)
+		)
+	,'!', ' e ')
+	) end as nomes_dos_municipios
+
+from empreendimento e where e.ide_empreendimento = $P{ide_empreendimento}]]>
+	</queryString>
+	<field name="nomes_dos_municipios" class="java.lang.String"/>
+	<title>
+		<band height="10"/>
+	</title>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField isStretchWithOverflow="true">
+				<reportElement uuid="d0fc220b-c97f-4a5b-b730-13d8b753d411" x="0" y="0" width="495" height="20"/>
+				<textElement markup="html">
+					<font isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA["<b> O empreendimento passa pelo(s) município(s):  </b>"
++ $F{nomes_dos_municipios} + "."]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

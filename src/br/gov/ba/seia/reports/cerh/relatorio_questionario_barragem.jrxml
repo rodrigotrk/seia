@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="relatorio_questionario_barragem" language="java" pageWidth="545" pageHeight="802" columnWidth="545" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="2cf377da-30ee-4d82-a489-c9a6691b90a3">
+	<property name="ireport.zoom" value="1.3636363636363638"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="ide_barragem" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT
+	b.nom_barragem,
+	(SELECT m.nom_municipio from municipio m where m.cod_ibge_municipio = (SELECT cast (sp_get_municipio(b.the_geom) as numeric))) as nom_municipio,
+	(ST_X(b.the_geom)) as longitude,
+	(ST_Y(b.the_geom)) AS latitude
+FROM barragem b
+where b.ide_barragem = $P{ide_barragem}]]>
+	</queryString>
+	<field name="nom_barragem" class="java.lang.String"/>
+	<field name="nom_municipio" class="java.lang.String"/>
+	<field name="longitude" class="java.lang.Double"/>
+	<field name="latitude" class="java.lang.Double"/>
+	<title>
+		<band height="20">
+			<staticText>
+				<reportElement uuid="da3da892-dd10-476b-94ca-84280fde4700" mode="Opaque" x="465" y="0" width="80" height="20" backcolor="#DDDDDD"/>
+				<box topPadding="3" leftPadding="5">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement/>
+				<text><![CDATA[Longitude]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="5ff869c0-cb2f-4a02-b3b1-1db09fb7af36" mode="Opaque" x="225" y="0" width="160" height="20" backcolor="#DDDDDD"/>
+				<box topPadding="3" leftPadding="5">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement/>
+				<text><![CDATA[Munícipio]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="e098dbd0-cad7-4053-a982-cfc82bb25529" mode="Opaque" x="0" y="0" width="225" height="20" backcolor="#DDDDDD"/>
+				<box topPadding="3" leftPadding="5">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement/>
+				<text><![CDATA[Nome da Barragem]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="0ec4ed79-617d-4440-a9fc-2d57b6aed873" mode="Opaque" x="385" y="0" width="80" height="20" backcolor="#DDDDDD"/>
+				<box topPadding="3" leftPadding="5">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement/>
+				<text><![CDATA[Latitude]]></text>
+			</staticText>
+		</band>
+	</title>
+	<detail>
+		<band height="20" splitType="Prevent">
+			<textField isStretchWithOverflow="true">
+				<reportElement uuid="e8043761-8926-4079-8a9a-a0989e5d4713" stretchType="RelativeToBandHeight" x="0" y="0" width="225" height="20" isPrintWhenDetailOverflows="true"/>
+				<box topPadding="3" leftPadding="5">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{nom_barragem}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement uuid="830b99ec-5611-446f-9b40-d4a8ea33910e" stretchType="RelativeToBandHeight" x="225" y="0" width="160" height="20" isPrintWhenDetailOverflows="true"/>
+				<box topPadding="3" leftPadding="5">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{nom_municipio}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement uuid="4f3bbfd0-fb0d-4b44-8c08-c6f38cbcf748" stretchType="RelativeToBandHeight" x="385" y="0" width="80" height="20" isPrintWhenDetailOverflows="true"/>
+				<box topPadding="3" leftPadding="5">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{latitude}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement uuid="04829ce2-60b3-4c70-9e9e-f54ba3f995ae" stretchType="RelativeToBandHeight" x="465" y="0" width="80" height="20" isPrintWhenDetailOverflows="true"/>
+				<box topPadding="3" leftPadding="5">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{longitude}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

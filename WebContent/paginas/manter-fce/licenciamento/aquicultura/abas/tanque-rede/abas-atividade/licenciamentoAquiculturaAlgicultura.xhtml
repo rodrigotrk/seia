@@ -1,0 +1,353 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui">
+	<ui:include
+		src="/paginas/manter-fce/licenciamento/aquicultura/abas/tanque-rede/licenciamentoAquiculturaIncluirPoligonalAreaCultivo.xhtml" />
+
+	<h:panelGrid id="gridEspecieAlgicultura"
+		style="overflow:auto; margin-top:15px; margin-bottom:5px;" columns="2">
+		<h:outputText styleClass="titulo-grupo" style="font-weight:bold;"
+			value="Selecione a espécie*" />
+			
+		<h:outputText styleClass="titulo-grupo" style="font-weight:bold; margin-left:25px;" 
+			value="#{bundle.fce_lic_aqui_localizacao_cultivo}"/>
+			
+		<p:selectManyMenu id="tabelaEspeciesAlgicultura"
+			value="#{tanqueRedeController.aquiculturaAtividadeDTO.listaEspecieSelecionada}"
+			style="width:300px; height:150px; line-height:1.5;"
+			converter="simpleEntityConverter"
+			disabled="#{!tanqueRedeController.aquiculturaAtividadeDTO.podePreencherNaLicenca or fceLicenciamentoAquiculturaController.desabilitarTudo}"
+			styleClass="selecioneEspecie"
+			>
+			<f:selectItems var="especie"
+				value="#{tanqueRedeController.aquiculturaAtividadeDTO.listaEspecie}"
+				itemLabel="#{especie.ideEspecie.nomeToLabel}" itemValue="#{especie}" />
+			<p:ajax global="false" process="@this" />
+		</p:selectManyMenu>
+		
+		<p:selectManyCheckbox style="margin-left:23px; margin-top:10px;" 
+			value="#{tanqueRedeController.aquiculturaAtividadeDTO.listaTipoLocalizacaoCultivo}" 
+			layout="pageDirection" 
+			converter="simpleEntityConverter" 
+			valueChangeListener="#{tanqueRedeController.verificarLocalizacaoCultivoOutros()}"
+			disabled="#{fceLicenciamentoAquiculturaController.desabilitarTudo}"
+			>
+			<f:selectItems value="#{tanqueRedeController.listaTipoLocalizacaoCultivo}" var="cultivo" itemLabel="#{cultivo.nomTipoLocalizacaoCultivo}" itemValue="#{cultivo}"/>
+			<p:ajax event="change" global="false"/>
+		</p:selectManyCheckbox>
+		
+		<h:outputText value="É possível selecionar mais de uma opção."
+			style="font-size:xx-small; color:orange; margin-top: -10px; position: absolute;" />
+			
+		<p:spacer/>
+		
+		<p:commandButton value="Incluir" style="margin-left:240px;"
+			actionListener="#{tanqueRedeController.adicionarEspecie()}"
+			process="@this"
+			disabled="#{!tanqueRedeController.aquiculturaAtividadeDTO.podePreencherNaLicenca or fceLicenciamentoAquiculturaController.desabilitarTudo}"
+			update="licenciamentoAquiculturaAbas:formLicenciamentoAquiculturaTanque:tabAquiculturaAtividade:gridEspecieAlgicultura 
+					licenciamentoAquiculturaAbas:formLicenciamentoAquiculturaTanque:tabAquiculturaAtividade:gridEspeciesAlgiculturaAdicionada
+					licenciamentoAquiculturaAbas:formLicenciamentoAquiculturaTanque:tabAquiculturaAtividade:gridSomatorioAtividadesAlgicultura" />
+
+	</h:panelGrid>
+
+	<h:panelGrid id="gridEspeciesAlgiculturaAdicionada"
+		style="overflow:auto; margin-top:15px; margin-bottom:5px;">
+		<h:outputText styleClass="titulo-grupo" style="font-weight:bold;"
+			value="Caracterização do cultivo*"
+			rendered="#{tanqueRedeController.especieAdicionada}" />
+
+		<p:accordionPanel id="caracterizacaoAlgicultura" var="algicultura"
+			widgetVar="algicultura"
+			value="#{tanqueRedeController.aquiculturaAtividadeDTO.listaCaracterizacaoCultivo}"
+			style="margin-top:10px; width:1020px;"
+			rendered="#{tanqueRedeController.especieAdicionada}">
+			<p:tab title="#{algicultura.nomEspecie}" id="especie" titleStyleClass="tabEspecie">
+				<br />
+				<h:outputText styleClass="titulo-grupo" style="font-weight:bold;"
+					value="Tipo de produção:" 
+					rendered="#{!algicultura.ideEspecieAquiculturaTipoAtividade.outrasEspecies}"/>
+				<h:panelGrid id="gridAlgiculturaTipoProducao" columns="4"
+					style="margin-bottom:15px; margin-top:15px;"
+					rendered="#{!algicultura.ideEspecieAquiculturaTipoAtividade.outrasEspecies}">
+					<p:selectBooleanCheckbox id="checkFormasJovens"
+						value="#{algicultura.producaoFormaJovem}"
+						disabled="#{fceLicenciamentoAquiculturaController.desabilitarTudo}"
+						>
+						<p:ajax
+							listener="#{tanqueRedeController.listarDependenciaFormaJovem(algicultura)}"
+							event="change" />
+						<p:ajax
+							listener="#{tanqueRedeController.abasAtividades.atualizarTipoProducao()}"
+							event="change" />
+					</p:selectBooleanCheckbox>
+					<h:outputText value="Formas Jovens" />
+
+					<p:selectBooleanCheckbox id="checkEngorda"
+						value="#{algicultura.producaoEngorda}" style="margin-left:15px;"
+						disabled="#{fceLicenciamentoAquiculturaController.desabilitarTudo}"
+						>
+						<p:ajax
+							listener="#{tanqueRedeController.listarDependenciaEngorda(algicultura)}"
+							event="change" />
+						<p:ajax
+							listener="#{tanqueRedeController.abasAtividades.atualizarTipoProducao()}"
+							event="change" />
+					</p:selectBooleanCheckbox>
+					<h:outputText value="Engorda / Crescimento" />
+
+				</h:panelGrid>
+				<!-- fim grid Tipo de Producao -->
+
+				<!-- FORMAS JOVENS -->
+
+				<h:panelGroup id="group"
+					rendered="#{!algicultura.ideEspecieAquiculturaTipoAtividade.outrasEspecies}">
+					<h:outputText styleClass="titulo-grupo" value="Forma Jovem"
+						rendered="#{algicultura.producaoFormaJovem}" />
+					<h:panelGrid id="gridAlgiculturaFormaJovem" columns="4"
+						style="width:996px;" rendered="#{algicultura.producaoFormaJovem}">
+
+						<p:dataTable id="tableSistemaCultivo" var="sistema"
+							value="#{algicultura.aquiculturaProducaoDTOFormaJovem.listaSistemaCultivo}"
+							style="width:183px; margin-top:-20px;" scrollRows="5"
+							scrollable="#{true}" scrollHeight="91">
+							<p:column style="width:20px;">
+								<p:selectBooleanCheckbox value="#{sistema.rowSelect}"
+									disabled="#{fceLicenciamentoAquiculturaController.desabilitarTudo}"
+									>
+									<p:ajax event="change" global="false" />
+								</p:selectBooleanCheckbox>
+							</p:column>
+
+							<p:column style="text-align:left; width:120px;"
+								headerText="Sistema de cultivo">
+								<h:outputText value="#{sistema.nomSistemaCultivo}" />
+							</p:column>
+						</p:dataTable>
+
+						<p:dataTable id="tableTipoInstalacao" var="instalacao"
+							value="#{algicultura.aquiculturaProducaoDTOFormaJovem.listaTipoInstalacao}"
+							style="width:362px; margin-top:-20px;" scrollRows="5"
+							scrollable="#{true}" scrollHeight="91">
+							<p:column style="width:20px;">
+								<p:selectBooleanCheckbox value="#{instalacao.rowSelect}"
+									disabled="#{fceLicenciamentoAquiculturaController.desabilitarTudo}"
+									>
+									<p:ajax
+										listener="#{tanqueRedeController.abasAtividades.atualizarTipoInstalacao()}"
+										event="change" />
+								</p:selectBooleanCheckbox>
+							</p:column>
+							<p:column style="text-align:left; width:170px;"
+								headerText="Tipo de instalação">
+								<h:outputText value="#{instalacao.nomTipoInstalacao}"
+									style="width:170px;" />
+							</p:column>
+							<p:column headerText="Nº de estruturas">
+								<p:inputText value="#{instalacao.numEstrutura}"
+									onkeyup="mascararNumeroAndAddZeros(this, event, 9, 0, '.', ',', 3);"
+									style="width:80px; height:10px;"
+									disabled="#{!instalacao.rowSelect or instalacao.outros or fceLicenciamentoAquiculturaController.desabilitarTudo}"
+									>
+									<f:convertNumber integerOnly="true"  minFractionDigits="0" />
+									<p:ajax event="blur" global="false" />
+								</p:inputText>
+							</p:column>
+						</p:dataTable>
+
+						<p:dataTable id="tableOrganismo" var="organismo"
+							value="#{algicultura.aquiculturaProducaoDTOFormaJovem.listaOrganismo}"
+							style="width:140px; margin-left: -40px; margin-top:-20px;"
+							rendered="#{algicultura.producaoFormaJovem}" scrollRows="5"
+							scrollable="#{true}" scrollHeight="91">
+							<p:column style="width:20px;">
+								<p:selectBooleanCheckbox value="#{organismo.rowSelect}"
+									disabled="#{fceLicenciamentoAquiculturaController.desabilitarTudo}"
+									>
+									<p:ajax event="change" global="false" />
+								</p:selectBooleanCheckbox>
+							</p:column>
+							<p:column style="text-align:left;" headerText="Organismos">
+								<h:outputText value="#{organismo.nomOrganismo}" />
+							</p:column>
+						</p:dataTable>
+
+						<h:panelGrid id="gridInput" columns="1"
+							style="width:300x; margin-left:10px;"
+							rendered="#{algicultura.producaoFormaJovem}">
+							<h:outputText value="Volume do cultivo (m³)" />
+
+							<p:inputText
+								value="#{algicultura.aquiculturaProducaoDTOFormaJovem.fceAquiculturaLicencaTipoAtividadeTipoProducao.numVolumeCultivo}"
+								onkeyup="mascararNumeroAndAddZeros(this, event, 10, 2, '.', ',', 3);"
+								maxlength="15" style="width:128px;"
+								disabled="#{fceLicenciamentoAquiculturaController.desabilitarTudo}"
+								>
+								<f:convertNumber integerOnly="false" minFractionDigits="2" />
+								<p:ajax event="blur" global="false" />
+							</p:inputText>
+
+							<h:outputText value="Área do cultivo (ha)"
+								style="margin-top:14px" />
+
+							<p:inputText
+								value="#{algicultura.aquiculturaProducaoDTOFormaJovem.fceAquiculturaLicencaTipoAtividadeTipoProducao.numAreaCultivo}"
+								onkeyup="mascararNumeroAndAddZeros(this, event, 8, 4, '.', ',', 3);"
+								maxlength="15" style="width:128px;"
+								disabled="#{fceLicenciamentoAquiculturaController.desabilitarTudo}"
+								>
+								<f:convertNumber integerOnly="false" minFractionDigits="4" />
+								<p:ajax event="blur" global="false" />
+							</p:inputText>
+
+							<h:outputText value="Produção (milheiro/ano)"
+								style="margin-top:14px" />
+							<p:inputText
+								value="#{algicultura.aquiculturaProducaoDTOFormaJovem.fceAquiculturaLicencaTipoAtividadeTipoProducao.numProducao}"
+								onkeyup="mascararNumeroAndAddZeros(this, event, 9, 2, '.', ',', 3);"
+								maxlength="15" style="width:128px;"
+								disabled="#{fceLicenciamentoAquiculturaController.desabilitarTudo}"
+								>
+								<f:convertNumber integerOnly="false" minFractionDigits="2" />
+								<p:ajax event="blur" global="false" />
+							</p:inputText>
+						</h:panelGrid>
+						<!-- fim grid inputs -->
+					</h:panelGrid>
+					<!-- fim grid Formas Jovens -->
+
+					<!-- ENGORDA / CRESCIMENTO -->
+
+					<h:outputText styleClass="titulo-grupo"
+						value="Engorda / Crescimento"
+						rendered="#{algicultura.producaoEngorda}" />
+					<h:panelGrid id="gridAlgiculturaEngorda"
+						rendered="#{algicultura.producaoEngorda}" columns="4">
+
+						<p:dataTable id="tableSistemaCultivoEngorda" var="sistema"
+							value="#{algicultura.aquiculturaProducaoDTOEngorda.listaSistemaCultivo}"
+							style="width:183px; margin-top:-20px;" scrollRows="5"
+							scrollable="#{true}" scrollHeight="91">
+							<p:column style="width:20px;">
+								<p:selectBooleanCheckbox value="#{sistema.rowSelect}"
+									disabled="#{fceLicenciamentoAquiculturaController.desabilitarTudo}"
+									>
+									<p:ajax event="change" global="false" />
+								</p:selectBooleanCheckbox>
+							</p:column>
+
+							<p:column style="text-align:left; width:120px;"
+								headerText="Sistema de cultivo">
+								<h:outputText value="#{sistema.nomSistemaCultivo}" />
+							</p:column>
+						</p:dataTable>
+
+						<p:dataTable id="tableTipoInstalacaoEngorda" var="instalacao"
+							value="#{algicultura.aquiculturaProducaoDTOEngorda.listaTipoInstalacao}"
+							style="width:362px; margin-left:38px; margin-top:-20px;"
+							scrollRows="5" scrollable="#{true}" scrollHeight="91">
+							<p:column style="width:20px;">
+								<p:selectBooleanCheckbox value="#{instalacao.rowSelect}"
+									disabled="#{fceLicenciamentoAquiculturaController.desabilitarTudo}"
+									>
+									<p:ajax
+										listener="#{tanqueRedeController.abasAtividades.atualizarTipoInstalacao()}"
+										event="change" />
+								</p:selectBooleanCheckbox>
+							</p:column>
+							<p:column style="text-align:left; width:170px;"
+								headerText="Tipo de instalação">
+								<h:outputText value="#{instalacao.nomTipoInstalacao}"
+									style="width:170px;" />
+							</p:column>
+							<p:column headerText="Nº de estruturas">
+								<p:inputText value="#{instalacao.numEstrutura}"
+									onkeyup="mascararNumeroAndAddZeros(this, event, 9, 0, '.', ',', 3);"
+									style="width:80px; height:10px;"
+									disabled="#{!instalacao.rowSelect or instalacao.outros or fceLicenciamentoAquiculturaController.desabilitarTudo}"
+									>
+									<f:convertNumber integerOnly="true"  minFractionDigits="0" />
+									<p:ajax event="blur" global="false" />
+								</p:inputText>
+							</p:column>
+						</p:dataTable>
+
+						<h:panelGrid id="gridInputEngorda" columns="1"
+							style="width:300x; margin-left:30px;"
+							rendered="#{algicultura.producaoEngorda}">
+							<h:outputText value="Volume do cultivo (m³)" />
+
+							<p:inputText
+								value="#{algicultura.aquiculturaProducaoDTOEngorda.fceAquiculturaLicencaTipoAtividadeTipoProducao.numVolumeCultivo}"
+								onkeyup="mascararNumeroAndAddZeros(this, event, 10, 2, '.', ',', 3);"
+								maxlength="15" style="width:128px;"
+								disabled="#{fceLicenciamentoAquiculturaController.desabilitarTudo}"
+								>
+								<f:convertNumber integerOnly="false" minFractionDigits="2" />
+								<p:ajax event="blur" global="false" />
+							</p:inputText>
+
+							<h:outputText value="Área do cultivo (ha)"
+								style="margin-top:14px" />
+
+							<p:inputText
+								value="#{algicultura.aquiculturaProducaoDTOEngorda.fceAquiculturaLicencaTipoAtividadeTipoProducao.numAreaCultivo}"
+								onkeyup="mascararNumeroAndAddZeros(this, event, 8, 4, '.', ',', 3);"
+								maxlength="15" style="width:128px;"
+								disabled="#{fceLicenciamentoAquiculturaController.desabilitarTudo}"
+								>
+								<f:convertNumber integerOnly="false" minFractionDigits="4" />
+								<p:ajax event="blur" global="false" />
+							</p:inputText>
+
+							<h:outputText value="Produção (tonelada/ano)"
+								style="margin-top:14px" />
+							<p:inputText
+								value="#{algicultura.aquiculturaProducaoDTOEngorda.fceAquiculturaLicencaTipoAtividadeTipoProducao.numProducao}"
+								onkeyup="mascararNumeroAndAddZeros(this, event, 9, 2, '.', ',', 3);"
+								maxlength="15" style="width:128px;"
+								disabled="#{fceLicenciamentoAquiculturaController.desabilitarTudo}"
+								>
+								<f:convertNumber integerOnly="false" minFractionDigits="2" />
+								<p:ajax event="blur" global="false" />
+							</p:inputText>
+						</h:panelGrid>
+						<!-- fim grid inputs -->
+					</h:panelGrid>
+					<!-- fim grid Engorda / Crescimento -->
+				</h:panelGroup>
+				<h:panelGrid id="gridBotao" columns="2"
+					style="margin-top:15px; margin-left:795px;">
+					<p:commandButton id="btnExcluir" value="Excluir"
+						style="width:90px;"
+						process="@this"
+						global="true"
+						actionListener="#{tanqueRedeController.excluirCaracterizacaoCultivo(algicultura)}"
+						update="licenciamentoAquiculturaAbas:formLicenciamentoAquiculturaTanque:tabAquiculturaAtividade:gridEspecieAlgicultura 
+								licenciamentoAquiculturaAbas:formLicenciamentoAquiculturaTanque:tabAquiculturaAtividade:gridEspeciesAlgiculturaAdicionada
+								licenciamentoAquiculturaAbas:formLicenciamentoAquiculturaTanque:tabAquiculturaAtividade:gridSomatorioAtividadesAlgicultura"
+						disabled="#{!tanqueRedeController.aquiculturaAtividadeDTO.podePreencherNaLicenca or fceLicenciamentoAquiculturaController.desabilitarTudo}"
+						/>
+					<p:commandButton id="btnSalvar" value="Salvar" style="width:90px;"
+						actionListener="#{tanqueRedeController.salvarCaracterizacaoCultivo(algicultura)}"
+						process="@this"
+						global="true"
+						update="licenciamentoAquiculturaAbas:formLicenciamentoAquiculturaTanque:tabAquiculturaAtividade:gridSomatorioAtividadesAlgicultura"
+						disabled="#{fceLicenciamentoAquiculturaController.desabilitarTudo}"
+						/>
+				</h:panelGrid>
+			</p:tab>
+		</p:accordionPanel>
+	</h:panelGrid>
+
+	<h:panelGrid id="gridSomatorioAtividadesAlgicultura"
+		style="margin-top:15px; margin-bottom:17px; margin-left:4px; width:1020px;"
+		>
+		<ui:include src="/paginas/manter-fce/licenciamento/aquicultura/abas/tanque-rede/abas-atividade/licenciamentoAquiculturaAtividadeRodape.xhtml" />
+	</h:panelGrid>
+</ui:composition>

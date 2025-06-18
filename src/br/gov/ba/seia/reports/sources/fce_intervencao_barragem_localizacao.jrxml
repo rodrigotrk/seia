@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="fce_intervencao_barragem_localizacao" language="java" pageWidth="488" pageHeight="802" whenNoDataType="AllSectionsNoDetail" columnWidth="488" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="80b78396-35cc-4e26-aaf9-1207b1892468">
+	<property name="ireport.zoom" value="1.8150000000000004"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String"/>
+	<parameter name="ide_origem_fce" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="P_IDE_FCE" class="java.lang.Integer"/>
+	<queryString>
+		<![CDATA[SELECT this_.ide_outorga_localizacao_geografica,
+       replace(split_part(f_get_vertices(this_.ide_localizacao_geografica), ' ', 2), '(', '') as latitude,
+       replace(split_part(f_get_vertices(this_.ide_localizacao_geografica), ' ', 3), ')', '') as longitude,
+       tba.nom_tipo_barragem,
+       this_.nom_intervencao
+FROM outorga_localizacao_geografica this_
+inner join tipo_barragem tba on (tba.ide_tipo_barragem=this_.ide_tipo_barragem)
+INNER JOIN localizacao_geografica lg1_ ON this_.ide_localizacao_geografica=lg1_.ide_localizacao_geografica
+INNER JOIN outorga o3_ ON this_.ide_outorga=o3_.ide_outorga
+INNER JOIN modalidade_outorga mo8_ ON o3_.ide_modalidade_outorga=mo8_.ide_modalidade_outorga
+INNER JOIN requerimento r7_ ON o3_.ide_requerimento=r7_.ide_requerimento
+INNER JOIN fce fce ON fce.ide_requerimento=r7_.ide_requerimento
+INNER JOIN fce_intervencao_barragem fci9_ ON fci9_.ide_fce=fce.ide_fce
+WHERE mo8_.ide_modalidade_outorga=3
+  AND fce.ide_fce = $P{P_IDE_FCE}
+   AND fce.ide_origem_fce = $P{ide_origem_fce}]]>
+	</queryString>
+	<field name="ide_outorga_localizacao_geografica" class="java.lang.Integer"/>
+	<field name="latitude" class="java.lang.String"/>
+	<field name="longitude" class="java.lang.String"/>
+	<field name="nom_tipo_barragem" class="java.lang.String"/>
+	<field name="nom_intervencao" class="java.lang.String"/>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<detail>
+		<band height="120" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="afa81cd0-3a04-4ce9-b5a1-034789f6eab1" mode="Opaque" x="201" y="53" width="100" height="20" backcolor="#D3D3D3"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="b2188a39-8db5-4b50-ab66-a01b1abed5ad" mode="Opaque" x="1" y="53" width="100" height="20" backcolor="#D3D3D3"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Latitude]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="5cac7e76-5f44-4192-88d4-1eca16c15ad4" mode="Opaque" x="101" y="53" width="100" height="20" backcolor="#D3D3D3"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Longitude]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="e0deefae-64b0-4b75-93c7-902eb25574ff" x="1" y="73" width="100" height="20"/>
+				<box>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{latitude}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="56f9d646-6763-429c-801c-926f1ddaa803" x="101" y="73" width="100" height="20"/>
+				<box>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{longitude}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="d975e294-ab9a-436f-b17b-97a7949e2657" x="201" y="73" width="100" height="20"/>
+				<box>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nom_tipo_barragem}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="b4dc6393-0625-4bdc-aa94-8a87a08c956f" x="1" y="3" width="200" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Coordenada do Eixo do Barramento]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="2a49c1ed-2c03-4359-a320-fcff8b6815f8" mode="Opaque" x="1" y="33" width="100" height="20" backcolor="#D3D3D3"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Ponto Inicial]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="bdde19e9-c67b-4c40-9e17-5cd62e3077e1" mode="Opaque" x="101" y="33" width="100" height="20" backcolor="#D3D3D3"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Ponto Final]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="66ae1d0d-3ae8-4376-813e-0271544a8390" mode="Opaque" x="201" y="33" width="100" height="20" backcolor="#D3D3D3"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Tipo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="1d5b4726-d240-49db-8063-7fd64b9290b3" mode="Opaque" x="301" y="33" width="163" height="20" backcolor="#D3D3D3"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Identificação]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="a5ea3a9e-2bdb-4d6e-8025-53b3e84b6f8a" mode="Opaque" x="301" y="53" width="163" height="20" backcolor="#D3D3D3"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="7bb795a7-5b06-43cd-83b1-155a4aa05018" x="301" y="73" width="163" height="20"/>
+				<box>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nom_intervencao}]]></textFieldExpression>
+			</textField>
+			<subreport runToBottom="false">
+				<reportElement uuid="378089c8-8f63-4b9f-afa4-b5007ba7bd93" positionType="Float" isPrintRepeatedValues="false" x="0" y="105" width="478" height="15" isRemoveLineWhenBlank="true"/>
+				<subreportParameter name="P_OUTORGA_LOCALIZACAO_GEOGRAFICA">
+					<subreportParameterExpression><![CDATA[$F{ide_outorga_localizacao_geografica}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "fce_intervencao_dadosBarragem.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+		<band height="3"/>
+	</detail>
+</jasperReport>

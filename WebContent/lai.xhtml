@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui"
+	xmlns:sec="http://www.springframework.org/security/facelets/tags"
+	template="/layout/template.xhtml">
+	
+	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"> </script>
+	
+	
+	<ui:define name="titulo-pagina">
+	<script >	    
+	$(document).ready(function() {
+    	$(this).delegate('.has_doc','keyup',function() { 
+	    	var texto = $('.has_doc').val();
+	    	texto = texto.replace(/[^0-9]+/gi,'');
+	    	texto = texto.toLowerCase();
+    		$('.has_doc').val(texto);    		
+	    });
+    });	   
+	    
+	</script>
+	
+		
+		<h3> SEIA | Sistema Estadual de Informações Ambientais e de
+			Recursos Hídricos</h3>		
+	</ui:define>
+	<ui:define name="conteudo-principal">
+		
+		<ui:include src="/paginas/manter-fce/include-fce.xhtml" />
+		<ui:include src="/paginas/manter-processo/detalhe-processo/detalharProcesso.xhtml" />
+		<ui:include src="/paginas/manter-processo/dado-concedido/asv/dadoConcedidoAsv.xhtml"/>
+	
+		<div>
+			<h:form id="conteudo">
+				<h:panelGroup>
+					Para realizar consultas em processos formados, concluídos , e arquivados no INEMA clique em um dos filtros abaixo e depois no botão "Consultar".
+				</h:panelGroup>
+				<h:panelGrid columns="1">
+					<h:panelGrid columns="5" style="margin: 15px 0px 0px;">
+						<h:panelGrid  columns="1">
+							<h:outputText value="Nº do processo:" />
+							<p:inputText id="numeroProcesso" style="width: 200px;" value="#{laiController.numeroProcesso}"/>
+						</h:panelGrid>
+						
+						<p:spacer style="width: 30px;"/>
+						<h:panelGrid columns="1">	
+							<h:outputText value="CPF/CNPJ:" />				
+							<p:inputText id="numDocumento" style="width: 200px;" styleClass="has_doc" value="#{laiController.numDocumento}" maxlength="18" />
+						</h:panelGrid>
+						
+						<p:spacer style="width: 30px;"/>
+						<h:panelGrid  columns="1">
+							<h:outputText value="Nome / Razão Social / Nome fantasia:" />
+							<p:inputText id="nome" style="width: 200px;" value="#{laiController.nome}"/>
+						</h:panelGrid>
+					</h:panelGrid>
+					
+					<h:panelGrid columns="3">	
+						<h:panelGrid  columns="1">
+							<h:outputText value="Nome do empreendimento:" />
+							<p:inputText id="empreendimento" style="width: 200px;" value="#{laiController.empreendimento}"/>
+						</h:panelGrid>
+						
+						<p:spacer style="width: 30px;"/>
+						<h:panelGrid columsn="1">
+							<h:outputText value="Localidade:" />
+							<p:selectOneMenu id="municipioComboBox" value="#{laiController.municipioSelecionado}" converter="municipioConverter" styleClass="form-input form-select" style="width: 208px;">
+								<f:selectItem itemLabel="Selecione..."/>
+								<f:selectItems value="#{laiController.municipios}" var="municipio" itemValue="#{municipio}" itemLabel="#{municipio.nomMunicipio}"/>
+							</p:selectOneMenu>							
+						</h:panelGrid>
+					</h:panelGrid>
+					
+					<h:panelGrid columns="2">
+						<p:commandButton action="#{laiController.consultar()}" value="Consultar" update="tabelaProcessos,dataTableProcesso"  global="true" />
+						<p:commandButton value="Limpar" actionListener="#{laiController.limparTela()}" update=":conteudo"  global="true" />
+					</h:panelGrid>						
+					<script type="text/javascript">
+						$('#conteudo\\:nomMunicipio_input').css({'width': '200px'});
+					</script>				
+					<h:panelGroup>
+							Para ampliar a consulta para os processos em análise técnica no INEMA, você deve acessar através do seu login no SEIA (<h:commandLink action="/login.xhtml" value="aqui" />) , na opção "Consulta Pública".<br />
+					</h:panelGroup>
+				</h:panelGrid>
+				<h:panelGrid id="tabelaProcessos" columns="1" style="margin-top:15px; width:100%;">
+					<p:dataTable id="dataTableProcesso" var="processo" value="#{laiController.dataModelProcessos}"  lazy="true" paginator="true" rows="10" paginatorPosition="bottom"
+						paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}" currentPageReportTemplate="Registro(s) {startRecord}/{endRecord} de {totalRecords} registro(s)"
+						emptyMessage="#{bundle.msg_lista_vazia}" widgetVar="dataTableProcesso" rendered="#{laiController.showProcessos}" style="border-style:none !important;">
+
+						<p:column>
+							<f:facet name="header">Nº do Processo</f:facet>   
+								<p:commandLink actionListener="#{laiController.visualizarProcesso()}" oncomplete="dialogdetalharProcesso.show()" update=":formDetalharProcesso:tabviewprocesso" process="@this">
+								<f:attribute name="ideProcesso" value="#{processo}" />
+								<f:ajax execute="@this" />
+								<h:outputText value="#{processo.numProcesso}" />
+							</p:commandLink>
+						</p:column>
+								
+						<p:column>
+							<f:facet name="header">Nome/Razão Social</f:facet>
+							<h:outputText value="#{processo.ideRequerimento.requerente.nomeRazao}" />
+						</p:column>		
+									
+						<p:column headerText="Ações">
+							<h:commandLink ajax="false" rendered="#{laiController.isLac(processo)}">
+								<h:graphicImage title="Gerar Certificado LAC" value="/resources/img/cicon.png" />
+								<p:fileDownload value="#{laiController.imprimirCertificadoLac(processo)}" />
+							</h:commandLink>
+							
+							<h:commandLink rendered="#{laiController.isAtoDeclaratorio(processo) }" ajax="false">
+								<h:graphicImage title="Gerar Relatório de Ato Declaratório"
+									value="/resources/img/ico-pdf.png" />
+								<p:fileDownload
+									value="#{laiController.gerarDocumentoDeclaracaoPdf(processo)}" />
+							</h:commandLink>
+							
+							<h:commandLink rendered="#{laiController.isAtoDiap(processo) }" ajax="false">
+								<h:graphicImage title="Gerar Certificado de Declaração de Intervenção em Área de Preservação Permanente"
+									value="/resources/img/ico-pdf.png" />
+								<p:fileDownload value="#{laiController.getImprimirCertificadoDiap(processo)}" />
+							</h:commandLink>
+							
+							<h:commandLink rendered="#{laiController.isRfp(processo) }" ajax="false">
+								<h:graphicImage title="Gerar Certificado de Registro de Floresta de Produção Plantada"
+									value="/resources/img/ico-pdf.png" />
+								<p:fileDownload
+									value="#{laiController.gerarRfp(processo)}" />
+							</h:commandLink>
+							
+							<h:commandLink rendered="#{laiController.isRcfp(processo) }" ajax="false">
+								<h:graphicImage title="Gerar Certificado de Registro de Corte de Floresta Plantada"
+									value="/resources/img/ico-tesoura.png" />
+								<p:fileDownload
+									value="#{laiController.gerarRcfp(processo)}" />
+							</h:commandLink>
+							
+							<!-- Gerar Certificado RLAC -->
+							<h:commandLink rendered="#{laiController.isRLAC(processo)}" ajax="false">
+								<h:graphicImage title="Gerar Certificado RLAC" value="/resources/img/cicon.png" />
+								<p:fileDownload value="#{laiController.imprimirCertificadoRLAC(processo)}" />
+							</h:commandLink>
+							
+							<!-- Gerar Certificado de APE -->
+							<h:commandLink id="ide_requerimento" rendered="#{laiController.isAPE(processo)}" ajax="false">
+								<h:graphicImage title="Gerar Certificado de APE" value="/resources/img/ico-pdf.png" />
+							<p:fileDownload value="#{laiController.imprimirCertificadoAPE(processo)}" />
+							</h:commandLink>
+
+						</p:column>
+														
+					</p:dataTable>
+				</h:panelGrid>
+			</h:form>
+		</div>
+	</ui:define>
+</ui:composition>

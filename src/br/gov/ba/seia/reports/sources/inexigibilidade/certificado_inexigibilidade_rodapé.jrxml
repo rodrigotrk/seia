@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="certificado_inexibilidade_rodapé" pageWidth="495" pageHeight="68" columnWidth="495" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" isFloatColumnFooter="true" uuid="7b443dd5-d1fe-455f-892f-30e57b109dc7">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="IDE_REQUERIMENTO" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[select num_token, num_certificado from certificado where ide_requerimento = 1194]]>
+	</queryString>
+	<field name="num_token" class="java.lang.String"/>
+	<field name="num_certificado" class="java.lang.String"/>
+	<detail>
+		<band height="68">
+			<textField>
+				<reportElement uuid="6e4bdd0e-1a8d-44d3-b5b1-3a05ef282cbd" x="2" y="5" width="495" height="28"/>
+				<textElement textAlignment="Justified" markup="html"/>
+				<textFieldExpression><![CDATA["A autenticidade deste certificado pode ser atestada na internet, no endereço:  <p> http://www.seia.ba.gov.br em Serviços On-line/Atestar Certificado, utilizando a chave de segurança deste certificado.</p>"]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="b5056259-921a-4901-b2e3-e9238622cfc0" x="0" y="48" width="495" height="20"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{num_token}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

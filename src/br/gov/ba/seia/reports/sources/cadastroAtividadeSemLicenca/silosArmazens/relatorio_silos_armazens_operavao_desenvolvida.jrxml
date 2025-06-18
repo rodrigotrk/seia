@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="relatorio_silos_armazens_operavao_desenvolvida" language="java" pageWidth="572" pageHeight="752" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="7801704a-5380-444e-b851-383d6cd6c423">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="ide_silos_armazens" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[select odsa.* from silos_armazens  sa inner join silos_armazens_operacao_desenvolvida saod
+on sa.ide_silos_armazens = saod.ide_silos_armazens
+inner join operacao_desenvolvida_silos_armazens odsa on saod.ide_operacao_desenvolvida_silos_armazens = odsa.ide_operacao_desenvolvida_silos_armazens
+where sa.ide_silos_armazens = $P{ide_silos_armazens} and ide_operacao_desenvolvida_pai is null]]>
+	</queryString>
+	<field name="ide_operacao_desenvolvida_silos_armazens" class="java.lang.Integer"/>
+	<field name="nom_operacao_desevolvida" class="java.lang.String"/>
+	<field name="dtc_exclusao" class="java.sql.Timestamp"/>
+	<field name="ind_excluido" class="java.lang.Boolean"/>
+	<field name="ide_operacao_desenvolvida_pai" class="java.lang.Integer"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<detail>
+		<band height="41" splitType="Stretch">
+			<textField>
+				<reportElement uuid="410f91fc-2bc4-4ef5-aacd-a95dca1c1bad" x="0" y="0" width="297" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{nom_operacao_desevolvida}]]></textFieldExpression>
+			</textField>
+			<subreport>
+				<reportElement uuid="e8c6898b-114d-460a-9ac4-e89186b540e8" x="28" y="20" width="269" height="21" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$F{nom_operacao_desevolvida}.equals("Beneficiamento")]]></printWhenExpression>
+				</reportElement>
+				<subreportParameter name="SUBREPORT_DIR">
+					<subreportParameterExpression><![CDATA[$P{SUBREPORT_DIR}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="ide_silos_armazens">
+					<subreportParameterExpression><![CDATA[$P{ide_silos_armazens}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "relatorio_silos_armazens_operavao_desenvolvida_filho.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+	</detail>
+</jasperReport>

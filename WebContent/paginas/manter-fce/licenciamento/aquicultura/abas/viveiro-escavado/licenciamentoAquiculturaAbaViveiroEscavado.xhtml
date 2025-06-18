@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui">
+	<h:form id="formLicenciamentoAquiculturaAbaViveiro" >
+	
+		<h:panelGrid id="captacaoSuperficial" rendered="#{viveiroEscavadoController.existeCaptacaoSuperifical}">
+			<h:outputText styleClass="titulo-grupo" style="font-weight:bold;" value="#{bundle.fce_lic_aqui_coordenadas_cap_sup}"/>
+			<ui:include src="/paginas/manter-fce/licenciamento/aquicultura/abas/viveiro-escavado/licenciamentoAquiculturaTableCaptacaoSuperficial.xhtml" />
+		</h:panelGrid>					
+
+		<h:panelGrid id="captacaoSubterranea" rendered="#{viveiroEscavadoController.existeCaptacaoSubterranea}">					
+			<h:outputText styleClass="titulo-grupo" style="font-weight:bold;" value="#{bundle.fce_lic_aqui_coordenadas_cap_sub}"/>
+			<ui:include src="/paginas/manter-fce/licenciamento/aquicultura/abas/viveiro-escavado/licenciamentoAquiculturaTableCaptacaoSubterranea.xhtml" />
+		</h:panelGrid>
+		
+		<h:panelGrid id="lancamentoEfluente" rendered="#{viveiroEscavadoController.existeLancamentoEfluente}">
+			<h:outputText styleClass="titulo-grupo" style="font-weight:bold;" value="#{bundle.fce_lic_aqui_coordenadas_lancamento}"/>
+			<ui:include src="/paginas/manter-fce/licenciamento/aquicultura/abas/viveiro-escavado/licenciamentoAquiculturaTableLancamentoEfluentes.xhtml" />
+		</h:panelGrid>
+		
+		<h:panelGrid id="adicionaCoordenada" rendered="#{viveiroEscavadoController.permitirCadastroOutorgaAbaAtiva}" >
+			<ui:include src="/paginas/manter-fce/licenciamento/aquicultura/abas/viveiro-escavado/licenciamentoAquiculturaIncluirCoordenadas.xhtml" />
+		</h:panelGrid>
+		
+		<!--	 Atividades Checkboxes -->
+		<ui:include src="/paginas/manter-fce/licenciamento/aquicultura/abas/viveiro-escavado/licenciamentoAquiculturaAtividades.xhtml" />
+		
+		<!-- Atividade Tabs  -->
+		<ui:include src="/paginas/manter-fce/licenciamento/aquicultura/abas/viveiro-escavado/licenciamentoAquiculturaTabAtividades.xhtml" />
+				
+		<br/><br/>
+		
+		<h:outputText styleClass="titulo-grupo" style="font-weight:bold;" value="#{bundle.fce_lic_aqui_sistema_abastecimento}"/>		
+		<h:panelGrid id="vazaoSuperficial" columns="4" style="margin-top:10px;">
+			<h:outputText value="#{bundle.fce_lic_aqui_vazao_requerida_total}"/>
+			<p:inputText value="#{fceLicenciamentoAquiculturaController.fceAquiculturaLicenca.numVazaoCaptacao}" style="width:100px;" 
+				disabled="#{fceLicenciamentoAquiculturaDadosRequerimentoController.viveiroEscavadoPreenchidoEmOutorga or fceLicenciamentoAquiculturaController.desabilitarTudo}"
+				onkeyup="mascararNumeroAndAddZeros(this, event, 9, 3, '.', ',', 3);"  maxlength="15">
+				<f:convertNumber integerOnly="false" minFractionDigits="3"/>
+				<p:ajax event="blur" global="false"/>
+			</p:inputText>
+			<h:outputText value=" (m³/dia)" />
+			<h:graphicImage value="/resources/img/ico-ajuda.png" id="ajuda" style="margin: 1px 1px 2px 4px;" rendered="#{fceLicenciamentoAquiculturaDadosRequerimentoController.viveiroEscavadoPreenchidoEmOutorga}"/>
+			<p:tooltip for="ajuda" value="Vazão Informada no FCE - Outorga para Aquicultura" showEffect="fade" hideEffect="fade" />
+		</h:panelGrid>
+		
+		<br/><br/>
+		
+		<h:outputText styleClass="titulo-grupo" style="font-weight:bold;" value="#{bundle.fce_lic_aqui_sistema_drenagem}"/>
+		<h:panelGrid id="vazaolancamento" columns="4" style="margin-top:10px;">
+			<h:outputText value="#{bundle.fce_lic_aqui_vazao_requerida}"/>
+			<p:inputText value="#{fceLicenciamentoAquiculturaController.fceAquiculturaLicenca.numVazaoLancamento}" style="width:100px;" 
+				disabled="#{fceLicenciamentoAquiculturaDadosRequerimentoController.tanqueRedePreenchidoEmOutorga or fceLicenciamentoAquiculturaController.desabilitarTudo}"
+				onkeyup="mascararNumeroAndAddZeros(this, event, 9, 3, '.', ',', 3);"  maxlength="15">
+				<f:convertNumber integerOnly="false" minFractionDigits="3"/>
+				<p:ajax event="blur" global="false"/>
+			</p:inputText>
+			<h:outputText value=" (m³/mês)" />	
+			<h:graphicImage value="/resources/img/ico-ajuda.png" id="ajudaEfluente" style="margin: 1px 1px 2px 4px;" rendered="#{fceLicenciamentoAquiculturaDadosRequerimentoController.tanqueRedePreenchidoEmOutorga}"/>
+			<p:tooltip for="ajudaEfluente" value="Vazão Informada no FCE - Outorga para Aquicultura" showEffect="fade" hideEffect="fade" />
+		</h:panelGrid>
+		
+		<br /><br />
+		
+		<h:panelGrid id="gridBotoes" columns="2" style="margin-top:40px; margin-left:920px;" rendered="#{!fceLicenciamentoAquiculturaController.desabilitarTudo}" >
+			<p:commandButton id="btnVoltar" value="Voltar" style="width:90px;"
+				update="licenciamentoAquiculturaAbas"
+				process="@this"
+				actionListener="#{viveiroEscavadoController.voltarAba()}"
+				/>
+			<p:commandButton id="btnAvancar" value="Avançar" style="width:90px;"
+				update="licenciamentoAquiculturaAbas" 
+				process="@this"
+				actionListener="#{viveiroEscavadoController.avancarAba()}"
+				/>
+		</h:panelGrid>
+	</h:form>
+</ui:composition>

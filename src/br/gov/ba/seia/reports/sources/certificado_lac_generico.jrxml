@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="certificado_lac" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="455" leftMargin="70" rightMargin="70" topMargin="50" bottomMargin="50" uuid="b1e0829c-95c6-45b7-ab08-c732eac28ee6">
+	<property name="ireport.zoom" value="1.610510000000001"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="247"/>
+	<parameter name="LOGO_INEMA" class="java.lang.String"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="legislacao" class="java.lang.String"/>
+	<parameter name="LOGO_SEIA" class="java.lang.String"/>
+	<parameter name="descricao" class="java.lang.String"/>
+	<parameter name="ide_requerimento" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[select tl.nom_tipo_logradouro,
+	l.nom_logradouro,
+	e.num_endereco,
+	br.nom_bairro,
+	mp.nom_municipio,
+	et.nom_estado,
+	ps.nom_pais,
+	CASE
+	  WHEN pf.nom_pessoa is not null
+	  THEN pf.nom_pessoa
+	  ELSE pj.nom_nome_fantasia
+	END as nome_razao_social,
+	CASE
+	  WHEN pf.nom_pessoa is not null
+	  THEN pf.num_cpf
+	  ELSE pj.num_cnpj
+	END as num_cpf_cnpj,
+	rq.num_requerimento,
+	fe.nom_fase_empreendimento,
+	f_get_vertices(lg.ide_localizacao_geografica) vertices,
+	ct.num_certificado,num_processo
+from requerimento rq
+inner join processo prc on prc.ide_requerimento = rq.ide_requerimento
+inner join certificado ct on ct.ide_requerimento = rq.ide_requerimento
+inner join requerimento_unico rqu on rqu.ide_requerimento_unico = rq.ide_requerimento
+inner join fase_empreendimento fe on fe.ide_fase_empreendimento = rqu.ide_fase_empreendimento
+inner join empreendimento_requerimento er on er.ide_requerimento = rq.ide_requerimento
+inner join empreendimento emp on emp.ide_empreendimento = er.ide_empreendimento
+left join endereco_empreendimento eem on eem.ide_empreendimento = emp.ide_empreendimento
+left join localizacao_geografica lg on lg.ide_localizacao_geografica = emp.ide_localizacao_geografica
+inner join requerimento_pessoa rp on rp.ide_requerimento = rq.ide_requerimento
+inner join pessoa p on p.ide_pessoa = rp.ide_pessoa
+left join pessoa_juridica pj on pj.ide_pessoa_juridica = p.ide_pessoa
+left join pessoa_fisica pf on pf.ide_pessoa_fisica = p.ide_pessoa
+inner join porte pt on pt.ide_porte = rqu.ide_porte
+left join endereco e on e.ide_endereco = eem.ide_endereco
+left join logradouro l on l.ide_logradouro = e.ide_logradouro
+left join tipo_logradouro tl on tl.ide_tipo_logradouro = l.ide_tipo_logradouro
+left join bairro br on br.ide_bairro = l.ide_bairro
+left join municipio mp on mp.ide_municipio = l.ide_municipio
+left join estado et on et.ide_estado = mp.ide_estado
+left join pais ps on ps.ide_pais = et.ide_pais
+where rq.ide_requerimento = $P{ide_requerimento}
+and rp.ide_tipo_pessoa_requerimento = 1]]>
+	</queryString>
+	<field name="nom_tipo_logradouro" class="java.lang.String"/>
+	<field name="nom_logradouro" class="java.lang.String"/>
+	<field name="num_endereco" class="java.lang.String"/>
+	<field name="nom_bairro" class="java.lang.String"/>
+	<field name="nom_municipio" class="java.lang.String"/>
+	<field name="nom_estado" class="java.lang.String"/>
+	<field name="nom_pais" class="java.lang.String"/>
+	<field name="nome_razao_social" class="java.lang.String"/>
+	<field name="num_cpf_cnpj" class="java.lang.String"/>
+	<field name="num_requerimento" class="java.lang.String"/>
+	<field name="nom_fase_empreendimento" class="java.lang.String"/>
+	<field name="vertices" class="java.lang.String"/>
+	<field name="num_certificado" class="java.lang.String"/>
+	<field name="num_processo" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="117" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="80d9ef0a-3a50-4ce1-9c68-ce930c215c6c" x="109" y="1" width="239" height="29"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="11" isBold="true"/>
+					<paragraph leftIndent="2" rightIndent="2" spacingBefore="2" spacingAfter="2"/>
+				</textElement>
+				<text><![CDATA[LICENCIAMENTO AMBIENTAL POR ADESÃO E COMPROMISSO – LAC
+
+]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="da51298b-edee-4458-89ea-12b1c422450d" x="86" y="87" width="285" height="20"/>
+				<textElement>
+					<font size="14" isBold="true" isUnderline="true"/>
+				</textElement>
+				<text><![CDATA[Licença de Adesão e Compromisso]]></text>
+			</staticText>
+			<image isLazy="true" onErrorType="Blank">
+				<reportElement uuid="2e7907a2-8ea7-4676-8384-5c73e9c2fce2" x="4" y="4" width="99" height="41" forecolor="#FFFFFF"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<graphicElement>
+					<pen lineWidth="1.0" lineStyle="Solid" lineColor="#FFFFFF"/>
+				</graphicElement>
+				<imageExpression><![CDATA[$P{LOGO_INEMA}]]></imageExpression>
+			</image>
+			<textField>
+				<reportElement uuid="9c46a842-b379-4d0b-8fc5-5a41b957e6ff" x="1" y="60" width="454" height="21"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[" Certificado nº "+$F{num_certificado}]]></textFieldExpression>
+			</textField>
+			<image isLazy="true" onErrorType="Blank">
+				<reportElement uuid="f8b4eda0-2567-48db-8312-887994fa1a82" x="353" y="4" width="99" height="41" forecolor="#FFFFFF"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<graphicElement>
+					<pen lineWidth="0.0"/>
+				</graphicElement>
+				<imageExpression><![CDATA[$P{LOGO_SEIA}]]></imageExpression>
+			</image>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="3732fc90-1d50-4d33-9848-c30fffe8d762" x="109" y="30" width="239" height="19"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{descricao}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement uuid="dada9ecf-7e4f-499d-8a19-e535eb6be572" x="2" y="49" width="452" height="1"/>
+			</line>
+			<line>
+				<reportElement uuid="4631c87f-0d6e-4e59-8d6f-bee62e875e76" x="2" y="0" width="452" height="1"/>
+			</line>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="79" splitType="Stretch">
+			<textField isStretchWithOverflow="true">
+				<reportElement uuid="7d944d12-ccb0-495f-b11d-d84551db567e" isPrintRepeatedValues="false" x="1" y="0" width="454" height="70"/>
+				<textElement textAlignment="Justified">
+					<paragraph firstLineIndent="10" leftIndent="2" rightIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nome_razao_social} +
+" , inscrito no "+ new String($F{num_cpf_cnpj}.length() == 11 ? "CPF " + $F{num_cpf_cnpj}.substring(0,3) + "." + $F{num_cpf_cnpj}.substring(3,6) + "." + $F{num_cpf_cnpj}.substring(6,9) + "-" + $F{num_cpf_cnpj}.substring(9,11) : "CNPJ " + $F{num_cpf_cnpj}.substring(0,2) + "." + $F{num_cpf_cnpj}.substring(2,5) + "." + $F{num_cpf_cnpj}.substring(5,8) + "/" + $F{num_cpf_cnpj}.substring(8,12) + "-" + $F{num_cpf_cnpj}.substring(12,14))
++" e conforme consta no Processo n°"+$F{num_processo}+" encontra-se regular perante o licenciamento ambiental pelo prazo de dois anos contados a partir da data de emissão deste documento, mediante Licença de Adesão e Compromisso para realização da atividade de "+$F{nom_fase_empreendimento}+" de Estações rádio-base de telefonia celular, no endereço "+ $F{nom_tipo_logradouro}+" "+$F{nom_logradouro}+", N° "+  $F{num_endereco}+", "+$F{nom_bairro}
++", "+$F{nom_municipio}+", "+$F{nom_estado}+", "+$F{nom_pais} +", coordenadas geográficas "+$F{vertices}]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="26">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="329aeada-257f-4138-8e66-8d045dbc9e81" stretchType="RelativeToTallestObject" x="1" y="0" width="454" height="26" isRemoveLineWhenBlank="true" isPrintWhenDetailOverflows="true"/>
+				<textElement textAlignment="Justified"/>
+				<textFieldExpression><![CDATA[$P{legislacao}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="25" splitType="Stretch">
+			<textField pattern="EEEEE dd MMMMM yyyy">
+				<reportElement uuid="e4264f95-dea5-4c3d-b672-44ab71324755" x="1" y="5" width="100" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement uuid="d14bd0dd-afee-49be-b99e-0fc329e66fa9" x="0" y="1" width="455" height="1"/>
+			</line>
+			<staticText>
+				<reportElement uuid="1953d9e0-7a12-4da3-af61-ddb0745d0df0" x="104" y="5" width="260" height="19"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="5"/>
+				</textElement>
+				<text><![CDATA[INEMA/CAB: Avenida Luís Viana Filho, 6ª Avenida, nº 600 - CAB - CEP 41.745-900 - Salvador - Bahia - Brasil.]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="66e94ee7-8ea8-4ee9-a6e7-9f12edd11d93" x="393" y="5" width="24" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="19334b67-2143-4272-8c42-8859051a546e" x="417" y="5" width="14" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<text><![CDATA[de]]></text>
+			</staticText>
+			<textField evaluationTime="Report">
+				<reportElement uuid="6c4aed9a-c6f7-4262-821d-0c75ae19a0d3" x="431" y="5" width="24" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="47afe209-2211-4c67-b358-ce977f92e6e5" x="364" y="5" width="29" height="19"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<text><![CDATA[Pág.]]></text>
+			</staticText>
+		</band>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

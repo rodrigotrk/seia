@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="fce_outorga_aquicultura_coordenadas_shape" pageWidth="480" pageHeight="802" whenNoDataType="AllSectionsNoDetail" columnWidth="480" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="80b78396-35cc-4e26-aaf9-1207b1892468">
+	<property name="ireport.zoom" value="2.000000000000001"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String"/>
+	<parameter name="ide_fce_aquicultura" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[$P{ide_fce_aquicultura}]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT DISTINCT
+	sis.nom_sistema_coordenada,
+	fclg.nom_rio,
+	olg.ide_localizacao_geografica,
+	loc.des_localizacao_geografica
+
+FROM fce_outorga_localizacao_aquicultura fcla
+inner join fce_outorga_localizacao_geografica fclg on fclg.ide_fce_outorga_localizacao_geografica = fcla.ide_fce_outorga_localizacao_geografica
+inner join outorga_localizacao_geografica olg on olg.ide_outorga_localizacao_geografica = fclg.ide_outorga_localizacao_geografica
+INNER JOIN localizacao_geografica loc ON olg.ide_localizacao_geografica = loc.ide_localizacao_geografica
+INNER JOIN sistema_coordenada sis ON loc.ide_sistema_coordenada = sis.ide_sistema_coordenada
+
+WHERE fcla.ide_fce_aquicultura = $P{ide_fce_aquicultura}]]>
+	</queryString>
+	<field name="nom_sistema_coordenada" class="java.lang.String"/>
+	<field name="nom_rio" class="java.lang.String"/>
+	<field name="ide_localizacao_geografica" class="java.lang.Integer">
+		<fieldDescription><![CDATA[Identificar da localização geográfica da Área de Preservação Permanente]]></fieldDescription>
+	</field>
+	<field name="des_localizacao_geografica" class="java.lang.String"/>
+	<columnHeader>
+		<band height="25" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="b2188a39-8db5-4b50-ab66-a01b1abed5ad" x="270" y="0" width="75" height="25"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Rio]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="06e77dc7-2635-43f3-9c9b-f87af0f7288f" x="60" y="0" width="60" height="25"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Sub-Bacia]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="8a401f52-0dba-4942-92ae-704fc9627f24" x="120" y="0" width="150" height="25"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[RPGA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="cf34a225-768b-449e-8a73-cafc67b5ea92" x="0" y="0" width="60" height="25"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Bacia hidrográfica]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="f3a2d5ec-93d1-42fa-8209-5feae81f61d6" x="345" y="0" width="118" height="25"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Descrição]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="35" splitType="Stretch">
+			<textField>
+				<reportElement uuid="e0deefae-64b0-4b75-93c7-902eb25574ff" x="270" y="0" width="75" height="35"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nom_rio}]]></textFieldExpression>
+			</textField>
+			<subreport>
+				<reportElement uuid="7f862e49-3f2c-4ac0-a3b4-cf16c0864826" positionType="Float" stretchType="RelativeToBandHeight" isPrintRepeatedValues="false" x="0" y="0" width="60" height="35" isRemoveLineWhenBlank="true"/>
+				<subreportParameter name="ide_localizacao_geografica">
+					<subreportParameterExpression><![CDATA[$F{ide_localizacao_geografica}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} +"fce_outorga_bacia_shape.jasper"]]></subreportExpression>
+			</subreport>
+			<subreport>
+				<reportElement uuid="7431fe25-69a2-456c-a09b-71593aaa2180" positionType="Float" stretchType="RelativeToBandHeight" isPrintRepeatedValues="false" x="120" y="0" width="150" height="35" isRemoveLineWhenBlank="true"/>
+				<subreportParameter name="ide_localizacao_geografica">
+					<subreportParameterExpression><![CDATA[$F{ide_localizacao_geografica}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} +"fce_outorga_rpga_shape.jasper"]]></subreportExpression>
+			</subreport>
+			<subreport>
+				<reportElement uuid="a589142d-6e74-4f2b-90ec-2f11061ebe99" positionType="Float" stretchType="RelativeToBandHeight" isPrintRepeatedValues="false" x="60" y="0" width="60" height="35" isRemoveLineWhenBlank="true"/>
+				<subreportParameter name="ide_localizacao_geografica">
+					<subreportParameterExpression><![CDATA[$F{ide_localizacao_geografica}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} +"fce_outorga_subbacia_shape.jasper"]]></subreportExpression>
+			</subreport>
+			<textField>
+				<reportElement uuid="db660aaa-6c83-4af1-b1fe-02f322e95703" x="345" y="0" width="118" height="35"/>
+				<box>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[( $F{des_localizacao_geografica}.isEmpty() ? " -- " : $F{des_localizacao_geografica} )]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

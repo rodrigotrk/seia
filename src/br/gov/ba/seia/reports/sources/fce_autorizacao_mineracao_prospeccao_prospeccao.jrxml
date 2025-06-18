@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="fce_autorizacao_mineracao_prospeccao" pageWidth="480" pageHeight="817" whenNoDataType="AllSectionsNoDetail" columnWidth="480" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="80b78396-35cc-4e26-aaf9-1207b1892468">
+	<property name="ireport.zoom" value="1.815000000000001"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="ide_fce_pesquisa_mineral_prospeccao" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[$P{ide_fce_pesquisa_mineral_prospeccao}]]></defaultValueExpression>
+	</parameter>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[SELECT 	mp.nom_metodo_prospeccao,
+	fp.seq_prospeccao,
+
+array_to_string( array(SELECT latitude FROM (
+		SELECT
+			case when length(trim(f_get_vertices(ide_localizacao_geografica)):: character varying) > 0
+			then
+				substring(
+					( SELECT trim(f_get_vertices(ide_localizacao_geografica) ) )
+					FROM (strpos((SELECT trim(f_get_vertices(ide_localizacao_geografica))), '(') + 1) for (strpos((SELECT trim(f_get_vertices(ide_localizacao_geografica))),
+					' ') - 1)
+					)
+			else 'valor não informado.' end AS latitude
+		FROM
+			localizacao_geografica
+		WHERE
+			ide_localizacao_geografica = dg.ide_localizacao_geografica) pontos), ', ') AS latitudeInicial,
+
+	array_to_string( array(SELECT longitude FROM (
+		SELECT
+			case when length(trim(f_get_vertices(ide_localizacao_geografica)):: character varying) > 0
+			then
+			replace(substring((SELECT trim(f_get_vertices(ide_localizacao_geografica))) FROM (strpos((SELECT trim(f_get_vertices(ide_localizacao_geografica))), ' ') + 1) for (strpos((SELECT trim(f_get_vertices(ide_localizacao_geografica))), ')') - 1)), ')', '') else 'valor não informado.' end AS longitude
+		FROM
+			localizacao_geografica
+		WHERE
+			ide_localizacao_geografica = dg.ide_localizacao_geografica) pontos), ', ') AS longitudeInicial
+
+
+FROM fce_pesquisa_mineral_prospeccao fpmp
+join metodo_prospeccao mp on mp.ide_metodo_prospeccao = fpmp.ide_metodo_prospeccao
+left join fce_prospeccao fp on fp.ide_fce_pesquisa_mineral_prospeccao = fpmp.ide_fce_pesquisa_mineral_prospeccao
+left join dado_geografico dg on dg.ide_localizacao_geografica = fp.ide_localizacao_geografica
+WHERE fpmp.ide_fce_pesquisa_mineral_prospeccao = $P{ide_fce_pesquisa_mineral_prospeccao}
+and mp.ide_metodo_prospeccao <> 5]]>
+	</queryString>
+	<field name="nom_metodo_prospeccao" class="java.lang.String"/>
+	<field name="seq_prospeccao" class="java.lang.String"/>
+	<field name="latitudeinicial" class="java.lang.String"/>
+	<field name="longitudeinicial" class="java.lang.String"/>
+	<columnHeader>
+		<band height="20">
+			<rectangle>
+				<reportElement uuid="8eae750d-762a-41bd-9167-293c559f86c3" x="20" y="0" width="307" height="20" backcolor="#DDDDDD"/>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</rectangle>
+			<staticText>
+				<reportElement uuid="afbc41e7-4f1e-421c-8359-da11ced669b7" x="20" y="0" width="145" height="20"/>
+				<box topPadding="3" leftPadding="2"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Sequência ou Identificação]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="38ef0171-0266-4379-9ddd-0ad5ec36cc88" x="165" y="0" width="81" height="20"/>
+				<box topPadding="3" leftPadding="2"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Latitude]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="3ee8ef45-c552-4fe8-8a69-63239e88c5bb" x="246" y="0" width="81" height="20"/>
+				<box topPadding="3" leftPadding="2"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Longitude]]></text>
+			</staticText>
+			<line>
+				<reportElement uuid="968cba46-64f1-467f-8a80-3a14e99785b1" x="166" y="0" width="1" height="20"/>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</line>
+			<line>
+				<reportElement uuid="3a3c7f9c-913c-4750-9e87-abcf2ab7803b" x="246" y="0" width="1" height="20"/>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</line>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement uuid="d3021233-c695-47a4-ae49-2322f86b9fea" x="20" y="0" width="145" height="20"/>
+				<box topPadding="3" leftPadding="2"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{seq_prospeccao}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="6b66bb9c-89ec-4664-b006-7a83c5e184c5" x="165" y="0" width="81" height="20"/>
+				<box topPadding="3" leftPadding="2"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{latitudeinicial}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="64edf7e9-cf82-4910-b7bf-2aef48bc67d1" x="246" y="0" width="81" height="20"/>
+				<box topPadding="3" leftPadding="2"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{longitudeinicial}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement uuid="87d9fa05-559d-4961-8a34-1f6d266b9ee7" x="20" y="0" width="1" height="20"/>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</line>
+			<line>
+				<reportElement uuid="d5bf6125-cc94-453b-8157-81f24dc743ed" x="166" y="0" width="1" height="20"/>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</line>
+			<line>
+				<reportElement uuid="40a95b8f-72a0-4650-8def-5128c672849e" x="246" y="0" width="1" height="20"/>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</line>
+			<line>
+				<reportElement uuid="b780fbce-f0c5-41a3-9787-8f321da7702a" x="326" y="0" width="1" height="20"/>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</line>
+			<line>
+				<reportElement uuid="28efa02c-b918-49fb-8c15-46665d4a18fb" x="20" y="19" width="307" height="1"/>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</line>
+		</band>
+	</detail>
+</jasperReport>

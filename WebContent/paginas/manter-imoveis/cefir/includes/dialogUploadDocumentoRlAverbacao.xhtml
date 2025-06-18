@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui">
+
+	<h:form id="formUploadDocumentoAverbacao">		
+		<h:panelGrid width="400">
+			<h:outputText value="* #{bundle.cefir_lbl_documento_comprova_averbacao}" />		
+			<p:fileUpload id="updAverbacao" 
+						  widgetVar="updAverbacao" 
+						  uploadLabel="false" 
+						  label="Upload Documento" 
+						  invalidFileMessage="Tipo de arquivo inválido."
+						  fileUploadListener="#{reservaLegalController.uploadDocumentoAverbacao()}"
+						  mode="advanced" 
+						  oncomplete="dlgUploadDocumentoAverbacao.hide()"  
+						  auto="true"
+						  allowTypes="/(\.|\/)(pdf|gif|jpeg|png|jpg)$/"/>
+		</h:panelGrid>
+	</h:form>
+</ui:composition>

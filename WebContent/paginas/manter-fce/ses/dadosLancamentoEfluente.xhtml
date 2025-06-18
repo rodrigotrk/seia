@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.prime.com.tr/ui">
+	
+	
+		<p:dialog id="dadosLancamentoEfluente" 
+				  widgetVar="dadosLancamentoEfluente" 
+				  position="center" 
+				  appendToBody="false" 
+				  draggable="true" 
+				  dynamic="true" 
+				  width="850" 
+				  height="650"
+				  resizable="false" 
+				  header="Características do ponto já outorgado"
+				  modal="true">		
+		<br/>
+		      <p:layoutUnit position="center" resizable="false"  style="border-color: green;"> 
+              <table style="width:100%;font-size: 11px; background-color: #E6F9E6;"> 
+                  <tr> 
+                      <td /> 
+                      <td colspan="2"> 
+                          <h:outputText value="ATENÇÃO! O preenchimento das informações dessa tela não é obrigatório." style="line-height: 1"/>
+                      </td> 
+                  </tr> 
+              </table> 
+          </p:layoutUnit> 
+		
+			<h:panelGroup id="pnlDadosCaracteristasEfluente" layout="block">
+				<h:form id="formDadosCaracteristasEfluente">	
+				<p:fieldset style="margin-bottom:10px;">
+					<h:panelGrid id="pngDadosCaracteristasEfluente" columns="1">
+		
+			<h1 class="titulo-grupo" style="font-weight:bold;">Dados do efluente</h1>
+						<hr style="margin-top: 0;"/>
+					
+				<h:panelGrid id="pngCaracterizacaoEfluente">
+					<h:outputText value="Caracterização do efluente:"/>	
+					<p:selectManyCheckbox id="caracterizacao" layout="pageDirection" value="#{fceSesController.listCaracterizacaoEfluenteSelecionados}" converter="simpleEntityConverter">
+						<f:selectItems value="#{fceSesController.listCaracterizacaoEfluente}" 
+						               var="caract" 
+						               itemLabel="#{caract.dscCaracterizacaoEfluente}" 
+						               itemValue="#{caract}" />
+					</p:selectManyCheckbox>
+				</h:panelGrid>	
+				
+				<h:panelGrid id="pngPeriodoDerivacao">
+					<br />
+					<h:outputText value="Período de Lançamento:"/>
+					<p:selectOneRadio id="listaPerídoLançamento" layout="pageDirection" disabled="#{fceSesController.desabilitarTudo}"
+						value="#{fceSesController.fceSesCoordenadasLancamentoLocalizacaoGeografica.ideTipoDerivacao}" required="true"> 
+						<f:converter converterId="simpleEntityConverter" />
+						<f:selectItems value="#{fceSesController.listPeriodoDerivacao}" var="lpl" itemLabel="#{lpl.dscTipoPeriodoDerivacao}" itemValue="#{lpl}"/>
+					</p:selectOneRadio>	
+					<br />					
+				</h:panelGrid>
+					
+				<h:panelGrid>
+		    		<p:dataTable id="tabEfluentes" value="#{fceSesController.listCaracteristicaLancamento}" var="fceCaracteristica" >
+		    			<p:columnGroup type="header">
+		    				<p:row>
+		    					<p:column rowspan="2" headerText="Principais Características"/>
+		    					<p:column colspan="2" headerText="Efluente"/>
+		    					<p:column rowspan="2" headerText="Eficiência de Remoção" escape="false" style="white-space:normal; width: 85px;" />
+		    					<p:column rowspan="2" headerText="Ações"/>
+		    				</p:row>
+		    				<p:row>
+		    					<p:column headerText="Bruto"/>
+		    					<p:column headerText="Tratado"/>
+		    				</p:row>
+		    			</p:columnGroup>
+		    			<p:column>
+			    			<h:outputText value="#{fceCaracteristica.ideCaracteristicaEfluente.nomCaracteristicaEfluente}" />
+		    			</p:column>
+		    			<p:column>
+			    			<p:inputText id="bruto" value="#{fceCaracteristica.valorBrutoEfluente}" style="width:100px;" styleClass="campoNumericoComDecimal-3" disabled="#{fceCaracteristica.confirmado or fceLancamentoEfluentesController.desabilitarTudo}" maxlength="15">
+			    				<f:convertNumber integerOnly="false" locale="pt,BR" minFractionDigits="3"/>
+								<p:ajax event="blur" global="false"/>
+							</p:inputText>
+							<h:outputText value=" (UFC/100ml)" rendered="#{fceCaracteristica.ideCaracteristicaEfluente.coliformes}"/>
+							<h:outputText value=" (mg/l)" rendered="#{!fceCaracteristica.ideCaracteristicaEfluente.coliformes}"/>
+		    			</p:column>
+		
+						<p:column>
+							<p:inputText value="#{fceCaracteristica.valorEfluenteTratado}" styleClass="campoNumericoComDecimal-3" 
+							style="margin-left:5px; width:80px;" disabled="#{fceCaracteristica.confirmado or fceSesController.desabilitarTudo}" maxlength="15">
+								<f:convertNumber integerOnly="false" locale="pt,BR" minFractionDigits="3"/>
+								<p:ajax event="blur" global="false"/>
+							</p:inputText>
+							<h:outputText value=" (UFC/100ml)" rendered="#{fceCaracteristica.ideCaracteristicaEfluente.coliformes}"/>
+							<h:outputText value=" (mg/l)" rendered="#{!fceCaracteristica.ideCaracteristicaEfluente.coliformes}"/>	
+		    			</p:column>
+		    			
+		    			<p:column>
+							<p:inputText value="#{fceCaracteristica.valorEficienciRemocao}" styleClass="campoNumericoComDecimal-3" style="margin-left:5px; width:40px;" disabled="true" maxlength="7">
+								<f:convertNumber integerOnly="false" locale="pt,BR" minFractionDigits="3"/>
+								<p:ajax event="blur" global="false"/>
+							</p:inputText>
+							<h:outputText value=" (%)" />
+		    			</p:column>
+		    			
+		    			
+		    			<p:column style="width:20px;">
+							
+							<p:commandLink rendered="#{!fceCaracteristica.confirmado}" disabled="#{fceSesController.desabilitarTudo}" 
+								action="#{fceSesController.confirmarEfluente(fceCaracteristica)}" process="@this" update="formDadosCaracteristasEfluente:tabEfluentes" >
+								<h:graphicImage title="Confirmar..." value="/resources/img/ico-msg-sucesso.png" style="margin-left:12px;" />
+								<f:setPropertyActionListener target="#{fceSesController.fceSesCaracteristicaLancamentoSelecionado}" value="#{fceCaracteristica}" />
+							</p:commandLink>
+							
+							<p:commandLink rendered="#{fceCaracteristica.confirmado}" disabled="#{fceSesController.desabilitarTudo}" 
+								action="#{fceSesController.editarEfluente()}" process="@this" 
+								update="formDadosCaracteristasEfluente:tabEfluentes" >
+									<h:graphicImage title="Editar..." value="/resources/img/ico-editar.png" />
+									<f:setPropertyActionListener target="#{fceSesController.fceSesCaracteristicaLancamentoSelecionado}" value="#{fceCaracteristica}" />
+							</p:commandLink>
+											
+						</p:column>
+		    			
+		    		</p:dataTable>
+		    	</h:panelGrid>
+		    	
+<!-- 	    		<h:panelGrid>
+	    		<br/>
+					<h:outputText value="Parte do efluente será usada para reuso?"  />
+		
+					<p:selectOneRadio value="#{fceSesController.fceSesCoordenadasLancamento.indEfluenteReuso}">  
+							<f:selectItem itemLabel="Sim" itemValue="true"/>
+							<f:selectItem itemLabel="Não" itemValue="false"/>
+					        <p:ajax update="vazaoEfluenteTratado" event="change"/> 
+					</p:selectOneRadio> 
+					
+				</h:panelGrid> -->
+					
+<!-- 				<h:panelGrid id="vazaoEfluenteTratado">	
+					
+					<h:panelGrid columns="3" rendered="#{fceSesController.fceSesCoordenadasLancamento.indEfluenteReuso}">
+						<h:outputText value="Vazão do efluente tratado" />
+						<p:inputText value="#{fceSesController.fceSesCoordenadasLancamento.vazaoEfluenteTratado}" styleClass="campoNumericoComDecimal-2">
+							<f:convertNumber integerOnly="false" locale="pt,BR" minFractionDigits="2"/>
+						</p:inputText>
+						<h:outputText value="(m³/dia)" />
+					</h:panelGrid>
+					
+				</h:panelGrid>	 -->
+				
+					<h:panelGrid columns="3">
+						<h:outputText value="Vazão média do efluente" />
+						<p:inputText value="#{fceSesController.fceSesCoordenadasLancamentoLocalizacaoGeografica.valorVazaoMedia}" styleClass="campoNumericoComDecimal-2">
+							<f:convertNumber integerOnly="false" locale="pt,BR" minFractionDigits="2"/>
+						</p:inputText>
+						<h:outputText value="(m³/dia)" />
+					</h:panelGrid>				
+				
+				</h:panelGrid>
+				</p:fieldset>
+				
+					<h:panelGroup>
+						<p:commandButton value="Voltar" onclick="dadosLancamentoEfluente.hide();" process="@this" immediate="true" />
+						<p:commandButton id="btnSavar" rendered="#{!fceSesController.desabilitarTudo}" value="Salvar" process="@this, formDadosCaracteristasEfluente" global="true"  action="#{fceSesController.salvarCaracterizacaoPontoOutorgado()}"/>
+					</h:panelGroup>
+					
+				</h:form>	
+			</h:panelGroup>				
+				
+	</p:dialog>	
+	
+</ui:composition>

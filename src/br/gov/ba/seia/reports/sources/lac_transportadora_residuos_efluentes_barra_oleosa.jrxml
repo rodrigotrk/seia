@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="lac_transportadora_residuos_transportados" language="java" pageWidth="495" pageHeight="802" whenNoDataType="AllSectionsNoDetail" columnWidth="495" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="80b78396-35cc-4e26-aaf9-1207b1892468">
+	<property name="ireport.zoom" value="3.138428376721004"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="ide_lac" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[select boca.num_borra_oleosa, boca.num_oleo_lubrificante, boca.num_vazao_media, boca.num_dbo_media, boca.num_og_medio from lac lc
+inner join lac_transporte lt on lc.ide_lac = lt.ide_lac
+inner join base_operacional bo on lt.ide_lac_transporte = bo.ide_lac_transporte
+inner join base_operacional_controle_ambiental boca on bo.ide_base_operacional = boca.ide_base_operacional
+where lc.ide_lac = $P{ide_lac} and (boca.num_borra_oleosa notnull or boca.num_oleo_lubrificante notnull)
+order by boca.num_borra_oleosa,boca.num_oleo_lubrificante]]>
+	</queryString>
+	<field name="num_borra_oleosa" class="java.math.BigDecimal"/>
+	<field name="num_oleo_lubrificante" class="java.math.BigDecimal"/>
+	<field name="num_vazao_media" class="java.math.BigDecimal"/>
+	<field name="num_dbo_media" class="java.math.BigDecimal"/>
+	<field name="num_og_medio" class="java.math.BigDecimal"/>
+	<columnHeader>
+		<band height="19" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="ef648b68-33b4-40f9-8097-99fbe25335ba" x="1" y="2" width="159" height="17">
+					<printWhenExpression><![CDATA[$F{num_borra_oleosa} != null || $F{num_oleo_lubrificante} != null]]></printWhenExpression>
+				</reportElement>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Resíduos sólidos]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement uuid="2ab6ecae-25d7-413d-b022-576f57cbc161" x="184" y="0" width="40" height="20">
+					<printWhenExpression><![CDATA[$F{num_borra_oleosa} != null]]></printWhenExpression>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{num_borra_oleosa} != null ? $F{num_borra_oleosa} : ""]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="06bc22d7-c223-4769-b038-720e9384e491" x="10" y="0" width="174" height="20">
+					<printWhenExpression><![CDATA[$F{num_borra_oleosa} != null]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Justified" verticalAlignment="Middle">
+					<font fontName="Arial" size="9" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Borra oleosa gerada anualmente (t/ano):"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="06bc22d7-c223-4769-b038-720e9384e491" x="10" y="0" width="227" height="20">
+					<printWhenExpression><![CDATA[$F{num_oleo_lubrificante} != null]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Justified" verticalAlignment="Middle">
+					<font fontName="Arial" size="9" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Óleo lubrificante usado gerado anualmente (t/ano):"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="06bc22d7-c223-4769-b038-720e9384e491" x="237" y="0" width="40" height="20">
+					<printWhenExpression><![CDATA[$F{num_oleo_lubrificante} != null]]></printWhenExpression>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{num_oleo_lubrificante} != null ? $F{num_oleo_lubrificante} : ""]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

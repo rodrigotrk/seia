@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui"
+    xmlns:c="http://java.sun.com/jsp/jstl/core">
+
+	<p:dialog id="_dialogdetalheNotificacao" dynamic="true" widgetVar="dialogdetalheNotificacao" width="810" height="620" modal="true" closable="true" position="center" resizable="false" header="Detalhes da Notificação" >
+		<h:form id="frmDetalharNotificacao">
+			<h:panelGrid id="panelDetalharNotificacao" columns="1">  
+				<h3>
+					<h:outputText value="Detalhes da notificação" styleClass="titulo-grupo" rendered="#{detalheNotificacaoController.notificacao.notificacaoPrazo}" />
+					<h:outputText value="Detalhes da notificação de comunicação" styleClass="titulo-grupo" rendered="#{detalheNotificacaoController.notificacao.notificacaoComunicacao}" />
+				</h3>
+				<h:outputText value="#{detalheNotificacaoController.notificacao.numNotificacao}" style="font-weight:bold"/>
+				<p:spacer width="50" height="10" />
+				<h3><h:outputLabel styleClass="titulo-grupo" value="Dados Gerais" /></h3>
+			
+				<h:panelGrid columns="4">
+					<p:spacer width="10" height="10" />
+					<h:outputText value="Número do Processo" style="font-weight:bold"/>
+					<p:spacer width="30" height="10" />
+					<h:outputText value="Data de Formação" style="font-weight:bold"/>
+					
+					<p:spacer width="10" height="10" />
+					<h:outputText value="#{detalheNotificacaoController.notificacao.ideProcesso.numProcesso}"/>
+					<p:spacer width="30" height="10" />
+					<h:outputText value="#{detalheNotificacaoController.notificacao.ideProcesso.dtcFormacao}">
+						<f:convertDateTime pattern="dd/MM/yyyy" locale="pt,BR" timeZone="Brazil/East"/>
+					</h:outputText>
+				</h:panelGrid>
+				
+				<h:panelGrid columns="4">
+					<p:spacer width="10" height="10" />
+					<h:outputText value="Nome/Razão Social" style="font-weight:bold"/>
+					<p:spacer width="110" height="10" />
+					<h:outputText value="CPF/CNPJ" style="font-weight:bold"/>
+					
+					<p:spacer width="10" height="10" />
+					<h:outputText value="#{detalheNotificacaoController.empreendimento.idePessoa.nomeRazao}"/>
+					<p:spacer width="110" height="10" />
+					<h:outputText value="#{detalheNotificacaoController.empreendimento.idePessoa.cpfCnpj}"/>
+				</h:panelGrid>
+				
+				<h:panelGrid columns="4">
+					<p:spacer width="10" height="10" />
+					<h:outputText value="Endereço" style="font-weight:bold"/>
+					<p:spacer width="110" height="10" />	
+					<h:outputText value="Empreendimento" style="font-weight:bold"/>
+					
+					<p:spacer width="10" height="10" />
+					<h:outputText value="#{detalheNotificacaoController.empreendimento.endereco.enderecoCompleto}"/>
+					
+					<p:spacer width="110" height="10" />
+					<h:outputText value="#{detalheNotificacaoController.empreendimento.nomEmpreendimento}"/>
+				</h:panelGrid>
+				
+				<h3><h:outputLabel styleClass="titulo-grupo" value="Requerimento" /></h3>
+				
+				<h:panelGrid columns="4">
+					<p:spacer width="10" height="10" />
+					<h:outputText value="Número do Requerimento" style="font-weight:bold"/>
+					<p:spacer width="50" height="10" />
+					<h:outputText value="Data de Abertura" style="font-weight:bold"/>
+					
+					<p:spacer width="10" height="10" />
+					<h:outputText value="#{detalheNotificacaoController.notificacao.ideProcesso.ideRequerimento.numRequerimento}"/>
+					<p:spacer width="50" height="10" />
+					<h:outputText value="#{detalheNotificacaoController.notificacao.ideProcesso.ideRequerimento.dtcCriacao}">
+						<f:convertDateTime pattern="dd/MM/yyyy" locale="pt,BR" timeZone="Brazil/East"/>
+					</h:outputText>
+				</h:panelGrid>
+				
+				<h:panelGrid columns="1" rendered="#{!empty detalheNotificacaoController.notificacao.notificacaoMotivoNotificacaoCollection}">
+					<h3><h:outputLabel styleClass="titulo-grupo" value="Motivos" style="margin-left: 2px;"/></h3>
+					
+					<h:outputText value="Documentos" style="margin-left: 16px;"/>
+					
+					<ui:repeat var="nmn" value="#{detalheNotificacaoController.notificacao.notificacaoMotivoNotificacaoCollectionSemShape}">
+						<h:outputText value="#{nmn.ideMotivoNotificacao.nomMotivoNotificacao}" style="margin-left: 30px;"/>
+						<br/>
+					</ui:repeat>
+					
+					
+					<h:panelGrid rendered="#{not empty detalheNotificacaoController.notificacao.notificacaoMotivoNotificacaoCollectionComShape}">
+						<br/>
+						
+						<h:outputText value="Solicitação de Shapes" style="margin-left: 16px;"/>
+						
+						<p:dataTable var="nmn" value="#{detalheNotificacaoController.notificacao.notificacaoMotivoNotificacaoCollectionComShape}" 
+							style="margin-left: 30px;">
+							
+							<p:column headerText="Motivo">
+								<h:outputText value="#{nmn.ideMotivoNotificacao.nomMotivoNotificacao}" />
+							</p:column>
+							
+							<p:column headerText="Imóvel" rendered="#{detalheNotificacaoController.existePeloMenosUmImovel}">
+								<ui:repeat var="imv" value="#{nmn.motivoNotificacaoImovelCollection}">
+									<h:outputText value="#{imv.ideImovel.nomeImovelRural}" rendered="#{not empty imv.ideImovel.nomeImovelRural}"/>
+									<h:outputText value=" ---- " rendered="#{empty imv.ideImovel.nomeImovelRural}"/>
+									<br/>
+								</ui:repeat>
+							</p:column>
+						</p:dataTable>
+					</h:panelGrid>
+				</h:panelGrid>
+				
+				<h:panelGrid columns="1" rendered="#{!empty detalheNotificacaoController.notificacao.justificativaRejeicaoCollection}">
+					<h3><h:outputLabel styleClass="titulo-grupo" value="Justificativas" /></h3>
+					<ui:repeat var="justificativa" value="#{detalheNotificacaoController.notificacao.justificativaRejeicaoCollection}">
+						<p:spacer width="10" height="10" /><h:outputText value="#{justificativa.nomJustificativaRejeicao}" /><br />
+					</ui:repeat>
+				</h:panelGrid>
+				<h:panelGrid columns="2" rendered="#{!empty detalheNotificacaoController.notificacao.dscOutroJustificativa}">
+					<p:spacer width="5" height="10" /><h:inputTextarea value="#{detalheNotificacaoController.notificacao.dscOutroJustificativa}" readonly="true" cols="50" />
+				</h:panelGrid>
+				
+				<h:panelGrid rendered="#{notificacaoParcialController.notificacaoPrazo}" columns="2">
+				    <h3><h:outputLabel styleClass="titulo-grupo" value="Prazo de Resposta" /></h3>
+					<h:outputText value="#{detalheNotificacaoController.notificacao.validadeEmDias} dias" />
+				</h:panelGrid>
+				
+				<h3><h:outputLabel styleClass="titulo-grupo" value="Texto da Notificação Final" /></h3>
+				<h:panelGrid columns="2">
+					<p:spacer width="10" height="10" />
+					<h:inputTextarea value="#{detalheNotificacaoController.notificacao.dscNotificacao}" disabled="true" rows="5" cols="118" />
+				</h:panelGrid>
+				<br/>
+				<h3 ><h:outputLabel styleClass="titulo-grupo" value="Notificação Parcial" /></h3>
+				
+				<p:dataTable var="notificacao" value="#{detalheNotificacaoController.notificacao.notificacaoParcialCollection}"
+					emptyMessage="Nenhum registro encontrado.">
+					
+					<p:column headerText="Data de criação" style="text-align: center;">
+						<h:outputText value="#{notificacao.dtcCriacao}" >
+							<f:convertDateTime pattern="dd/MM/yyyy" locale="pt,BR" timeZone="Brazil/East"/>
+						</h:outputText>
+					</p:column>
+					
+					<p:column headerText="Emitida" style="text-align: center;">
+						<h:outputText value="#{notificacao.indEmissaoString}" />
+					</p:column>
+					
+					<p:column headerText="Técnico Responsável" style="text-align: center;">
+						<h:outputText value="#{notificacao.idePauta.idePessoaFisica.pessoaFisica.nomPessoa}" />
+					</p:column>
+					
+					<p:column headerText="Visualizar" style="text-align: center;">
+						<p:commandLink onclick="dialogoVisualizarNP.show();" update=":frmDialogoVisualizarNP">
+							<h:graphicImage title="Visualizar Notificação Parcial" value="/resources/img/ico-pesquisa.png" />
+			            	<f:setPropertyActionListener value="#{notificacao}" target="#{notificacaoParcialController.notificacaoParcial}" />
+			            </p:commandLink>			            
+					</p:column>					
+				</p:dataTable>		
+			</h:panelGrid>
+		</h:form>
+	</p:dialog>					
+</ui:composition>

@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="relatorio_pessoa_juridica" pageWidth="515" pageHeight="802" columnWidth="515" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="1b5747ae-f560-46be-8244-11363b73ebe0">
+	<property name="ireport.zoom" value="1.4641000000000006"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="ide_pessoa" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[select
+
+ pj.ide_pessoa_juridica,
+ pj.nom_razao_social as nome_razao,
+ pj.nom_nome_fantasia,
+ (tl.nom_tipo_logradouro ||' '|| l.nom_logradouro) as endereco,
+ b.nom_bairro,
+ m.nom_municipio as cidade,
+
+ case when length(trim(to_char(l.num_cep,'99999999')))=7
+ then '0' || trim(to_char(l.num_cep,'99999999'))
+ else to_char(l.num_cep,'99999999')
+ end as num_cep,
+
+substr(pj.num_cnpj,  1, 2) || '.' || substr(pj.num_cnpj, 3, 3) || '.' || substr(pj.num_cnpj, 6, 3) || '/' || SUBSTR(pj.num_cnpj, 9, 4) || '-' || SUBSTR(pj.num_cnpj, 13, 2) cfp_cnpj,
+
+ (tl.nom_tipo_logradouro ||' '|| l.nom_logradouro ||' '|| enpj.num_endereco ||', '|| b.nom_bairro ||', '|| m.nom_municipio ||' - '|| es.nom_estado ) as logradouro,
+es.des_sigla
+from pessoa p
+	left join pessoa_juridica pj on pj.ide_pessoa_juridica = p.ide_pessoa
+	left join endereco_pessoa ep on ep.ide_pessoa = p.ide_pessoa
+	left join endereco enpj on enpj.ide_endereco = ep.ide_endereco
+	left join logradouro l on l.ide_logradouro = enpj.ide_logradouro
+	left join tipo_logradouro tl on tl.ide_tipo_logradouro = l.ide_tipo_logradouro
+	left join bairro b on b.ide_bairro = l.ide_bairro
+	left join municipio m on m.ide_municipio = l.ide_municipio
+	left join estado es on es.ide_estado = m.ide_estado
+ where p.ide_pessoa = $P{ide_pessoa}]]>
+	</queryString>
+	<field name="ide_pessoa_juridica" class="java.lang.Integer">
+		<fieldDescription><![CDATA[Identificador da pessoa jurídica da associação INCRA]]></fieldDescription>
+	</field>
+	<field name="nome_razao" class="java.lang.String"/>
+	<field name="nom_nome_fantasia" class="java.lang.String"/>
+	<field name="endereco" class="java.lang.String"/>
+	<field name="nom_bairro" class="java.lang.String"/>
+	<field name="cidade" class="java.lang.String"/>
+	<field name="num_cep" class="java.lang.String"/>
+	<field name="cfp_cnpj" class="java.lang.String"/>
+	<field name="logradouro" class="java.lang.String"/>
+	<field name="des_sigla" class="java.lang.String"/>
+	<detail>
+		<band height="140">
+			<printWhenExpression><![CDATA[$F{ide_pessoa_juridica}!= null]]></printWhenExpression>
+			<staticText>
+				<reportElement uuid="07d3e473-7d86-4403-b6db-dba36bc9507a" x="0" y="0" width="515" height="20"/>
+				<box leftPadding="5">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[PESSOA JURÍDICA
+]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="6e384b07-3424-4143-b07c-6760033a504b" x="0" y="40" width="261" height="20"/>
+				<box leftPadding="5">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle" markup="html">
+					<font fontName="SansSerif" size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Razão Social: " + "<b>" +$F{nome_razao} + "<b>"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="59b163ba-2c64-4621-849f-d6026fe9a559" x="261" y="40" width="254" height="20"/>
+				<box leftPadding="5">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle" markup="html">
+					<font fontName="SansSerif" size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA["CNPJ: " + "<b>" + $F{cfp_cnpj} + "<b>"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="908fd2b2-74ea-441a-9c0c-28ab0140e9e5" x="0" y="60" width="261" height="20"/>
+				<box leftPadding="5">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle" markup="html">
+					<font fontName="SansSerif" size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Nome Fantasia: " + "<b>" +$F{nom_nome_fantasia} + "<b>"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="5d97f89e-1031-403b-815b-2a73ff5178b8" x="261" y="60" width="254" height="20"/>
+				<box leftPadding="5">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle" markup="html">
+					<font fontName="SansSerif" size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Matrícula: " + "<b>" + $F{cfp_cnpj} + "<b>"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="40a6833f-e9cd-4a38-b50f-7aa5982129a2" x="420" y="120" width="95" height="20"/>
+				<box leftPadding="5">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle" markup="html">
+					<font fontName="SansSerif" size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA["UF: " + "<b>" + $F{des_sigla} + "<b>"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="5ab1ad6e-434c-46c7-9fcc-4492a02bc060" x="261" y="120" width="159" height="20"/>
+				<box leftPadding="5">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle" markup="html">
+					<font fontName="SansSerif" size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA["CEP: " + "<b>" +
+($F{num_cep}!= null ? $F{num_cep}: " --- ")
++ "<b>"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="e7ea497d-cbf4-4175-9e5f-527f06ce1b7c" x="0" y="120" width="261" height="20"/>
+				<box leftPadding="5">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle" markup="html">
+					<font fontName="SansSerif" size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Cidade: "+ "<b>" + $F{cidade} + "<b>"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="c696ec2d-5363-452a-9369-abae3cb45994" x="261" y="80" width="254" height="20"/>
+				<box leftPadding="5">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle" markup="html">
+					<font fontName="SansSerif" size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Logradouro: " + "<b>" + $F{endereco} + "<b>"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="40dde4bc-d162-4a74-ba87-989c66fa69f8" x="0" y="80" width="261" height="20"/>
+				<box leftPadding="5">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle" markup="html">
+					<font fontName="SansSerif" size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Endereço: " + "<b>" + $F{endereco} + "<b>"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="8216cd3d-7e3d-422e-be39-19695dd77271" x="0" y="100" width="515" height="20"/>
+				<box leftPadding="5">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle" markup="html">
+					<font fontName="SansSerif" size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Bairro/Distrito: "+ "<b>" +$F{nom_bairro} + "<b>"]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="20" splitType="Stretch">
+			<subreport>
+				<reportElement uuid="0202237b-bb5b-4574-985a-5c99d729b0d6" stretchType="RelativeToBandHeight" isPrintRepeatedValues="false" x="0" y="0" width="515" height="20"/>
+				<subreportParameter name="ide_pessoa_juridica">
+					<subreportParameterExpression><![CDATA[$F{ide_pessoa_juridica}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "relatorio_pessoa_juridica_representante.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+	</detail>
+</jasperReport>

@@ -1,0 +1,264 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="relatorio_subreport_caracterizacao_ambiental_silos_armazens" language="java" pageWidth="514" pageHeight="752" columnWidth="514" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="95794cce-f840-4d44-adb0-20ae107f11c7">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="34"/>
+	<parameter name="ide_cadastro" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[select casa.* from silos_armazens sa
+inner join cadastro_atividade_nao_sujeita_lic c
+on sa.ide_cadastro_atividade_nao_sujeita_lic = c.ide_cadastro_atividade_nao_sujeita_lic
+inner join caracterizacao_ambiental_silos_armazens casa
+on casa.ide_silos_armazens = sa.ide_silos_armazens
+where c.ide_cadastro_atividade_nao_sujeita_lic = $P{ide_cadastro}]]>
+	</queryString>
+	<field name="ide_caracterizacao_ambiental_silos_armazens" class="java.lang.Integer"/>
+	<field name="ind_utiliza_agua" class="java.lang.Boolean"/>
+	<field name="ind_medida_controle_emissao" class="java.lang.Boolean"/>
+	<field name="ind_sistema_tratamento" class="java.lang.Boolean"/>
+	<field name="ind_lanca_efluente" class="java.lang.Boolean"/>
+	<field name="ide_silos_armazens" class="java.lang.Integer"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="209340ef-c6e2-42fa-b592-e3dc17798060" mode="Opaque" x="0" y="0" width="515" height="20" backcolor="#DDDDDD"/>
+				<box leftPadding="5">
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Caracterização Ambiental]]></text>
+			</staticText>
+		</band>
+		<band height="40" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="d0c644e3-fff3-4d91-804b-8b629c895604" x="0" y="0" width="514" height="20"/>
+				<box>
+					<bottomPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[A atividade utiliza ou vai utilizar água?]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="376d497d-da62-4a68-a859-85e81d97ca30" x="0" y="20" width="28" height="20">
+					<printWhenExpression><![CDATA[$F{ind_utiliza_agua}]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[Sim]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="294a52c0-e174-49b9-bb70-2aac0c0c5267" x="0" y="20" width="28" height="20">
+					<printWhenExpression><![CDATA[!$F{ind_utiliza_agua}]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[Não]]></text>
+			</staticText>
+		</band>
+		<band height="20">
+			<subreport>
+				<reportElement uuid="5bab7a96-d98e-400a-8d8c-eb0ea5fc49a5" x="0" y="0" width="200" height="20" isRemoveLineWhenBlank="true"/>
+				<subreportParameter name="SUBREPORT_DIR">
+					<subreportParameterExpression><![CDATA[$P{SUBREPORT_DIR}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="ide_caracterizacao_ambiental_silos_armazens">
+					<subreportParameterExpression><![CDATA[$F{ide_caracterizacao_ambiental_silos_armazens}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "relatorio_subreport_caracterizacao_ambiental_silos_armazens_origem_agua.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+		<band height="60">
+			<staticText>
+				<reportElement uuid="25ca0cf1-f2aa-4cdd-9e4c-62500ddd0e6a" x="0" y="0" width="514" height="20"/>
+				<box>
+					<bottomPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Possui sistema de tratamento?]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="9240ed63-fac4-4876-875a-62f69fa66a9d" x="0" y="20" width="28" height="20">
+					<printWhenExpression><![CDATA[$F{ind_sistema_tratamento}]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[Sim]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="1c9ab73c-c3c9-4f0d-9b4f-3acd420b812a" x="0" y="20" width="28" height="20">
+					<printWhenExpression><![CDATA[!$F{ind_sistema_tratamento}]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[Não]]></text>
+			</staticText>
+			<subreport>
+				<reportElement uuid="7106c17e-eb3e-4f35-9384-623b7da24a05" x="0" y="40" width="200" height="20" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$F{ind_sistema_tratamento}]]></printWhenExpression>
+				</reportElement>
+				<subreportParameter name="SUBREPORT_DIR">
+					<subreportParameterExpression><![CDATA[$P{SUBREPORT_DIR}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="ide_caracterizacao_ambiental_silos_armazens">
+					<subreportParameterExpression><![CDATA[$F{ide_caracterizacao_ambiental_silos_armazens}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "relatorio_subreport_caracterizacao_ambiental_silos_armazens_sistema_tratamento.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+		<band height="60">
+			<staticText>
+				<reportElement uuid="4ee5b397-156b-40e8-85a9-609081fb3979" x="0" y="0" width="514" height="20"/>
+				<box>
+					<bottomPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[A empresa lança efluentes em corpo hídrico?]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="0ae11224-32c0-40fc-b0b8-e4f64ce81ef7" x="0" y="20" width="28" height="20">
+					<printWhenExpression><![CDATA[$F{ind_lanca_efluente}]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[Sim]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="0d21a68f-d2e1-4ad4-a86d-4ce7a8ee2b16" x="0" y="20" width="28" height="20">
+					<printWhenExpression><![CDATA[!$F{ind_lanca_efluente}]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[Não]]></text>
+			</staticText>
+			<subreport>
+				<reportElement uuid="2bf918e9-5fe2-4596-b4cc-9dcd515a4c8d" x="0" y="40" width="200" height="20" isRemoveLineWhenBlank="true"/>
+				<subreportParameter name="SUBREPORT_DIR">
+					<subreportParameterExpression><![CDATA[$P{SUBREPORT_DIR}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="ide_caracterizacao_ambiental_silos_armazens">
+					<subreportParameterExpression><![CDATA[$F{ide_caracterizacao_ambiental_silos_armazens}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "relatorio_subreport_caracterizacao_ambiental_silos_armazens_efluente_corpo_hidrico.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+		<band height="21">
+			<subreport>
+				<reportElement uuid="228fbbe4-dc8b-4c4b-9a0c-9be3378ff9ab" x="0" y="0" width="200" height="21"/>
+				<subreportParameter name="SUBREPORT_DIR">
+					<subreportParameterExpression><![CDATA[$P{SUBREPORT_DIR}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="ide_caracterizacao_ambiental_silos_armazens">
+					<subreportParameterExpression><![CDATA[$F{ide_caracterizacao_ambiental_silos_armazens}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "relatorio_subreport_caracterizacao_ambiental_silos_armazens_caracterizacao_atmosferica.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+		<band height="20">
+			<subreport>
+				<reportElement uuid="d9a677f8-9443-4216-ab66-733e3fbb1ede" x="0" y="0" width="200" height="20"/>
+				<subreportParameter name="SUBREPORT_DIR">
+					<subreportParameterExpression><![CDATA[$P{SUBREPORT_DIR}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="ide_caracterizacao_ambiental_silos_armazens">
+					<subreportParameterExpression><![CDATA[$F{ide_caracterizacao_ambiental_silos_armazens}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "relatorio_subreport_caracterizacao_ambiental_silos_armazens_equipamento_controle.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+		<band height="60">
+			<staticText>
+				<reportElement uuid="f4bd78ec-2fb3-48c5-b55e-02c076e5cef8" x="0" y="0" width="514" height="20"/>
+				<box>
+					<bottomPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Possui medidas de controle de emissões]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="b96b8dc2-7425-45fc-beef-ea5751e96536" x="0" y="20" width="28" height="20">
+					<printWhenExpression><![CDATA[$F{ind_medida_controle_emissao}]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Sim]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="ef460b80-e1d4-427d-af52-97b49ea6e668" x="0" y="20" width="28" height="20">
+					<printWhenExpression><![CDATA[!$F{ind_medida_controle_emissao}]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Não]]></text>
+			</staticText>
+			<subreport>
+				<reportElement uuid="c32e1cdd-6ac4-4384-9a88-e0f142d4e6f4" x="0" y="40" width="200" height="20" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$F{ind_medida_controle_emissao}]]></printWhenExpression>
+				</reportElement>
+				<subreportParameter name="SUBREPORT_DIR">
+					<subreportParameterExpression><![CDATA[$P{SUBREPORT_DIR}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="ide_caracterizacao_ambiental_silos_armazens">
+					<subreportParameterExpression><![CDATA[$F{ide_caracterizacao_ambiental_silos_armazens}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "relatorio_subreport_caracterizacao_ambiental_silos_armazens_medida_controle_emissao.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+		<band height="20">
+			<subreport>
+				<reportElement uuid="3b94e883-fc67-4cf0-8f0a-650ccd301f8d" x="0" y="0" width="200" height="20"/>
+				<subreportParameter name="SUBREPORT_DIR">
+					<subreportParameterExpression><![CDATA[$P{SUBREPORT_DIR}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="ide_caracterizacao_ambiental_silos_armazens">
+					<subreportParameterExpression><![CDATA[$F{ide_caracterizacao_ambiental_silos_armazens}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "relatorio_subreport_caracterizacao_ambiental_silos_armazens_classificacao_residuo.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+		<band height="20">
+			<subreport>
+				<reportElement uuid="8d84b8e0-b583-4047-a2d1-27df831cb553" x="0" y="0" width="200" height="20"/>
+				<subreportParameter name="SUBREPORT_DIR">
+					<subreportParameterExpression><![CDATA[$P{SUBREPORT_DIR}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="ide_caracterizacao_ambiental_silos_armazens">
+					<subreportParameterExpression><![CDATA[$F{ide_caracterizacao_ambiental_silos_armazens}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "relatorio_subreport_caracterizacao_ambiental_silos_armazens_destinacao_final.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+	</detail>
+</jasperReport>

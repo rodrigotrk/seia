@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="fce_sistema_esgotamento_sanitario_abas" pageWidth="495" pageHeight="817" whenNoDataType="AllSectionsNoDetail" columnWidth="495" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="80b78396-35cc-4e26-aaf9-1207b1892468">
+	<property name="ireport.zoom" value="1.6500000000000004"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="ide_fce" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[$P{ide_fce}]]></defaultValueExpression>
+	</parameter>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String"/>
+	<parameter name="ide_requerimento" class="java.lang.Integer"/>
+	<queryString>
+		<![CDATA[select ses.ide_fce_ses,fce.ide_requerimento from fce_ses ses
+INNER JOIN fce on ses.ide_fce = fce.ide_fce
+where fce.ide_fce = $P{ide_fce}]]>
+	</queryString>
+	<field name="ide_fce_ses" class="java.lang.Integer"/>
+	<field name="ide_requerimento" class="java.lang.Integer"/>
+	<detail>
+		<band height="16" splitType="Stretch">
+			<subreport runToBottom="false">
+				<reportElement uuid="9ef48ca3-c53b-4307-8488-a1765548a88b" positionType="Float" stretchType="RelativeToTallestObject" isPrintRepeatedValues="false" x="0" y="0" width="495" height="15" isRemoveLineWhenBlank="true" isPrintWhenDetailOverflows="true"/>
+				<subreportParameter name="SUBREPORT_DIR">
+					<subreportParameterExpression><![CDATA[$P{SUBREPORT_DIR}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="ide_fce_ses">
+					<subreportParameterExpression><![CDATA[$F{ide_fce_ses}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "fce_sistema_esgotamento_sanitario_dados_gerais.jasper"]]></subreportExpression>
+			</subreport>
+			<staticText>
+				<reportElement uuid="18419b73-7aee-4755-add0-e8d87b51543d" x="316" y="0" width="179" height="15">
+					<printWhenExpression><![CDATA[false]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Right">
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[Aba Dados Gerais]]></text>
+			</staticText>
+		</band>
+		<band height="15" splitType="Stretch">
+			<subreport runToBottom="false">
+				<reportElement uuid="b7859322-2bd1-4158-8edf-409159d26ea9" positionType="Float" stretchType="RelativeToTallestObject" isPrintRepeatedValues="false" x="0" y="0" width="495" height="15" isRemoveLineWhenBlank="true" isPrintWhenDetailOverflows="true"/>
+				<subreportParameter name="SUBREPORT_DIR">
+					<subreportParameterExpression><![CDATA[$P{SUBREPORT_DIR}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="ide_fce">
+					<subreportParameterExpression><![CDATA[$P{ide_fce}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="ide_requerimento">
+					<subreportParameterExpression><![CDATA[$F{ide_requerimento}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="ide_fce_ses">
+					<subreportParameterExpression><![CDATA[$F{ide_fce_ses}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "fce_sistema_esgotamento_sanitario_dados_elevatoria.jasper"]]></subreportExpression>
+			</subreport>
+			<staticText>
+				<reportElement uuid="e74e354f-fd17-4511-b4b7-5701b505352f" x="316" y="0" width="179" height="15">
+					<printWhenExpression><![CDATA[false]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Right">
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[Dados da Elevatória]]></text>
+			</staticText>
+		</band>
+		<band height="15" splitType="Stretch">
+			<subreport runToBottom="false">
+				<reportElement uuid="88e6e39f-4d18-4044-929a-12b5ca9fdbbe" positionType="Float" stretchType="RelativeToTallestObject" isPrintRepeatedValues="false" x="0" y="0" width="495" height="15" isRemoveLineWhenBlank="true" isPrintWhenDetailOverflows="true"/>
+				<subreportParameter name="SUBREPORT_DIR">
+					<subreportParameterExpression><![CDATA[$P{SUBREPORT_DIR}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="ide_fce">
+					<subreportParameterExpression><![CDATA[$P{ide_fce}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="ide_requerimento">
+					<subreportParameterExpression><![CDATA[$F{ide_requerimento}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="ide_fce_ses">
+					<subreportParameterExpression><![CDATA[$F{ide_fce_ses}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "fce_sistema_esgotamento_sanitario_estacao_tratamento_esgoto.jasper"]]></subreportExpression>
+			</subreport>
+			<staticText>
+				<reportElement uuid="479a083d-19a3-4d3d-a456-2cd820c2f79a" x="316" y="1" width="179" height="14">
+					<printWhenExpression><![CDATA[false]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Right">
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[Dados da estação de tratamento]]></text>
+			</staticText>
+		</band>
+		<band height="15">
+			<subreport runToBottom="false">
+				<reportElement uuid="9ba974a9-58d7-4c00-a60d-87d54cf85ca6" positionType="Float" stretchType="RelativeToTallestObject" isPrintRepeatedValues="false" x="0" y="0" width="495" height="15" isRemoveLineWhenBlank="true" isPrintWhenDetailOverflows="true"/>
+				<subreportParameter name="SUBREPORT_DIR">
+					<subreportParameterExpression><![CDATA[$P{SUBREPORT_DIR}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="ide_requerimento">
+					<subreportParameterExpression><![CDATA[$F{ide_requerimento}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="ide_fce_ses">
+					<subreportParameterExpression><![CDATA[$F{ide_fce_ses}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "fce_sistema_saneamento_sanitario_coordenada_efluente.jasper"]]></subreportExpression>
+			</subreport>
+			<staticText>
+				<reportElement uuid="f9850475-feb9-47e3-93f3-6787fff62ce0" x="316" y="1" width="179" height="14">
+					<printWhenExpression><![CDATA[false]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Right">
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[Lançamento Efluente]]></text>
+			</staticText>
+		</band>
+	</detail>
+</jasperReport>

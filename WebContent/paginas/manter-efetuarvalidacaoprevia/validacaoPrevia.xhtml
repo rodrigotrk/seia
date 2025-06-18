@@ -1,0 +1,526 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui">
+	
+	<p:confirmDialog widgetVar="modalConfirmarFechamentoDaTelaEfetuarValidacaoPrevia"  header="Alerta" message="#{bundle.geral_msg_confirmar_nao_salvar}" severity="alert">
+		<h:form>
+			<p:commandButton value="Sim" global="false" oncomplete="modalConfirmarFechamentoDaTelaEfetuarValidacaoPrevia.hide();dialogEfetuarValidacaoPrevia.hide();"/>
+			<p:commandButton value="Não" global="false" oncomplete="modalConfirmarFechamentoDaTelaEfetuarValidacaoPrevia.hide();"/>
+		</h:form>
+	</p:confirmDialog>
+	
+	<p:confirmDialog id="confirmarEnvioEmailDocumentoValidado" widgetVar="confirmarEnvioEmailDocumentoValidado"
+		header="#{bundle.geral_lbl_mensagem}" 
+		message="Documento validado, deseja enviar email para o requerente?"
+		resizable="false" severity="alert">
+		<h:form>
+			<h:panelGroup>
+				<p:commandButton value="#{bundle.btn_sim}"  update="emailDocumentoValidado" 
+					oncomplete="confirmarEnvioEmailDocumentoValidado.hide();emailDocumentoValidado.show();"/>
+				<p:commandButton value="#{bundle.btn_nao}"  oncomplete="confirmarEnvioEmailDocumentoValidado.hide();"/>
+			</h:panelGroup>
+		</h:form>
+	
+	</p:confirmDialog>
+	
+		<p:dialog id="emailDocumentoValidado" modal="true" widgetVar="emailDocumentoValidado"  appendToBody="true" position="center"
+			header="Email Documento Validado" width="810" height="380" resizable="false" style="height:380px"><!-- onShow="$('.counter').html($('.textoEmail').val().length +' caracteres.')" -->
+		<h:form id="documentoValidado">			
+			<h:panelGrid>				
+				<p:inputTextarea styleClass="textoEmail" cols="150" autoResize="false" maxHeight="280" rows="20" style="overflow-y:auto;"  
+					value="#{validacaoPreviaController.emailDocumentoValidado}" maxLength="4000" /><!-- onkeyup="$('.counter').html($('.textoEmail').val().length +' caracteres.')" -->
+				
+				<!-- h:outputText styleClass="counter"  -->
+			</h:panelGrid>
+			<h:panelGrid columns="2" style="float:right;">
+				<p:commandButton value="Enviar Email" process="@form" action="#{validacaoPreviaController.salvarComunicacaoDocumentoValidado()}"/>
+				<p:commandButton value="Cancelar" oncomplete="emailDocumentoValidado.hide();"/>
+			</h:panelGrid>	
+		</h:form>
+	</p:dialog>
+	
+	
+	<p:confirmDialog id="confirmarEnvioEmailPendenciaValidacao" widgetVar="confirmarEnvioEmailPendenciaValidacao"
+		header="#{bundle.geral_lbl_mensagem}" 
+		message="Deseja enviar um email para o requerente solicitando o envio da documentação não validada?"
+		resizable="false" severity="alert">
+		<h:form>
+			<h:panelGroup>
+				<p:commandButton value="#{bundle.btn_sim}"  update="pendenciaValidacao" action="#{validacaoPreviaController.salvarComunicacaoDocumentoPendente()}"
+					oncomplete="confirmarEnvioEmailPendenciaValidacao.hide();emailPendenciaValidacao.show();"/>
+				<p:commandButton value="#{bundle.btn_nao}"  oncomplete="confirmarEnvioEmailPendenciaValidacao.hide();"/>
+			</h:panelGroup>
+		</h:form>
+	</p:confirmDialog>
+	
+	<p:dialog id="emailPendenciaValidacao" modal="true" widgetVar="emailPendenciaValidacao"  appendToBody="true" position="center"
+			header="Email Validação Pendente" width="810" height="380" resizable="false" style="height:380px"><!-- onShow="$('.counter').html($('.textoEmail').val().length +' caracteres.')" -->
+		<h:form id="pendenciaValidacao">			
+			<h:panelGrid>				
+				<p:inputTextarea styleClass="textoEmail" cols="150" autoResize="false" maxHeight="280" rows="20" style="overflow-y:auto;"  
+					value="#{validacaoPreviaController.emailPendenciaValidacao}" maxLength="4000" /><!-- onkeyup="$('.counter').html($('.textoEmail').val().length +' caracteres.')" -->
+				
+				<!--h:outputText styleClass="counter" /--> 
+			</h:panelGrid>
+			<h:panelGrid columns="2" style="float:right;">
+				<p:commandButton value="Enviar Email" process="@form" action="#{validacaoPreviaController.salvarComunicacaoPendenciaValidacao()}"/>
+				<p:commandButton value="Cancelar" oncomplete="emailPendenciaValidacao.hide();"/>
+			</h:panelGrid>	
+		</h:form>
+	</p:dialog>
+	
+	<p:dialog widgetVar="fileUploadDocumentoValidacao" id="_fileUploadDocumentoValidacao" modal="true" draggable="true" position="center" resizable="false"
+		header="#{bundle.validacao_previa_lbl_selecione_arquivo}" appendToBody="true"
+		style="max-height:80%; overflow: auto; border-collapse:collapse; margin: 100px auto 0px auto; margin-left: 50px \0/ !important">
+		
+		<h:form enctype="multipart/form-data">
+			<p:fileUpload uploadLabel="false" label="Upload Arquivo" auto="true"
+				invalidFileMessage="Tipo de arquivo inválido." mode="advanced"
+				fileUploadListener="#{validacaoPreviaController.gerenciarUploadDocumentoObrigatorio}"
+				allowTypes="/(\.|\/)(pdf|gif|jpeg|png|jpg)$/"  
+				oncomplete="fileUploadDocumentoValidacao.hide();updateDocumento();" value="#{validacaoPreviaController.documentoObrigatorioSelecionado}" />
+		</h:form>
+	</p:dialog>
+	
+	<p:dialog id="dialogEfetuarValidacaoPrevia" showHeader="false" style="overflow-y:auto;max-height:750px;top:20px !important;" modal="true" appendToBody="true" position="top"
+		width="850" widgetVar="dialogEfetuarValidacaoPrevia" resizable="false" draggable="false">
+		
+		<h:form id="validacaoPrevia">
+			<p:remoteCommand name="updateDocumento" update=":validacaoPrevia:pnlListaDocumentos" oncomplete="expandAll();"/>
+			<h1 style="font-size: 14px">EFETUAR VALIDAÇÃO PRÉVIA</h1>
+			<hr	style="width: 100%; margin-top: 5px; margin-bottom: 5px; border: none; border-top: 1px solid #ccc;" />
+			<p style="margin: 5px;" class="titulo-grupo"><h:outputText value="Dados do requerimento"/></p>
+			<h:panelGrid columns="4">
+				<h:outputLabel value="N° Requerimento : " styleClass="tit-requerimento"/>
+				<h:outputText value="#{validacaoPreviaController.requerimento.numRequerimento}" styleClass="dados-requerimento" />
+				<h:outputLabel value="Empreendimento : "  styleClass="tit-requerimento"/>
+				<h:outputText value="#{validacaoPreviaController.requerimento.ultimoEmpreendimento.nomEmpreendimento}" styleClass="dados-requerimento" />
+				<h:outputLabel value="CPF : "  styleClass="tit-requerimento" rendered="#{validacaoPreviaController.requerimento.requerente.PF}"/>
+				<h:outputLabel value="CNPJ : "  styleClass="tit-requerimento" rendered="#{validacaoPreviaController.requerimento.requerente.PJ}" />
+				<h:outputText value="#{validacaoPreviaController.requerimento.requerente.cpfCnpj}" styleClass="dados-requerimento" />
+				<h:outputLabel value="Requerente : " styleClass="tit-requerimento" />
+				<h:outputText value="#{validacaoPreviaController.requerimento.requerente.nomeRazao}" styleClass="dados-requerimento" />
+			</h:panelGrid>
+			<hr	style="width: 100%; margin-top: 5px; margin-bottom: 5px; border: none; border-top: 1px solid #ccc;" />
+			<br/>
+			<ui:include src="/paginas/novo-requerimento/historicoComunicacaoRequerente.xhtml" />
+			<br/>
+			<h1 style="font-size: 12px">Documentos</h1>
+			
+			<h:panelGrid columns="2" rendered="#{validacaoPreviaController.requerimento.ultimoEmpreendimento.endereco.ideLogradouro.municipio.indEstadoEmergencia}">
+				<h:outputText styleClass="dados-requerimento" value="O empreendimento se enquadra nas características presentes no decreto n° 14.389/2013?" />
+				<p:selectOneRadio id="estado_emergencia_req" value="#{validacaoPreviaController.requerimento.indEstadoEmergencia}" >
+					<f:selectItem itemLabel="Sim" itemValue="#{true}"/>
+					<f:selectItem itemLabel="Não" itemValue="#{false}"/>
+				</p:selectOneRadio>
+			</h:panelGrid>
+			
+			<br/>
+			
+			<h:panelGrid id="listaFce" rendered="#{validacaoPreviaController.renderedFCE}">
+				<p:dataTable id="tabelaFce" value="#{validacaoPreviaController.listaFce}" var="fce" emptyMessage="#{bundle.msg_lista_vazia}" style="width:811px;">
+					<f:facet name="header">
+						<h:outputText value="Formulário de Caracterização do Empreendimento - FCE" />
+					</f:facet>
+					<p:column style="width: 680px;">
+						<f:facet name="header">Descrição</f:facet>
+			           	<h:outputText value="#{fce.ideDocumentoObrigatorio.nomDocumentoObrigatorio}"/>
+			        </p:column>
+			        <p:column style="width: 60px;">
+						<f:facet name="header">Ações</f:facet>
+						<h:panelGroup layout="block" style="text-align:center;">
+							<h:commandLink title="Imprimir" global="true">
+								<p:fileDownload value="#{validacaoPreviaController.imprimirRelatorio(fce)}"/>
+								<p:graphicImage value="/resources/img/ico-pdf.png" />
+							</h:commandLink>
+							
+						</h:panelGroup>
+					</p:column>
+				</p:dataTable>
+				<br/>
+			</h:panelGrid>
+			
+			<h:panelGrid id="listaFormularioAtoDeclaratorio" 
+				rendered="#{validacaoPreviaController.renderedFormularioAtoDeclaratorio}">
+				<p:dataTable id="tabelaAtoDeclaratorio" 
+					value="#{validacaoPreviaController.listaAtoDeclaratorio}" 
+					var="ato" 
+					emptyMessage="#{bundle.msg_lista_vazia}" 
+					style="width:811px;">
+					<f:facet name="header">
+						<h:outputText value="Formulário de Atos Declaratórios" />
+					</f:facet>
+					<p:column style="width: 680px;">
+						<f:facet name="header">Descrição</f:facet>
+			           	<h:outputText value="#{ato.ideDocumentoObrigatorio.nomDocumentoObrigatorio}"/>
+			        </p:column>
+			        <p:column style="width: 60px;">
+						<f:facet name="header">Ações</f:facet>
+						<h:panelGroup layout="block" style="text-align:center;">
+							<h:commandLink title="Imprimir" global="true">
+								<p:fileDownload value="#{validacaoPreviaController.imprimirRelatorio(ato)}"/>
+								<p:graphicImage value="/resources/img/ico-pdf.png" />
+							</h:commandLink>
+							
+						</h:panelGroup>
+					</p:column>
+				</p:dataTable>
+				<br/>
+			</h:panelGrid>
+			
+			<h:panelGrid id="listaDeclaracao" rendered="#{!empty validacaoPreviaController.listaDeclaracaoIntervencao}">
+				<p:dataTable id="dataTableDeclaracao" var="declaracao" value="#{validacaoPreviaController.listaDeclaracaoIntervencao}" 
+				rendered="#{!empty validacaoPreviaController.listaDeclaracaoIntervencao}" style="width:811px;">
+					<f:facet name="header">
+						<h:outputText value="Decreto" />
+					</f:facet>
+					<p:column>
+						<f:facet name="header">
+							<h:outputText value="Descrição" />
+						</f:facet>
+						<h:outputText value="#{declaracao.caracteristicaAtividadeIntervencaoApp.caracteristicaIntervencaoApp.nomCaracteristicaIntervencao}"  />
+					</p:column>
+					<p:column headerText="Nome Arquivo">
+						<h:panelGroup layout="block" style="word-wrap: break-word;">
+							<h:outputText value="#{declaracao.fileNameDoc}" />
+						</h:panelGroup>
+					</p:column>
+					<p:column headerText="Tamanho(KB)">
+						<h:panelGroup layout="block" style="word-wrap: break-word;">
+							<h:outputText value="#{declaracao.tamanhoDoc}" />
+						</h:panelGroup>
+					</p:column>	
+					<p:column headerText="Validado">
+						<h:panelGroup id="pnlValidadoDeclaracao" layout="block" style="width: 50px;">
+							<p:selectBooleanCheckbox value="#{declaracao.indDocumentoValidado}" disabled="#{declaracao.indDocumentoValidado}">
+								<p:ajax process="@this" update="@this pnlAcoesDeclaracao"/>
+							</p:selectBooleanCheckbox>
+						</h:panelGroup>
+					</p:column>
+					<p:column headerText="Ações">
+						<h:panelGroup id="pnlAcoesDeclaracao" layout="block" style="width: 50px; text-align: center;">
+							<h:commandLink title="Download do arquivo" rendered="#{!empty declaracao.desCaminhoArquivoDecreto}">
+								<h:graphicImage title="Download do arquivo" value="/resources/img/ico-download.png" />
+								<p:fileDownload value="#{validacaoPreviaController.getFileDownload(declaracao.desCaminhoArquivoDecreto)}"/>
+							</h:commandLink>
+							<p:commandLink rendered="#{declaracao.indDocumentoValidado}" process="@this" update="pnlValidadoDeclaracao pnlAcoesDeclaracao">
+								<f:setPropertyActionListener target="#{declaracao.indDocumentoValidado}" value="#{false}"/>
+								<h:graphicImage title="Excluir Validação" value="/resources/img/ico-excluir-p.png" />
+							</p:commandLink>
+						</h:panelGroup>
+					</p:column>
+				</p:dataTable>
+			</h:panelGrid>
+			
+			<br/>
+			
+			<h:panelGrid id="pnlListaDocumentos">
+			
+			<!-- REQUERIMENTOS NOVOS V2 -->
+				<p:dataTable id="dataTableAtosAmbientaisValidacaoPrevia" var="doc" value="#{validacaoPreviaController.listaDocumentoObrigatorioEnquadramento}" 
+				rendered="#{!validacaoPreviaController.reqAntigo}" emptyMessage="#{bundle.msg_lista_vazia}">
+					<f:facet name="header">
+						<h:outputText value="Documentos" />
+					</f:facet>
+					<p:column>
+						<h:panelGroup layout="block" style="text-align: center">
+				            <p:rowToggler rendered="#{!empty doc.listaDocumentoObrigatorio}" />
+				            <p:graphicImage rendered="#{empty doc.listaDocumentoObrigatorio}" value="/resources/img/ico-aprovado.png"/>  
+						</h:panelGroup>  
+			        </p:column> 	
+					<p:column>
+						<f:facet name="header">
+							<h:outputText value="Ato ambiental" />
+						</f:facet>
+						<h:outputText value="#{doc.enquadramentoAtoAmbiental.atoAmbiental.nomAtoAmbiental}"  />
+					</p:column>
+					<p:column style="text-align: center;">
+						<f:facet name="header">
+							<h:outputText value="Tipologia" />
+						</f:facet>
+						<h:outputText rendered="#{doc.enquadramentoAtoAmbiental.tipologia ne null}" value="#{doc.enquadramentoAtoAmbiental.tipologia.desTipologia}" />
+					</p:column>
+					<p:rowExpansion rendered="#{!empty doc.listaDocumentoObrigatorio}">
+						<p:dataTable id="listaDoc" var="documento" value="#{doc.listaDocumentoObrigatorio}">
+							<p:column headerText="Formulário/Documento">
+								<h:panelGroup layout="block" style="width: 300px; word-wrap: break-word;">
+									<h:outputText value="#{documento.ideDocumentoAto.ideDocumentoObrigatorio.nomDocumentoObrigatorio}" />
+								</h:panelGroup>
+							</p:column>
+							<p:column headerText="Nome Arquivo">
+								<h:panelGroup layout="block" style="width: 200px; word-wrap: break-word;">
+									<h:outputText value="#{documento.fileNameDoc}" />
+								</h:panelGroup>
+							</p:column>
+							<p:column headerText="Tamanho(KB)">
+								<h:panelGroup layout="block" style="width: 100px; word-wrap: break-word;">
+									<h:outputText value="#{documento.tamanhoDoc}" />
+								</h:panelGroup>
+							</p:column>	
+							<p:column headerText="Validado">
+								<h:panelGroup id="pnlValidado" layout="block" style="width: 50px;">
+									<p:selectBooleanCheckbox value="#{documento.indDocumentoValidado}" disabled="#{documento.indDocumentoValidado}">
+										<p:ajax process="@this" update="@this pnlAcoes"/>
+									</p:selectBooleanCheckbox>
+								</h:panelGroup>
+							</p:column>
+							<p:column headerText="Ações">
+								<h:panelGroup id="pnlAcoes" layout="block" style="width: 50px; text-align: center;">
+									<h:commandLink title="Download do arquivo" rendered="#{!empty documento.dscCaminhoArquivo}">
+										<h:graphicImage title="Download do arquivo" value="/resources/img/ico-download.png" />
+										<p:fileDownload value="#{validacaoPreviaController.getFileDownload(documento.dscCaminhoArquivo)}"/>
+									</h:commandLink>
+									<p:commandLink rendered="#{documento.indDocumentoValidado}" process="@this" update="pnlValidado pnlAcoes">
+										<f:setPropertyActionListener target="#{documento.indDocumentoValidado}" value="#{false}"/>
+										<h:graphicImage title="Excluir Validação" value="/resources/img/ico-excluir-p.png" />
+									</p:commandLink>
+								</h:panelGroup>
+							</p:column>
+						</p:dataTable>
+					</p:rowExpansion>
+				</p:dataTable>
+				<br />
+				
+				<!-- REQUERIMENTOS ANTIGOS ENQUADRADOS NA V1 -->
+				<p:dataTable id="dataTableValidacaoPreviaRequerimentosV1" var="documento" value="#{validacaoPreviaController.listaDocumentoObrigatorioEnquadramentoAntigo}" 
+					emptyMessage="#{bundle.msg_lista_vazia}" style="width:780px;" rendered="#{validacaoPreviaController.reqAntigo}">
+					
+					<p:column headerText="Formulário/Documento">
+						<h:outputText value="#{documento.ideDocumentoAto.ideDocumentoObrigatorio.nomDocumentoObrigatorio}" />
+					</p:column>
+					
+					<p:column headerText="Tipologia" style="width:130px !important">
+						<h:outputText value="#{documento.ideDocumentoAto.descricao}" />
+					</p:column>
+					
+					<p:column headerText="Nome Arquivo" style="max-width: 232px;">
+						<h:outputText value="#{documento.fileNameDoc}" />
+					</p:column>
+					
+					<p:column headerText="Tamanho(KB)">
+						<h:outputText value="#{documento.tamanhoDoc}" />
+					</p:column>	
+										
+					<p:column id="colValidado" headerText="Validado">
+						<h:panelGroup id="pnlValidado" layout="block">
+							<p:selectBooleanCheckbox value="#{documento.indDocumentoValidado}" disabled="#{documento.indDocumentoValidado}">
+								<p:ajax process="@this" update="@this pnlAcoes"/>
+							</p:selectBooleanCheckbox>
+						</h:panelGroup>
+					</p:column>
+					
+					<p:column id="colAcoes" headerText="Ações">
+						<h:panelGroup id="pnlAcoes" layout="block">
+							<h:commandLink title="Download do arquivo" immediate="true" rendered="#{!empty documento.dscCaminhoArquivo}">
+								<h:graphicImage title="Download do arquivo" value="/resources/img/ico-download.png" />
+								<p:fileDownload value="#{validacaoPreviaController.getFileDownload(documento.dscCaminhoArquivo)}"/>
+							</h:commandLink>
+							
+							<p:commandLink rendered="#{documento.indDocumentoValidado}" process="@this" update="pnlValidado pnlAcoes">
+								<f:setPropertyActionListener target="#{documento.indDocumentoValidado}" value="#{false}"/>
+								<h:graphicImage title="Excluir Validação" value="/resources/img/ico-excluir-p.png" />
+							</p:commandLink>
+						</h:panelGroup>
+					</p:column>
+				</p:dataTable>
+				
+				<script>
+				    var expandAllValidacao = function(){
+						$('.ui-row-toggler').each(function(el){ $(this).click();});
+				    }
+				</script>
+				
+				<br/>
+	
+				<p:dataTable var="documento" value="#{validacaoPreviaController.documentosIdentificacao}" rendered="#{!empty validacaoPreviaController.documentosIdentificacao}">
+					<f:facet name="header">
+						Documentos Identificação
+					</f:facet>
+					
+					<p:column headerText="Documento">
+						<h:outputText value="#{documento.ideDocumentoIdentificacao.ideTipoIdentificacao.nomTipoIdentificacao}" />
+					</p:column>
+					
+					<p:column headerText="Nome Arquivo">
+						<h:outputText value="#{documento.ideDocumentoIdentificacao.fileName}" />
+					</p:column>
+					
+					<p:column headerText="Tamanho(KB)">
+						<h:outputText value="#{documento.ideDocumentoIdentificacao.fileSize}" />
+					</p:column>
+					<p:column headerText="Validado">
+						<h:panelGroup id="pnlValidado" layout="block">
+							<p:selectBooleanCheckbox value="#{documento.indDocumentoValidado}" disabled="#{documento.indDocumentoValidado}">
+								<p:ajax process="@this" update="@this pnlAcoes"/>
+							</p:selectBooleanCheckbox>
+						</h:panelGroup>
+					</p:column>		
+					<p:column headerText="Ações">
+						<h:panelGroup id="pnlAcoes" layout="block">
+							<h:commandLink title="Download do arquivo" immediate="true">
+								<h:graphicImage title="Download do arquivo" value="/resources/img/ico-download.png" />
+								<p:fileDownload value="#{validacaoPreviaController.getFileDownload(documento.ideDocumentoIdentificacao.dscCaminhoArquivo)}"/>
+							</h:commandLink>
+							
+							<p:commandLink rendered="#{documento.indDocumentoValidado}" process="@this" update="pnlValidado pnlAcoes">
+								<f:setPropertyActionListener target="#{documento.indDocumentoValidado}" value="#{false}"/>
+								<h:graphicImage title="Excluir Validação" value="/resources/img/ico-excluir-p.png" />
+							</p:commandLink>
+						</h:panelGroup>
+					</p:column>
+				</p:dataTable>
+				
+				<br/>
+				<p:dataTable var="documento" value="#{validacaoPreviaController.documentosRepresentacao}" rendered="#{!empty validacaoPreviaController.documentosRepresentacao}">
+					<f:facet name="header">
+						Documentos Representação
+					</f:facet>
+					
+					<p:column headerText="Documento">
+						<h:outputText value="#{documento.tipoDocumento}" />
+					</p:column>
+					
+					<p:column headerText="Nome Arquivo">
+						<h:outputText value="#{documento.fileNameTransient}" />
+					</p:column>
+					
+					<p:column headerText="Tamanho(KB)">
+						<h:outputText value="#{documento.sizeFile}" />
+					</p:column>
+					<p:column headerText="Validado">
+						<h:panelGroup id="pnlValidado" layout="block">
+							<p:selectBooleanCheckbox value="#{documento.indDocumentoValidado}" disabled="#{documento.indDocumentoValidado}">
+								<p:ajax process="@this" update="@this pnlAcoes"/>
+							</p:selectBooleanCheckbox>
+						</h:panelGroup>
+					</p:column>		
+					<p:column headerText="Ações">
+						<h:panelGroup id="pnlAcoes" layout="block">
+							<h:commandLink title="Download do arquivo" immediate="true">
+								<p:fileDownload value="#{validacaoPreviaController.getFileDownload(documento.caminhoArquivoTransient)}"/>
+								<h:graphicImage title="Download do arquivo" value="/resources/img/ico-download.png" />
+							</h:commandLink>
+							
+							<p:commandLink rendered="#{documento.indDocumentoValidado}" process="@this" update="pnlValidado pnlAcoes">
+								<f:setPropertyActionListener target="#{documento.indDocumentoValidado}" value="#{false}"/>
+								<h:graphicImage title="Excluir Validação" value="/resources/img/ico-excluir-p.png" />
+							</p:commandLink>
+						</h:panelGroup>
+					</p:column>
+					
+				</p:dataTable>
+				<br/>
+				
+				<h:panelGrid width="811px;">
+					<p:dataTable var="docImovelRuralReq" emptyMessage="{bundle.msg_lista_vazia}" value="#{validacaoPreviaController.documentosImovelRuralReq}" 
+								rendered="#{!empty validacaoPreviaController.documentosImovelRuralReq}" style="max-width:810px;">
+						<f:facet name="header">
+							Documentos Identificação dos Imóveis Rurais
+						</f:facet>
+						<p:column headerText="Imóvel Rural">
+							<h:outputText value="#{docImovelRuralReq.ideDocumentoImovelRural.imovelRural.desDenominacao}" />
+						</p:column>
+						
+						<p:column headerText="Documento">
+							<h:outputText value="#{docImovelRuralReq.ideDocumentoImovelRural.nomDocumentoObrigatorio}" />
+						</p:column>
+						
+						<p:column headerText="Nome Arquivo" style="word-break: break-word;">
+							<h:outputText value="#{docImovelRuralReq.ideDocumentoImovelRural.fileName}" />
+						</p:column>
+						
+						<p:column headerText="Tamanho(KB)">
+							<h:outputText value="#{docImovelRuralReq.ideDocumentoImovelRural.fileSizeFormated}" />
+						</p:column>
+						<p:column headerText="Validado">
+							<h:panelGroup id="pnlValidado" layout="block">
+								<p:selectBooleanCheckbox value="#{docImovelRuralReq.indDocumentoValidado}">
+									<p:ajax process="@this" update="@this pnlAcoes"/>
+								</p:selectBooleanCheckbox>
+							</h:panelGroup>
+						</p:column>		
+						<p:column headerText="Ações">
+							<h:panelGroup id="pnlAcoes" layout="block">
+								<h:commandLink title="Download do arquivo" immediate="true">
+									<h:graphicImage title="Download do arquivo" value="/resources/img/ico-download.png" />
+									<p:fileDownload value="#{validacaoPreviaController.getFileDownload(docImovelRuralReq.ideDocumentoImovelRural.dscCaminhoArquivo)}"/>
+								</h:commandLink>
+								
+								<p:commandLink rendered="#{docImovelRuralReq.indDocumentoValidado}" process="@this" update="pnlValidado pnlAcoes">
+									<f:setPropertyActionListener target="#{docImovelRuralReq.indDocumentoValidado}" value="#{false}"/>
+									<h:graphicImage title="Excluir Validação" value="/resources/img/ico-excluir-p.png" />
+								</p:commandLink>
+							</h:panelGroup>
+						</p:column>
+					</p:dataTable>
+				</h:panelGrid>
+				
+				
+				
+				<h:panelGrid width="811px;" style="margin-top:20px;">
+					<p:dataTable var="docReqEmp" emptyMessage="{bundle.msg_lista_vazia}" value="#{validacaoPreviaController.listaDocumentoRequerimentoEmpreendimentos}" 
+								rendered="#{!empty validacaoPreviaController.listaDocumentoRequerimentoEmpreendimentos}" style="max-width:810px;">
+						<f:facet name="header">
+							Documentos do Empreendimento
+						</f:facet>
+						
+						<p:column headerText="Documento" style="word-break: break-word;">
+							<h:outputText value="#{docReqEmp.nomDocumento}" />
+						</p:column>
+						
+						<p:column headerText="Nome Arquivo" style="word-break: break-word;">
+							<h:outputText value="#{docReqEmp.fileNameDoc}" />
+						</p:column>
+						
+						<p:column headerText="Tamanho(KB)">
+							<h:outputText value="#{docReqEmp.tamanhoDoc}" />
+						</p:column>
+						<p:column headerText="Validado">
+							<h:panelGroup id="pnlValidado" layout="block">
+								<p:selectBooleanCheckbox value="#{docReqEmp.indDocumentoValidado}" disabled="#{docReqEmp.indDocumentoValidado}">
+									<p:ajax process="@this" update="@this pnlAcoes"/>
+								</p:selectBooleanCheckbox>
+							</h:panelGroup>
+						</p:column>		
+						<p:column headerText="Ações">
+							<h:panelGroup id="pnlAcoes" layout="block">
+								<h:commandLink title="Download do arquivo" immediate="true">
+									<h:graphicImage title="Download do arquivo" value="/resources/img/ico-download.png" />
+									<p:fileDownload value="#{validacaoPreviaController.getFileDownload(docReqEmp.dscCaminhoArquivo)}"/>
+								</h:commandLink>
+								
+								<p:commandLink rendered="#{docReqEmp.indDocumentoValidado}" process="@this" update="pnlValidado pnlAcoes">
+									<f:setPropertyActionListener target="#{docReqEmp.indDocumentoValidado}" value="#{false}"/>
+									<h:graphicImage title="Excluir Validação" value="/resources/img/ico-excluir-p.png" />
+								</p:commandLink>
+							</h:panelGroup>
+						</p:column>
+					</p:dataTable>
+				</h:panelGrid>
+				
+				
+			</h:panelGrid>
+			
+			<br/>
+			<h:panelGrid id="painelAreas" rendered="#{empty validacaoPreviaController.processoReenquadramentoDTO and !validacaoPreviaController.CRF}">
+				<h:outputText value="Selecione a área onde será formado o processo" styleClass="dados-requerimento" />
+				<p:selectOneRadio layout="pageDirection" value="#{validacaoPreviaController.requerimento.ideArea}" converter="areaConverter">
+					<f:selectItems var="area" value="#{validacaoPreviaController.areas}" itemLabel="#{area.nomArea}"
+						itemValue="#{area}"/>
+				</p:selectOneRadio>	
+			</h:panelGrid>
+			<br/>
+			
+			<h:panelGrid columns="2" style="float:right">
+				<p:commandButton value="Salvar" style="float:right;" update="formConsultarRequerimento:tabelaRequerimentos" global="true" action="#{validacaoPreviaController.salvar()}" oncomplete="atualizarPauta()"/>
+				<p:commandButton value="Voltar" style="float:right;" global="true" oncomplete="modalConfirmarFechamentoDaTelaEfetuarValidacaoPrevia.show();"/>
+				<p:remoteCommand name="atualizarPauta" actionListener="#{pautaReenquadramentoProcessoController.consultar()}" update=":frmPautaReenquadramentoProcesso" />
+			</h:panelGrid>
+		</h:form>
+	</p:dialog>
+	
+</ui:composition>

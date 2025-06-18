@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui">
+	
+	<!-- <p:dialog id="dialogCnae" header="#{bundle.cnaeLabelCabecalho}" widgetVar="dialogCnae" height="325" width="750" resizable="false" position="center" appendToBody="true" modal="true">
+	<ui:include
+				src="/paginas/manter-fce/outorga/captacao/superficial/modalAtividadeCnae.xhtml" />
+	</p:dialog>			 -->
+	
+	<h:form id="formCapSuperCaptacao">
+	
+		<h:outputText styleClass="titulo-grupo" style="font-weight:bold; margin-left:10px;" value="Dados da Captação *" />
+		<h:panelGrid id="gridCaptacao">
+			<br />
+			<h:outputText style="margin-left:20px;" value="Características da Captação"/>
+			<p:selectOneRadio value="#{fceCaptacaoSuperficialController.fceCaptacaoSuperficial.caracteristicaCaptacao}" style="margin-left:30px;" layout="pageDirection" 
+			valueChangeListener="#{fceCaptacaoSuperficialController.changeCaracteristicaCaptacao()}" converter="simpleEntityConverter" 
+			disabled="#{fceCaptacaoSuperficialController.fceIntervencaoBarragemSalva or fceCaptacaoSuperficialController.desabilitarTudo}">  
+	        	<f:selectItems value="#{fceCaptacaoSuperficialController.listaCaracteristicaCaptacaoTemp}" var="caracteristicaEscolhida" itemLabel="#{caracteristicaEscolhida.dscCaracteristicaCaptacao}" itemValue="#{caracteristicaEscolhida}"/>
+	    		<p:ajax event="change" global="false" update="capSuperAbas formCapSuperCaptacao :formCapSuperBarramento"/>
+	    	</p:selectOneRadio>			
+	    	<br />
+			<h:outputText style="margin-left:20px;" value="Características do Sistema de Captação"/>
+			
+			<p:selectOneRadio value="#{fceCaptacaoSuperficialController.fceCaptacaoSuperficial.caracteristicaSistemaCaptacao}" 
+			style="margin-left:30px;" layout="pageDirection" converter="simpleEntityConverter" disabled="#{fceCaptacaoSuperficialController.desabilitarTudo}">  
+	        	<f:selectItems value="#{fceCaptacaoSuperficialController.listaCaracteristicaSistemaCaptacao}" var="caracteristica" itemLabel="#{caracteristica.dscCaracteristicaSistemaCaptacao}" itemValue="#{caracteristica}" />
+	        	<p:ajax global="false"/>  
+	    	</p:selectOneRadio>
+	    	
+	    	<br />
+    	</h:panelGrid> <!-- FIM DO PANELGRID INICIAL -->
+    	
+		
+		<h:panelGroup id="pngTipoEstabelecimentoSuperficial">
+			<h:outputText id="tipoEstabelecimentoSuperficial" value="Tipo de Estabelecimento" styleClass="titulo-grupo"  style="margin-left:10px; font-weight:bold;" rendered="#{fceCaptacaoSuperficialController.renderCamposCnaeEVazao}"/>
+			<br /><br />
+		</h:panelGroup>
+    	
+    	<!-- 
+    	<h:panelGrid style="margin-left:15px;" columns="3"  rendered="#{fceCaptacaoSuperficialController.renderCamposCnaeEVazao}"> 
+		    	
+		    	<h:outputLabel value="Vazão da captação"/>
+		    	<p:inputText value="#{fceCaptacaoSuperficialController.fceCaptacaoSuperficial.numVazaoCaptacao}" size="10"
+		    	 disabled="#{!fceCaptacaoSuperficialController.fceTecnico}" id="vazaoCaptacao" onkeyup="maskIt(this, event, '99.999.999,99', true)">
+		    		<f:convertNumber minFractionDigits="2" locale="pt_BR"/>
+		    		 
+		    	</p:inputText>
+		    	<h:outputText value="(m³/dia)" />
+    	</h:panelGrid>
+    	-->
+    	
+		<h:panelGrid columns="1" style="margin-left:25px;" rendered="#{fceCaptacaoSuperficialController.renderCamposCnaeEVazao}">
+			<h:panelGroup>
+				<h:outputText value="#{bundle.representantelegalLabelIncluirCnae}" />
+				
+				<p:commandLink oncomplete="dialogCnae.show()" actionListener="#{cnaeController.limparObjetos()}" update="dialogCnae" disabled="#{fceCaptacaoSuperficialController.fceIntervencaoBarragemSalva or fceCaptacaoSuperficialController.desabilitarTudo}">
+					<h:graphicImage title="Incluir Cnae" value="/resources/img/ico-expandir.png"  />
+					<f:setPropertyActionListener target="#{cnaeController.editMode}" value="#{false}" />
+					<f:setPropertyActionListener target="#{cnaeController.enableFormCnae}" value="#{true}" />
+					<f:setPropertyActionListener target="#{cnaeController.fceCaptacaoSuperficial}" value="#{fceCaptacaoSuperficialController.fceCaptacaoSuperficial}" />
+					<f:ajax execute="@this" render=":documento:dialogCnae"/>
+				</p:commandLink> 
+				
+			</h:panelGroup>			
+		</h:panelGrid>
+		
+		<h:panelGrid id= "pnlTableCnae" style="margin-left:25px;"  render="#{fceCaptacaoSuperficialController.renderCamposCnaeEVazao}">
+		
+			 <p:dataTable id="tableCnae" widgetVar="tableCnae" value="#{cnaeController.fceCaptacaoSuperficialCnaeData}" var="fceSuperficialCnae" rendered="#{cnaeController.flagTableCnae}" emptyMessage="#{bundle.cnaeLabelTabRegitrosNaoEncontrados}">
+					<f:facet name="header">
+						<h:outputText value="#{bundle.cnaeLabelTabHeader}" />					
+					</f:facet>
+					<p:column headerText="#{bundle.cnaeLabelTabCodigo}">
+						<h:outputText value="#{fceSuperficialCnae.ideCnae.codCnae}" />
+					</p:column>
+					<p:column headerText="#{bundle.cnaeLabelTabDescricao}">
+						<h:outputText value="#{fceSuperficialCnae.ideCnae.desCnae}" />
+					</p:column>
+					<p:column headerText="#{bundle.cnaeLabelTabAtividadePrincipal}">
+						<h:outputText value="#{fceSuperficialCnae.indCnaePrincipal eq true ? 'Sim' : 'Não'}" />				
+					</p:column>				
+					<p:column headerText="#{bundle.cnaeLabelTabAtividadeAcoes}">
+						<p:commandLink oncomplete="dialogCnae.show();" actionListener="#{cnaeController.editarItemLista(fceSuperficialCnae)}" disabled="#{fceCaptacaoSuperficialController.fceIntervencaoBarragemSalva or fceCaptacaoSuperficialController.desabilitarTudo}">
+						<f:setPropertyActionListener target="#{cnaeController.editMode}" value="#{true}" />
+						<f:setPropertyActionListener target="#{cnaeController.enableFormCnae}" value="#{true}" />
+						<p:graphicImage value="/resources/img/ico-editar.png"/>
+							<f:ajax execute="@this"/>
+						</p:commandLink>
+						<h:commandButton image="/resources/img/ico-excluir.png" onclick="dialogExcluirCnae.show()" disabled="#{fceCaptacaoSuperficialController.fceIntervencaoBarragemSalva or fceCaptacaoSuperficialController.desabilitarTudo}">
+							<f:setPropertyActionListener target="#{cnaeController.fceCaptacaoSuperficialCnaeSelecionado}" value="#{fceSuperficialCnae}" />
+							<f:ajax execute="@this"/>
+						</h:commandButton>
+						
+					</p:column>				
+			</p:dataTable> 
+			
+    	</h:panelGrid>
+    	
+		<h:panelGrid id="gridBotoes" rendered="#{!fceCaptacaoSuperficialController.desabilitarTudo}" columns="2" style="margin-top:40px;">
+			<p:commandButton id="btnVoltar" value="Voltar"  style="width:90px;" update="formCapSuperCaptacao" process="formCapSuperCaptacao" onclick="confirmationVoltarAbaCaptacao.show();"  global="false"/>
+			<p:commandButton id="btnAvancar" value="Avançar" style="width:90px;" update="capSuperAbas" process="formCapSuperCaptacao" action="#{fceCaptacaoSuperficialController.avancarAba()}" global="false">
+				<f:setPropertyActionListener target="#{fceCaptacaoSuperficialController.fceCaptacaoSuperficialCnaeData}" value="#{cnaeController.fceCaptacaoSuperficialCnaeData}" />
+			</p:commandButton> 
+		</h:panelGrid> <!-- FIM DO PANELGRID BOTOES -->
+		
+	</h:form>
+	
+</ui:composition>

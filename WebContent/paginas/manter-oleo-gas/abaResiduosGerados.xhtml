@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+				xmlns:h="http://java.sun.com/jsf/html" 
+				xmlns:f="http://java.sun.com/jsf/core" 
+				xmlns:ui="http://java.sun.com/jsf/facelets" 
+				xmlns:p="http://primefaces.prime.com.tr/ui">
+
+	<h:panelGrid columns="3" style="width: 100%;">
+		<h:outputText value="* Cascalhos gerados (m³):" />
+		<p:spacer width="100" height="0"/>
+		<h:outputText value="* Coeficiente de empolamento (%):" />
+		
+		<p:inputText value="#{caepogController.caepogPoco.cascalhoResiduoCaepogPoco}" required="false" requiredMessage="Favor informar o valor do cascalho gerado" 
+			disabled="#{!caepogController.caepogPoco.indNovoCaepogPoco or caepogController.caepog.visualizando}" maxlength="6"
+			onkeyup="SomenteNumero(this);" >
+			
+			<p:ajax event="blur" global="false"/>
+		</p:inputText>
+		
+		<p:spacer width="100" height="0"/>
+		
+		<p:inputText value="#{caepogController.caepogPoco.empolamentoCaepogPoco}" required="false" requiredMessage="Favor informar o coeficiente de empolamento" 
+			onkeyup="SomenteNumero(this);" disabled="#{!caepogController.caepogPoco.indNovoCaepogPoco or caepogController.caepog.visualizando}" maxlength="3">
+			
+			<p:ajax event="blur" global="false"/>
+		</p:inputText>
+	</h:panelGrid>
+	
+	<h:panelGrid style="width: 100%;">
+		<p:spacer width="0" height="10"/>
+		
+		<h:outputText value="Fases da Perfuração:" />
+		
+		<p:dataTable id="dataTablePerfuracaoPoco2" var="perfuracao" value="#{caepogController.caepogPoco.caepogFasePerfuracaoCollection}" lazy="true"
+			emptyMessage="#{bundle.consultapf_msg_empty_list}">
+			
+			<p:column>
+				<f:facet name="header">
+					<h:outputText value="Fase"/>
+				</f:facet>
+
+				<h:outputText value="#{perfuracao.seqCaepogPerfuracaoPoco}" />
+			</p:column>
+			
+			<p:column>
+				<f:facet name="header">
+					<h:outputText value="TPH (%)"/>
+				</f:facet>
+				
+              	<p:inputText value="#{perfuracao.tph.numValorFaseVariavel}" size="5" onkeyup="mascararNumeroAndAddZeros(this, event, 10, 2, '.', ',', 3);"  maxlength="13" disabled="#{perfuracao.confirmadoAbaResiduo}">
+              		<f:convertNumber integerOnly="false" minFractionDigits="2" />	
+              		<p:ajax event="blur" global="false"/>
+              	</p:inputText>
+			</p:column>
+			
+			<p:column>
+				<f:facet name="header">
+					Volume <br/>Estimado <br/>(m3)
+				</f:facet>
+				
+              	<p:inputText value="#{perfuracao.volumeEstimado.numValorFaseVariavel}" size="5" onkeyup="mascararNumeroAndAddZeros(this, event, 10, 2, '.', ',', 3);"  maxlength="13" disabled="#{perfuracao.confirmadoAbaResiduo}">
+              		<f:convertNumber integerOnly="false" minFractionDigits="2" />
+              		<p:ajax event="blur" global="false"/>
+              	</p:inputText>
+			</p:column>
+			
+			<p:column>
+				<f:facet name="header">
+					Salinidade <br/>(mg/l)
+				</f:facet>
+				
+             	<p:inputText value="#{perfuracao.salinidade.numValorFaseVariavel}" size="6" onkeyup="mascararNumeroAndAddZeros(this, event, 10, 2, '.', ',', 3);"  maxlength="13" disabled="#{perfuracao.confirmadoAbaResiduo}">
+             		<f:convertNumber integerOnly="false" minFractionDigits="2" />
+             		<p:ajax event="blur" global="false"/>
+             	</p:inputText>
+			</p:column>
+			
+			<p:column>
+				<f:facet name="header">
+					Classificação <br/>Resíduos
+				</f:facet>
+				
+				<p:selectOneMenu value="#{perfuracao.ideCaepogClasseResiduo}" converter="simpleEntityConverter" disabled="#{perfuracao.confirmadoAbaResiduo}"> 
+					<f:selectItem itemLabel="Selecione..." />
+					<f:selectItems value="#{caepogController.listCaepogClasseResiduo}" var="cr" itemLabel="#{cr.nomClasseResiduo}" itemValue="#{cr}" />
+					<p:ajax event="change" global="false"/>
+				</p:selectOneMenu>
+			</p:column>
+			
+			<p:column style="max-width:200px; text-align: center;">
+				<f:facet name="header">
+					<h:outputText value="Destino"/>
+				</f:facet>
+				
+				<h:outputText value="#{perfuracao.idePessoaJuridicaDestino.nomRazaoSocial}" rendered="#{perfuracao.confirmadoAbaResiduo}"/>
+				
+				<p:commandLink onclick="dialogRequerente.show();" actionListener="#{caepogController.abrirDialogRequerentePessoaJuridica(perfuracao)}" 
+					disabled="#{caepogController.caepog.visualizando}" process="@this" rendered="#{!perfuracao.confirmadoAbaResiduo}" update="form_dialog">
+
+				  	<h:graphicImage title="Selecionar Pessoa Jurídica" value="/resources/img/ico-adicionar.png" style="margin-left: 5px;" />
+				</p:commandLink>
+			</p:column>
+			
+			<p:column>
+				<f:facet name="header">
+					<h:outputText value="Ações" />
+				</f:facet>
+
+				<p:commandLink title="Confirmar" process="@this"
+					actionListener="#{caepogController.confirmarFasePerfuracaoResiduoGerado(perfuracao)}"  
+					update="formDialogPoco:tabViewDialogPoco:dataTablePerfuracaoPoco2" 
+	 		    	rendered="#{!perfuracao.confirmadoAbaResiduo}">
+	 		    	
+          			<h:graphicImage title="Confirmar" value="/resources/img/ico-aprovar-notificacao.png"/>
+	            </p:commandLink>
+	            
+	        	<p:commandLink title="Editar" process="@this" actionListener="#{caepogController.editarFasePerfuracaoResiduoGerado(perfuracao)}"
+		        	rendered="#{perfuracao.confirmadoAbaResiduo}" disabled="#{!caepogController.caepogPoco.indNovoCaepogPoco or caepogController.caepog.visualizando}"
+	        		update="formDialogPoco:tabViewDialogPoco:dataTablePerfuracaoPoco2">
+		        	
+          			<h:graphicImage title="Editar" value="/resources/img/ico-editar.png" />
+	            </p:commandLink>
+				
+				<p:commandLink title="Excluir" oncomplete="confirmationPerfuracao.show();" 
+					disabled="#{!caepogController.caepogPoco.indNovoCaepogPoco or caepogController.caepog.visualizando}">
+					
+					<f:setPropertyActionListener target="#{caepogController.caepogFasePerfuracao}" value="#{perfuracao}" />
+					<h:graphicImage title="Excluir" value="/resources/img/ico-excluir.png" style="margin-left: 5px;" />
+				</p:commandLink>
+			</p:column>
+		</p:dataTable>
+	</h:panelGrid>
+</ui:composition>

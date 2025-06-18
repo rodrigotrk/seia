@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+
+	<h:panelGrid columns="1">
+		<h:outputLabel styleClass="titulo-grupo" value="#{bundle.cefir_lbl_dados_especificos_dados_dominio}" />
+		<h:panelGrid>
+			<h:outputText value="#{bundle.cefir_lbl_dados_especificos_proprietario_possuidor_adicionado}" style="font-size: 11px;font-weight: bold;" />
+			<p:dataTable var="pctFamilia" value="#{detalharImovelRuralController.imovelRural.idePctImovelRural.pctFamiliaCollection}" emptyMessage="#{bundle.cefir_msg_A012}"
+				style="width: 650px; table-layout: fixed; word-wrap: break-word;">
+				<p:ajax event="rowToggle" process="@this" />
+				<p:column style="text-align: center !important;width:80px; white-space: pre-wrap;word-break: break-all;">
+					<f:facet name="header">
+						<h:outputText value="Membros da família" />
+					</f:facet>
+					<p:rowToggler />
+				</p:column>
+				<p:column style="text-align: center !important; width:90px;">
+					<f:facet name="header">
+						<h:outputText value="#{bundle.geral_lbl_cpf}" />
+					</f:facet>
+					<h:outputText value="#{pctFamilia.idePessoa.pessoaFisica.numCpfFormatado}" />
+				</p:column>
+				<p:column style="text-align: center !important;width:153px;">
+					<f:facet name="header">
+						<h:outputText value="#{bundle.lbl_nome}" />
+					</f:facet>
+					<h:outputText value="#{pctFamilia.idePessoa.pessoaFisica.nomPessoa}" />
+				</p:column>
+				<p:rowExpansion>
+					<p:dataTable value="#{pctFamilia.membrosFamiliaCollection}" var="membro" style="width: 650px;" emptyMessage="Nenhum membro da família associado.">
+						<p:column style="text-align: center !important;">
+							<f:facet name="header">
+								<h:outputText value="#{bundle.geral_lbl_cpf}" />
+							</f:facet>
+							<h:outputText
+								value="#{membro.idePessoa.pessoaFisica.numCpfFormatado}" />
+						</p:column>
+						<p:column style="text-align: center !important;">
+							<f:facet name="header">
+								<h:outputText value="#{bundle.lbl_nome}" />
+							</f:facet>
+							<h:outputText value="#{membro.idePessoa.pessoaFisica.nomPessoa}" />
+						</p:column>
+					</p:dataTable>
+				</p:rowExpansion>
+			</p:dataTable>
+		</h:panelGrid>
+	</h:panelGrid>
+
+	<h:panelGrid rendered="#{not empty detalharImovelRuralController.imovelRural.idePctImovelRural.pessoaJuridicaPctListaConcedente}">
+		<h:panelGroup>
+			<h:outputLabel value="Concedente" styleClass="titulo-grupo" />
+		</h:panelGroup>
+		<p:dataTable var="pessoaJuridica" value="#{detalharImovelRuralController.imovelRural.idePctImovelRural.pessoaJuridicaPctListaConcedente}">
+			<p:column headerText="CNPJ">
+				<h:panelGroup layout="block" style="text-align: center;">
+					<h:outputText value="#{pessoaJuridica.idePessoaJuridica.numCnpjFormatado}" />
+				</h:panelGroup>
+			</p:column>
+			<p:column headerText="Nome do concedente">
+				<h:outputText value="#{pessoaJuridica.idePessoaJuridica.nomRazaoSocial}" />
+			</p:column>
+		</p:dataTable>
+	</h:panelGrid>
+
+	<h:panelGrid rendered="#{not empty detalharImovelRuralController.imovelRural.idePctImovelRural.pessoaJuridicaPctListaConcessionario}">
+		<h:panelGroup>
+			<h:outputLabel value="Concessionário" styleClass="titulo-grupo" />
+		</h:panelGroup>
+		<p:dataTable value="#{detalharImovelRuralController.imovelRural.idePctImovelRural.pessoaJuridicaPctListaConcessionario}" var="pessoaJuridica">
+			<p:column headerText="CNPJ">
+				<h:panelGroup layout="block" style="text-align: center;">
+					<h:outputText value="#{pessoaJuridica.idePessoaJuridica.numCnpjFormatado}" />
+				</h:panelGroup>
+			</p:column>
+			<p:column headerText="Nome do concessionário">
+				<h:outputText
+					value="#{pessoaJuridica.idePessoaJuridica.nomRazaoSocial}" />
+			</p:column>
+		</p:dataTable>
+	</h:panelGrid>
+
+	<h:panelGrid>
+		<p:spacer height="5" />
+		<h:outputText value="Existem associações nessa comunidade?" style="font-size: 11px;font-weight: bold;" />
+		<h:outputText value="#{detalharImovelRuralController.imovelRural.idePctImovelRural.indAssociacaoComunidade ? 'Sim':'Não' }" />
+		<p:spacer height="5" />
+	</h:panelGrid>
+
+	<h:panelGrid rendered="#{not empty detalharImovelRuralController.imovelRural.idePctImovelRural.pessoaJuridicaPctListaAssociacao}">
+		<h:panelGroup layout="block">
+			<h:outputLabel value="Associações adicionadas" styleClass="titulo-grupo" />
+		</h:panelGroup>
+		<p:dataTable var="pessoaJuridica" value="#{detalharImovelRuralController.imovelRural.idePctImovelRural.pessoaJuridicaPctListaAssociacao}" style="width: 650px;">
+			<p:column headerText="CNPJ">
+				<h:panelGroup layout="block" style="text-align: center;">
+					<h:outputText value="#{pessoaJuridica.idePessoaJuridica.numCnpjFormatado}" />
+				</h:panelGroup>
+			</p:column>
+			<p:column headerText="Nome da associação">
+				<h:outputText value="#{pessoaJuridica.idePessoaJuridica.nomRazaoSocial}" />
+			</p:column>
+		</p:dataTable>
+	</h:panelGrid>
+
+</ui:composition>

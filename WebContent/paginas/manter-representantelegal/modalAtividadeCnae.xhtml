@@ -1,0 +1,108 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+	<h:form id="form-pagina-cnae">
+	
+		<h:panelGrid columns="1">
+			<h:outputText value="#{bundle.representanteLegalLabelCnae}" />
+			<h:panelGroup>
+				<h:outputText value="#{bundle.representantelegalLabelIncluirCnae}" />
+				<h:commandButton image="/resources/img/ico-expandir.png" onclick="dialogCnae.show()">
+					<f:ajax execute="@this"/>
+				</h:commandButton>
+			</h:panelGroup>			
+		</h:panelGrid>
+		
+		<p:dataTable id="tableCnae" widgetVar="tableCnae" value="#{cnaeController.cnaeData}" var="pjcnae" rendered="#{cnaeController.flagTableCnae}" emptyMessage="#{bundle.cnaeLabelTabRegitrosNaoEncontrados}">
+				<f:facet name="header">
+					<h:outputText value="#{bundle.cnaeLabelTabHeader}" />					
+				</f:facet>
+				<p:column headerText="#{bundle.cnaeLabelTabCodigo}">
+					<h:outputText value="#{pjcnae.ideCnae.codCnae}" />
+				</p:column>
+				<p:column headerText="#{bundle.cnaeLabelTabDescricao}">
+					<h:outputText value="#{pjcnae.ideCnae.desCnae}" />
+				</p:column>
+				<p:column headerText="#{bundle.cnaeLabelTabAtividadePrincipal}">
+					<h:outputText value="#{cnae.indCnaePrincipal}" />				
+				</p:column>				
+				<p:column headerText="#{bundle.cnaeLabelTabAtividadeAcoes}">
+					<h:commandButton image="/resources/img/ico-editar.png" actionListener="#{cnaeController.editar(pjcnae)}" type="button">
+						<f:ajax execute="@this"/>
+					</h:commandButton>
+					<h:commandButton image="/resources/img/ico-excluir.png" actionListener="#{cnaeController.excluir(pjcnae)}" type="button">
+						<f:ajax execute="@this"/>
+					</h:commandButton>	
+				</p:column>				
+			</p:dataTable>
+		
+		
+		<p:dialog id="dialogCnae" header="#{bundle.cnaeLabelCabecalho}" widgetVar="dialogCnae" height="350" width="750">
+			<h:panelGrid columns="1">
+				<h:outputText value="#{bundle.cnaeLabelSecao}" />
+				<h:inputText value="#{cnaeController.cnaeSecao.desCnae}" rendered="#{!cnaeController.enableFormCnae}" disabled="true" style="width: 700px;" />
+				<p:selectOneMenu id="comboSecao" value="#{cnaeController.cnaeSecao.ideCnae}" style="width: 700px;" rendered="#{cnaeController.enableFormCnae}">
+					<f:selectItem itemValue="" itemLabel="Selecione Seção..."/>
+					<f:selectItems value="#{cnaeController.listaSecao}"/>	
+					<p:ajax update="paneldiaglogCnae" process="@this" global="false" listener="#{cnaeController.buscarDivisaoPorSecao}"/>							
+				</p:selectOneMenu>
+				
+				<h:outputText value="#{bundle.cnaeLabelDivisao}" />
+				
+				<h:inputText value="#{cnaeController.cnaeDivisao.desCnae}" rendered="#{!cnaeController.enableFormCnae}" disabled="true" style="width: 700px;" />
+				<p:selectOneMenu id="comboDivisao" value="#{cnaeController.cnaeDivisao.ideCnae}" style="width: 700px;" rendered="#{cnaeController.enableFormCnae}">
+					<f:selectItem itemValue="" itemLabel="Selecione Divisao..."/>
+					<f:selectItems value="#{cnaeController.listaDivisao}"/>								
+					<p:ajax update="paneldiaglogCnae" process="@this" global="false" listener="#{cnaeController.buscarGrupoPorDivisao}"/>				
+				</p:selectOneMenu>
+				
+				<h:outputText value="#{bundle.cnaeLabelGrupo}" />
+				
+				<h:inputText value="#{cnaeController.cnaeGrupo.desCnae}" rendered="#{!cnaeController.enableFormCnae}" disabled="true" style="width: 700px;" />
+				<p:selectOneMenu id="comboGrupo" value="#{cnaeController.cnaeGrupo.ideCnae}" style="width: 700px;" rendered="#{cnaeController.enableFormCnae}">
+					<f:selectItem itemValue="" itemLabel="Selecione Grupo..."/>
+					<f:selectItems value="#{cnaeController.listaGrupo}"/>
+					<p:ajax update="paneldiaglogCnae" process="@this"  global="false" listener="#{cnaeController.buscarClassePorGrupo}"/>
+				</p:selectOneMenu>
+				
+				<h:outputText value="#{bundle.cnaeLabelClasse}" />
+				
+				<h:inputText value="#{cnaeController.cnaeClasse.desCnae}" rendered="#{!cnaeController.enableFormCnae}" disabled="true" style="width: 700px;" />
+				<p:selectOneMenu id="comboClasse" value="#{cnaeController.cnaeClasse}" style="width: 700px;" rendered="#{cnaeController.enableFormCnae}" converter="cnaeConverter">
+					<f:selectItem itemValue="" itemLabel="Selecione Classe..."/>
+					<f:selectItems value="#{cnaeController.listaClasse}" var="classe" itemValue="#{classe}" itemLabel="#{classe.cnaeFormatado}"/>								
+					<p:ajax update="paneldiaglogCnae" process="@this" global="false" listener="#{cnaeController.buscarSubclassePorClasse}"/>
+				</p:selectOneMenu>
+				
+				<h:outputText value="#{bundle.cnaeLabelSubclasse}" />
+				
+				<h:inputText value="#{cnaeController.pessoaJuridicaCnae.ideCnae.desCnae}" rendered="#{!cnaeController.enableFormCnae}" disabled="true" style="width: 700px;" />
+				<p:selectOneMenu id="comboSubClasse" value="#{cnaeController.pessoaJuridicaCnae.ideCnae.ideCnae}" style="width: 700px;" rendered="#{cnaeController.enableFormCnae}">
+					<f:selectItem itemValue="" itemLabel="Selecione SubClasse..."/>
+					<f:selectItems value="#{cnaeController.listaSubclasse}"/>								
+				</p:selectOneMenu>
+				
+				<h:outputText value="#{bundle.cnaeLabelPerguntaAtividadePrincipal}" />
+				
+				<p:selectOneRadio value="#{cnaeController.pessoaJuridicaCnae.indCnaePrincipal}" disabled="#{!cnaeController.enableFormCnae}">  
+		            <f:selectItem itemLabel="#{bundle.cnaeLabelSim}" itemValue="true"/>  
+		            <f:selectItem itemLabel="#{bundle.cnaeLabelNao}" itemValue="false"/>
+		        </p:selectOneRadio>
+		        	        
+		        <h:panelGrid columns="2">
+		        	<h:panelGroup >
+		        		<p:button value="#{bundle.cnaeLabelLimpar}"/>
+		        		<p:commandButton value="#{bundle.cnaeLabelSalvar}" ajax="false">
+							<p:ajax process="@form" update="tableCnae"/>
+						</p:commandButton>		        		
+		        	</h:panelGroup>
+		        	<h:outputText value="#{bundle.lbl_preench_obrig_asterisc}" />
+		        </h:panelGrid>
+			</h:panelGrid>
+		</p:dialog>
+	</h:form>			
+</html>

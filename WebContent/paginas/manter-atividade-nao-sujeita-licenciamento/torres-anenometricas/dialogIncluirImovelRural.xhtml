@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui">
+
+	<p:dialog header="#{bundle.geral_lbl_incluir_imovel}"
+		widgetVar="dialogIncluirImovelRural" id="dialogIncluirImovelRural"
+		modal="true" position="center" resizable="false">
+		<p:ajax event="close" listener="#{torresAnemometricasController.limparDialogIncluirImovel()}" update="dialogIncluirImovelRural"/>
+		<div style="width: 500px; text-align: justify">
+			<h:form id="form_dialog_imovel_rural">
+
+				<h:outputLabel value="Informe o número CAR"/>
+				<h:panelGrid columns="2">
+                       <p:inputText id="inptNumeroCar" value="#{torresAnemometricasController.numSicar}" />
+                       <p:commandLink image="ui-icon ui-icon-search" process="@form" ajax="true"
+                          update="gridOutSicar" actionListener="#{torresAnemometricasController.pesquisarImovelRural()}">
+                          <h:graphicImage title="Pesquisar"
+                                value="/resources/img/ico-pesquisa.png"
+                                style="margin-right: 5px;" />
+                        </p:commandLink>
+				</h:panelGrid>
+
+
+				<h:panelGrid id="gridOutSicar" columns="1" style="width:100%;">
+					<h:outputText id="outNumSicar" value="#{torresAnemometricasController.imovel.imovelRural.desDenominacao}" />
+				</h:panelGrid>
+
+
+				<h:panelGrid columns="2" style="width:100%;text-align:center">
+
+					<p:commandButton title="#{bundle.geral_lbl_voltar}"
+						value="#{bundle.geral_lbl_voltar}" process="@this"
+						oncomplete="dialogIncluirImovelRural.hide()" styleClass="left" />
+
+					<p:commandButton title="#{bundle.geral_lbl_salvar}"
+						value="#{bundle.geral_lbl_salvar}" process="@form" oncomplete="dialogIncluirImovelRural.hide()"
+						actionListener="#{torresAnemometricasController.incluirImovelRural()}"
+						styleClass="right" />
+				</h:panelGrid>
+			</h:form>
+		</div>
+	</p:dialog>
+</ui:composition>

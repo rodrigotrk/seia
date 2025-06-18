@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="resumo_requerimento_questionario_origem_agua_superficial_caracteristicas_vazao_e_detalhes" language="java" pageWidth="100" pageHeight="802" columnWidth="100" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="1377a39f-8de1-4204-af93-8928008302ce">
+	<property name="ireport.zoom" value="3.1384283767210035"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="ide_requerimento" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="ide_outorga_localizacao_geografica" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[select
+
+  olg.num_vazao, --  'Vazão da captação: ' || olg.num_vazao
+  olg.num_area_irrigada,
+  olg.num_area_irrigada_captacao,
+  olg.num_area_pulverizada, --  'Área pulveridazada: '  || olg.num_vazao
+
+
+   ide_tipo_barragem              -- 1  'A barragem é de nível;', 2 'A barragem é de regulação;'
+
+from outorga_localizacao_geografica olg
+	inner join outorga o on  o.ide_outorga = olg.ide_outorga
+where o.ide_requerimento = $P{ide_requerimento}
+and olg.ide_outorga_localizacao_geografica = $P{ide_outorga_localizacao_geografica}]]>
+	</queryString>
+	<field name="num_vazao" class="java.math.BigDecimal"/>
+	<field name="num_area_irrigada" class="java.math.BigDecimal"/>
+	<field name="num_area_irrigada_captacao" class="java.math.BigDecimal"/>
+	<field name="num_area_pulverizada" class="java.math.BigDecimal"/>
+	<field name="ide_tipo_barragem" class="java.lang.Integer"/>
+	<detail>
+		<band height="24">
+			<printWhenExpression><![CDATA[$F{num_area_irrigada} != null]]></printWhenExpression>
+			<staticText>
+				<reportElement uuid="75193136-9add-4e54-832f-b536ae5cfc8f" x="0" y="0" width="100" height="12"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Área Irrigada]]></text>
+			</staticText>
+			<textField pattern="#,##0.00">
+				<reportElement uuid="c51a1f75-3cf4-4280-a25d-083d3bd920ee" x="0" y="12" width="100" height="12"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{num_area_irrigada}]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="32">
+			<printWhenExpression><![CDATA[$F{num_area_irrigada_captacao} != null]]></printWhenExpression>
+			<staticText>
+				<reportElement uuid="c6bcf8f6-b5b7-4740-8a4e-0628a7a80ca4" x="0" y="0" width="100" height="20"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Área irrigada
+Captacao]]></text>
+			</staticText>
+			<textField pattern="#,##0.00">
+				<reportElement uuid="6b457ffd-9b2f-479d-aad7-cc11a697ef9c" x="0" y="20" width="81" height="12"/>
+				<textElement textAlignment="Right">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{num_area_irrigada_captacao}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="7427f2e1-16f9-4c53-bd0d-db19b66f1234" x="81" y="20" width="19" height="12"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[ ha]]></text>
+			</staticText>
+		</band>
+		<band height="24">
+			<printWhenExpression><![CDATA[$F{num_area_pulverizada} != null]]></printWhenExpression>
+			<staticText>
+				<reportElement uuid="d4c86858-7e74-4566-9aa0-7c613fab7590" x="0" y="0" width="100" height="12"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Área Pulverizada:]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="72741f04-61b5-4fe6-bf70-cc0d9bcd7067" x="0" y="12" width="100" height="12"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{num_area_pulverizada}]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="20">
+			<printWhenExpression><![CDATA[$F{ide_tipo_barragem} == 1]]></printWhenExpression>
+			<staticText>
+				<reportElement uuid="213e531b-3f25-48ec-bd68-ab21cf138fb3" x="0" y="0" width="100" height="20"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[[X] A barragem é de nivel]]></text>
+			</staticText>
+		</band>
+		<band height="20">
+			<printWhenExpression><![CDATA[$F{ide_tipo_barragem} == 2]]></printWhenExpression>
+			<staticText>
+				<reportElement uuid="e4974394-f605-46b1-93db-33b1b564db8b" x="0" y="0" width="100" height="20"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[[X] A barragem é de
+Regularização]]></text>
+			</staticText>
+		</band>
+		<band height="24">
+			<printWhenExpression><![CDATA[$F{num_vazao} !=null]]></printWhenExpression>
+			<staticText>
+				<reportElement uuid="104ed0f2-b2a1-4e29-90a3-c26593d7f02b" x="0" y="0" width="100" height="12"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Vazão da Captação]]></text>
+			</staticText>
+			<textField pattern="#,##0.00">
+				<reportElement uuid="1574c2df-3643-42af-87a5-3eeb6e25edd5" x="0" y="12" width="81" height="12"/>
+				<textElement textAlignment="Right">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{num_vazao}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="16d3725e-1c9e-4645-a029-033b4f777145" x="81" y="12" width="19" height="12"/>
+				<textElement/>
+				<text><![CDATA[ m3/dia]]></text>
+			</staticText>
+		</band>
+	</detail>
+</jasperReport>

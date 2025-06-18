@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+	xmlns:h="http://java.sun.com/jsf/html" 
+	xmlns:f="http://java.sun.com/jsf/core" 
+	xmlns:ui="http://java.sun.com/jsf/facelets" 
+	xmlns:p="http://primefaces.prime.com.tr/ui">
+	
+	<h:form id="formIncluirImovel">
+	
+		<h:panelGrid columns="1">
+			<h:outputText value="Informe o número CAR" />
+			
+			<h:panelGrid columns="2">
+				<p:inputText style="width:310px;" value="#{registroFlorestaPlantadaController.numSicar}" />
+				<p:commandLink  type="button" actionListener="#{registroFlorestaPlantadaController.carregarImovel()}" process="@form" update="formIncluirImovel:nomImovel, formIncluirImovel:botoesIncluirImovel">
+					<h:graphicImage title="* Selecionar" value="/resources/img/ico-pesquisa.png" />
+				</p:commandLink>
+			</h:panelGrid>
+		
+			<h:panelGrid id="nomImovel" >
+				<h:panelGrid rendered="#{not empty registroFlorestaPlantadaController.imovelPesquisa.imovelRural.desDenominacao}">
+					<h:outputText value="Imóvel:" />			
+					<h:outputText value="#{registroFlorestaPlantadaController.imovelPesquisa.imovelRural.desDenominacao}" />
+				</h:panelGrid>
+			</h:panelGrid>
+			
+		</h:panelGrid>	
+		
+		
+		<h:panelGrid columns="2" id="botoesIncluirImovel">
+			<p:commandButton title="Voltar" value="Voltar" styleClass="btn-medio right"  onclick="dialogImovel.hide()" />
+			<p:commandButton title="Salvar" value="Salvar" styleClass="btn-medio right" update="formFlorestaProducaoPlantada:smimovel"  oncomplete="dialogImovel.hide()" actionListener="#{registroFlorestaPlantadaController.adicionarImovel()}"
+				disabled="#{empty registroFlorestaPlantadaController.imovelPesquisa.imovelRural.desDenominacao}"/>
+		</h:panelGrid>
+	
+	
+	</h:form>
+	
+</ui:composition>

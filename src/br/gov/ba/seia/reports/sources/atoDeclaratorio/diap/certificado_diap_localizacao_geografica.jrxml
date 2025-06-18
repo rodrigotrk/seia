@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="certificado_diap_localizacao_geografica" language="java" pageWidth="525" pageHeight="802" columnWidth="525" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="82ecd246-fe4b-419d-a659-8875da7513b7">
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="ide_ato_declaratorio" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[select
+	latitude_gms,
+	longitude_gms
+
+FROM sp_get_coordenada_localizacao
+	((SELECT diap.ide_localizacao_geografica
+		FROM declaracao_intervencao_app diap
+		WHERE diap.ide_ato_declaratorio = $P{ide_ato_declaratorio}));]]>
+	</queryString>
+	<field name="latitude_gms" class="java.lang.String"/>
+	<field name="longitude_gms" class="java.lang.String"/>
+	<detail>
+		<band height="30" splitType="Stretch">
+			<textField isStretchWithOverflow="true">
+				<reportElement uuid="36d6e9f7-6ec3-490e-9c75-7b7a5a2699a7" stretchType="RelativeToBandHeight" x="0" y="10" width="525" height="20"/>
+				<textElement textAlignment="Justified">
+					<font fontName="SansSerif"/>
+					<paragraph lineSpacing="1_1_2"/>
+				</textElement>
+				<textFieldExpression><![CDATA["A intervenção poderá ser realizada dentro do prazo de 3 (três) anos contados da emissão deste " +
+"documento e terá como referência as Coordenadas Geográficas Latitude " + $F{latitude_gms}
++ "e Longitude " + $F{longitude_gms} + "."]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

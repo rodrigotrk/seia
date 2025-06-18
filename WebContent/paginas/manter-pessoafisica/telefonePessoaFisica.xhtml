@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui">	
+		<h3><h:outputLabel styleClass="titulo-grupo" value="TELEFONES" /></h3>
+		
+		<h:form id="formtelefone">
+			<h:outputLabel value="Incluir Telefone" />
+			
+			<p:commandLink id="linkDialogTelefone" 	oncomplete="$('.ui-messages-info').remove();$('.ui-messages-error').remove();telefoneDialog.show()" update=":tabviewpf:formdialogs:telefoneDialog" disabled="#{pessoaFisicaController.disableFormPessoaFisica}">
+				<h:graphicImage title="Incluir Telefone" value="/resources/img/ico-expandir.png"  />
+				<f:setPropertyActionListener target="#{pessoaFisicaController.editModeTelefone}" value="#{false}" />
+				<f:setPropertyActionListener value="#{true}" target="#{pessoaFisicaController.newModeTelefone}" />
+				<f:ajax update=":tabviewpf:formconteudo:telefoneDialog" listener="#{pessoaFisicaController.limpar()}"/>				
+			</p:commandLink>
+		</h:form>
+		
+		<h:form id="formconteudo">
+		<h:panelGrid id="paneltabletelefone">
+		
+		<!-- DATATABLE TELEFONE -->
+			<p:dataTable id="tabelaTelefone" widgetVar="tabelaTelefone" var="telefone" style="width:400px;" rendered="#{pessoaFisicaController.mostrarTableTelefone}"
+				value="#{pessoaFisicaController.modelTelefone}"
+				paginator="true" rows="5" paginatorPosition="bottom"
+                paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}"  >
+				<f:facet name="header">  
+					<h:outputText id="txtListaTelefones" value="Lista de Telefones" />
+				</f:facet>
+				<p:column headerText="Tipo">
+					<h:outputText id="txtNomTipoTelefone" value="#{telefone.ideTipoTelefone.nomTipoTelefone}" />
+				</p:column>
+
+				<p:column headerText="Número" style="text-align: center;">
+					<h:outputText id="txtNumTelefone" value="#{telefone.numTelefone}" />
+				</p:column>
+				
+				<p:column style="text-align: center;" headerText="Ações">	
+						
+						<p:commandLink id="lnkConsultar" update=":tabviewpf:formdialogs:display" oncomplete="$('.ui-messages-info').remove();$('.ui-messages-error').remove();telefoneDialog.show()" title="Visualizar">
+							<h:graphicImage title="Consultar" value="/resources/img/ico-pesquisa.png" />
+							<f:setPropertyActionListener value="#{telefone}" target="#{pessoaFisicaController.telefone}" />
+							<f:setPropertyActionListener value="#{telefone.ideTipoTelefone}" target="#{pessoaFisicaController.tipoTelefone}" />
+							<f:setPropertyActionListener value="#{false}" target="#{pessoaFisicaController.editModeTelefone}" />
+							<f:setPropertyActionListener value="#{false}" target="#{pessoaFisicaController.newModeTelefone}" />
+						</p:commandLink>
+						
+						<p:commandLink id="lnkEditar" update=":tabviewpf:formdialogs:display"
+							oncomplete="$('.ui-messages-info').remove();$('.ui-messages-error').remove();telefoneDialog.show()" title="Editar" disabled="#{pessoaFisicaController.disableFormPessoaFisica}">
+							<h:graphicImage title="Editar" value="/resources/img/ico-editar.png" />
+							<f:setPropertyActionListener value="#{telefone}" target="#{pessoaFisicaController.telefone}" />
+							<f:setPropertyActionListener value="#{telefone.ideTipoTelefone}" target="#{pessoaFisicaController.tipoTelefone}" />
+							<f:setPropertyActionListener value="#{true}" target="#{pessoaFisicaController.editModeTelefone}" />
+							<f:setPropertyActionListener value="#{false}" target="#{pessoaFisicaController.newModeTelefone}" />
+							<p:ajax onstart="javascript:$('.ui-messages-error').remove();" />
+						</p:commandLink>
+						
+						<p:commandLink id="lnkExcluir" update=":tabviewpf:formdialogs:display" oncomplete="$('.ui-messages-info').remove();$('.ui-messages-error').remove();confirmationTelefone.show()" title="Remover" disabled="#{pessoaFisicaController.disableFormPessoaFisica}">
+							<h:graphicImage title="Excluir" value="/resources/img/ico-excluir.png" />
+							<f:setPropertyActionListener value="#{telefone}" target="#{pessoaFisicaController.telefone}" />
+						</p:commandLink>
+					
+				</p:column>
+			</p:dataTable>
+			
+			<!-- FIM DATATABLE TELEFONE -->
+			</h:panelGrid>
+			</h:form>
+			<h:form id="formdialogs">
+			
+			<p:confirmDialog message="#{bundle.consultapf_msg_confimrexclusao}"
+				header="Mensagem" 
+				widgetVar="confirmationTelefone" id="confirmationTelefone"  >
+				
+				<p:commandButton id="btnSim" value="Sim" update=":tabviewpf:formconteudo:paneltabletelefone"
+					actionListener="#{pessoaFisicaController.removerTelefone}"
+					oncomplete="confirmationTelefone.hide()" process="@this"/>
+				
+				<p:commandButton id="btnNao" value="Não" onclick="confirmationTelefone.hide()"
+					type="button" />
+			
+			</p:confirmDialog>
+
+			<p:dialog style="float:left;top:-110px; left:-180px;" id="telefoneDialog" widgetVar="telefoneDialog" header="Telefone" resizable="false" modal="true" position="center">
+				<h:panelGrid id="display" columns="2" class="ui-dialog-title-dialog-telefone" cellpadding="0">
+					<h:outputLabel id="idlabeltipotelefone" class="form-label" value="#{bundle.LabelTipoTelefone}" />
+					
+					<h:outputLabel id="idlabelnumerotelefone" class="form-label" value="#{bundle.LabelNumeroTelefone}" />
+										
+					<h:panelGroup>
+					
+					<!-- TIPO TELEFONE -->
+					<h:outputText id="txtNomTipoTelefone"
+						value="#{pessoaFisicaController.telefone.ideTipoTelefone.nomTipoTelefone}  "
+						style="font-weight:bold"
+						rendered="#{!pessoaFisicaController.editModeTelefone and !pessoaFisicaController.newModeTelefone}" />
+					
+					<h:selectOneMenu id="idcombotipotelefone" class="form-select"
+						styleClass="form-input" value="#{pessoaFisicaController.tipoTelefone}"
+						rendered="#{pessoaFisicaController.editModeTelefone  and !pessoaFisicaController.newModeTelefone}">
+						<f:selectItem itemLabel="Selecione..."  />
+						<f:selectItems
+							value="#{pessoaFisicaController.valuesComboBoxTipoTelefone}" />
+						<f:converter converterId="tipoTelefoneConverter" />
+					</h:selectOneMenu>
+					
+					<h:selectOneMenu id="idcombotipotelefoneNew" class="form-select"
+						styleClass="form-input" value="#{pessoaFisicaController.tipoTelefoneNovo}"
+						rendered="#{pessoaFisicaController.newModeTelefone}">
+						<f:selectItem itemLabel="Selecione..."  />
+						<f:selectItems 	value="#{pessoaFisicaController.valuesComboBoxTipoTelefone}" />
+						<f:converter converterId="tipoTelefoneConverter" />
+					</h:selectOneMenu>
+					<!-- FIM TIPO TELEFONE -->
+					</h:panelGroup>	
+					
+					<h:panelGroup>
+					<!-- NUMERO TELEFONE -->
+					<h:outputText id="txtNumTelefone" value="#{pessoaFisicaController.telefone.numTelefone}"
+						style="font-weight:bold"
+						rendered="#{!pessoaFisicaController.editModeTelefone and !pessoaFisicaController.newModeTelefone}" />
+					
+					<p:inputMask mask="#{bundle.MascaraTelefone}" id="numero"
+						widgetVar="numero"
+						value="#{pessoaFisicaController.telefone.numTelefone}" 
+						rendered="#{pessoaFisicaController.editModeTelefone and !pessoaFisicaController.newModeTelefone}"/>
+					
+					<p:inputMask mask="#{bundle.MascaraTelefone}" id="numeroNew"
+						widgetVar="numero"
+						value="#{pessoaFisicaController.telefoneNovo.numTelefone}" 
+						rendered="#{pessoaFisicaController.newModeTelefone}"/>
+					
+					<!-- FIM NUMERO TELEFONE -->
+					</h:panelGroup>	
+					
+					<h:outputText />
+					<h:panelGroup layout="block"
+						rendered="#{pessoaFisicaController.editModeTelefone || pessoaFisicaController.newModeTelefone}">
+						
+						<p:commandButton 
+							styleClass="form-button" 
+							id="resetFormTelefone" 
+							widgetVar="resetFormTelefone"
+							 value="#{bundle.LabelBotaoLimpar}"
+							actionListener="#{pessoaFisicaController.limparTelefoneAction()}" process="@this"  update="display"/>
+					
+						<p:commandButton id="btnSalvar" styleClass="form-button"
+							value="#{bundle.LabelBotaoSalvar}"
+							update=":tabviewpf:formconteudo:paneltabletelefone display"
+							actionListener="#{pessoaFisicaController.adicionaTelefone}"
+							>
+						</p:commandButton>
+						
+					</h:panelGroup>	
+				</h:panelGrid>	
+				<h:outputLabel value="#{bundle.lbl_preench_obrig_asterisc}" style="float: left;" />
+			
+			</p:dialog>
+			
+		</h:form>
+		
+			<script type="text/javascript">
+			$(document).ready(function() {
+				$("#tabviewpf\\:formdialogs\\:telefoneDialog").css("top","49%");
+				$("#tabviewpf\\:formdialogs\\:telefoneDialog").css("left","48%");
+				$("#tabviewpf\\:formdialogs\\:confirmationTelefone").css("top","49%");
+				$("#tabviewpf\\:formdialogs\\:confirmationTelefone").css("left","45%");
+			});
+			</script>
+</ui:composition>

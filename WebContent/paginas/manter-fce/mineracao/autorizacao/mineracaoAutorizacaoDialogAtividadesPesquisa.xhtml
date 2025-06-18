@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui" 
+	xmlns:s="http://java.sun.com/jsf/composite/seia">
+    		
+    		
+	<h:panelGroup layout="block" id="pnlDialogExterno"> 
+		<p:dialog id="dialogProspeccao" showHeader="true" header="#{fceAutorizacaoMineracaoController.tituloDialogLocGeo}" widgetVar="dialogProspeccao" appendToBody="true" dynamic="true" position="center" width="250" height="170" resizable="false" modal="true"  draggable="true" >
+			<h:panelGrid id="pnlLocGeo" columns="1">
+				<h:form id="formProspeccao">
+					
+					<h:panelGroup style="padding-bottom:20px;">
+						<h:panelGroup style="padding-bottom:20px;">	
+							<h:outputText value="Sequência ou Identificação:" />
+							<h:graphicImage value="/resources/img/ico-ajuda.png" id="dica" style="margin: 3px 1px 2px 4px;" />
+							<p:tooltip for="seqProspeccao" value="Sequência, Identificação ou Codificação da amostra" showEffect="fade" hideEffect="fade" />
+							<p:tooltip for="dica" value="Sequência, Identificação ou Codificação da amostra" showEffect="fade" hideEffect="fade" />
+						</h:panelGroup>
+						
+						<p:inputText id="seqProspeccao" maxlength="20" value="#{fceAutorizacaoMineracaoController.fceProspeccao.seqProspeccao}" style="width:95%; margin-top: 10px; margin-bottom: 20px"/> 
+					</h:panelGroup>	
+	
+					<s:divConteudoCentralizado id="centerCont">
+						<h:panelGroup  layout="block" id="commandLink" >
+							
+							<h:panelGrid columns="2">
+								<p:commandLink oncomplete="dlgLocalizacaoGeograficaGeneric.show();"	action="#{localizacaoGeograficaGenericController.carregarTela()}" 
+										actionListener="#{localizacaoGeograficaGenericController.limparLocalizacaoGeografSelecionada()}" process="@this"
+										rendered="#{!fceAutorizacaoMineracaoController.locGeoFceProspeccaoSalva}" disabled="#{fceAutorizacaoMineracaoController.desabilitarTudo}">
+										<f:setPropertyActionListener target="#{localizacaoGeograficaGenericController.tipoSecaoGeometrica}" value="#{fceAutorizacaoMineracaoController.somentePonto}" />
+										<f:setPropertyActionListener target="#{localizacaoGeograficaGenericController.empreendimento}" value="#{fceAutorizacaoMineracaoController.empreendimento}" />
+										<f:setPropertyActionListener target="#{localizacaoGeograficaGenericController.localizacaoGeograficaSelecionada}" value="#{fceAutorizacaoMineracaoController.fceProspeccao.ideLocalizacaoGeografica}" />
+										<f:setPropertyActionListener target="#{localizacaoGeograficaGenericController.objetoLocalizacao}" value="#{fceAutorizacaoMineracaoController.fceProspeccao}" />
+										<f:setPropertyActionListener target="#{localizacaoGeograficaGenericController.idDoComponenteParaSerAtualizado}" value="formProspeccao:centerCont:commandLink" />
+									<h:graphicImage title="#{bundle.fce_lic_min_incluir_shape}" value="/resources/img/ico-expandir.png" style="margin-right: 2px;" />
+									<h:outputText value="Incluir Localização Geográfica" style="cursor: initial;" />
+								</p:commandLink>
+							</h:panelGrid><br/>
+							
+							<p:commandLink style="cursor: pointer; margin-left:5px;"
+								onclick='javascript:${fceAutorizacaoMineracaoController.visualizarLocalizacao(fceAutorizacaoMineracaoController.fceProspeccao.ideLocalizacaoGeografica)}'
+								global="false"
+								rendered="#{fceAutorizacaoMineracaoController.locGeoFceProspeccaoSalva}" 
+								accesskey="VISUALIZAR GEOBAHIA">
+								<h:graphicImage title="#{bundle.fce_lic_aqui_visualizar_dados_geobahia}" value="/resources/img/ico-arl-relocacao.png" />
+							</p:commandLink>
+						
+							<p:commandLink oncomplete="dlgLocalizacaoGeograficaGeneric.show();" 
+								process="@this" 
+								actionListener="#{localizacaoGeograficaGenericController.editarLocGeoComActionEvent()}" 
+								rendered="#{fceAutorizacaoMineracaoController.locGeoFceProspeccaoSalva and !fceAutorizacaoMineracaoController.desabilitarTudo}">
+								<f:attribute name="ideToUpdate" value="pnlAutMineracao"/>
+								<f:attribute name="ideLocalizacaoGeografica" value="#{fceAutorizacaoMineracaoController.fceProspeccao.ideLocalizacaoGeografica}"/>
+								<f:attribute name="ideTipoInsercao" value="#{fceAutorizacaoMineracaoController.somentePonto}"/>
+								<f:attribute name="analiseTecnica" value="#{fceAutorizacaoMineracaoController.fceTecnico}"/>
+								<f:attribute name="objetoLocalizacao" value="#{fceAutorizacaoMineracaoController.fceProspeccao.ideLocalizacaoGeografica}"/>
+								<f:attribute name="ideRequerimento" value="#{fceAutorizacaoMineracaoController.fce.ideRequerimento.ideRequerimento}"/>
+								<h:graphicImage title="Editar" value="/resources/img/ico-editar.png" />
+							</p:commandLink>
+							
+							<p:commandLink process="@this" global="false"
+								onclick="cformExcluirLocGeo.show()"
+								rendered="#{fceAutorizacaoMineracaoController.locGeoFceProspeccaoSalva}"
+								disabled="#{fceAutorizacaoMineracaoController.desabilitarTudo}">
+								<f:setPropertyActionListener target="#{localizacaoGeograficaGenericController.localizacaoGeograficaSelecionada}" value="#{fceAutorizacaoMineracaoController.fceProspeccao.ideLocalizacaoGeografica}" />
+								<h:graphicImage title="Excluir" value="/resources/img/ico-excluir.png" />
+							</p:commandLink>
+						</h:panelGroup>
+					</s:divConteudoCentralizado>
+					
+					<s:divConteudoCentralizado>
+						<p:commandButton value="Inserir" update=":tabAutMineracao:minAutAtividadesPesquisa" actionListener="#{fceAutorizacaoMineracaoController.inserirPesquisaMineralProspeccao()}" process="@this,formProspeccao:seqProspeccao"/>
+					</s:divConteudoCentralizado>
+			
+				</h:form>
+			</h:panelGrid>	
+		</p:dialog>
+	</h:panelGroup>
+	
+	<h:form id = "formExcluirFceProspeccao">
+		<p:confirmDialog message="Deseja realmente excluir o registro?" widgetVar="cformExcluirFceProspeccao" header="Excluir Prospeccão">
+			<p:commandButton value="Sim" process="@this" actionListener="#{fceAutorizacaoMineracaoController.removerFceProspeccao()}" update=":tabAutMineracao:minAutAtividadesPesquisa" style="margin-right:10px;"  />			
+			<p:commandButton value="Não" oncomplete="cformExcluirFceProspeccao.hide();"/>
+		</p:confirmDialog>
+	</h:form>
+		
+	<h:form id = "formExcluirLocGeo">
+		<p:confirmDialog message="Deseja realmente excluir o registro?" widgetVar="cformExcluirLocGeo" header="Excluir">
+			<p:commandButton value="Sim" process="@this" actionListener="#{fceAutorizacaoMineracaoController.excluirLocGeo()}" update=":tabAutMineracao:minAutAtividadesPesquisa" style="margin-right:10px;"  />			
+			<p:commandButton value="Não" oncomplete="cformExcluirLocGeo.hide();"/>
+		</p:confirmDialog>
+	</h:form>
+
+</ui:composition>
+	

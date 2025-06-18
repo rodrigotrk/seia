@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui"
+	template="../../../layout/template.xhtml">
+
+	<ui:define name="titulo-pagina">
+		<h3>Baixar DAE</h3>
+	</ui:define>
+
+	<ui:define name="conteudo-principal">
+
+		<h:form>
+
+			<p:messages id="msgBaixarDae" redisplay="false" />
+
+			<h:panelGrid id="pngPrincipal" style="width:100%">
+
+
+				<p:fileUpload cancelLabel="Cancelar" multiple="false" fileLimit="1"
+					label="Upload de documento" value="#{fileUploadView.file}"
+					mode="advanced" sizeLimit="100000"
+					fileUploadListener="#{baixarProcesarPagamentoDae.prepararUpload()}"
+					uploadLabel="Processar Pagamento"
+					invalidFileMessage="Arquivo invalido"
+					allowTypes="/(\.|\/)(xls|xlsx)$/"
+					invalidSizeMessage="Tamanho do arquivo invalido" skinSimple="true"
+					update="pngArquivosPagamento" />
+					<br/>
+			</h:panelGrid>
+
+			<h:panelGrid id="pngArquivosPagamento">
+
+				<p:dataTable id="tableArquivosPagamento"
+					rendered="#{not empty baixarProcesarPagamentoDae.listArquivoBaixaDae}"
+					style="width:100%" var="arquivoBaixa"
+					value="#{baixarProcesarPagamentoDae.listArquivoBaixaDae}"
+					lazy="true" paginator="true" rows="10" paginatorPosition="bottom"
+					paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}">
+
+					<f:facet name="header">
+		            	Últimos Arquivos Processados
+		        	</f:facet>
+
+					<p:column headerText="Data de Processamento"
+						style="text-align:center; white-space : normal ; width: 100px">
+						<h:outputText value="#{arquivoBaixa.dataProcessamento}"
+							style="float:center;">
+							<f:convertDateTime pattern="dd/MM/yyyy" />
+						</h:outputText>
+					</p:column>
+
+					<p:column headerText="Arquivo Processo" style="text-align:center;">
+						<h:outputText value="#{arquivoBaixa.nomArquivo}" />
+					</p:column>
+
+					<p:column headerText="Período Processamento"
+						style="text-align:center;">
+						<h:outputText value="#{arquivoBaixa.dataInicioPeriodoPagamento}">
+							<f:convertDateTime pattern="dd/MM/yyyy" />
+						</h:outputText>
+
+						<h:outputText value=" - " />
+
+						<h:outputText value="#{arquivoBaixa.dataFimPeriodoPagamento}">
+							<f:convertDateTime pattern="dd/MM/yyyy" />
+						</h:outputText>
+					</p:column>
+
+					<p:column headerText="Período Processamento"
+						style="text-align:center;">
+						<h:outputText value="#{arquivoBaixa.descricaoProcessamento}" />
+					</p:column>
+
+				</p:dataTable>
+
+			</h:panelGrid>
+		</h:form>
+	</ui:define>
+</ui:composition>

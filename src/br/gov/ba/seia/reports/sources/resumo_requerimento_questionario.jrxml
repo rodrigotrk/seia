@@ -1,0 +1,1363 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="resumo_requerimento_questionario" language="java" pageWidth="479" pageHeight="733" columnWidth="479" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="aca799d4-c06c-46ae-9b81-5f1030c63427">
+	<property name="ireport.zoom" value="1.3636363636363635"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="181"/>
+	<parameter name="ide_requerimento" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[select
+	*,
+	case when ind_captacao_barramento isnull then '1' else '0' end as cap_barramento_preenchido,
+	case when ind_poco_captacao_perfurado isnull then '1' else '0' end as poc_captacao_preenchido,
+	case when ind_barragem_capt_construida isnull then '1' else '0' end as bar_captacao_preenchido,
+array_to_string( array(
+     	select pt.num_processo_tramite
+from processo_tramite pt
+where pt.ide_requerimento = $P{ide_requerimento}
+          )
+	, ', ') as processos,
+array_to_string( array(
+     	select tc.nom_tipo_captacao
+from tipo_captacao tc
+inner join requerimento_tipo_captacao rtc on rtc.ide_tipo_captacao = tc.ide_tipo_captacao
+where rtc.ide_requerimento = $P{ide_requerimento}
+          )
+	, ', ') as origem_agua,
+array_to_string( array(
+     	select ta.nom_tipo_finalidade_uso_agua
+from tipo_finalidade_uso_agua ta
+inner join requerimento_tipo_finalidade_uso_agua ra
+on (ta.ide_tipo_finalidade_uso_agua = ra.ide_tipo_finalidade_uso_agua)
+where ide_requerimento  = $P{ide_requerimento}
+          )
+	, ', ') as finalidade_agua,
+array_to_string( array(
+     	select tr.nom_tipo_receptor
+from tipo_receptor tr
+inner join requerimento_tipo_receptor rtr on rtr.ide_tipo_receptor = tr.ide_tipo_receptor
+where rtr.ide_requerimento = $P{ide_requerimento}
+          )
+	, ', ') as residuos_liquidos,
+array_to_string( array(
+     	select ti.nom_tipo_intervencao
+from tipo_intervencao ti
+inner join requerimento_tipo_intervencao rti on rti.ide_tipo_intervencao = ti.ide_tipo_intervencao
+where rti.ide_requerimento = $P{ide_requerimento}
+          )
+	, ', ') as tipos_intervencao
+from requerimento_unico ru
+where ru.ide_requerimento_unico = $P{ide_requerimento}]]>
+	</queryString>
+	<field name="ide_requerimento_unico" class="java.lang.Integer"/>
+	<field name="ind_tramite_inema" class="java.lang.Boolean"/>
+	<field name="ind_tramite_ana" class="java.lang.Boolean"/>
+	<field name="ind_supressao_vegetacao" class="java.lang.Boolean"/>
+	<field name="ind_plano_manejo" class="java.lang.Boolean"/>
+	<field name="ind_servidao_florestal" class="java.lang.Boolean"/>
+	<field name="num_outorga_protocolo_abertura" class="java.lang.String"/>
+	<field name="ind_proc_outorga_atende" class="java.lang.Boolean"/>
+	<field name="ind_utiliza_agua" class="java.lang.Boolean"/>
+	<field name="ind_realiza_emissao_residuos_liquidos" class="java.lang.Boolean"/>
+	<field name="ind_intervencao_corpo_hidrico" class="java.lang.Boolean"/>
+	<field name="ind_regularizar_perf_poco" class="java.lang.Boolean"/>
+	<field name="ind_poco_regularizar_perfurado" class="java.lang.Boolean"/>
+	<field name="ind_volume_material" class="java.lang.Boolean"/>
+	<field name="ind_captacao_barramento" class="java.lang.Boolean"/>
+	<field name="ind_poco_captacao_perfurado" class="java.lang.Boolean"/>
+	<field name="ind_autorizacao_perfuracao_poco" class="java.lang.Boolean"/>
+	<field name="num_vazao_captacao" class="java.math.BigDecimal"/>
+	<field name="dtc_perf_poco" class="java.sql.Timestamp"/>
+	<field name="num_processo_autorizacao_poco" class="java.lang.String"/>
+	<field name="ide_porte" class="java.lang.Integer"/>
+	<field name="ide_fase_empreendimento" class="java.lang.Integer"/>
+	<field name="ide_localizacao_geografica" class="java.lang.Integer"/>
+	<field name="dsc_outrosobjt_limp_area" class="java.lang.String"/>
+	<field name="dtc_inicio_limp_area" class="java.sql.Timestamp"/>
+	<field name="dtc_final_limp_area" class="java.sql.Timestamp"/>
+	<field name="ind_barragem_capt_construida" class="java.lang.Boolean"/>
+	<field name="ind_autorizacao_construcao_barragem_capt" class="java.lang.Boolean"/>
+	<field name="ind_barragem_interv_construida" class="java.lang.Boolean"/>
+	<field name="ind_autorizacao_construcao_barragem_interv" class="java.lang.Boolean"/>
+	<field name="ind_realizar_queima_controlada" class="java.lang.Boolean"/>
+	<field name="ind_util_mat_lenhoso_arvr_mortas" class="java.lang.Boolean"/>
+	<field name="ind_declaracao_plano_supr_sust" class="java.lang.Boolean"/>
+	<field name="ind_vinc_flor_prod_rep_flor" class="java.lang.Boolean"/>
+	<field name="num_portaria_lic_silvicultura" class="java.lang.String"/>
+	<field name="ind_transf_cred_rep_florestal" class="java.lang.Boolean"/>
+	<field name="ind_aprov_exec_plano_mnj_flor" class="java.lang.Boolean"/>
+	<field name="num_processo_aprov_exec_plano_mnj_flor" class="java.lang.String"/>
+	<field name="ind_cort_flor_prod" class="java.lang.Boolean"/>
+	<field name="ind_pror_valid_asv" class="java.lang.Boolean"/>
+	<field name="ind_pror_valid_rcfp" class="java.lang.Boolean"/>
+	<field name="ind_pror_valid_acfp" class="java.lang.Boolean"/>
+	<field name="ind_pror_valid_la" class="java.lang.Boolean"/>
+	<field name="ind_pror_valid_nao" class="java.lang.Boolean"/>
+	<field name="num_port_asv" class="java.lang.String"/>
+	<field name="num_port_rcfp" class="java.lang.String"/>
+	<field name="num_port_acfp" class="java.lang.String"/>
+	<field name="num_port_la" class="java.lang.String"/>
+	<field name="num_port_cert_reg_flor_prod" class="java.lang.String"/>
+	<field name="ind_flor_vinc_rep_flor" class="java.lang.Boolean"/>
+	<field name="num_port_emiss_cred_rep_flor" class="java.lang.String"/>
+	<field name="ind_rec_vol_flor_rem" class="java.lang.Boolean"/>
+	<field name="ind_orig_mat_len_asv" class="java.lang.Boolean"/>
+	<field name="ind_orig_mat_len_rcfp" class="java.lang.Boolean"/>
+	<field name="ind_orig_mat_len_acfp" class="java.lang.Boolean"/>
+	<field name="num_orig_mat_len_asv" class="java.lang.String"/>
+	<field name="num_orig_mat_len_rcfp" class="java.lang.String"/>
+	<field name="num_orig_mat_len_acfp" class="java.lang.String"/>
+	<field name="num_proc_lic_ambiental" class="java.lang.String"/>
+	<field name="num_proc_emiss_cred" class="java.lang.String"/>
+	<field name="ind_dla" class="java.lang.Boolean"/>
+	<field name="ind_revovar_licenca_ambiental" class="java.lang.Boolean"/>
+	<field name="num_revovar_licenca_ambiental" class="java.lang.String"/>
+	<field name="ind_ato_ambiental" class="java.lang.Boolean"/>
+	<field name="ind_ato_fauna" class="java.lang.Boolean"/>
+	<field name="ind_manejo_fauna" class="java.lang.Boolean"/>
+	<field name="ind_estudo_fauna" class="java.lang.Boolean"/>
+	<field name="ind_alterar_licenca_ambiental" class="java.lang.Boolean"/>
+	<field name="num_alterar_licenca_ambiental" class="java.lang.String"/>
+	<field name="ind_reloc_servid_florest" class="java.lang.Boolean"/>
+	<field name="cap_barramento_preenchido" class="java.lang.String"/>
+	<field name="poc_captacao_preenchido" class="java.lang.String"/>
+	<field name="bar_captacao_preenchido" class="java.lang.String"/>
+	<field name="processos" class="java.lang.String"/>
+	<field name="origem_agua" class="java.lang.String"/>
+	<field name="finalidade_agua" class="java.lang.String"/>
+	<field name="residuos_liquidos" class="java.lang.String"/>
+	<field name="tipos_intervencao" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="12">
+			<staticText>
+				<reportElement uuid="6e030a85-b739-4e22-ac9b-2e2d7cd315ef" positionType="Float" x="0" y="0" width="138" height="12" isRemoveLineWhenBlank="true"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="8" isBold="false" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Deseja renovar licença ambiental?]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="27ff1fa5-7d8e-4c31-ba39-09ccc2822841" positionType="Float" x="151" y="0" width="200" height="12" isRemoveLineWhenBlank="true"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="9" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ind_revovar_licenca_ambiental} ? "Sim" : "Não"]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="12">
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="a7058d7b-a1dd-4610-aa94-49e7be32a399" positionType="Float" x="198" y="0" width="154" height="12" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$F{ind_revovar_licenca_ambiental}]]></printWhenExpression>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="9" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{num_revovar_licenca_ambiental}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="7ab206e2-813a-46f0-879b-e3455e2d84c9" positionType="Float" x="0" y="0" width="197" height="12" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$F{ind_revovar_licenca_ambiental}]]></printWhenExpression>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="8" isBold="false" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Número para Renovação de Licença Ambiental:]]></text>
+			</staticText>
+		</band>
+		<band height="12">
+			<staticText>
+				<reportElement uuid="13e8ca64-ed5b-4ba4-b711-0d4bcb291fd7" positionType="Float" x="0" y="0" width="138" height="12" isRemoveLineWhenBlank="true"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="8" isBold="false" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Deseja alterar licença ambiental?]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="0da8d5cf-8ecb-40ff-a426-62ba916f07a7" positionType="Float" x="143" y="0" width="200" height="12" isRemoveLineWhenBlank="true"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="9" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ind_alterar_licenca_ambiental} ? "Sim" : "Não"]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="12">
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="80c21fef-53a3-44e9-9567-c45785070f99" positionType="Float" x="191" y="0" width="154" height="12" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$F{ind_alterar_licenca_ambiental}]]></printWhenExpression>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="9" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{num_alterar_licenca_ambiental}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="5f6922ea-3a86-4e29-88c7-b9d7697ec147" positionType="Float" x="0" y="0" width="190" height="12" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$F{ind_alterar_licenca_ambiental}]]></printWhenExpression>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="8" isBold="false" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Número para Alteração de Licença Ambiental:]]></text>
+			</staticText>
+		</band>
+		<band height="12">
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="f747b695-0dc3-4b14-bbff-bfe8e623bc8f" positionType="Float" x="363" y="0" width="70" height="12" isRemoveLineWhenBlank="true"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="9" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ind_pror_valid_asv} ? "Sim" : "Não"]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="43490189-4e75-4126-8cbc-3e77b4c149f6" positionType="Float" x="0" y="0" width="343" height="12" isRemoveLineWhenBlank="true"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="8" isBold="false" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Você necessita prorrogar prazo de validade de Supressão de vegetação nativa - ASV?]]></text>
+			</staticText>
+		</band>
+		<band height="12">
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="ed1cee6c-7241-4176-a98b-d16437dbed0e" positionType="Float" x="246" y="0" width="154" height="12" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$F{ind_pror_valid_asv}]]></printWhenExpression>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="9" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{num_port_asv}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="19f84a9f-7691-4147-a230-e0be0463003c" positionType="Float" x="0" y="0" width="254" height="12" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$F{ind_pror_valid_asv}]]></printWhenExpression>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="8" isBold="false" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Número da Portaria de Autorização de Supressão de Vegetação:]]></text>
+			</staticText>
+		</band>
+		<band height="12">
+			<staticText>
+				<reportElement uuid="dbd85bdd-ad22-4849-bc50-3b117eebd35b" positionType="Float" x="0" y="0" width="234" height="12" isRemoveLineWhenBlank="true"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="8" isBold="false" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Você necessita prorrogar prazo de validade de Outorga?]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="2ca8afef-761f-4abe-9d33-4da3e3903ccc" positionType="Float" x="238" y="0" width="155" height="12" isRemoveLineWhenBlank="true"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="9" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ind_pror_valid_rcfp} ? "Sim" : "Não"]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="12">
+			<staticText>
+				<reportElement uuid="3faea03c-83d9-46c6-bc2f-54e01a7af4b9" positionType="Float" x="0" y="0" width="198" height="12" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$F{ind_pror_valid_rcfp}]]></printWhenExpression>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="8" isBold="false" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Número do registro de corte de floresta de produção: ]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="2ade5b36-e0fb-4929-af94-ed5e0dae6c97" positionType="Float" x="203" y="0" width="154" height="12" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$F{ind_pror_valid_rcfp}]]></printWhenExpression>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="9" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{num_port_rcfp}]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="12">
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="61107e9e-eed7-42fd-b290-d707096e83b1" positionType="Float" x="407" y="0" width="53" height="12" isRemoveLineWhenBlank="true"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="9" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ind_pror_valid_acfp} ? "Sim" : "Não"]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="01697e50-1b02-46dc-af6a-5d1051edbd8e" positionType="Float" x="0" y="0" width="386" height="12" isRemoveLineWhenBlank="true"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="8" isBold="false" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Você necessita prorrogar prazo de validade de Autorização de corte de floresta de produção - ACFP?]]></text>
+			</staticText>
+		</band>
+		<band height="12">
+			<staticText>
+				<reportElement uuid="bc589430-abdb-48ed-a2f2-08fea039561b" positionType="Float" x="0" y="0" width="258" height="12" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$F{ind_pror_valid_acfp}]]></printWhenExpression>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="8" isBold="false" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Número da portaria de autorização de corte de floresta de produção:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="fe8435e4-d3a7-4773-8de2-7c5ae7609daf" positionType="Float" x="263" y="0" width="154" height="12" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$F{ind_pror_valid_acfp}]]></printWhenExpression>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="9" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{num_port_acfp}]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="12">
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="7c35a170-695a-4df5-a635-63a10f4ec49f" positionType="Float" x="261" y="0" width="155" height="12" isRemoveLineWhenBlank="true"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="9" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ind_pror_valid_la} ? "Sim" : "Não"]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="fefd8672-22cb-4320-95c2-5a4fc4fa470e" positionType="Float" x="0" y="0" width="254" height="12" isRemoveLineWhenBlank="true"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="8" isBold="false" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Você necessita prorrogar prazo de validade de Licença ambiental?]]></text>
+			</staticText>
+		</band>
+		<band height="12">
+			<staticText>
+				<reportElement uuid="2e13c695-45a4-4351-b87e-56535af1af35" positionType="Float" x="0" y="0" width="182" height="12" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$F{ind_pror_valid_la}]]></printWhenExpression>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="8" isBold="false" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Número da portaria de licenciamento ambiental:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="87fd1c52-216d-450d-8302-87158aadfd33" positionType="Float" x="189" y="0" width="154" height="12" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$F{ind_pror_valid_la}]]></printWhenExpression>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="9" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{num_port_la}]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="12">
+			<staticText>
+				<reportElement uuid="a6bc1a83-3a59-4df3-a1f4-7ec2c8beb0ac" positionType="Float" x="0" y="0" width="313" height="12" isRemoveLineWhenBlank="true"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="8" isBold="false" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[O empreendimento possui processo(s) em trâmite e/ou concluído(s) no INEMA?]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="7f6d7455-e4ac-4ffc-8b3b-0a9d5d6a063e" positionType="Float" x="343" y="0" width="82" height="12" isRemoveLineWhenBlank="true"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="9" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ind_tramite_inema} ? "Sim" : "Não"]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="12">
+			<staticText>
+				<reportElement uuid="233c6c38-9f94-4adb-9360-167d25070cb4" positionType="Float" x="0" y="0" width="45" height="12" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$F{ind_tramite_inema}]]></printWhenExpression>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="8" isBold="false" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Processos:]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="792b87fa-0dfb-458e-a823-23e110075596" positionType="Float" x="45" y="0" width="428" height="12" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$F{ind_tramite_inema}]]></printWhenExpression>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="9" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{processos}]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="12">
+			<staticText>
+				<reportElement uuid="cb8696d5-8ff4-411c-8d07-2dbf623a23ac" positionType="Float" x="0" y="0" width="425" height="12" isRemoveLineWhenBlank="true"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="8" isBold="false" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[O empreendimento possui processo(s) em trâmite e/ou concluído(s) na ANA (Agência Nacional das Águas)?
+]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="a72c5b13-ce5c-4ea4-93ab-0dad3cbd6f13" positionType="Float" x="442" y="0" width="36" height="12" isRemoveLineWhenBlank="true"/>
+				<textElement verticalAlignment="Middle">
+					<font size="9" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ind_tramite_ana} ? "Sim" : "Não"]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="12">
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="27e1cd64-1588-4b80-aaac-a60a636c6024" positionType="Float" x="190" y="0" width="200" height="12" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$F{ind_tramite_ana}]]></printWhenExpression>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="9" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{num_outorga_protocolo_abertura}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="e6fda450-4531-4782-87e0-f6fc2647fd7f" positionType="Float" x="0" y="0" width="182" height="12" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$F{ind_tramite_ana}]]></printWhenExpression>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="8" isBold="false" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Nº da outorga ou nº do protocolo de sua abertura:]]></text>
+			</staticText>
+		</band>
+		<band height="12">
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="3ec49580-e91c-433d-8960-a95a5cf2d67c" positionType="Float" x="379" y="0" width="57" height="12" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$F{ind_tramite_inema}]]></printWhenExpression>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font size="9" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ind_proc_outorga_atende} ? "Sim" : "Não"]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="0a108874-3630-4264-8156-d9371ba6e791" positionType="Float" x="0" y="0" width="346" height="12" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$F{ind_tramite_inema}]]></printWhenExpression>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="8" isBold="false" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[O(s) processo(s) atende(m) a todos os usos passíveis de outorga do empreendimento?]]></text>
+			</staticText>
+		</band>
+		<band height="12">
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="e8f92af7-2a0b-43dc-8d8b-7984f32753da" positionType="Float" x="198" y="0" width="123" height="12" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[!$F{ind_proc_outorga_atende}]]></printWhenExpression>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="9" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ind_utiliza_agua} ? "Sim" : "Não"]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="0b31e772-b504-479c-8ff4-c6904b3a4c02" positionType="Float" x="0" y="0" width="164" height="12" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[!$F{ind_proc_outorga_atende}]]></printWhenExpression>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="8" isBold="false" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[O empreendimento utiliza/utilizará água?
+]]></text>
+			</staticText>
+		</band>
+		<band height="12">
+			<staticText>
+				<reportElement uuid="87bc5bb2-cb69-43da-9f55-f50a9fa0b659" positionType="Float" x="0" y="0" width="304" height="12" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$F{ind_utiliza_agua}]]></printWhenExpression>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="8" isBold="false" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Qual(is) a(s) origem(ns) da água utilizada/a ser utilizada?]]></text>
+			</staticText>
+		</band>
+		<band height="12">
+			<printWhenExpression><![CDATA[$F{ind_utiliza_agua}]]></printWhenExpression>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="7212f1e9-5f4a-4ba3-b9ed-8b65e8ba1f38" positionType="Float" x="0" y="0" width="473" height="12" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$F{ind_utiliza_agua}]]></printWhenExpression>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="9" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{origem_agua}]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="12">
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="e2a7a269-32aa-40b2-92e1-ac1b98f82c2f" positionType="Float" x="134" y="0" width="200" height="12" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$F{cap_barramento_preenchido}.equals("0")]]></printWhenExpression>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="9" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ind_captacao_barramento} ? "Sim" : "Não"]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="80f42e30-182c-4f8a-b0cf-1f543d90a96e" positionType="Float" x="0" y="0" width="134" height="12" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$F{cap_barramento_preenchido}.equals("0")]]></printWhenExpression>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="8" isBold="false" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[A captação é com barramento?]]></text>
+			</staticText>
+		</band>
+		<band height="12">
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="918521a2-1cf5-4070-a5c5-dea461add354" positionType="Float" x="183" y="0" width="200" height="12" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$F{ind_captacao_barramento}]]></printWhenExpression>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="9" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ind_barragem_capt_construida} ? "Sim" : "Não"]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="23a6ebf6-00a4-42c8-86eb-72b2f749f8b5" positionType="Float" x="0" y="0" width="178" height="12" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$F{ind_captacao_barramento}]]></printWhenExpression>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="8" isBold="false" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[A barragem de captação já está construída?]]></text>
+			</staticText>
+		</band>
+		<band height="12">
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="559da1cd-ca03-4a6b-ae5f-4af3cd662562" positionType="Float" x="307" y="0" width="132" height="12" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$F{bar_captacao_preenchido}.equals("0") && !$F{ind_barragem_capt_construida}]]></printWhenExpression>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="9" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ind_autorizacao_construcao_barragem_capt} ? "Sim" : "Não"]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="7b05af6b-7f9a-4c62-bc86-3d9e520918d1" positionType="Float" x="0" y="0" width="270" height="12" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$F{bar_captacao_preenchido}.equals("0") && !$F{ind_barragem_capt_construida}]]></printWhenExpression>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="8" isBold="false" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Possui autorização para a construção da barragem de captação?]]></text>
+			</staticText>
+		</band>
+		<band height="12">
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="398061f3-2c7a-4993-935a-335ec1b7e6e3" positionType="Float" x="186" y="0" width="200" height="12" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$F{poc_captacao_preenchido}.equals("0")]]></printWhenExpression>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font size="9" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ind_poco_captacao_perfurado} ? "Sim" : "Não"]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="a22a1df4-0f2d-4642-93f2-1ee564aabb3e" positionType="Float" x="0" y="0" width="167" height="12" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$F{poc_captacao_preenchido}.equals("0")]]></printWhenExpression>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="8" isBold="false" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[O poço da captação já está perfurado?]]></text>
+			</staticText>
+		</band>
+		<band height="12">
+			<staticText>
+				<reportElement uuid="d33cd00d-8784-4935-9a61-4c7e34016081" positionType="Float" x="0" y="0" width="208" height="12" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$F{poc_captacao_preenchido}.equals("0") && !$F{ind_poco_captacao_perfurado}]]></printWhenExpression>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="8" isBold="false" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Possui autorização para a perfuração do poço?]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="dc66ee67-3706-439c-b9aa-2313e7ceb1c2" positionType="Float" x="211" y="0" width="119" height="12" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$F{poc_captacao_preenchido}.equals("0") && !$F{ind_poco_captacao_perfurado}]]></printWhenExpression>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="9" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ind_poco_captacao_perfurado} ? "Sim" : "Não"]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="12">
+			<staticText>
+				<reportElement uuid="4dd05b69-c593-4cd4-9a78-232f669a33f8" positionType="Float" x="0" y="0" width="127" height="12" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[($F{ind_captacao_barramento} != null ) || ($F{ind_poco_captacao_perfurado} != null)]]></printWhenExpression>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="8" isBold="false" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Vazão da captação (m³/dia):]]></text>
+			</staticText>
+			<textField pattern="#,##0.0" isBlankWhenNull="true">
+				<reportElement uuid="6f2cf3da-f7f0-47d6-b6f5-56805c6c1c60" positionType="Float" x="130" y="0" width="149" height="12" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[($F{ind_captacao_barramento} != null) || ($F{ind_poco_captacao_perfurado} != null)]]></printWhenExpression>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="9" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{num_vazao_captacao}]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="14">
+			<subreport>
+				<reportElement uuid="3e269704-4ab6-4139-a23f-be7f5fbd0182" positionType="Float" stretchType="RelativeToBandHeight" x="1" y="0" width="478" height="14" isRemoveLineWhenBlank="true"/>
+				<subreportParameter name="SUBREPORT_DIR">
+					<subreportParameterExpression><![CDATA[$P{SUBREPORT_DIR}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="ide_requerimento">
+					<subreportParameterExpression><![CDATA[$F{ide_requerimento_unico}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "resumo_requerimento_questionario_localizacao.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+		<band height="12">
+			<staticText>
+				<reportElement uuid="7847b0e5-f328-4782-ae20-b3feec1fbe50" positionType="Float" x="0" y="0" width="309" height="12" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$F{ind_captacao_barramento} || $F{ind_poco_captacao_perfurado}]]></printWhenExpression>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="8" isBold="false" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Qual(is) a(s) finalidade(s) da água superficial/subterrânea captada?]]></text>
+			</staticText>
+		</band>
+		<band height="12">
+			<printWhenExpression><![CDATA[$F{ind_captacao_barramento} || $F{ind_poco_captacao_perfurado}]]></printWhenExpression>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="215930e9-fed7-4d54-8281-0b7e56428f4a" positionType="Float" x="0" y="0" width="473" height="12" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$F{ind_captacao_barramento} || $F{ind_poco_captacao_perfurado}]]></printWhenExpression>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="9" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{finalidade_agua}]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="12">
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="f50f5c18-7f27-49ec-ba7b-cd5d85fd7af6" positionType="Float" x="313" y="0" width="80" height="12" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$F{ind_realiza_emissao_residuos_liquidos}]]></printWhenExpression>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="9" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ind_realiza_emissao_residuos_liquidos} ? "Sim" : "Não"]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="2aa4d172-5c5e-460f-bc3d-ccad1188f49b" positionType="Float" x="0" y="0" width="312" height="12" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$F{ind_realiza_emissao_residuos_liquidos}]]></printWhenExpression>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="8" isBold="false" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[O empreendimento realiza/realizará lançamento/emissão de resíduos líquidos?
+]]></text>
+			</staticText>
+		</band>
+		<band height="12">
+			<staticText>
+				<reportElement uuid="031de260-08fc-4840-a972-6e16b5e63e60" positionType="Float" x="0" y="0" width="297" height="12" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$F{ind_realiza_emissao_residuos_liquidos}]]></printWhenExpression>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="8" isBold="false" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Qual(is) o(s) receptor(es) dos resíduos líquidos?]]></text>
+			</staticText>
+		</band>
+		<band height="12">
+			<printWhenExpression><![CDATA[$F{ind_realiza_emissao_residuos_liquidos}]]></printWhenExpression>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="09bb9232-4c1d-4f04-9122-85320fe8940a" positionType="Float" x="0" y="0" width="473" height="12" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$F{ind_realiza_emissao_residuos_liquidos}]]></printWhenExpression>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="9" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{residuos_liquidos}]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="12">
+			<staticText>
+				<reportElement uuid="5359f9ea-d17f-4b49-977e-77b5996f7144" positionType="Float" x="0" y="0" width="250" height="12" isRemoveLineWhenBlank="true"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="8" isBold="false" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[O empreendimento faz/fará intervenção em corpo hídrico?]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="b4f3b064-1fe9-414b-82ca-8d0ce9c770c6" positionType="Float" x="277" y="0" width="48" height="12" isRemoveLineWhenBlank="true"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="9" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ind_intervencao_corpo_hidrico} ? "Sim" : "Não"]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="12">
+			<staticText>
+				<reportElement uuid="a6e98b7b-b0dd-48de-abcf-01d158542bf6" positionType="Float" x="0" y="0" width="383" height="12" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$F{ind_intervencao_corpo_hidrico}]]></printWhenExpression>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="8" isBold="false" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Qual(is) opção(ões) de intervenção em corpo hídrico será(ão) feita(s)?]]></text>
+			</staticText>
+		</band>
+		<band height="12">
+			<printWhenExpression><![CDATA[$F{ind_intervencao_corpo_hidrico}]]></printWhenExpression>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="95e46633-d3cc-44d6-8912-f496fa1fb4d2" positionType="Float" x="1" y="0" width="473" height="12" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$F{ind_intervencao_corpo_hidrico}]]></printWhenExpression>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="9" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{tipos_intervencao}]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="12">
+			<staticText>
+				<reportElement uuid="e3628e62-f6be-40f1-ace9-a7878ea93f50" positionType="Float" x="0" y="0" width="178" height="12" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[!$F{ind_proc_outorga_atende}]]></printWhenExpression>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="8" isBold="false" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Deseja regularizar a perfuração de poço?]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="55cb7427-35c5-4cbd-bd7e-b9cec6b48bd7" positionType="Float" x="222" y="0" width="136" height="12" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[!$F{ind_proc_outorga_atende}]]></printWhenExpression>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="8" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ind_regularizar_perf_poco} ? "Sim" : "Não"]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="24">
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="ed4622b5-920c-4b33-94d6-18ff5ecc6efb" positionType="Float" x="241" y="12" width="105" height="12" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$F{ind_poco_regularizar_perfurado}]]></printWhenExpression>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="8" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ind_poco_regularizar_perfurado} ? "Sim" : "Não"]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="15f4a9ab-135c-4641-813b-60069931889f" positionType="Float" x="0" y="0" width="234" height="12" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$F{ind_poco_regularizar_perfurado}]]></printWhenExpression>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="8" isBold="false" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Nº do processo que autorizou a perfuração:]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="71aeea66-647f-47da-9d50-56b1db7db6f0" positionType="Float" x="238" y="0" width="112" height="12" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$F{ind_poco_regularizar_perfurado}]]></printWhenExpression>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="8" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{num_processo_autorizacao_poco}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="98688a45-979c-4b78-bc1f-e0e9810847f3" positionType="Float" x="1" y="12" width="233" height="12" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$F{ind_poco_regularizar_perfurado}]]></printWhenExpression>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="8" isBold="false" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[O poço a ser regularizado já está perfurado?]]></text>
+			</staticText>
+		</band>
+		<band height="12">
+			<staticText>
+				<reportElement uuid="2715b733-f82f-42ea-900a-fd5e1d40bf44" positionType="Float" x="0" y="0" width="127" height="12" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$F{ind_poco_regularizar_perfurado}]]></printWhenExpression>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="8" isBold="false" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Data da perfuração do poço:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="ccf474fe-28d1-47ca-9c0b-82c5dcc87e2f" positionType="Float" x="134" y="0" width="200" height="12" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$F{ind_poco_regularizar_perfurado}]]></printWhenExpression>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="8" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.text.SimpleDateFormat("dd/MM/yyyy").format($F{dtc_perf_poco})]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="12">
+			<staticText>
+				<reportElement uuid="43d381e0-d298-40cd-9c83-2252ceb71a79" positionType="Float" x="0" y="0" width="176" height="12" isRemoveLineWhenBlank="true"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="8" isBold="false" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Você precisará de algum ato florestal?]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="7b56fa4c-4c34-4989-9dda-ac71c60562bb" positionType="Float" x="211" y="0" width="200" height="12" isRemoveLineWhenBlank="true"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="9" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ind_ato_ambiental} ? "Sim" : "Não"]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="12">
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="807212c2-40fa-4a33-b7a0-d47452fb04ad" positionType="Float" x="213" y="0" width="200" height="12" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$F{ind_ato_ambiental}]]></printWhenExpression>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="9" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ind_supressao_vegetacao} ? "Sim" : "Não"]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="ab16f1a8-dd2d-4e93-906b-737487aac9f7" positionType="Float" x="1" y="0" width="177" height="12" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$F{ind_ato_ambiental}]]></printWhenExpression>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="8" isBold="false" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Haverá supressão de vegetação nativa?]]></text>
+			</staticText>
+		</band>
+		<band height="12">
+			<staticText>
+				<reportElement uuid="c61d7e59-e8fa-4ed4-8bab-2bad2006e7e2" positionType="Float" x="0" y="0" width="176" height="12" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$F{ind_supressao_vegetacao}]]></printWhenExpression>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="8" isBold="false" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Haverá produção volumétrica de madeira?]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="189a4013-139a-4bd3-9e0b-b7395c25b454" positionType="Float" x="212" y="0" width="200" height="12" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$F{ind_supressao_vegetacao}]]></printWhenExpression>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="9" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ind_volume_material} ? "Sim" : "Não"]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="12">
+			<staticText>
+				<reportElement uuid="40e01f1d-ade9-46b3-980f-a11af331272d" positionType="Float" x="0" y="0" width="190" height="12" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$F{ind_ato_ambiental}]]></printWhenExpression>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="8" isBold="false" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Você irá realizar uma queima controlada?
+]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="f0633696-289a-461e-a0bb-107798da08e2" positionType="Float" x="213" y="0" width="200" height="12" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$F{ind_ato_ambiental}]]></printWhenExpression>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="9" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ind_realizar_queima_controlada} ? "Sim" : "Não"]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="12">
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="53dcb657-6c4f-4826-90b3-e7219fe6ad1e" positionType="Float" x="350" y="0" width="72" height="12" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$F{ind_ato_ambiental}]]></printWhenExpression>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="9" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ind_util_mat_lenhoso_arvr_mortas} ? "Sim" : "Não"]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="81a2aa5e-992f-4fa9-885f-dc3d7d832246" positionType="Float" x="0" y="0" width="334" height="12" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$F{ind_ato_ambiental}]]></printWhenExpression>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="8" isBold="false" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Você irá utilizar material lenhoso originado de árvores mortas por causas naturais?]]></text>
+			</staticText>
+		</band>
+		<band height="12">
+			<staticText>
+				<reportElement uuid="8bfb51de-655c-4630-a7f2-5a1a7c9c58e0" positionType="Float" x="0" y="0" width="334" height="12" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$F{ind_ato_ambiental}]]></printWhenExpression>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="8" isBold="false" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Necessita fazer a declaração anual do Plano de Suprimento Sustentável?]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="9cd4a07c-738e-40c1-ae48-be4cad544de3" positionType="Float" x="351" y="0" width="110" height="12" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$F{ind_ato_ambiental}]]></printWhenExpression>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="9" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ind_declaracao_plano_supr_sust} ? "Sim" : "Não"]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="12">
+			<staticText>
+				<reportElement uuid="6a39d9c6-a02f-4797-ae42-fe683ba31618" positionType="Float" x="0" y="0" width="304" height="12" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$F{ind_declaracao_plano_supr_sust}]]></printWhenExpression>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="8" isBold="false" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Número do Processo de Licenciamento Ambiental do Empreendimento:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="6e3487f5-8edd-4d4a-b70c-bf1238d38705" positionType="Float" x="321" y="0" width="110" height="12" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$F{ind_declaracao_plano_supr_sust}]]></printWhenExpression>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="9" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{num_proc_lic_ambiental}]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="12">
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="3f2f35c9-a1a0-4465-8085-55b4e24616db" positionType="Float" x="321" y="0" width="102" height="12" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$F{ind_ato_ambiental}]]></printWhenExpression>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="9" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ind_vinc_flor_prod_rep_flor} ? "Sim" : "Não"]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="ecfb4653-f65e-441a-a171-508628b0f607" positionType="Float" x="0" y="0" width="293" height="12" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$F{ind_ato_ambiental}]]></printWhenExpression>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="8" isBold="false" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Você deseja vincular uma floresta de produção à reposição florestal?
+]]></text>
+			</staticText>
+		</band>
+		<band height="12">
+			<staticText>
+				<reportElement uuid="398c70fb-1edb-467a-9777-5ee4aec63b37" positionType="Float" x="0" y="0" width="457" height="12" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$F{ind_vinc_flor_prod_rep_flor}]]></printWhenExpression>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="8" isBold="false" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Número da portaria de licença da silvicultura ou o número do certificado de registro de floresta de produção:]]></text>
+			</staticText>
+		</band>
+		<band height="12">
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="7bc3e216-8742-4505-8c07-a7f5150e6aec" positionType="Float" stretchType="RelativeToTallestObject" x="1" y="0" width="480" height="12" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$F{ind_vinc_flor_prod_rep_flor}]]></printWhenExpression>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="8" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{num_portaria_lic_silvicultura}]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="12">
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="dcd08a74-a8f0-4cf8-b683-df12ca4475c2" positionType="Float" x="239" y="0" width="140" height="12" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$F{ind_ato_ambiental}]]></printWhenExpression>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="9" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ind_transf_cred_rep_florestal} ? "Sim" : "Não"]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="f9cb05f0-1d87-43d8-9076-35a55c98ae36" positionType="Float" x="0" y="0" width="222" height="12" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$F{ind_ato_ambiental}]]></printWhenExpression>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="8" isBold="false" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Você deseja transferir créditos de reposição florestal?
+]]></text>
+			</staticText>
+		</band>
+		<band height="12">
+			<staticText>
+				<reportElement uuid="964aaa63-0c7b-4721-aac7-00dc04bb044b" positionType="Float" x="0" y="0" width="265" height="12" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$F{ind_transf_cred_rep_florestal}]]></printWhenExpression>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="8" isBold="false" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Número do Processo de Emissão de Crédito de Volume Florestal:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="4ea3f34a-495d-457e-811d-9ec0a745432a" positionType="Float" x="281" y="0" width="178" height="12" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$F{ind_transf_cred_rep_florestal}]]></printWhenExpression>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="9" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{num_proc_emiss_cred}]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="12">
+			<staticText>
+				<reportElement uuid="0775c6d7-8710-46f0-aece-95dc22969d64" positionType="Float" x="0" y="0" width="297" height="12" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$F{ind_ato_ambiental}]]></printWhenExpression>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="8" isBold="false" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Você necessita de Aprovação do plano de manejo florestal sustentável?
+]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="9ba82b9f-d0e9-4ec6-b5b8-f323e058a091" positionType="Float" x="312" y="0" width="127" height="12" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$F{ind_ato_ambiental}]]></printWhenExpression>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="9" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ind_plano_manejo} ? "Sim" : "Não"]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="12">
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="b96e3bdf-d63a-471a-9883-89ecb76cf1e3" positionType="Float" x="439" y="0" width="40" height="12" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$F{ind_ato_ambiental}]]></printWhenExpression>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="9" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ind_aprov_exec_plano_mnj_flor} ? "Sim" : "Não"]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="0b4ddea8-ecf6-4a84-9a6c-ca420a31ead8" positionType="Float" x="0" y="0" width="439" height="12" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$F{ind_ato_ambiental}]]></printWhenExpression>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="8" isBold="false" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Necessista de Aprovação de Execução de plano de manejo florestal sustentável, para corte de unidade produtiva?]]></text>
+			</staticText>
+		</band>
+		<band height="12">
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="af0ca733-d9d6-4257-9deb-e5f97be0e17c" positionType="Float" x="329" y="0" width="103" height="12" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$F{ind_aprov_exec_plano_mnj_flor}]]></printWhenExpression>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="9" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{num_processo_aprov_exec_plano_mnj_flor}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="74c83fb7-14c7-410d-9c81-da137786dba6" positionType="Float" x="0" y="0" width="321" height="12" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$F{ind_aprov_exec_plano_mnj_flor}]]></printWhenExpression>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="8" isBold="false" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Número do processo de aprovação do plano de manejo florestal sustentável:]]></text>
+			</staticText>
+		</band>
+		<band height="12">
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="84b4d030-a025-4711-b6d9-695c8fde6f8f" positionType="Float" x="330" y="0" width="127" height="12" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$F{ind_ato_ambiental}]]></printWhenExpression>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="9" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ind_cort_flor_prod} ? "Sim" : "Não"]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="05fb6270-7bf5-451b-a880-fb8c07b390ce" positionType="Float" x="0" y="0" width="312" height="12" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$F{ind_ato_ambiental}]]></printWhenExpression>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="8" isBold="false" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Necessita cortar uma floresta de produção já licenciada ou registrada?
+]]></text>
+			</staticText>
+		</band>
+		<band height="12">
+			<staticText>
+				<reportElement uuid="b1de6cf4-e3bd-49bf-8d44-366bda6b11aa" positionType="Float" x="0" y="0" width="363" height="12" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$F{ind_cort_flor_prod}]]></printWhenExpression>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="8" isBold="false" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Número da portaria de licença ou número do certificado de registro de floresta de produção:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="c314cccd-e7cc-42f0-aaf8-3bc5166befed" positionType="Float" x="366" y="0" width="112" height="12" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$F{ind_cort_flor_prod}]]></printWhenExpression>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="9" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{num_port_cert_reg_flor_prod}]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="12">
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="9fb51226-a8db-4790-b3ef-c195ad4366bb" positionType="Float" x="309" y="0" width="93" height="12" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$F{ind_ato_ambiental}]]></printWhenExpression>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="9" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ind_vinc_flor_prod_rep_flor} ? "Sim" : "Não"]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="768825ae-ccd0-4b89-99de-5cf4b4c92a7e" positionType="Float" x="0" y="0" width="222" height="12" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$F{ind_ato_ambiental}]]></printWhenExpression>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="8" isBold="false" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[A floresta está vinculada a Reposição Florestal?
+]]></text>
+			</staticText>
+		</band>
+		<band height="12">
+			<staticText>
+				<reportElement uuid="b9ebe774-5994-4ace-bd73-fd3c57bd4e6b" positionType="Float" x="0" y="0" width="277" height="12" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$F{ind_vinc_flor_prod_rep_flor}]]></printWhenExpression>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="8" isBold="false" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Número da Portaria de Emissão de Crédito de Reposição Florestal:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="4e8d5b02-de70-4f13-8f5a-3b8e0b499609" positionType="Float" x="305" y="0" width="112" height="12" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$F{ind_vinc_flor_prod_rep_flor}]]></printWhenExpression>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="9" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{num_port_emiss_cred_rep_flor}]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="12">
+			<staticText>
+				<reportElement uuid="a9756357-a64b-43c0-9389-974cd2024b38" positionType="Float" x="0" y="0" width="288" height="12" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$F{ind_ato_ambiental}]]></printWhenExpression>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="8" isBold="false" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Necessário reconhecimento de volume florestal remanescente - RVFR?]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="5bc0d1e3-161b-4a64-9732-ba7271137189" positionType="Float" x="304" y="0" width="124" height="12" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$F{ind_ato_ambiental}]]></printWhenExpression>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="9" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ind_rec_vol_flor_rem} ? "Sim" : "Não"]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="12">
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="fde5986d-2e48-4f1a-97e6-3e7171e3b03f" positionType="Float" x="339" y="0" width="137" height="12" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$F{ind_orig_mat_len_acfp}]]></printWhenExpression>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="9" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{num_orig_mat_len_asv}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="94e8fb12-d780-4fdb-abd5-a32a4c1e347a" positionType="Float" x="6" y="0" width="205" height="12" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$F{ind_orig_mat_len_acfp}]]></printWhenExpression>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="8" isBold="false" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Autorização de Supressão de Vegetação Nativa - ASV]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="318b8475-3b42-41b7-baa4-12a799e7e58b" positionType="Float" x="210" y="0" width="129" height="12" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$F{ind_orig_mat_len_acfp}]]></printWhenExpression>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="9" isBold="false" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Número da portaria de ASV:]]></text>
+			</staticText>
+		</band>
+		<band height="12">
+			<staticText>
+				<reportElement uuid="0eccbb61-1286-4b4d-ac7b-aa409f5caca1" positionType="Float" x="211" y="0" width="135" height="12" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$F{ind_orig_mat_len_acfp}]]></printWhenExpression>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="9" isBold="false" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Número da portaria de ACFP:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="5d71e004-d62b-4f26-b6c5-744f21171689" positionType="Float" x="0" y="0" width="211" height="12" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$F{ind_orig_mat_len_acfp}]]></printWhenExpression>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="8" isBold="false" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Autorização de Corte de Floresta de Produção - ACFP]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="23ddddc2-09d8-49a2-b078-40f30e50f114" positionType="Float" x="348" y="0" width="132" height="12" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$F{ind_orig_mat_len_acfp}]]></printWhenExpression>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="9" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{num_orig_mat_len_acfp}]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="12">
+			<staticText>
+				<reportElement uuid="9f5e10cd-ce8f-41fb-8335-90d6103efbd0" positionType="Float" x="0" y="0" width="321" height="12" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$F{ind_ato_ambiental}]]></printWhenExpression>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="8" isBold="false" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Você necessita de Aprovação de localização de servidão ambiental?]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="71881996-8b8c-4307-b832-bdbfc301fa8a" positionType="Float" x="329" y="0" width="135" height="12" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$F{ind_ato_ambiental}]]></printWhenExpression>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="9" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ind_servidao_florestal} ? "Sim" : "Não"]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="13">
+			<staticText>
+				<reportElement uuid="9f5e10cd-ce8f-41fb-8335-90d6103efbd0" positionType="Float" x="0" y="1" width="321" height="12" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$F{ind_ato_ambiental}]]></printWhenExpression>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="8" isBold="false" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Você necessita de Aprovação de relocaçao de servidão ambiental?]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="71881996-8b8c-4307-b832-bdbfc301fa8a" positionType="Float" x="333" y="1" width="135" height="12" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$F{ind_ato_ambiental}]]></printWhenExpression>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="9" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ind_reloc_servid_florest} ? "Sim" : "Não"]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="13">
+			<staticText>
+				<reportElement uuid="84f52321-0ac1-481e-bc46-fba044999956" positionType="Float" x="0" y="1" width="167" height="12" isRemoveLineWhenBlank="true"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="8" isBold="false" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Você precisará de algum ato de fauna?]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="65f96bb0-523a-4346-b5a5-51172d393b56" positionType="Float" x="176" y="1" width="150" height="12" isRemoveLineWhenBlank="true"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="9" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ind_ato_fauna} ? "Sim" : "Não"]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="12">
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="16e537b6-d2b2-48ca-8fb0-86f8df2f5b3b" positionType="Float" x="442" y="0" width="36" height="12" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$F{ind_ato_fauna}]]></printWhenExpression>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="9" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ind_manejo_fauna} ? "Sim" : "Não"]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="cb960ef3-2b86-432d-b5b6-0cfd778b515c" positionType="Float" x="0" y="0" width="436" height="12" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$F{ind_ato_fauna}]]></printWhenExpression>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="7" isBold="false" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Será necessário o Manejo de Fauna (de qualquer tipo) para a realização de estudos, pesquisas ou obras de empreendimento?]]></text>
+			</staticText>
+		</band>
+		<band height="13">
+			<staticText>
+				<reportElement uuid="8996f9db-8c53-44f5-8771-b1c462d6423a" positionType="Float" x="0" y="0" width="234" height="12" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$F{ind_ato_fauna}]]></printWhenExpression>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="8" isBold="false" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Irá realizar estudo de fauna para atender condicionante?]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="75a6d148-9310-4a8b-891b-0d0fedbaab45" positionType="Float" x="246" y="1" width="143" height="12" isRemoveLineWhenBlank="true">
+					<printWhenExpression><![CDATA[$F{ind_ato_fauna}]]></printWhenExpression>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="9" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ind_estudo_fauna} ? "Sim" : "Não"]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

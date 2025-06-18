@@ -1,0 +1,136 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition  xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.prime.com.tr/ui">
+			  	
+	<h:panelGroup id="conteudo">
+		
+		<h:form id="formAtoAmbiental">
+		 
+			<h:panelGrid columns="1">
+				
+				<h:panelGroup>
+				<h:panelGrid columns="1" id="panelNome">
+					<h:outputText value="* Nome" />
+					<p:inputText id="inputNome" value="#{atoAmbientalController.atoAmbientalSelecionado.nomAtoAmbiental}" style="width: 300px" required="true" requiredMessage="O campo Nome é de preenchimento obrigatório." />
+				</h:panelGrid>
+				
+				<h:panelGrid columns="3" id="panelSigla">
+					<h:outputText value="* Sigla" />
+					<p:spacer width="30" height="10" />
+					<h:outputText value="Número de dias Validade" />
+					<p:inputText id="inputSigla" value="#{atoAmbientalController.atoAmbientalSelecionado.sglAtoAmbiental}" style="width: 50px" required="true" requiredMessage="O campo Sigla é de preenchimento obrigatório." />
+						<p:spacer width="30" height="10" />
+				
+						<p:inputText id="inputValidade" value="#{atoAmbientalController.atoAmbientalSelecionado.numDiasValidade}" style="width: 50px" />
+				</h:panelGrid>
+					
+				<h:panelGrid columns="5" id="panelTipoAto">
+					
+					<h:outputText value="Categoria" />
+					<p:spacer width="30" height="10" />
+					<h:outputText value="Declaratório" />
+					<p:spacer width="30" height="10" />
+					<h:outputText value="Ativo" />
+ 					
+					<p:selectOneMenu  id="comboTipoAto" required="true" converter="tipoAtoConverter" value="#{atoAmbientalController.atoAmbientalSelecionado.ideTipoAto}" requiredMessage="O campo Tipo Ato é de preencimento Obrigatório ">
+						<f:selectItem itemValue="" itemLabel="Selecione..."/>
+						<f:selectItems value="#{atoAmbientalController.listaTipoAto}" var="tipoAto" itemLabel="#{tipoAto.nomTipoAto}" itemValue="#{tipoAto}" />
+					</p:selectOneMenu>
+			
+					<p:spacer width="30" height="10" />
+					<p:selectBooleanCheckbox value="#{atoAmbientalController.atoAmbientalSelecionado.indDeclaratorio}"  />
+						<p:spacer width="30" height="10" />
+						<p:selectBooleanCheckbox value="#{atoAmbientalController.atoAmbientalSelecionado.indAtivo}" />
+				</h:panelGrid>	
+							
+					<br /><br />
+					<p:commandButton value="Salvar" type="submit" actionListener="#{atoAmbientalController.salvarAtoAmbiental}" update="formAtoAmbiental :atualizadoComSucesso :pnlDocumentoAto" process="@form,pnlDocumentoAto"  style="margin-left:4px;" />					
+				</h:panelGroup>
+		
+								
+				<h:panelGroup >
+					<h:panelGrid id="pnlDocumentoAto"  rendered="#{atoAmbientalController.renderDocumentoAto}" >
+					
+					<br />			
+					<p:commandButton actionListener="#{atoAmbientalController.adicionarVinculo()}"  process="@this" update=":form_dialog" oncomplete="dlg.show()"  value="Vincular ao ato(s) documento(s)"  style="margin-left:4px;"/>				
+				
+				
+					<h:panelGrid id="fora" rendered="true">
+					<h:panelGrid columns="1" id="panelGrid4">		
+					
+						<p:dataTable 
+						id="tableConsultaAto" var="documentoAto" value="#{atoAmbientalController.documentoAtoModel}"  	lazy="true" 
+						paginator="true" rows="10" paginatorPosition="bottom" paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}"
+					    rowsPerPageTemplate="5,10,15" emtyMessage="#{bundle.consultapf_msg_empty_list}" style="width: 750px;">
+								        
+					        <f:facet name="header">
+					            <h:outputText value="Documentos Vinculados" />
+					        </f:facet>
+					        
+					        <p:column headerText="Tipologia" >
+					        	<h:outputText value="#{documentoAto.ideTipologia.desTipologia == null ? '-' : documentoAto.ideTipologia.desTipologia}" />
+					        </p:column>
+					        
+					        <p:column headerText="Finalidade(s)" >
+					        	<h:outputText value="#{documentoAto.ideTipoFinalidadeUsoAgua.nomTipoFinalidadeUsoAgua == null ? '-' : documentoAto.ideTipoFinalidadeUsoAgua.nomTipoFinalidadeUsoAgua}" />
+					        </p:column>
+					        
+					        <p:column headerText="Documento Obrigatório">
+					            <h:outputText value="#{documentoAto.ideDocumentoObrigatorio.nomDocumentoObrigatorio == null ? '-' : documentoAto.ideDocumentoObrigatorio.nomDocumentoObrigatorio}" />
+					        </p:column>
+
+							<p:column headerText="Ação">
+
+								<p:commandLink id="btnAlterar" title="#{bundle.btn_editar}" process="@this" oncomplete="dlg.show();" update="form_dialog">
+									<h:graphicImage title="Editar" value="/resources/img/ico-alterar.png" />
+									<f:setPropertyActionListener target="#{atoAmbientalController.documentoAtoSelecionado}" value="#{documentoAto}"/>
+									<f:setPropertyActionListener target="#{atoAmbientalController.autorizadao}" value="#{true}"/>
+									<f:setPropertyActionListener target="#{atoAmbientalController.recarregar}" value="#{true}"/>
+									<f:setPropertyActionListener target="#{atoAmbientalController.editarFinalidade}" value="#{true}"/>
+									<f:setPropertyActionListener target="#{atoAmbientalController.editar}" value="#{true}"/>
+								</p:commandLink>
+						
+								<p:commandLink id="btnExcluir" actionListener="#{atoAmbientalController.setDocumentoAtoSelecionado(documentoAto)}" onclick="confirmationDocAto.show()"  title="Excluir" process="@form" >
+									<h:graphicImage title="Excluir" value="/resources/img/ico-excluir.png" />									
+            					</p:commandLink>
+
+							</p:column>
+
+						</p:dataTable>	    				
+					</h:panelGrid>
+					</h:panelGrid>
+					</h:panelGrid>				
+				</h:panelGroup>
+
+				<br />
+				
+			</h:panelGrid>		
+		  
+		</h:form>
+					
+	</h:panelGroup>
+	
+	<h:panelGroup id="paneldodlg">
+	
+		<p:dialog header="Vincular Documento Obrigatório ao Ato Ambiental" id="dlg" widgetVar="dlg" modal="true" style="text-align:center;" resizable="false" width="550" height="300" position="center">
+			<ui:include src="/paginas/manter-atoambiental/atoambiental_documento.xhtml" />
+		</p:dialog>
+	
+	</h:panelGroup>	
+
+	
+	<p:confirmDialog message="#{bundle.consultapf_msg_confimrexclusao}" header="Mensagem" severity="alert" widgetVar="confirmationDocAto" id="confirmationDocAto">
+		<h:form id="excluirDocAto">
+					<p:commandButton id="confirmarExcluir"  	value="#{bundle.consultapf_lbl_sim}" update=":tableConsultaAto :formAtoAmbiental:fora" action="#{atoAmbientalController.excluirDocumentoAto()}" oncomplete="confirmationDocAto.hide()" process="confirmarExcluir" />
+					<p:commandButton value="#{bundle.consultapf_lbl_nao}" onclick="confirmationDocAto.hide()" type="button" />
+		</h:form>
+	</p:confirmDialog>
+
+
+</ui:composition>
+
+
+

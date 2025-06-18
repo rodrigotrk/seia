@@ -1,0 +1,123 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui">
+	<h:form id="formCadResponsavel">
+		<h:panelGrid>
+			<h:panelGrid columns="1" id="painel_cpf">
+				<h:outputLabel id="idlblcpf" value="* CPF" />
+				<h:panelGrid columns="2">
+					<p:inputMask id="txtCpf" widgetVar="txtCpf"
+						mask="#{bundle.consultapf_msk_cpf}" required="true"
+						requiredMessage="O campo CPF é de preenchimento obrigatório."
+						value="#{imovelRuralControllerNew.responsavelTecnicoSelecionado.idePessoaFisica.numCpf}"
+						onchange="consultar_resp_cpf();"
+						disabled="${imovelRuralControllerNew.isEdicaoResponsavelTecnico}">
+						<f:converter converterId="cpfConverter" />
+						<f:validator validatorId="cpfValidator" />
+					</p:inputMask>
+					<p:remoteCommand
+						actionListener="#{imovelRuralControllerNew.consultarResponsavelByCPF()}"
+						id="consultar_resp_cpf" name="consultar_resp_cpf" process="txtCpf" async="true"
+						update="formCadResponsavel">
+					</p:remoteCommand>
+				</h:panelGrid>
+			</h:panelGrid>
+		</h:panelGrid>
+		<p:panel id="panelCadResponsavel" widgetVar="panelCadResponsavel">
+			<h:panelGrid columns="1" id="painel_responsavel">
+				<h:outputLabel id="idlblnome" value="* Nome" />
+				<p:inputText required="true"
+					requiredMessage="O campo Nome é de preenchimento obrigatório"
+					value="#{imovelRuralControllerNew.responsavelTecnicoSelecionado.idePessoaFisica.nomPessoa}"
+					style="width: 600px;" 
+					disabled="${imovelRuralControllerNew.isPessoaFisicaJaCadastrada}"/>
+				<h:outputLabel id="idlblnacionalidade"
+					value="* #{bundle.lbl_nacionalidade}" />
+				<p:selectOneMenu id="idcombopais" required="true"
+					requiredMessage="O campo Nacionalidade é de preenchimento obrigatório."
+					value="#{imovelRuralControllerNew.responsavelTecnicoSelecionado.idePessoaFisica.idePais}"
+					converter="paisConverter"
+					disabled="${imovelRuralControllerNew.isPessoaFisicaJaCadastrada}">
+					<f:selectItem itemLabel="Selecione..." />
+					<f:selectItems value="#{imovelRuralControllerNew.listaPais}"
+						var="pais" itemLabel="#{pais.nomPais}" itemValue="#{pais}" />
+				</p:selectOneMenu>
+				<h:outputText id="idtextFORMACAO" value="* Escolaridade " />
+				<p:selectOneMenu id="idcomboformacao"
+					converter="escolaridadeConverter" required="true"
+					requiredMessage="O campo Escolaridade é de preenchimento obrigatório"
+					value="${imovelRuralControllerNew.responsavelTecnicoSelecionado.idePessoaFisica.ideEscolaridade}">
+					<f:selectItem itemLabel="Selecione..." />
+					<f:selectItems value="#{imovelRuralControllerNew.listaEscolaridade}"
+						var="escolaridade" itemLabel="#{escolaridade.nomEscolaridade}"
+						itemValue="#{escolaridade}" />
+				</p:selectOneMenu>
+				<h:outputText id="idtextEMAIL" value="* E-mail" />
+				<p:inputText required="true"
+					requiredMessage="O campo E-mail é de preenchimento obrigatório."
+					validator="emailValidator"
+					value="#{imovelRuralControllerNew.responsavelTecnicoSelecionado.idePessoaFisica.pessoa.desEmail}"
+					style="width: 600px;" 
+					disabled="${imovelRuralControllerNew.isPessoaFisicaJaCadastrada}"/>
+				<br />
+	
+				<h:panelGrid columns="2">
+					<p:fileUpload id="fileUploadArt" uploadLabel="false" widgetVar="fileUploadArt"
+						label="Upload da ART" fileLimit="1"
+						fileUploadListener="#{imovelRuralControllerNew.uploadArt()}"
+						invalidFileMessage="Tipo de arquivo inválido." mode="advanced"
+						auto="true"
+						required="#{!imovelRuralControllerNew.imovelRural.menorQueQuatroModulosFiscais}"
+						process="@this" requiredMessage="Arquivo é Obrigatório!"
+						allowTypes="/(\.|\/)(pdf|gif|jpeg|png|jpg)$/" immediate="true" 
+						update="dataTableArt"
+						disabled="${imovelRuralControllerNew.responsavelTecnicoSelecionado.idePessoaFisica.numCpf == null}">
+					</p:fileUpload>
+					
+					<h:graphicImage value="/resources/img/ico-ajuda.png"  id="ajudaUploadArt" style="margin: 3px 1px 2px 4px;"/>
+						
+					<p:tooltip for="ajudaUploadArt" 
+							   value="#{bundle.cefir_lbl_tooltip_upload_art}" 
+							   showEffect="fade" 
+							   hideEffect="fade" />
+	
+				</h:panelGrid>
+				
+				<h:panelGrid id="tblArt">
+					<p:dataTable id="dataTableArt" widgetVar="dataTableArt"
+						value="#{imovelRuralControllerNew.listArt}"
+						var="arquivo" emptyMessage="#{bundle.cefir_msg_A012}"
+						style="width:472px;">
+						<p:column>
+							<h:outputText value="#{arquivo.nomDocumentoObrigatorio}" />
+						</p:column>
+						<p:column>
+							<h:commandButton title="Download ART" image="/resources/img/ico-download.png" immediate="true">										 																	 										 							
+								<p:fileDownload value="#{imovelRuralControllerNew.getFileDownload(arquivo.dscCaminhoArquivo)}" />							
+							</h:commandButton>										
+						</p:column>
+					</p:dataTable>
+				</h:panelGrid>
+			</h:panelGrid>
+		</p:panel>
+	
+				<br />
+				<h:panelGrid columns="2">
+					<p:commandButton					
+						value="Limpar" process="@this"
+						action="#{imovelRuralControllerNew.limparFormResponsavelTecnico()}"
+						disabled="${imovelRuralControllerNew.isEdicaoResponsavelTecnico}"
+						update="@form">
+					</p:commandButton>
+					<p:commandButton
+						value="#{responsavelCefirController.lblBtnSalvarResponsavelTecnico}"
+						actionListener="#{imovelRuralControllerNew.salvarResponsavel}"
+						disabled="${imovelRuralControllerNew.disableSalvarResponsavelTecnico}"
+						process="@form">
+					</p:commandButton>
+				</h:panelGrid>
+				<br />
+	</h:form>
+</ui:composition>

@@ -1,0 +1,407 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="resumo_requerimento_questionario_aquicultura_caracteristicas_desc" pageWidth="150" pageHeight="802" columnWidth="150" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="21e01b45-3ab3-470a-9f1f-661da95b1fa0">
+	<property name="ireport.zoom" value="3.543122000000002"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="1113"/>
+	<parameter name="ide_outorga_localizacao_geografica" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[select
+    pr.ide_pergunta,
+    olg.dtc_publicacao_portaria_barragem,
+    olg.num_portaria_barragem,
+    olg.dtc_publicacao_portaria_barragem,
+    olg.dtc_emissao_oficio,
+    olg.num_oficio,
+    olg.num_processo_barragem,
+    olg.num_volume_acumulacao_barragem,
+    olg.num_vazao,
+    olg.num_area_inundada_reservatorio,
+    olg.num_descarga_fundo,
+    olg.num_portaria_licenca_barragem,
+    tb.nom_tipo_barragem,
+    tb.ide_tipo_barragem
+
+ from pergunta_requerimento pr
+
+	 inner join outorga o on o.ide_requerimento = pr.ide_requerimento
+	 inner join outorga_localizacao_geografica olg on olg.ide_outorga = o.ide_outorga
+	 left join tipo_barragem tb on tb.ide_tipo_barragem = olg.ide_tipo_barragem
+	 where  pr.ide_pergunta in (66,67,68,69,70,75)
+	and olg.ide_outorga_localizacao_geografica = $P{ide_outorga_localizacao_geografica}
+	and  pr.ind_resposta = true]]>
+	</queryString>
+	<field name="ide_pergunta" class="java.lang.Integer"/>
+	<field name="dtc_publicacao_portaria_barragem" class="java.sql.Timestamp"/>
+	<field name="num_portaria_barragem" class="java.lang.String"/>
+	<field name="dtc_emissao_oficio" class="java.sql.Timestamp"/>
+	<field name="num_oficio" class="java.lang.String"/>
+	<field name="num_processo_barragem" class="java.lang.String"/>
+	<field name="num_volume_acumulacao_barragem" class="java.math.BigDecimal"/>
+	<field name="num_vazao" class="java.math.BigDecimal"/>
+	<field name="num_area_inundada_reservatorio" class="java.math.BigDecimal"/>
+	<field name="num_descarga_fundo" class="java.math.BigDecimal"/>
+	<field name="num_portaria_licenca_barragem" class="java.lang.String"/>
+	<field name="nom_tipo_barragem" class="java.lang.String"/>
+	<field name="ide_tipo_barragem" class="java.lang.Integer"/>
+	<detail>
+		<band height="22">
+			<printWhenExpression><![CDATA[false]]></printWhenExpression>
+			<staticText>
+				<reportElement uuid="162715e1-1f99-4acf-9c0d-5a28f050518c" mode="Opaque" x="0" y="0" width="150" height="22" isRemoveLineWhenBlank="true" backcolor="#E1FF00"/>
+				<box leftPadding="4"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<text><![CDATA[<!-- Pergunta 66 -->]]></text>
+			</staticText>
+		</band>
+		<band height="11" splitType="Stretch">
+			<printWhenExpression><![CDATA[$F{ide_pergunta}.equals(66)]]></printWhenExpression>
+			<staticText>
+				<reportElement uuid="97a9654b-a9c0-4f5d-9b7e-8aac0c48f85a" x="0" y="0" width="150" height="11" isRemoveLineWhenBlank="true"/>
+				<box leftPadding="4"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<text><![CDATA[[x] Outorga Preventiva]]></text>
+			</staticText>
+		</band>
+		<band height="22">
+			<printWhenExpression><![CDATA[false]]></printWhenExpression>
+			<staticText>
+				<reportElement uuid="162715e1-1f99-4acf-9c0d-5a28f050518c" mode="Opaque" x="0" y="0" width="150" height="22" isRemoveLineWhenBlank="true" backcolor="#E1FF00"/>
+				<box leftPadding="4"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<text><![CDATA[<!-- Pergunta 67 -->]]></text>
+			</staticText>
+		</band>
+		<band height="11">
+			<printWhenExpression><![CDATA[$F{ide_pergunta}.equals(67)]]></printWhenExpression>
+			<staticText>
+				<reportElement uuid="8a3dbfed-9b23-4a14-bb04-23b88d204d33" x="0" y="0" width="150" height="11" isRemoveLineWhenBlank="true"/>
+				<box leftPadding="4"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<text><![CDATA[[x] Ocupação em barramento]]></text>
+			</staticText>
+		</band>
+		<band height="22">
+			<printWhenExpression><![CDATA[false]]></printWhenExpression>
+			<staticText>
+				<reportElement uuid="162715e1-1f99-4acf-9c0d-5a28f050518c" mode="Opaque" x="0" y="0" width="150" height="22" isRemoveLineWhenBlank="true" backcolor="#E1FF00"/>
+				<box leftPadding="4"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<text><![CDATA[<!-- Pergunta 68 -->]]></text>
+			</staticText>
+		</band>
+		<band height="11">
+			<printWhenExpression><![CDATA[$F{ide_pergunta}.equals(68)]]></printWhenExpression>
+			<staticText>
+				<reportElement uuid="889c6a74-bac1-4d1f-958c-5a7632651b1a" x="0" y="0" width="150" height="11" isRemoveLineWhenBlank="true"/>
+				<box leftPadding="4"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<text><![CDATA[[x] O barramento está construído]]></text>
+			</staticText>
+		</band>
+		<band height="22">
+			<printWhenExpression><![CDATA[false]]></printWhenExpression>
+			<staticText>
+				<reportElement uuid="162715e1-1f99-4acf-9c0d-5a28f050518c" mode="Opaque" x="0" y="0" width="150" height="22" isRemoveLineWhenBlank="true" backcolor="#E1FF00"/>
+				<box leftPadding="4"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<text><![CDATA[<!-- Pergunta 69 -->]]></text>
+			</staticText>
+		</band>
+		<band height="22">
+			<printWhenExpression><![CDATA[$F{ide_pergunta}.equals(69)]]></printWhenExpression>
+			<staticText>
+				<reportElement uuid="90d7128c-6b91-4bea-af7a-d8e1c4bfb1f6" x="0" y="0" width="150" height="22" isRemoveLineWhenBlank="true"/>
+				<box leftPadding="4"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<text><![CDATA[[x] O requerente é o proprietário do barramento]]></text>
+			</staticText>
+		</band>
+		<band height="11">
+			<printWhenExpression><![CDATA[$F{ide_pergunta}.equals(69) &&
+$F{ide_tipo_barragem}.equals(1)]]></printWhenExpression>
+			<staticText>
+				<reportElement uuid="9baaf885-0522-418e-8c2f-4da7cdf23db1" x="0" y="0" width="150" height="11" isRemoveLineWhenBlank="true"/>
+				<box leftPadding="4"/>
+				<textElement>
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<text><![CDATA[[x] A barragem é de Nível]]></text>
+			</staticText>
+		</band>
+		<band height="11">
+			<printWhenExpression><![CDATA[$F{ide_pergunta}.equals(69) &&
+$F{ide_tipo_barragem}.equals(2)]]></printWhenExpression>
+			<staticText>
+				<reportElement uuid="8d0529f9-9127-4057-80ea-5c773130ae6b" x="0" y="0" width="150" height="11" isRemoveLineWhenBlank="true"/>
+				<box leftPadding="4"/>
+				<textElement>
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<text><![CDATA[[x] A barragem é de Regularização]]></text>
+			</staticText>
+		</band>
+		<band height="22">
+			<printWhenExpression><![CDATA[false]]></printWhenExpression>
+			<staticText>
+				<reportElement uuid="162715e1-1f99-4acf-9c0d-5a28f050518c" mode="Opaque" x="0" y="0" width="150" height="22" isRemoveLineWhenBlank="true" backcolor="#E1FF00"/>
+				<box leftPadding="4"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<text><![CDATA[<!-- Pergunta 70 -->]]></text>
+			</staticText>
+		</band>
+		<band height="22">
+			<printWhenExpression><![CDATA[$F{ide_pergunta}.equals(70)]]></printWhenExpression>
+			<staticText>
+				<reportElement uuid="351816e2-7722-4a0d-a2ad-ed94e0f5f623" x="0" y="0" width="150" height="22" isRemoveLineWhenBlank="true"/>
+				<box leftPadding="4"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<text><![CDATA[[x]  Tem outorga ou dispensa para
+construção da barragem.]]></text>
+			</staticText>
+		</band>
+		<band height="11">
+			<printWhenExpression><![CDATA[$F{ide_pergunta}.equals(70) &&
+$F{num_portaria_barragem} != null &&
+$F{dtc_publicacao_portaria_barragem} != null]]></printWhenExpression>
+			<staticText>
+				<reportElement uuid="277021e6-5f8d-4798-9243-bb5e4df0824b" x="0" y="0" width="150" height="11" isRemoveLineWhenBlank="true"/>
+				<box leftPadding="4"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<text><![CDATA[[x] Outorga (A)]]></text>
+			</staticText>
+		</band>
+		<band height="33">
+			<printWhenExpression><![CDATA[$F{ide_pergunta}.equals(70) &&
+$F{num_oficio} != null]]></printWhenExpression>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement uuid="6c09789c-b021-41b8-acc6-e0bf0a2c50e0" x="0" y="0" width="150" height="33" isRemoveLineWhenBlank="true"/>
+				<box leftPadding="4"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA["[x] Dispensa para construção da barragem Nº do Ofício / Declaração:" +  $F{num_oficio}]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="11">
+			<printWhenExpression><![CDATA[$F{ide_pergunta}.equals(70) &&
+$F{dtc_emissao_oficio} != null]]></printWhenExpression>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement uuid="4dd444ed-0f68-4d75-8cd7-15d31af68de8" x="107" y="0" width="43" height="11" isRemoveLineWhenBlank="true"/>
+				<box leftPadding="0"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dtc_emissao_oficio}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="a1e5d129-6ae7-419e-9071-f6c3d7d2577a" x="0" y="0" width="107" height="11" isRemoveLineWhenBlank="true"/>
+				<box leftPadding="4"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<text><![CDATA[Data de Ofício/Declaração :]]></text>
+			</staticText>
+		</band>
+		<band height="11">
+			<printWhenExpression><![CDATA[$F{ide_pergunta}.equals(70) &&
+$F{num_oficio}!= null &&
+$F{dtc_emissao_oficio}!= null]]></printWhenExpression>
+			<staticText>
+				<reportElement uuid="e52b1055-56eb-4284-afee-46a3d8c87094" x="0" y="0" width="150" height="11" isRemoveLineWhenBlank="true"/>
+				<box leftPadding="4"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<text><![CDATA[[x] Dispensa (B)]]></text>
+			</staticText>
+		</band>
+		<band height="11">
+			<printWhenExpression><![CDATA[$F{ide_pergunta}.equals(70) &&
+$F{dtc_publicacao_portaria_barragem} != null &&
+ $F{num_portaria_barragem} != null]]></printWhenExpression>
+			<textField isStretchWithOverflow="true">
+				<reportElement uuid="09ccace9-83ca-4ebf-aa71-ec810802201c" x="0" y="0" width="150" height="11" isRemoveLineWhenBlank="true" isPrintWhenDetailOverflows="true"/>
+				<box leftPadding="4"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Nº da Portaria:  " + $F{num_portaria_barragem}]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="22">
+			<printWhenExpression><![CDATA[$F{ide_pergunta}.equals(70) &&
+$F{dtc_publicacao_portaria_barragem} != null]]></printWhenExpression>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement uuid="a8833631-5959-4341-b163-b19a7097d31a" x="0" y="11" width="150" height="11" isRemoveLineWhenBlank="true"/>
+				<box leftPadding="4"/>
+				<textElement verticalAlignment="Top">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dtc_publicacao_portaria_barragem}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="fcb5f855-07b7-45b8-aa83-27b9e16127f4" x="0" y="0" width="150" height="11" isRemoveLineWhenBlank="true"/>
+				<box leftPadding="4"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<text><![CDATA[Data de publicação da Portaria:]]></text>
+			</staticText>
+		</band>
+		<band height="22">
+			<printWhenExpression><![CDATA[$F{ide_pergunta}.equals(70) &&
+$F{num_processo_barragem} != null]]></printWhenExpression>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement uuid="9bace78a-b70a-4f59-9af5-23fb9b976735" x="0" y="0" width="150" height="22" isRemoveLineWhenBlank="true"/>
+				<box leftPadding="4"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Nº do processo da construção da barragem:" + $F{num_processo_barragem}]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="11">
+			<printWhenExpression><![CDATA[$F{ide_pergunta}.equals(70) &&
+$F{num_volume_acumulacao_barragem} != null]]></printWhenExpression>
+			<textField isStretchWithOverflow="true" pattern="#,##0.00">
+				<reportElement uuid="749e970f-385d-48d6-b997-3e83ea49b421" x="67" y="0" width="68" height="11" isRemoveLineWhenBlank="true" isPrintWhenDetailOverflows="true"/>
+				<box leftPadding="4"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{num_volume_acumulacao_barragem}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="9d5834b2-db3d-46dc-bc00-dd76fc995431" x="0" y="0" width="67" height="11" isRemoveLineWhenBlank="true"/>
+				<textElement>
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<text><![CDATA[Volume de acumulação da barragem: ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="72c43c81-bb22-4652-94b9-caf546048e00" x="134" y="0" width="16" height="11" isRemoveLineWhenBlank="true"/>
+				<textElement>
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<text><![CDATA[ m3]]></text>
+			</staticText>
+		</band>
+		<band height="11">
+			<printWhenExpression><![CDATA[$F{ide_pergunta}.equals(70) &&
+ $F{num_area_inundada_reservatorio} != null]]></printWhenExpression>
+			<staticText>
+				<reportElement uuid="4f79f7c2-f36c-4cc8-9943-bb83f7114c45" x="0" y="0" width="67" height="11" isRemoveLineWhenBlank="true"/>
+				<textElement>
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<text><![CDATA[Área de inundação: ]]></text>
+			</staticText>
+			<elementGroup>
+				<textField isStretchWithOverflow="true" pattern="#,##0.00">
+					<reportElement uuid="271f6a05-d9b2-464f-b808-5e8e64901078" x="67" y="0" width="67" height="11" isRemoveLineWhenBlank="true" isPrintWhenDetailOverflows="true"/>
+					<box leftPadding="4"/>
+					<textElement textAlignment="Right">
+						<font fontName="Arial" size="8"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{num_area_inundada_reservatorio}]]></textFieldExpression>
+				</textField>
+			</elementGroup>
+			<staticText>
+				<reportElement uuid="eaa09e18-947e-40ed-a86c-03e23646e777" x="133" y="0" width="17" height="11" isRemoveLineWhenBlank="true"/>
+				<textElement>
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<text><![CDATA[ ha]]></text>
+			</staticText>
+		</band>
+		<band height="11">
+			<printWhenExpression><![CDATA[$F{ide_pergunta}.equals(70) &&
+$F{num_descarga_fundo} != null]]></printWhenExpression>
+			<textField isStretchWithOverflow="true" pattern="dd/MM/yyyy">
+				<reportElement uuid="076d383f-586b-464a-b6e9-215561af4be1" x="0" y="0" width="150" height="11" isRemoveLineWhenBlank="true" isPrintWhenDetailOverflows="true"/>
+				<box leftPadding="4"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Descarga de fundo: " + $F{num_descarga_fundo} + " m3/dia"]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="11">
+			<printWhenExpression><![CDATA[$F{ide_pergunta}.equals(70) &&
+$F{num_vazao} !=null]]></printWhenExpression>
+			<textField isStretchWithOverflow="true" pattern="dd/MM/yyyy">
+				<reportElement uuid="cbd1584c-9247-446c-bb88-bfc2b5205f09" x="67" y="0" width="83" height="11" isRemoveLineWhenBlank="true" isPrintWhenDetailOverflows="true"/>
+				<box leftPadding="4"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{num_vazao}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="48cf17d4-b6ee-4f6d-934c-f178f08937cd" x="0" y="0" width="67" height="11" isRemoveLineWhenBlank="true"/>
+				<textElement>
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<text><![CDATA[Vazão da captação: ]]></text>
+			</staticText>
+		</band>
+		<band height="22">
+			<printWhenExpression><![CDATA[false]]></printWhenExpression>
+			<staticText>
+				<reportElement uuid="162715e1-1f99-4acf-9c0d-5a28f050518c" mode="Opaque" x="0" y="0" width="150" height="22" isRemoveLineWhenBlank="true" backcolor="#E1FF00"/>
+				<box leftPadding="4"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<text><![CDATA[<!-- Pergunta 75 -->]]></text>
+			</staticText>
+		</band>
+		<band height="11">
+			<printWhenExpression><![CDATA[$F{ide_pergunta}.equals(75)]]></printWhenExpression>
+			<staticText>
+				<reportElement uuid="1ee2fd25-3e08-421c-b045-903f1b895125" x="0" y="0" width="150" height="11" isRemoveLineWhenBlank="true"/>
+				<box leftPadding="4"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<text><![CDATA[[x] A barragem possui licença ambiental]]></text>
+			</staticText>
+		</band>
+		<band height="22">
+			<printWhenExpression><![CDATA[$F{ide_pergunta}.equals(75) &&
+$F{num_portaria_licenca_barragem} != null]]></printWhenExpression>
+			<textField>
+				<reportElement uuid="416e2cdc-c0b0-4a9c-af08-4c5ef222e85d" x="0" y="0" width="150" height="22" isRemoveLineWhenBlank="true"/>
+				<box leftPadding="4"/>
+				<textElement>
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Número da Portaria:  "+ $F{num_portaria_licenca_barragem}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

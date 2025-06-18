@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="certificado_rfp_dados_responsavel_tecnico" language="java" pageWidth="495" pageHeight="802" columnWidth="495" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="2d95e095-1cdc-413e-9d22-3a2bf543c2d8">
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="ide_requerimento" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[select
+	pf.nom_pessoa,
+	pf.num_cpf,
+	coalesce(di.num_documento,' - ') as num_documento
+from ato_declaratorio at_
+inner join registro_floresta_producao rfp on rfp.ide_ato_declaratorio = at_.ide_ato_declaratorio
+inner join registro_floresta_producao_responsavel_tecnico rfprt on rfprt.ide_registro_floresta_producao = rfp.ide_registro_floresta_producao
+inner join pessoa_fisica pf on pf.ide_pessoa_fisica = rfprt.ide_pessoa_fisica
+left join documento_identificacao di on di.ide_pessoa = pf.ide_pessoa_fisica and di.ide_tipo_identificacao = 5
+where ide_documento_obrigatorio = 10041
+and at_.ide_requerimento = $P{ide_requerimento}]]>
+	</queryString>
+	<field name="nom_pessoa" class="java.lang.String"/>
+	<field name="num_cpf" class="java.lang.String"/>
+	<field name="num_documento" class="java.lang.String"/>
+	<columnHeader>
+		<band height="50">
+			<staticText>
+				<reportElement uuid="888b47a5-ee00-44d5-afa9-712e324005a6" mode="Opaque" x="0" y="10" width="495" height="20" backcolor="#DDDDDD"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Dados do responsável técnico pela floresta de produção]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="f656c435-dd1a-420c-a39b-cfce15b6e1dc" mode="Opaque" x="0" y="30" width="200" height="20" backcolor="#DDDDDD"/>
+				<box leftPadding="5">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[Nome]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="217d3ca0-5987-4d35-9160-77da865b1918" mode="Opaque" x="200" y="30" width="147" height="20" backcolor="#DDDDDD"/>
+				<box leftPadding="5">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[CPF]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="3e86cf65-9d66-4c97-849f-3af0f685d8e0" mode="Opaque" x="347" y="30" width="148" height="20" backcolor="#DDDDDD"/>
+				<box leftPadding="5">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[Conselho]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="33" splitType="Stretch">
+			<textField>
+				<reportElement uuid="fcf7ab03-b9b0-4298-9d5b-54c369c1d2a2" x="0" y="0" width="200" height="20"/>
+				<box leftPadding="5">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{nom_pessoa}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="52dcd7e1-2f51-468f-ae5d-f46de3f375be" x="200" y="0" width="147" height="20"/>
+				<box leftPadding="5">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{num_cpf}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="70898841-296a-4f65-9c98-7f1e6a57c3ff" x="347" y="0" width="148" height="20"/>
+				<box leftPadding="5">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{num_documento}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

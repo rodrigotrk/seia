@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui">
+
+	<h:form id="formHistoricoAtoAmbientalProcesso" rendered="#{not empty detalharProcessoController.vwProcesso.processoReenquadramentoHistAtoList}">
+		<h3>
+			<h:outputLabel styleClass="titulo-grupo"
+				value="Histórico de ato(s) ambiental(is) reenquadrado(s)" />
+		</h3>
+		<br />
+		<h:panelGrid columns="1">
+			<p:dataTable id="tabelaAtoAmbientalProcesso" scrollable="true"
+				style="heght:150px; width:900px; border:1px solid #ccc;"
+				value="#{detalharProcessoController.vwProcesso.processoReenquadramentoHistAtoList}"
+				var="histAto"
+				emptyMessage="Não há registros a ser exibido no momento.">
+				<p:column style="width:100px;text-align:center;">
+					<f:facet name="header">Ato original</f:facet>
+					<h:outputText value="#{histAto.ideAtoAmbientalOriginal.nomAtoAmbiental}" rendered="#{not empty histAto.ideAtoAmbientalOriginal.nomAtoAmbiental}" />
+					<h:outputText value="--" rendered="#{empty histAto.ideAtoAmbientalOriginal.nomAtoAmbiental}"  />
+				</p:column>
+				<p:column style="width:200px;">
+					<f:facet name="header">Tipologia</f:facet>
+					<h:outputText escape="false" value="#{histAto.ideTipologiaOriginal.desTipologia}" rendered="#{not empty histAto.ideTipologiaOriginal.desTipologia}" />
+					<h:outputText escape="false" value="--" rendered="#{empty histAto.ideTipologiaOriginal.desTipologia}"/>
+				</p:column>
+				<p:column style="width:198px;">
+					<f:facet name="header">Ato reenquadrado</f:facet>
+					<h:outputText escape="false" value="#{histAto.ideEnquadramentoAtoAmbientalReenquadrado.atoAmbiental.nomAtoAmbiental}"
+						rendered="#{not empty histAto.ideEnquadramentoAtoAmbientalReenquadrado.atoAmbiental.nomAtoAmbiental}" />
+					<h:outputText escape="false" value="--" rendered="#{empty histAto.ideEnquadramentoAtoAmbientalReenquadrado.atoAmbiental.nomAtoAmbiental}"/>
+				</p:column>
+				<p:column style="width:195px;">
+					<f:facet name="header">Tipologia do<br />Ato reenquadrado</f:facet>
+					<h:outputText escape="false" value="#{histAto.ideEnquadramentoAtoAmbientalReenquadrado.tipologia.desTipologia}"
+						rendered="#{not empty histAto.ideEnquadramentoAtoAmbientalReenquadrado.tipologia.desTipologia}" />
+					<h:outputText escape="false" value="--" rendered="#{empty histAto.ideEnquadramentoAtoAmbientalReenquadrado.tipologia.desTipologia}" />
+				</p:column>
+				<p:column style="width:108px;">
+					<f:facet name="header">Data do<br />reenquadramento</f:facet>
+					<h:outputText escape="false" value="#{histAto.dtcReenquadramento}">
+						<f:convertDateTime pattern="dd/MM/yyyy" />
+					</h:outputText>
+				</p:column>
+			</p:dataTable>
+		</h:panelGrid>
+	</h:form>
+</ui:composition>

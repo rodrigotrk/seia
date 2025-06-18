@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui">
+
+		
+	<h:form id="formCancelarCerh">
+		<h:panelGrid id="pnlInformacoesUsuario">
+			<h:outputText value="#{bundle.cerh_aba_dados_gerais_lbl_informacoes_usuario}" styleClass="bold"/>
+		
+			<h:panelGrid columns="2" style="width:100%;">
+				<h:panelGrid>
+					<h:outputText value="#{bundle.cerh_aba_dados_gerais_lbl_nome_razao_social}: " />
+					<h:outputText value="#{cancelarCerhController.cadastroCancelado.ideCerh.idePessoaRequerente.nomeRazao}" style="word-wrap: break-word;"/>
+				</h:panelGrid>
+				
+				<h:panelGrid>
+					<h:outputText value="#{bundle.cerh_aba_dados_gerais_lbl_cpf_cnpj}: " />
+					<h:outputText value="#{cancelarCerhController.cadastroCancelado.ideCerh.idePessoaRequerente.cpfCnpjFormatado}" />
+				</h:panelGrid>
+				
+				<h:panelGrid>
+					<h:outputText value="#{bundle.cerh_aba_dados_gerais_lbl_email}: " />
+					<h:outputText value="#{cancelarCerhController.cadastroCancelado.ideCerh.idePessoaRequerente.desEmail}" />
+				</h:panelGrid>
+				
+				<h:panelGrid>
+					<h:outputText value="#{bundle.cerh_aba_dados_gerais_lbl_tel}: " />
+					<h:outputText value="#{cancelarCerhController.telefone}"/>
+				</h:panelGrid>
+			
+				<h:panelGrid id="gridDtcCancelamento" columns="2" rendered="#{cancelarCerhController.cadastroCancelado.visualizar}">
+					<h:outputText value="* #{bundle.cerh_cancelar_data_cancelamento}:" /> 
+					<p:calendar id="periodoInicio" 
+						value="#{cancelarCerhController.cadastroCancelado.dtcPessoaFisicaCancelamento}"
+						disabled="#{not empty cancelarCerhController.cadastroCancelado.ideCerhCadastroCancelado }"
+						navigator="true" 
+						showOn="button" 
+						locale="pt" 
+						pattern="dd/MM/yyyy" 
+						readOnlyInputText="true" 
+						mindate="01/01/1900" maxdate="#{cancelarCerhController.dataHoje}"
+						size="7">
+						<p:ajax event="dateSelect" process="@this"/>
+					</p:calendar>
+				</h:panelGrid>	
+				
+			</h:panelGrid>
+		
+			<h:panelGrid id="gridObservacao" style="width:100%;" rendered="#{cancelarCerhController.cadastroCancelado.visualizar}">
+				<h:outputText value="* #{bundle.geral_lbl_justificativa}:" />
+				<h:inputTextarea id="inputObs" disabled="#{not empty cancelarCerhController.cadastroCancelado.ideCerhCadastroCancelado }" 	value="#{cancelarCerhController.cadastroCancelado.dscObservacao}" cols="9" style="width:500px; height:130px;"/>
+			</h:panelGrid>
+			
+			<h:panelGrid id="gridDocumento" style="width:50%;" rendered="#{cancelarCerhController.cadastroCancelado.visualizar}">
+			
+				<p:fileUpload uploadLabel="false" 
+					label="Upload de Documento"
+					fileUploadListener="#{cancelarCerhController.uploadArquivo()}"
+					invalidFileMessage="#{bundle.msg_erro_007}" 
+					mode="advanced" 
+					auto="true" 
+					allowTypes="/(\.|\/)(pdf|png|jpg)$/" 
+					process="@this"
+					update="gridDocumento"
+					disabled="#{cancelarCerhController.existeArquivo() or not empty cancelarCerhController.cadastroCancelado.ideCerhCadastroCancelado}"/>
+				
+				<p:dataTable id="tableDocumento" 
+					widgetVar="tableDocumento" 
+					lazy="true" 
+					value="#{cancelarCerhController.arquivo}" 
+					var="arquivo" 
+					emptyMessage="#{bundle.msg_lista_vazia}"
+					style="width:333px;" 
+					rendered="#{cancelarCerhController.existeArquivo()}">
+					
+					<p:column style="width:252px;">
+						<h:outputText value="#{arquivo}" />
+					</p:column>
+					
+					<p:column style="width:35px;">
+						<h:commandButton value="#{arquivo}" 
+							image="/resources/img/ico-download.png" 
+							immediate="true" 
+							title="Download do Documento">
+							<p:fileDownload value="#{cancelarCerhController.baixarDocumento}" />
+						</h:commandButton>
+						<p:commandLink oncomplete="confirmaExclusaoDocumento.show()" 
+							title="Excluir Documento" 
+							disabled="#{not empty cancelarCerhController.cadastroCancelado.ideCerhCadastroCancelado }"
+							process="@this" 
+							global="false">
+							<h:graphicImage title="Excluir" value="/resources/img/ico-excluir.png" />
+						</p:commandLink>
+					</p:column>
+				</p:dataTable>
+			
+			</h:panelGrid>
+				
+			
+		</h:panelGrid>
+
+		<p:commandButton 
+			value="salvar" 
+			rendered="#{cancelarCerhController.cadastroCancelado.visualizar}"
+			disabled="#{not empty cancelarCerhController.cadastroCancelado.ideCerhCadastroCancelado }"
+			actionListener="#{cancelarCerhController.salvar()}"
+			global="false" 
+			style="	position: absolute; bottom: 40px;	right: 22px;" />
+		
+		<p:commandButton 
+			value="excluir" 
+			rendered="#{not cancelarCerhController.cadastroCancelado.visualizar}"
+			actionListener="#{cancelarCerhController.excluir()}"
+			global="false" 
+			style="	position: absolute; bottom: 20px;	right: 22px;" >
+		
+			<f:attribute name="metodoConsultar" value="#{consultarCerhController.metodoConsultar}"/>
+		</p:commandButton>
+		
+			
+	</h:form>
+
+</ui:composition>

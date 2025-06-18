@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui">
+	<h:form id="form_manutencao">
+		<div style="width: 700px;">
+			<h:panelGrid>
+				<h:outputText
+					value="* Nos casos de postos a serem reformados, informar o tipo de pavimentação referente à seguintes áreas:"
+					styleClass="form_label_b" />
+			</h:panelGrid>
+
+			<h:panelGrid columns="5">
+				<h:outputLabel value="* Área" />
+				<p:spacer width="152" height="10" />
+				<h:outputLabel value="* Antes da Reforma" />
+				<p:spacer width="20" height="10" />
+				<h:outputLabel value="* Depois da Reforma" />
+			</h:panelGrid>
+			<h:panelGrid columns="5">
+				<p:selectOneMenu id="tipoAreaReforma"
+					disabled="#{lacPostoController.viewMode || !lacPostoController.operacao}"
+					required="true"
+					requiredMessage="O campo Área é de preenchimento obrigatório."
+					value="#{lacPostoController.areaAbastecimentoPostoCombustivel.tipoAreaAbastecimento.ideTipoAreaAbastecimento}"
+					style="width:200px;">
+					<f:selectItem itemLabel="Selecione a área..." itemValue="" />
+					<f:selectItems value="#{lacPostoController.tiposAreaAbastecimento}"
+						var="tipoArea" itemLabel="#{tipoArea.dscTipoAreaAbastecimento}"
+						itemValue="#{tipoArea.ideTipoAreaAbastecimento}" />
+				</p:selectOneMenu>
+
+				<p:selectOneMenu id="antesReforma" style="width:115px;"
+					value="#{lacPostoController.areaAbastecimentoPostoCombustivel.tipoPermeabilidadeAntesReforma.ideTipoPermeabilidade}"
+					disabled="#{lacPostoController.viewMode || !lacPostoController.operacao}"
+					required="true"
+					requiredMessage="O campo Antes da Reforma é de preenchimento obrigatório.">
+					<f:selectItem itemLabel="Selecione..." itemValue="" />
+					<f:selectItems value="#{lacPostoController.tiposPermeabilidade}"
+						var="tipoPermeabilidade"
+						itemLabel="#{tipoPermeabilidade.dscTipoPermeabilidade}"
+						itemValue="#{tipoPermeabilidade.ideTipoPermeabilidade}" />
+				</p:selectOneMenu>
+				<p:spacer width="20" height="10" />
+				<p:selectOneMenu id="depoisReforma" style="width:115px;"
+					disabled="#{lacPostoController.viewMode || !lacPostoController.operacao}"
+					required="true"
+					value="#{lacPostoController.areaAbastecimentoPostoCombustivel.tipoPermeabilidadeDepoisReforma.ideTipoPermeabilidade}"
+					requiredMessage="O campo Depois da Reforma é de preenchimento obrigatório.">
+					<f:selectItem itemLabel="Selecione..." itemValue="" />
+					<f:selectItems value="#{lacPostoController.tiposPermeabilidade}"
+						var="tipoPermeabilidade"
+						itemLabel="#{tipoPermeabilidade.dscTipoPermeabilidade}"
+						itemValue="#{tipoPermeabilidade.ideTipoPermeabilidade}" />
+				</p:selectOneMenu>
+				<p:commandButton value="Incluir"  global="false"
+					disabled="#{lacPostoController.viewMode || !lacPostoController.operacao}"
+					action="#{lacPostoController.adicionarAreaAbastecimento()}"
+					process="@this,depoisReforma,antesReforma,tipoAreaReforma"
+					update="listaArea,depoisReforma,antesReforma,tipoAreaReforma" />
+			</h:panelGrid>
+
+			<h:panelGrid columns="1">
+
+				<p:dataTable id="listaArea" emptyMessage="Nenhuma área de abastecimento cadastrada" 
+					value="#{lacPostoController.lacPostoCombustivel.areaAbastecimentoPostoCombustivelCollection}"
+					var="area">
+					<p:column headerText="Área">
+						<h:outputText
+							value="#{area.tipoAreaAbastecimento.dscTipoAreaAbastecimento}" />
+					</p:column>
+
+					<p:column headerText="Antes da Reforma">
+						<h:outputText
+							value="#{area.tipoPermeabilidadeAntesReforma.dscTipoPermeabilidade}" />
+					</p:column>
+
+					<p:column headerText="Depois da Reforma">
+						<h:outputText
+							value="#{area.tipoPermeabilidadeDepoisReforma.dscTipoPermeabilidade}" />
+					</p:column>
+
+					<p:column headerText="Opções">
+						<p:commandLink id="excluir" title="Excluir" process="@this" onclick="confirmationDialogArea.show();"
+							disabled="#{lacPostoController.viewMode || !lacPostoController.operacao}"
+							update="posto_tab:form_manutencao:listaArea">
+							<h:graphicImage value="/resources/img/ico-excluir.png" />
+							<f:setPropertyActionListener target="${lacPostoController.objetoARemover}" value="#{area}"/>
+						</p:commandLink>
+					</p:column>
+
+				</p:dataTable>
+				<p:spacer width="15" />
+				<p:confirmDialog id="confirmationArea" message="Tem certeza que deseja excluir o(s) registro(s) selecionado(s)?"  styleClass="dialog_confirm"
+	                header="Confirmação" severity="alert" widgetVar="confirmationDialogArea" appendToBody="true">  
+	                  
+			        <p:commandButton id="confirmArea" value="Sim" process="@this" oncomplete="confirmationDialogArea.hide()" action="#{lacPostoController.removerAreaAbastecimento()}" 
+			        	update="posto_tab:form_manutencao:listaArea"/>  
+			        <p:commandButton id="declineArea" process="@this" value="Não" onclick="confirmationDialogArea.hide()" type="button" />   
+			                  
+			    </p:confirmDialog>  
+
+			</h:panelGrid>
+
+			<h:panelGrid columns="2">
+				<h:outputText
+					value="* Houve acidente e/ou vazamento desde o seu funcionamento?" />
+				<p:selectOneRadio id="indAcidente"
+					value="#{lacPostoController.lacPostoCombustivel.indAcidente}"
+					disabled="#{lacPostoController.viewMode}"
+					valueChangeListener="#{lacPostoController.verificarAcidente()}">
+					<f:selectItem itemLabel="Sim" itemValue="#{true}" />
+					<f:selectItem itemLabel="Não" itemValue="#{false}" />
+					<p:ajax event="change" process="@this"
+						update="posto_tab:form_manutencao:obsAcidente" />
+				</p:selectOneRadio>
+			</h:panelGrid>
+
+			<h:panelGrid width="700" id="obsAcidente">
+				<h:outputText id="lblAcidente"
+					rendered="#{lacPostoController.exibeObsAcidente}"
+					value="Informar, nos casos de postos em operação, se houve algum tipo de vazamento ou acidente ambiental no emprendimento desde
+					o início do seu funcionamento.Caso afirmativo, descrever a ocorrência com detalhamento cronológico, os danos causados, as providências tomadas, as medidas de 
+					 remediação e os dados de monitoramento de poços, corpos d'água ou outros sistemas existentes;Informação específica."
+					styleClass="form_label_b" />
+				<p:inputTextarea id="txaAcidente" autoResize="false"
+					disabled="#{lacPostoController.viewMode}" maxLength="1000"
+					rendered="#{lacPostoController.exibeObsAcidente}"
+					value="#{lacPostoController.lacPostoCombustivel.dscOcorrenciaAcidente}"
+					cols="110" rows="5" />
+			</h:panelGrid>
+
+			<h:panelGrid columns="3">
+				<h:outputText
+					value="* Especificar as quantidades médias mensais de serviços de troca de óleo:" />
+				<p:inputText id="qtdTrocaOleo" onkeypress="SomenteNumero(this);"
+					onkeyup="SomenteNumero(this);"
+					disabled="#{lacPostoController.viewMode}" styleClass="form_text_p"
+					value="#{lacPostoController.lacPostoCombustivel.qtdTrocaOleo}" />
+				<h:outputText value="un" />
+			</h:panelGrid>
+			<h:panelGrid >
+				<p:commandButton id="bt_atualizar"
+					process="@this,indAcidente,txaAcidente,qtdTrocaOleo"
+					value="Salvar dados manutenção" update="posto_tab,form_manutencao"  disabled="#{lacPostoController.viewMode}"
+					action="#{lacPostoController.salvarOuAtualizarDadosManutencao()}"
+					rendered="#{lacPostoController.editMode}" />
+			</h:panelGrid>
+			<br/>
+		</div>
+		<div>
+			<div style="float: left;">
+				<p:commandButton
+					process="@this,indAcidente,txaAcidente,qtdTrocaOleo" value="Voltar"
+					update="posto_tab">
+					<f:setPropertyActionListener
+						target="#{lacPostoController.activeTab}" value="2" />
+				</p:commandButton>
+			</div>
+			<div style="float: right;">
+				<p:commandButton value="Imprimir" ajax="false" immediate="true" id="imprimir" 
+					rendered="#{(!empty lacPostoController.lacPostoCombustivel.ideLac and !empty lacPostoController.legislacoesAceitasLac) or lacPostoController.viewMode}" style="margin-right:10px;">
+					<p:fileDownload value="#{lacPostoController.imprimirRelatorio}" />
+				</p:commandButton>				
+				<p:commandButton id="bt_finalizar"
+					process="@this,indAcidente,txaAcidente,qtdTrocaOleo"
+					value="Finalizar" update="posto_tab,form_manutencao,form_termos_posto"
+					action="#{lacPostoController.validarLacEFinalizar()}"/>
+			</div>
+		</div>
+		<br />
+	</h:form>
+</ui:composition>

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui">
+
+	<h:panelGrid columns="1" cellpadding="10">
+
+				<ui:include src="/paginas/manter-imoveis/cefir/includes/includes-dados-especificos/uso-agua/pontoCaptacaoSuperficial.xhtml" />
+	</h:panelGrid>
+
+	<h:panelGrid columns="1" cellpadding="10">
+
+		<ui:include src="/paginas/manter-imoveis/cefir/includes/includes-dados-especificos/uso-agua/pontoCaptacaoSubterranea.xhtml" />
+	</h:panelGrid>
+
+	<h:panelGrid columns="1" cellpadding="10">
+
+		<ui:include src="/paginas/manter-imoveis/cefir/includes/includes-dados-especificos/uso-agua/pontoReceptorResiduos.xhtml" />
+	</h:panelGrid>
+
+	<h:panelGrid columns="1" cellpadding="10">
+
+		<ui:include src="/paginas/manter-imoveis/cefir/includes/includes-dados-especificos/uso-agua/pontoIntervencao.xhtml" />
+	</h:panelGrid>
+
+	<p:confirmDialog id="confirmacaoExclusaoProcessoCapSuperficial"
+					 widgetVar="confirmacaoExclusaoProcessoCapSuperficial"
+					 header="#{bundle.geral_lbl_mensagem}" 
+					 message="#{bundle.msg_confirma_exclusao}" 
+					 severity="alert">
+			<h:panelGroup>
+				<div style="text-align: center;">
+					<p:commandButton id="btnConfirmarExclusaoProcessoCapSuperficial"
+									 value="#{bundle.btn_sim}"
+									 update="tabelaProcessoTramiteCapSuperficial"
+									 onclick="confirmacaoExclusaoProcessoCapSuperficial.hide()"
+									 action="#{imovelRuralControllerNew.excluirProcessoUsoAgua()}"
+									 process="@this" ajax="true" />
+					<p:commandButton value="#{bundle.btn_nao}" 
+									 oncomplete="confirmacaoExclusaoProcessoCapSuperficial.hide()"  process="@this" ajax="true"/>
+				</div>
+			</h:panelGroup>
+	</p:confirmDialog>
+
+</ui:composition>

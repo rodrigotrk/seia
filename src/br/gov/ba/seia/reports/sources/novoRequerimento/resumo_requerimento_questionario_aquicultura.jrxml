@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="resumo_requerimento_questionario_processos" pageWidth="439" pageHeight="802" columnWidth="439" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="8719f475-cd82-4e7d-beb9-997db22c6a9d">
+	<property name="ireport.zoom" value="3.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="Tipo_Aquicultura" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[13]]></defaultValueExpression>
+	</parameter>
+	<parameter name="ide_requerimento" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[select distinct
+olg.ide_outorga_localizacao_geografica,
+nom_intervencao,
+csg.nom_classificacao_secao,
+sc.nom_sistema_coordenada
+ from outorga o
+left join outorga_localizacao_geografica olg on o.ide_outorga = olg.ide_outorga
+left join tipo_intervencao ti on ti.ide_tipo_intervencao = olg.ide_tipo_intervencao
+
+left join localizacao_geografica lg on lg.ide_localizacao_geografica = olg.ide_localizacao_geografica
+left join sistema_coordenada sc on sc.ide_sistema_coordenada = lg.ide_sistema_coordenada
+left join  classificacao_secao_geometrica csg on csg.ide_classificacao_secao = lg.ide_classificacao_secao
+left join localizacao_geografica lgF on lgf.ide_localizacao_geografica = olg.ide_localizacao_geografica_final
+left join dado_geografico dg on dg.ide_localizacao_geografica = lg.ide_localizacao_geografica
+where
+ ti.ide_tipo_intervencao =$P{Tipo_Aquicultura}
+ and o.ide_requerimento = $P{ide_requerimento}]]>
+	</queryString>
+	<field name="ide_outorga_localizacao_geografica" class="java.lang.Integer"/>
+	<field name="nom_intervencao" class="java.lang.String"/>
+	<field name="nom_classificacao_secao" class="java.lang.String"/>
+	<field name="nom_sistema_coordenada" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="12">
+			<staticText>
+				<reportElement uuid="d0108d9a-e146-417e-824e-7acc68993ca0" x="0" y="0" width="310" height="12" isRemoveLineWhenBlank="true"/>
+				<textElement>
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<text><![CDATA[[X] Aqüicultura em tanques de rede ou similares]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="20" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="3f9c6e9b-5dcc-49c0-979d-00f2b3843b41" positionType="Float" mode="Opaque" x="10" y="0" width="78" height="20" isRemoveLineWhenBlank="true" backcolor="#EEECE1"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font fontName="Arial" size="8" isBold="false" isUnderline="false"/>
+				</textElement>
+				<text><![CDATA[Nome da intervenção]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="31fa7419-5147-41c1-bea4-4dfc013051f7" positionType="Float" mode="Opaque" x="88" y="0" width="78" height="20" isRemoveLineWhenBlank="true" backcolor="#EEECE1"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font fontName="Arial" size="8" isBold="false" isUnderline="false"/>
+				</textElement>
+				<text><![CDATA[Localização Geografica ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="0d4cb988-2045-4f05-abef-4963cfde07b8" positionType="Float" mode="Opaque" x="166" y="0" width="150" height="20" isRemoveLineWhenBlank="true" backcolor="#EEECE1"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font fontName="Arial" size="8" isBold="false" isUnderline="false"/>
+				</textElement>
+				<text><![CDATA[Caracteristicas ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="1d51f246-3b67-486c-9d6c-ea0487c80360" positionType="Float" mode="Opaque" x="316" y="0" width="120" height="20" isRemoveLineWhenBlank="true" backcolor="#EEECE1"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font fontName="Arial" size="8" isBold="false" isUnderline="false"/>
+				</textElement>
+				<text><![CDATA[Finalidades]]></text>
+			</staticText>
+			<line>
+				<reportElement uuid="3ad118d6-5bac-40a7-b161-b8ad47899363" stretchType="RelativeToBandHeight" x="166" y="0" width="1" height="20" isRemoveLineWhenBlank="true"/>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</line>
+			<line>
+				<reportElement uuid="a610fba0-dd60-4ec4-964e-eab224563325" stretchType="RelativeToBandHeight" x="10" y="0" width="1" height="20" isRemoveLineWhenBlank="true"/>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</line>
+			<line>
+				<reportElement uuid="7317482a-cced-46a6-b28c-79b4f077fc73" stretchType="RelativeToBandHeight" x="436" y="0" width="1" height="20" isRemoveLineWhenBlank="true"/>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</line>
+			<line>
+				<reportElement uuid="9beb77ce-3ae1-420e-936b-43a848a2cc34" stretchType="RelativeToBandHeight" x="88" y="0" width="1" height="20" isRemoveLineWhenBlank="true"/>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</line>
+			<line>
+				<reportElement uuid="8d606957-6853-4a25-b954-7d18c36dd8c7" stretchType="RelativeToBandHeight" x="316" y="0" width="1" height="20" isRemoveLineWhenBlank="true"/>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</line>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="24" splitType="Stretch">
+			<textField isStretchWithOverflow="true">
+				<reportElement uuid="34cfeb3e-14c8-497e-a33e-6c39cfaba699" positionType="Float" stretchType="RelativeToTallestObject" mode="Opaque" x="10" y="1" width="78" height="23" isRemoveLineWhenBlank="true" isPrintWhenDetailOverflows="true" backcolor="#FFFFFF"/>
+				<textElement textAlignment="Center" verticalAlignment="Top" markup="none">
+					<font fontName="Arial" size="8" isBold="false" isUnderline="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nom_intervencao}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="42e8552e-4e6c-4820-9fa4-7982c9ad332c" x="89" y="0" width="77" height="12" isRemoveLineWhenBlank="true"/>
+				<box leftPadding="2"/>
+				<textElement>
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nom_classificacao_secao}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="ca3a238d-29db-4afd-94d3-afb812468d15" x="89" y="12" width="77" height="12" isRemoveLineWhenBlank="true"/>
+				<box leftPadding="2"/>
+				<textElement>
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nom_sistema_coordenada}]]></textFieldExpression>
+			</textField>
+			<subreport>
+				<reportElement uuid="a242583b-cc09-4108-aa2c-fa024c97e2e3" x="167" y="0" width="149" height="24" isRemoveLineWhenBlank="true"/>
+				<subreportParameter name="SUBREPORT_DIR">
+					<subreportParameterExpression><![CDATA[$P{SUBREPORT_DIR}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="ide_requerimento">
+					<subreportParameterExpression><![CDATA[$P{ide_requerimento}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="ide_outorga_localizacao_geografica">
+					<subreportParameterExpression><![CDATA[$F{ide_outorga_localizacao_geografica}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="Tipo_Aquicultura">
+					<subreportParameterExpression><![CDATA[$P{Tipo_Aquicultura}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "resumo_requerimento_questionario_aquicultura_caracteristicas_desc.jasper"]]></subreportExpression>
+			</subreport>
+			<subreport>
+				<reportElement uuid="9d88e97e-59ca-4dbd-8ecb-95d4bba3dce6" x="317" y="0" width="119" height="24" isRemoveLineWhenBlank="true"/>
+				<subreportParameter name="SUBREPORT_DIR">
+					<subreportParameterExpression><![CDATA[$P{SUBREPORT_DIR}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="ide_requerimento">
+					<subreportParameterExpression><![CDATA[$P{ide_requerimento}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="ide_outorga_localizacao_geografica">
+					<subreportParameterExpression><![CDATA[$F{ide_outorga_localizacao_geografica}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="Tipo_Aquicultura">
+					<subreportParameterExpression><![CDATA[$P{Tipo_Aquicultura}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "resumo_requerimento_questionario_aquicultura_finalidade.jasper"]]></subreportExpression>
+			</subreport>
+			<line>
+				<reportElement uuid="2f0ca902-49e4-40c0-b0de-2175ea2e9a6a" stretchType="RelativeToBandHeight" x="10" y="0" width="1" height="24" isRemoveLineWhenBlank="true"/>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</line>
+			<line>
+				<reportElement uuid="b8aeb5c6-55d4-42e1-b798-22f5a56c4354" stretchType="RelativeToBandHeight" x="88" y="0" width="1" height="24" isRemoveLineWhenBlank="true"/>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</line>
+			<line>
+				<reportElement uuid="1e7e7590-dd8d-4337-a230-828c9979e604" stretchType="RelativeToBandHeight" x="166" y="0" width="1" height="24" isRemoveLineWhenBlank="true"/>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</line>
+			<line>
+				<reportElement uuid="63b8a212-808a-41da-b233-4f9f743dc359" stretchType="RelativeToBandHeight" x="316" y="0" width="1" height="24" isRemoveLineWhenBlank="true"/>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</line>
+			<line>
+				<reportElement uuid="36d02b6d-c398-4e00-ba21-671caa90c50b" stretchType="RelativeToBandHeight" x="436" y="0" width="1" height="24" isRemoveLineWhenBlank="true"/>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</line>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="1">
+			<line>
+				<reportElement uuid="e53c1116-ac24-4287-bfef-1a518c757f6e" x="11" y="0" width="425" height="1" isRemoveLineWhenBlank="true"/>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</line>
+		</band>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

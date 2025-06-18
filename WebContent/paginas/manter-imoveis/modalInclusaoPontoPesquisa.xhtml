@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui">
+		
+	<h:form id="formDlgPontoPesquisa">		
+		<h:panelGrid columns="1" id="paneldiaglogPontoPesquisa" >		
+			<h:panelGrid columns="2" id="panelPontoPesquisa">				
+				<h:outputLabel>
+					<em>*</em>
+					<h:outputLabel value="#{bundle.incluirvertice_lbl_informar_coordenada}" />
+					<br />
+				</h:outputLabel>
+				<br />
+				
+				<h:panelGrid id="hideModalPontoPesquisa">
+				
+				<h:outputLabel value="Grau, Minuto e Segundo" />
+				
+					<h:panelGrid columns="1" rendered="#{listarImovelRuralController.selectedModoCoordenada == '1'}">
+						<h:panelGrid columns="3" id="latitudePontoPesquisa">
+							<h:panelGroup>
+								<h:outputLabel value="* #{bundle.empreendimento_lbl_latitude}" for="grausLatitudePontoPesquisa" />
+								<br />
+								<p:inputText 
+									value="#{listarImovelRuralController.grausLatitudeLoc}"
+									onkeyup="SomenteNumero(this);"
+									onblur="verificaLatitude(this); document.getElementById('formDlgPontoPesquisa:calculaLatitude').click(); document.getElementById('formDlgPontoPesquisa:minutosLatitudePontoPesquisa').focus();" id="grausLatitudePontoPesquisa"
+									style="width: 40px;"
+									maxlength="2">
+									</p:inputText>&nbsp;°&nbsp;
+                                  <p:inputText
+									value="#{listarImovelRuralController.minutosLatitudeLoc}"
+									onkeyup="SomenteNumero(this);"
+									onblur="verificaMinutoSegundo(this); document.getElementById('formDlgPontoPesquisa:calculaLatitude').click(); document.getElementById('formDlgPontoPesquisa:segundosLatitudePontoPesquisa').focus();" id="minutosLatitudePontoPesquisa"
+									style="width: 40px;"
+									maxlength="2"> 
+									</p:inputText>&nbsp;'&nbsp;
+                                  <p:inputText 
+									value="#{listarImovelRuralController.segundosLatitudeLoc}"
+									onkeyup="SomenteNumero(this);"
+									onblur="verificaMinutoSegundo(this); document.getElementById('formDlgPontoPesquisa:calculaLatitude').click();" id="segundosLatitudePontoPesquisa"
+									style="width: 40px;"
+									maxlength="2">									
+									</p:inputText>&nbsp;"&nbsp;S
+                              </h:panelGroup>
+							<h:commandLink id="calculaLatitude" actionListener="#{listarImovelRuralController.calculaFracaoGrauLatitudeLoc}">
+								<f:ajax	execute="@this grausLatitudePontoPesquisa minutosLatitudePontoPesquisa segundosLatitudePontoPesquisa" render="fracaoGrauLatitudePontoPesquisa" />
+							</h:commandLink>
+							<h:panelGroup>				
+								<br/>				
+								<p:inputText id="fracaoGrauLatitudePontoPesquisa" value="#{listarImovelRuralController.fracaoGrauLatitudeLoc}" disabled="true" />
+							</h:panelGroup>
+						</h:panelGrid>
+						
+						<h:panelGrid columns="3" id="longitudePontoPesquisa">
+							<h:panelGroup>
+								<h:outputLabel
+									value="* #{bundle.empreendimento_lbl_longitude}"
+									for="grausLongitudePontoPesquisa" />
+								<br />
+								<p:inputText
+									value="#{listarImovelRuralController.grausLongitudeLoc}"
+									onkeyup="SomenteNumero(this);"
+									onblur="verificaLongitude(this); document.getElementById('formDlgPontoPesquisa:calculaLongitude').click(); document.getElementById('formDlgPontoPesquisa:minutosLongitudePontoPesquisa').focus();" id="grausLongitudePontoPesquisa"
+									style="width: 40px;"
+									maxlength="2">
+									</p:inputText>&nbsp;°&nbsp;
+                                  <p:inputText
+									value="#{listarImovelRuralController.minutosLongitudeLoc}"
+									onkeyup="SomenteNumero(this);"
+									onblur="verificaMinutoSegundo(this); document.getElementById('formDlgPontoPesquisa:calculaLongitude').click(); document.getElementById('formDlgPontoPesquisa:segundosLongitudePontoPesquisa').focus();" id="minutosLongitudePontoPesquisa"
+									style="width: 40px;"
+									maxlength="2">
+									</p:inputText>&nbsp;'&nbsp;
+                                  <p:inputText
+									value="#{listarImovelRuralController.segundosLongitudeLoc}"
+									onkeyup="SomenteNumero(this);"
+									onblur="verificaMinutoSegundo(this); document.getElementById('formDlgPontoPesquisa:calculaLongitude').click()" id="segundosLongitudePontoPesquisa"
+									style="width: 40px;"
+									maxlength="2">
+									</p:inputText>&nbsp;"&nbsp;W
+                              </h:panelGroup>
+							<h:commandLink id="calculaLongitude" actionListener="#{listarImovelRuralController.calculaFracaoGrauLongitudeLoc}" >
+								<f:ajax	execute="@this grausLongitudePontoPesquisa minutosLongitudePontoPesquisa segundosLongitudePontoPesquisa" render="fracaoGrauLongitudePontoPesquisa" />
+							</h:commandLink>
+							<h:panelGroup>
+								<br/>								
+								<p:inputText id="fracaoGrauLongitudePontoPesquisa" value="#{listarImovelRuralController.fracaoGrauLongitudeLoc}" disabled="true" />
+							</h:panelGroup>
+						</h:panelGrid>
+					</h:panelGrid>
+					
+					<h:panelGrid rendered="#{listarImovelRuralController.selectedModoCoordenada == '2'}">
+						<h:panelGroup>
+							<h:outputLabel value="* #{bundle.empreendimento_lbl_latitude}"
+								for="latitudeFracaoGrauPontoPesquisa" /> - <h:outputLabel
+								value="#{bundle.incluirvertice_lbl_grau_fracao_grau}" />
+							<br />-&nbsp;<p:inputText
+								value="#{listarImovelRuralController.fracaoGrauLatitudeLoc}"
+								id="latitudeFracaoGrauPontoPesquisa" 
+								label="#{bundle.empreendimento_lbl_latitude}"
+								onkeyup="SomenteDecimal(this);">
+								<p:ajax event="blur" global="false" />
+								</p:inputText>
+						</h:panelGroup>
+						<h:panelGroup>
+							<h:outputLabel value="* #{bundle.empreendimento_lbl_longitude}"
+								for="longitudeFracaoGrauPontoPesquisa" /> - <h:outputLabel
+								value="#{bundle.incluirvertice_lbl_grau_fracao_grau}" />
+							<br />-&nbsp;<p:inputText
+								value="#{listarImovelRuralController.fracaoGrauLongitudeLoc}"
+								id="longitudeFracaoGrauPontoPesquisa" 
+								label="#{bundle.empreendimento_lbl_longitude}"
+								onkeyup="SomenteDecimal(this);">
+								<p:ajax event="blur" global="false" />
+								</p:inputText>
+						</h:panelGroup>
+					</h:panelGrid>
+				</h:panelGrid>
+				<br />
+				<h:outputLabel value="As coordenadas devem ser informadas no sistema Geográfico e Datum SIRGAS 2000." />
+				<br />
+				<h:panelGrid columns="2">
+					<p:spacer width="410" height="10" />
+					<p:commandButton value="Adicionar"
+						actionListener="#{listarImovelRuralController.inserirPontoPesquisa()}" oncomplete="if(args.closeModal) { dlgPontoPesquisa.hide(); }">
+						<p:ajax process="@this" />
+					</p:commandButton>
+				</h:panelGrid>
+			</h:panelGrid>
+		</h:panelGrid>
+	</h:form>	
+</ui:composition>

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="fce_linha_energia_destino_residuo" language="java" pageWidth="495" pageHeight="802" columnWidth="495" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="c4da0e77-6df0-438e-afca-e3a6c6f83d77">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="ide_fce" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[select tDR.dsc_destino_residuo from fce f inner join fce_linha_energia fLE on f.ide_fce = fLE.ide_fce inner join
+fce_linha_energia_destino_residuo fLEDR on fLEDR.ide_fce_linha_energia =  fLE.ide_fce_linha_energia inner join
+destino_residuo tDR on tDR.ide_destino_residuo =  fLEDR.ide_destino_residuo
+where f.ide_fce = $P{ide_fce}]]>
+	</queryString>
+	<field name="dsc_destino_residuo" class="java.lang.String"/>
+	<columnHeader>
+		<band height="42" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="d7e862d4-4489-42fc-9d9e-193c4712396e" x="8" y="22" width="120" height="20"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Destino resíduo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="c6e97269-ab04-4bab-a914-564f53a3a8c7" mode="Opaque" x="0" y="0" width="495" height="17" backcolor="#DDDDDD"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Destino dos resíduos]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement uuid="b1677297-a4ad-49d7-9f2b-f4165e0fe963" x="8" y="0" width="120" height="20"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{dsc_destino_residuo}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="2"/>
+	</pageFooter>
+</jasperReport>

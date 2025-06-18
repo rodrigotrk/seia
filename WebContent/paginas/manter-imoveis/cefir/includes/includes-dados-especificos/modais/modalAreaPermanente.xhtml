@@ -1,0 +1,855 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+	
+	<h:form id="formApp">
+		<h:panelGrid id="panelApp" rendered="#{imovelRuralControllerNew.appSelecionada != null}">
+			<h:panelGrid id="panelDetalhesApp" columns="1">
+				<h:panelGrid id="panelTipoApp">
+					<h:outputLabel value="* #{bundle.cefir_lbl_tipo_app}" />
+					<p:selectOneMenu id="tipoApp"
+						value="#{imovelRuralControllerNew.appSelecionada.ideTipoApp}"
+						disabled="#{imovelRuralControllerNew.visualizacaoApp}"
+						required="true"
+						requiredMessage="#{func:messageFormat('javax.faces.component.UISelectOne.REQUIRED', bundle.cefir_lbl_tipo_app)}"
+						style="width: 460px;">
+						
+						<f:selectItem itemLabel="#{bundle.geral_lbl_selecione}" />
+						<f:selectItems 
+							value="#{imovelRuralControllerNew.listaTipoApp}" 
+							var="tipoApp" 
+							itemLabel="#{tipoApp.dscTipoApp}" 
+							itemValue="#{tipoApp}" />
+						<f:converter converterId="tipoAppConverter" />
+						
+						<p:ajax event="change" process="@this" update="panelDetalhesApp localizacaoGeograficaApp" listener="#{imovelRuralControllerNew.carregarSubTipoApp()}" />
+					</p:selectOneMenu>
+				</h:panelGrid>
+				
+				<h:panelGrid id="panelSubTipoApp" rendered="#{imovelRuralControllerNew.appSelecionada.ideTipoApp.ideTipoApp == 1}">
+					<h:outputLabel value="* #{bundle.cefir_lbl_app_curso_dagua}" />
+					<p:selectOneMenu id="subTipoApp"
+						value="#{imovelRuralControllerNew.appSelecionada.ideSubTipoApp}"
+						disabled="#{imovelRuralControllerNew.visualizacaoApp}"
+						required="true"
+						requiredMessage="O campo largura do curso d'água natural é de preenchimento obrigatório."
+						style="width: 260px;">
+						
+						<f:selectItem itemLabel="#{bundle.geral_lbl_selecione}" />
+						<f:selectItems 
+							value="#{imovelRuralControllerNew.listaSubTipoApp}"
+							var="subTipoApp"
+							itemLabel="#{subTipoApp.dscSubTipoApp}"
+							itemValue="#{subTipoApp}" />
+						<f:converter converterId="subTipoAppConverter" />
+						
+						<p:ajax event="change" process="@this" />
+					</p:selectOneMenu>
+				</h:panelGrid>
+
+				<h:panelGrid id="panelAreaApp">
+					<h:outputLabel value="* #{bundle.cefir_lbl_area_app}" />
+					<p:inputText id="areaApp"
+						value="#{imovelRuralControllerNew.appSelecionada.valArea}"
+						maxlength="15"
+						disabled="#{imovelRuralControllerNew.visualizacaoApp}"
+						required="true"
+						requiredMessage="#{func:messageFormat('javax.faces.component.UISelectOne.REQUIRED', bundle.cefir_lbl_area_app)}"
+						onkeypress="mascararNumeroLR(this, event, 10, 4, '.', ',', 3);"
+						onkeyup="mascararNumeroLR(this, event, 10, 4, '.', ',', 3);"
+						converter="doubleQuatroCasasDecimaisConverter">
+					</p:inputText>
+				</h:panelGrid>
+				
+				<h:panelGrid id="panelTipoEstadoConservacaoApp">
+					<h:outputLabel value="* Estado de conservação" 
+						rendered="#{!imovelRuralControllerNew.imovelRural.imovelCDA and !imovelRuralControllerNew.imovelRural.imovelBNDES}" />
+						
+					<h:outputLabel value="Estado de conservação" 
+						rendered="#{imovelRuralControllerNew.imovelRural.imovelCDA or imovelRuralControllerNew.imovelRural.imovelBNDES}" />
+					
+					<p:selectOneMenu id="tipoEstadoConservacaoApp" 
+						value="#{imovelRuralControllerNew.appSelecionada.ideTipoEstadoConservacao}"
+						required="#{!imovelRuralControllerNew.imovelRural.imovelCDA and !imovelRuralControllerNew.imovelRural.imovelBNDES}"
+						requiredMessage="O campo Estado de conservação é de preenchimento obrigatório."
+						disabled="#{imovelRuralControllerNew.visualizacaoApp}" 
+						style="width: 200px;"
+						valueChangeListener="#{imovelRuralControllerNew.changeTipoEstadoConservacao()}">
+						
+						<f:selectItem itemLabel="#{bundle.geral_lbl_selecione}" />
+						<f:selectItems 
+							value="#{imovelRuralControllerNew.listaTipoEstadoConservacaoApp}" 
+							var="tipoEstadoConservacaoApp"
+							itemLabel="#{tipoEstadoConservacaoApp.dscTipoEstadoConservacao}"
+							itemValue="#{tipoEstadoConservacaoApp}" />
+						<f:converter converterId="simpleEntityConverter" />
+						
+						<p:ajax event="change" process="@this" update="panelCronogramaApp" />
+					</p:selectOneMenu>
+				</h:panelGrid>
+			</h:panelGrid>
+
+			<h:panelGrid id="panelCronogramaApp">
+				<p:fieldset rendered="#{imovelRuralControllerNew.mostraDesejaCadastrarCronogramaApp || imovelRuralControllerNew.cadastrarCronogramaApp}">
+					<h:panelGrid id="panelDesejaCadastrarPrad" rendered="#{imovelRuralControllerNew.mostraDesejaCadastrarCronogramaApp}">
+						<h:outputLabel value="* Deseja cadastrar o Plano de Recuperação de Áreas Degradadas?"
+							rendered="#{!imovelRuralControllerNew.imovelRural.imovelCDA and !imovelRuralControllerNew.imovelRural.imovelBNDES}" />
+							
+						<h:outputLabel value="Deseja cadastrar o Plano de Recuperação de Áreas Degradadas?"
+							rendered="#{imovelRuralControllerNew.imovelRural.imovelCDA or imovelRuralControllerNew.imovelRural.imovelBNDES}" />
+							
+						<p:selectOneRadio id="desejaCadastrarPrad"
+							value="#{imovelRuralControllerNew.appSelecionada.indDesejaCadPrad}"
+							disabled="#{imovelRuralControllerNew.visualizacaoApp}"
+							required="#{!imovelRuralControllerNew.imovelRural.imovelCDA and !imovelRuralControllerNew.imovelRural.imovelBNDES}"
+							requiredMessage="O campo Deseja Cadastrar o Plano de Recuperação de Áreas Degradadas é de preenchimento obrigatório.">
+							
+							<f:selectItem itemLabel="#{bundle.geral_lbl_sim}" itemValue="#{true}" />
+							<f:selectItem itemLabel="#{bundle.geral_lbl_nao}" itemValue="#{false}" />
+							
+							<p:ajax event="change" process="@this" update="panelCronogramaApp" listener="#{imovelRuralControllerNew.changeDesejaCadastrarCronograma()}"/>
+						</p:selectOneRadio>
+					</h:panelGrid>
+					
+					<h:panelGrid id="panelAreaProcessoRecuperacao" rendered="#{imovelRuralControllerNew.cadastrarCronogramaApp}">
+						<h:outputLabel value="* Sua área está em processo de recuperação?"
+							rendered="#{!imovelRuralControllerNew.imovelRural.imovelCDA and !imovelRuralControllerNew.imovelRural.imovelBNDES}" />
+							
+						<h:outputLabel value="Sua área está em processo de recuperação?"
+							rendered="#{imovelRuralControllerNew.imovelRural.imovelCDA or imovelRuralControllerNew.imovelRural.imovelBNDES}" />
+							
+						<p:selectOneRadio id="areaProcessoRecuperacao"
+							value="#{imovelRuralControllerNew.appSelecionada.indProcessoRecuperacao}"
+							disabled="#{imovelRuralControllerNew.visualizacaoApp}"
+							required="#{!imovelRuralControllerNew.imovelRural.imovelCDA and !imovelRuralControllerNew.imovelRural.imovelBNDES}"
+							requiredMessage="O campo Sua área está em processo de recuperação é de preenchimento obrigatório.">
+							
+							<f:selectItem itemLabel="#{bundle.geral_lbl_sim}" itemValue="#{true}" />
+							<f:selectItem itemLabel="#{bundle.geral_lbl_nao}" itemValue="#{false}" />
+						</p:selectOneRadio>
+					</h:panelGrid>
+	
+					<h:panelGrid rendered="#{imovelRuralControllerNew.cadastrarCronogramaApp}" columns="2">
+						<h:outputLabel value="CRONOGRAMA DE RECUPERAÇÃO DE ÁREAS DEGRADADAS" styleClass="titulo-grupo" />
+					</h:panelGrid>
+	
+					<h:panelGrid id="panelCondicoesRecuperacaoApp" columns="3" rendered="#{imovelRuralControllerNew.cadastrarCronogramaApp}">
+						<a onclick="dialogTermoRecuperacaoApp.show()" href="#">Condições para recuperação de áreas degradadas</a>
+						
+						<h:selectBooleanCheckbox id="chkAceiteCondicoesApp"
+							value="#{imovelRuralControllerNew.aceiteCondicoesRecuperacaoApp}"
+							disabled="${imovelRuralControllerNew.visualizacaoApp}"
+							required="#{!imovelRuralControllerNew.imovelRural.imovelCDA and !imovelRuralControllerNew.imovelRural.imovelBNDES}"
+							requiredMessage="É preciso aceitar o termo de recuperação para salvar!"/>
+							
+						<h:outputLabel value="Aceito" />
+					</h:panelGrid>
+					
+					<h:panelGrid id="panelTableCronogramaApp" rendered="#{imovelRuralControllerNew.cadastrarCronogramaApp}">
+						<p:dataTable id="dataTableCronogramaApp" 
+							var="cronogramaEtapa"
+							value="#{imovelRuralControllerNew.appSelecionada.cronogramaRecuperacao.cronogramaEtapaCollection}"
+							lazy="true" paginator="true" rows="10" paginatorPosition="bottom"
+							paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}"
+							emptyMessage="#{bundle.cefir_msg_A012}" style="width:600px;"
+							widgetVar="dataTableCronogramaApp">
+							
+							<f:facet name="header">
+								<h:outputLabel value="Cronogramas" />
+							</f:facet>
+							
+							<p:column>
+								<f:facet name="header">
+									<h:outputLabel value="Atividade" />
+								</f:facet>
+								<h:outputLabel value="#{(cronogramaEtapa.ideTipoRecuperacao.ideTipoRecuperacao == 11) ? cronogramaEtapa.dscOutroTipoRecuperacao : cronogramaEtapa.ideTipoRecuperacao.dscTipoRecuperacao}" />
+							</p:column>
+							
+							<p:column>
+								<f:facet name="header">
+									<h:outputLabel value="Início" />
+								</f:facet>
+								<h:outputLabel value="#{cronogramaEtapa.mesInicio}/#{cronogramaEtapa.anoInicio}" />
+							</p:column>
+							
+							<p:column>
+								<f:facet name="header">
+									<h:outputLabel value="Fim" />
+								</f:facet>
+								<h:outputLabel value="#{cronogramaEtapa.mesFim}/#{cronogramaEtapa.anoFim}" />
+							</p:column>
+							
+							<p:column>
+								<f:facet name="header">
+									<h:outputLabel value="Realizado" />
+								</f:facet>
+								<h:outputLabel value="#{cronogramaEtapa.percentual}%" />
+							</p:column>
+							
+							<p:column>
+								<f:facet name="header">
+									<h:outputLabel value="Ações" />
+								</f:facet>
+								
+								<p:commandLink id="EditarcronogramaEtapaApp" 
+									title="Editar" 
+									process="@this"
+									oncomplete="dlgCronogramaEtapa.show()"
+									update="formCronogramaEtapa"
+									disabled="#{imovelRuralControllerNew.visualizacaoApp}">
+									<h:graphicImage title="Editar" value="/resources/img/ico-editar.png" />
+									<f:setPropertyActionListener value="#{cronogramaEtapa}" target="#{imovelRuralControllerNew.cronogramaEtapaSelecionado}" />
+									<f:setPropertyActionListener value="true" target="#{imovelRuralControllerNew.isEdicaoCronogramaEtapa}" />
+									<f:setPropertyActionListener value="2" target="#{imovelRuralControllerNew.tipoCronogramaEtapa}" />
+								</p:commandLink>
+								
+								<p:commandLink id="ExcluirCronogramaApp"
+									onclick="confirmaExclusaoCronogramaEtapaApp.show(); confirmaExclusaoCronogramaEtapaApp.content.parent().css('top',  '80px'); confirmaExclusaoCronogramaEtapaApp.content.parent().css('left',  '500px');"
+									ajax="true" 
+									global="false" 
+									process="@this" 
+									disabled="#{imovelRuralControllerNew.visualizacaoApp}">
+									<h:graphicImage title="Excluir" value="/resources/img/ico-excluir.png" />
+									<f:setPropertyActionListener value="#{cronogramaEtapa}" target="#{imovelRuralControllerNew.cronogramaEtapaSelecionado}" />
+								</p:commandLink>
+							</p:column>
+						</p:dataTable>
+	
+						<p:commandButton id="btnIncluirEtapa"
+							value="Incluir Etapa" 
+							process="@this"
+							oncomplete="dlgCronogramaEtapa.show()"
+							action="#{imovelRuralControllerNew.limparFormCronogramaEtapa(2)}"
+							update="formCronogramaEtapa"
+							disabled="#{imovelRuralControllerNew.visualizacaoApp}">
+							<f:setPropertyActionListener value="false" target="#{imovelRuralControllerNew.isEdicaoCronogramaEtapa}" />
+						</p:commandButton>
+					</h:panelGrid>
+	
+					<h:panelGrid id="panelPradMesmoApp" rendered="#{imovelRuralControllerNew.cadastrarCronogramaApp}">
+						<h:outputLabel value="* O Plano de Recuperação Ambiental - PRA é o mesmo informado anteriormente?"
+							rendered="#{!imovelRuralControllerNew.imovelRural.imovelCDA and !imovelRuralControllerNew.imovelRural.imovelBNDES}" />
+							
+						<h:outputLabel value="O Plano de Recuperação Ambiental - PRA é o mesmo informado anteriormente?"
+							rendered="#{imovelRuralControllerNew.imovelRural.imovelCDA or imovelRuralControllerNew.imovelRural.imovelBNDES}" />
+							
+						<p:selectOneRadio id="radioPradMesmoApp" 
+							value="#{imovelRuralControllerNew.appSelecionada.cronogramaRecuperacao.indPradImportada}"
+							disabled="#{imovelRuralControllerNew.visualizacaoApp}">
+							
+							<f:selectItem itemLabel="#{bundle.geral_lbl_sim}" itemValue="#{true}" />
+							<f:selectItem itemLabel="#{bundle.geral_lbl_nao}" itemValue="#{false}" />
+							
+							<p:ajax event="change" process="@this" update="formUploadPradApp:panelUploadPradApp panelArquivoPradApp" listener="#{imovelRuralControllerNew.carregarListaPradImportado(2)}" />
+						</p:selectOneRadio>
+					</h:panelGrid>
+	
+					<h:panelGrid id="panelArquivoPradApp" rendered="#{imovelRuralControllerNew.cadastrarCronogramaApp}">
+						<h:outputLabel value="Informe o  Plano de Recuperação Ambiental - PRA a ser associado"
+							rendered="#{imovelRuralControllerNew.appSelecionada.cronogramaRecuperacao != null
+								and imovelRuralControllerNew.appSelecionada.cronogramaRecuperacao.indPradImportada != null 
+								and imovelRuralControllerNew.appSelecionada.cronogramaRecuperacao.indPradImportada}" />
+							
+						<p:selectOneMenu id="listPradsApp"
+							value="#{imovelRuralControllerNew.appSelecionada.cronogramaRecuperacao.ideDocumentoObrigatorio}"
+							required="#{!imovelRuralControllerNew.imovelRural.imovelCDA 
+								and !imovelRuralControllerNew.imovelRural.imovelBNDES 
+								and !imovelRuralControllerNew.cadastrarCronogramaApp}"
+							requiredMessage="O campo Informe o Plano de Recuperação Ambiental - PRA a ser associado é de preenchimento obrigatório."
+							immediate="true"
+							rendered="#{imovelRuralControllerNew.appSelecionada.cronogramaRecuperacao != null
+								and imovelRuralControllerNew.appSelecionada.cronogramaRecuperacao.indPradImportada != null 
+								and imovelRuralControllerNew.appSelecionada.cronogramaRecuperacao.indPradImportada}"
+							style="width: 260px;"
+							disabled="#{imovelRuralControllerNew.visualizacaoApp}">
+							
+							<f:selectItem itemLabel="#{bundle.geral_lbl_selecione}" />
+							<f:selectItems
+								value="#{imovelRuralControllerNew.listaPradImportadosApp}"
+								var="prad" 
+								itemValue="#{prad}"
+								itemLabel="#{prad.nomDocumentoObrigatorio}" />
+							<f:converter converterId="documentoImovelRuralConverter" />
+						</p:selectOneMenu>
+						
+						<h:panelGrid id="panelUploadArquivoPradApp"
+							rendered="#{imovelRuralControllerNew.appSelecionada.cronogramaRecuperacao != null
+								and imovelRuralControllerNew.appSelecionada.cronogramaRecuperacao.ideDocumentoObrigatorio == null 
+								and imovelRuralControllerNew.appSelecionada.cronogramaRecuperacao.indPradImportada != null 
+								and !imovelRuralControllerNew.appSelecionada.cronogramaRecuperacao.indPradImportada}">
+							
+							<p:commandButton id="btnUploadArquivoPradApp"
+								value="#{bundle.cefir_lbl_upload_pra}"
+								onclick="dlgUploadPradApp.show()"
+								title="#{bundle.cefir_lbl_upload_pra}" 
+								process="@this"
+								disabled="#{imovelRuralControllerNew.visualizacaoApp}">
+							</p:commandButton>
+						</h:panelGrid>
+	
+						<h:panelGrid rendered="#{imovelRuralControllerNew.appSelecionada.cronogramaRecuperacao != null
+							and imovelRuralControllerNew.appSelecionada.cronogramaRecuperacao.ideDocumentoObrigatorio != null 
+							and imovelRuralControllerNew.appSelecionada.cronogramaRecuperacao.indPradImportada != null 
+							and !imovelRuralControllerNew.appSelecionada.cronogramaRecuperacao.indPradImportada}">
+							
+							<h:outputLabel value="Arquivo do PRA" style="float:left; width:330px;" />
+						</h:panelGrid>
+	
+						<h:panelGrid id="panelTableArquivoPradApp">
+							<p:dataTable id="dataTableArquivoPradApp"
+								rendered="#{imovelRuralControllerNew.appSelecionada.cronogramaRecuperacao != null
+									and imovelRuralControllerNew.appSelecionada.cronogramaRecuperacao.ideDocumentoObrigatorio != null 
+									and imovelRuralControllerNew.appSelecionada.cronogramaRecuperacao.indPradImportada != null 
+									and !imovelRuralControllerNew.appSelecionada.cronogramaRecuperacao.indPradImportada}"
+								widgetVar="dtTbArquivoPradApp"
+								value="#{imovelRuralControllerNew.listaPradApp}" 
+								var="arquivo"
+								lazy="true" emptyMessage="#{bundle.cefir_msg_A012}"
+								style="width:472px;">
+								
+								<p:column>
+									<h:outputLabel value="#{arquivo.nomDocumentoObrigatorio}" />
+								</p:column>
+								
+								<p:column>
+									<h:commandButton value="#{arquivo}" image="/resources/img/ico-download.png" immediate="true">
+										<p:fileDownload value="#{imovelRuralControllerNew.getFileDownload(arquivo.dscCaminhoArquivo)}" />
+									</h:commandButton>
+									
+									<p:commandLink id="ExcluirArquivoPradApp"
+										onclick="confirmaExclusaoDocumentoPradApp.show(); confirmaExclusaoDocumentoPradApp.content.parent().css('top',  '80px'); confirmaExclusaoDocumentoPradApp.content.parent().css('left',  '500px')"
+										ajax="true" 
+										global="false" 
+										process="@this"
+										disabled="#{imovelRuralControllerNew.visualizacaoApp}">
+										<h:graphicImage title="Excluir" value="/resources/img/ico-excluir.png" />
+									</p:commandLink>
+								</p:column>
+							</p:dataTable>
+						</h:panelGrid>
+					</h:panelGrid>
+					
+					<h:panelGrid id="localizacaoGeograficaPradApp" columns="1" rendered="#{imovelRuralControllerNew.cadastrarCronogramaApp}">
+						<h3><h:outputLabel value="POLIGONAL DA ÁREA A SER RECUPERADA NA APP" styleClass="titulo-grupo" /></h3>
+						<h:panelGrid id="panelDetalhesLocalizacaoPrad" columns="3">
+							<h:outputLabel styleClass="form-label" value="* #{bundle.empreendimento_lbl_secao_geometrica}" />
+							
+							<h:outputLabel styleClass="form-label" value="* #{bundle.empreendimento_lbl_datum}"
+								rendered="#{imovelRuralControllerNew.renderedLabelSRID(imovelRuralControllerNew.appSelecionada.cronogramaRecuperacao.localizacaoGeografica)}" />
+				
+							<p:spacer width="10px" rendered="#{!imovelRuralControllerNew.renderedLabelSRID(imovelRuralControllerNew.appSelecionada.cronogramaRecuperacao.localizacaoGeografica)}" />
+							
+							<h:outputLabel styleClass="form-label" value="Descrição" />
+							
+							<p:selectOneMenu id="tipoSecaoGeometricaShapePradApp"
+								value="#{imovelRuralControllerNew.appSelecionada.cronogramaRecuperacao.localizacaoGeografica.ideClassificacaoSecao}"
+								disabled="#{imovelRuralControllerNew.getExisteTheGeomPradApp(imovelRuralControllerNew.appSelecionada) 
+									or (imovelRuralControllerNew.appSelecionada.cronogramaRecuperacao.localizacaoGeografica != null 
+										and not empty imovelRuralControllerNew.appSelecionada.cronogramaRecuperacao.localizacaoGeografica.listArquivosShape) 
+									or imovelRuralControllerNew.visualizacaoApp}"
+								required="true"
+								requiredMessage="O campo Tipo de Inserção é de preenchimento obrigatório."
+								style="width: 160px;">
+								
+								<f:selectItem itemLabel="#{bundle.geral_lbl_selecione}" />
+								<f:selectItems
+									value="#{imovelRuralControllerNew.listaSecaoGeometrica}"
+									var="secaoGeometricaPrad"
+									itemLabel="#{secaoGeometricaPrad.nomClassificacaoSecao}"
+									itemValue="#{secaoGeometricaPrad}" />
+								<f:converter converterId="secaoGeometricaConverter" />
+								
+								<p:ajax event="change" process="@this" update="localizacaoGeograficaPradApp" listener="${imovelRuralControllerNew.verificaTipoSecaoGeometricaShape(23)}" />
+							</p:selectOneMenu>
+							
+							<h:outputLabel style="margin-left:10px;"
+								value="#{imovelRuralControllerNew.appSelecionada.cronogramaRecuperacao.localizacaoGeografica.ideSistemaCoordenada.nomSistemaCoordenada}"
+								rendered="#{imovelRuralControllerNew.renderedLabelSRID(imovelRuralControllerNew.appSelecionada.cronogramaRecuperacao.localizacaoGeografica)}" />
+		
+							<p:spacer width="10px" rendered="#{!imovelRuralControllerNew.renderedLabelSRID(imovelRuralControllerNew.appSelecionada.cronogramaRecuperacao.localizacaoGeografica)}" />
+							
+							<p:inputText id="descLocGeoShapePradApp"
+								value="#{imovelRuralControllerNew.appSelecionada.cronogramaRecuperacao.localizacaoGeografica.desLocalizacaoGeografica}"
+								maxlength="150" 
+								title="Descrição da Localização"
+								disabled="#{imovelRuralControllerNew.getExisteTheGeomPradApp(imovelRuralControllerNew.appSelecionada) 
+									or imovelRuralControllerNew.visualizacaoApp}" />
+						</h:panelGrid>
+		
+						<h:panelGrid id="panelUploadShapefilePradApp" columns="1" style="width:370px"
+							rendered="#{imovelRuralControllerNew.appSelecionada.cronogramaRecuperacao.localizacaoGeografica.ideClassificacaoSecao.ideClassificacaoSecao == 2  
+								and !imovelRuralControllerNew.getExisteTheGeomPradApp(imovelRuralControllerNew.appSelecionada)}">
+							
+							<h:panelGrid rendered="${imovelRuralControllerNew.mostrarBotaoUploadShapePradApp()}">
+								<p:commandButton id="btnUploadShapefilePradApp"
+									value="+ Upload dos Shapes" 
+									onclick="dlgUploadShapePradApp.show()"
+									disabled="${imovelRuralControllerNew.visualizacaoApp}"
+									title="Upload dos Shapes"
+									process="@this localizacaoGeograficaPradApp">
+								</p:commandButton>
+							</h:panelGrid>
+							
+							<h:panelGrid rendered="#{imovelRuralControllerNew.appSelecionada.cronogramaRecuperacao != null
+								and imovelRuralControllerNew.appSelecionada.cronogramaRecuperacao.localizacaoGeografica != null  
+								and imovelRuralControllerNew.appSelecionada.cronogramaRecuperacao.localizacaoGeografica.listArquivosShape != null 
+								and not empty imovelRuralControllerNew.appSelecionada.cronogramaRecuperacao.localizacaoGeografica.listArquivosShape}">
+								
+								<h:outputLabel value="#{bundle.cefir_lbl_localizacao_geografica_shp}" style="float:left; width:330px;" />
+							</h:panelGrid>
+							
+							<h:panelGrid id="panelTableArquivosShapePradApp" style="float:right;">
+								<p:dataTable id="dataTableArquivosShapePradApp"
+									rendered="#{imovelRuralControllerNew.appSelecionada.cronogramaRecuperacao != null
+										and imovelRuralControllerNew.appSelecionada.cronogramaRecuperacao.localizacaoGeografica != null 
+										and imovelRuralControllerNew.appSelecionada.cronogramaRecuperacao.localizacaoGeografica.listArquivosShape != null 
+										and not empty imovelRuralControllerNew.appSelecionada.cronogramaRecuperacao.localizacaoGeografica.listArquivosShape}"
+									widgetVar="dtTbDocumentosApp"
+									value="#{imovelRuralControllerNew.appSelecionada.cronogramaRecuperacao.localizacaoGeografica.listArquivosShape}"
+									var="arquivoPradApp" 
+									lazy="true"
+									emptyMessage="#{bundle.cefir_msg_A012}" style="width:472px;">
+									
+									<p:column>
+										<h:outputLabel value="#{arquivoPradApp}" />
+									</p:column>
+									
+									<p:column>
+										<p:commandLink
+											onclick="confirmaExclusaoArquivoShapeFileLocGeoPradApp.show(); confirmaExclusaoArquivoShapeFileLocGeoPradApp.content.parent().css('top',  '80px'); confirmaExclusaoArquivoShapeFileLocGeoPradApp.content.parent().css('left',  '500px')"
+											process="@this"
+											disabled="${imovelRuralControllerNew.visualizacaoApp}">
+											<h:graphicImage title="Excluir" value="/resources/img/ico-excluir.png" />
+											<f:setPropertyActionListener value="${arquivoPradApp}" target="#{imovelRuralControllerNew.arquivoShapeExcluir}"></f:setPropertyActionListener>
+										</p:commandLink>
+									</p:column>
+								</p:dataTable>
+							</h:panelGrid>
+						</h:panelGrid>
+		
+						<h:panelGrid id="uploadDesenhoPradApp" columns="1" style="width:370px"
+							rendered="#{imovelRuralControllerNew.appSelecionada.cronogramaRecuperacao.localizacaoGeografica.ideClassificacaoSecao.ideClassificacaoSecao == 3 
+								and !imovelRuralControllerNew.getExisteTheGeomPradApp(imovelRuralControllerNew.appSelecionada)}">
+							
+							<h:outputLink 
+								value="#{imovelRuralControllerNew.caminhoNovoGeoBahia}"
+								title="NOVO GEOBAHIA"
+								disabled="${imovelRuralControllerNew.visualizacaoApp}"
+								target="_blank">
+								<h:outputLabel value="DESENHAR NO NOVO GEOBAHIA" />
+								<f:param name="action" value="draw" />
+								<f:param name="id_imovel" value="#{imovelRuralControllerNew.imovelRural.ideImovelRural}" />
+								<f:param name="type" value="app" />
+								<f:param name="id_app" value="#{imovelRuralControllerNew.appSelecionada.ideApp}" />
+								<f:param name="cod" value="#{imovelRuralControllerNew.appSelecionada.codigoPersistirShape}" />
+								<f:param name="token" value="#{imovelRuralControllerNew.token}" />
+							</h:outputLink>
+						</h:panelGrid>
+						
+						<h:panelGrid id="panelTheGeomPradApp" rendered="#{imovelRuralControllerNew.getExisteTheGeomPradApp(imovelRuralControllerNew.appSelecionada)}" columns="1">
+							<h:panelGrid id="panelAcoesVisualizarShapesPradApp" columns="3">
+								<h:outputLink 
+									value="#{imovelRuralControllerNew.caminhoNovoGeoBahia}"
+									title="NOVO GEOBAHIA"
+									target="_blank">
+									<h:outputLabel value="VISUALIZAR SHAPE DO PRAD DA APP" />
+									<f:param name="action" value="view" />
+									<f:param name="id_imovel" value="#{imovelRuralControllerNew.imovelRural.ideImovelRural}" />
+									<f:param name="type" value="app" />
+									<f:param name="id_app" value="#{imovelRuralControllerNew.appSelecionada.ideApp}" />
+									<f:param name="cod" value="#{imovelRuralControllerNew.appSelecionada.codigoPersistirShape}" />
+									<f:param name="token" value="#{imovelRuralControllerNew.token}" />
+								</h:outputLink>
+								
+								<h:outputLink 
+									value="#{imovelRuralControllerNew.caminhoNovoGeoBahia}"
+									title="NOVO GEOBAHIA"
+									target="_blank">
+									<h:graphicImage title="Visualizar" value="/resources/img/ico-arl-relocacao.png" />
+									<f:param name="action" value="view" />
+									<f:param name="id_imovel" value="#{imovelRuralControllerNew.imovelRural.ideImovelRural}" />
+									<f:param name="type" value="app" />
+									<f:param name="id_app" value="#{imovelRuralControllerNew.appSelecionada.ideApp}" />
+									<f:param name="cod" value="#{imovelRuralControllerNew.appSelecionada.codigoPersistirShape}" />
+									<f:param name="token" value="#{imovelRuralControllerNew.token}" />
+								</h:outputLink>
+								
+								<p:commandLink 
+									onclick="confirmaExclusaoGeometriaPradApp.show(); confirmaExclusaoGeometriaPradApp.content.parent().css('top',  '80px'); confirmaExclusaoGeometriaPradApp.content.parent().css('left',  '500px')"
+									process="@this"
+									disabled="${imovelRuralControllerNew.visualizacaoApp}">
+									<h:graphicImage title="Excluir" value="/resources/img/ico-excluir.png" />
+								</p:commandLink>
+							</h:panelGrid>
+						</h:panelGrid>
+					</h:panelGrid>
+				</p:fieldset>
+			</h:panelGrid>
+
+			<h:panelGrid id="localizacaoGeograficaApp" columns="1">
+				<h3><h:outputLabel value="POLIGONAL DA APP" styleClass="titulo-grupo" /></h3>
+				<h:panelGrid id="panelDetalhesLocalizacao" columns="3">
+					<h:outputLabel styleClass="form-label" value="* #{bundle.empreendimento_lbl_secao_geometrica}" />
+					
+					<h:outputLabel styleClass="form-label" value="* #{bundle.empreendimento_lbl_datum}"
+						rendered="#{imovelRuralControllerNew.renderedLabelSRID(imovelRuralControllerNew.appSelecionada.ideLocalizacaoGeografica)}"/>
+		
+					<p:spacer width="10px" rendered="#{!imovelRuralControllerNew.renderedLabelSRID(imovelRuralControllerNew.appSelecionada.ideLocalizacaoGeografica)}" />
+					
+					<h:outputLabel styleClass="form-label" value="Descrição" />
+					
+					<p:selectOneMenu id="tipoSecaoGeometricaShapeApp"
+						value="#{imovelRuralControllerNew.appSelecionada.ideLocalizacaoGeografica.ideClassificacaoSecao}"
+						disabled="#{imovelRuralControllerNew.getExisteTheGeomApp(imovelRuralControllerNew.appSelecionada) 
+							or (imovelRuralControllerNew.appSelecionada.ideLocalizacaoGeografica != null 
+								and not empty imovelRuralControllerNew.appSelecionada.ideLocalizacaoGeografica.listArquivosShape) 
+							or imovelRuralControllerNew.visualizacaoApp}"
+						required="true"
+						requiredMessage="O campo Tipo de Inserção é de preenchimento obrigatório."
+						style="width: 160px;">
+						
+						<f:selectItem itemLabel="#{bundle.geral_lbl_selecione}" />
+						<f:selectItems
+							value="#{imovelRuralControllerNew.listaSecaoGeometrica}"
+							var="secaoGeometrica"
+							itemLabel="#{secaoGeometrica.nomClassificacaoSecao}"
+							itemValue="#{secaoGeometrica}" />
+						<f:converter converterId="secaoGeometricaConverter" />
+						
+						<p:ajax event="change" process="@this" update="localizacaoGeograficaApp" listener="${imovelRuralControllerNew.verificaTipoSecaoGeometricaShape(3)}" />
+					</p:selectOneMenu>
+					
+					<h:outputLabel style="margin-left:10px;"
+						value="#{imovelRuralControllerNew.appSelecionada.ideLocalizacaoGeografica.ideSistemaCoordenada.nomSistemaCoordenada}"
+						rendered="#{imovelRuralControllerNew.renderedLabelSRID(imovelRuralControllerNew.appSelecionada.ideLocalizacaoGeografica)}" />
+
+					<p:spacer width="10px" rendered="#{!imovelRuralControllerNew.renderedLabelSRID(imovelRuralControllerNew.appSelecionada.ideLocalizacaoGeografica)}" />
+					
+					<p:inputText id="descLocGeoShapeApp"
+						value="#{imovelRuralControllerNew.appSelecionada.ideLocalizacaoGeografica.desLocalizacaoGeografica}"
+						maxlength="150" 
+						title="Descrição da Localização"
+						disabled="#{imovelRuralControllerNew.getExisteTheGeomApp(imovelRuralControllerNew.appSelecionada) or imovelRuralControllerNew.visualizacaoApp}" />
+				</h:panelGrid>
+
+				<h:panelGrid id="panelUploadShapefileApp" columns="1" style="width:370px"
+					rendered="#{imovelRuralControllerNew.appSelecionada.ideLocalizacaoGeografica.ideClassificacaoSecao.ideClassificacaoSecao == 2  
+						and !imovelRuralControllerNew.getExisteTheGeomApp(imovelRuralControllerNew.appSelecionada)}">
+					
+					<h:panelGrid rendered="${imovelRuralControllerNew.mostrarBotaoUploadShapeApp()}">
+						<p:commandButton id="btnUploadShapefileApp"
+							value="+ Upload dos Shapes" 
+							onclick="dlgUploadShapeApp.show()"
+							disabled="${imovelRuralControllerNew.visualizacaoApp}"
+							title="Upload dos Shapes"
+							process="@this localizacaoGeograficaApp">
+						</p:commandButton>
+					</h:panelGrid>
+					
+					<h:panelGrid rendered="#{imovelRuralControllerNew.appSelecionada.ideLocalizacaoGeografica != null 
+						and imovelRuralControllerNew.appSelecionada.ideLocalizacaoGeografica.listArquivosShape != null 
+						and not empty imovelRuralControllerNew.appSelecionada.ideLocalizacaoGeografica.listArquivosShape}">
+						
+						<h:outputLabel value="#{bundle.cefir_lbl_localizacao_geografica_shp}" style="float:left; width:330px;" />
+					</h:panelGrid>
+					
+					<h:panelGrid id="panelTableArquivosShapeApp" style="float:right;">
+						<p:dataTable id="dataTableArquivosShapeApp"
+							rendered="#{imovelRuralControllerNew.appSelecionada.ideLocalizacaoGeografica != null 
+								and imovelRuralControllerNew.appSelecionada.ideLocalizacaoGeografica.listArquivosShape != null 
+								and not empty imovelRuralControllerNew.appSelecionada.ideLocalizacaoGeografica.listArquivosShape}"
+							widgetVar="dtTbDocumentosApp"
+							value="#{imovelRuralControllerNew.appSelecionada.ideLocalizacaoGeografica.listArquivosShape}"
+							var="arquivoApp" 
+							lazy="true"
+							emptyMessage="#{bundle.cefir_msg_A012}" style="width:472px;">
+							
+							<p:column>
+								<h:outputLabel value="#{arquivoApp}" />
+							</p:column>
+							
+							<p:column>
+								<p:commandLink
+									onclick="confirmaExclusaoArquivoShapeFileLocGeoApp.show(); confirmaExclusaoArquivoShapeFileLocGeoApp.content.parent().css('top',  '80px'); confirmaExclusaoArquivoShapeFileLocGeoApp.content.parent().css('left',  '500px')"
+									process="@this"
+									disabled="${imovelRuralControllerNew.visualizacaoApp}">
+									<h:graphicImage title="Excluir" value="/resources/img/ico-excluir.png" />
+									<f:setPropertyActionListener value="${arquivoApp}" target="#{imovelRuralControllerNew.arquivoShapeExcluir}"></f:setPropertyActionListener>
+								</p:commandLink>
+							</p:column>
+						</p:dataTable>
+					</h:panelGrid>
+				</h:panelGrid>
+
+				<h:panelGrid id="uploadDesenhoApp" columns="1" style="width:370px"
+					rendered="#{imovelRuralControllerNew.appSelecionada.ideLocalizacaoGeografica.ideClassificacaoSecao.ideClassificacaoSecao == 3 
+						and !imovelRuralControllerNew.getExisteTheGeomApp(imovelRuralControllerNew.appSelecionada)}">
+					
+					<h:outputLink 
+						value="#{imovelRuralControllerNew.caminhoGeoBahia}"
+						title="GEOBAHIA"
+						disabled="${imovelRuralControllerNew.visualizacaoApp}"
+						target="_blank">
+						<h:outputLabel value="DESENHAR NO GEOBAHIA" />
+						<f:param name="secao" value="cefir" />
+						<f:param name="acao" value="draw" />
+						<f:param name="id" value="#{imovelRuralControllerNew.imovelRural.ideImovelRural}" />
+						<f:param name="tema" value="3" />
+						<f:param name="sub_tema" value="#{imovelRuralControllerNew.appSelecionada.ideTipoApp.ideTipoApp}" />
+						<f:param name="cod" value="#{imovelRuralControllerNew.appSelecionada.codigoPersistirShape}" />
+						<f:param name="token" value="#{imovelRuralControllerNew.token}" />
+					</h:outputLink>
+				</h:panelGrid>
+
+				<h:panelGrid id="panelTheGeomApp"
+					rendered="#{imovelRuralControllerNew.getExisteTheGeomApp(imovelRuralControllerNew.appSelecionada)}" columns="1">
+					
+					<h:panelGrid id="panelAcoesVisualizarShapesApp" columns="3">
+						<h:outputLink 
+							value="#{imovelRuralControllerNew.caminhoGeoBahia}"
+							title="GEOBAHIA"
+							target="_blank">
+							<h:outputLabel value="VISUALIZAR SHAPE DA APP" />
+							<f:param name="secao" value="cefir" />
+							<f:param name="acao" value="view" />
+							<f:param name="id" value="#{imovelRuralControllerNew.imovelRural.ideImovelRural}" />
+							<f:param name="tema" value="3" />
+							<f:param name="sub_tema" value="#{imovelRuralControllerNew.appSelecionada.ideTipoApp.ideTipoApp}" />
+							<c:if test="#{!imovelRuralControllerNew.appSelecionada.ideLocalizacaoGeografica.novosArquivosShapeImportados}">
+								<f:param name="id_loc" value="#{imovelRuralControllerNew.appSelecionada.ideLocalizacaoGeografica.ideLocalizacaoGeografica}" />
+							</c:if>
+							<c:if test="#{imovelRuralControllerNew.appSelecionada.ideLocalizacaoGeografica.novosArquivosShapeImportados}">
+								<f:param name="cod" value="#{imovelRuralControllerNew.appSelecionada.codigoPersistirShape}" />
+							</c:if>
+							<f:param name="token" value="#{imovelRuralControllerNew.token}" />
+						</h:outputLink>
+						
+						<h:outputLink 
+							value="#{imovelRuralControllerNew.caminhoGeoBahia}"
+							title="GEOBAHIA"
+							target="_blank">
+							<h:graphicImage title="Visualizar" value="/resources/img/ico-arl-relocacao.png" />
+							<f:param name="secao" value="cefir" />
+							<f:param name="acao" value="view" />
+							<f:param name="id" value="#{imovelRuralControllerNew.imovelRural.ideImovelRural}" />
+							<f:param name="tema" value="3" />
+							<f:param name="sub_tema" value="#{imovelRuralControllerNew.appSelecionada.ideTipoApp.ideTipoApp}" />
+							<c:if test="#{!imovelRuralControllerNew.appSelecionada.ideLocalizacaoGeografica.novosArquivosShapeImportados}">
+								<f:param name="id_loc" value="#{imovelRuralControllerNew.appSelecionada.ideLocalizacaoGeografica.ideLocalizacaoGeografica}" />
+							</c:if>
+							<c:if test="#{imovelRuralControllerNew.appSelecionada.ideLocalizacaoGeografica.novosArquivosShapeImportados}">
+								<f:param name="cod" value="#{imovelRuralControllerNew.appSelecionada.codigoPersistirShape}" />
+							</c:if>
+							<f:param name="token" value="#{imovelRuralControllerNew.token}" />
+						</h:outputLink>
+						
+						<p:commandLink 
+							onclick="confirmaExclusaoGeometriaApp.show(); confirmaExclusaoGeometriaApp.content.parent().css('top',  '80px'); confirmaExclusaoGeometriaApp.content.parent().css('left',  '500px')"
+							process="@this"
+							disabled="${imovelRuralControllerNew.visualizacaoApp}">
+							<h:graphicImage title="Excluir" value="/resources/img/ico-excluir.png" />
+						</p:commandLink>
+					</h:panelGrid>
+				</h:panelGrid>
+			</h:panelGrid>
+
+			<h:panelGrid>
+				<p:commandButton id="btnSalvarApp"
+					value="#{bundle.btn_salvar}"
+					actionListener="#{imovelRuralControllerNew.salvarApp()}"
+					process="@form"
+					update="formCadImovelRural:tabAbasDadosEspecificos:pngDataTableApps"
+					rendered="${!imovelRuralControllerNew.visualizacaoApp}">
+				</p:commandButton>
+				
+				<p:commandButton id="btnFecharApp" 
+					value="Fechar"
+					onclick="dlgCadApp.hide()"
+					process="@this"
+					rendered="#{imovelRuralControllerNew.visualizacaoApp}">
+				</p:commandButton>
+			</h:panelGrid>
+		</h:panelGrid>
+		
+		<p:dialog id="dialogTermoRecuperacaoApp"
+			header="Condições para recuperação de áreas degradadas"
+			closable="true" 
+			draggable="true" 
+			resizable="false" 
+			width="600"
+			widgetVar="dialogTermoRecuperacaoApp" 
+			modal="false" 
+			height="300"
+			onShow="dialogTermoRecuperacaoApp.initPosition();">
+			
+			<h:panelGrid id="panelTermoApp" columns="1">
+				<h4>O Plano para recuperação de área degradada deverá conter:</h4>
+				<br />
+				<b>1.</b> Diagnóstico das áreas a serem recuperadas, contemplando os seguintes aspectos: caracterizando a, com análise dos seus aspectos físicos (clima, solo, topografia, recursos hídricos) e bióticos (fauna, flora) e outros<br />
+				<br />
+				&nbsp;&nbsp;&nbsp;&nbsp;a) Caracterização do fato gerador da degradação e/ou da sua ocupação atual<br />
+				&nbsp;&nbsp;&nbsp;&nbsp;b) Estado de conservação da área objeto do Plano com indicação de:<br />
+				<br />
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i) Condições do relevo, indicando ocorrência de erosão<br />
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ii) Condições do solo<br />
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;iii) Condições da cobertura vegetal<br />
+				<br />
+				&nbsp;&nbsp;&nbsp;&nbsp;c) Extensão da área a ser recuperada<br />
+				<br />
+	
+				<b>2.</b> Caracterização da fitofisionomia da região:<br />
+				<br />
+				&nbsp;&nbsp;&nbsp;&nbsp;a) Bioma<br />
+				&nbsp;&nbsp;&nbsp;&nbsp;b) Estado de conservação da vegetação do entorno<br />
+				&nbsp;&nbsp;&nbsp;&nbsp;c) Ocorrências relevantes, a exemplo de áreas que possam servir de porta sementes<br />
+				<br />
+	
+				<b>3.</b> Indicação do(s) Sistema(s) de Plantio de Espécies Nativas<br />
+				<br />
+				&nbsp;&nbsp;&nbsp;&nbsp;a) Implantação<br />
+				&nbsp;&nbsp;&nbsp;&nbsp;b) Enriquecimento<br />
+				&nbsp;&nbsp;&nbsp;&nbsp;c) Regeneração Natural<br />
+				<br />
+	
+				<b>4.</b> Descrição da metodologia para recuperação da área comtemplando os itens abaixo, conforme a necessidade.<br />
+				<br />
+				&nbsp;&nbsp;&nbsp;&nbsp;a) Correções topográficas<br />
+				&nbsp;&nbsp;&nbsp;&nbsp;b) Correções do solo<br />
+				&nbsp;&nbsp;&nbsp;&nbsp;c) Isolamento da Área<br />
+				&nbsp;&nbsp;&nbsp;&nbsp;d) Retirada dos fatores de degradação<br />
+				&nbsp;&nbsp;&nbsp;&nbsp;e) Técnica de plantio<br />
+				&nbsp;&nbsp;&nbsp;&nbsp;f) Preparação e espaçamento das covas<br />
+				&nbsp;&nbsp;&nbsp;&nbsp;g) Listagem de espécies a serem plantadas por categorias regenerativas (pioneiras, secundárias e tardias);<br />
+				&nbsp;&nbsp;&nbsp;&nbsp;h) Esquema do plantio por categoria regenerativa (distribuição das espécies)<br />
+				&nbsp;&nbsp;&nbsp;&nbsp;i) Manutenção, contemplando: controle de pragas, adubação ou irrigação, quando couber<br />
+				&nbsp;&nbsp;&nbsp;&nbsp;j) Implementação de equipamentos atrativos para a avifauna <br />
+				<br />
+	
+				O PRAD deve ser acompanhado da competente Anotação de Responsabilidade Técnica (ART), ou documento equivalente, do responsável pela elaboração, devidamente registrada no competente conselho de classe.
+				<br />
+				<br />
+				As áreas degradadas fora de APP e RL, deverão ser objetos de PRAD específico, com cronograma físico e execução máximo de 5 anos, em percentuais mínimos de 10% no primeiro ano, 25% no segundo ano, 50% no terceiro ano, 75% no quarto ano e 100% no quinto ano.
+				<br />
+				<br />
+			</h:panelGrid>
+		</p:dialog>
+		
+		<p:confirmDialog id="confirmaExclusaoCronogramaEtapaApp"
+			widgetVar="confirmaExclusaoCronogramaEtapaApp"
+			header="#{bundle.geral_lbl_mensagem}"
+			message="#{bundle.msg_confirma_exclusao}" 
+			appendToBody="true" severity="alert">
+		
+			<p:commandButton id="btnConfirmaExclusaoCronogramaEtapaApp"
+				value="#{bundle.btn_sim}"
+				action="#{imovelRuralControllerNew.excluirCronogramaEtapaApp()}"
+				update="panelTableCronogramaApp"
+				onclick="confirmaExclusaoCronogramaEtapaApp.hide();"
+				process="@this" />
+				
+			<p:commandButton 
+				value="#{bundle.btn_nao}" 
+				onclick="confirmaExclusaoCronogramaEtapaApp.hide()" />
+		</p:confirmDialog>
+		
+		<p:confirmDialog id="confirmaExclusaoDocumentoPradApp"
+			widgetVar="confirmaExclusaoDocumentoPradApp"
+			header="#{bundle.geral_lbl_mensagem}"
+			message="#{bundle.msg_confirma_exclusao}" 
+			appendToBody="true" 
+			severity="alert">
+			
+			<p:commandButton id="btnConfirmaExclusaoDocumentoPradApp"
+				value="#{bundle.btn_sim}"
+				action="${imovelRuralControllerNew.excluirDocumentoPrad(2)}"
+				update="panelArquivoPradApp" 
+				onclick="confirmaExclusaoDocumentoPradApp.hide()"
+				process="@this" />
+				
+			<p:commandButton 
+				value="#{bundle.btn_nao}" 
+				onclick="confirmaExclusaoDocumentoPradApp.hide()" />
+		</p:confirmDialog>
+		
+		<p:confirmDialog id="confirmaExclusaoArquivoShapeFileLocGeoApp"
+			widgetVar="confirmaExclusaoArquivoShapeFileLocGeoApp"
+			header="#{bundle.geral_lbl_mensagem}" 
+			message="#{bundle.msg_confirma_exclusao}"
+			appendToBody="true" 
+			severity="alert">
+			
+			<p:commandButton id="btnConfirmaExclusaoArquivoShapeFileLocGeoApp"
+				value="#{bundle.btn_sim}"
+				action="${imovelRuralControllerNew.excluirArquivo(3)}"
+				update="localizacaoGeograficaApp"
+				onclick="confirmaExclusaoArquivoShapeFileLocGeoApp.hide()"
+				process="@this" />
+				
+			<p:commandButton 
+				value="#{bundle.btn_nao}" 
+				onclick="confirmaExclusaoArquivoShapeFileLocGeoApp.hide()" />
+		</p:confirmDialog>
+		
+		<p:confirmDialog id="confirmaExclusaoArquivoShapeFileLocGeoPradApp"
+			widgetVar="confirmaExclusaoArquivoShapeFileLocGeoPradApp"
+			header="#{bundle.geral_lbl_mensagem}" 
+			message="#{bundle.msg_confirma_exclusao}"
+			appendToBody="true" 
+			severity="alert">
+			
+			<p:commandButton id="btnConfirmaExclusaoArquivoShapeFileLocGeoPradApp"
+				value="#{bundle.btn_sim}"
+				action="${imovelRuralControllerNew.excluirArquivo(23)}"
+				update="localizacaoGeograficaPradApp"
+				onclick="confirmaExclusaoArquivoShapeFileLocGeoPradApp.hide()"
+				process="@this" />
+				
+			<p:commandButton 
+				value="#{bundle.btn_nao}" 
+				onclick="confirmaExclusaoArquivoShapeFileLocGeoPradApp.hide()" />
+		</p:confirmDialog>
+
+		<p:confirmDialog id="confirmaExclusaoGeometriaApp"
+			widgetVar="confirmaExclusaoGeometriaApp"
+			header="#{bundle.geral_lbl_mensagem}" 
+			message="#{bundle.msg_confirma_exclusao}" 
+			appendToBody="true"
+			severity="alert">
+			
+			<p:commandButton id="btnConfirmaExclusaoGeometriaApp"
+				value="#{bundle.btn_sim}"
+				action="#{imovelRuralControllerNew.excluirShape(imovelRuralControllerNew.appSelecionada.ideLocalizacaoGeografica, 3)}"
+				update="formCadImovelRural:tabAbasDadosEspecificos:pngDataTableApps localizacaoGeograficaApp"
+				onclick="confirmaExclusaoGeometriaApp.hide()"
+				process="@this" />
+				
+			<p:commandButton 
+				value="#{bundle.btn_nao}" 
+				onclick="confirmaExclusaoGeometriaApp.hide()" />
+		</p:confirmDialog>
+		
+		<p:confirmDialog id="confirmaExclusaoGeometriaPradApp"
+			widgetVar="confirmaExclusaoGeometriaPradApp"
+			header="#{bundle.geral_lbl_mensagem}" 
+			message="#{bundle.msg_confirma_exclusao}" 
+			appendToBody="true"
+			severity="alert">
+			
+			<p:commandButton id="btnConfirmaExclusaoGeometriaPradApp"
+				value="#{bundle.btn_sim}"
+				action="#{imovelRuralControllerNew.excluirShape(imovelRuralControllerNew.appSelecionada.cronogramaRecuperacao.localizacaoGeografica, 23)}"
+				update="formCadImovelRural:tabAbasDadosEspecificos:pngDataTableApps localizacaoGeograficaPradApp"
+				onclick="confirmaExclusaoGeometriaPradApp.hide()"
+				process="@this" />
+				
+			<p:commandButton 
+				value="#{bundle.btn_nao}" 
+				onclick="confirmaExclusaoGeometriaPradApp.hide()" />
+		</p:confirmDialog>
+	</h:form>
+</ui:composition>

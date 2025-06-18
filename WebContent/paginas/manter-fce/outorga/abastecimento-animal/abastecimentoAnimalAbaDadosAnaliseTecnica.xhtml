@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui">
+
+	<h:outputText styleClass="titulo-grupo"
+		style="font-weight:bold; margin-left:5px;"
+		value="Captação Subterrânea" />
+	<p:dataTable id="capSupTabelaPontos" style="margin-left:5px; width: 400px;"
+		emptyMessage="#{bundle.msg_lista_vazia}"
+		value="#{fceDessedentacaoAnimalController.listaFceOutorgaLocalizacaoGeograficaCapSub}"
+		var="fceOutorgaLocGeo">
+		<p:column headerText="Latitude" style="text-align:center;">
+			<h:outputText
+				value="#{fceOutorgaLocGeo.latitude}" />
+		</p:column>
+
+		<p:column headerText="Longitude" style="text-align:center;">
+			<h:outputText
+				value="#{fceOutorgaLocGeo.longitude}" />
+		</p:column>
+
+		<p:column style="text-align:center;">
+			<f:facet name="header">
+ 	 			Sistema de Coordenada
+	 		</f:facet>
+			<h:outputText
+				value="#{fceOutorgaLocGeo.sistemaCoordenada}" />
+		</p:column>
+
+		<p:column headerText="Bacia Hidrográfica" id="bacia">
+			<h:outputText
+				value="#{fceOutorgaLocGeo.bacia}" />
+		</p:column>
+
+		<p:column headerText="Sub-Bacia" id="subBacia">
+			<h:outputText
+				value="#{fceOutorgaLocGeo.subBacia}" />
+		</p:column>
+
+		<p:column headerText="RPGA" id="rpga"
+			style="text-align:center; width:165px;">
+			<h:outputText
+				value="#{fceOutorgaLocGeo.rpga}" />
+		</p:column>
+
+		<p:column headerText="Ações" style="text-align:center;">
+			<a
+				onclick="javascript:${localizacaoGeograficaGenericController.retornarUrl(fceOutorgaLocGeo.ideLocalizacaoGeografica)}">
+				<h:graphicImage title="Localização do Ponto no Geobahia"
+					value="/resources/img/ico-arl-relocacao.png" />
+			</a>
+		</p:column>
+	</p:dataTable>
+	<!-- FIM DA DATATABLE COM OS PONTOS Subterranea-->
+
+	<br />
+	<br />
+
+	<h:outputText styleClass="titulo-grupo"
+		style="font-weight:bold; margin-left:5px;"
+		value="Captação Superficial" />
+	<p:dataTable id="tabelaCapSuperficial" style="margin-left:5px; width: 400px;"
+		emptyMessage="#{bundle.lac_dadosGerais_msg007}"
+		value="#{fceDessedentacaoAnimalController.listaFceOutorgaLocalizacaoGeograficaCapSup}"
+		var="fceOutorgaLocGeo">
+		<p:column headerText="Latitude" style="text-align:center;">
+			<h:outputText
+				value="#{fceOutorgaLocGeo.latitude}" />
+		</p:column>
+
+		<p:column headerText="Longitude" style="text-align:center;">
+			<h:outputText
+				value="#{fceOutorgaLocGeo.longitude}" />
+		</p:column>
+
+		<p:column style="text-align:center;">
+			<f:facet name="header">
+		   		Sistema de Coordenada
+		  	</f:facet>
+			<h:outputText
+				value="#{fceOutorgaLocGeo.sistemaCoordenada}" />
+		</p:column>
+
+		<p:column headerText="Bacia Hidrográfica" id="bacia">
+			<h:outputText
+				value="#{fceOutorgaLocGeo.bacia}" />
+		</p:column>
+
+		<p:column headerText="Sub-Bacia" id="subBacia">
+			<h:outputText
+				value="#{fceOutorgaLocGeo.subBacia}" />
+		</p:column>
+
+		<p:column headerText="RPGA" id="rpga"
+			style="text-align:center; width:165px;">
+			<h:outputText
+				value="#{fceOutorgaLocGeo.rpga}" />
+		</p:column>
+		
+		<p:column id="rio" headerText="Rio" 
+			style="text-align:center; width:110px;" >
+			<p:inputText value="#{fceOutorgaLocGeo.nomRio}" 
+				disabled="#{fceOutorgaLocGeo.confirmado or fceDessedentacaoAnimalController.desabilitarTudo}" 
+				style="width:100px;" 
+				maxlength="80" 
+				title="Informe o nome popular do rio">
+				<p:ajax event="blur" global="false"/>
+			</p:inputText>
+ 		</p:column>
+
+		<p:column headerText="Ações" style="text-align:center;">
+			<a
+				onclick="javascript:${localizacaoGeograficaGenericController.retornarUrl(fceOutorgaLocGeo.ideLocalizacaoGeografica)}">
+				<h:graphicImage title="Localização do Ponto no Geobahia"
+					value="/resources/img/ico-arl-relocacao.png" />
+			</a>
+		</p:column>
+	</p:dataTable>
+	<!-- FIM DA DATATABLE COM OS PONTOS Superficial-->
+</ui:composition>

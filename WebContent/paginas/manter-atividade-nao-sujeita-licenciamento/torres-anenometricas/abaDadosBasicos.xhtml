@@ -1,0 +1,342 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui"
+	xmlns:s="http://java.sun.com/jsf/composite/seia">
+
+
+<h:panelGrid id="pnlDadosBasicos" style="width: 100%;">
+	<h:panelGrid columns="3">
+		<h:outputText value="#{bundle.geral_lbl_empreendimento}">:</h:outputText>
+		<p:inputText id="inputEmpreendimento" name="inputEmpreendimento"
+			value="#{torresAnemometricasController.cadastro.ideEmpreendimento.nomEmpreendimento}" disabled="true"></p:inputText>
+            <p:commandLink onclick="dialogSelecionarEmpreendimento.show();" disabled="#{torresAnemometricasController.visualizacao}">
+                <h:graphicImage title="Pesquisar" value="/resources/img/ico-pesquisa.png" />
+                <f:setPropertyActionListener value="#{torresAnemometricasController.pessoaRequerente}" target="#{selecionarEmpreendimentoController.requerente}" />
+                <f:setPropertyActionListener value="#{torresAnemometricasController.telaDestinoEnum}" target="#{selecionarEmpreendimentoController.destinoEnum}" />
+            </p:commandLink>
+	</h:panelGrid>
+
+	<!-- Dados do requerente -->
+	<h:panelGroup style="margin-bottom:20px">
+		<fieldset>
+			<legend>#{bundle.geral_lbl_dados_requerente}</legend>
+			<h:panelGrid columns="2">
+				<h:panelGrid columns="2">
+					<h:outputLabel value="#{bundle.geral_lbl_razao_social}:" rendered="#{torresAnemometricasController.requerentePessoaJuridica}"/>
+					<h:outputLabel value="#{bundle.geral_lbl_nome}" rendered="#{!torresAnemometricasController.requerentePessoaJuridica}"/>
+					<h:outputText value="#{torresAnemometricasController.pessoaRequerente.nomeRazao}" />
+				</h:panelGrid>
+
+				<h:panelGrid columns="2">
+					<h:outputLabel value="#{bundle.geral_lbl_cnpj}:" rendered="#{torresAnemometricasController.requerentePessoaJuridica}"/>
+					<h:outputLabel value="#{bundle.geral_lbl_cpf}:" rendered="#{!torresAnemometricasController.requerentePessoaJuridica}"/>
+					<h:outputText  value="#{torresAnemometricasController.pessoaRequerente.cpfCnpj}" converter="cnpjConverter"
+						rendered="#{torresAnemometricasController.requerentePessoaJuridica}"/>
+					<h:outputText  value="#{torresAnemometricasController.pessoaRequerente.cpfCnpj}" converter="cpfConverter"
+						rendered="#{!torresAnemometricasController.requerentePessoaJuridica}"/>
+				</h:panelGrid>
+			</h:panelGrid>
+            
+            <!-- Dados de Incrição -->
+			<h:panelGrid columns="2" rendered="#{torresAnemometricasController.requerentePessoaJuridica}">
+				<h:panelGrid columns="2">
+					<h:outputLabel value="#{bundle.lbl_inscricao_estadual}:" />
+					<h:outputText value="#{torresAnemometricasController.pessoaJuridicaRequerente.numInscricaoEstadual}" />
+				</h:panelGrid>
+
+				<h:panelGrid columns="2">
+					<h:outputLabel value="#{bundle.lbl_inscricao_municipal}:" />
+					<h:outputText value="#{torresAnemometricasController.pessoaJuridicaRequerente.numInscricaoMunicipal}" />
+				</h:panelGrid>
+			</h:panelGrid>
+
+            <!-- Endereço -->
+			<h:panelGrid columns="2">
+				<h:panelGrid columns="2">
+					<h:outputLabel value="#{bundle.geral_lbl_endereco}:" />
+					<h:outputText value="#{torresAnemometricasController.pessoaRequerente.endereco.enderecoBasicoFormatado}" />
+				</h:panelGrid>
+
+				<h:panelGrid columns="2">
+					<h:outputLabel value="#{bundle.geral_lbl_bairro}:" />
+					<h:outputText value="#{torresAnemometricasController.pessoaRequerente.endereco.ideLogradouro.ideBairro.nomBairro}" />
+				</h:panelGrid>
+			</h:panelGrid>
+
+			<h:panelGrid columns="2">
+				<h:panelGrid columns="2">
+					<h:outputLabel value="#{bundle.geral_lbl_cidade}:" />
+					<h:outputText value="#{torresAnemometricasController.pessoaRequerente.endereco.ideLogradouro.ideBairro.ideMunicipio.nomMunicipio}" />
+				</h:panelGrid>
+
+				<h:panelGrid columns="2">
+					<h:outputLabel value="#{bundle.geral_lbl_estado}:" />
+					<h:outputText value="#{torresAnemometricasController.pessoaRequerente.endereco.ideLogradouro.ideBairro.ideMunicipio.ideEstado.nomEstado}" />
+				</h:panelGrid>
+			</h:panelGrid>
+
+
+			<h:panelGrid columns="2">
+				<h:panelGrid columns="2">
+					<h:outputLabel value="#{bundle.geral_lbl_cep}:" />
+					<h:outputText value="#{torresAnemometricasController.pessoaRequerente.endereco.ideLogradouro.numCepFormatado}" />
+				</h:panelGrid>
+
+				<h:panelGrid columns="2">
+					<h:outputLabel value="#{bundle.telefoneLabelCabecalho}:" />
+					<p:dataList id="dataTelefonesRequerente" value="#{torresAnemometricasController.pessoaRequerente.telefoneCollection}" var="tel" type="ordered" styleClass="no-border">
+                            <h:outputText value="#{tel.ideTipoTelefone.nomTipoTelefone}: #{tel.numTelefone}" />
+                    </p:dataList>
+				</h:panelGrid>
+			</h:panelGrid>
+
+			<h:panelGrid columns="2">
+				<h:panelGrid columns="2">
+					<h:outputLabel value="#{bundle.lbl_email}:" />
+					<h:outputText value="#{torresAnemometricasController.pessoaRequerente.desEmail}" />
+				</h:panelGrid>
+
+				<!-- <h:panelGrid columns="2">
+					<h:outputLabel value="#{bundle.lbl_fax}:" />
+					<h:outputText value="" />
+				</h:panelGrid> -->
+			</h:panelGrid>
+            
+            <p:spacer height="10"/>
+            <h:panelGrid columns="1" rendered="#{torresAnemometricasController.requerentePessoaJuridica}">
+			     <h:outputText value="#{bundle.lbl_representantes_legais}:"
+				style="font-weight:bold" />
+		      </h:panelGrid>
+			<!-- <p:repeat value="#{dataListView.cars1}" var="car"> -->
+			<h:panelGrid columns="3" rendered="#{torresAnemometricasController.requerentePessoaJuridica}">
+                <p:dataList id="listReplegal" value="#{torresAnemometricasController.pessoaJuridicaRequerente.representanteLegalCollection}" var="replegal" type="ordered" styleClass="no-border">
+                     <h:outputText value="#{bundle.geral_lbl_nome} #{replegal.idePessoaFisica.nomPessoa}" />
+                     <h:outputText value="#{bundle.lbl_email}: #{replegal.idePessoaFisica.pessoa.desEmail}" style="margin-left:5px;"/>
+                     <p:dataList id="dataTelefonesRepresentates" value="#{replegal.idePessoaFisica.pessoa.telefoneCollection}" var="tel" type="ordered" styleClass="no-border">
+                         <h:outputText value="#{tel.ideTipoTelefone.nomTipoTelefone}: #{tel.numTelefone}" />
+                     </p:dataList>
+                 </p:dataList>
+
+			</h:panelGrid>
+			<!-- </p:repeat> -->
+
+		</fieldset>
+
+	</h:panelGroup>
+
+    <p:spacer height="20"/>
+	<!-- Dados do empreendimento -->
+	
+	<h:panelGroup style="margin-bottom:20px"  rendered="#{torresAnemometricasController.empreendimentoSelecionado}">
+		<fieldset>
+               <legend>#{bundle.geral_lbl_dados_empreendimento}</legend>
+               
+			<h:panelGrid columns="2">
+				<h:panelGrid columns="2">
+					<h:outputLabel value="#{bundle.lbl_nome}: " />
+					<h:outputText value="#{torresAnemometricasController.cadastro.ideEmpreendimento.nomEmpreendimento}" />
+				</h:panelGrid>
+
+				<h:panelGrid columns="2">
+				</h:panelGrid>
+			</h:panelGrid>
+
+			<h:panelGrid columns="2">
+				<h:panelGrid columns="2">
+					<h:outputLabel value="#{bundle.geral_lbl_endereco}:" />
+					<h:outputText value="#{torresAnemometricasController.cadastro.ideEmpreendimento.endereco.enderecoBasicoFormatado}" />
+				</h:panelGrid>
+
+				<h:panelGrid columns="2">
+					<h:outputLabel value="#{bundle.geral_lbl_bairro}:" />
+					<h:outputText  value="#{torresAnemometricasController.cadastro.ideEmpreendimento.endereco.ideLogradouro.ideBairro.nomBairro}" />
+				</h:panelGrid>
+			</h:panelGrid>
+
+			<h:panelGrid columns="2">
+				<h:panelGrid columns="2">
+					<h:outputLabel value="#{bundle.geral_lbl_cidade}:" />
+					<h:outputText value="#{torresAnemometricasController.cadastro.ideEmpreendimento.endereco.ideLogradouro.ideMunicipio.nomMunicipio}" />
+				</h:panelGrid>
+
+				<h:panelGrid columns="2">
+					<h:outputLabel value="#{bundle.geral_lbl_estado}:" />
+					<h:outputText value="#{torresAnemometricasController.cadastro.ideEmpreendimento.endereco.ideLogradouro.ideMunicipio.ideEstado.nomEstado}" />
+				</h:panelGrid>
+			</h:panelGrid>
+
+			<h:panelGrid columns="2">
+				<h:panelGrid columns="2">
+					<h:outputLabel value="#{bundle.geral_lbl_cep}:" />
+					<h:outputText value="#{torresAnemometricasController.cadastro.ideEmpreendimento.endereco.ideLogradouro.numCepFormatado}" />
+				</h:panelGrid>
+
+				<h:panelGrid columns="2">
+				</h:panelGrid>
+			</h:panelGrid>
+			
+			<p:spacer height="10"/>
+			
+			        <!--  RESPONSÁVEL TÉCNICO -->           
+                <h:panelGrid id="gridResponsavelTecnico">
+                   <h:outputText value="#{bundle.lbl_responsavel_tecnico}"  style="font-weight:bold"/>
+                    <p:dataTable id="tableResponsavelTecnico" 
+                        widgetVar="tableResponsavelTecnico" 
+                        value="#{torresAnemometricasController.cadastro.ideEmpreendimento.responsavelEmpreendimentoCollection}" 
+                        var="respTecnico" 
+                        emptyMessage="#{bundle.msg_lista_vazia}"
+                        style="width:400px;">
+                        <p:column headerText="#{bundle.lbl_nome}">
+                            <h:outputText value="#{respTecnico.idePessoaFisica.nomPessoa}" />
+                        </p:column>
+                        <p:column headerText="#{bundle.lbl_acao}">
+                            <p:selectBooleanCheckbox value="#{respTecnico.selecionado}" 
+                                style="margin-left:17px;" disabled="#{torresAnemometricasController.visualizacao}">
+                                <p:ajax event="change"  listener="#{torresAnemometricasController.detalharRepresentanteTecnico(respTecnico)}" update="formRmpreendimentos:tabViewCadastroTorres:gridListReponsavelTecnico" />
+                            </p:selectBooleanCheckbox>
+                        </p:column>
+                    </p:dataTable>
+                </h:panelGrid>     
+			
+			     <p:spacer height="10"/>
+			     
+			     <!-- Detalhamento dos responsáveis técnicos -->
+               <h:panelGrid id="gridListReponsavelTecnico" columns="2">
+                <p:dataList id="listResponsavelTecnico" value="#{torresAnemometricasController.responsavelEmpreendimento}" var="responsavel" type="ordered" styleClass="no-border">
+                <h:panelGrid columns="2">
+                    <h:panelGrid  columns="1">
+                        <h:outputText value="#{bundle.geral_lbl_nome} #{responsavel.idePessoaFisica.nomPessoa}" />
+                    </h:panelGrid>
+                    
+                    <h:panelGrid  columns="1">
+                    
+                    </h:panelGrid>
+                </h:panelGrid>
+                
+                
+                <h:panelGrid columns="2">
+                
+                    <h:panelGrid  columns="2">
+                        #{bundle.geral_lbl_cpf}: <h:outputText value="#{responsavel.idePessoaFisica.numCpf}" converter="cpfConverter" />
+                    </h:panelGrid>
+                    
+                </h:panelGrid>
+                    
+	
+	            <!-- Endereço -->
+	            <h:panelGrid columns="2">
+	                <h:panelGrid columns="2">
+	                    <h:outputLabel value="#{bundle.geral_lbl_endereco}:" />
+	                    <h:outputText value="#{responsavel.idePessoaFisica.pessoa.endereco.enderecoBasicoFormatado}" />
+	                </h:panelGrid>
+	
+	                <h:panelGrid columns="2">
+	                    <h:outputLabel value="#{bundle.geral_lbl_bairro}:" />
+	                    <h:outputText value="#{responsavel.idePessoaFisica.pessoa.endereco.ideLogradouro.ideBairro.nomBairro}" />
+	                </h:panelGrid>
+	            </h:panelGrid>
+	
+	            <h:panelGrid columns="2">
+	                <h:panelGrid columns="2">
+	                    <h:outputLabel value="#{bundle.geral_lbl_cidade}:" />
+	                    <h:outputText value="#{responsavel.idePessoaFisica.pessoa.endereco.ideLogradouro.ideBairro.ideMunicipio.nomMunicipio}" />
+	                </h:panelGrid>
+	
+	                <h:panelGrid columns="2">
+	                    <h:outputLabel value="#{bundle.geral_lbl_estado}:" />
+	                    <h:outputText value="#{responsavel.idePessoaFisica.pessoa.endereco.ideLogradouro.ideBairro.ideMunicipio.ideEstado.nomEstado}" />
+	                </h:panelGrid>
+	            </h:panelGrid>
+	
+	
+	            <h:panelGrid columns="2">
+	                <h:panelGrid columns="2">
+	                    <h:outputLabel value="#{bundle.geral_lbl_cep}:" />
+	                    <h:outputText value="#{responsavel.idePessoaFisica.pessoa.endereco.ideLogradouro.numCepFormatado}" />
+	                </h:panelGrid>
+	
+	                <h:panelGrid columns="2">
+	                    <h:outputLabel value="#{bundle.telefoneLabelCabecalho}:" />
+	                    <p:dataList id="dataTelefonesResposavelTecnico" value="#{responsavel.idePessoaFisica.pessoa.telefoneCollection}" var="tel" type="ordered" styleClass="no-border">
+	                            <h:outputText value="#{tel.ideTipoTelefone.nomTipoTelefone}: #{tel.numTelefone}" />
+	                    </p:dataList>
+	                </h:panelGrid>
+	            </h:panelGrid>
+                    
+                 </p:dataList>
+
+            </h:panelGrid>
+            
+			<h:panelGrid rendered="#{torresAnemometricasController.existeImovelRural()}">
+				<h:outputText value="#{bundle.perg_imovel_cefir}"
+					style="font-weight:bold" />
+				<p:selectOneRadio id="temResponsavelTecnico" value="#{torresAnemometricasController.cadastro.indPossuiCefir}" 
+					disabled="#{torresAnemometricasController.visualizacao}">
+					<f:selectItem itemLabel="Sim" itemValue="#{true}" />
+					<f:selectItem itemLabel="Não" itemValue="#{false}" />
+					<p:ajax event="change"/>
+				</p:selectOneRadio>
+			</h:panelGrid>
+			
+			<p:spacer height="10"/>
+			
+			<h:panelGrid id="gridImovelRural"  rendered="#{torresAnemometricasController.existeImovelRural()}" >
+			<h:panelGrid>
+				<h:outputText value="*#{bundle.lbl_imoveis_rurais}"
+					style="font-weight:bold"  />
+				
+			<p:spacer height="10"/>
+                
+                <p:commandLink ajax="true" oncomplete="dialogIncluirImovelRural.show()" 
+                   process="@this"  update=":pnlDadosBasicos" immediate="true" 
+                   disabled="#{torresAnemometricasController.visualizacao}"> 
+                   
+	                <h:graphicImage title="#{bundle.txt_incluir_imovel_rural}" value="/resources/img/ico-expandir.png" />
+	                    <f:setPropertyActionListener target="#{empreendimentoController.urlOrigem}" value="/paginas/manter-atividade-nao-sujeita-licenciamento/torres-anenometricas/abaDadosBasicos.xhtml"  />
+	                <h:outputText value="#{bundle.txt_incluir_imovel_rural}" style="font-size: 11px;"/>
+                </p:commandLink>
+                
+                <!-- DataTable Imoveis Rurais -->
+                <p:spacer height="10"/>
+				<p:dataTable id="dataTableImoveisRurais" var="imovel" 
+					value="#{torresAnemometricasController.listaImoveis}" lazy="true"
+					paginator="true" rows="8" paginatorPosition="bottom"
+					paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}"
+					emptyMessage="#{bundle.geral_msg_empty_list}"
+					widgetVar="dataTableImoveisRurais" style="width: 680px;">
+					<p:column headerText="#{bundle.lbl_nome_imovel}" 
+						style="text-align:center;" >
+						<h:outputText value="#{imovel.nomeImovelRural}" />
+					</p:column>
+
+					<p:column headerText="#{bundle.lbl_num_car}">
+						  <h:outputText value="#{imovel.imovelRural.imovelRuralSicar.numSicar}" /> 
+					</p:column>
+					
+					<p:column headerText="Ações">
+						<p:commandLink id="linkExclusaoImovel" rendered="#{torresAnemometricasController.podeExcluir(imovel)}" 
+						onclick="confirmarExclusaoImovel.show()" disabled="#{torresAnemometricasController.visualizacao}">
+							<h:graphicImage value="/resources/img/ico-excluir.png" title="Excluir" process="@this"/>
+							<f:setPropertyActionListener value="#{imovel}" target="#{torresAnemometricasController.imovelExclusao}" />
+						</p:commandLink>
+					</p:column>
+				</p:dataTable>
+			</h:panelGrid>
+
+</h:panelGrid>
+		</fieldset>
+	</h:panelGroup>
+	
+	   <h:panelGrid columns="1" style="width:100%;text-align:center">
+
+        <p:commandButton title="#{bundle.geral_lbl_avancar}"
+            value="#{bundle.geral_lbl_avancar}"
+            update="tabViewCadastroTorres" 
+            action="#{torresAnemometricasController.avancarAba()}" process="@this" styleClass="right" />
+    </h:panelGrid>
+</h:panelGrid>
+</html>

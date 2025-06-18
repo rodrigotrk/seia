@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui">
+
+	<h:form id="formRecomendacao">
+		<h:panelGrid id="pnlRecomendacao">
+			<h:outputLabel value="Recomendações" style="font-weight:bold;" />
+			<ul>
+				<ui:repeat var="recomendacao" value="#{declaracaoInexigibilidadeController.listaRecomendacao}">
+					<li><h:outputText value="* #{recomendacao.recomendacaoInexigibilidade.desRecomendacaoInexigibilidade}" /></li><br/>
+				</ui:repeat>
+			</ul>
+		</h:panelGrid>
+		<h:panelGrid columns="2" id="pnlCiencia">
+			<p:selectBooleanCheckbox value="#{declaracaoInexigibilidadeController.declaracaoInexigibilidade.indCienteRecomendacao}"
+				disabled="#{!declaracaoInexigibilidadeController.permiteEditar}"/>
+			<h:outputText value="Ciente" />
+		</h:panelGrid>
+		
+		<p:outputPanel id="pnlFuncoesAdicional">
+		<p:commandButton actionListener="#{declaracaoInexigibilidadeController.voltar()}" value="Voltar" image="ui-icon-arrowthick-1-w">
+			<f:setPropertyActionListener value="false" target="#{declaracaoInexigibilidadeController.permiteSalvar}"/>
+		</p:commandButton>
+		<p:commandButton action="#{declaracaoInexigibilidadeController.prepararFinalizar}" value="Finalizar" 
+			style="float:right; margin-left:5px;" 
+			disabled="#{empty declaracaoInexigibilidadeController.listaAtividadeSelecionada or !declaracaoInexigibilidadeController.permiteEditar}"/>
+		</p:outputPanel>
+	</h:form>
+	
+	<br/><br/>
+		
+</ui:composition>

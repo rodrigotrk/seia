@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui">
+	
+	<p:outputPanel id="listaIntervencao"
+					   rendered="#{imovelRuralControllerNew.imovelRural.indIntervencao}">
+			<h:panelGrid id="tabelaIntervencao" columns="1">
+				<h:panelGroup>
+										
+					<p:commandButton value="#{bundle.empreendimento_lbl_incluir_ponto_intervencao}"
+									 action="#{imovelRuralControllerNew.inicializarObjetosUsoAgua(4)}"
+									 oncomplete="dlgIntervencao.show()" 
+									 process="@this"
+									 update="formDlgPontoIntervencao">
+									 <f:setPropertyActionListener target="#{imovelRuralControllerNew.visualizarUsoAgua}"
+																 value="false" />
+					</p:commandButton>
+				</h:panelGroup>
+
+			<h:panelGrid id="panelTableIntervencao" columns="2">
+				<p:dataTable id="tableIntervencao" style="width:520px;" value="#{imovelRuralControllerNew.getListUsoAgua(4)}"
+					widgetVar="tableParticipacaoAcionaria" var="intervencao" paginator="true" rows="10" paginatorAlwaysVisible="false"
+					emptyMessage="#{bundle.cefir_msg_A012}" paginatorPosition="bottom">
+
+					<p:column headerText="#{bundle.novoRequerimneto_lbl_localizacaoGeografica}">
+						<h:outputText value="#{imovelRuralControllerNew.obterPontoFormatado(intervencao)}" />
+					</p:column>
+					
+					<p:column headerText="#{bundle.lbl_acao}">
+						<h:panelGrid columns="2">
+							<p:commandLink oncomplete="dlgIntervencao.show();" title="#{bundle.geral_lbl_visualizar}" process="@this"
+								action="#{imovelRuralControllerNew.prepararParaEdicaoImovelRuralUsoAgua(intervencao)}" update="formDlgPontoIntervencao">
+								
+								<f:setPropertyActionListener target="#{imovelRuralControllerNew.visualizarUsoAgua}" value="true" />
+								<h:graphicImage title="#{bundle.geral_lbl_visualizar}" value="/resources/img/ico-pesquisa.png" />
+							</p:commandLink>
+	
+							<h:outputLink value="#{imovelRuralControllerNew.caminhoDesenharGeoBahia}" target="_blank" title="GEOBAHIA" style="margin-left:5px;">
+								<h:graphicImage title="#{bundle.geral_lbl_visualizar}" value="/resources/img/ico-arl-relocacao.png" />
+								<f:param name="xy" value="#{imovelRuralControllerNew.obterLatLongPorLocGeo(false,false,intervencao.ideLocalizacaoGeografica)}" />
+							</h:outputLink>
+	
+							<p:commandLink oncomplete="dlgIntervencao.show()" title="#{bundle.btn_editar}" update="formDlgPontoIntervencao" process="@this" 
+								action="#{imovelRuralControllerNew.prepararParaEdicaoImovelRuralUsoAgua(intervencao)}">
+								
+								<f:setPropertyActionListener target="#{imovelRuralControllerNew.visualizarUsoAgua}" value="false" />
+								<h:graphicImage title="#{bundle.btn_editar}" value="/resources/img/ico-editar.png" />
+							</p:commandLink>
+							
+							<p:commandLink oncomplete="confirmationExclusao.show()" title="#{bundle.btn_excluir}" process="@this" ajax="true" style="margin-left:5px;">
+								<f:setPropertyActionListener target="#{imovelRuralControllerNew.imovelRuralUsoAgua}" value="#{intervencao}" />
+								<h:graphicImage title="#{bundle.btn_excluir}" value="/resources/img/ico-excluir.png" />
+							</p:commandLink>
+						</h:panelGrid>
+					</p:column>
+				</p:dataTable>
+			</h:panelGrid>
+		</h:panelGrid>
+	</p:outputPanel>
+</ui:composition>

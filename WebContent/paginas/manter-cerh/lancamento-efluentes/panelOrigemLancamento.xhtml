@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui">
+
+
+	<h:panelGroup layout="block" styleClass="manyCheckColumns">
+		<p:selectManyCheckbox  
+			disabled="#{cerhController.abaLancamentoEfluentes.dto.caracterizacaoDTO.visualizacao}"
+			converter="simpleEntityConverter"
+			layout="pageDirection"
+			value="#{cerhController.abaLancamentoEfluentes.dto.caracterizacaoDTO.tipoFinalidadeUsoAguaCollection}"
+			valueChangeListener="#{cerhController.abaLancamentoEfluentes.changeCerhCaptacaoCaracterizacaoFinalidadeCollection()}"
+			var="tipoFinalidadeUsoAgua">
+			
+			<f:selectItems 
+	    		value="#{cerhController.abaLancamentoEfluentes.tipoFinalidadeUsoAguaCollection}" 
+	    		var="finalidade"
+	    		itemValue="#{finalidade}"
+	    		itemLabel="#{finalidade.nomTipoFinalidadeUsoAgua}"/>
+			
+			<p:ajax  
+				event="change"
+				process="@this" 
+				update="formLancamentoEfluentes:panelEsgotamentoSanitario,formLancamentoEfluentes:panelOutros"
+				/>
+			
+		</p:selectManyCheckbox>
+	</h:panelGroup>
+
+</ui:composition>

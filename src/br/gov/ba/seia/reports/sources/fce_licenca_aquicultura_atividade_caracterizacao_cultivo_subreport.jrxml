@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="fce_licenca_aquicultura_atividade_caracterizacao_cultivo" pageWidth="495" pageHeight="802" columnWidth="495" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" isIgnorePagination="true" uuid="80b78396-35cc-4e26-aaf9-1207b1892468">
+	<property name="ireport.zoom" value="2.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String"/>
+	<parameter name="ide_fce_aquicultura_licenca" class="java.lang.Integer"/>
+	<parameter name="ide_tipo_aquicultura" class="java.lang.Integer"/>
+	<parameter name="ide_aquicultura_tipo_atividade" class="java.lang.Integer"/>
+	<queryString>
+		<![CDATA[SELECT falta.ide_fce_aquicultura_licenca_tipo_atividade
+
+FROM fce_aquicultura_licenca_tipo_atividade falta
+
+INNER JOIN especie_aquicultura_tipo_atividade eat ON eat.ide_especie_aquicultura_tipo_atividade = falta.ide_especie_aquicultura_tipo_atividade
+
+WHERE falta.ide_fce_aquicultura_licenca = $P{ide_fce_aquicultura_licenca}
+AND falta.ide_tipo_aquicultura = $P{ide_tipo_aquicultura}
+AND eat.ide_aquicultura_tipo_atividade = $P{ide_aquicultura_tipo_atividade}]]>
+	</queryString>
+	<field name="ide_fce_aquicultura_licenca_tipo_atividade" class="java.lang.Integer"/>
+	<detail>
+		<band height="22" splitType="Stretch">
+			<subreport>
+				<reportElement uuid="86edcee7-f08c-4687-8386-967aefbc5f3a" x="0" y="0" width="495" height="22" isPrintInFirstWholeBand="true"/>
+				<subreportParameter name="SUBREPORT_DIR">
+					<subreportParameterExpression><![CDATA[$P{SUBREPORT_DIR}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="ide_fce_aquicultura_licenca_tipo_atividade">
+					<subreportParameterExpression><![CDATA[$F{ide_fce_aquicultura_licenca_tipo_atividade}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} +"fce_licenca_aquicultura_atividade_caracterizacao_cultivo.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+	</detail>
+</jasperReport>

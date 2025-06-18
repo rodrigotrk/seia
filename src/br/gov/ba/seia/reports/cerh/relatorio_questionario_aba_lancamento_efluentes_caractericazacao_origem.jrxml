@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="relatorio_questionario_aba_lancamento_efluentes_caractericazacao_origem" language="java" pageWidth="555" pageHeight="802" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="3c066b93-5252-4930-9597-c50da2dd3802">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="IDE_CERH_LANCAMENTO_EFLUENTE_CARACTERIZACAO" class="java.lang.Integer"/>
+	<queryString>
+		<![CDATA[select
+	tfua.nom_tipo_finalidade_uso_agua
+from
+	cerh_lancamento_caracterizacao_origem clco
+inner join tipo_finalidade_uso_agua tfua on  tfua.ide_tipo_finalidade_uso_agua = clco.ide_tipo_finalidade_uso_agua
+where clco.ide_cerh_lancamento_efluente_caracterizacao in ( $P{IDE_CERH_LANCAMENTO_EFLUENTE_CARACTERIZACAO} )
+order by tfua.nom_tipo_finalidade_uso_agua]]>
+	</queryString>
+	<field name="nom_tipo_finalidade_uso_agua" class="java.lang.String"/>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement uuid="9d82273b-8919-42fb-8921-a718367f5779" x="0" y="0" width="300" height="20"/>
+				<box topPadding="3" leftPadding="5">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement/>
+				<textFieldExpression><![CDATA["[x] " + $F{nom_tipo_finalidade_uso_agua}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

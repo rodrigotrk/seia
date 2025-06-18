@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui"
+	xmlns:s="http://java.sun.com/jsf/composite/seia">
+	
+	
+	<h:form id="formAbaEnergiaEolica">
+		
+		<p:outputPanel rendered="#{fceGeracaoEnergiaController.renderedEnergiaEolica}">
+			<h:outputText value="Parque(s) Eólico(s)" style="font-weight: bold;"/>
+			<div class="line"/>
+			<br/><br/>
+			
+			<p:commandLink process="@this" action="#{fceGeracaoEnergiaController.iniciarFceEnergiaEolicaParque}" onsuccess="incluirParqueEolico.show()" update="formIncParqueEolico"
+				disabled="#{fceGeracaoEnergiaController.desabilitarTudo}">
+				<h:graphicImage title="Incluir Parque Eólico" value="/resources/img/ico-expandir.png" style="margin-left: 2px;"/>
+				<h:outputText value="Incluir Parque Eólico" />
+			</p:commandLink>
+				
+			<br/><br/>
+			<p:dataTable emptyMessage="Não existe nenhum Parque Eólico cadastrado." id="listaEnergiaEolicaParque" rows="5" var="parque"
+			value="#{fceGeracaoEnergiaController.listaEnergiaEolicaParque}" paginator="true" paginatorPosition="bottom" paginatorAlwaysVisible="false">
+				<p:column headerText="Identificação" style="width: 400px; text-align:center;">
+					<h:outputText value="#{parque.desIdentificadorParque}" />
+				</p:column>
+				<p:column headerText="Área" style="text-align:center;">
+					<h:outputText value="#{parque.localizacaoGeografica.vlrArea}">
+						<f:convertNumber type="number" groupingUsed="true" minFractionDigits="2" pattern="#0.0000"/>
+					</h:outputText>
+				</p:column>
+				<p:column headerText="Nº de Aerogeradores" style="text-align:center;">
+					<h:outputText value="#{fceGeracaoEnergiaController.totalNumeroAerogeradorParque(parque)}" />
+				</p:column>
+				<p:column headerText="Ações" style="text-align:center;">
+					<p:commandLink id="visualizaParque" action="#{fceGeracaoEnergiaController.visualizarParque}" title="Visualizar" update="formIncParqueEolico" onsuccess="incluirParqueEolico.show()" process="visualizaParque">
+						<h:graphicImage title="Visualizar" value="/resources/img/ico-pesquisa.png" />
+						<f:setPropertyActionListener value="#{parque}" target="#{fceGeracaoEnergiaController.fceEnergiaEolicaParqueAux}" />
+           			</p:commandLink>
+					<p:commandLink id="alterar" rendered="#{!fceGeracaoEnergiaController.desabilitarTudo}" action="#{fceGeracaoEnergiaController.configurarEdicaoParque}" title="#{bundle.btn_editar}" update="formIncParqueEolico" oncomplete="incluirParqueEolico.show()" process="alterar">
+						<h:graphicImage title="Editar" value="/resources/img/ico-alterar.png" />
+						<f:setPropertyActionListener value="#{parque}" target="#{fceGeracaoEnergiaController.fceEnergiaEolicaParqueAux}" />
+            		</p:commandLink>
+					<p:commandLink id="excluirEolica" rendered="#{!fceGeracaoEnergiaController.desabilitarTudo}" title="#{bundle.btn_excluir}" onclick="confirmDlgExclusaoEolica.show()" process="excluirEolica">
+						<h:graphicImage title="Excluir" value="/resources/img/ico-excluir.png" />
+						<f:setPropertyActionListener value="#{parque}" target="#{fceGeracaoEnergiaController.fceEnergiaEolicaParqueAux}" />
+            		</p:commandLink>
+				</p:column>
+				<p:columnGroup type="footer" rendered="#{!empty fceGeracaoEnergiaController.listaEnergiaEolicaParque}">
+					<p:row>
+                		<p:column footerText="Total de Parques" colspan="3" style="text-align:left;"/>
+                		<p:column footerText="#{fceGeracaoEnergiaController.numeroTotalParque}" />
+                	</p:row>
+                	<p:row>
+                		<p:column footerText="Total de Aerogeradores" colspan="3" style="text-align:left;"/>
+               		<p:column>
+               			<f:facet name="footer">
+               				<h:outputText value="#{fceGeracaoEnergiaController.numeroTotalAerogerador}">
+               					<f:convertNumber type="number" groupingUsed="true" minFractionDigits="2" pattern="###,##0.00"/>
+							</h:outputText>
+               			</f:facet>
+					</p:column>                		
+                	</p:row>	
+				</p:columnGroup>
+			</p:dataTable>
+			
+			<br/><br/><br/>
+			
+		</p:outputPanel>
+		
+		<p:outputPanel rendered="#{!fceGeracaoEnergiaController.renderedEnergiaEolica}">
+		
+		<h:outputText styleClass="titulo-grupo" style="font-weight:bold;" value="Informações dos aerogeradores do(s) parque(s) eólico(s)" />
+		<div class="line"/>
+		<br/>
+		
+		<h:panelGrid columns="2">
+		
+			<h:outputText value="Número de parques"/>
+			<p:inputText value="#{fceGeracaoEnergiaController.fceEnergiaEolicaLicencaPrevia.numParques}" styleClass="inputTextOnlyInteger" disabled="#{fceGeracaoEnergiaController.desabilitarTudo}"/>
+
+			
+				<h:outputText value="Quantidade geral de aerogeradores"/>
+				<h:panelGrid columns="2">
+					<p:inputText value="#{fceGeracaoEnergiaController.fceEnergiaEolicaLicencaPrevia.quantidadeGeralAerogerador}" disabled="true" style="margin-left: -4px" styleClass="inputTextOnlyInteger"/>
+				<h:outputText value="(Un)"/>
+				</h:panelGrid>
+			
+			
+				<h:outputText value="Potência dos aerogeradores"/>
+				<h:panelGrid columns="2">
+					<p:inputText onkeyup="maskIt(this, event, '99.999.999,99', true)" disabled="#{fceGeracaoEnergiaController.desabilitarTudo}" style="margin-left: -4px" value="#{fceGeracaoEnergiaController.fceEnergiaEolicaLicencaPrevia.valPotenciaAerogerador}">
+						<p:ajax event="blur" process="@this" global="false"/>
+						<f:converter converterId="bigConverter"/>
+					</p:inputText>
+					<h:outputText value="(MW)"/>
+			
+				</h:panelGrid>
+		
+		</h:panelGrid>
+		
+		<br/><br/><br/>
+		</p:outputPanel>
+		
+		<p:commandButton value="Voltar" action="#{fceGeracaoEnergiaController.voltar}" update="tabAbasGeracaoEnergia">
+			<f:setPropertyActionListener value="2" target="#{fceGeracaoEnergiaController.numeroAba}"/>
+		</p:commandButton>
+		<p:commandButton value="Avançar" action="#{fceGeracaoEnergiaController.avancar}" rendered="#{!fceGeracaoEnergiaController.desabilitarTudo}" style="float:right" update="tabAbasGeracaoEnergia">
+			<f:setPropertyActionListener value="2" target="#{fceGeracaoEnergiaController.numeroAba}"/>
+		</p:commandButton>
+		<p:commandButton value="Salvar" action="#{fceGeracaoEnergiaController.salvar}" rendered="#{!fceGeracaoEnergiaController.desabilitarTudo}" style="float:right; margin-right: 5px;">
+			<f:setPropertyActionListener value="2" target="#{fceGeracaoEnergiaController.numeroAba}"/>
+		</p:commandButton>
+	</h:form>	
+						
+</ui:composition>

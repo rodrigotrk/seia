@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+xmlns:h="http://java.sun.com/jsf/html" 
+xmlns:f="http://java.sun.com/jsf/core" 
+xmlns:ui="http://java.sun.com/jsf/facelets" 
+xmlns:p="http://primefaces.prime.com.tr/ui">
+
+	<p:dialog header="Processos no INEMA" widgetVar="dialogProcessoInema" appendToBody="true" modal="true" style="text-align:center;" resizable="false" width="300" 
+		position="center" dynamic="true">	
+		<h:form id="formDialogProcessoInema">
+			<h:panelGroup id="panelGridProcessoSEIA">
+				<h:panelGrid>
+					<h:outputText style="text-align:left;" value="* 1. Informe o número do Processo" />
+				</h:panelGrid>
+				<p:inputText value="#{processoTramiteController.processoTramite.numProcessoTramite}" style="width: 250px" disabled="#{novoRequerimentoController.desabilitarTudo}"/>
+			</h:panelGroup>
+			<br/>
+			<br />
+			<p:commandButton global ="false" actionListener="#{processoTramiteController.salvar()}" value="Salvar" update="formDialogProcessoInema subViewAbas:tabAbasId:formAbaProcesso:TblProcessoEmTramite"
+							 disabled="#{novoRequerimentoController.desabilitarTudo}"/>
+		</h:form>
+	</p:dialog>
+	
+</ui:composition>

@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui"
+	template="../../layout/template.xhtml">
+	<ui:define name="titulo-pagina">
+		<h3>Consultar Comunicação</h3>
+	</ui:define>
+	<ui:define name="conteudo-principal">
+		<ui:include src="/paginas/comunicacao/dlgVisualizarComunicacao.xhtml" />
+
+
+		<br />
+		<h3>
+			<h:outputLabel styleClass="titulo-grupo" style="font-weight:bold;"
+				value="PARÂMETROS DA CONSULTA" />
+		</h3>
+		<h:form id="formConsultarComunicacao">
+			<h:panelGroup layout="block">
+				<h:panelGrid columns="1" id="panel">
+					<h:panelGrid columns="1">
+						<h:panelGrid columns="3">
+							<h:outputLabel id="lblTitulo"
+								value="#{bundle.comunicacao_lbl_titulo}" />
+							<h:outputLabel value="Perfil" />
+							<h:outputLabel value="Situação" />
+							<p:inputText value="#{comunicacaoController.descTitulo}" />
+							<p:selectOneMenu id="comboPerfil"
+								value="#{comunicacaoController.perfilSelecionado}"
+								converter="perfilConverter" style="width:220px;">
+								<f:selectItem itemValue="#{null}" itemLabel="Selecione..." />
+								<f:selectItems value="#{comunicacaoController.perfilList}"
+									var="perfil" itemLabel="#{perfil.dscPerfil}"
+									itemValue="#{perfil}" />
+							</p:selectOneMenu>
+
+							<p:selectOneRadio id="indAtiva"
+								value="#{comunicacaoController.situacao}">
+								<f:selectItem itemLabel="Todos" itemValue="" />
+								<f:selectItem itemLabel="Ativo" itemValue="A" />
+								<f:selectItem itemLabel="Inativo" itemValue="I" />
+							</p:selectOneRadio>
+						</h:panelGrid>
+
+
+
+						<h:panelGrid columns="2">
+							<h:panelGrid columns="2">
+								<h:outputText value="Status" />
+								<h:outputText value="Tipo de Comunicação" />
+								<p:selectOneMenu id="comboStatus"
+									value="#{comunicacaoController.comunicacaoStatusSelecionado}"
+									converter="simpleEntityConverter" style="width:220px;">
+									<f:selectItem itemValue="#{null}" itemLabel="Selecione..." />
+									<f:selectItems
+										value="#{comunicacaoController.comunicacaoStatusList}"
+										var="status" itemLabel="#{status.dscStatus}"
+										itemValue="#{status}" />
+								</p:selectOneMenu>
+
+								<p:selectOneRadio id="tpComunicacao"
+									value="#{comunicacaoController.tpComunicacao}">
+									<f:selectItem itemLabel="Todos" itemValue="" />
+									<f:selectItem itemLabel="Notificação" itemValue="N" />
+									<f:selectItem itemLabel="Temporária" itemValue="T" />
+								</p:selectOneRadio>
+
+							</h:panelGrid>
+						</h:panelGrid>
+						<h:panelGrid columns="4">
+							<h:outputText value="Período" />
+							<h:outputText />
+							<h:outputText />
+							<h:outputText />
+							<h:panelGroup>
+								<h:outputText value="Data Inicial   " />
+								<p:calendar showOn="button" size="10" readOnlyInputText="true"
+									value="#{comunicacaoController.dtPeriodoInicial}" locale="pt"
+									pattern="dd/MM/yyyy" navigator="true" yearRange="c-50:c+10" />
+							</h:panelGroup>
+							<h:outputText value="Data Final" />
+							<p:calendar showOn="button" size="10" readOnlyInputText="true"
+								value="#{comunicacaoController.dtPeriodoFinal}" locale="pt"
+								pattern="dd/MM/yyyy" navigator="true" yearRange="c-50:c+10" />
+						</h:panelGrid>
+					</h:panelGrid>
+
+
+				</h:panelGrid>
+
+
+
+				<h:panelGrid id="tabelaComunicacoes" columns="1">
+					<h:panelGrid columns="3" style="float: right;">
+						<p:commandButton value="Limpar"
+							actionListener="#{comunicacaoController.limparTela()}"
+							update="formConsultarComunicacao" />
+						<p:commandButton value="Consultar"
+							actionListener="#{comunicacaoController.consultar()}"
+							update="formConsultarComunicacao:tabelaComunicacoes" />
+
+						<p:commandButton id="btnNovo" value="Novo" ajax="false"
+							action="#{comunicacaoController.novo()}" />
+					</h:panelGrid>
+
+					<p:dataTable id="dataTableComunicacoes" var="comunicacao"
+						value="#{comunicacaoController.comunicacaoLDM}"
+						emptyMessage="#{bundle.msg_lista_vazia}" paginator="true"
+						rows="10" paginatorPosition="bottom" lazy="true">
+
+						<p:column style="width:200px">
+							<f:facet name="header">Título</f:facet>
+							<h:outputText value="#{comunicacao.dscTitulo}" />
+						</p:column>
+						<p:column>
+							<f:facet name="header">Período</f:facet>
+							<h:outputText id="dtcInicio"
+								value="#{comunicacao.dtcPeriodoInicio}">
+								<f:convertDateTime for="dtcInicio" pattern="dd/MM/yyyy"
+									locale="pt,BR" timeZone="Brazil/East" />
+							</h:outputText>
+
+							<h:outputText value=" De - "
+								rendered="#{empty comunicacao.dtcPeriodoFim}" />						
+						 a  <h:outputText id="dtcFim" value="#{comunicacao.dtcPeriodoFim}"
+								rendered="#{not empty comunicacao.dtcPeriodoFim}">
+								<f:convertDateTime for="dtcFim" pattern="dd/MM/yyyy"
+									locale="pt,BR" timeZone="Brazil/East" />
+							</h:outputText>
+
+						</p:column>
+						<p:column>
+							<f:facet name="header">Criada em</f:facet>
+							<h:outputText value="#{comunicacao.dtcCriacao}">
+								<f:convertDateTime for="dtcFormacao" pattern="dd/MM/yyyy"
+									locale="pt,BR" timeZone="Brazil/East" />
+							</h:outputText>
+						</p:column>
+						<p:column>
+							<f:facet name="header">Tipo</f:facet>
+							<h:outputText value="#{comunicacao.tpComunicacaoDesc}" />
+						</p:column>
+						<p:column>
+							<f:facet name="header">Situação</f:facet>
+							<h:outputText value="#{comunicacao.situacao}" />
+						</p:column>
+						<p:column>
+							<f:facet name="header">Status</f:facet>
+							<h:outputText value="#{comunicacao.comunicacaoStatus.dscStatus}" />
+						</p:column>
+						<p:column>
+							<f:facet name="header">Ações</f:facet>
+							<h:panelGroup layout="block" style="text-align:center">
+							<h:panelGrid columns="2">
+								<p:commandLink
+									action="#{comunicacaoController.carregarComunicacao(comunicacao)}"
+									update="formVisualizar1"
+									oncomplete="dlgVisualizarComunicacao.show();">
+									<h:graphicImage style="margin: 2.5px;"
+										title="Visualizar Comunicação"
+										value="/resources/img/ico-pesquisa.png" />
+								</p:commandLink>
+								<p:commandLink process="@this" update=":formManterComunicacao"
+									rendered="#{comunicacaoController.renderedEditar(comunicacao)}"
+									action="#{comunicacaoController.editarComunicacao(comunicacao)}">
+									<f:setPropertyActionListener
+									target="${contextoController.object}" value="#{comunicacao}" />
+									<h:graphicImage title="Editar"
+										value="/resources/img/ico-editar.png" />
+								</p:commandLink>
+								<p:commandLink
+									rendered="#{comunicacaoController.renderedExcluir(comunicacao)}"
+									action="#{comunicacaoController.carregarComunicacao(comunicacao)}"
+									process="@this"
+									update="formConsultarComunicacao:tabelaComunicacoes"
+									oncomplete="dialogConfirmarExcluirComunicacao.show();">
+									<h:graphicImage title="Excluir"
+										value="/resources/img/ico-excluir.png" />
+								</p:commandLink>
+								<p:commandLink
+									rendered="#{comunicacaoController.renderedCancelar(comunicacao)}"
+									action="#{comunicacaoController.carregarComunicacao(comunicacao)}"
+									process="@this"
+									update="formConsultarComunicacao:tabelaComunicacoes"
+									oncomplete="dialogConfirmarCancelarComunicacao.show();">
+									<h:graphicImage title="Cancelar"
+										value="/resources/img/ico-cancelar-projeto.png" />
+								</p:commandLink>
+								</h:panelGrid>
+							</h:panelGroup>
+
+						</p:column>
+
+					</p:dataTable>
+				</h:panelGrid>
+			</h:panelGroup>
+		</h:form>
+
+		<p:confirmDialog header="Confirmação"
+			id="_dialogConfirmarExcluirComunicacao"
+			widgetVar="dialogConfirmarExcluirComunicacao" appendToBody="true"
+			message="#{bundle.comunicacao_lbl_excluir}" severity="alert">
+			<h:form id="formConfirmarExcluirComunicacao">
+				<h:panelGroup layout="block" style="float: right;">
+					<p:commandButton id="btnNao" value="#{bundle.geral_lbl_nao}"
+						onclick="dialogConfirmarExcluirComunicacao.hide();" />
+					<p:commandButton id="btnSim"
+						onclick="dialogConfirmarExcluirComunicacao.hide();"
+						value="#{bundle.geral_lbl_sim}"
+						update=":formConsultarComunicacao:tabelaComunicacoes"
+						action="#{comunicacaoController.confirmarExclusao()}" />
+
+				</h:panelGroup>
+			</h:form>
+		</p:confirmDialog>
+
+		<p:confirmDialog header="Confirmação"
+			id="_dialogConfirmarCancelarComunicacao"
+			widgetVar="dialogConfirmarCancelarComunicacao" appendToBody="true"
+			message="#{bundle.comunicacao_lbl_cancelar}" severity="alert">
+			<h:form id="formConfirmarCancelarComunicacao">
+				<h:panelGroup layout="block" style="float: right;">
+					<p:commandButton id="btnNao" value="#{bundle.geral_lbl_nao}"
+						onclick="dialogConfirmarCancelarComunicacao.hide();" />
+					<p:commandButton id="btnSim"
+						onclick="dialogConfirmarCancelarComunicacao.hide();"
+						value="#{bundle.geral_lbl_sim}"
+						update=":formConsultarComunicacao:tabelaComunicacoes"
+						action="#{comunicacaoController.confirmarCancelamento()}" />
+
+				</h:panelGroup>
+			</h:form>
+		</p:confirmDialog>
+
+
+
+	</ui:define>
+</ui:composition>

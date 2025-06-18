@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="aviso_bndes_cefir_imoveis_em_compensacao" language="java" pageWidth="495" pageHeight="802" columnWidth="495" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="acbd4b23-2d6b-41e3-88c8-0dc149833940">
+	<property name="ireport.zoom" value="1.3310000000000004"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="SHAPE_COMPENSACAO_RL" class="java.util.List"/>
+	<parameter name="ide_imovel" class="java.lang.Integer"/>
+	<parameter name="AREA_IMOVEL" class="java.lang.Double"/>
+	<queryString>
+		<![CDATA[SELECT
+ic.ide_imovel_rural,
+ic.des_denominacao,
+l.nom_logradouro,
+l.nom_tipo_logradouro,
+l.num_cep
+b.nom_bairro,
+m.nom_municipio,
+est.des_sigla,
+ic.val_area_rl,
+ir.num_matricula,
+ir.num_registro,
+(SELECT ide_tipo_vinculo_imovel FROM pessoa_imovel WHERE ide_imovel = $P{ide_imovel} order by 1 asc limit 1) AS ide_tipo_vinculo_imovel,
+(SELECT des_denominacao FROM imovel_rural WHERE ide_imovel_rural = $P{ide_imovel}) AS nome_imovel_principal
+FROM sp_get_imovelcredito($P{ide_imovel}, 'GEOMETRYCOLLECTION(EMPTY)') AS ic
+JOIN imovel i ON i.ide_imovel = ic.ide_imovel_rural
+JOIN imovel_rural ir ON ir.ide_imovel_rural = i.ide_imovel
+LEFT JOIN endereco e ON e.ide_endereco = i.ide_endereco
+LEFT JOIN logradouro l ON l.ide_logradouro = e.ide_logradouro
+LEFT JOIN bairro b ON b.ide_bairro = l.ide_bairro
+LEFT JOIN municipio m ON m.ide_municipio = l.ide_municipio
+LEFT JOIN estado est ON est.ide_estado = m.ide_estado
+WHERE ic.ide_imovel_rural <> $P{ide_imovel}
+ORDER BY ic.ide_imovel_rural;]]>
+	</queryString>
+	<field name="ide_imovel_rural" class="java.lang.String"/>
+	<field name="des_denominacao" class="java.lang.String"/>
+	<field name="nom_logradouro" class="java.lang.String"/>
+	<field name="nom_bairro" class="java.lang.String"/>
+	<field name="nom_municipio" class="java.lang.String"/>
+	<field name="des_sigla" class="java.lang.String"/>
+	<field name="val_area_rl" class="java.lang.Double"/>
+	<field name="nome_imovel_principal" class="java.lang.String"/>
+	<field name="num_matricula" class="java.lang.String"/>
+	<field name="num_registro" class="java.lang.String"/>
+	<field name="ide_tipo_vinculo_imovel" class="java.lang.Integer"/>
+	<field name="nom_tipo_logradouro" class="java.lang.String"/>
+	<field name="num_cep" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<detail>
+		<band height="356">
+			<image scaleImage="FillFrame">
+				<reportElement uuid="59f82de5-d894-4cdd-907c-38d96303f45f" positionType="Float" x="59" y="82" width="378" height="253" isRemoveLineWhenBlank="true" isPrintInFirstWholeBand="true" isPrintWhenDetailOverflows="true"/>
+				<imageExpression><![CDATA[$P{SHAPE_COMPENSACAO_RL}.get( $V{PAGE_NUMBER}-1 )]]></imageExpression>
+			</image>
+			<textField>
+				<reportElement uuid="d45afabe-76b5-47dd-ae2d-909727e7a526" x="1" y="45" width="272" height="15"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[" Cidade: " + $F{nom_municipio}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="d45afabe-76b5-47dd-ae2d-909727e7a526" x="273" y="45" width="135" height="15"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[" CEP: " + $F{num_cep}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="fd66a9e4-273e-496d-9ca5-9224c1a96972" x="251" y="30" width="244" height="15"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[" Bairro/Distrito: " + $F{nom_bairro}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="310420ea-3258-485d-82c1-f15f0cc90fee" x="408" y="45" width="87" height="15"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[" UF: " + $F{des_sigla}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="0485cfe2-daf8-461a-91f9-fa0c03117cc8" x="1" y="0" width="330" height="15"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[" Denominação: " + $F{des_denominacao}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="d45afabe-76b5-47dd-ae2d-909727e7a526" x="1" y="30" width="250" height="15"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[" Logradouro: " + new String($F{nom_logradouro} == null ? " Não Informado ":  $F{nom_tipo_logradouro}+" "+$F{nom_logradouro})]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="7f5bd08a-e7de-4b13-8696-6d72ebf42bc3" x="331" y="0" width="164" height="15"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ide_tipo_vinculo_imovel} == 1 ? " Matrícula: " + $F{num_matricula} : " Documento de posse: " + $F{num_registro}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="073d63b6-5ad3-4e13-9388-4b96122c874c" x="1" y="15" width="494" height="15"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[" Área da reserva legal compensada: " + ($F{val_area_rl} + " ha, equivalente a " + new DecimalFormat("#,###,##0.00").format((($F{val_area_rl}.doubleValue()/$P{AREA_IMOVEL}.doubleValue()) * 100)) + "% da área do imóvel " +$F{nome_imovel_principal}+".")]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

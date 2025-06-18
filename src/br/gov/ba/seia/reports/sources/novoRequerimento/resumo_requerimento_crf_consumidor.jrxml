@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="resumo_requerimento_crf_consumidor" language="java" pageWidth="572" pageHeight="752" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="fc8730ad-1cea-42cc-a501-a98a6fb4ab19">
+	<property name="ireport.zoom" value="1.4641000000000006"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="ide_cumprimento_reposicao_florestal" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT this_.ide_consumidor_reposicao_florestal,
+       crf1_.ide_cumprimento_reposicao_florestal,
+       this_.vlm_material_lenhoso_consumido,
+       this_.num_portaria_ato_adquirido,
+       this_.data_publicacao_portaria,
+       this_.num_processo_original,
+       um.cod_unidade_medida
+FROM consumidor_reposicao_florestal this_
+INNER JOIN cumprimento_reposicao_florestal crf1_ ON this_.ide_cumprimento_reposicao_florestal=crf1_.ide_cumprimento_reposicao_florestal
+INNER JOIN unidade_medida um on um.ide_unidade_medida=this_.ide_unidade_medida
+WHERE this_.ide_cumprimento_reposicao_florestal=$P{ide_cumprimento_reposicao_florestal}]]>
+	</queryString>
+	<field name="ide_consumidor_reposicao_florestal" class="java.lang.Integer"/>
+	<field name="ide_cumprimento_reposicao_florestal" class="java.lang.Integer"/>
+	<field name="vlm_material_lenhoso_consumido" class="java.math.BigDecimal"/>
+	<field name="num_portaria_ato_adquirido" class="java.lang.String"/>
+	<field name="data_publicacao_portaria" class="java.sql.Timestamp"/>
+	<field name="num_processo_original" class="java.lang.String"/>
+	<field name="cod_unidade_medida" class="java.lang.String"/>
+	<detail>
+		<band height="83" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="3fbf707a-67e6-4d64-952b-4caf70e75ae7" x="1" y="1" width="249" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Volume de material lenhoso a ser consumido:]]></text>
+			</staticText>
+			<textField pattern="#,##0.0000">
+				<reportElement uuid="3a8e67e9-d957-4149-a53c-d1a81b652ac7" x="263" y="1" width="67" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{vlm_material_lenhoso_consumido} ]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="e0e44f8c-e197-4fb7-a6ef-71b5f18359f3" x="1" y="21" width="262" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Número da portaria do ato que originou o volume adquirido:]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="70780b45-47ae-49cd-89b8-818f9adfa7ae" x="263" y="21" width="290" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{num_portaria_ato_adquirido}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="b76211b4-1d18-4b52-92ff-66c2b279133d" x="1" y="41" width="174" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Data da publicação da portaria:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="faa16d0c-6bdf-4d5a-86d3-138071fc39ac" x="1" y="61" width="218" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Número do processo que originou o ato:]]></text>
+			</staticText>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement uuid="ada43b7d-2e0d-4f81-ad56-4ef0d5fd7759" x="263" y="41" width="217" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{data_publicacao_portaria}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="0011e435-8565-48df-86fb-d31cd4af79d9" x="263" y="61" width="217" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{num_processo_original}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="b87aba37-7b20-49ed-bf52-93a7f79ae7b8" x="330" y="1" width="132" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[" (" + $F{cod_unidade_medida} + ")"]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

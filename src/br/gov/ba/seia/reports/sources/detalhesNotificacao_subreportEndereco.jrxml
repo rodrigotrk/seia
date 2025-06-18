@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="detalhesNotificacao_subreportEndereco" pageWidth="555" pageHeight="802" whenNoDataType="NoDataSection" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0">
+	<property name="ireport.zoom" value="1.6500000000000004"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="ide_empreendimento" class="java.lang.Integer"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["C:\\ambiente\\workspace\\seia\\src\\br\\gov\\ba\\seia\\report\\sources\\"]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[select te.nom_tipo_endereco,
+	l.nom_logradouro,
+	e.num_endereco,
+	b.nom_bairro,
+	e.des_complemento,
+	m.nom_municipio,
+	est.des_sigla,
+	e.des_ponto_referencia,
+	l.num_cep
+from endereco_empreendimento ee
+INNER JOIN tipo_endereco te ON te.ide_tipo_endereco = ee.ide_tipo_endereco
+INNER JOIN endereco e ON e.ide_endereco = ee.ide_endereco
+INNER JOIN logradouro l ON l.ide_logradouro = e.ide_logradouro
+INNER JOIN bairro b ON b.ide_bairro = l.ide_bairro
+INNER JOIN municipio m ON m.ide_municipio = l.ide_municipio
+INNER JOIN estado est on est.ide_estado = m.ide_estado
+where ee.ide_empreendimento = $P{ide_empreendimento}
+order by ee.ide_tipo_endereco asc
+limit 1]]>
+	</queryString>
+	<field name="nom_tipo_endereco" class="java.lang.String"/>
+	<field name="nom_logradouro" class="java.lang.String"/>
+	<field name="num_endereco" class="java.lang.String"/>
+	<field name="nom_bairro" class="java.lang.String"/>
+	<field name="des_complemento" class="java.lang.String"/>
+	<field name="nom_municipio" class="java.lang.String"/>
+	<field name="des_sigla" class="java.lang.String"/>
+	<field name="des_ponto_referencia" class="java.lang.String"/>
+	<field name="num_cep" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="34" splitType="Stretch">
+			<staticText>
+				<reportElement key="staticText-20" x="0" y="5" width="48" height="13"/>
+				<box>
+					<pen lineColor="#FFFFFF"/>
+					<topPen lineColor="#FFFFFF"/>
+					<leftPen lineColor="#FFFFFF"/>
+					<bottomPen lineColor="#FFFFFF"/>
+					<rightPen lineColor="#FFFFFF"/>
+				</box>
+				<textElement verticalAlignment="Middle" markup="none">
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[Endereço:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="48" y="5" width="490" height="29"/>
+				<textElement verticalAlignment="Top"/>
+				<textFieldExpression><![CDATA[new String($F{nom_logradouro}.concat(", ").concat($F{num_endereco} != null ? "N° " + $F{num_endereco} + ", " : "").concat($F{nom_bairro} + ", ").concat($F{des_complemento} != null ? $F{des_complemento} + ", " : "").concat($F{nom_municipio} + ", ").concat($F{des_sigla} + ". ").concat($F{des_ponto_referencia} != null ? $F{des_ponto_referencia} + ". " : "").concat("CEP " + $F{num_cep}.substring(0,2).concat("." + $F{num_cep}.substring(2,5)).concat("-" + $F{num_cep}.substring(5,8)) + "."))]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

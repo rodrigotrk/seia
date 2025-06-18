@@ -1,0 +1,2 @@
+ALTER TABLE processo_reenquadramento ADD COLUMN ind_aceite_requerente BOOLEAN;
+ALTER TABLE processo_reenquadramento ADD COLUMN dtc_aceite_requerente TIMESTAMP;

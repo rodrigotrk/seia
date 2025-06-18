@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="fce_abastecimento_humano_abastecimento" language="java" pageWidth="495" pageHeight="802" whenNoDataType="AllSectionsNoDetail" columnWidth="495" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="80b78396-35cc-4e26-aaf9-1207b1892468">
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="ide_fce" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT
+     fceH."fce_ide_abastecimento_humano",
+     fceH."num_populacao_atual",
+     fceH."num_consumo_per_capita",
+     fceH."num_consumo_atual",
+     fceH."num_horizonte_projeto",
+     fceH."num_populacao_projetada",
+     fceH."num_consumo_projetado",
+     fceH."num_tempo_captacao",
+     fceH."ide_tipo_periodo_derivacao",
+     fceH."ide_fce",
+     tpd."dsc_tipo_periodo_derivacao",
+     tpd."ide_tipo_periodo_derivacao"
+FROM
+     "fce" f INNER JOIN "fce_abastecimento_humano" fceH ON f."ide_fce" = fceH."ide_fce"
+     INNER JOIN "tipo_periodo_derivacao" tpd ON fceH."ide_tipo_periodo_derivacao" = tpd."ide_tipo_periodo_derivacao"
+WHERE
+     f.ide_fce = $P{ide_fce}]]>
+	</queryString>
+	<field name="fce_ide_abastecimento_humano" class="java.lang.Integer"/>
+	<field name="num_populacao_atual" class="java.lang.Integer"/>
+	<field name="num_consumo_per_capita" class="java.math.BigDecimal"/>
+	<field name="num_consumo_atual" class="java.math.BigDecimal"/>
+	<field name="num_horizonte_projeto" class="java.lang.Integer"/>
+	<field name="num_populacao_projetada" class="java.lang.Integer"/>
+	<field name="num_consumo_projetado" class="java.math.BigDecimal"/>
+	<field name="num_tempo_captacao" class="java.lang.Integer"/>
+	<field name="ide_tipo_periodo_derivacao" class="java.lang.Integer"/>
+	<field name="ide_fce" class="java.lang.Integer"/>
+	<field name="dsc_tipo_periodo_derivacao" class="java.lang.String"/>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<detail>
+		<band height="184">
+			<staticText>
+				<reportElement uuid="6003c0d8-001f-442c-b769-e7716564ad43" x="2" y="0" width="140" height="20"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Justified" verticalAlignment="Middle">
+					<font fontName="Arial" size="9"/>
+				</textElement>
+				<text><![CDATA[População (hab): ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="593b7b4a-270e-4bb0-8d17-5d0f00418723" x="2" y="20" width="140" height="20"/>
+				<textElement textAlignment="Justified" verticalAlignment="Middle">
+					<font fontName="Arial" size="9"/>
+				</textElement>
+				<text><![CDATA[Consumo per capta (l/hab/dia): ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="e7901405-ec79-4ac9-9a7a-a0e338100b25" x="2" y="40" width="140" height="20"/>
+				<textElement textAlignment="Justified" verticalAlignment="Middle">
+					<font fontName="Arial" size="9"/>
+				</textElement>
+				<text><![CDATA[Consumo (m³/dia): ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="46824e72-66a1-4e0c-8580-799977c458a6" x="2" y="70" width="140" height="20"/>
+				<textElement textAlignment="Justified" verticalAlignment="Middle">
+					<font fontName="Arial" size="9"/>
+				</textElement>
+				<text><![CDATA[Horizonte do projeto (anos): ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="b467c790-2435-4aee-a779-6fe3c4d9f2e6" x="2" y="90" width="140" height="20"/>
+				<textElement textAlignment="Justified" verticalAlignment="Middle">
+					<font fontName="Arial" size="9"/>
+				</textElement>
+				<text><![CDATA[População projetada (hab): ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="90bda2c4-a26e-4713-bc68-a8c345744ad4" x="2" y="110" width="140" height="20"/>
+				<textElement textAlignment="Justified" verticalAlignment="Middle">
+					<font fontName="Arial" size="9"/>
+				</textElement>
+				<text><![CDATA[Consumo projetado (m³/dia): ]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" pattern="#,##0;-#,##0">
+				<reportElement uuid="89d1f565-5094-486c-8e98-06cf19ed2463" x="142" y="0" width="100" height="20"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Arial" size="9"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{num_populacao_atual}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="#,##0.00;-#,##0.00">
+				<reportElement uuid="89d1f565-5094-486c-8e98-06cf19ed2463" x="142" y="20" width="100" height="20"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Arial" size="9"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{num_consumo_per_capita}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="#,##0.000;-#,##0.000">
+				<reportElement uuid="89d1f565-5094-486c-8e98-06cf19ed2463" x="142" y="40" width="100" height="20"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Arial" size="9"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{num_consumo_atual}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="#,##0;-#,##0">
+				<reportElement uuid="89d1f565-5094-486c-8e98-06cf19ed2463" x="142" y="70" width="80" height="20"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Arial" size="9"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{num_horizonte_projeto}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="#,##0;-#,##0">
+				<reportElement uuid="89d1f565-5094-486c-8e98-06cf19ed2463" x="142" y="90" width="80" height="20"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Arial" size="9"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{num_populacao_projetada}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="#,##0.000;-#,##0.000">
+				<reportElement uuid="89d1f565-5094-486c-8e98-06cf19ed2463" x="142" y="110" width="80" height="20"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Arial" size="9"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{num_consumo_projetado}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="#,##0.00;-#,##0.00">
+				<reportElement uuid="89d1f565-5094-486c-8e98-06cf19ed2463" x="112" y="144" width="80" height="20"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Arial" size="9"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dsc_tipo_periodo_derivacao}]]></textFieldExpression>
+			</textField>
+			<elementGroup/>
+			<textField isStretchWithOverflow="true">
+				<reportElement uuid="89d1f565-5094-486c-8e98-06cf19ed2463" x="158" y="164" width="50" height="20">
+					<printWhenExpression><![CDATA[$F{dsc_tipo_periodo_derivacao}.equals( 'Intermitente' )]]></printWhenExpression>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="9"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{num_tempo_captacao}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="90bda2c4-a26e-4713-bc68-a8c345744ad4" x="2" y="144" width="110" height="20"/>
+				<textElement textAlignment="Justified" verticalAlignment="Middle">
+					<font fontName="Arial" size="9"/>
+				</textElement>
+				<text><![CDATA[Período de derivação:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="90bda2c4-a26e-4713-bc68-a8c345744ad4" x="32" y="164" width="126" height="20">
+					<printWhenExpression><![CDATA[$F{dsc_tipo_periodo_derivacao}.equals( 'Intermitente' )]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Justified" verticalAlignment="Middle">
+					<font fontName="Arial" size="9"/>
+				</textElement>
+				<text><![CDATA[Tempo de captação (h/dia):]]></text>
+			</staticText>
+		</band>
+	</detail>
+</jasperReport>

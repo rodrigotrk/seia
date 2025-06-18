@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="fce_turismo_origem_energia" pageWidth="220" pageHeight="802" whenNoDataType="AllSectionsNoDetail" columnWidth="220" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="80b78396-35cc-4e26-aaf9-1207b1892468">
+	<property name="ireport.zoom" value="2.9230756500000017"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String"/>
+	<parameter name="ide_fce_turismo" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT DISTINCT
+	toe.ide_tipo_origem_energia,
+	toe.DSC_TIPO_ORIGEM_ENERGIA
+FROM fce_turismo_origem_energia ftoe
+INNER JOIN tipo_origem_energia toe ON toe.ide_tipo_origem_energia = ftoe.ide_tipo_origem_energia
+WHERE ftoe.ide_fce_turismo = $P{ide_fce_turismo} ORDER BY toe.ide_tipo_origem_energia]]>
+	</queryString>
+	<field name="ide_tipo_origem_energia" class="java.lang.Integer"/>
+	<field name="dsc_tipo_origem_energia" class="java.lang.String"/>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="20">
+			<printWhenExpression><![CDATA[!$F{dsc_tipo_origem_energia}.isEmpty()]]></printWhenExpression>
+			<staticText>
+				<reportElement uuid="009453ab-a5aa-46e7-acdb-92a8b92141f4" x="0" y="0" width="130" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Suprimento de Energia]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<printWhenExpression><![CDATA[!$F{dsc_tipo_origem_energia}.isEmpty()]]></printWhenExpression>
+			<textField isStretchWithOverflow="true">
+				<reportElement uuid="9916345c-d0ca-4c6c-bfc9-6c2a35a5c50c" x="20" y="0" width="150" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{dsc_tipo_origem_energia}]]></textFieldExpression>
+			</textField>
+			<ellipse>
+				<reportElement uuid="88a5af06-477b-4d2a-9ef3-1ea87c79884b" x="7" y="7" width="5" height="5" backcolor="#000000"/>
+			</ellipse>
+		</band>
+	</detail>
+</jasperReport>

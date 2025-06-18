@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="resumo_requerimento_questionario_processos" pageWidth="450" pageHeight="802" columnWidth="450" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="8719f475-cd82-4e7d-beb9-997db22c6a9d">
+	<property name="ireport.zoom" value="2.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="ide_requerimento" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[select
+	f.num_area_suprimida,
+	ir.des_denominacao ,
+
+
+array_to_string( array(select b.nom_bioma from bioma_requerimento br
+	inner join bioma b on b.ide_bioma = br.ide_bioma
+	where br.ide_localizacao_geografica =
+	(select ide_localizacao_geografica From pergunta_requerimento pr
+	where pr.ide_pergunta = 46 and pr.ind_excluido != true and pr.ide_imovel = i.ide_imovel
+	AND pr.ide_requerimento = $P{ide_requerimento})),', ') as bioma
+
+from florestal f
+	inner join imovel i on i.ide_imovel = f.ide_imovel
+	left outer join imovel_rural ir on ir.ide_imovel_rural = i.ide_imovel
+
+where
+f.ide_requerimento = $P{ide_requerimento} and
+f.num_area_suprimida is not null]]>
+	</queryString>
+	<field name="num_area_suprimida" class="java.math.BigDecimal"/>
+	<field name="des_denominacao" class="java.lang.String">
+		<fieldDescription><![CDATA[Denominação do imóvel rural.]]></fieldDescription>
+	</field>
+	<field name="bioma" class="java.lang.String"/>
+	<variable name="num_area_suprimida_1" class="java.math.BigDecimal" resetType="Column" calculation="Sum">
+		<variableExpression><![CDATA[$F{num_area_suprimida}]]></variableExpression>
+	</variable>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="10" splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band height="12">
+			<textField>
+				<reportElement uuid="70f29bb5-130d-4a77-ae03-8d83eb7df7a3" positionType="Float" mode="Opaque" x="0" y="0" width="396" height="12" backcolor="#FFFFFF"/>
+				<box leftPadding="0"/>
+				<textElement verticalAlignment="Middle" markup="none">
+					<font fontName="SansSerif" size="8" isBold="false" isUnderline="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Haverá supressão de vegetação nativa? SIM"]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="12" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="f43eab24-e7ad-41f9-aec7-ad5096e3f901" positionType="Float" mode="Opaque" x="10" y="0" width="130" height="12" backcolor="#EEECE1"/>
+				<box leftPadding="5">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle" markup="none">
+					<font fontName="SansSerif" size="8" isBold="false" isUnderline="false"/>
+				</textElement>
+				<text><![CDATA[Área a ser suprimida ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="f43eab24-e7ad-41f9-aec7-ad5096e3f901" positionType="Float" mode="Opaque" x="140" y="0" width="210" height="12" backcolor="#EEECE1"/>
+				<box leftPadding="5">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle" markup="none">
+					<font fontName="SansSerif" size="8" isBold="false" isUnderline="false"/>
+				</textElement>
+				<text><![CDATA[Imóvel / Matrícula]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="e9828f6c-6486-4792-93bd-e2d42624dd3b" positionType="Float" mode="Opaque" x="350" y="0" width="90" height="12" backcolor="#EEECE1">
+					<printWhenExpression><![CDATA[!$F{bioma}.equals("")]]></printWhenExpression>
+				</reportElement>
+				<box leftPadding="5">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle" markup="none">
+					<font fontName="SansSerif" size="8" isBold="false" isUnderline="false"/>
+				</textElement>
+				<text><![CDATA[Bioma]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="25" splitType="Stretch">
+			<textField pattern="#,##0.0000" isBlankWhenNull="true">
+				<reportElement uuid="70f29bb5-130d-4a77-ae03-8d83eb7df7a3" positionType="Float" stretchType="RelativeToTallestObject" mode="Opaque" x="10" y="0" width="130" height="12" backcolor="#FFFFFF"/>
+				<box leftPadding="5">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle" markup="none">
+					<font fontName="SansSerif" size="8" isBold="false" isUnderline="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{num_area_suprimida}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="70f29bb5-130d-4a77-ae03-8d83eb7df7a3" positionType="Float" stretchType="RelativeToTallestObject" mode="Opaque" x="140" y="0" width="210" height="12" backcolor="#FFFFFF"/>
+				<box leftPadding="5">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle" markup="none">
+					<font fontName="SansSerif" size="8" isBold="false" isUnderline="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{des_denominacao} == null? "-" : $F{des_denominacao}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="91df6aaf-6f50-4713-ad74-caebb33514e9" x="10" y="12" width="130" height="12"/>
+				<box leftPadding="5">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8"/>
+				</textElement>
+				<text><![CDATA[TOTAL das áreas:]]></text>
+			</staticText>
+			<textField pattern="#,##0.0000">
+				<reportElement uuid="ebc14106-8fd5-4f12-a8c2-ce8033cefdc1" x="140" y="12" width="210" height="12"/>
+				<box leftPadding="5">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{num_area_suprimida_1}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement uuid="9edfa589-3525-401f-b5e0-81347a68ed08" positionType="Float" stretchType="RelativeToTallestObject" mode="Opaque" x="350" y="0" width="90" height="12" backcolor="#FFFFFF">
+					<printWhenExpression><![CDATA[!$F{bioma}.equals("")]]></printWhenExpression>
+				</reportElement>
+				<box leftPadding="5">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle" markup="none">
+					<font fontName="SansSerif" size="8" isBold="false" isUnderline="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{bioma} == null? "-" : $F{bioma}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="resumo_requerimento_questionario_origem_agua_superficial_caracteristicas_outorga_preventiva" language="java" pageWidth="100" pageHeight="802" columnWidth="100" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="361e9c56-8f1b-4b23-a8dd-00e5a75fbc89">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="ide_requerimento" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[select
+   case
+    when pr.ide_pergunta = 33 	then  '[X] É outorga preventiva;'
+    end as caracteristica
+from pergunta_requerimento pr
+	inner join outorga_localizacao_geografica olg on  pr.ide_localizacao_geografica = olg.ide_localizacao_geografica
+	where pr.ide_pergunta =  33 --"1.1. A outorga é preventiva?"
+	 and pr.ide_requerimento = $P{ide_requerimento}
+ and pr.ind_resposta = true]]>
+	</queryString>
+	<field name="caracteristica" class="java.lang.String"/>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement uuid="d2e1455f-0d56-4b03-8d43-a59289b0c2fd" x="0" y="0" width="100" height="20"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{caracteristica}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

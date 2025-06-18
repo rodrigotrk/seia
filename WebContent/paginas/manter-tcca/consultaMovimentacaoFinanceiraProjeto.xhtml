@@ -1,0 +1,370 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui"
+	xmlns:s="http://java.sun.com/jsf/composite/seia"
+    xmlns:c="http://java.sun.com/jsp/jstl/core">
+	
+	<h:form id="formMovimentacaoFinanceira">
+		<h:panelGrid>
+			
+			<!-- 
+			
+			INFORMACOES DO TCCA
+			
+			 -->
+			<h:panelGrid columns="2" styleClass="cleanPaddingTD border col-12">
+				<h:panelGrid style="width:500px;">
+					<h:panelGrid columns="2">
+						<h:outputText value="Número do TCCA:" styleClass="bold"/>
+						<h:outputText value="#{projetoTccaController.tcca.numTcca}" />
+					</h:panelGrid>
+					
+					<h:panelGrid columns="2">
+						<h:outputText value="Requerente:" styleClass="bold"/>
+						<h:outputText value="#{projetoTccaController.tcca.idePessoaRequerente.nomeRazao}" />
+					</h:panelGrid>
+					
+					<h:panelGrid columns="2">
+						<h:outputText value="Empreendimento:" styleClass="bold"/>
+						<h:outputText value="#{projetoTccaController.tcca.ideEmpreendimento.nomEmpreendimento}" />
+					</h:panelGrid>
+					
+					<h:panelGrid columns="2">
+						<h:outputText value="Status:" styleClass="bold"/>
+						<h:outputText value="#{projetoTccaController.tcca.ultimoStatus.ideTccaProjetoTipoStatus.nomTccaTipoStatus}" />
+					</h:panelGrid>
+				</h:panelGrid>
+			
+				<h:panelGrid style="width:435px;">
+					<h:panelGrid columns="2">
+						<h:outputText value="Valor do TCCA (R$): " styleClass="bold"/>
+						<h:outputText value="#{(projetoTccaController.tcca.valTcca)==null ? 0.00 : (projetoTccaController.tcca.valTcca)}"
+							styleClass="#{projetoTccaController.isValorNegativo(projetoTccaController.tcca.valTcca)}">
+							
+							<f:convertNumber pattern="#,###,##0.00" locale="pt_BR"/>
+						</h:outputText>
+					</h:panelGrid>
+					
+					<h:panelGrid columns="2">
+						<h:outputText value="Saldo Disponível do TCCA (R$): " styleClass="bold"/>
+						<h:outputText value="#{(projetoTccaController.tcca.ultimoSaldo.valSaldoNaoDestinadoProjeto)==null ? 0.00 : (projetoTccaController.tcca.ultimoSaldo.valSaldoNaoDestinadoProjeto)}"
+							styleClass="#{projetoTccaController.isValorNegativo(projetoTccaController.tcca.ultimoSaldo.valSaldoNaoDestinadoProjeto)}">
+							
+							<f:convertNumber pattern="#,###,##0.00" locale="pt_BR"/>
+						</h:outputText>
+					</h:panelGrid>
+					
+					<h:panelGrid columns="2">
+						<h:outputText value="Saldo Suplementado (R$): " styleClass="bold"/>
+						<h:outputText value="#{(projetoTccaController.tcca.ultimoSaldo.valSaldoSuplementado)==null ? 0.00 : (projetoTccaController.tcca.ultimoSaldo.valSaldoSuplementado)}"
+							styleClass="#{projetoTccaController.isValorNegativo(projetoTccaController.tcca.ultimoSaldo.valSaldoSuplementado)}">
+							
+							<f:convertNumber pattern="#,###,##0.00" locale="pt_BR"/>
+						</h:outputText>
+					</h:panelGrid>
+					
+					<h:panelGrid columns="2">
+						<h:outputText value="Saldo Para Execução (R$): " styleClass="bold"/>
+						<h:outputText value="#{(projetoTccaController.tcca.ultimoSaldo.valSaldoParaExecucao)==null ? 0.00 : (projetoTccaController.tcca.ultimoSaldo.valSaldoParaExecucao)}"
+							styleClass="#{projetoTccaController.isValorNegativo(projetoTccaController.tcca.ultimoSaldo.valSaldoParaExecucao)}">
+							
+							<f:convertNumber pattern="#,###,##0.00" locale="pt_BR"/>
+						</h:outputText>
+					</h:panelGrid>
+				</h:panelGrid>
+			</h:panelGrid>
+			
+			<p:spacer height="10"/>
+			
+			<!-- 
+			
+			INFORMACOES DO PROJETO
+			
+			 -->
+			<h:panelGrid columns="2" styleClass="cleanPaddingTD border col-12">
+				<h:panelGrid  style="width:500px;">
+					<h:panelGrid columns="2">
+						<h:outputText value="Nome do Projeto:" styleClass="bold"/>
+						<h:outputText value="#{projetoTccaController.projeto.nomProjeto}" />
+					</h:panelGrid>
+					
+					<h:panelGrid columns="2">
+						<h:outputText value="Status:" styleClass="bold"/>
+						<h:outputText value="#{projetoTccaController.projeto.ultimoStatus.ideTccaProjetoTipoStatus.nomTccaTipoStatus}" />
+					</h:panelGrid>
+					
+					<h:panelGrid columns="2">
+						<h:outputText value="Valor Previsto (R$): " styleClass="bold"/>
+						<h:outputText value="#{(projetoTccaController.projeto.valorPrevisto)==null ? 0.00 : (projetoTccaController.projeto.valorPrevisto)}"
+							styleClass="#{projetoTccaController.isValorNegativo(projetoTccaController.projeto.valorPrevisto)}">
+							
+							<f:convertNumber pattern="#,###,##0.00" locale="pt_BR"/>
+						</h:outputText>
+					</h:panelGrid>
+					
+					<h:panelGrid columns="2">
+						<h:outputText value="Valor Contratado (R$): " styleClass="bold"/>
+						<h:outputText value="#{(projetoTccaController.projeto.valorContratado)==null ? 0.00 : (projetoTccaController.projeto.valorContratado)}"
+							styleClass="#{projetoTccaController.isValorNegativo(projetoTccaController.projeto.valorContratado)}">
+							
+							<f:convertNumber pattern="#,###,##0.00" locale="pt_BR"/>
+						</h:outputText>
+					</h:panelGrid>
+					
+					<h:panelGrid columns="2">
+						<h:outputText value="Empresa executora:" styleClass="bold"/>
+						<h:outputText value="#{projetoTccaController.projeto.projetoEmpresaExecutoraAtiva.idePessoaExecutora.nomeRazao}"/>
+					</h:panelGrid>
+				</h:panelGrid>
+				
+				<h:panelGrid style="width:435px;">
+					<h:panelGrid columns="2">
+						<h:outputText value="Valor Executado (R$): " styleClass="bold"/>
+						<h:outputText value="#{(projetoTccaController.projeto.valorExecutado)==null ? 0.00 : (projetoTccaController.projeto.valorExecutado)}"
+							styleClass="#{projetoTccaController.isValorNegativo(projetoTccaController.projeto.valorExecutado)}">
+							
+							<f:convertNumber pattern="#,###,##0.00" locale="pt_BR"/>
+						</h:outputText>
+					</h:panelGrid>
+					
+					<h:panelGrid columns="2">
+						<h:outputText value="Valor Remanejado (R$): " styleClass="bold"/>
+						<h:outputText value="#{(projetoTccaController.projeto.valorRemanejado)==null ? 0.00 : -(projetoTccaController.projeto.valorRemanejado)}">
+							<f:convertNumber pattern="#,###,##0.00" locale="pt_BR"/>
+						</h:outputText>
+					</h:panelGrid>
+					
+					<h:panelGrid columns="2">
+						<h:outputText value="Valor Suplementado (R$): " styleClass="bold"/>
+						<h:outputText value="#{(projetoTccaController.projeto.valorSuplementado)==null ? 0.00 : (projetoTccaController.projeto.valorSuplementado)}"
+							styleClass="#{projetoTccaController.isValorNegativo(projetoTccaController.projeto.valorSuplementado)}">
+							
+							<f:convertNumber pattern="#,###,##0.00" locale="pt_BR"/>
+						</h:outputText>
+					</h:panelGrid>
+					
+					<h:panelGrid columns="2">
+						<h:outputText value="Saldo do Projeto (R$): " styleClass="bold"/>
+						<h:outputText value="#{(projetoTccaController.projeto.valorSaldo)==null ? 0.00 : (projetoTccaController.projeto.valorSaldo)}"
+							styleClass="#{projetoTccaController.isValorNegativo(projetoTccaController.projeto.valorSaldo)}">
+							
+							<f:convertNumber pattern="#,###,##0.00" locale="pt_BR"/>
+						</h:outputText>
+					</h:panelGrid>
+				</h:panelGrid>
+			</h:panelGrid>
+			
+			<p:spacer height="10"/>
+			
+			
+			<!-- 
+			
+			GRID ACOES E PRODUTOS
+			
+			 -->
+			<h:panelGrid id="pnlRelatorio" columns="1" styleClass="border" style="width:950px;">
+				<p:dataTable id="relatorioMovimentacaoFinanceira" value="#{projetoTccaController.projeto.projetoAcaoCollection}" var="acao" emptyMessage="Nenhum Registro encontrado"
+					lazy="true" paginator="true" rows="5" paginatorPosition="bottom" paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}"
+					styleClass="middle">
+					
+					<f:facet name="header">
+						<h:outputText value="Atividades" />
+					</f:facet>
+					
+					<p:columnGroup type="header">
+						<p:row>
+							<p:column headerText="Produto" style="width: 421px;"/>
+							<p:column headerText="Valor Previsto (R$)" styleClass="nowrap clean-side" style="width: 75px;"/>
+							<p:column headerText="Valor Contratado (R$)" styleClass="nowrap clean-side" style="width: 85px;"/>
+							<p:column headerText="Valor Executado (R$)" styleClass="nowrap clean-side" style="width: 75px;"/>
+							<p:column headerText="Valor Remanejado (R$)" styleClass="nowrap clean-side" style="width: 90px;"/>
+							<p:column headerText="Valor Suplementado (R$)" styleClass="nowrap clean-side" style="width: 105px;"/>
+							<p:column headerText="Saldo (R$)" styleClass="nowrap clean-side" style="width: 69px;"/>
+						</p:row>
+					</p:columnGroup>
+					
+					<p:subTable value="#{acao.projetoAcaoProdutoCollection}" var="produto">
+						<f:facet name="header">
+							<h:outputText value="#{acao.nomAcao}" />
+						</f:facet>
+						
+						<p:column>
+							<h:outputText value="#{produto.nomProduto}" />
+						</p:column>
+						
+						<p:column styleClass="right">
+							<h:outputText value="#{(produto.valorPrevisto)==null ? 0.00 : (produto.valorPrevisto)}"
+								styleClass="#{projetoTccaController.isValorNegativo(produto.valorPrevisto)}">
+								
+								<f:convertNumber pattern="#,###,##0.00" locale="pt_BR"/>
+							</h:outputText>
+						</p:column>
+						
+						<p:column styleClass="right">
+							<h:outputText value="#{(produto.valorContratado)==null ? 0.00 : (produto.valorContratado)}"
+								styleClass="#{projetoTccaController.isValorNegativo(produto.valorContratado)}">
+								
+								<f:convertNumber pattern="#,###,##0.00" locale="pt_BR"/>
+							</h:outputText>
+						</p:column>
+						
+						<p:column styleClass="right">
+							<h:outputText value="#{(produto.valorExecutado)==null ? 0.00 : (produto.valorExecutado)}"
+								styleClass="#{projetoTccaController.isValorNegativo(produto.valorExecutado)}">
+								
+								<f:convertNumber pattern="#,###,##0.00" locale="pt_BR"/>
+							</h:outputText>
+						</p:column>
+						
+						<p:column styleClass="right">
+							<h:outputText value="#{(produto.ultimoProdutoSaldo.valSaldoRemanejado)==null ? 0.00 : -(produto.ultimoProdutoSaldo.valSaldoRemanejado)}">
+								<f:convertNumber pattern="#,###,##0.00" locale="pt_BR"/>
+							</h:outputText>
+						</p:column>
+						
+						<p:column styleClass="right">
+							<h:outputText value="#{(produto.ultimoProdutoSaldo.valSaldoSuplementado)==null ? 0.00 : (produto.ultimoProdutoSaldo.valSaldoSuplementado)}"
+								styleClass="#{projetoTccaController.isValorNegativo(produto.ultimoProdutoSaldo.valSaldoSuplementado)}">
+								
+								<f:convertNumber pattern="#,###,##0.00" locale="pt_BR"/>
+							</h:outputText>
+						</p:column>
+						
+						<p:column styleClass="right">
+							<h:outputText value="#{(produto.ultimoProdutoSaldo.valSaldoProduto)==null ? 0.00 : (produto.ultimoProdutoSaldo.valSaldoProduto)}"
+								styleClass="#{projetoTccaController.isValorNegativo(produto.ultimoProdutoSaldo.valSaldoProduto)}">
+								
+								<f:convertNumber pattern="#,###,##0.00" locale="pt_BR"/>
+							</h:outputText>
+						</p:column>
+						
+						<p:columnGroup type="footer">
+							<p:row>
+								<p:column styleClass="left bold">
+									<f:facet name="footer">
+										<h:outputText value="Totais"/>
+									</f:facet>
+								</p:column>
+								
+								<p:column styleClass="right bold">
+									<f:facet name="footer">
+										<h:outputText value="#{(acao.valorPrevisto)==null ? 0.00 : (acao.valorPrevisto)}"
+											styleClass="#{projetoTccaController.isValorNegativo(acao.valorPrevisto)}">
+											
+											<f:convertNumber pattern="#,###,##0.00" locale="pt_BR"/>
+										</h:outputText>
+									</f:facet>
+								</p:column>
+								
+								<p:column styleClass="right bold">
+									<f:facet name="footer">
+										<h:outputText value="#{(acao.valorContratado)==null ? 0.00 : (acao.valorContratado)}"
+											styleClass="#{projetoTccaController.isValorNegativo(acao.valorContratado)}">
+											
+											<f:convertNumber pattern="#,###,##0.00" locale="pt_BR"/>
+										</h:outputText>
+									</f:facet>
+								</p:column>
+								
+								<p:column styleClass="right bold">
+									<f:facet name="footer">
+										<h:outputText value="#{(acao.valorExecutado)==null ? 0.00 : (acao.valorExecutado)}"
+											styleClass="#{projetoTccaController.isValorNegativo(acao.valorExecutado)}">
+											
+											<f:convertNumber pattern="#,###,##0.00" locale="pt_BR"/>
+										</h:outputText>
+									</f:facet>
+								</p:column>
+								
+								<p:column styleClass="right bold">
+									<f:facet name="footer">
+										<h:outputText value="#{(acao.valorRemanejado)==null ? 0.00 : -(acao.valorRemanejado)}">
+											<f:convertNumber pattern="#,###,##0.00" locale="pt_BR"/>
+										</h:outputText>
+									</f:facet>
+								</p:column>
+								
+								<p:column styleClass="right bold">
+									<f:facet name="footer">
+										<h:outputText value="#{(acao.valorSuplementado)==null ? 0.00 : (acao.valorSuplementado)}"
+											styleClass="#{projetoTccaController.isValorNegativo(acao.valorSuplementado)}">
+											
+											<f:convertNumber pattern="#,###,##0.00" locale="pt_BR"/>
+										</h:outputText>
+									</f:facet>
+								</p:column>
+								
+								<p:column styleClass="right bold">
+									<f:facet name="footer">
+										<h:outputText value="#{(acao.valorSaldo)==null ? 0.00 : (acao.valorSaldo)}"
+											styleClass="#{projetoTccaController.isValorNegativo(acao.valorSaldo)}">
+											
+											<f:convertNumber pattern="#,###,##0.00" locale="pt_BR"/>
+										</h:outputText>
+									</f:facet>
+								</p:column>
+							</p:row>
+						</p:columnGroup>
+					</p:subTable>
+				</p:dataTable>
+			</h:panelGrid>
+			
+			<p:spacer height="10"/>
+			
+			<!-- 
+			
+			GRID HISTORICO DAS MOVIMENTACOES
+			
+			 -->
+			<h:panelGrid styleClass="border" style="width:950px;">
+				
+				<p:dataTable value="#{projetoTccaController.projeto.listHistoricoMovimentacoes}" var="historico" emptyMessage="Nenhum Registro encontrado"
+					lazy="true" paginator="true" rows="5" paginatorPosition="bottom" styleClass="middle"
+					paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}">
+					
+					<f:facet name="header">
+						<h:outputText value="Histórico das Movimentações" styleClass="bold" />
+					</f:facet>
+				
+					<p:column headerText="Operação" style="width: 90px;">
+				      	<h:outputText value="#{historico.ideMovimentacaoFinanceira.ideTccaProjetoOperacao.nomOperacao}" />
+					</p:column>
+					
+					<p:column headerText="Origem" style="width: 255px;">
+						<h:outputText value="#{historico.ideProjetoAcaoProdutoOrigem.nomProduto}" 
+							rendered="#{historico.ideProjetoAcaoProdutoOrigem != null}"/>
+						
+						<h:outputText value="TCCA N° #{historico.ideTccaOrigem.numTcca}" 
+							rendered="#{historico.ideProjetoAcaoProdutoOrigem == null and historico.ideTccaOrigem != null}"/>
+					</p:column>
+					
+					<p:column headerText="Destino" style="width: 255px;">
+						<h:outputText value="#{historico.ideProjetoAcaoProdutoDestino.nomProduto}" 
+							rendered="#{historico.ideProjetoAcaoProdutoDestino != null}"/>
+						
+						<h:outputText value="TCCA N° #{historico.ideTccaDestino.numTcca}" 
+							rendered="#{historico.ideProjetoAcaoProdutoDestino == null and historico.ideTccaDestino != null}"/>
+					</p:column>
+					
+					<p:column headerText="Data" style="width: 60px; text-align:center">
+						<h:outputText value="#{historico.ideMovimentacaoFinanceira.dtcOperacao}" >
+						 	<f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss" />
+						</h:outputText>
+					</p:column>
+					
+					<p:column headerText="Valor (R$)" style="width: 70px;">
+						<h:outputText value="#{(historico.ideMovimentacaoFinanceira.valOperacao)==null ? 0.00 : (historico.ideMovimentacaoFinanceira.valOperacao)}"
+							styleClass="#{projetoTccaController.isValorNegativo(historico.ideMovimentacaoFinanceira.valOperacao)}">
+							
+							<f:convertNumber pattern="#,###,##0.00" locale="pt_BR"/>
+						</h:outputText>
+					</p:column>
+				</p:dataTable>
+			</h:panelGrid>
+		</h:panelGrid>
+	</h:form>
+</html>

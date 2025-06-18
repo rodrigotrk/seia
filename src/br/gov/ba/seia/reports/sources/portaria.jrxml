@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="lac_erb" language="java" pageWidth="595" pageHeight="842" columnWidth="495" leftMargin="50" rightMargin="50" topMargin="20" bottomMargin="20" isFloatColumnFooter="true" uuid="c4ecfa5d-978c-4245-a7b5-c4df6eea73db">
+	<property name="ireport.zoom" value="1.50262960180316"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="LOGO_INEMA" class="java.lang.String"/>
+	<parameter name="LOGO_SEIA" class="java.lang.String"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="ideProcesso" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[select
+	p.dtc_formacao,
+	pr.num_portaria,
+	to_char(dtc_publicacao_portaria, 'DD/mm/YYYY') as dataPublicacaoFormatada,
+
+	p.num_processo,
+	pr.texto_portaria,
+	pr.ide_tipo_portaria
+from portaria pr
+inner join processo p on p.ide_processo = pr.ide_processo
+where p.ide_processo = $P{ideProcesso};]]>
+	</queryString>
+	<field name="dtc_formacao" class="java.sql.Timestamp"/>
+	<field name="num_portaria" class="java.lang.String"/>
+	<field name="datapublicacaoformatada" class="java.lang.String"/>
+	<field name="num_processo" class="java.lang.String">
+		<fieldDescription><![CDATA[Número do processo de licenciamento da área produtiva]]></fieldDescription>
+	</field>
+	<field name="texto_portaria" class="java.lang.String"/>
+	<field name="ide_tipo_portaria" class="java.lang.Integer"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<pageHeader>
+		<band height="62" splitType="Stretch">
+			<line>
+				<reportElement uuid="07728e14-9245-4ca4-98a5-ee4d94e221ed" x="0" y="61" width="493" height="1"/>
+			</line>
+			<staticText>
+				<reportElement uuid="5c0f7a21-ac26-4679-9ccb-f645b83bebd8" x="100" y="1" width="296" height="19"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="11" isBold="true"/>
+				</textElement>
+				<text><![CDATA[PORTARIA]]></text>
+			</staticText>
+			<line>
+				<reportElement uuid="2894cba5-d6bb-4f17-b975-67edff8f3666" x="0" y="0" width="495" height="1"/>
+			</line>
+			<image isLazy="true" onErrorType="Blank">
+				<reportElement uuid="0eaf5df1-e22a-44dd-8e81-8885dd70d072" x="396" y="2" width="99" height="59" forecolor="#FFFFFF"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<graphicElement>
+					<pen lineWidth="0.0"/>
+				</graphicElement>
+				<imageExpression><![CDATA[$P{LOGO_SEIA}]]></imageExpression>
+			</image>
+			<image isLazy="true" onErrorType="Blank">
+				<reportElement uuid="69b9d110-d7d7-43e5-bfa3-891f3513c6b0" x="1" y="2" width="99" height="59" forecolor="#FFFFFF"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<graphicElement>
+					<pen lineWidth="1.0" lineStyle="Solid" lineColor="#FFFFFF"/>
+				</graphicElement>
+				<imageExpression><![CDATA[$P{LOGO_INEMA}]]></imageExpression>
+			</image>
+			<textField>
+				<reportElement uuid="65ef9c4f-1d61-417e-8c5c-0822bc1bb18c" x="100" y="20" width="296" height="20"/>
+				<box rightPadding="2"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Nº " + $F{num_portaria} + " de " +
+$F{datapublicacaoformatada}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="7b1496e3-1424-4339-9b0c-b1a17dc6e44c" x="100" y="40" width="296" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ide_tipo_portaria} == 1 ?
+"Alteração de Razão Social(ARLS)" :
+"Transferência de Titularidade (TLA)"]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="434" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="b706ecd2-8f1d-4ec9-86ab-6e0778748af6" positionType="Float" mode="Opaque" x="1" y="11" width="492" height="17" backcolor="#DDDDDD"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Verdana" isBold="true"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<text><![CDATA[Dados Gerais]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="957844cf-ea09-4340-b232-c29119c27b54" positionType="Float" mode="Opaque" x="1" y="85" width="492" height="15" backcolor="#DDDDDD"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Verdana" isBold="true"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<text><![CDATA[Texto]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="1c7cc1d4-88eb-481c-9079-879269530da5" x="1" y="39" width="125" height="17"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Número do Processo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="741fccea-fc5b-4312-8c6e-c1be09fca92e" x="368" y="39" width="125" height="17"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Data de Formação]]></text>
+			</staticText>
+			<textField pattern="dd/MM/yy">
+				<reportElement uuid="8959297c-f4d3-420d-bb61-281b715f4ce2" x="368" y="56" width="125" height="20"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{dtc_formacao}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="20b5a701-ff5b-4c56-98a6-2bafb1a944eb" x="1" y="56" width="287" height="20"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{num_processo}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="6af16354-030f-4b77-b0ce-d819d778984e" x="1" y="117" width="494" height="317"/>
+				<textElement textAlignment="Justified" verticalAlignment="Top"/>
+				<textFieldExpression><![CDATA[$F{texto_portaria}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="26" splitType="Stretch">
+			<textField pattern="d/M/yyyy">
+				<reportElement uuid="718b448d-d3d6-4212-b92b-61e2a9b3e3a6" positionType="Float" mode="Opaque" x="1" y="13" width="118" height="13" forecolor="#000000"/>
+				<textElement verticalAlignment="Middle">
+					<font size="10" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="ff43f21f-597d-474f-9305-11d8992bc708" positionType="Float" x="1" y="0" width="492" height="13"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="5"/>
+				</textElement>
+				<text><![CDATA[INEMA/CAB: Avenida Luis Viana Filho, 6° Avenida n° 600 - CAB - CEP 41.745-900 - Salvador - Bahia - Brasil]]></text>
+			</staticText>
+		</band>
+	</pageFooter>
+</jasperReport>

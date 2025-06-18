@@ -1,0 +1,275 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+
+
+	<h:panelGrid columns="1" id="localizacaoGeografica" >
+	<h3>
+		<h:outputLabel styleClass="titulo-grupo"
+			value="LOCALIZAÇÂO GEOGRÁFICA DO IMÓVEL" />
+	</h3>
+	<h:form id="locGeografica">
+                                                   
+        <p:outputPanel autoUpdate="true">
+        <h:panelGrid columns="3" cellpadding="7">
+				<h:outputLabel styleClass="form-label" value="* #{bundle.empreendimento_lbl_datum}" />
+				<h:outputLabel styleClass="form-label" value="#{bundle.empreendimento_lbl_secao_geometrica}" />
+				<h:outputLabel styleClass="form-label" value="Descrição" />
+				
+				<p:selectOneMenu id="combodatum" label="#{bundle.empreendimento_lbl_datum}" value="#{localizacaoGeograficaImovelController.datumSelecionado}"
+					valueChangeListener="#{localizacaoGeograficaImovelController.selectedDatumChanged}"
+					style="width: 200px;" required="true" disabled="#{!imoveisController.temImovelSelecionado or empreendimentoController.visualizarEmpreendimento}">
+                 <f:selectItem itemLabel="Selecione..."/>
+					<f:selectItems value="#{localizacaoGeograficaImovelController.datums}" var="datumItem" itemValue="#{datumItem}"	itemLabel="#{datumItem.nomSistemaCoordenada}" />
+                 <f:converter converterId="datumConverter" />
+                 <p:ajax process="@this"/>
+            </p:selectOneMenu>               
+                         
+			<p:selectOneMenu label="#{bundle.empreendimento_lbl_secao_geometrica}"  required="true" requiredMessage="O campo Tipo de Inserção é de preenchimento obrigatório."
+					value="#{localizacaoGeograficaImovelController.localizacaoGeograficaSelecionada.ideClassificacaoSecao}"
+					valueChangeListener="#{localizacaoGeograficaImovelController.selectedSecGeometricaChanged}" 					
+					disabled="#{!imoveisController.temImovelSelecionado or empreendimentoController.visualizarEmpreendimento}" style="width: 200px;">
+					<f:converter converterId="simpleEntityConverter" />															
+					<f:selectItems value="#{localizacaoGeograficaImovelController.itemsClassifSecGeometrica}" />
+			</p:selectOneMenu>
+			
+			<p:inputText id="inputDescLocalizaGeograf" maxlength="150" onkeypress="ExcetoNumero(this);" onkeyup="ExcetoNumero(this);" value="#{localizacaoGeograficaImovelController.localizacaoGeograficaSelecionada.desLocalizacaoGeografica}" 
+							 title="Descrição da Localização" disabled="#{!imoveisController.temImovelSelecionado or empreendimentoController.visualizarEmpreendimento}" />	
+			
+			<p:commandButton value="Salvar"	disabled="#{!imoveisController.temImovelSelecionado or empreendimentoController.visualizarEmpreendimento}"
+					action="#{localizacaoGeograficaImovelController.salvarLocalizacaoGeografica}" update=":tabAbas:paginaImovel:locGeografica:uplShapefile :tabAbas:locGeografica:panelIncluirVertice" />
+							
+		</h:panelGrid>
+							
+		<h:panelGrid id="uplShapefile" rendered="#{localizacaoGeograficaImovelController.uplShapefile}" columns="1" style="width:370px">
+				<h:outputLabel value="#{bundle.empreendimento_lbl_localizacao_geografica_shp}" rendered="#{localizacaoGeograficaImovelController.uplShapefile}" style="float:left; width:330px;" />
+				<p:fileUpload uploadLabel="false" label="Upload Documento" rendered="#{localizacaoGeograficaImovelController.uplShapefile}" fileLimit="3"
+					fileUploadListener="#{localizacaoGeograficaImovelController.trataArquivo()}" invalidFileMessage="Tipo de arquivo inválido." mode="advanced"
+					update="tblDocumento" auto="true" required="true" requiredMessage="Arquivo é Obrigatório!" allowTypes="/(\.|\/)(shp|dbf|shx|SHP|DBF|SHX)$/" immediate="true"/>
+							
+				<h:panelGrid id="tblDocumento" rendered="#{localizacaoGeograficaImovelController.uplShapefile}" style="float:right;">
+					<p:dataTable id="dataTableDocumentos" rendered="#{localizacaoGeograficaImovelController.temArquivo}"
+						widgetVar="dtTbDocumentos" value="#{localizacaoGeograficaImovelController.listaArquivo}"
+						var="arquivo" lazy="true" emptyMessage="#{bundle.msg_lista_vazia}" style="width:472px;">
+				         <p:column>  
+							<h:outputText value="#{arquivo}"/>
+				         </p:column>	
+				         <p:column rendered="${imoveisController.editMode}">  
+							<h:commandButton value="#{arquivo}" immediate="true" image="/resources/img/ico-download.png" disabled="#{empreendimentoController.visualizarEmpreendimento}">
+									<p:fileDownload value="#{localizacaoGeograficaImovelController.arquivoBaixar}" />
+				         	</h:commandButton>
+				         	&nbsp;
+				         	<p:commandLink onclick="confirmaExclusaoShapeFileLocGeoImovel.show()">
+								<f:setPropertyActionListener target="${localizacaoGeograficaImovelController.arqDeExclusao}" value="${arquivo}"/>
+								<h:graphicImage title="Excluir" value="/resources/img/ico-excluir.png" />
+							</p:commandLink>
+				         </p:column>	
+		    		</p:dataTable>
+		    		<h:panelGrid id="pnlBtnsAcoesShapes" style="width:400px;" columns="2">
+		    			<h:panelGrid id="pnlGridLinkVisualisaShape" rendered="${localizacaoGeograficaImovelController.existeTheGeom}" >
+							<a onclick='javascript:${localizacaoGeograficaImovelController.criarUrlShape("null")}'>
+								<img title="Visualizar Shape Persistido" src="/resources/img/ico-arl-relocacao.png" />
+	                    	</a>
+		    			</h:panelGrid>
+			    		<p:commandButton value="Salvar Shapes" id="btnLnkEnviarArqShapes" disabled="${localizacaoGeograficaImovelController.desabilitaSalvarShape}" style="width:150px; float:right;background-image: url(/resources/img/geraImgShape.png)!important;" 
+			    				title="Gerar Imagem dos ShapeFiles" async="true" action="#{localizacaoGeograficaImovelController.persistirShapes()}" update=":tabAbas:locGeografica:uplShapefile" />
+			    	</h:panelGrid>
+	    		</h:panelGrid>
+		</h:panelGrid>													
+        <br/>
+       	<br/>
+			<h:panelGrid id="panelIncluirVertice" rendered="#{localizacaoGeograficaImovelController.pnlVerticesHabilitado}">
+                <h:outputLabel value="#{bundle.empreendimento_lbl_incluir_ponto}"/>
+				<p:commandLink id="incluirVerticeLocGeoImovel" update=":tabAbas:paginaImovel:locGeograficaVertices" disabled="#{localizacaoGeograficaImovelController.desabilitaIncluirVerticeLocGeoImovel or empreendimentoController.visualizarEmpreendimento}"
+					oncomplete="dlgIncluirVertice.show();"
+					action="#{localizacaoGeograficaImovelController.limparVertice}"
+					process="@this" immediate="true">
+                <h:graphicImage title="Incluir Ponto" value="/resources/img/ico-expandir.png" />
+                </p:commandLink>
+			</h:panelGrid>
+        </p:outputPanel>
+                           
+                           
+		<p:dataTable rendered="#{localizacaoGeograficaImovelController.mostraLista}" var="vertice" styleClass="w100px"
+			value="#{localizacaoGeograficaImovelController.localizacaoGeograficaSelecionada.dadoGeograficoCollection}">
+                <p:column headerText="#{bundle.empreendimento_lbl_latitude}">
+					<h:outputText value="${localizacaoGeograficaImovelController.getLatitude(vertice)}" />
+                </p:column>
+                <p:column headerText="#{bundle.empreendimento_lbl_longitude}">
+					<h:outputText value="${localizacaoGeograficaImovelController.getLongitude(vertice)}" />
+                </p:column>
+                <p:column style="width:100px" headerText="#{bundle.geral_lbl_acoes}" rendered="#{imoveisController.temImovelSelecionado}" >
+					<p:commandLink update=":tabAbas:paginaImovel:locGeograficaVertices" oncomplete="dlgIncluirVertice.show();" process="@this" immediate="true"
+						action="#{localizacaoGeograficaImovelController.carregarVertice}" disabled="#{empreendimentoController.visualizarEmpreendimento}">
+						<h:graphicImage title="Editar" value="/resources/img/ico-editar.png" />
+						<f:setPropertyActionListener value="#{vertice}"	target="#{localizacaoGeograficaImovelController.vertice}" />
+					</p:commandLink>                                   
+					<p:commandLink onclick="confirmacaoExclusaoVertice.show()" process="@this" disabled="#{empreendimentoController.visualizarEmpreendimento}">
+						<f:setPropertyActionListener target="#{localizacaoGeograficaImovelController.verticeExclusao}" value="#{vertice}" />
+						<h:graphicImage title="Excluir"	value="/resources/img/ico-excluir.png" />
+                    </p:commandLink>
+					<a onclick="javascript:${localizacaoGeograficaImovelController.getUrl(vertice)}">
+						<h:graphicImage title="Geo Bahia" value="/resources/img/ico-arl-relocacao.png" />
+                    </a>
+                 </p:column>
+		 </p:dataTable>
+                           
+    </h:form>
+ </h:panelGrid> 
+                    
+<br />
+	<h:form id="formConfirmaExclusaoShapeFileLocGeoImovel" >
+		<p:confirmDialog id="_confirmaExclusaoShapeFileLocGeoImovel" widgetVar="confirmaExclusaoShapeFileLocGeoImovel"	header="#{bundle.geral_lbl_mensagem}"  
+			message="#{bundle.msg_confirma_exclusao}" severity="alert">
+				<div style="text-align: center;">
+					<p:commandButton id="btnConfirmaExclusaoShapeFileLocGeoImovel" action="${localizacaoGeograficaImovelController.excluirArquivo()}" 
+									 update=":tabAbas:locGeografica:dataTableDocumentos :tabAbas:locGeografica:tblDocumento"
+									 onclick="confirmaExclusaoShapeFileLocGeoImovel.hide()" value="#{bundle.btn_sim}"/>
+						
+					<p:commandButton value="#{bundle.btn_nao}" type="button" onclick="confirmaExclusaoShapeFileLocGeoImovel.hide()" />
+				</div>
+		</p:confirmDialog>
+	</h:form>
+<br />
+
+<p:dialog header="#{bundle.empreendimento_lbl_incluir_ponto}"
+	widgetVar="dlgIncluirVertice" modal="true" id="dlgIncluirVertice"
+	resizable="false">
+            <h:form id="locGeograficaVertices" onmouseover="RemovMenosFracGrau();">
+            <h:outputLabel onmouseover="RemovMenosFracGrau();">
+                    <em>*</em>
+			<h:outputLabel
+				value="#{bundle.incluirvertice_lbl_informar_coordenada}" />
+			<br />
+			<h:selectOneRadio
+				label="#{bundle.incluirvertice_lbl_informar_coordenada}"
+				value="#{localizacaoGeograficaImovelController.selectedModoCoordenada}"
+				id="ModoCoordenada">
+				<f:selectItem
+					itemLabel="#{bundle.incluirvertice_lbl_latitude_longitude_grau_minuto_segundo}"
+					itemValue="1" />
+                    <br />
+				<f:selectItem
+					itemLabel="#{bundle.incluirvertice_lbl_grau_fracao_grau}"
+					itemValue="2" />
+				<p:ajax event="change" process="ModoCoordenada" update="hideModal"
+					immediate="true" />
+                    </h:selectOneRadio>
+                </h:outputLabel>
+                <br />
+                <h:panelGrid>
+          		<h:panelGrid id="hideModal">
+				<h:panelGrid columns="1" rendered="#{localizacaoGeograficaImovelController.selectedModoCoordenada == '1'}">
+                	<h:panelGrid columns="3" id="latitude">
+                            <h:panelGroup>
+								<h:outputLabel value="* #{bundle.empreendimento_lbl_latitude}" for="grausLatitude" />
+		                                   &nbsp;
+	                           	<p:inputText label="#{bundle.empreendimento_lbl_latitude}" onkeyup="SomenteNumero(this);" onblur="verificaLatitude(this);"
+										value="#{localizacaoGeograficaImovelController.grausLatitude}" id="grausLatitude" style="width: 40px;" />
+								&nbsp;°&nbsp;
+	                          	<p:inputText label="#{bundle.empreendimento_lbl_latitude}" value="#{localizacaoGeograficaImovelController.minutosLatitude}"
+										onkeyup="SomenteNumero(this);" onblur="verificaMinutoSegundo(this);" id="minutosLatitude" style="width: 40px;" />
+								&nbsp;'&nbsp;
+	                          	<p:inputText label="#{bundle.empreendimento_lbl_latitude}" value="#{localizacaoGeograficaImovelController.segundosLatitude}"
+										onkeyup="SomenteNumero(this);" onblur="verificaMinutoSegundo(this);" id="segundosLatitude" style="width: 40px;" />
+								&nbsp;"&nbsp; S
+                            </h:panelGroup>
+                                <h:commandLink id="calcFracGrauLatitude" actionListener="#{localizacaoGeograficaImovelController.calculaFracaoGrauLatitude}">
+                                    <h:graphicImage title="Calcula Fração Grau Latitude" value="/resources/img/arrow-circle-double-135.png" />
+                                    <f:ajax execute="@this grausLatitude minutosLatitude segundosLatitude" render="latitude" />
+                                </h:commandLink>
+                            <h:panelGroup>
+								<h:outputLabel value="#{bundle.incluirvertice_lbl_grau_fracao_grau}" />
+	                            <br />
+								<p:inputText value="#{localizacaoGeograficaImovelController.fracaoGrauLatitude}" readonly="true" />
+                            </h:panelGroup>
+                            </h:panelGrid>
+                           
+                            <h:panelGrid columns="3" id="longitude">
+	                            <h:panelGroup>
+									<h:outputLabel value="* #{bundle.empreendimento_lbl_longitude}"	for="grausLongitude" />
+									&nbsp;
+									<p:inputText value="#{localizacaoGeograficaImovelController.grausLongitude}" id="grausLongitude"
+												 onblur="verificaLongitude(this);" onkeyup="SomenteNumero(this);" style="width: 40px;" />
+									&nbsp;°&nbsp;
+		                            <p:inputText value="#{localizacaoGeograficaImovelController.minutosLongitude}" id="minutosLongitude" 
+		                           				 onkeyup="SomenteNumero(this);" onblur="verificaMinutoSegundo(this);" style="width: 40px;" />
+		                            &nbsp;'&nbsp;
+		                            <p:inputText value="#{localizacaoGeograficaImovelController.segundosLongitude}" id="segundosLongitude"
+												 onkeyup="SomenteNumero(this);" onblur="verificaMinutoSegundo(this);" style="width: 40px;" />
+									&nbsp;"&nbsp;W
+	                            </h:panelGroup>
+	                            <h:commandLink id="calcFracGrauLongitude" actionListener="#{localizacaoGeograficaImovelController.calculaFracaoGrauLongitude}">
+	                                <h:graphicImage title="Calcula Fração Grau Longitude" value="/resources/img/arrow-circle-double-135.png" />
+	                                <f:ajax execute="@this grausLongitude minutosLongitude segundosLongitude" render="longitude" />
+	                            </h:commandLink>
+	                            <h:panelGroup>
+									<h:outputLabel	value="#{bundle.incluirvertice_lbl_grau_fracao_grau}" />
+		                                    <br />
+									<p:inputText value="#{localizacaoGeograficaImovelController.fracaoGrauLongitude}" readonly="true" />
+	                            </h:panelGroup>
+                            </h:panelGrid>
+                           
+                </h:panelGrid>
+				<h:panelGrid rendered="#{localizacaoGeograficaImovelController.selectedModoCoordenada == '2'}">
+                        <h:panelGroup>
+							<h:outputLabel value="* #{bundle.empreendimento_lbl_latitude}" for="latitudeFracaoGrau" /> - <h:outputLabel	value="#{bundle.incluirvertice_lbl_grau_fracao_grau}" />
+							<br />-&nbsp;<p:inputMask value="#{localizacaoGeograficaImovelController.fracaoGrauLatitude}" id="latitudeFracaoGrau" required="true"
+											label="#{bundle.empreendimento_lbl_latitude}" mask="99,999999" onblur="verificaLatitude(this);" />
+                        </h:panelGroup>
+                        <h:panelGroup>
+							<h:outputLabel value="* #{bundle.empreendimento_lbl_longitude}"	for="longitudeFracaoGrau" /> - 
+							<h:outputLabel value="#{bundle.incluirvertice_lbl_grau_fracao_grau}" />
+							<br />-&nbsp;<p:inputMask value="#{localizacaoGeograficaImovelController.fracaoGrauLongitude}" id="longitudeFracaoGrau"
+											 required="true" label="#{bundle.empreendimento_lbl_longitude}" mask="99,999999" onblur="verificaLongitude(this);" />
+                        </h:panelGroup>
+                        <br />
+	           		<h:outputLabel value="#{bundle.loc_geo_aviso_digito_decimal}" style="color: red;"/>
+                </h:panelGrid>
+           		</h:panelGrid>
+                <br />
+					<b><h:outputLabel value="#{bundle.incluirvertice_msg_coordenadas_devem_ser_informadas_sistema_geodesico_datum_utilizados}" style="font-weight: bold;" /></b>
+                <br />
+                    <h:panelGroup>
+                        <h:outputLabel value="#{bundle.lbl_preench_obrig_asterisc}" />
+                    </h:panelGroup>
+                    <h:panelGroup id="teste">
+                        <div style="text-align: center;">
+                            <p:commandButton immediate="true" process="@this"  update="tabAbas:paginaImovel:locGeograficaVertices" 
+                            				 actionListener="#{imoveisController.limparFormLocGeografica}" value="#{bundle.geral_lbl_limpar}"/>
+                            <p:commandButton value="#{bundle.geral_lbl_salvar}" update="tabAbas:paginaImovel:localizacaoGeografica,locGeograficaVertices" ajax="true" 
+                            				 onsuccess="dialogoIncluirVertice.hide(); dlgIncluirVertice.hide();" process="@form" action="${imoveisController.carregarImoveisEmpreendimento()}" actionListener="#{localizacaoGeograficaImovelController.salvarVertice}"/>
+                        </div>
+                    </h:panelGroup>
+                </h:panelGrid>
+                
+            </h:form>
+        </p:dialog>
+        
+        
+        
+<p:confirmDialog id="confirmacaoExclusaoVertice"
+	widgetVar="confirmacaoExclusaoVertice"
+	header="#{bundle.geral_lbl_mensagem}" zindex="9000"
+                message="#{bundle.msg_confirma_exclusao}" severity="alert">
+            <h:form id="formexclusao">
+            <h:panelGroup>
+                <div style="text-align: center;">
+                    <p:commandButton id="confirmarInclusaoBoleto"
+                        value="#{bundle.btn_sim}"
+                        update="tabAbas:paginaImovel:locGeografica"
+                        onclick="confirmacaoExclusaoVertice.hide()"
+                        action="${localizacaoGeograficaImovelController.excluirVertice}"/>
+				<p:commandButton value="#{bundle.btn_nao}" process="@this"
+					update="formexclusao"
+					oncomplete="confirmacaoExclusaoVertice.hide()" />
+                </div>
+            </h:panelGroup>
+            </h:form>
+        </p:confirmDialog>					
+	
+	</html>

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui"
+	xmlns:s="http://java.sun.com/jsf/composite/seia">
+	
+	<h:form id="formTipologia">
+		<h:panelGrid style="text-align: left;">
+			<h:outputLabel value="* Divisão:"/>
+		</h:panelGrid>
+		
+		<h:panelGrid id="panelTipologia" columns="1">
+			
+			<p:selectOneMenu id="selectOneTipologia" value="#{tccaController.tipologiaSelecionada}" style="width: 576px;" converter="tipologiaConverter" >
+				<f:selectItem itemLabel="Selecione..." />
+				<f:selectItems value="#{tccaController.tipologiasDisponiveis}" var="tipologia" itemLabel="#{tipologia.codigoDescricaoTipologia}" itemValue="#{tipologia}"/>
+				<p:ajax event="change" update="panelTipologia" listener="#{tccaController.changeListenerTipologia}" />
+			</p:selectOneMenu>
+			
+			<p:tree value="#{tccaController.root}" var="node" selectionMode="single" selection="#{tccaController.selectedNode}" 
+				style="width: 566px; height:200px; overflow: scroll; overflow-x: hidden;">
+				
+				<p:treeNode>
+					<h:outputText value="#{node.desTipologia}"/>
+				</p:treeNode>
+			</p:tree>
+			
+			<h:selectOneRadio id="inputTipoTipologia" value="#{tccaController.empreendimentoTipologiaSelecionado.indPermanente}" rendered="false">
+				<f:selectItem itemLabel="Permanente" itemValue="true" />
+				<f:selectItem itemLabel="Temporária" itemValue="false" />
+			</h:selectOneRadio>
+			
+			<h:panelGroup>
+				<p:commandButton value="#{bundle.btn_cancelar}" onclick="dialogTipologia.hide()" />
+				<p:commandButton actionListener="#{tccaController.adicionaGrupoTipologia(true)}" value="Salvar e Fechar" update="formCadastroTCCA:panelTipologia" />
+				<p:commandButton actionListener="#{tccaController.adicionaGrupoTipologia(false)}" value="Salvar e Continuar" update="formCadastroTCCA:panelTipologia"/>
+			</h:panelGroup>
+		</h:panelGrid>
+	</h:form>
+</ui:composition>

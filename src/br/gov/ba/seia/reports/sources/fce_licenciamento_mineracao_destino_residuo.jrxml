@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="fce_licenciamento_mineracao_destino_residuo" pageWidth="480" pageHeight="817" whenNoDataType="AllSectionsNoDetail" columnWidth="480" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="80b78396-35cc-4e26-aaf9-1207b1892468">
+	<property name="ireport.zoom" value="1.5000000000000007"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String"/>
+	<parameter name="ide_fce_licenciamento_mineral" class="java.lang.Integer"/>
+	<queryString>
+		<![CDATA[SELECT dr.dsc_destino_residuo FROM fce_licenciamento_mineral_destino_residuo  flm
+join destino_residuo dr on dr.ide_destino_residuo = flm.ide_destino_residuo
+where ide_fce_licenciamento_mineral  = $P{ide_fce_licenciamento_mineral}]]>
+	</queryString>
+	<field name="dsc_destino_residuo" class="java.lang.String"/>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement uuid="d3021233-c695-47a4-ae49-2322f86b9fea" x="0" y="0" width="307" height="20"/>
+				<box topPadding="3" leftPadding="2"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dsc_destino_residuo}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

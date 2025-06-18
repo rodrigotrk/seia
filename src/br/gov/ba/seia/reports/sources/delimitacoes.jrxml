@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="delimitacoes" language="java" printOrder="Horizontal" pageWidth="311" pageHeight="21" orientation="Landscape" columnWidth="311" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="ide_lac" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT array_to_string( array(
+	select dsc_tipo_delimitacao_terreno ||
+		CASE
+		  WHEN le.dsc_outros_tipo_delimitacao is not null and ep.ide_tipo_delimitacao_terreno = 3
+		  THEN ': '||dsc_outros_tipo_delimitacao
+		  ELSE ''
+		END as dsc_outros
+	from tipo_delimitacao_terreno ep
+	inner join lac_erb_tipo_delimitacao ee on ee.ide_tipo_delimitacao_terreno = ep.ide_tipo_delimitacao_terreno
+	inner join lac_erb le on le.ide_lac_erb = ee.ide_lac_erb
+	 where ee.ide_lac_erb = $P{ide_lac}
+), ', ');]]>
+	</queryString>
+	<field name="array_to_string" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="21" splitType="Stretch">
+			<textField isStretchWithOverflow="true">
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="0" y="1" width="311" height="20"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font isStrikeThrough="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{array_to_string}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

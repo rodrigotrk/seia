@@ -1,0 +1,471 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="certificado" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="c07e0da1-41a4-48f2-ad14-889adbb752ad">
+	<property name="ireport.zoom" value="1.3660269107301444"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="48"/>
+	<subDataset name="dataset_torres" uuid="0c59630b-d016-404b-81b2-30b78595080a">
+		<parameter name="ide_cadastro" class="java.lang.Integer"/>
+		<queryString>
+			<![CDATA[select
+t.nom_idenf_torre_anemometrica,
+t.val_projecao_monitoramento,
+t. val_altura_torre,
+tnt.nom_tipo_natureza_torre,
+sc.nom_sistema_coordenada,
+array_to_string( array(SELECT latitude FROM (
+
+			SELECT
+				case when length(trim(f_get_vertices(ide_localizacao_geografica)):: character varying) > 0
+				then
+					substring(
+						( SELECT trim(f_get_vertices(ide_localizacao_geografica) ) )
+						FROM (strpos((SELECT trim(f_get_vertices(ide_localizacao_geografica))), '(') + 1) for (strpos((SELECT trim(f_get_vertices(ide_localizacao_geografica))),
+						' ') - 1)
+						)
+				else 'valor não informado.' end AS latitude
+			FROM
+				localizacao_geografica
+			WHERE
+				ide_localizacao_geografica = lg.ide_localizacao_geografica) pontos), ', ') AS latitudeInicial,
+
+array_to_string( array(SELECT longitude FROM (
+		SELECT
+			case when length(trim(f_get_vertices(ide_localizacao_geografica)):: character varying) > 0
+			then
+			replace(substring((SELECT trim(f_get_vertices(ide_localizacao_geografica))) FROM (strpos((SELECT trim(f_get_vertices(ide_localizacao_geografica))), ' ') + 1) for (strpos((SELECT trim(f_get_vertices(ide_localizacao_geografica))), ')') - 1)), ')', '') else 'valor não informado.' end AS longitude
+		FROM
+			localizacao_geografica
+		WHERE
+			ide_localizacao_geografica = lg.ide_localizacao_geografica) pontos), ', ') AS longitudeInicial
+from torre_anemometrica t
+inner join tipo_natureza_torre tnt on tnt.ide_tipo_natureza_torre = t.ide_tipo_natureza_torre
+inner join localizacao_geografica lg on lg.ide_localizacao_geografica = t.ide_localizacao_geografica
+inner join sistema_coordenada sc on sc.ide_sistema_coordenada = lg.ide_sistema_coordenada
+where ide_cadastro_atividade_nao_sujeita_lic = $P{ide_cadastro} and t.ind_excluido=false;]]>
+		</queryString>
+		<field name="nom_idenf_torre_anemometrica" class="java.lang.String">
+			<fieldDescription><![CDATA[Esse campo refere-se ao campos de Identificação da torre anemométrica.]]></fieldDescription>
+		</field>
+		<field name="val_projecao_monitoramento" class="java.lang.Integer">
+			<fieldDescription><![CDATA[Projeção de monitoramento]]></fieldDescription>
+		</field>
+		<field name="val_altura_torre" class="java.math.BigDecimal"/>
+		<field name="nom_tipo_natureza_torre" class="java.lang.String"/>
+		<field name="nom_sistema_coordenada" class="java.lang.String"/>
+		<field name="latitudeinicial" class="java.lang.String"/>
+		<field name="longitudeinicial" class="java.lang.String"/>
+	</subDataset>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="ide_cadastro" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="LOGO_INEMA" class="java.lang.String"/>
+	<parameter name="LOGO_GOVERNO" class="java.lang.String"/>
+	<parameter name="MARCA_DAGUA" class="java.lang.String"/>
+	<parameter name="LOGO_SEIA" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[select
+	c.ide_cadastro_atividade_nao_sujeita_lic,
+	c.num_cadastro as numero_de_cadastro,
+
+	--certificado
+	ce.num_certificado num_certificado,
+	overlay(overlay(overlay(num_token placing '-' from 25 for 0) placing '-' from 17 for 0) placing '-' from 9 for 0) as num_token,
+	ce.dtc_emissao_certificado
+
+from cadastro_atividade_nao_sujeita_lic c
+
+left join certificado ce on ce.ide_certificado = c.ide_certificado
+
+where c.ide_cadastro_atividade_nao_sujeita_lic = $P{ide_cadastro}]]>
+	</queryString>
+	<field name="ide_cadastro_atividade_nao_sujeita_lic" class="java.lang.Integer"/>
+	<field name="numero_de_cadastro" class="java.lang.String"/>
+	<field name="num_certificado" class="java.lang.String"/>
+	<field name="num_token" class="java.lang.String"/>
+	<field name="dtc_emissao_certificado" class="java.sql.Timestamp"/>
+	<background>
+		<band height="50">
+			<image scaleImage="RealHeight" onErrorType="Blank">
+				<reportElement uuid="1e3d6147-0a8b-4b5e-ad62-bea31939168c" positionType="Float" x="0" y="0" width="555" height="50" isRemoveLineWhenBlank="true" isPrintWhenDetailOverflows="true">
+					<printWhenExpression><![CDATA[$P{MARCA_DAGUA} != null && !$P{MARCA_DAGUA}.isEmpty()]]></printWhenExpression>
+				</reportElement>
+				<imageExpression><![CDATA[$P{MARCA_DAGUA}]]></imageExpression>
+			</image>
+		</band>
+	</background>
+	<detail>
+		<band height="65">
+			<staticText>
+				<reportElement uuid="16375c0d-8c7b-4d55-ade6-4334cdff1128" x="155" y="5" width="231" height="26"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="14" isBold="true" isUnderline="false"/>
+				</textElement>
+				<text><![CDATA[CERTIFICADO DE CADASTRO ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="a15a14be-9137-43ed-8072-bb9b4a903245" x="114" y="31" width="313" height="21"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="html">
+					<font fontName="SansSerif" size="14" isBold="true"/>
+					<paragraph lineSpacing="1_1_2"/>
+				</textElement>
+				<text><![CDATA[INSTALAÇÃO DE TORRES ANEMOMÉTRICAS]]></text>
+			</staticText>
+			<image isLazy="true" onErrorType="Blank">
+				<reportElement uuid="8c0f911e-b70f-48e2-adc6-f70c7c6cadc4" x="450" y="0" width="105" height="61" forecolor="#FFFFFF"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<graphicElement>
+					<pen lineWidth="1.0" lineStyle="Solid" lineColor="#FFFFFF"/>
+				</graphicElement>
+				<imageExpression><![CDATA[$P{LOGO_SEIA}]]></imageExpression>
+			</image>
+			<image isLazy="true" onErrorType="Blank">
+				<reportElement uuid="8c2b1aa1-3e36-4df3-8b3b-6d8dc227b09e" x="2" y="3" width="99" height="61" forecolor="#FFFFFF"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<graphicElement>
+					<pen lineWidth="0.0"/>
+				</graphicElement>
+				<imageExpression><![CDATA[$P{LOGO_INEMA}]]></imageExpression>
+			</image>
+		</band>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement uuid="5c508e19-a500-42a2-8277-5dfa889ba9a5" x="15" y="0" width="303" height="20"/>
+				<box topPadding="1" leftPadding="3" bottomPadding="1" rightPadding="1">
+					<topPen lineWidth="0.25" lineStyle="Solid"/>
+					<leftPen lineWidth="0.25" lineStyle="Solid"/>
+					<bottomPen lineWidth="0.25" lineStyle="Solid"/>
+					<rightPen lineWidth="0.25" lineStyle="Solid"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif" size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Nº Certificado: " + $F{num_certificado}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="089ae908-1705-4c4d-bf1a-bf13727c6eb6" x="318" y="0" width="222" height="20"/>
+				<box topPadding="1" leftPadding="3" bottomPadding="1" rightPadding="1">
+					<topPen lineWidth="0.25" lineStyle="Solid"/>
+					<leftPen lineWidth="0.25" lineStyle="Solid"/>
+					<bottomPen lineWidth="0.25" lineStyle="Solid"/>
+					<rightPen lineWidth="0.25" lineStyle="Solid"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif" size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dtc_emissao_certificado}!= null
+? "Data de emissão: " + new java.text.SimpleDateFormat("dd/MM/yyyy").format($F{dtc_emissao_certificado})
+: "Data de emissão não encontrada."]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="20">
+			<subreport>
+				<reportElement uuid="e4538302-330b-4f89-92b8-27043f6ff96b" x="15" y="0" width="525" height="20"/>
+				<subreportParameter name="SUBREPORT_DIR">
+					<subreportParameterExpression><![CDATA[$P{SUBREPORT_DIR}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="ide_cadastro">
+					<subreportParameterExpression><![CDATA[$F{ide_cadastro_atividade_nao_sujeita_lic}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "certificado_cabecalho.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+		<band height="25">
+			<subreport>
+				<reportElement uuid="41b6c4b9-9085-45ed-8d41-1c6f6250765f" x="15" y="5" width="525" height="20"/>
+				<subreportParameter name="SUBREPORT_DIR">
+					<subreportParameterExpression><![CDATA[$P{SUBREPORT_DIR}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="ide_cadastro">
+					<subreportParameterExpression><![CDATA[$F{ide_cadastro_atividade_nao_sujeita_lic}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "certificado_artigo_primeiro.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+		<band height="129" splitType="Stretch">
+			<componentElement>
+				<reportElement uuid="0b377f15-bc05-4526-aa21-3ecf16cff42d" x="15" y="7" width="526" height="117"/>
+				<jr:list xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" printOrder="Vertical">
+					<datasetRun subDataset="dataset_torres" uuid="5548cc85-8f4e-4300-83ea-718935e29a42">
+						<datasetParameter name="ide_cadastro">
+							<datasetParameterExpression><![CDATA[$P{ide_cadastro}]]></datasetParameterExpression>
+						</datasetParameter>
+					</datasetRun>
+					<jr:listContents height="117" width="526">
+						<textField>
+							<reportElement uuid="3ba996ee-dede-4180-ad5e-5b27adaa37ba" x="1" y="0" width="521" height="20"/>
+							<box leftPadding="0"/>
+							<textElement verticalAlignment="Middle"/>
+							<textFieldExpression><![CDATA["Torre anemométrica: "+$F{nom_idenf_torre_anemometrica}]]></textFieldExpression>
+						</textField>
+						<rectangle>
+							<reportElement uuid="bf044162-8cf7-4aa5-a971-cfc1fecac33e" x="1" y="20" width="525" height="95"/>
+						</rectangle>
+						<staticText>
+							<reportElement uuid="c270964f-9326-4339-9033-e98d95e787b5" x="1" y="21" width="126" height="16"/>
+							<box leftPadding="5"/>
+							<textElement verticalAlignment="Middle"/>
+							<text><![CDATA[Localização geográfica: ]]></text>
+						</staticText>
+						<textField>
+							<reportElement uuid="4779afe5-cbcf-4550-868e-86451827e5d5" x="1" y="36" width="143" height="16"/>
+							<box leftPadding="5"/>
+							<textElement verticalAlignment="Middle"/>
+							<textFieldExpression><![CDATA["Latitude: "+$F{latitudeinicial}]]></textFieldExpression>
+						</textField>
+						<textField>
+							<reportElement uuid="5db5de42-1023-4cb5-8553-daf1245ede8b" x="144" y="36" width="196" height="16"/>
+							<box leftPadding="5"/>
+							<textElement verticalAlignment="Middle"/>
+							<textFieldExpression><![CDATA["Longitude: "+$F{longitudeinicial}]]></textFieldExpression>
+						</textField>
+						<textField>
+							<reportElement uuid="6d212cde-9909-4354-b313-50a99053bee0" x="1" y="52" width="524" height="16"/>
+							<box leftPadding="5"/>
+							<textElement verticalAlignment="Middle"/>
+							<textFieldExpression><![CDATA["Sistema de Coordenadas: "+$F{nom_sistema_coordenada}]]></textFieldExpression>
+						</textField>
+						<textField>
+							<reportElement uuid="03650c38-c7f0-4429-b6c5-f5ad497ce768" x="1" y="67" width="208" height="16"/>
+							<box leftPadding="5"/>
+							<textElement verticalAlignment="Middle"/>
+							<textFieldExpression><![CDATA["Altura: "+$F{val_altura_torre}+" m"]]></textFieldExpression>
+						</textField>
+						<textField>
+							<reportElement uuid="bc7b05f4-92c4-4470-85ae-2d455262cebf" x="1" y="84" width="524" height="16"/>
+							<box leftPadding="5"/>
+							<textElement/>
+							<textFieldExpression><![CDATA["Natureza: "+$F{nom_tipo_natureza_torre}]]></textFieldExpression>
+						</textField>
+						<textField>
+							<reportElement uuid="fce02535-f36f-4393-9d94-1182fda79892" x="1" y="98" width="335" height="16"/>
+							<box leftPadding="5"/>
+							<textElement verticalAlignment="Middle"/>
+							<textFieldExpression><![CDATA["Projeção de monitoramento: "+$F{val_projecao_monitoramento} +" ano(s)"]]></textFieldExpression>
+						</textField>
+					</jr:listContents>
+				</jr:list>
+			</componentElement>
+		</band>
+		<band height="44" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="ce82f0b9-baf6-4d91-b085-51a7274fa243" x="27" y="1" width="503" height="12"/>
+				<textElement textAlignment="Justified" markup="html">
+					<font fontName="SansSerif"/>
+				</textElement>
+				<text><![CDATA[A operação da(s) torre (s) cadastrada(s) deverá atender às seguintes determinações e critérios:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="6bfc8097-ede4-4e03-8b67-258e0789f886" x="32" y="19" width="10" height="12"/>
+				<textElement markup="html">
+					<font fontName="SansSerif"/>
+				</textElement>
+				<text><![CDATA[1.
+]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="f5c3b4c3-3c77-470d-81fb-a2f77704e37b" x="55" y="19" width="485" height="25"/>
+				<textElement textAlignment="Justified"/>
+				<textFieldExpression><![CDATA["Requerer ao INEMA a autorização para a outorga de direito de uso de recursos hídricos, quando couber;"]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="30" splitType="Prevent">
+			<staticText>
+				<reportElement uuid="56a22525-f786-40b4-932e-efa9f6d0214e" positionType="Float" x="32" y="0" width="10" height="12" isPrintWhenDetailOverflows="true"/>
+				<textElement markup="html">
+					<font fontName="SansSerif"/>
+				</textElement>
+				<text><![CDATA[2.
+]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="f33be2f6-6224-4e3b-8ebd-c4fbce551da7" positionType="Float" x="55" y="0" width="485" height="25" isPrintWhenDetailOverflows="true"/>
+				<textElement textAlignment="Justified" markup="html">
+					<font fontName="SansSerif"/>
+				</textElement>
+				<text><![CDATA[Requerer ao INEMA a Autorização de Supressão de Vegetação nativa, caso seja necessário abertura de acesso ou retirada da vegetação na área para a instalação da Torre;]]></text>
+			</staticText>
+		</band>
+		<band height="28" splitType="Prevent">
+			<staticText>
+				<reportElement uuid="683d48f7-1738-4edd-85f2-4b9ead8488bd" positionType="Float" x="32" y="0" width="10" height="12" isPrintWhenDetailOverflows="true"/>
+				<textElement markup="html">
+					<font fontName="SansSerif"/>
+				</textElement>
+				<text><![CDATA[3.
+]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="f2d64562-7ecd-4a3a-bc85-9e1f9e11ae12" positionType="Float" x="55" y="0" width="485" height="24" isPrintWhenDetailOverflows="true"/>
+				<textElement textAlignment="Justified" markup="html">
+					<font fontName="SansSerif"/>
+				</textElement>
+				<text><![CDATA[Durante a instalação destinar, de acordo com legislação vigente,  os resíduos gerados ficando proibida a sua distribuição aleatória;]]></text>
+			</staticText>
+		</band>
+		<band height="30" splitType="Prevent">
+			<staticText>
+				<reportElement uuid="a6d652d5-f403-48f1-bc61-778a52cf3276" positionType="Float" x="32" y="0" width="10" height="12" isPrintWhenDetailOverflows="true"/>
+				<textElement markup="html">
+					<font fontName="SansSerif"/>
+				</textElement>
+				<text><![CDATA[4.
+]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="d6c28a29-0003-496c-aee9-367c67ca3498" positionType="Float" x="55" y="0" width="485" height="28" isPrintWhenDetailOverflows="true"/>
+				<textElement textAlignment="Justified" markup="html">
+					<font fontName="SansSerif"/>
+				</textElement>
+				<text><![CDATA[Desmobilizar e remover completamente toda a estrutura da torre (incluindo material de confecção, sustentação e acessórios) ao finalizar as atividades naquela área.]]></text>
+			</staticText>
+		</band>
+		<band height="16" splitType="Prevent">
+			<staticText>
+				<reportElement uuid="dce078fe-c8e6-4e3d-94f5-af43a2263178" positionType="Float" x="32" y="0" width="10" height="12" isPrintWhenDetailOverflows="true"/>
+				<textElement markup="html">
+					<font fontName="SansSerif"/>
+				</textElement>
+				<text><![CDATA[5.
+]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="3730041d-f313-41c8-8ff6-04c6914d3063" positionType="Float" x="55" y="0" width="485" height="12" isPrintWhenDetailOverflows="true"/>
+				<textElement textAlignment="Justified" markup="html">
+					<font fontName="SansSerif"/>
+				</textElement>
+				<text><![CDATA[Respeitar as Áreas de Preservação Permanente;]]></text>
+			</staticText>
+		</band>
+		<band height="43" splitType="Prevent">
+			<staticText>
+				<reportElement uuid="60daa03e-a374-49ce-8d7d-7e26f0d83f5f" positionType="Float" x="32" y="0" width="10" height="12" isPrintWhenDetailOverflows="true"/>
+				<textElement markup="html">
+					<font fontName="SansSerif"/>
+				</textElement>
+				<text><![CDATA[6.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="75bcaa08-86d5-4abb-aacf-77028e1af20b" positionType="Float" x="55" y="0" width="485" height="40" isPrintWhenDetailOverflows="true"/>
+				<textElement textAlignment="Justified" markup="html">
+					<font fontName="SansSerif"/>
+				</textElement>
+				<text><![CDATA[Instalar e manter uma placa de sinalização com as seguintes informações: Numero do cadastro; nome do empreendimento; identificação numérica da torre com o numero total de torres; natureza da torre; numero do processo, se ASV; data de implantação para fins de fiscalização;]]></text>
+			</staticText>
+		</band>
+		<band height="51">
+			<staticText>
+				<reportElement uuid="fab932a6-1e80-4cce-b6c1-202f81d6e448" x="15" y="2" width="37" height="13"/>
+				<textElement textAlignment="Center">
+					<font fontName="SansSerif" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Art. 2.º]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="bbcb1c57-0d1f-4919-8bc9-0da809f4dcf1" stretchType="RelativeToBandHeight" x="65" y="2" width="472" height="48"/>
+				<textElement textAlignment="Justified" markup="html">
+					<font fontName="SansSerif"/>
+				</textElement>
+				<text><![CDATA[Este Certificado refere-se exclusivamente a instalação de Torres anemométricas, não abrangendo outros empreendimentos ou atividades do mesmo requerente, cabendo a empresa obter a Anuência e/ou Autorização das outras instâncias no Âmbito Federal, Estadual ou Municipal, quando couber, para que a mesma alcance seus efeitos legais.]]></text>
+			</staticText>
+		</band>
+		<band height="43">
+			<printWhenExpression><![CDATA[!$F{num_token}.isEmpty()]]></printWhenExpression>
+			<staticText>
+				<reportElement uuid="d9537648-ef2e-4acf-8f57-53337af1b770" x="10" y="6" width="37" height="13"/>
+				<textElement textAlignment="Center">
+					<font fontName="SansSerif" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Art. 3.º]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="d0b11039-082b-4855-8ea3-36066d07d214" stretchType="RelativeToBandHeight" x="65" y="5" width="472" height="38"/>
+				<textElement textAlignment="Justified" markup="html">
+					<font fontName="SansSerif"/>
+				</textElement>
+				<text><![CDATA[Estabelecer que este certificado, bem como cópias dos documentos relativos ao cumprimento das recomendações acima citados, sejam mantidos disponíveis à fiscalização do INEMA e aos demais órgãos do Sistema Estadual de Meio Ambiente – SISEMA.]]></text>
+			</staticText>
+		</band>
+		<band height="68" splitType="Immediate">
+			<textField pattern="########-########-########-########">
+				<reportElement uuid="427ac6fc-5502-4bb0-a176-28df6f14e6b3" x="15" y="33" width="525" height="35"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{num_token}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="4adb62d5-9bec-4e9e-a1ed-33d05832df3f" x="15" y="9" width="525" height="24"/>
+				<textElement textAlignment="Justified">
+					<font fontName="SansSerif"/>
+				</textElement>
+				<textFieldExpression><![CDATA["A autenticidade deste certificado pode ser atestada na internet, no endereço: http://www.seia.ba.gov.br em Serviços On-line/Atestar Certificado, utilizando a chave de segurança deste certificado."]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="47">
+			<textField>
+				<reportElement uuid="6bd5aed0-b98c-463b-8680-6fc81a513463" x="15" y="12" width="525" height="12" forecolor="#C0C0C0"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Certificado de Cadastro"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="5e98e9fc-c50f-44da-951f-86b32c4183c5" x="15" y="23" width="525" height="12" forecolor="#C0C0C0"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Documento emitido às " + new java.text.SimpleDateFormat("HH:mm:ss").format(new java.util.Date()) +
+" do dia "+ new java.text.SimpleDateFormat("dd/MM/yyyy").format(new java.util.Date()) +
+" (Hora e Data de Brasília) Válido por 2 anos."]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="59a427c0-6a5c-4890-8761-33651ed7d009" x="15" y="35" width="525" height="12" forecolor="#C0C0C0"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA["INEMA/CAB: Avenida Luís Viana Filho, 6ª Avenida, nº 600 CAB. CEP:41.746-900 - Salvador - Bahia - Brasil"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="eeca94aa-7a37-43d4-a3c6-1bc24b487c5c" x="15" y="0" width="525" height="12" forecolor="#C0C0C0">
+					<printWhenExpression><![CDATA[!$F{num_token}.isEmpty()]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Chave de segurança " + $F{num_token}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="8844cf7a-ec66-41d5-869b-a6dc0dafbe11" x="516" y="35" width="12" height="12" forecolor="#C0C0C0"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}+ " | "]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement uuid="38d63822-38d8-4e13-b3ca-b38651e70423" x="528" y="35" width="12" height="12" forecolor="#C0C0C0"/>
+				<box leftPadding="1"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+</jasperReport>

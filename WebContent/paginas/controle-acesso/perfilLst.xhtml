@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui"
+	template="../../layout/template.xhtml">
+
+	<ui:define name="titulo-pagina">		
+		<h3>Cadastrar Perfis</h3>		
+	</ui:define>	
+
+	<ui:define name="conteudo-principal">
+
+		<h:form id="formFiltroPerfil">
+			<h:outputFormat value="#{bundle.lbl_descricao_perfil}:"/><p:inputText value="#{perfilController.descricaoPerfil}" />
+			&nbsp;
+			<p:commandButton value="#{bundle.btn_pesquisar}" action="#{perfilController.pesquisarPerfil}" ajax="false" process="pesquisar"/>
+			&nbsp;
+			<p:commandButton action="#{perfilController.novoPerfil}" update=":formPerfil:panelPerfil" value="#{bundle.btn_incluir_perfil}" oncomplete="dlgPerfil.show()"/>
+		</h:form>
+		<br />
+		<h:form id="formListaPerfis">
+			<p:dataTable id="dataTablePerfis" widgetVar="dtTbPerfis" value="#{perfilController.modelPerfis}" var="perfil" 
+			lazy="true" paginator="true" rows="10" paginatorPosition="bottom" paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}" rowsPerPageTemplate="5,10,15" emptyMessage="#{bundle.msg_lista_vazia}" style="width: 700px;">
+
+        		<f:facet name="header">
+					<h:outputText value="#{bundle.lst_perfis}" />
+				</f:facet>
+				<p:column style="width: 450px;">  
+					<f:facet name="header">
+						<h:outputText value="#{bundle.lbl_descricao_perfil}" />  
+					</f:facet>
+					<h:outputText value="#{perfil.dscPerfil}" />  
+				</p:column>
+				<p:column>
+					<f:facet name="header">  
+						<h:outputText value="#{bundle.msg_acoes}" />  
+					</f:facet>
+					
+					<p:commandLink id="alterar" disabled="${!security.temAcesso('1.7.3')}" action="#{perfilController.limparTela}" title="#{bundle.btn_editar}" update=":formPerfil:panelPerfil" onclick="dlgPerfil.show()" process="alterar">
+						<h:graphicImage title="Editar" value="/resources/img/ico-alterar.png" />
+						<f:setPropertyActionListener value="#{perfil}" target="#{perfilController.perfil}" />
+            		</p:commandLink>
+            		
+					<p:commandLink id="excluir" disabled="${!security.temAcesso('1.7.2')}" title="#{bundle.btn_excluir}" onclick="confirmDlgExclusaoPerfil.show()" image="ui-icon ui-icon-close" process="excluir">
+						<h:graphicImage title="Excluir" value="/resources/img/ico-excluir.png" />
+						<f:setPropertyActionListener value="#{perfil}" target="#{perfilController.perfil}" />
+            		</p:commandLink>
+        		</p:column>
+    		</p:dataTable>
+
+			<p:confirmDialog id="confirmDialogExclusaoPerfil" widgetVar="confirmDlgExclusaoPerfil" header="#{bundle.hdr_confirma_exclusao}" message="#{bundle.msg_confirma_exclusao}" severity="alert">
+				<p:commandButton id="confirmarExclusao" value="#{bundle.btn_sim}" update=":formListaPerfis:dataTablePerfis" action="#{perfilController.excluirPerfil}" oncomplete="confirmDlgExclusaoPerfil.hide()" process="confirmarExclusao"/>
+				<p:commandButton value="#{bundle.btn_nao}" type="button" onclick="confirmDlgExclusaoPerfil.hide()" />
+			</p:confirmDialog>
+
+    	</h:form>
+
+		<p:dialog id="dialogPerfil" header="#{bundle.btn_incluir_perfil}" closable="true" draggable="true" resizable="false" width="350" widgetVar="dlgPerfil" modal="true">	
+			<ui:include src="/paginas/controle-acesso/perfil.xhtml" />
+		</p:dialog>
+
+	</ui:define>
+</ui:composition>

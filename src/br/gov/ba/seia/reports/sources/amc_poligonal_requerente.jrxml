@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="amc_poligonal_requerente" language="java" pageWidth="495" pageHeight="752" columnWidth="495" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="6692951b-0f6e-4cf8-ad42-b50f9f480394">
+	<property name="ireport.zoom" value="2.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="IDE_IMOVEL" class="java.lang.Integer"/>
+	<queryString>
+		<![CDATA[select sc.nom_sistema_coordenada,
+       (SELECT * from sp_validacao_geom_tema_temporario1((SELECT ST_Union(the_geom) FROM dado_geografico WHERE ide_localizacao_geografica =pac.ide_localizacao_geografica))) as area_cabruca
+from processo_ato_concedido pac
+inner join localizacao_geografica lg on pac.ide_localizacao_geografica=lg.ide_localizacao_geografica
+inner join sistema_coordenada sc on sc.ide_sistema_coordenada = lg.ide_sistema_coordenada
+where pac.ide_imovel = $P{IDE_IMOVEL}]]>
+	</queryString>
+	<field name="nom_sistema_coordenada" class="java.lang.String"/>
+	<field name="area_cabruca" class="java.math.BigDecimal"/>
+	<columnHeader>
+		<band height="23" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="ce220f70-e374-4cd6-9527-8ffb6c262f5b" x="0" y="0" width="495" height="23"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[Poligonais do Requerimento]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="45" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="50a392ff-d06d-4c8e-a3fe-2fce25be718b" mode="Opaque" x="2" y="1" width="222" height="20" backcolor="#DDDDDD"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[Área da Cabruca (ha)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="3ece4c35-231e-485d-8244-39def2d3af29" mode="Opaque" x="226" y="1" width="268" height="20" backcolor="#DDDDDD"/>
+				<textElement verticalAlignment="Middle">
+					<font isBold="false"/>
+				</textElement>
+				<text><![CDATA[Sistema de Coordenada]]></text>
+			</staticText>
+			<line>
+				<reportElement uuid="6ab061d6-ffb8-40e5-b21b-91c30b0f1099" x="0" y="0" width="495" height="1"/>
+			</line>
+			<line>
+				<reportElement uuid="e6eac401-0649-42b1-861c-e50f8e73461f" x="0" y="22" width="495" height="1"/>
+			</line>
+			<textField>
+				<reportElement uuid="be6f5d46-db32-4336-b288-ce2f82bc395c" x="226" y="22" width="268" height="20"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{nom_sistema_coordenada}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="1ca0580c-fe7f-4fc2-9fba-159f2388ee01" x="2" y="22" width="209" height="20"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{area_cabruca}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement uuid="4287e251-8ddb-419d-9d4d-4498ab910de5" x="0" y="43" width="495" height="1"/>
+			</line>
+			<line>
+				<reportElement uuid="f862794c-283f-4ec0-a031-bd52c74e05de" x="0" y="1" width="1" height="20"/>
+			</line>
+			<line>
+				<reportElement uuid="2b5760ee-4bfb-4ae5-bd56-3fffb3babf71" x="0" y="22" width="1" height="22"/>
+			</line>
+			<line>
+				<reportElement uuid="0f417b9b-7ba8-4f60-8cca-176a8dfd8004" x="224" y="22" width="1" height="22"/>
+			</line>
+			<line>
+				<reportElement uuid="6f5d6dd9-2462-4246-a417-7a910f76aac0" x="224" y="0" width="1" height="22"/>
+			</line>
+			<line>
+				<reportElement uuid="0c05b5fd-7340-4836-832f-b6d4a39e6a12" x="494" y="22" width="1" height="22"/>
+			</line>
+			<line>
+				<reportElement uuid="fd93f679-e17c-478c-ba6a-8e1ba219de99" x="494" y="1" width="1" height="22"/>
+			</line>
+		</band>
+	</detail>
+</jasperReport>

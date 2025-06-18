@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui">
+	<h:panelGrid>
+		<h:outputLabel value="CRONOGRAMA DE RECUPERAÇÃO DE ÁREAS DEGRADADAS" styleClass="titulo-grupo" />
+		
+		<h:panelGrid columns="3">
+			Condições para recuperação de áreas degradadas fora de APP e RL
+			<h:selectBooleanCheckbox value="#{not empty detalharImovelRuralController.imovelRural.outrosPassivosAmbientais.cronogramaRecuperacao.cronogramaEtapaCollection}" disabled="true" />
+			<h:outputText value="Aceito"/>
+		</h:panelGrid>					
+		<p:outputPanel autoUpdate="true">
+			<h:panelGrid>
+				<p:dataTable var="cronogramaEtapa" value="#{detalharImovelRuralController.imovelRural.outrosPassivosAmbientais.cronogramaRecuperacao.cronogramaEtapaCollection}" lazy="true" paginator="true" rows="10"
+					paginatorPosition="bottom" paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}" emptyMessage="#{bundle.cefir_msg_A012}"
+					style="width:700px;" >
+					<f:facet name="header">
+						<h:outputText value="Cronogramas" />
+					</f:facet>
+					<p:column>
+						<f:facet name="header">
+							<h:outputText value="Atividade" />
+						</f:facet>
+						<h:outputText value="#{(cronogramaEtapa.ideTipoRecuperacao.ideTipoRecuperacao == 9) ? cronogramaEtapa.dscOutroTipoRecuperacao : cronogramaEtapa.ideTipoRecuperacao.dscTipoRecuperacao}" />
+					</p:column>
+					<p:column>
+						<f:facet name="header">
+							<h:outputText value="Início" />
+						</f:facet>
+						<h:outputText value="#{cronogramaEtapa.mesInicio}/#{cronogramaEtapa.anoInicio}" />
+					</p:column>
+					<p:column >
+						<f:facet name="header">
+							<h:outputText value="Fim" />
+						</f:facet>
+						<h:outputText value="#{cronogramaEtapa.mesFim}/#{cronogramaEtapa.anoFim}" />
+					</p:column>
+					<p:column>
+						<f:facet name="header">
+							<h:outputText value="Realizado" />
+						</f:facet>
+						<h:outputText value="#{cronogramaEtapa.percentual}%" />
+					</p:column>					
+				</p:dataTable>
+			</h:panelGrid>
+		</p:outputPanel>
+				
+		<h:panelGrid rendered="#{detalharImovelRuralController.imovelRural.outrosPassivosAmbientais != null and detalharImovelRuralController.imovelRural.outrosPassivosAmbientais.ideDocumentoPrad != null}">						
+			<h:outputLabel value="Arquivo PRAD" style="float:left; width:330px;" />					
+		</h:panelGrid>
+		<h:panelGrid rendered="#{detalharImovelRuralController.imovelRural.outrosPassivosAmbientais != null and detalharImovelRuralController.imovelRural.outrosPassivosAmbientais.ideDocumentoPrad != null}">
+			<p:dataTable value="#{detalharImovelRuralController.listaArquivoPradOP}" 
+				var="arquivo" lazy="true" emptyMessage="#{bundle.cefir_msg_A012}" style="width:472px;">
+				<p:column>  
+				    <h:outputText value="#{arquivo.nomDocumentoObrigatorio}"/>
+				</p:column>	
+				<p:column>  
+					<h:commandLink ajax="false">
+						<h:graphicImage value="/resources/img/ico-download.png" />
+						<f:setPropertyActionListener
+							target="#{detalharImovelRuralController.arquivoSelecionado}"
+							value="#{arquivo.dscCaminhoArquivo}" />
+						<p:fileDownload value="#{detalharImovelRuralController.arquivoBaixar}" />
+					</h:commandLink>										
+				</p:column>	
+		    </p:dataTable>
+	    </h:panelGrid>
+	</h:panelGrid>
+</ui:composition>

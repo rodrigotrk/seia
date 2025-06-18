@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui"
+	xmlns:s="http://java.sun.com/jsf/composite/seia"
+    xmlns:c="http://java.sun.com/jsp/jstl/core">
+	
+	<h:form id="formMovimentacaoFinanceira">
+		<h:panelGrid>
+			
+			<!-- 
+			
+			INFORMACOES DO TCCA
+			
+			 -->
+			<h:panelGrid columns="2" styleClass="cleanPaddingTD border col-12">
+				<h:panelGrid style="width:500px;">
+					<h:panelGrid columns="2">
+						<h:outputText value="Número do TCCA:" styleClass="bold"/>
+						<h:outputText value="#{tccaController.tcca.numTcca}" />
+					</h:panelGrid>
+					
+					<h:panelGrid columns="2">
+						<h:outputText value="Requerente:" styleClass="bold"/>
+						<h:outputText value="#{tccaController.tcca.idePessoaRequerente.nomeRazao}" />
+					</h:panelGrid>
+					
+					<h:panelGrid columns="2">
+						<h:outputText value="Empreendimento:" styleClass="bold"/>
+						<h:outputText value="#{tccaController.tcca.ideEmpreendimento.nomEmpreendimento}" />
+					</h:panelGrid>
+					
+					<h:panelGrid columns="2">
+						<h:outputText value="Status:" styleClass="bold"/>
+						<h:outputText value="#{tccaController.tcca.ultimoStatus.ideTccaProjetoTipoStatus.nomTccaTipoStatus}" />
+					</h:panelGrid>
+				</h:panelGrid>
+			
+				<h:panelGrid style="width:435px;">
+					<h:panelGrid columns="2">
+						<h:outputText value="Valor do TCCA (R$): " styleClass="bold"/>
+						<h:outputText value="#{(tccaController.tcca.valTcca)==null ? 0.00 : (tccaController.tcca.valTcca)}"
+							styleClass="#{tccaController.isValorNegativo(tccaController.tcca.valTcca)}">
+							
+							<f:convertNumber pattern="#,###,##0.00" locale="pt_BR"/>
+						</h:outputText>
+					</h:panelGrid>
+					
+					<h:panelGrid columns="2">
+						<h:outputText value="Saldo Disponível do TCCA (R$): " styleClass="bold"/>
+						<h:outputText value="#{(tccaController.tcca.ultimoSaldo.valSaldoNaoDestinadoProjeto)==null ? 0.00 : (tccaController.tcca.ultimoSaldo.valSaldoNaoDestinadoProjeto)}"
+							styleClass="#{tccaController.isValorNegativo(tccaController.tcca.ultimoSaldo.valSaldoNaoDestinadoProjeto)}">
+							
+							<f:convertNumber pattern="#,###,##0.00" locale="pt_BR"/>
+						</h:outputText>
+					</h:panelGrid>
+					
+					<h:panelGrid columns="2">
+						<h:outputText value="Saldo Suplementado (R$): " styleClass="bold"/>
+						<h:outputText value="#{(tccaController.tcca.ultimoSaldo.valSaldoSuplementado)==null ? 0.00 : (tccaController.tcca.ultimoSaldo.valSaldoSuplementado)}"
+							styleClass="#{tccaController.isValorNegativo(tccaController.tcca.ultimoSaldo.valSaldoSuplementado)}">
+							
+							<f:convertNumber pattern="#,###,##0.00" locale="pt_BR"/>
+						</h:outputText>
+					</h:panelGrid>
+					
+					<h:panelGrid columns="2">
+						<h:outputText value="Saldo Para Execução (R$): " styleClass="bold"/>
+						<h:outputText value="#{(tccaController.tcca.ultimoSaldo.valSaldoParaExecucao)==null ? 0.00 : (tccaController.tcca.ultimoSaldo.valSaldoParaExecucao)}"
+							styleClass="#{tccaController.isValorNegativo(tccaController.tcca.ultimoSaldo.valSaldoParaExecucao)}">
+							
+							<f:convertNumber pattern="#,###,##0.00" locale="pt_BR"/>
+						</h:outputText>
+					</h:panelGrid>
+				</h:panelGrid>
+			</h:panelGrid>
+			
+			<p:spacer height="10"/>
+			
+			<!-- 
+			
+			GRID HISTORICO DE REAJUSTES
+			
+			-->
+			
+			<h:panelGrid styleClass="border" style="width:950px;">
+				
+				<p:dataTable value="#{tccaController.tcca.listHistoricoReajustes}" var="reajuste" emptyMessage="Nenhum Registro encontrado"
+					lazy="true" paginator="true" rows="5" paginatorPosition="bottom" styleClass="middle"
+					paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}">
+					
+					<f:facet name="header">
+						<h:outputText value="Histórico dos Reajustes" styleClass="bold" />
+					</f:facet>
+				
+					<p:column headerText="Valor do TCCA (R$)" style="width: 190px;" styleClass="nowrap">
+				      	<h:outputText value="#{(reajuste.valTccaAnterior)==null ? 0.00 : (reajuste.valTccaAnterior)}"
+							styleClass="#{tccaController.isValorNegativo(reajuste.valTccaAnterior)}">
+							
+							<f:convertNumber pattern="#,###,##0.00" locale="pt_BR"/>
+						</h:outputText>
+					</p:column>
+					
+					<p:column headerText="Índice de Reajuste (%)" style="width: 160px; text-align:center" styleClass="nowrap">
+						<h:outputText value="#{(reajuste.indiceReajuste)==null ? 0.00 : (reajuste.indiceReajuste)}">
+							<f:convertNumber pattern="#,###,##0.00" locale="pt_BR"/>
+						</h:outputText>
+					</p:column>
+					
+					<p:column headerText="Valor do Reajuste (R$)" style="width: 190px;" styleClass="nowrap">
+						<h:outputText value="#{(reajuste.valReajuste)==null ? 0.00 : (reajuste.valReajuste)}"
+							styleClass="#{tccaController.isValorNegativo(reajuste.valReajuste)}">
+							
+							<f:convertNumber pattern="#,###,##0.00" locale="pt_BR"/>
+						</h:outputText>
+					</p:column>
+					
+					<p:column headerText="Data" style="width: 112px; text-align:center" styleClass="nowrap">
+						<h:outputText value="#{reajuste.dtcReajuste}" >
+						 	<f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss" />
+						</h:outputText>
+					</p:column>
+					
+					<p:column headerText="Valor do TCCA Após o Reajuste (R$)" style="width: 190px;" styleClass="nowrap">
+						<h:outputText value="#{(reajuste.valTcca)==null ? 0.00 : (reajuste.valTcca)}"
+							styleClass="#{tccaController.isValorNegativo(reajuste.valTcca)}">
+							
+							<f:convertNumber pattern="#,###,##0.00" locale="pt_BR"/>
+						</h:outputText>
+					</p:column>
+				</p:dataTable>
+			</h:panelGrid>
+			
+			<p:spacer height="10"/>
+			
+			<!-- 
+			
+			GRID HISTORICO DAS MOVIMENTACOES
+			
+			-->
+			
+			<h:panelGrid styleClass="border" style="width:950px;">
+				
+				<p:dataTable value="#{tccaController.tcca.listHistoricoMovimentacoes}" var="historico" emptyMessage="Nenhum Registro encontrado"
+					lazy="true" paginator="true" rows="5" paginatorPosition="bottom" styleClass="middle"
+					paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}">
+					
+					<f:facet name="header">
+						<h:outputText value="Histórico das Movimentações" styleClass="bold" />
+					</f:facet>
+				
+					<p:column headerText="Operação" style="width: 90px;">
+				      	<h:outputText value="#{historico.ideMovimentacaoFinanceira.ideTccaProjetoOperacao.nomOperacao}" />
+					</p:column>
+					
+					<p:column headerText="Origem" style="width: 150px;">
+						<h:outputText value="#{historico.ideProjetoAcaoProdutoOrigem.nomProduto}" 
+							rendered="#{historico.ideProjetoAcaoProdutoOrigem != null}"/>
+						
+						<h:outputText value="TCCA N° #{historico.ideTccaOrigem.numTcca}" 
+							rendered="#{historico.ideProjetoAcaoProdutoOrigem == null and historico.ideTccaOrigem != null}"/>
+					</p:column>
+					
+					<p:column headerText="Destino" style="width: 150px;">
+						<h:outputText value="#{historico.ideProjetoAcaoProdutoDestino.nomProduto}" 
+							rendered="#{historico.ideProjetoAcaoProdutoDestino != null}"/>
+						
+						<h:outputText value="TCCA N° #{historico.ideTccaDestino.numTcca}" 
+							rendered="#{historico.ideProjetoAcaoProdutoDestino == null and historico.ideTccaDestino != null}"/>
+					</p:column>
+					
+					<p:column headerText="Data" style="width: 70px; text-align:center;">
+						<h:outputText value="#{historico.ideMovimentacaoFinanceira.dtcOperacao}" >
+						 	<f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss" />
+						</h:outputText>
+					</p:column>
+					
+					<p:column headerText="Valor (R$)" style="width: 90px; text-align:center;" styleClass="clean-side">
+						<h:outputText value="#{(historico.ideMovimentacaoFinanceira.valOperacao)==null ? 0.00 : (historico.ideMovimentacaoFinanceira.valOperacao)}"
+							styleClass="#{tccaController.isValorNegativo(historico.ideMovimentacaoFinanceira.valOperacao)}">
+							
+							<f:convertNumber pattern="#,###,##0.00" locale="pt_BR"/>
+						</h:outputText>
+					</p:column>
+					
+					<p:column headerText="Saldo Disponível do TCCA (R$)" style="width: 80px;" styleClass="nowrap">
+						<h:outputText value="#{(historico.ideMovimentacaoFinanceira.ideTccaSaldo.valSaldoNaoDestinadoProjeto)==null ? 0.00 : (historico.ideMovimentacaoFinanceira.ideTccaSaldo.valSaldoNaoDestinadoProjeto)}"
+							styleClass="#{tccaController.isValorNegativo(historico.ideMovimentacaoFinanceira.ideTccaSaldo.valSaldoNaoDestinadoProjeto)}">
+							
+							<f:convertNumber pattern="#,###,##0.00" locale="pt_BR"/>
+						</h:outputText>
+					</p:column>
+					
+					<p:column headerText="Saldo Suplementado (R$)" style="width: 90px;" styleClass="nowrap">
+						<h:outputText value="#{(historico.ideMovimentacaoFinanceira.ideTccaSaldo.valSaldoSuplementado)==null ? 0.00 : (historico.ideMovimentacaoFinanceira.ideTccaSaldo.valSaldoSuplementado)}"
+							styleClass="#{tccaController.isValorNegativo(historico.ideMovimentacaoFinanceira.ideTccaSaldo.valSaldoSuplementado)}">
+							
+							<f:convertNumber pattern="#,###,##0.00" locale="pt_BR"/>
+						</h:outputText>
+					</p:column>
+					
+					<p:column headerText="Saldo Para Execução (R$)" style="width: 80px;" styleClass="nowrap">
+						<h:outputText value="#{(historico.ideMovimentacaoFinanceira.ideTccaSaldo.valSaldoParaExecucao)==null ? 0.00 : (historico.ideMovimentacaoFinanceira.ideTccaSaldo.valSaldoParaExecucao)}"
+							styleClass="#{tccaController.isValorNegativo(historico.ideMovimentacaoFinanceira.ideTccaSaldo.valSaldoParaExecucao)}">
+							
+							<f:convertNumber pattern="#,###,##0.00" locale="pt_BR"/>
+						</h:outputText>
+					</p:column>
+				</p:dataTable>
+			</h:panelGrid>
+		</h:panelGrid>
+	</h:form>
+</html>

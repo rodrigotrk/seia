@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui">
+
+	<h:form id="frmDialogControleAcessoPautaPermissoes">
+	<fieldset style="border: 1px solid #ccc; padding: 10px;">
+			<legend>
+				<h:outputText value="#{bundle.dialog_controle_acesso_pauta_permissoes_lbl_permissoes}" />
+			</legend>
+			<h:outputText value="#{bundle.dialog_controle_acesso_pauta_permissoes_lbl_funcionario}:" />
+			<br />
+			<h:outputText value="#{controleAcessoPautaPermissoesController.funcionarioSelecionado.pessoaFisica.nomPessoa}" />
+			<br /><br />
+			<h:outputText value="#{bundle.dialog_controle_acesso_pauta_permissoes_lbl_pauta_da_area}" /><br/><br/>
+			<div id="pnlPermissoesPautaArea" style="height:180px;overflow:scroll;border:1px solid #ccc;">
+				<p:selectManyCheckbox id="permissoesPautaArea" layout="pageDirection" value="#{controleAcessoPautaPermissoesController.permissoesPautaArea}" converter="simpleEntityConverter">
+					<f:selectItems value="#{controleAcessoPautaPermissoesController.listaDePermissoesPautaArea}" 
+					               var="permissaoPautaDaArea" 
+					               itemLabel="#{permissaoPautaDaArea.dscAcao}" 
+					               itemValue="#{permissaoPautaDaArea}" />
+				</p:selectManyCheckbox>
+			</div>
+			<br />
+			<h:outputText value="#{bundle.dialog_controle_acesso_pauta_permissoes_lbl_pauta_do_gestor}" /><br/><br/>
+			<div id="pnlPermissoesPautaGestor" style="height:180px;overflow:scroll;border:1px solid #ccc;">
+				<p:selectManyCheckbox id="permissoesPautaGestor" layout="pageDirection" value="#{controleAcessoPautaPermissoesController.permissoesPautaGestor}" converter="simpleEntityConverter">
+					<f:selectItems value="#{controleAcessoPautaPermissoesController.listaDePermissoesPautaGestor}" 
+					               var="permissaoPautaDoGestor" 
+					               itemLabel="#{permissaoPautaDoGestor.dscAcao}" 
+					               itemValue="#{permissaoPautaDoGestor}" />
+				</p:selectManyCheckbox>
+			</div>
+			<h:panelGrid columns="2" style="padding-left:160px;">
+				<p:commandButton value="#{bundle.geral_lbl_voltar}" process="@this,arvorePermissoesPautaArea" 
+				                 update="arvorePermissoesPautaArea" onclick="dlgGrupoAcessoPautaPermissoes.hide();" />
+				<p:commandButton value="#{bundle.geral_btn_confirmar}" action="#{controleAcessoPautaPermissoesController.salvarPermissoes()}" 
+				                 oncomplete="dlgGrupoAcessoPautaPermissoes.hide();" 
+				                 update="tabView:frmDialogControleAcessoPautaPermissoes:permissoesPautaArea tabView:frmDialogControleAcessoPautaPermissoes:permissoesPautaGestor" 
+				                 process="@this,tabView:frmDialogControleAcessoPautaPermissoes:permissoesPautaArea,tabView:frmDialogControleAcessoPautaPermissoes:permissoesPautaGestor"/>
+			</h:panelGrid>
+		</fieldset>		
+	</h:form>
+
+</ui:composition>

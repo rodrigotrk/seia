@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.prime.com.tr/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+	
+	<h:form id="minAutDadosGerais">
+
+
+
+		<!-- Substancia Mineral -->		
+		<h:panelGroup id="substanciaMineral">
+			<h:panelGrid columns="1">
+			<h:outputText value="* Substância mineral a ser pesquisada" styleClass="titulo-grupo-bold"/>
+			
+			<p:spacer height="20px"/>
+			
+			<h:panelGrid columns="2">
+				<p:commandLink title="Incluir Substância" disabled="#{fceAutorizacaoMineracaoController.desabilitarTudo}" oncomplete ="incluirSubstanciaMineral.show()" update=":formAutMinIncluirSubstancia :formAutMinIncluirSubstancia:gridAutMinSubstanciaMineral" >
+					<h:graphicImage title="Incluir Substância" value="/resources/img/ico-expandir.png" />
+					<h:outputText value="Incluir Substância"/>
+				</p:commandLink>			
+			</h:panelGrid>
+		 
+			<p:dataTable id="dataTableMinAutSubstancia" style="margin-left:5px; width: 400px;" emptyMessage="#{bundle.msg_lista_vazia}" value="#{fceAutorizacaoMineracaoController.listaFcePesquisaMineralSubstanciaMineral}" var="fcePesquisaMineralSubstanciaMineral">
+				<p:column headerText="Substância" style="text-align:center;">
+					<h:outputText value="#{fcePesquisaMineralSubstanciaMineral.substanciaMineralTipologia.ideSubstanciaMineral.nomSubstanciaMineral}" />	
+				</p:column>			
+				<p:column headerText="Ação" style="text-align:center;">
+					<p:commandLink update=":formExcluirFceAutMineracaoSubstancia" oncomplete="excluirFceAutMineracaoSubstancia.show()" title="Excluir" disabled="#{fceAutorizacaoMineracaoController.desabilitarTudo}">
+						<h:graphicImage title="Excluir" value="/resources/img/ico-excluir.png" />
+						<f:setPropertyActionListener value="#{fcePesquisaMineralSubstanciaMineral}" target="#{fceAutorizacaoMineracaoController.fcePesquisaMineralSubstanciaMineral}" />
+					</p:commandLink>	
+				</p:column>			
+			</p:dataTable>
+			
+			</h:panelGrid>
+		</h:panelGroup>
+		<!-- Substancia Mineral -->	
+
+
+
+
+
+	
+		<!-- Pesquisa Intervenção -->	
+		<h:panelGroup id="intervencaoRecursoHidrico">
+			
+			<h:panelGroup><br/><br/>
+				<h:outputText value="* Pesquisa ou Intervenção em recurso hídrico?"  styleClass="titulo-grupo-bold-margin-top" /><br/><br/>
+				<p:selectOneRadio
+					value="#{fceAutorizacaoMineracaoController.ideFcePesquisaMineral.indPesqIntervRecursoHidrico}"
+					valueChangeListener="#{fceAutorizacaoMineracaoController.changeIntervencaoCorpoHidrico()}"
+					disabled="#{fceAutorizacaoMineracaoController.desabilitarTudo}">
+						<f:selectItem itemLabel="Sim" itemValue="#{true}" />
+						<f:selectItem itemLabel="Não" itemValue="#{false}" />
+					<p:ajax event="change" update="plnIntervencaoRecursoHidrico"/>
+				</p:selectOneRadio>
+				
+				<h:panelGrid id="plnIntervencaoRecursoHidrico"  >
+					<h:panelGrid columns="1" style="margin-left:15px;" rendered="#{fceAutorizacaoMineracaoController.ideFcePesquisaMineral.indPesqIntervRecursoHidrico}">
+				
+						<h:panelGrid columns="2" >
+							<p:selectBooleanCheckbox  value="#{fceAutorizacaoMineracaoController.ideFcePesquisaMineral.indEsferaEstadual}"  disabled="#{fceAutorizacaoMineracaoController.desabilitarTudo}">
+								<p:ajax event="change" process="@this" />
+							</p:selectBooleanCheckbox>
+							<h:outputText style="margin-left:5px;" value="Estadual"/>
+						</h:panelGrid>	
+		
+						<h:panelGrid columns="2" >
+							<p:selectBooleanCheckbox value="#{fceAutorizacaoMineracaoController.ideFcePesquisaMineral.indEsferaFederal}" disabled="#{fceAutorizacaoMineracaoController.desabilitarTudo}">
+								<p:ajax event="change" process="@this" />
+							</p:selectBooleanCheckbox>
+							<h:outputText style="margin-left:5px;" value="Federal"/>
+						</h:panelGrid>
+						
+					</h:panelGrid>
+				</h:panelGrid>	
+			</h:panelGroup>
+		</h:panelGroup>
+		<!-- Pesquisa Intervenção -->	
+		
+		
+		
+		
+		
+		
+		<!-- Supressão de vegetação -->	
+		<h:panelGroup id="supressaoVegatacao">
+			<h:panelGrid>
+			<h:outputText value="* Necessidade de supressão de vegetação?" styleClass="titulo-grupo-bold-margin-top"/>
+				<p:selectOneRadio
+					value="#{fceAutorizacaoMineracaoController.ideFcePesquisaMineral.indSupressao}" disabled="#{true}">
+					<f:selectItem itemLabel="Sim" itemValue="#{true}" />
+					<f:selectItem itemLabel="Não" itemValue="#{false}" />
+				</p:selectOneRadio>
+			</h:panelGrid>
+			
+		</h:panelGroup>	
+		<!-- Supressão de vegetação -->	
+			
+			
+			
+			
+		<!-- Processo Dnpm -->
+		<h:panelGroup id="infoDnpm"><br/><br/><br/>
+			<h:outputText value="* Informações sobre a área junto ao DNPM"   styleClass="titulo-grupo-bold"/><br/><br/>
+			
+			<h:panelGrid columns="2">
+				<p:commandLink onclick="dialogProcessoDnpm.show()" disabled="#{fceAutorizacaoMineracaoController.desabilitarTudo}" update=":formProcessoDnpm:numProcessoDnpm" actionListener="#{fceAutorizacaoMineracaoController.iniciarProcessoDnpm}">
+					<h:graphicImage value="/resources/img/ico-expandir.png" />
+					<h:outputText value="Incluir Número do Processo" />
+				</p:commandLink>
+			</h:panelGrid>
+			
+			<p:dataTable id="dataTableMinAutinfoDnpm" style="margin-left:5px; width: 400px;" emptyMessage="#{bundle.msg_lista_vazia}" value="#{fceAutorizacaoMineracaoController.listaProcessoDnmp}" var="processoDnpm">
+		
+				<p:column headerText="Número do Processo" style="text-align:center;" >
+					<h:outputText value="#{processoDnpm.numProcessoDnpm}"  />	
+				</p:column>			
+				
+				<p:column headerText="Ação" style="text-align:center;">
+					<p:commandLink update=":formExcluirProcessoDpm" oncomplete="excluirFceAutMineracaoProcessoDnpm.show()" title="Excluir" disabled="#{fceAutorizacaoMineracaoController.desabilitarTudo}">
+						<h:graphicImage title="Excluir" value="/resources/img/ico-excluir.png" />
+						<f:setPropertyActionListener value="#{processoDnpm}" target="#{fceAutorizacaoMineracaoController.processoDnpm}" />
+					</p:commandLink>	
+				</p:column>			
+			</p:dataTable>
+			
+		</h:panelGroup>	
+		<!-- Processo Dnpm -->		
+		
+		
+		<!-- SuprimentoAgua -->	
+		<h:panelGrid style="margin-left:10px; margin-top:20px;" rendered="#{fceAutorizacaoMineracaoController.existeProcessoOutorga}">
+			<h:outputText styleClass="titulo-grupo-bold" value="#{bundle.fce_lic_min_suprimento_agua}" />
+			<h:outputText styleClass="titulo-grupo-bold" style="margin-left:13px;" value="#{bundle.fce_lic_min_outorga}" />
+			
+			<p:dataTable id="dataTableMinAutOutMin"
+				style="margin-left:5px; width: 600px;"
+				value="#{fceAutorizacaoMineracaoController.listaOutorgaMineracao}"
+				var="outorgaMineracao">
+				<p:column headerText="#{bundle.fce_lic_min_numero_portaria}" style="text-align:center;">
+					<p:inputText value="#{outorgaMineracao.numPortariaOutorga}" maxlength="20" disabled="#{outorgaMineracao.confirmado}">
+						<p:ajax event="blur" global="false"/>
+					</p:inputText>
+				</p:column>
+				<p:column headerText="#{bundle.fce_lic_min_numero_processo}" style="text-align:center;">
+					<h:outputText value="#{outorgaMineracao.numProcessoOutorga}" />
+				</p:column>
+				<p:column headerText="Ação" style="text-align:center;">
+					<p:commandLink update="tabAutMineracao:minAutDadosGerais:dataTableMinAutOutMin" actionListener="#{fceAutorizacaoMineracaoController.confirmarOutorgaMineracao()}"
+						rendered="#{!outorgaMineracao.confirmado}" disabled="#{fceAutorizacaoMineracaoController.desabilitarTudo}" process="@this">
+						<h:graphicImage title="Confirmar" value="/resources/img/ico-aprovar-notificacao.png" />
+						<f:attribute name="outorgaMineracao" value="#{outorgaMineracao}"/>
+					</p:commandLink>
+				
+					<p:commandLink update="tabAutMineracao:minAutDadosGerais:dataTableMinAutOutMin" actionListener="#{fceAutorizacaoMineracaoController.editarOutorgaMineracao()}" 
+						rendered="#{outorgaMineracao.confirmado}" disabled="#{fceAutorizacaoMineracaoController.desabilitarTudo}" process="@this">
+						<h:graphicImage title="Editar" value="/resources/img/ico-editar.png" />
+						<f:attribute name="outorgaMineracao" value="#{outorgaMineracao}"/>
+					</p:commandLink>
+					
+				</p:column>
+			</p:dataTable>
+		</h:panelGrid>
+		<!-- SuprimentoAgua -->	
+		
+		
+
+
+		<!-- SuprimentoEnergia --> 	
+		<h:panelGroup id="suprimentoEnergia"><br/><br/><br/>
+			<h:panelGrid>
+			<h:outputText value="* Suprimento de energia"   styleClass="titulo-grupo-bold"/>
+				<ui:repeat var="origemEnergia" value="#{fceAutorizacaoMineracaoController.listaTipoOrigemEnergia}">
+					<h:panelGrid columns="2" >
+						<p:selectBooleanCheckbox value="#{origemEnergia.checked}"  disabled="#{fceAutorizacaoMineracaoController.desabilitarTudo}" >
+							<p:ajax event="change" process="@this" listener="#{fceAutorizacaoMineracaoController.exibirAlertaOutrosSuprimentoEnergia(origemEnergia)}"/>
+						</p:selectBooleanCheckbox>
+						<h:outputText style="margin-left:5px;" value="#{origemEnergia.dscTipoOrigemEnergia}"/>
+					</h:panelGrid>
+				</ui:repeat>
+			</h:panelGrid>	
+		</h:panelGroup>	
+		<!--   SuprimentoEnergia -->	
+		
+		
+		
+		<!-- PANELGRID BOTOES -->
+		<h:panelGrid id="gridBotoes" columns="2" style="margin-top:40px; margin-left:575px;" rendered="#{!fceAutorizacaoMineracaoController.desabilitarTudo}">
+			<p:commandButton id="btnVoltar" value="Voltar" style="width:90px;" update="pnlAutMineracao" onclick="mineracaoAutorizacao.hide();" />
+			<p:commandButton id="btnAvancar" value="Avançar" style="width:90px;" update="pnlAutMineracao" process="minAutDadosGerais" action="#{fceAutorizacaoMineracaoController.finalizar()}" /> 
+		</h:panelGrid>
+		<!-- FIM DO PANELGRID BOTOES -->
+		
+		
+	</h:form>
+	
+</ui:composition>

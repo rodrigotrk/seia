@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui"
+	template="../../layout/template.xhtml">
+	<ui:define name="titulo-pagina">
+		<h3>Relatório Quantitativo</h3>
+	</ui:define>
+
+	<ui:define name="conteudo-principal">
+		<h3>
+			<h:outputLabel styleClass="titulo-grupo" value="INSTRUÇÕES" />
+		</h3>
+		<br />
+		- Para elaborar um relatório quantitativo, Informe os parâmentros de consulta desejados e clique no botão "Gerar relatório" .<br />
+		<br />
+		<br />
+		<h3><h:outputLabel styleClass="titulo-grupo" value="PARÂMETROS DA CONSULTA" /></h3>
+		<br />
+		<h:form id="frmRelatorioQuantitativo">
+			
+			<h:panelGrid>
+				<h:panelGrid id="pnlPeriodo" columns="1">
+					<h:outputText value="Período de formação do processo: " />
+					<h:panelGrid  columns="4">
+						<h:outputText value="De " />
+						<p:calendar id="tfPeriodoDeFormacaoDE" navigator="true" display="inline" value="#{relatorioQuantitativoController.periodoDeFormacaoDE}" showOn="button" locale="pt"
+									pattern="dd/MM/yyyy"  mindate="01/01/1900" maxdate="#{relatorioQuantitativoController.dataAtual}" accesskey="true" readOnlyInputText="true"/>
+						<h:outputText value=" até " />
+						<p:calendar id="tfPeriodoDeFormacaoATE" navigator="true" display="inline" value="#{relatorioQuantitativoController.periodoDeFormacaoATE}" showOn="button" locale="pt"
+									pattern="dd/MM/yyyy"  mindate="01/01/1900" maxdate="#{relatorioQuantitativoController.dataAtual}" accesskey="true" readOnlyInputText="true"/>
+					</h:panelGrid>
+				</h:panelGrid>
+				
+				<h:panelGrid id="pnlStatus" columns="2">
+					<h:panelGrid>
+						<h:outputText value="Status atual do processo: "/><p:spacer style="width:145px; height:0px;"/>
+						<p:selectOneMenu id="tfStatusFluxo" style="width:150px;" 
+										 value="#{relatorioQuantitativoController.statusFluxoSelecionado}" converter="statusFluxoConverter">
+							<f:selectItem itemLabel="Todos" />
+							<f:selectItems itemLabel="#{status.dscStatusFluxo}" itemValue="#{status}" var="status" value="#{relatorioQuantitativoController.listaStatusProcesso}" />
+							<p:ajax process="@this" update=":frmRelatorioQuantitativo:pnlStatus"/>
+						</p:selectOneMenu>
+					</h:panelGrid>
+					<h:panelGrid>
+						<h:outputText rendered="${relatorioQuantitativoController.statusFluxoSelecionado ne null}" value="Período do status: " />
+						<h:panelGrid columns="2">
+							<h:panelGrid columns="2">
+								<h:outputText rendered="${relatorioQuantitativoController.statusFluxoSelecionado ne null}" value="De " />
+								<p:calendar  rendered="${relatorioQuantitativoController.statusFluxoSelecionado ne null}" id="tfPeriodoStatusDE"  display="inline" value="#{relatorioQuantitativoController.periodoStatusDE}" showOn="button" locale="pt"
+											pattern="dd/MM/yyyy" navigator="true" mindate="01/01/1900" maxdate="#{relatorioQuantitativoController.dataAtual}" accesskey="true" readOnlyInputText="true"/>				
+							</h:panelGrid>
+							<h:panelGrid columns="2">
+								<h:outputText rendered="${relatorioQuantitativoController.statusFluxoSelecionado ne null}" value=" até " />
+								<p:calendar  rendered="${relatorioQuantitativoController.statusFluxoSelecionado ne null}" id="tfPeriodoStatusATE" navigator="true" display="inline" value="#{relatorioQuantitativoController.periodoStatusATE}" showOn="button" locale="pt"
+											pattern="dd/MM/yyyy"  mindate="01/01/1900" maxdate="#{relatorioQuantitativoController.dataAtual}" accesskey="true" readOnlyInputText="true"/> 
+							</h:panelGrid>				
+						</h:panelGrid>
+					</h:panelGrid>
+				</h:panelGrid>
+				
+				<h:panelGrid id="pnlCategoriaAtoTipologiaFinalidade" columns="4">
+					<h:panelGrid id="pnlCategoria">
+						<h:outputText value="Categoria: " />
+						<p:selectOneMenu id="tfCategoriaAto" style="width:150px;" value="#{relatorioQuantitativoController.tipoAtoSelecionado}" converter="tipoAtoConverter">
+							<f:selectItem itemLabel="Todos"/>
+							<f:selectItems itemLabel="#{tipoAto.nomTipoAto}" itemValue="#{tipoAto}" var="tipoAto" value="#{relatorioQuantitativoController.listaTipoAto}" />
+							<p:ajax process="@this" update=":frmRelatorioQuantitativo:pnlAto"/>
+						</p:selectOneMenu>
+					</h:panelGrid>
+					
+					<h:panelGrid id="pnlAto">
+						<h:outputText value="Ato ambiental: " />
+						<p:selectOneMenu id="tfAto" style="width:150px;" value="#{relatorioQuantitativoController.atoAmbientalSelecionado}" converter="atoAmbientalConverter">
+							<f:selectItem itemLabel="Todos"/>
+							<f:selectItems itemLabel="#{atoAmbiental.nomAtoAmbiental}" itemValue="#{atoAmbiental}" var="atoAmbiental" value="#{relatorioQuantitativoController.listaAtoAmbiental}" />
+							<p:ajax process="@this"/>
+						</p:selectOneMenu>
+					</h:panelGrid>
+					
+					<h:panelGrid id="pnlTipologia">
+						<h:outputText value="Tipologia: " />
+						<p:selectOneMenu id="tfTipologia" style="width:150px;" value="#{relatorioQuantitativoController.tipologiaSelecionada}" converter="tipologiaConverter">
+							<f:selectItem itemLabel="Todos"/>
+							<f:selectItems itemLabel="#{tipologia.desTipologia}" itemValue="#{tipologia}" var="tipologia" value="#{relatorioQuantitativoController.listaTipologia}" />
+							<p:ajax process="@this"/>
+						</p:selectOneMenu>
+					</h:panelGrid>
+					
+					<h:panelGrid id="pnlFinalidade">
+						<h:outputText value="Finalidade: " />
+						<p:selectOneMenu id="tfFinalidade" style="width:150px;" value="#{relatorioQuantitativoController.finalidadeSelecionada}" converter="tipoFinalidadeUsoAguaConverter">
+							<f:selectItem itemLabel="Todos"/>
+							<f:selectItems itemLabel="#{finalidade.nomTipoFinalidadeUsoAgua}" itemValue="#{finalidade}" var="finalidade" value="#{relatorioQuantitativoController.listaFinalidade}" />
+							<p:ajax process="@this"/>
+						</p:selectOneMenu>
+					</h:panelGrid>
+				</h:panelGrid>
+				
+				<h:panelGrid columns="2">
+					<h:panelGrid id="pnlDivisao" columns="1">
+						<h:outputText  value="Divisao:" />
+						<p:selectOneMenu id="comboDivisao" value="#{relatorioQuantitativoController.tipologiaDivisao}" converter="simpleEntityConverter">
+							<f:selectItem itemLabel="Todos" />
+							<f:selectItems value="#{relatorioQuantitativoController.listaTipologiaDivisao}" var="tipologia" itemLabel="#{tipologia.desTipologia}" itemValue="#{tipologia}" />
+							<p:ajax event="change" listener="#{relatorioQuantitativoController.carregarAtividade()}" process="@this" update="frmRelatorioQuantitativo:comboAtividade" />
+						</p:selectOneMenu>
+					</h:panelGrid>
+					<h:panelGrid id="pnlAtividade" columns="1">
+						<h:outputText  value="Atividade:" />
+						<p:selectOneMenu id="comboAtividade" value="#{relatorioQuantitativoController.tipologiaAtividade}" converter="simpleEntityConverter">
+							<f:selectItem itemLabel="Todos" />
+							<f:selectItems value="#{relatorioQuantitativoController.listaTipologiaAtividade}" var="tipologia" itemLabel="#{tipologia.desTipologia}" itemValue="#{tipologia}" />
+							<p:ajax event="change" process="@this" />
+						</p:selectOneMenu>
+					</h:panelGrid>
+				</h:panelGrid>
+				
+				<h:panelGrid id="pnlDiretoriaArea" columns="2">
+					<h:panelGrid id="pnlDiretoria">
+						<h:outputText value="Diretoria: " />
+						<p:selectOneMenu id="tfDiretoria" style="width:150px;" value="#{relatorioQuantitativoController.diretoriaSelecionada}" converter="areaConverter">
+							<f:selectItem itemLabel="Todos"/>
+							<f:selectItems itemLabel="#{area.nomArea}" itemValue="#{area}" var="area" value="#{relatorioQuantitativoController.listaDiretoria}" />
+							<p:ajax process="@this" update=":frmRelatorioQuantitativo:pnlArea"/>
+						</p:selectOneMenu>
+					</h:panelGrid>
+					<h:panelGrid id="pnlArea">
+						<h:outputText value="Area: " />
+						<p:selectOneMenu id="tfArea" style="width:150px;" value="#{relatorioQuantitativoController.areaSelecionada}" converter="areaConverter">
+							<f:selectItem itemLabel="Todos"/>
+							<f:selectItems itemLabel="#{area.nomArea}" itemValue="#{area}" var="area" value="#{relatorioQuantitativoController.listaArea}" />
+							<p:ajax process="@this"/>
+						</p:selectOneMenu>
+					</h:panelGrid>
+				</h:panelGrid>
+				
+				<h:panelGrid id="pnlMunicipio">
+					<h:outputText value="Localidade: " />
+					<h:panelGrid columns="2">
+						<p:inputText id="tfMunicipio" style="width:240px;" value="#{relatorioQuantitativoController.municipioSelecionado.nomMunicipio}" disabled="true"/>
+						<p:commandLink onclick="dlgBuscarMunicipio.show();">
+							<p:graphicImage>
+								<h:graphicImage title="Selecionar localidade" value="/resources/img/ico-pesquisa.png" />
+							</p:graphicImage>
+						</p:commandLink>
+					</h:panelGrid>
+				</h:panelGrid>
+				
+			</h:panelGrid>
+			
+			<h:panelGrid style="margin:20px 0px;" columns="2">
+				<p:commandButton value="Limpar" action="#{relatorioQuantitativoController.limparCampos()}" update=":frmRelatorioQuantitativo"/>
+				<p:commandButton value="Gerar relatório" ajax="false" process="@form" onclick="return verificarFiltros();" >
+					<p:fileDownload value="#{relatorioQuantitativoController.relatorioQuantitativoDeProcesso}" />
+				</p:commandButton>
+			</h:panelGrid>
+			
+			<p:remoteCommand name="exibirMensagemEscolhaDeFiltro" action="#{relatorioQuantitativoController.exibirMensagemEscolhaDeFiltro()}" />
+			<p:remoteCommand name="exibirMensagemPeriodoDeFormacao" action="#{relatorioQuantitativoController.exibirMensagemPeriodoDeFormacao()}" />
+			<p:remoteCommand name="exibirMensagemPeriodoDoStatus" action="#{relatorioQuantitativoController.exibirMensagemPeriodoDoStatus()}" />
+			
+		</h:form>
+		
+		<p:dialog id="_dlgBuscarMunicipio" widgetVar="dlgBuscarMunicipio" 
+				  style="top:250px !important; width:500px !important;"  
+				  modal="true"  closable="true" showHeader="false" appendToBody="true"
+				  position="center" resizable="false">
+			<ui:include src="/paginas/manter-processo/buscarMunicipio.xhtml" />
+		</p:dialog>
+		
+	</ui:define>
+</ui:composition>

@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="resumo_requerimento_crf_devedor" language="java" pageWidth="572" pageHeight="752" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="f906ffc1-06f6-4ccc-a352-078060ce4017">
+	<property name="ireport.zoom" value="1.1"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="ide_cumprimento_reposicao_florestal" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT this_.ide_devedor_reposicao_florestal,
+       crf1_.ide_cumprimento_reposicao_florestal,
+       ora2_.nom_orgao_emissor_auto,
+       mun4_.nom_municipio,
+       this_.num_auto_infracao,
+       bio3_.ide_bioma,
+       bio3_.nom_bioma,
+       bio3_.metros_cubicos,
+       this_.vlr_area_suprimida
+FROM devedor_reposicao_florestal this_
+INNER JOIN bioma bio3_ ON this_.ide_bioma=bio3_.ide_bioma
+INNER JOIN cumprimento_reposicao_florestal crf1_ ON this_.ide_cumprimento_reposicao_florestal=crf1_.ide_cumprimento_reposicao_florestal
+LEFT OUTER JOIN municipio mun4_ ON this_.ide_municipio=mun4_.ide_municipio
+INNER JOIN orgao_emissor_auto ora2_ ON this_.ide_orgao_emissor_auto=ora2_.ide_orgao_emissor_auto
+WHERE this_.ide_cumprimento_reposicao_florestal=$P{ide_cumprimento_reposicao_florestal}]]>
+	</queryString>
+	<field name="ide_devedor_reposicao_florestal" class="java.lang.Integer"/>
+	<field name="ide_cumprimento_reposicao_florestal" class="java.lang.Integer"/>
+	<field name="nom_orgao_emissor_auto" class="java.lang.String"/>
+	<field name="nom_municipio" class="java.lang.String"/>
+	<field name="num_auto_infracao" class="java.lang.String"/>
+	<field name="ide_bioma" class="java.lang.Integer"/>
+	<field name="nom_bioma" class="java.lang.String"/>
+	<field name="metros_cubicos" class="java.math.BigDecimal"/>
+	<field name="vlr_area_suprimida" class="java.math.BigDecimal"/>
+	<detail>
+		<band height="102" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="351f6838-ea47-428b-b180-06800fcb7515" x="0" y="0" width="131" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Órgão emissor do auto:]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="45909dd2-064f-403b-ac70-95fd89f7cd1f" x="146" y="0" width="241" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nom_orgao_emissor_auto}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="5e5e2fc4-870a-4e24-8f24-cdc86d79cfc9" x="0" y="40" width="131" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Número do Auto de Infração:]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="d5853cb6-627c-4b69-94e9-c1e017c31cdb" x="146" y="40" width="241" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{num_auto_infracao}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="1910235c-e2c2-4dfb-b75d-f899c3febc4c" x="0" y="60" width="146" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Bioma onde ocorreu a supressão:]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="5d521c41-d969-49ae-a026-781f2b20ea92" x="146" y="60" width="241" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nom_bioma}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="b6895d64-2cb9-4deb-8e43-3f101fed12ca" x="0" y="80" width="146" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Área suprimida (ha):]]></text>
+			</staticText>
+			<textField pattern="#,##0.0000">
+				<reportElement uuid="1a3ee044-836d-44fe-a0e6-7ac0682e971a" x="146" y="80" width="241" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{vlr_area_suprimida}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="e86b9778-13bb-4135-a2a4-45d4b8608205" positionType="Float" x="0" y="20" width="131" height="20" isRemoveLineWhenBlank="true" isPrintWhenDetailOverflows="true">
+					<printWhenExpression><![CDATA[$F{nom_municipio} != null]]></printWhenExpression>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Município:]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="25c403a1-0ccc-48c7-97b5-f6584fb5f731" positionType="Float" x="146" y="20" width="241" height="20" isRemoveLineWhenBlank="true" isPrintWhenDetailOverflows="true">
+					<printWhenExpression><![CDATA[$F{nom_municipio} != null]]></printWhenExpression>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nom_municipio}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

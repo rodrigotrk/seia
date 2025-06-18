@@ -1,0 +1,82 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui"
+	xmlns:c="http://java.sun.com/jsp/jstl/core">
+	<h3>
+		<h:outputLabel styleClass="titulo-grupo"
+			value="#{detalharImovelRuralController.tituloProprietariosJustoPossuidores}" />
+	</h3>
+	<br/>
+	<h:panelGrid columns="1">
+		<p:dataTable 
+			style="width:520px;" widgetVar="tableParticipacaoAcionaria"
+			value="#{detalharImovelRuralController.imovelRural.imovel.pessoaImovelCollection}"
+			var="proprietario" paginator="true" rows="10"
+			paginatorAlwaysVisible="false" paginatorPosition="bottom">
+			<p:column headerText="Nome">
+				<h:outputText value="#{proprietario.idePessoa.nomeRazao}" />
+			</p:column>
+			<p:column headerText="CPF/CNPJ">
+				<h:outputText value="#{proprietario.idePessoa.cpfCnpj}" />
+			</p:column>
+		</p:dataTable>
+	</h:panelGrid>
+	<h:panelGrid style="width: 93%;">
+		<h3>
+			<h:outputLabel value="#{detalharImovelRuralController.lblDocumentoPossePropriedade}"
+				id="lblUploadDocVizualizacao" styleClass="titulo-grupo"
+				style="width:380px; margin-left: 0px;" />
+		</h3>
+		<h:panelGrid style="float:left; width: 99%;">
+			<p:dataTable widgetVar="dtTbDocumentos"
+				value="#{detalharImovelRuralController.listaArquivoDocumento}" var="arquivo"
+				lazy="true" emptyMessage="#{bundle.cefir_msg_A012}"
+				style="width:80%;">
+				<p:column>
+					<h:outputText value="#{arquivo.nomDocumentoObrigatorio}" />
+				</p:column>
+				<p:column>
+					<h:commandLink ajax="false">
+						<h:graphicImage value="/resources/img/ico-download.png" />
+						<f:setPropertyActionListener
+							target="#{detalharImovelRuralController.arquivoSelecionado}"
+							value="#{arquivo.dscCaminhoArquivo}" />
+						<p:fileDownload value="#{detalharImovelRuralController.arquivoBaixar}" />
+					</h:commandLink>
+				</p:column>
+			</p:dataTable>
+		</h:panelGrid>
+	</h:panelGrid>
+
+	<h:panelGrid style="width: 93%;"
+		rendered="${detalharImovelRuralController.isProcPfPjRepLegal}">
+		<h3>
+			<h:outputLabel value="Procuração"
+				id="lblUploadProc" styleClass="titulo-grupo"
+				style="width:380px; margin-left: 0px;" />
+		</h3>
+		<h:panelGrid style="float:left; width: 99%;">
+			<p:dataTable id="dataTableDocumentosImovelProcuradorImovelVisualizacao"
+				widgetVar="dtTbDocumentosProcuradorImovel"
+				value="#{detalharImovelRuralController.listaArquivoProcuracao}"
+				var="arquivo" lazy="true" emptyMessage="#{bundle.cefir_msg_A012}"
+				style="width:80%;">
+				<p:column>
+					<h:outputText value="#{arquivo.nomDocumentoObrigatorio}" />
+				</p:column>
+				<p:column>
+					<h:commandLink ajax="false">
+						<h:graphicImage value="/resources/img/ico-download.png" />
+						<f:setPropertyActionListener
+							target="#{detalharImovelRuralController.arquivoSelecionado}"
+							value="#{arquivo.dscCaminhoArquivo}" />
+						<p:fileDownload value="#{detalharImovelRuralController.arquivoBaixar}" />
+					</h:commandLink>
+				</p:column>
+			</p:dataTable>
+		</h:panelGrid>
+	</h:panelGrid>	
+</ui:composition>

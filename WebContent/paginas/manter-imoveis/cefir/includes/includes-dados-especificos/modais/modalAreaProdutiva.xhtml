@@ -1,0 +1,269 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui">		
+	
+<h:panelGrid id="panelAreaProdutiva" columns="1">
+	<h3><h:outputLabel value="INFORMAÇÕES DA ATIVIDADE DESENVOLVIDA" styleClass="titulo-grupo" /></h3>
+	<h:form id="formAreaProdutiva" style="font-size: 11px !important;">	
+		<h:panelGrid rendered="#{imovelRuralControllerNew.areaProdutivaSelecionada != null}">
+			<h:panelGrid id="panelTipologiaAtividade">	
+				<h:panelGrid id="panelTipologia" columns="2">
+					
+					<h:outputLabel value="*#{bundle.cefir_lbl_divisao_atividade}" />
+					<br />	
+						
+					<p:selectOneMenu id="divisaoAtividade" 
+									 value="#{imovelRuralControllerNew.divisaoAtividade}" 
+									 style="width: 220px;"
+ 									 disabled="#{imovelRuralControllerNew.isEdicaoAp  or imovelRuralControllerNew.visualizacaoAp}"
+ 									 required="true" 
+									 requiredMessage="#{func:messageFormat('cefir_msg_A001', bundle.cefir_lbl_divisao_atividade)}">
+						<f:selectItem itemLabel="#{bundle.geral_lbl_selecione}" />
+						<f:selectItems value="#{imovelRuralControllerNew.listaDivisaoAtividade}" 
+									   var="tipologia" 
+									   itemLabel="#{tipologia.codTipologia}: #{tipologia.desTipologia}" 
+									   itemValue="#{tipologia}" />
+						<f:converter converterId="tipologiaConverter" />
+						<p:ajax event="change" 
+								update="formAreaProdutiva" 
+								listener="#{imovelRuralControllerNew.changeDivisaoAtividade}" />
+					</p:selectOneMenu>
+					
+					<br />
+						
+					<h:outputLabel value="*#{bundle.cefir_lbl_grupo_atividade}" />
+					<br />
+						
+					<p:selectOneMenu id="grupoAtividade" 
+									 value="#{imovelRuralControllerNew.areaProdutivaSelecionada.ideTipologia}" 
+									 disabled="#{imovelRuralControllerNew.divisaoAtividade == null or imovelRuralControllerNew.isEdicaoAp or imovelRuralControllerNew.visualizacaoAp}" 
+									 style="min-width: 220px;"
+									 required="true" 
+									 requiredMessage="#{func:messageFormat('cefir_msg_A001', bundle.cefir_lbl_grupo_atividade)}">
+						<f:selectItem itemLabel="#{bundle.geral_lbl_selecione}" />
+						<f:selectItems value="#{imovelRuralControllerNew.listaGrupoAtividade}" 
+									   var="tipologia" 
+									   itemLabel="#{tipologia.desTipologia}" 
+									   itemValue="#{tipologia}" />
+						<f:converter converterId="tipologiaConverter" />
+						<p:ajax event="change" 
+								update="formAreaProdutiva panelPlanoManejo panelDocumentoPlanoManejo" 
+								listener="#{imovelRuralControllerNew.changeGrupoAtividade}" />
+					</p:selectOneMenu>
+					
+					<p:selectOneMenu id="subgrupoAtividade" 
+									 value="#{imovelRuralControllerNew.areaProdutivaSelecionada.ideTipologiaSubgrupo}" 
+									 disabled="#{imovelRuralControllerNew.visualizacaoAp or (imovelRuralControllerNew.isEdicaoAp and !imovelRuralControllerNew.silvicultura)}" 
+									 required="true" 
+									 requiredMessage="#{func:messageFormat('cefir_msg_A001', bundle.cefir_lbl_grupo_atividade)}" 
+									 style="min-width: 300px;"
+									 rendered="#{imovelRuralControllerNew.renderedSubGrupoAtividade}">
+						<f:selectItem itemLabel="#{bundle.geral_lbl_selecione}" />
+						<f:selectItems value="#{imovelRuralControllerNew.listaSubGrupoAtividade}" 
+									   var="subGrupoAtividade" 
+									   itemLabel="#{subGrupoAtividade.desTipologia}" 
+									   itemValue="#{subGrupoAtividade}" />
+						<f:converter converterId="tipologiaConverter" />
+						<p:ajax event="change" 
+								listener="#{imovelRuralControllerNew.changeSubGrupoAtividade}"
+								update="formAreaProdutiva" />
+					</p:selectOneMenu>
+					</h:panelGrid>
+					
+					<h:panelGrid rendered="#{imovelRuralControllerNew.renderedIncluirAtividade}">
+						<p:commandButton id="btnIncluirAtividade" 
+										 action="#{imovelRuralControllerNew.incluirTipologiaAtividade(true)}" 
+										 value="+ Incluir Atividade" 
+										 process="@this" 
+										 update="formAreaProdutiva:panelTipologiaAtividade" 
+										 disabled="#{imovelRuralControllerNew.visualizacaoAp}" />
+						
+					</h:panelGrid>
+					
+					<p:fieldset rendered="#{imovelRuralControllerNew.isInclusaoAtividade}">
+						<ui:include src="panelAgricultura.xhtml" />
+						<ui:include src="panelAnimal.xhtml" />
+						<ui:include src="panelPsicultura.xhtml" />
+						<ui:include src="panelAtividade.xhtml" />
+					</p:fieldset>
+					
+					<h:panelGrid id="listaTipologiaAtividade" rendered="#{imovelRuralControllerNew.renderedDatatableAtividade or imovelRuralControllerNew.pnlAgricultura or imovelRuralControllerNew.pnlAnimal or imovelRuralControllerNew.pnlPiscicultura}">
+						<ui:include src="tableAtividade.xhtml" />
+						<ui:include src="tableAgricultura.xhtml" />
+						<ui:include src="tableAnimal.xhtml" />
+						<ui:include src="tablePsicultura.xhtml" />
+					</h:panelGrid>
+				</h:panelGrid>
+				
+				<h:panelGrid id="panelAreaProdutiva">
+					<h:panelGrid>
+						<h:inputText onmousemove="$(document.activeElement).blur()" style="visibility:hidden;" />
+						<h:outputLabel value="* #{bundle.cefir_lbl_val_area_produtiva}" />
+						<p:inputText id="valAreaProdutiva" 
+									 value="#{imovelRuralControllerNew.areaProdutivaSelecionada.valArea}" 
+									 maxlength="15"
+									 disabled="#{imovelRuralControllerNew.visualizacaoAp}" 
+									 required="true" 
+									 requiredMessage="#{func:messageFormat('cefir_msg_A001', bundle.cefir_lbl_val_area_produtiva)}"
+									 onkeypress="mascararNumeroLR(this, event, 10, 4, '.', ',', 3);" 
+									 onkeyup="mascararNumeroLR(this, event, 10, 4, '.', ',', 3);"
+									 converter="doubleQuatroCasasDecimaisConverter">
+							<p:ajax event="blur" process="@this" update="formAreaProdutiva:panelAreaProdutiva"/>		 
+						</p:inputText>
+						
+					   <h:panelGrid id="panelPlanoManejo" rendered="#{imovelRuralControllerNew.manejoSustentavel || imovelRuralControllerNew.manejoCabruca}">
+							<h:outputLabel value="* #{bundle.cefir_lbl_num_unidade_producao}" rendered="#{imovelRuralControllerNew.manejoSustentavel}" /> 
+							<p:inputText id="numUnidadeProducao"
+										 value="#{imovelRuralControllerNew.areaProdutivaSelecionada.numUnidadeProducao}"
+										 maxlength="9" 
+										 onkeyup="mascararNumeroAndAddZeros(this, event, 9, 0, '.', ',', 3);"
+										 onkeypress="mascararNumeroAndAddZeros(this, event, 9, 0, '.', ',', 3);"
+										 onblur="mascararNumeroAndAddZeros(this, event, 9, 0, '.', ',', 3);"	 
+										 required="true" 									 
+										 requiredMessage="#{func:messageFormat('cefir_msg_A001', bundle.cefir_lbl_num_unidade_producao)}" 
+										 rendered="#{imovelRuralControllerNew.manejoSustentavel}">
+								<f:convertNumber integerOnly="true"/>
+							</p:inputText>	
+										 
+										 
+							<h:outputLabel value="#{bundle.cefir_lbl_num_processo_amc}" rendered="#{imovelRuralControllerNew.manejoCabruca}"/>
+							<h:outputLabel value="* #{bundle.cefir_lbl_num_processo_manejo_sustentavel}" rendered="#{imovelRuralControllerNew.manejoSustentavel}" /> 
+							
+							<p:inputMask id="numProcessoAmc" value="#{imovelRuralControllerNew.areaProdutivaSelecionada.numProcessoAmc}" 
+								maxlength="25" mask="9999-999999/TEC/AMC-9999" rendered="#{imovelRuralControllerNew.manejoCabruca}" />
+							 
+							 <p:inputText id="numProcessoSustentavel" value="#{imovelRuralControllerNew.areaProdutivaSelecionada.numProcesso}" 
+							 	maxlength="25" required="true" requiredMessage="#{func:messageFormat('cefir_msg_A001', bundle.cefir_lbl_num_processo_manejo_sustentavel)}"
+							 	rendered="#{imovelRuralControllerNew.manejoSustentavel}" /> 										 
+								 										 									 									
+							<h:panelGrid columns="2" rendered="#{imovelRuralControllerNew.manejoSustentavel}">
+								<h:outputLabel value="* #{bundle.cefir_lbl_comprovante_plano_manejo}" />
+								<h:graphicImage value="/resources/img/ico-ajuda.png"  id="ajudaCompManejo" style="margin: 3px 1px 2px 4px;"/>						
+								<p:tooltip for="ajudaCompManejo" 
+										   value="Certidão de inteiro teor com averbação do plano de manejo sustentável aprovado." 
+										   showEffect="fade" 
+										   hideEffect="fade" />							
+							
+							</h:panelGrid>																																																								
+																				
+							<p:fileUpload id="uplDocPlanoManejo" 
+										  uploadLabel="false" 
+										  label="Selecione o Arquivo" 
+										  disabled="#{imovelRuralControllerNew.visualizacaoAp}"
+										  fileUploadListener="#{imovelRuralControllerNew.uploadDocumentoPlanoManejo()}" 
+										  fileLimit="3" invalidFileMessage="Tipo de arquivo inválido." mode="advanced"										  
+										  update="panelDocumentoPlanoManejo"
+										  auto="true" required="true"
+										  rendered="#{imovelRuralControllerNew.manejoSustentavel}" 
+										  requiredMessage="#{func:messageFormat('cefir_msg_A001', bundle.cefir_lbl_comprovante_plano_manejo)}" 
+										  allowTypes="/(\.|\/)(pdf|gif|jpeg|png|jpg)$/" immediate="true"/>
+						</h:panelGrid>		  																						
+					</h:panelGrid>
+					
+					<h:panelGrid id="panelDocumentoPlanoManejo">
+						<p:dataTable id="dataTableDocumentoPlanoManejo" rendered="#{imovelRuralControllerNew.listaDocumentoPlanoManejo != null and not empty imovelRuralControllerNew.listaDocumentoPlanoManejo}"
+									 value="#{imovelRuralControllerNew.listaDocumentoPlanoManejo}"
+									 var="arquivoPlanoManejo" lazy="true" emptyMessage="#{bundle.cefir_msg_A012}">
+					         <p:column>  
+								<h:outputText value="#{arquivoPlanoManejo.nomDocumentoObrigatorio}"/>
+					         </p:column>	
+					         <p:column>
+					         	<h:commandButton image="/resources/img/ico-download.png" immediate="true" >
+									<p:fileDownload value="#{imovelRuralControllerNew.getFileDownload(arquivoPlanoManejo.dscCaminhoArquivo)}" />
+					         	</h:commandButton>
+					         	&nbsp;
+					         	<p:commandLink process="@this" onclick="confirmaExclusaoArquivoPlanoManejo.show();">
+									
+									<h:graphicImage title="Excluir" value="/resources/img/ico-excluir.png" />
+								</p:commandLink>
+					         </p:column>	
+			    		</p:dataTable>
+			   		</h:panelGrid>				   									
+					
+					<h:panelGrid columns="1" id="panelProcessoLicenca">
+						<h:panelGrid rendered="#{imovelRuralControllerNew.renderedPerguntaLicenca()}">
+							<h:outputText value="* #{bundle.cefir_lbl_atividade_desenvolvida_possui_licenca}?" />
+							<p:selectOneRadio id="temLicenca"
+											  value="#{imovelRuralControllerNew.areaProdutivaSelecionada.licenciada}"
+											  valueChangeListener="#{imovelRuralControllerNew.limparCampoNumeroLicencaAreaProdutiva()}"
+											  required="true" 
+											  requiredMessage="#{func:messageFormat('cefir_msg_A001', bundle.cefir_lbl_atividade_desenvolvida_possui_licenca)}"
+											  disabled="#{imovelRuralControllerNew.visualizacaoAp}">
+								<f:selectItem itemLabel="#{bundle.geral_lbl_sim}" itemValue="#{true}" />
+								<f:selectItem itemLabel="#{bundle.geral_lbl_nao}" itemValue="#{false}" />
+								<p:ajax event="change" update="panelProcessoLicenca" />
+							</p:selectOneRadio>
+						</h:panelGrid>
+						<h:panelGrid rendered="#{imovelRuralControllerNew.renderedPerguntaLicenca() and imovelRuralControllerNew.areaProdutivaSelecionada.licenciada}">
+							<h:outputLabel value="* #{bundle.cefir_lbl_numero_licenca}" />
+							<p:inputText id="numLicenca"
+										 value="#{imovelRuralControllerNew.areaProdutivaSelecionada.numProcesso}"
+										 maxlength="30" 
+										 style="width: 170px;" 
+										 required="true" 
+										 requiredMessage="#{func:messageFormat('cefir_msg_A001', bundle.cefir_lbl_numero_licenca)}"  
+										 disabled="#{imovelRuralControllerNew.visualizacaoAp}"/>
+							<br />
+						</h:panelGrid>
+					</h:panelGrid>
+					
+				</h:panelGrid>
+					
+				<ui:include src="panelLocalizacaoAreaProdutiva.xhtml" />
+			
+			</h:panelGrid>
+			
+			<h:panelGrid>
+				<p:commandButton id="cefir_ap_btn_salvar" 
+								 value="#{bundle.btn_salvar}" 
+								 process="@form" 
+								 actionListener="#{imovelRuralControllerNew.salvarAreaProdutiva()}"
+								 update="formCadImovelRural:tabAbasDadosEspecificos:listaAreaProdutiva" disabled="#{!imovelRuralControllerNew.imovelRural.indAreaProdutiva}"
+								 rendered="#{!imovelRuralControllerNew.visualizacaoAp}" />
+				<p:commandButton id="cefir_ap_btn_fechar" 
+								 value="Fechar" 
+								 process="@this" 
+								 onclick="dlgCadAreaProdutiva.hide()"
+								 rendered="#{imovelRuralControllerNew.visualizacaoAp}" />
+			</h:panelGrid>
+			
+			<p:confirmDialog id="confirmaExclusaoArquivoShapeFileLocGeoAp" 
+							 widgetVar="confirmaExclusaoArquivoShapeFileLocGeoAp" 
+							 header="#{bundle.geral_lbl_mensagem}"  
+							 appendToBody="true" 
+							 message="#{bundle.msg_confirma_exclusao}" 
+							 severity="alert">
+				<p:commandButton id="btnConfirmaExclusaoArquivoShapeFileLocGeoAp" 
+								 action="${imovelRuralControllerNew.excluirArquivo(4)}" 
+					 			 update="localizacaoGeograficaAp panelLocalizacaoAp" 
+					 			 onclick="confirmaExclusaoArquivoShapeFileLocGeoAp.hide()" 
+					 			 value="#{bundle.btn_sim}"/>
+				<p:commandButton value="#{bundle.btn_nao}" 
+								 type="button" 
+								 onclick="confirmaExclusaoArquivoShapeFileLocGeoAp.hide()" />
+			</p:confirmDialog>
+				
+			<p:confirmDialog id="confirmaExclusaoShapeFileLocGeoAp"
+							 widgetVar="confirmaExclusaoShapeFileLocGeoAp" 
+							 header="#{bundle.geral_lbl_mensagem}"  
+							 appendToBody="true" 
+							 message="#{bundle.msg_confirma_exclusao}" 
+							 severity="alert">			
+				<p:commandButton id="btnConfirmaExclusaoShapeFileLocGeoAp" 
+								 action="#{imovelRuralControllerNew.excluirShape(imovelRuralControllerNew.areaProdutivaSelecionada.ideLocalizacaoGeografica, 4)}" 
+								 onclick="confirmaExclusaoShapeFileLocGeoAp.hide()" 
+					 			 update="formCadImovelRural:tabAbasDadosEspecificos:listaAreaProdutiva localizacaoGeograficaAp panelLocalizacaoAp" 
+					 			 value="#{bundle.btn_sim}" 
+					 			 process="@this localizacaoGeograficaAp panelLocalizacaoAp"/>
+				<p:commandButton value="#{bundle.btn_nao}" 
+								 type="button" 
+								 onclick="confirmaExclusaoShapeFileLocGeoAp.hide()" />			
+			</p:confirmDialog>
+						
+		</h:form>
+	</h:panelGrid>
+</ui:composition>

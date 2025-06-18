@@ -1,0 +1,17 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.prime.com.tr/ui">
+	<h:panelGrid columns="1">
+		<b>Solicitante</b>
+		<h:outputLabel value="#{cerhCobrancaController.requerente.nomeRazao}" />
+		<h:panelGrid columns="4">
+			<h:selectOneRadio value="#{cerhCobrancaController.papelSolicitante}" required="true" requiredMessage="#{cerhCobrancaController.getMessage('Papel do Solicitante')}" valueChangeListener="#{requerenteController.load(cerhCobrancaController.metodoExterno)}">
+				<f:selectItems value="#{cerhCobrancaController.solicitanteEnums}" var="papel" itemValue="#{papel}" itemLabel="#{papel}" />
+				<p:ajax event="change" process="@this" global="false"  />
+			</h:selectOneRadio>
+		</h:panelGrid>
+	</h:panelGrid>	
+</html>

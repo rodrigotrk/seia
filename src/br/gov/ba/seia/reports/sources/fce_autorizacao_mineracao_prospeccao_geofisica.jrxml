@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="fce_autorizacao_mineracao_prospeccao_geofisica" pageWidth="480" pageHeight="817" whenNoDataType="AllSectionsNoDetail" columnWidth="480" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="80b78396-35cc-4e26-aaf9-1207b1892468">
+	<property name="ireport.zoom" value="1.9965000000000013"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="ide_fce_pesquisa_mineral" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[$P{ide_fce_pesquisa_mineral}]]></defaultValueExpression>
+	</parameter>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[SELECT mp.nom_metodo_prospeccao, g.nom_geofisica FROM fce_pesquisa_prospeccao_geofisica  fppg
+inner join geofisica g on g.ide_geofisica = fppg.ide_geofisica
+INNER join fce_pesquisa_mineral_prospeccao fpmp on fpmp.ide_fce_pesquisa_mineral_prospeccao = fppg.ide_fce_pesquisa_mineral_prospeccao
+inner join metodo_prospeccao mp on mp.ide_metodo_prospeccao = fpmp.ide_metodo_prospeccao
+WHERE fpmp.ide_fce_pesquisa_mineral = $P{ide_fce_pesquisa_mineral}
+and mp.ide_metodo_prospeccao = 5]]>
+	</queryString>
+	<field name="nom_metodo_prospeccao" class="java.lang.String"/>
+	<field name="nom_geofisica" class="java.lang.String"/>
+	<columnHeader>
+		<band height="30">
+			<textField>
+				<reportElement uuid="8a294ddb-91ee-434d-8e68-6aacc4aaea2a" x="0" y="10" width="307" height="20"/>
+				<box topPadding="3" leftPadding="5"/>
+				<textElement>
+					<font size="9" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nom_metodo_prospeccao}]]></textFieldExpression>
+			</textField>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement uuid="fccffb36-c570-4836-9e8d-4b935a2e76c4" x="15" y="0" width="307" height="20"/>
+				<box topPadding="3" leftPadding="2"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nom_geofisica}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

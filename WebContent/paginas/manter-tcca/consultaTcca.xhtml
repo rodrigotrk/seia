@@ -1,0 +1,205 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.prime.com.tr/ui"
+      xmlns:s="http://java.sun.com/jsf/composite/seia">
+
+	<ui:composition template="/layout/template.xhtml">
+		
+		<ui:define name="titulo-pagina">
+			<h3>Consultar TCCA</h3>
+		</ui:define>
+		
+		<ui:define name="conteudo-principal">
+			
+			<!-- INCLUDE DOS DIALOGS -->
+			<ui:include src="/paginas/manter-tcca/includeDialogsTcca.xhtml" />
+			
+			<h:form>
+				<p:poll listener="#{tccaController.atualizaMensagemPorPollAjax}" update="formConsultaTCCA" 
+					widgetVar="tccaPoll" global="false" stop="true" interval="1"/>
+			</h:form>
+				
+			<h:form id="formConsultaTCCA">
+				<h3><h:outputLabel styleClass="titulo-grupo" style="font-weight:bold;" value="PARÂMETROS DA CONSULTA" /></h3>
+				<p:spacer height="10" width="0"/>
+				
+				<h:panelGrid columns="1" id="panelFiltro">
+					
+					<!-- Requerente e Empreendimento -->
+					<h:panelGrid columns="4">
+					 	<h:outputText value="Requerente:" />
+					 	<p:spacer height="0" width="1"/>
+					 	
+					 	<p:spacer height="0" width="1"/>
+					 	<h:outputText value="Nome do Empreendimento:"/>
+					 	
+						<p:inputText id="requerenteFiltro" value="#{tccaController.requerenteFiltro.nomeRazao}" disabled="true" style="width: 200px;"/>
+					    <p:commandLink onclick="dialogRequerente.show();" action="#{empreendimentoController.limparFiltroRequerente()}" update="form_dialog">
+					    	<h:graphicImage title="Pesquisar" value="/resources/img/ico-pesquisa.png" />
+					    	<f:setPropertyActionListener target="#{tccaController.telaConsulta}" value="#{true}" />
+						</p:commandLink>
+					    
+						<p:spacer height="0" width="20"/>
+						<p:inputText id="empreendimentoFiltro" value="#{tccaController.empreendimentoFiltro.nomEmpreendimento}" style="width: 456px;" />
+					</h:panelGrid>
+					
+					<!-- Número da Licença, Número do Processo SEMA e Número do TCCA -->
+					<h:panelGrid columns="6">
+					 	<h:outputText value="Número do Processo:" />
+					 	<p:spacer height="0" width="1"/>
+					 	
+					 	<p:spacer height="0" width="1"/>
+					 	<h:outputText value="Número do Processo SEMA:" />
+					 	
+					 	<p:spacer height="0" width="1"/>
+					 	<h:outputText value="Número do TCCA:" />
+					 	
+						<p:inputText id="numLicencaFiltro" value="#{tccaController.numLicencaFiltro}" style="width: 200px;"/>
+					    <p:spacer height="0" width="17"/>
+					    
+					    <p:spacer height="0" width="20"/>
+					    <p:inputText id="numProcessoFiltro" value="#{tccaController.numProcessoFiltro}" style="width: 200px;"/>
+						
+						<p:spacer height="0" width="33"/>
+						<p:inputText id="numTCCAFiltro" value="#{tccaController.numTCCAFiltro}" style="width: 200px;"/>
+					</h:panelGrid>
+				</h:panelGrid>
+				
+				<br />
+					
+				<!-- Botões -->
+				<h:panelGrid columns="1" id="panelBotoes">
+					<h:panelGrid columns="3">
+						<p:commandButton id="botaoConsultarFiltro" value="Consultar" actionListener="#{tccaController.consultarTCCA()}" 
+							rendered="${security.temAcesso('3.67.4')}" update="formConsultaTCCA:dataTableTCCA"/>
+		    			
+						<p:commandButton id="botaoNovoCadastro" value="Novo TCCA" action="/paginas/manter-tcca/cadastroTcca.xhtml" 
+							global="false" rendered="${security.temAcesso('3.67.1')}" ajax="false"/>
+						
+						<p:commandButton id="botaoLimparFiltros" value="Limpar" actionListener="#{tccaController.limparTelaConsulta()}" 
+							update="formConsultaTCCA"/>
+					</h:panelGrid>
+				</h:panelGrid>
+				
+				<br />
+				<br />
+				
+				<p:dataTable id="dataTableTCCA" lazy="true" paginator="true" rows="8" paginatorPosition="bottom" var="tcca" widgetVar="tcca"
+					paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}" emptyMessage="#{bundle.consultapf_msg_empty_list}"
+					value="#{tccaController.dataModelTCCA}" binding="#{tccaController.dataTableTCCA}" style="margin-left:8px;">
+					
+					<f:facet name="header">
+						<h:outputText value="Lista de TCCAs Cadastrados" />
+					</f:facet>
+					
+					<p:column style="text-align: center;">
+						<f:facet name="header">
+							<h:outputText value="Número do TCCA" />
+						</f:facet>
+						
+						<h:outputText value="#{tcca.numTcca}"/>
+					</p:column>
+					
+					<p:column style="text-align: center;">
+						<f:facet name="header">
+							<h:outputText value="Status do TCCA" />
+						</f:facet>
+						
+						<h:outputText value="#{tcca.ultimoStatus.ideTccaProjetoTipoStatus.nomTccaTipoStatus}"/>
+					</p:column>
+					
+					<p:column style="text-align: center;">
+						<f:facet name="header">
+							<h:outputText value="Saldo para Execução (R$)" />
+						</f:facet>
+						
+						<h:outputText value="#{(tcca.ultimoSaldo.valSaldoParaExecucao)==null ? 0.00 : (tcca.ultimoSaldo.valSaldoParaExecucao)}"
+							styleClass="#{tccaController.isValorNegativo(tcca.ultimoSaldo.valSaldoParaExecucao)}">
+							
+							<f:convertNumber pattern="#,###,##0.00" locale="pt_BR"/>
+						</h:outputText>
+					</p:column>
+					
+					<p:column style="text-align: center;">
+						<f:facet name="header">
+							<h:outputText value="#{bundle.geral_lbl_acoes}" />
+						</f:facet>
+						
+						<h:panelGrid columns="2">
+							<h:commandButton id="visualizar" action="#{tccaController.editarTcca()}" title="Visualizar" image="/resources/img/ico-pesquisa.png" 
+								style="margin: 2px;" rendered="#{security.temAcesso('3.67.6')}">
+								
+								<f:setPropertyActionListener target="#{tccaController.tcca}" value="#{tcca}" />
+								<f:setPropertyActionListener target="#{tccaController.telaCadastro}" value="#{true}" />
+								<f:setPropertyActionListener target="#{tccaController.tcca.visualizando}" value="#{true}" />
+							</h:commandButton>
+							
+							<h:commandButton id="editar" action="#{tccaController.editarTcca()}" title="Editar" image="/resources/img/ico-alterar.png" style="margin: 2px;" 
+								rendered="#{security.temAcesso('3.67.3') and (tcca.statusCadastroIncompleto or tcca.statusVigente or tcca.statusEmExecucao)}">
+								
+								<f:setPropertyActionListener target="#{tccaController.tcca}" value="#{tcca}" />
+								<f:setPropertyActionListener target="#{tccaController.telaCadastro}" value="#{true}" />
+							</h:commandButton>
+							
+							<p:commandLink id="excluir" oncomplete="dialogExcluir.show()" title="Excluir" ajax="true"
+								rendered="#{security.temAcesso('3.67.2') and tcca.statusCadastroIncompleto}">
+								
+								<f:setPropertyActionListener target="#{tccaController.tcca}" value="#{tcca}" />
+								<h:graphicImage title="Excluir" value="/resources/img/ico-excluir.png" style="margin: 2px;"/>
+							</p:commandLink>
+							
+							<h:commandButton id="listarProjeto" title="Listar Projetos do TCCA" image="/resources/img/ico-listar-projeto.png" 
+								style="margin: 2px;" global="false" ajax="false" rendered="${security.temAcesso('3.67.64')}"
+								action="/paginas/manter-tcca/consultaProjeto.xhtml"
+								actionListener="#{tccaController.enviarTccaParaSessao(tcca)}"/>
+							
+							<p:commandLink id="duplicar" oncomplete="dialogDuplicarTcca.show()" title="Duplicar TCCA"
+								rendered="#{security.temAcesso('3.67.73') and tccaController.renderizaBotaoDuplicarTcca(tcca)}">
+								
+								<f:setPropertyActionListener target="#{tccaController.tcca}" value="#{tcca}" />
+								<h:graphicImage title="Duplicar TCCA" value="/resources/img/ico-duplicar.png" style="margin: 2px;"/>
+							</p:commandLink>
+							
+							<p:commandLink id="reajustarValor" title="Reajustar Valor" action="#{tccaController.acaoTcca('REAJUSTAR_VALOR')}"
+								rendered="#{security.temAcesso('3.67.74') and (tcca.statusVigente or tcca.statusEmExecucao)}">
+								
+								<f:setPropertyActionListener target="#{tccaController.tcca}" value="#{tcca}" />
+								<h:graphicImage title="Reajustar Valor TCCA" value="/resources/img/ico-reajustar-valor.png" style="margin: 2px;"/>
+							</p:commandLink>
+								
+							<p:commandLink id="renovarPrazoValidade" action="#{tccaController.acaoTcca('RENOVAR_PRAZO')}" title="Renovar Prazo de Validade"
+								rendered="#{security.temAcesso('3.67.75') and tccaController.renderRenovarPrazo(tcca)}" >
+								
+								<f:setPropertyActionListener target="#{tccaController.tcca}" value="#{tcca}" />
+								<f:setPropertyActionListener target="#{tccaController.telaCadastro}" value="#{true}" />
+								<f:setPropertyActionListener target="#{tccaController.tcca.visualizando}" value="#{true}" />
+								<h:graphicImage title="Renovar Prazo TCCA" value="/resources/img/ico-renovar-prazo-validade.png" style="margin: 2px;"/>
+							</p:commandLink>
+							
+							<p:commandLink id="cancelarTcca" oncomplete="dialogCancelarTcca.show()" title="Cancelar TCCA" ajax="true" 
+								rendered="#{security.temAcesso('3.67.51') and (tcca.statusExpirado or tcca.statusVigente or tcca.statusEmExecucao)}">
+								
+								<f:setPropertyActionListener target="#{tccaController.tcca}" value="#{tcca}" />
+								<h:graphicImage title="Cancelar TCCA" value="/resources/img/ico-msg-erro.png" style="margin: 2px;"/>
+							</p:commandLink>
+							
+							<h:commandButton title="Executar Movimentação Financeira no TCCA" style="margin: 2px;" image="/resources/img/ico-executar-movimentacao-financeira.png" 
+								action="/paginas/manter-tcca/cadastroMovimentacaoFinanceiraTcca.xhtml" actionListener="#{tccaController.enviarTccaParaSessao(tcca)}"
+								rendered="#{security.temAcesso('3.67.72') and (tcca.statusVigente or tcca.statusEmExecucao or tcca.statusCancelado)}"/>
+							
+							<p:commandLink title="Consultar Histórico de Movimentação Financeira" oncomplete="dialogRelatorioMovimentacaoTCCA.show()" ajax="true"
+								actionListener="#{tccaController.exibirRelatorioMovimentacaoFinanceira(tcca)}"
+								rendered="#{security.temAcesso('3.67.72') and !tcca.statusCadastroIncompleto}" >
+								
+								<h:graphicImage title="Consultar Histórico de Movimentação Financeira" value="/resources/img/ico-consultar-historico-movimentacao-financeira.png" style="margin: 2px;"/>
+							</p:commandLink>
+						</h:panelGrid>
+					</p:column>
+				</p:dataTable>
+			</h:form>
+		</ui:define>
+	</ui:composition>
+</html>

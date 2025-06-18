@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui">
+
+	<h:form id="form_dialog_temas">
+		<h:panelGrid columns="2" style="text-align: left">
+			<h:selectBooleanCheckbox value="#{relatorioImovelRuralController.colunasExibirRelatorioQuantitativoImoveisRuraisDTO.selecaoTodos}" 
+									valueChangeListener="#{relatorioImovelRuralController.changeTodosTemas()}"> 
+				<p:ajax update="botao form_dialog_temas" event="change"/>
+			</h:selectBooleanCheckbox>
+			<h:outputText value="Selecionar todos" />			
+		</h:panelGrid>
+		
+		<p:separator style="width:100%; text-align:center;"/>
+		
+		<h:panelGrid columns="2" style="text-align: left">
+			<h:selectBooleanCheckbox value="#{relatorioImovelRuralController.colunasExibirRelatorioQuantitativoImoveisRuraisDTO.imoveisRurais}"> 
+				<p:ajax update="botao form_dialog_temas" event="change"/>
+			</h:selectBooleanCheckbox>
+			<h:outputText value="Imóveis Rurais" />
+			
+			<h:selectBooleanCheckbox value="#{relatorioImovelRuralController.colunasExibirRelatorioQuantitativoImoveisRuraisDTO.reservaLegal}"> 
+				<p:ajax update="botao form_dialog_temas" event="change"/>
+			</h:selectBooleanCheckbox>
+			<h:outputText value="Reserva Legal" />
+			
+			<h:selectBooleanCheckbox value="#{relatorioImovelRuralController.colunasExibirRelatorioQuantitativoImoveisRuraisDTO.app}">
+				<p:ajax update="botao form_dialog_temas" event="change"/>
+			</h:selectBooleanCheckbox>
+			<h:outputText value="Área de Preservação Permanente" />
+			
+			<h:selectBooleanCheckbox value="#{relatorioImovelRuralController.colunasExibirRelatorioQuantitativoImoveisRuraisDTO.areaProdutiva}">
+				<p:ajax update="botao form_dialog_temas" event="change"/>
+			</h:selectBooleanCheckbox>
+			<h:outputText value="Atividade desenvolvida" />
+			
+			<h:selectBooleanCheckbox value="#{relatorioImovelRuralController.colunasExibirRelatorioQuantitativoImoveisRuraisDTO.vegetacaoNativa}">
+				<p:ajax update="botao form_dialog_temas" event="change"/>
+			</h:selectBooleanCheckbox>
+			<h:outputText value="Vegetação Nativa" />
+
+			<h:selectBooleanCheckbox value="#{relatorioImovelRuralController.colunasExibirRelatorioQuantitativoImoveisRuraisDTO.rppn}">
+				<p:ajax update="botao form_dialog_temas" event="change"/>
+			</h:selectBooleanCheckbox>
+			<h:outputText value="RPPN" />
+			
+			<h:selectBooleanCheckbox value="#{relatorioImovelRuralController.colunasExibirRelatorioQuantitativoImoveisRuraisDTO.usoAgua}">
+				<p:ajax update="botao form_dialog_temas" event="change"/>
+			</h:selectBooleanCheckbox>
+			<h:outputText value="Uso da Água" />
+			
+			<h:selectBooleanCheckbox value="#{relatorioImovelRuralController.colunasExibirRelatorioQuantitativoImoveisRuraisDTO.outrosPassivos}">
+				<p:ajax update="botao form_dialog_temas" event="change"/>
+			</h:selectBooleanCheckbox>
+			<h:outputText value="Outros Passivos" />
+		</h:panelGrid>
+		
+		<h:panelGrid style="margin-top:40px; margin-left: 54px;">	
+			<p:commandButton style="font-size: 12px; width: 100px;"  
+							 value="Gerar" 
+							 ajax="false" 
+							 disabled="#{relatorioImovelRuralController.desabilitaBtnImprimir()}"
+							 onclick="dlgSelecionaTemas.hide();">
+				<p:fileDownload value="#{relatorioImovelRuralController.impRelatorioQuantitativoImovelRural()}"/>
+			</p:commandButton>
+		</h:panelGrid>
+	</h:form>
+</ui:composition>

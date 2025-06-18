@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="certificado_inexibilidade_modelo07_unidades" language="java" pageWidth="555" pageHeight="802" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="5aabb08f-e6ba-485e-8309-74ada3b7037b">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="IDE_DECLARACAO_INEXIGIBILIDADE" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[select diu.nom_unidade as NOME_UNIDADE,
+tl.nom_tipo_logradouro || ' ' || l.nom_logradouro || coalesce(e.des_complemento, '  ', (' ' || e.des_complemento)) || coalesce(' '||e.num_endereco, ' ', (' ' || e.num_endereco)) || ', ' || br.nom_bairro || ', ' || mp.nom_municipio || '/' || et.des_sigla as Endereço
+from declaracao_inexigibilidade_info_unidade diu
+LEFT JOIN endereco e on diu.ide_endereco = e.ide_endereco
+LEFT JOIN logradouro l ON l.ide_logradouro = e.ide_logradouro
+LEFT JOIN tipo_logradouro tl ON tl.ide_tipo_logradouro = l.ide_tipo_logradouro
+LEFT JOIN bairro br ON br.ide_bairro = l.ide_bairro
+LEFT JOIN municipio mp ON mp.ide_municipio = l.ide_municipio
+LEFT JOIN estado et ON et.ide_estado = mp.ide_estado
+LEFT JOIN pais ps ON ps.ide_pais = et.ide_pais
+where diu.ide_declaracao_inexigibilidade = $P{IDE_DECLARACAO_INEXIGIBILIDADE}]]>
+	</queryString>
+	<field name="nome_unidade" class="java.lang.String"/>
+	<field name="endereço" class="java.lang.String"/>
+	<detail>
+		<band height="36" splitType="Stretch">
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="dd2fc343-442f-41ed-a54f-2e8990ecb297" x="1" y="0" width="494" height="15"/>
+				<textElement markup="html">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nome_unidade}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="d6a5c9d4-1ec3-4ab0-bf3d-5886373a7daf" x="1" y="16" width="50" height="15"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Endereço:]]></text>
+			</staticText>
+			<textField>
+				<reportElement uuid="9fdceede-86dc-4a44-a4ea-91fb923b2eb4" x="55" y="16" width="491" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{endereço}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

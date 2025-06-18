@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui"
+	template="../../../layout/template.xhtml">
+
+	<ui:define name="titulo-pagina">
+		<h3>Consultar Convênios</h3>
+	</ui:define>
+
+	<ui:define name="conteudo-principal">
+
+		<p:confirmDialog id="confirmaExclusaoUsuario" widgetVar="confirmaExclusaoUsuario" header="#{bundle.geral_lbl_mensagem}" appendToBody="true"
+				 message="#{bundle.msg_confirma_exclusao}" severity="alert">
+			<h:form id="formConfirmaExclusaoUsuario">
+				<div style="text-align: center;">
+					<p:commandButton actionListener="#{contratoConvenioController.desvincularUsuarioConvenio()}" 
+						 update="panelUsarioxConvenio" onclick="confirmaExclusaoUsuario.hide()" value="#{bundle.btn_sim}" />
+					<p:commandButton value="#{bundle.btn_nao}" type="button" onclick="confirmaExclusaoUsuario.hide()" />
+				</div>
+			</h:form>
+		</p:confirmDialog>
+		
+		<p:confirmDialog id="confirmaExclusaoConvenio" widgetVar="confirmaExclusaoConvenio" header="#{bundle.geral_lbl_mensagem}" appendToBody="true"
+				 message="#{bundle.msg_confirma_exclusao}" severity="alert">
+			<h:form id="formConfirmaExclusaoConvenio">
+				<div style="text-align: center;">
+					<p:commandButton actionListener="#{contratoConvenioController.excluirConvenio()}" 
+						 update="formConvenio:pngConvenio" onclick="confirmaExclusaoConvenio.hide()" value="#{bundle.btn_sim}" />
+					<p:commandButton value="#{bundle.btn_nao}" type="button" onclick="confirmaExclusaoConvenio.hide()" />
+				</div>
+			</h:form>
+		</p:confirmDialog>		
+	
+	<p:dialog id="dialogIncluirConvenio" dynamic="true" width="630" header="Incluir Convênio" widgetVar="dialogIncluirConvenio" modal="true" position="top" resizable="false">
+		<ui:include src="/paginas/manter-cerh/convenio/associarEmpresaConvenio.xhtml" />
+	</p:dialog>
+	
+		<h:form id="formConvenio">
+		
+			<h3>
+				<h:outputLabel styleClass="titulo-grupo" style="font-weight:bold;" value="PARÂMETROS DA CONSULTA" />
+			</h3>
+
+			<h:panelGroup id="panelContultarConvenio" layout="block" style="margin-top:15px; width: 100%;">
+				
+				<h:panelGrid columns="3" >
+					
+					<h:panelGrid>
+						<h:outputText value="CNPJ" />
+						<p:inputMask id="cnpj" mask="#{bundle.consultapj_msk_cnpj}" value="#{contratoConvenioController.cnpj}" converter="cnpjConverter" validator="cnpjValidator" size="30" style="width: 225px;" />
+					</h:panelGrid>
+					
+					<h:panelGrid>
+						<h:outputLabel value="#{bundle.cefir_lbl_nome_contrato_convenio}" />
+						<p:inputText value="#{contratoConvenioController.contratoConvenioFiltro.nomContratoConvenio}" size="30" maxlength="50" style="width: 225px;" />
+					</h:panelGrid>
+					
+					<h:panelGrid>
+						<h:outputLabel value="#{bundle.cefir_lbl_numero_contrato_convenio}" />
+						<p:inputText value="#{contratoConvenioController.contratoConvenioFiltro.numContrato}" size="30" maxlength="30" style="width: 225px;" />
+					</h:panelGrid>
+					
+					<h:panelGrid>
+						<h:outputLabel value="#{bundle.cefir_lbl_gestor_financeiro}" />
+						<p:selectOneMenu id="gestorFinanceiroConsulta" value="#{contratoConvenioController.contratoConvenioFiltro.ideGestorFinanceiro}"
+						converter="simpleEntityConverter" style="width: 232px;">
+							<f:selectItem itemLabel="#{bundle.geral_lbl_selecione}" />
+							<f:selectItems value="#{contratoConvenioController.listGestorFinanceiro}" var="gestor" itemLabel="#{gestor.nomGestorFinanceiro}" itemValue="#{gestor}" />
+						</p:selectOneMenu>
+					</h:panelGrid>
+					
+					<h:panelGrid>
+						<h:outputLabel value="Tipo Projeto" />
+						<p:selectOneMenu id="gestorTipoProjetoConsulta" value="#{contratoConvenioController.contratoConvenioFiltro.ideTipoProjeto}"
+						converter="simpleEntityConverter" style="width: 232px;">
+							<f:selectItem itemLabel="#{bundle.geral_lbl_selecione}" />
+							<f:selectItems value="#{contratoConvenioController.listTipoProjeto}" var="projeto" itemLabel="#{projeto.nomTipoProjeto}" itemValue="#{projeto}" />
+						</p:selectOneMenu>
+					</h:panelGrid>
+					
+				</h:panelGrid>
+				
+			</h:panelGroup>
+			
+			<p:spacer height="15"/>
+		
+			<h:panelGrid>
+				<h:panelGrid columns="3">
+					<p:commandButton actionListener="#{contratoConvenioController.consultarConvenio()}" value="Consultar Convênio"/>
+					<p:commandButton actionListener="#{contratoConvenioController.incluirConvenio()}" oncomplete="dialogIncluirConvenio.show()" value="Incluir Convênio" />
+					<p:commandButton actionListener="#{contratoConvenioController.limpar()}" value="Limpar" />
+				</h:panelGrid>
+			</h:panelGrid>
+			
+			<br/>
+			
+			<h:panelGrid id="dadosEmpresa" columns="2" rendered="#{not empty contratoConvenioController.listConvenio and not empty contratoConvenioController.pessoaJuridica.nomRazaoSocial}">
+				<h:outputText value="Nome/Razão Social:" style="font-weight: bold;" />
+				<h:outputText value="#{contratoConvenioController.pessoaJuridica.nomRazaoSocial}" />
+				<h:outputText value="Email:" style="font-weight: bold;"/>
+				<h:outputText value="#{contratoConvenioController.pessoaJuridica.pessoa.desEmail}" />
+				<h:outputText value="CNPJ:" style="font-weight: bold;"/>
+				<h:outputText value="#{contratoConvenioController.numCnpjFormatado}" />
+			</h:panelGrid>		
+			
+			<br/>
+				
+			<h:panelGroup id="pngConvenio" layout="block" width="100%">
+	
+				<p:dataTable id="tableConvenioEmpresa"
+				rendered="#{not empty contratoConvenioController.listConvenio}"
+				style="width:100%" var="convenio"
+				value="#{contratoConvenioController.listConvenio}"
+				lazy="true" paginator="true" rows="10" paginatorPosition="bottom"
+				paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}">
+	
+					<f:facet name="header">
+		            	Lista de Convênios Vinculados à Empresa
+		        	</f:facet>
+	
+					<p:column headerText="Convênio" style="text-align:center;">
+						<h:outputText value="#{convenio.nomContratoConvenio}" />
+					</p:column>
+					
+					<p:column headerText="Contrato" style="text-align:center;">
+						<h:outputText value="#{convenio.numContrato}" />
+					</p:column>
+					
+					<p:column headerText="Ações" style="text-align:center;">
+						
+						<p:commandLink  action="#{contratoConvenioController.visualizarConvenio()}" process="@this" update="formIncluirConvenio" oncomplete="dialogIncluirConvenio.show()">
+							<f:setPropertyActionListener target="#{contratoConvenioController.contratoConvenio}" value="#{convenio}" />
+							<h:graphicImage title="Visualizar Convênio" value="/resources/img/ico-pesquisa.png" />
+						</p:commandLink>
+							
+						<p:commandLink  action="#{contratoConvenioController.editarContratoConvenio()}" process="@this" update="formIncluirConvenio" oncomplete="dialogIncluirConvenio.show()">
+							<f:setPropertyActionListener target="#{contratoConvenioController.contratoConvenio}" value="#{convenio}" />
+							<h:graphicImage title="Editar Convênio" value="/resources/img/ico-editar.png" />
+						</p:commandLink>
+							
+						<p:commandLink oncomplete="confirmaExclusaoConvenio.show();" process="@this" >
+							<f:setPropertyActionListener target="#{contratoConvenioController.contratoConvenio}" value="#{convenio}" />
+							<h:graphicImage title="Excluir Convênio" value="/resources/img/ico-excluir.png" />
+						</p:commandLink>
+						
+					</p:column>	
+					
+				</p:dataTable>
+	
+			</h:panelGroup>
+		</h:form>
+	</ui:define>
+</ui:composition>

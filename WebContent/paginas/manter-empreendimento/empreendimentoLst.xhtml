@@ -1,0 +1,154 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.prime.com.tr/ui">
+      
+
+	<ui:composition template="/layout/template.xhtml">
+	
+		<ui:define name="titulo-pagina">		
+			<h3> Consultar Empreendimento</h3>		
+		</ui:define>	
+		
+		<ui:define name="conteudo-principal">	
+		
+		<!-- form -->
+		<h:form id="filtroEmpreendimento">	
+			<h3><h:outputLabel styleClass="titulo-grupo" style="font-weight:bold;" value="INSTRUÇÕES" /></h3>
+			<p class="titulo-grupo">
+				- Para consultar um ou mais empreendimentos, informe o(s) parâmetro(s) de consulta desejado(s) e clique no botão "Consultar".<br />
+				<h:outputText value="- Para incluir um novo empreendimento, clique no botão &#34;Incluir Empreendimento&#34;." rendered="#{!contextoController.usuarioLogado.usuarioExterno}"/>
+			</p>
+		
+			<h3><h:outputLabel styleClass="titulo-grupo" style="font-weight:bold;" value="PARÂMETROS DA CONSULTA" /></h3>
+				 
+		 <h:panelGrid columns="1" id="panel" >
+		   	<h:panelGrid columns="2">
+			 	<h:outputLabel id="lblRequerente" value="#{bundle.consulta_empree_requerente}" rendered="#{!empreendimentoController.externalUser}" />
+			 	&nbsp;
+				<p:inputText value="#{empreendimentoController.descnome}" disabled="true" rendered="#{!empreendimentoController.externalUser}" />
+			    <h:commandButton rendered="#{!empreendimentoController.externalUser}" image="/resources/img/ico-pesquisa.png"  onclick="dlg2.show();" disabled="${!security.temAcesso('3.14.4')}"/>
+		   </h:panelGrid>
+		   
+		   <h:panelGroup>
+		    <h:panelGrid columns="2">
+		      <h:outputLabel value="#{bundle.consulta_empree_nome_empreendimento}"/>
+		      <h:panelGroup>
+		      	<h:outputFormat value="#{bundle.consulta_empree_municipio}" />	
+		      </h:panelGroup>
+		     
+		      <p:inputText value="#{empreendimentoController.nomeEmpreendimento}" style="width: 475px;" disabled="${!security.temAcesso('3.14.4')}"/>
+		      <h:panelGroup>
+		        <p:selectOneMenu value="#{empreendimentoController.municipio}" converter="municipioConverter" style="width:200px" disabled="${!security.temAcesso('3.14.4')}">
+		         <f:selectItem itemLabel="Selecione..." />
+		         <f:selectItems value="#{empreendimentoController.listaMunicipio}" var="municipio" itemLabel="#{municipio.nomMunicipio}" itemValue="#{municipio}" />
+		        </p:selectOneMenu>		       
+		      </h:panelGroup>
+		    </h:panelGrid>
+		    <br />
+		    
+		    <h:panelGroup>
+		    
+		    	<p:commandButton value="Consultar" global="true" action="#{empreendimentoController.consultarEmpreendimentos}" disabled="${!security.temAcesso('3.14.4')}">
+		    	</p:commandButton>&nbsp;
+		    
+		    
+		    	<p:commandButton value="Incluir Empreendimento" action="#{empreendimentoController.incluirEmpreendimento}" ajax="false" actionListener="#{empreendimentoController.novoEmpreendimento}" rendered="${security.temAcesso('3.14.1')}">
+						<f:setPropertyActionListener target="#{empreendimentoController.visualizarEmpreendimento}" value="#{false}"/>		    	
+		    	</p:commandButton>
+		    	&nbsp;
+		    	<p:commandButton value="Limpar" actionListener="#{empreendimentoController.limparTela()}" update="filtroEmpreendimento:panel" rendered="${security.temAcesso('3.14.4')}"/>
+		    </h:panelGroup>
+		   </h:panelGroup>
+		
+			<br />
+			<br />
+		   
+		   <!-- tabela empreeendimento -->
+		   
+			<p:dataTable id="dataTableEmpreendimentos" var="empreendimento" value="#{empreendimentoController.empreendimentoModel}" lazy="true"
+		                 paginator="true" rows="8" paginatorPosition="bottom"
+		                 paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}"  
+		                 emptyMessage="#{bundle.consultapf_msg_empty_list}"
+		                 widgetVar="empreendimento">
+		                 
+		        <f:facet name="header">  
+						<h:outputText value="#{bundle.consulta_empree_lista}" />
+				</f:facet>  
+				
+		        <p:column style="width: 250px;">  
+		            <f:facet name="header">  
+		                <h:outputText value="#{bundle.consulta_empree_nome}" />  
+		            </f:facet>
+		            <h:outputText value="#{empreendimento.nomEmpreendimento}" />           
+		        </p:column>
+		        
+		        <p:column >  
+		            <f:facet name="header">  
+		                <h:outputText value="#{bundle.empreendimento_lbl_requerente}" />  
+		            </f:facet>
+		            
+		            <h:outputText value="#{!empty empreendimento.nomPessoa ? empreendimento.nomPessoa : empreendimento.nomRazaoSocial}" />
+		        </p:column>  
+		        
+		        <p:column>  
+		            <f:facet name="header" style="width: 200px;">
+		                <h:outputText value="#{bundle.consulta_empree_municipio}" />  
+		            </f:facet>
+
+		            <h:outputText value="#{empreendimento.nomMunicipio}" />           
+		        </p:column>    
+		  
+		        		  
+		        <p:column style="text-align: center; width: 50px;" >  
+		            <f:facet name="header">  
+		                <h:outputText value="#{bundle.geral_lbl_acoes}" />  
+		            </f:facet>  
+		            
+					<h:commandButton id="visualizar" title="Visualizar" action="/paginas/manter-empreendimento/empreendimento.xhtml" rendered="${security.temAcesso('3.14.4')}"  process="@this" image="/resources/img/ico-pesquisa.png" >
+						<f:setPropertyActionListener value="#{true}" target="#{empreendimentoController.visualizarEmpreendimento}" />
+						<f:setPropertyActionListener value="#{empreendimento}" target="#{empreendimentoController.vwEmpreendimento}" />
+					</h:commandButton>
+					        	
+					<h:commandButton id="alterar" title="#{bundle.btn_editar}" action="/paginas/manter-empreendimento/empreendimento.xhtml" image="/resources/img/ico-alterar.png" rendered="${security.temAcesso('3.14.3')}">
+						<f:setPropertyActionListener value="#{false}" target="#{empreendimentoController.visualizarEmpreendimento}" />
+						<f:setPropertyActionListener value="#{empreendimento}" target="#{empreendimentoController.vwEmpreendimento}" />
+					</h:commandButton>
+					
+					<p:commandLink id="excluir" title="#{bundle.btn_excluir}" onclick="confirmDlgExclusaoEmpreendimento.show()" image="ui-icon ui-icon-close" process="excluir" rendered="${security.temAcesso('3.14.2')}">
+						<h:graphicImage title="Excluir" value="/resources/img/ico-excluir.png" style="vertical-align: baseline;"/>
+						<f:setPropertyActionListener value="#{empreendimento.empreendimento}" target="#{empreendimentoController.empreendimento}" />
+					</p:commandLink>
+		        </p:column>        
+		    </p:dataTable>
+		    
+		    
+		   <!-- fim tabela -->
+		   
+		   
+		 </h:panelGrid>
+		 
+		   		  
+		
+		</h:form>
+		<!-- fim form -->
+
+		<p:dialog header="Selecionar Requerente" widgetVar="dlg2" modal="true" style="text-align:center;" resizable="false"  position="center">  
+			<ui:include src="/paginas/manter-empreendimento/empreendimento_requerente.xhtml" />
+        </p:dialog>
+
+		<!--  dialog de confirmação -->
+		<p:confirmDialog id="confirmDialogExclusaoEmpreendimento" widgetVar="confirmDlgExclusaoEmpreendimento" header="#{bundle.hdr_confirma_exclusao}" message="#{bundle.msg_confirma_exclusao}" severity="alert">
+			<h:form>
+				<p:commandButton id="confirmarExclusao" value="#{bundle.btn_sim}" update=":filtroEmpreendimento:panel @form" action="#{empreendimentoController.excluirEmpreendimento}" oncomplete="confirmDlgExclusaoEmpreendimento.hide()" process="confirmarExclusao"/>
+				<p:commandButton value="#{bundle.btn_nao}" type="button" onclick="confirmDlgExclusaoEmpreendimento.hide()" />
+			</h:form>
+		</p:confirmDialog>
+		<!--  fim dialgo -->
+
+
+		</ui:define>  
+	</ui:composition>
+</html>

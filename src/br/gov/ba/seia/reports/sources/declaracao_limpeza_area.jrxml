@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="declaracao_limpeza_area" pageWidth="595" pageHeight="842" columnWidth="455" leftMargin="70" rightMargin="70" topMargin="50" bottomMargin="50" uuid="11ee7980-333a-48e5-830d-545b8f166a4b">
+	<property name="ireport.zoom" value="1.9487171000000019"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="328"/>
+	<parameter name="LOGO_SEIA" class="java.lang.String"/>
+	<parameter name="LOGO_INEMA" class="java.lang.String"/>
+	<parameter name="ide_requerimento" class="java.lang.Integer"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["/home/luis/ambiente/seia/seia/src/br/gov/ba/seia/reports/sources/"]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[select r.ide_requerimento,la.nom_objetivo_limpeza_area,r.num_requerimento,
+ru.dsc_outrosobjt_limp_area,to_char(ru.dtc_inicio_limp_area,'dd/MM/yyyy') dtc_inicio_limp_area,to_char(ru.dtc_final_limp_area,'dd/MM/yyyy') dtc_final_limp_area,
+	sum(ri.vlr_area) valor_total,
+    CASE
+	  WHEN pf.nom_pessoa is not null
+	  THEN pf.nom_pessoa
+	  ELSE pj.nom_nome_fantasia
+	END as nome_razao_social,
+	CASE
+	  WHEN pf.nom_pessoa is not null
+	  THEN pf.num_cpf
+	  ELSE pj.num_cnpj
+	END as num_cpf_cnpj
+ from requerimento r
+	inner join requerimento_unico ru on ru.ide_requerimento_unico = r.ide_requerimento
+    left join objetivo_requerimento_limpeza_area o on o.ide_requerimento = r.ide_requerimento
+    left join objetivo_limpeza_area la on la.ide_objetivo_limpeza_area = o.ide_objetivo_limpeza_area
+	inner join empreendimento_requerimento er on er.ide_requerimento = r.ide_requerimento
+    inner join empreendimento emp on emp.ide_empreendimento = er.ide_empreendimento
+    inner join requerimento_imovel ri on ri.ide_requerimento = r.ide_requerimento
+    left join localizacao_geografica lg on lg.ide_localizacao_geografica = emp.ide_localizacao_geografica
+    left join endereco_empreendimento ee on ee.ide_empreendimento = emp.ide_empreendimento
+    left join endereco e on e.ide_endereco = ee.ide_endereco
+    left join logradouro l on l.ide_logradouro = e.ide_logradouro
+    left join tipo_logradouro tl on tl.ide_tipo_logradouro = l.ide_tipo_logradouro
+    left join bairro br on br.ide_bairro = l.ide_bairro
+    left join municipio mp on mp.ide_municipio = l.ide_municipio
+    left join estado et on et.ide_estado = mp.ide_estado
+    left join pais ps on ps.ide_pais = et.ide_pais
+    inner join requerimento_pessoa rp on rp.ide_requerimento = r.ide_requerimento
+    inner join pessoa p on p.ide_pessoa = rp.ide_pessoa
+    left join pessoa_juridica pj on pj.ide_pessoa_juridica = p.ide_pessoa
+    left join pessoa_fisica pf on pf.ide_pessoa_fisica = p.ide_pessoa
+where  rp.ide_tipo_pessoa_requerimento = 1 and r.ide_requerimento = $P{ide_requerimento}
+group by r.ide_requerimento,la.nom_objetivo_limpeza_area,r.num_requerimento,	ru.dsc_outrosobjt_limp_area,ru.dtc_inicio_limp_area,ru.dtc_final_limp_area,
+	 nome_razao_social,num_cpf_cnpj]]>
+	</queryString>
+	<field name="ide_requerimento" class="java.lang.Integer"/>
+	<field name="nom_objetivo_limpeza_area" class="java.lang.String"/>
+	<field name="num_requerimento" class="java.lang.String"/>
+	<field name="dsc_outrosobjt_limp_area" class="java.lang.String"/>
+	<field name="dtc_inicio_limp_area" class="java.lang.String"/>
+	<field name="dtc_final_limp_area" class="java.lang.String"/>
+	<field name="valor_total" class="java.math.BigDecimal"/>
+	<field name="nome_razao_social" class="java.lang.String"/>
+	<field name="num_cpf_cnpj" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="50" splitType="Stretch">
+			<rectangle>
+				<reportElement uuid="8dfa3f4e-5b28-48d3-9166-33892427f9c4" x="1" y="1" width="107" height="48"/>
+			</rectangle>
+			<rectangle>
+				<reportElement uuid="7b87a71b-17c5-4843-9fdc-04d49b0df193" x="347" y="1" width="108" height="48"/>
+			</rectangle>
+			<staticText>
+				<reportElement uuid="4689f2d3-b959-40b5-aa09-4055504192aa" x="108" y="1" width="239" height="48"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="11" isBold="true"/>
+					<paragraph leftIndent="2" rightIndent="2" spacingBefore="2" spacingAfter="2"/>
+				</textElement>
+				<text><![CDATA[DECLARAÇÃO DE LIMPEZA DE ÁREA ]]></text>
+			</staticText>
+			<image isLazy="true" onErrorType="Blank">
+				<reportElement uuid="afc4657e-e55f-461c-99ba-10245465f152" x="352" y="5" width="99" height="41" forecolor="#FFFFFF"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<graphicElement>
+					<pen lineWidth="0.0"/>
+				</graphicElement>
+				<imageExpression><![CDATA[$P{LOGO_SEIA}]]></imageExpression>
+			</image>
+			<image isLazy="true" onErrorType="Blank">
+				<reportElement uuid="1ed1bf69-4d3c-42a1-9b03-a9b996935822" x="6" y="5" width="99" height="41" forecolor="#FFFFFF"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<graphicElement>
+					<pen lineWidth="1.0" lineStyle="Solid" lineColor="#FFFFFF"/>
+				</graphicElement>
+				<imageExpression><![CDATA[$P{LOGO_INEMA}]]></imageExpression>
+			</image>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="88" splitType="Stretch">
+			<textField>
+				<reportElement uuid="93c0a8dc-0467-42df-aca4-582012e5005c" isPrintRepeatedValues="false" x="0" y="8" width="454" height="78"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{nome_razao_social} + " , "+ new String($F{num_cpf_cnpj}.length() == 11 ? "CPF " + $F{num_cpf_cnpj}.substring(0,3) + "." + $F{num_cpf_cnpj}.substring(3,6) + "." + $F{num_cpf_cnpj}.substring(6,9) + "-" + $F{num_cpf_cnpj}.substring(9,11) : "CNPJ " + $F{num_cpf_cnpj}.substring(0,2) + "." + $F{num_cpf_cnpj}.substring(2,5) + "." + $F{num_cpf_cnpj}.substring(5,8) + "/" + $F{num_cpf_cnpj}.substring(8,12) + "-" + $F{num_cpf_cnpj}.substring(12,14))
++" declarou ao Instituto de Meio Ambiente - INEMA quer realizará atividade de  com o objetivo de "+$F{nom_objetivo_limpeza_area}+" no período de " +$F{dtc_inicio_limp_area}+" a "+$F{dtc_final_limp_area}+" nos imóveis rurais abaixo relacionado(s) com respectiva coordenada de referência e endereço, em uma área total de "+$F{valor_total}+"ha"]]></textFieldExpression>
+			</textField>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="43" splitType="Stretch">
+			<subreport>
+				<reportElement uuid="82f1f707-0959-4e5e-a924-79e23bc1a75d" positionType="Float" stretchType="RelativeToTallestObject" x="1" y="2" width="454" height="29"/>
+				<subreportParameter name="id_requerimento">
+					<subreportParameterExpression><![CDATA[$F{ide_requerimento}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "declaracao_limpeza_area_imoveis.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="28" splitType="Stretch">
+			<textField>
+				<reportElement uuid="fe071acc-04de-40d8-9611-fa6b8e3b4dc9" x="392" y="6" width="24" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement uuid="9d192666-20c0-420c-972a-efe6f4b91aa8" x="430" y="6" width="24" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField pattern="EEEEE dd MMMMM yyyy">
+				<reportElement uuid="2b1643a6-e781-4445-883b-ba032a888de6" x="0" y="6" width="100" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="ba4a918f-df19-47d9-9cc1-9405a6ec7c16" x="103" y="6" width="260" height="19"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="5"/>
+				</textElement>
+				<text><![CDATA[INEMA/CAB: Avenida Luís Viana Filho, 6ª Avenida, nº 600 - CAB - CEP 41.745-900 - Salvador - Bahia - Brasil.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="83c2666c-867e-4854-b129-6b5f5fbaa176" x="416" y="6" width="14" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<text><![CDATA[de]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="4e447461-1e16-48f3-abb0-4600bbe11024" x="363" y="6" width="29" height="19"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<text><![CDATA[Pág.]]></text>
+			</staticText>
+		</band>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

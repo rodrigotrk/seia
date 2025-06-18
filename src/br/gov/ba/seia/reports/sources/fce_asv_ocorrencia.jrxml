@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="fce_asv_ocorrencia" pageWidth="495" pageHeight="802" whenNoDataType="AllSectionsNoDetail" columnWidth="495" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="80b78396-35cc-4e26-aaf9-1207b1892468">
+	<property name="ireport.zoom" value="1.4641000000000066"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="ide_fce_asv" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[select fceOco.num_area as areaAbandonada,
+fo.num_area as areaInviavel
+from fce_asv fceAsv
+left join fce_asv_ocorrencia_area fceOco on fceAsv.ide_fce_asv = fceOco.ide_fce_asv and fceOco.ide_ocorrencia_area = 1
+left join fce_asv_ocorrencia_area fo on fceAsv.ide_fce_asv = fo.ide_fce_asv and fo.ide_ocorrencia_area = 2
+where fceAsv.ide_fce_asv = $P{ide_fce_asv}]]>
+	</queryString>
+	<field name="areaabandonada" class="java.math.BigDecimal"/>
+	<field name="areainviavel" class="java.math.BigDecimal"/>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="25" splitType="Stretch">
+			<printWhenExpression><![CDATA[$F{areaabandonada} != null || $F{areainviavel} != null ? true : false]]></printWhenExpression>
+			<staticText>
+				<reportElement uuid="8ec3d088-eaf4-495e-bfe0-b2990ce8be9d" positionType="Float" mode="Opaque" x="0" y="5" width="495" height="15" isRemoveLineWhenBlank="true" backcolor="#DDDDDD"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Verdana" isBold="true"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<text><![CDATA[Ocorrência de Áreas no Empreendimento]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="32">
+			<printWhenExpression><![CDATA[$F{areaabandonada} != null]]></printWhenExpression>
+			<staticText>
+				<reportElement uuid="5027c493-2f2c-43b6-9c25-c1cba4cf4ea8" positionType="Float" mode="Opaque" x="10" y="0" width="482" height="15" isRemoveLineWhenBlank="true" backcolor="#DDDDDD"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Verdana" isBold="true"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<text><![CDATA[Abandonada/Subutilizadas/Utilizada de forma inadequada]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" pattern="#,##0.00" isBlankWhenNull="true">
+				<reportElement uuid="89d1f565-5094-486c-8e98-06cf19ed2463" x="71" y="20" width="179" height="12"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Justified" verticalAlignment="Middle">
+					<font fontName="Arial" size="9"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{areaabandonada}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="1d573949-5c91-4ca4-92c1-d88e3c723a37" x="30" y="20" width="41" height="12"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="9"/>
+				</textElement>
+				<text><![CDATA[Área (ha):]]></text>
+			</staticText>
+		</band>
+		<band height="32">
+			<printWhenExpression><![CDATA[$F{areainviavel} != null]]></printWhenExpression>
+			<staticText>
+				<reportElement uuid="1d573949-5c91-4ca4-92c1-d88e3c723a37" x="30" y="20" width="41" height="12"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="9"/>
+				</textElement>
+				<text><![CDATA[Área (ha):]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="5027c493-2f2c-43b6-9c25-c1cba4cf4ea8" positionType="Float" mode="Opaque" x="10" y="0" width="482" height="15" isRemoveLineWhenBlank="true" backcolor="#DDDDDD"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Verdana" isBold="true"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<text><![CDATA[Agronomicamente Inviável]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" pattern="#,##0.00" isBlankWhenNull="true">
+				<reportElement uuid="89d1f565-5094-486c-8e98-06cf19ed2463" x="71" y="20" width="179" height="12"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Justified" verticalAlignment="Middle">
+					<font fontName="Arial" size="9"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{areainviavel}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="relatorio_questionario_aba_barragem_caracterizacao_finalidade_detalhe" pageWidth="555" pageHeight="802" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="f860ff11-7ae1-4364-aa79-f592f63c0b63">
+	<property name="ireport.zoom" value="1.6528925619834713"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["/home/alexandre/workspace/seia/src/br/gov/ba/seia/reports/cerh/"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="IDE_CERH_INTERVENCAO_CARACTERIZACAO" class="java.lang.Integer"/>
+	<parameter name="tipo_intervencao" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[SELECT
+	cic.ide_cerh_obras_hidraulicas,
+	cic.ide_cerh_intervencao_servico
+FROM cerh_intervencao_caracterizacao cic
+WHERE
+	ide_cerh_intervencao_caracterizacao =  $P{IDE_CERH_INTERVENCAO_CARACTERIZACAO}]]>
+	</queryString>
+	<field name="ide_cerh_obras_hidraulicas" class="java.lang.Integer"/>
+	<field name="ide_cerh_intervencao_servico" class="java.lang.Integer"/>
+	<title>
+		<band height="10"/>
+	</title>
+	<detail>
+		<band height="21">
+			<line>
+				<reportElement uuid="9a1405cc-a61b-4c25-b97e-afa8968e4598" mode="Transparent" x="1" y="10" width="539" height="1" backcolor="#45FF00"/>
+			</line>
+			<textField>
+				<reportElement uuid="96891326-fab5-433f-8a2d-a4e4d95559bb" mode="Opaque" x="20" y="0" width="243" height="20"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[( $F{ide_cerh_obras_hidraulicas} != null ? "Obras Hidráulicas" : "Serviços" ) + " - Informações de Uso"]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement uuid="1c49de0f-fcfe-434b-b667-73a999f042b7" mode="Transparent" x="0" y="10" width="1" height="11" backcolor="#45FF00"/>
+			</line>
+			<line>
+				<reportElement uuid="d3e40af5-e159-40d0-8eb5-1a3156fa8c62" mode="Transparent" x="540" y="10" width="1" height="11" backcolor="#45FF00"/>
+			</line>
+		</band>
+		<band height="20" splitType="Prevent">
+			<printWhenExpression><![CDATA[$F{ide_cerh_obras_hidraulicas} != null]]></printWhenExpression>
+			<subreport>
+				<reportElement uuid="511a6ac9-077e-4564-a103-4731255525fb" x="20" y="0" width="500" height="20"/>
+				<subreportParameter name="SUBREPORT_DIR">
+					<subreportParameterExpression><![CDATA[$P{SUBREPORT_DIR}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="ide_cerh_intervencao_caracterizacao">
+					<subreportParameterExpression><![CDATA[$P{IDE_CERH_INTERVENCAO_CARACTERIZACAO}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "relatorio_questionario_aba_intervencao_obras_hidraulicas.jasper"]]></subreportExpression>
+			</subreport>
+			<line>
+				<reportElement uuid="b039646c-ab0d-42a8-ba37-28119496bb24" stretchType="RelativeToBandHeight" x="0" y="0" width="1" height="20"/>
+			</line>
+			<line>
+				<reportElement uuid="1bebf869-44f7-44e6-86de-2646103fbfe0" stretchType="RelativeToBandHeight" x="540" y="0" width="1" height="20"/>
+			</line>
+		</band>
+		<band height="20">
+			<printWhenExpression><![CDATA[$F{ide_cerh_intervencao_servico} != null]]></printWhenExpression>
+			<subreport>
+				<reportElement uuid="a4713bd8-a8ec-42ad-8619-045b8b9fa4c5" x="20" y="0" width="500" height="20"/>
+				<subreportParameter name="ide_cerh_intervencao_servico">
+					<subreportParameterExpression><![CDATA[$F{ide_cerh_intervencao_servico}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "relatorio_questionario_aba_intervencao_servicos.jasper"]]></subreportExpression>
+			</subreport>
+			<line>
+				<reportElement uuid="4bc08dd6-8432-4447-bd60-4c824d759cbc" stretchType="RelativeToBandHeight" x="540" y="0" width="1" height="20"/>
+			</line>
+			<line>
+				<reportElement uuid="10ffec55-730b-4e15-bb30-39a20ad37eaf" stretchType="RelativeToBandHeight" x="0" y="0" width="1" height="20"/>
+			</line>
+		</band>
+		<band height="21">
+			<line>
+				<reportElement uuid="f0cefcc0-4fe8-4fbd-9ac0-cad2c7e9ea57" x="1" y="10" width="539" height="1"/>
+			</line>
+			<line>
+				<reportElement uuid="9c1a7e6a-55fc-4e29-8d35-d1c37f35cae2" mode="Transparent" x="540" y="0" width="1" height="11" backcolor="#45FF00"/>
+			</line>
+			<line>
+				<reportElement uuid="e0afe180-3907-4a0c-be08-040a3214e5c1" mode="Transparent" x="0" y="0" width="1" height="10" backcolor="#45FF00"/>
+			</line>
+		</band>
+	</detail>
+</jasperReport>

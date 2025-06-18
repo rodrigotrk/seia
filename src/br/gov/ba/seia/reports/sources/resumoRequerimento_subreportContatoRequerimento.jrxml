@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="resumoRequerimento_subreportContatoRequerimento" language="java" pageWidth="453" pageHeight="802" whenNoDataType="NoDataSection" columnWidth="453" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0">
+	<property name="ireport.zoom" value="1.6105100000000008"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="ide_endereco_contato" class="java.lang.Integer"/>
+	<parameter name="nom_contato" class="java.lang.String"/>
+	<parameter name="num_telefone_contato" class="java.lang.String"/>
+	<parameter name="des_email_contato" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[SELECT l.nom_logradouro,
+	e.num_endereco,
+	b.nom_bairro,
+	e.des_complemento,
+	m.nom_municipio,
+	est.des_sigla,
+	e.des_ponto_referencia,
+	l.num_cep
+FROM endereco e
+INNER JOIN logradouro l on l.ide_logradouro = e.ide_logradouro
+INNER JOIN bairro b ON b.ide_bairro = l.ide_bairro
+INNER JOIN municipio m ON m.ide_municipio = l.ide_municipio
+INNER JOIN estado est on est.ide_estado = m.ide_estado
+WHERE e.ide_endereco = $P{ide_endereco_contato}]]>
+	</queryString>
+	<field name="nom_logradouro" class="java.lang.String"/>
+	<field name="num_endereco" class="java.lang.String"/>
+	<field name="nom_bairro" class="java.lang.String"/>
+	<field name="des_complemento" class="java.lang.String"/>
+	<field name="nom_municipio" class="java.lang.String"/>
+	<field name="des_sigla" class="java.lang.String"/>
+	<field name="des_ponto_referencia" class="java.lang.String"/>
+	<field name="num_cep" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="89" splitType="Stretch">
+			<frame>
+				<reportElement x="0" y="0" width="453" height="89"/>
+				<textField pattern="###0.00">
+					<reportElement x="216" y="33" width="237" height="12"/>
+					<textElement verticalAlignment="Middle">
+						<font size="9" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$P{num_telefone_contato}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement x="0" y="22" width="214" height="12"/>
+					<textElement verticalAlignment="Middle" markup="none">
+						<font size="9" isBold="true" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<text><![CDATA[Nome]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+					<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="0" y="77" width="453" height="12" isRemoveLineWhenBlank="true" isPrintInFirstWholeBand="true" isPrintWhenDetailOverflows="true"/>
+					<textElement verticalAlignment="Top">
+						<font size="9" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[new String($F{nom_logradouro}.concat(", ").concat($F{num_endereco} != null ? "N° " + $F{num_endereco} + ", " : "").concat($F{nom_bairro} + ", ").concat($F{des_complemento} != null ? $F{des_complemento} + ", " : "").concat($F{nom_municipio} + ", ").concat($F{des_sigla} + ". ").concat($F{des_ponto_referencia} != null ? $F{des_ponto_referencia} + ". " : "").concat("CEP " + $F{num_cep}.substring(0,2).concat("." + $F{num_cep}.substring(2,5)).concat("-" + $F{num_cep}.substring(5,8)) + "."))]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement positionType="Float" x="0" y="66" width="453" height="12"/>
+					<textElement verticalAlignment="Middle" markup="none">
+						<font size="9" isBold="true" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<text><![CDATA[Endereço de Contato]]></text>
+				</staticText>
+				<line>
+					<reportElement x="0" y="0" width="453" height="1"/>
+				</line>
+				<staticText>
+					<reportElement x="216" y="22" width="237" height="12"/>
+					<textElement verticalAlignment="Middle" markup="none">
+						<font size="9" isBold="true" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<text><![CDATA[Telefones]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="0" y="44" width="453" height="12"/>
+					<textElement verticalAlignment="Middle" markup="none">
+						<font size="9" isBold="true" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<text><![CDATA[E-mail]]></text>
+				</staticText>
+				<textField pattern="###0">
+					<reportElement x="0" y="55" width="453" height="12"/>
+					<textElement verticalAlignment="Middle">
+						<font size="9" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$P{des_email_contato}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement x="0" y="1" width="453" height="16"/>
+					<textElement verticalAlignment="Top" markup="none">
+						<font size="11" isBold="true" pdfFontName="Helvetica-Bold"/>
+					</textElement>
+					<text><![CDATA[Contato para Assuntos Relacionados ao Requerimento]]></text>
+				</staticText>
+				<textField>
+					<reportElement x="0" y="33" width="214" height="12"/>
+					<textElement verticalAlignment="Middle">
+						<font size="9" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$P{nom_contato}]]></textFieldExpression>
+				</textField>
+			</frame>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

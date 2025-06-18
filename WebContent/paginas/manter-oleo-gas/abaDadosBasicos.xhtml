@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" 
+				xmlns:h="http://java.sun.com/jsf/html" 
+				xmlns:f="http://java.sun.com/jsf/core" 
+				xmlns:ui="http://java.sun.com/jsf/facelets" 
+				xmlns:p="http://primefaces.prime.com.tr/ui">
+	
+	<h:form id="formAbaDadosBasicos">
+		
+		<!-- Requerente e Empreendimento -->
+		<h:panelGrid columns="3" id="panelFiltro">
+		 	<h:outputText id="lblRequerente" value="Requerente:" />
+			<p:inputText value="#{caepogController.requerente.nomeRazao}" disabled="true" style="width: 200px;"/>
+			<p:commandLink onclick="dialogRequerente.show();" action="#{empreendimentoController.limparFiltroRequerente()}" update="form_dialog" disabled="#{caepogController.caepog.visualizando}">
+		    	<h:graphicImage title="Pesquisar" value="/resources/img/ico-pesquisa.png" />
+			</p:commandLink>
+			
+		 	<h:outputText id="lblEmpreendimento" value="Empreendimento:" />
+			<p:inputText value="#{caepogController.empreendimento.nomEmpreendimento}" disabled="true" style="width: 200px;"/>
+		    <p:commandLink onclick="dialogEmpreendimento.show();" disabled="#{caepogController.requerente == null || caepogController.caepog.visualizando}">
+		    	<h:graphicImage title="Pesquisar" value="/resources/img/ico-pesquisa.png" />
+		    </p:commandLink>
+		</h:panelGrid>
+		
+		<p:spacer width="0" height="10" />
+		
+		<h:panelGroup rendered="#{caepogController.empreendimento != null}">
+			<fieldset>
+				<legend>Dados do Empreendedor</legend>
+				
+				<h:panelGrid columns="2">
+					<h:panelGrid>
+						<h:outputText value="Nome/Razão Social: #{caepogController.requerente.nomeRazao}" />
+						
+						<h:outputText value="Endereço: #{caepogController.requerente.endereco.enderecoBasicoFormatado}" />
+						
+						<h:outputText value="Cidade: #{caepogController.requerente.endereco.ideLogradouro.ideBairro.ideMunicipio.nomMunicipio}" />
+						
+						<h:outputText value="CEP: #{caepogController.requerente.endereco.ideLogradouro.numCepFormatado}" />
+						
+						<h:outputText value="Representante Legal: #{caepogController.representanteLegal.nomeRazao}" rendered="#{caepogController.representanteLegal != null}" />
+					</h:panelGrid>
+					
+					<h:panelGrid>
+						<h:outputText value="CPF/CNPJ: #{caepogController.requerente.cpfCnpjFormatado}" />
+						
+						<h:outputText value="Bairro: #{caepogController.requerente.endereco.ideLogradouro.ideBairro.nomBairro}" />
+						
+						<h:outputText value="Estado: #{caepogController.requerente.endereco.ideLogradouro.ideBairro.ideMunicipio.ideEstado.nomEstado}" />
+						
+						<p:spacer width="0" height="12"/>
+						
+						<h:outputText value="CPF/CNPJ: #{caepogController.representanteLegal.cpfCnpjFormatado}" rendered="#{caepogController.representanteLegal != null}" />
+					</h:panelGrid>
+				
+					<p:spacer width="400" height="20"/>
+					<p:spacer width="0" height="20"/>
+					
+					<h:panelGrid>
+						<h:outputText value="Empreendimento: #{caepogController.empreendimento.nomEmpreendimento}" />
+						
+						<h:outputText value="Endereço: #{caepogController.empreendimento.endereco.enderecoBasicoFormatado}" />
+						
+						<h:outputText value="Cidade: #{caepogController.empreendimento.endereco.ideLogradouro.ideBairro.ideMunicipio.nomMunicipio}" />
+						
+						<h:outputText value="CEP: #{caepogController.empreendimento.endereco.ideLogradouro.numCepFormatado}" />
+						
+						<h:outputText value="Responsável Técnico: #{caepogController.responsavelEmpreendimento.idePessoaFisica.nomPessoa}" rendered="#{caepogController.responsavelEmpreendimento != null}" />
+					</h:panelGrid>
+					
+					<h:panelGrid>
+						<h:outputText value="Bairro: #{caepogController.empreendimento.endereco.ideLogradouro.ideBairro.nomBairro}" />
+						
+						<h:outputText value="Estado: #{caepogController.empreendimento.endereco.ideLogradouro.ideBairro.ideMunicipio.ideEstado.nomEstado}" />
+						
+						<p:spacer width="0" height="24"/>
+						
+						<h:outputText value="CPF: #{caepogController.responsavelEmpreendimento.idePessoaFisica.numCpf}" rendered="#{caepogController.responsavelEmpreendimento != null}" />
+					</h:panelGrid>
+				</h:panelGrid>
+			</fieldset>
+		</h:panelGroup>
+	</h:form>
+</ui:composition>

@@ -1,0 +1,360 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="lac_transportadora_residuos_transportados" language="java" pageWidth="495" pageHeight="802" whenNoDataType="AllSectionsNoDetail" columnWidth="495" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="80b78396-35cc-4e26-aaf9-1207b1892468">
+	<property name="ireport.zoom" value="1.9487171000000039"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="ide_fce" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[select distinct ta.dsc_tipologia_atividade,ca.*, (SELECT array_to_string(
+array(select fd1.dsc_atividade from fce_agrossilvopastoril fa1
+inner join criacao_animal ca1
+on fa1.ide_fce_agrossilvopastoril=ca1.ide_fce_agrossilvopastoril
+inner join criacao_animal_finalidade_tipologia_atividade cafta1
+on ca1.ide_criacao_animal=cafta1.ide_criacao_animal
+inner join finalidade_tipologia_atividade fta1
+on cafta1.ide_finalidade_tipologia_atividade=fta1.ide_finalidade_tipologia_atividade
+inner join finalidade fd1
+on fta1.ide_finalidade = fd1.ide_finalidade where fa1.ide_fce = $P{ide_fce} and ca1.ide_criacao_animal = ca.ide_criacao_animal), ' \n ')
+) as finalidades from fce f
+inner join fce_agrossilvopastoril fa
+on f.ide_fce=fa.ide_fce
+inner join criacao_animal ca
+on fa.ide_fce_agrossilvopastoril=ca.ide_fce_agrossilvopastoril
+inner join criacao_animal_finalidade_tipologia_atividade cafta
+on ca.ide_criacao_animal=cafta.ide_criacao_animal
+inner join finalidade_tipologia_atividade fta
+on cafta.ide_finalidade_tipologia_atividade=fta.ide_finalidade_tipologia_atividade
+inner join finalidade fd
+on fta.ide_finalidade = fd.ide_finalidade
+inner join tipologia_atividade ta
+on fta.ide_tipologia_atividade = ta.ide_tipologia_atividade
+where fa.ide_fce = $P{ide_fce}]]>
+	</queryString>
+	<field name="dsc_tipologia_atividade" class="java.lang.String"/>
+	<field name="ide_criacao_animal" class="java.lang.Integer"/>
+	<field name="ide_fce_agrossilvopastoril" class="java.lang.Integer"/>
+	<field name="num_capacidade" class="java.math.BigDecimal"/>
+	<field name="num_cabecas" class="java.lang.Integer"/>
+	<field name="num_matrizes" class="java.lang.Integer"/>
+	<field name="num_reprodutores" class="java.lang.Integer"/>
+	<field name="num_animais" class="java.lang.Integer"/>
+	<field name="num_producao" class="java.math.BigDecimal"/>
+	<field name="ide_unidade_tipologia_atividade" class="java.lang.Integer"/>
+	<field name="finalidades" class="java.lang.String"/>
+	<columnHeader>
+		<band height="75" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="c0e41e2b-b1d9-405d-b6fe-f0f253809026" x="189" y="6" width="215" height="30" isPrintWhenDetailOverflows="true"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Evolução do Rebanho]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="3d436841-c5fa-4954-890c-ff67cdbd5057" x="7" y="49" width="71" height="26"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Espécie animal]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="18179ea9-3b5d-42a1-8b8e-d617105552a1" x="78" y="49" width="60" height="26"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Área a ser ocupada  (ha)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="c354d0f3-d50a-40ca-9e1f-f380cd85b2c4" x="138" y="49" width="50" height="26"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[N° de cabeças]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="d5f8f595-f7f9-4e3e-8c67-adb5c93f4ebc" x="188" y="49" width="57" height="26"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Top">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Nº de matrizes]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="3e9120ea-ed8d-414d-8989-a544854310eb" x="245" y="49" width="65" height="26"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Top">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Nº de reprodutores]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="3d436841-c5fa-4954-890c-ff67cdbd5057" x="7" y="36" width="481" height="13"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[  Tipos de Cultura]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="3e9120ea-ed8d-414d-8989-a544854310eb" x="310" y="49" width="48" height="26"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Top">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Produção
+/und
+]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="3e9120ea-ed8d-414d-8989-a544854310eb" x="358" y="49" width="48" height="26"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Top">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Nº de animais]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="3e9120ea-ed8d-414d-8989-a544854310eb" x="406" y="49" width="82" height="26"/>
+				<box>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Finalidade]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="19" splitType="Stretch">
+			<textField isStretchWithOverflow="true">
+				<reportElement uuid="89d1f565-5094-486c-8e98-06cf19ed2463" x="7" y="2" width="70" height="16"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="9"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{dsc_tipologia_atividade}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00">
+				<reportElement uuid="89d1f565-5094-486c-8e98-06cf19ed2463" x="78" y="0" width="60" height="18"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="9"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{num_capacidade}]]></textFieldExpression>
+			</textField>
+			<textField pattern="###0">
+				<reportElement uuid="89d1f565-5094-486c-8e98-06cf19ed2463" x="139" y="0" width="48" height="18"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="9"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{num_cabecas}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="###0">
+				<reportElement uuid="89d1f565-5094-486c-8e98-06cf19ed2463" x="246" y="0" width="64" height="18" isPrintWhenDetailOverflows="true"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="9"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{num_reprodutores} == 0 ? "Não informado" : $F{num_reprodutores}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="###0">
+				<reportElement uuid="89d1f565-5094-486c-8e98-06cf19ed2463" x="189" y="0" width="56" height="18" isPrintWhenDetailOverflows="true"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="9"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{num_matrizes} == 0 ? "Não informado" : $F{num_matrizes}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement uuid="8c345237-cd29-4d3d-b3d1-3dd00de784e9" stretchType="RelativeToBandHeight" x="138" y="0" width="1" height="18"/>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</line>
+			<line>
+				<reportElement uuid="8c345237-cd29-4d3d-b3d1-3dd00de784e9" stretchType="RelativeToBandHeight" x="245" y="0" width="1" height="18"/>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</line>
+			<line>
+				<reportElement uuid="8c345237-cd29-4d3d-b3d1-3dd00de784e9" stretchType="RelativeToBandHeight" x="77" y="0" width="1" height="18"/>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</line>
+			<line>
+				<reportElement uuid="8c345237-cd29-4d3d-b3d1-3dd00de784e9" stretchType="RelativeToBandHeight" x="188" y="0" width="1" height="18"/>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</line>
+			<line>
+				<reportElement uuid="8c345237-cd29-4d3d-b3d1-3dd00de784e9" stretchType="RelativeToBandHeight" x="358" y="0" width="1" height="18"/>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</line>
+			<line>
+				<reportElement uuid="8c345237-cd29-4d3d-b3d1-3dd00de784e9" stretchType="RelativeToBandHeight" x="310" y="0" width="1" height="18"/>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</line>
+			<line>
+				<reportElement uuid="8c345237-cd29-4d3d-b3d1-3dd00de784e9" positionType="Float" x="8" y="18" width="480" height="1" isPrintWhenDetailOverflows="true"/>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</line>
+			<textField pattern="###0.00;-###0.00">
+				<reportElement uuid="89d1f565-5094-486c-8e98-06cf19ed2463" x="310" y="0" width="48" height="18"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="9"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{num_producao}]]></textFieldExpression>
+			</textField>
+			<textField pattern="###0">
+				<reportElement uuid="89d1f565-5094-486c-8e98-06cf19ed2463" x="358" y="0" width="49" height="18"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="9"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{num_animais}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="">
+				<reportElement uuid="89d1f565-5094-486c-8e98-06cf19ed2463" positionType="Float" x="407" y="2" width="82" height="16" isPrintWhenDetailOverflows="true"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Justified" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="9"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[" "+$F{finalidades}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement uuid="d38db7d1-5fe5-430c-812d-3d8bfde2827d" stretchType="RelativeToBandHeight" x="406" y="0" width="1" height="18"/>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</line>
+			<line>
+				<reportElement uuid="497482ec-f709-46a4-85b2-a82b652a4bce" stretchType="RelativeToBandHeight" x="488" y="0" width="1" height="18"/>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</line>
+			<line>
+				<reportElement uuid="4142727f-5310-4ae6-a9f1-85da81831140" stretchType="RelativeToBandHeight" x="7" y="0" width="1" height="18"/>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</line>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="4" splitType="Stretch"/>
+	</pageFooter>
+</jasperReport>

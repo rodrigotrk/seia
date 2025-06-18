@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui">
+	
+	
+	<h:form id="formAbaEnergiaTermoeletrica">
+	
+			<h:outputText value="Unidade(s) Termoelétrica(s)" style="font-weight: bold;"/>
+			<div class="line"/>
+		<br/><br/>
+		<p:commandLink process="@this" action="#{fceGeracaoEnergiaController.iniciarEnergiaTermoeletrica}" disabled="#{fceGeracaoEnergiaController.desabilitarTudo}" onsuccess="incluirUnidadeTermoeletrica.show()" update="formUnidadeTermoeletrica">
+			<h:graphicImage title="Incluir unidade termoelétrica" value="/resources/img/ico-expandir.png" style="margin-left: 2px;"/>
+			<h:outputText value="Incluir unidade termoelétrica" />
+		</p:commandLink>
+		<br/><br/>
+		<p:dataTable emptyMessage="Não existe nenhuma Unidade Termoéletrica cadastrada." id="listaEnergiaTermoeletrica" rows="5" var="unidade"
+			value="#{fceGeracaoEnergiaController.listaEnergiaTermoeletricaUnidade}" paginator="true" paginatorPosition="bottom" paginatorAlwaysVisible="false">
+			<p:column headerText="Identificação" style="width: 350px; text-align:center;">
+				<h:outputText value="#{unidade.desIdentificacaoUnidade}" />
+			</p:column>
+			<p:column headerText="Área" style="text-align:center;">
+				<h:outputText value="#{unidade.localizacaoGeografica.vlrArea}" >
+					<f:convertNumber type="number" groupingUsed="true" minFractionDigits="2" pattern="###,##0.00"/>
+				</h:outputText>
+			</p:column>
+			<p:column headerText="Ações" style="text-align:center;">
+				<p:commandLink id="visualizarUnidadeTermo" action="#{fceGeracaoEnergiaController.visualizarUnidadeTermo()}" title="Visualizar" update="formUnidadeTermoeletrica" onsuccess="incluirUnidadeTermoeletrica.show()" process="visualizarUnidadeTermo">
+					<h:graphicImage title="Visualizar" value="/resources/img/ico-pesquisa.png" />
+					<f:setPropertyActionListener value="#{unidade}" target="#{fceGeracaoEnergiaController.fceEnergiaTermoeletricaUnidadeAux}"/>
+           		</p:commandLink>
+				<p:commandLink id="alterarUnidadeTermo" rendered="#{!fceGeracaoEnergiaController.desabilitarTudo}" action="#{fceGeracaoEnergiaController.configurarEdicaoUnidadeTermo}" title="#{bundle.btn_editar}" update="formUnidadeTermoeletrica" oncomplete="incluirUnidadeTermoeletrica.show()" process="alterarUnidadeTermo">
+					<h:graphicImage title="Editar" value="/resources/img/ico-alterar.png" />
+					<f:setPropertyActionListener value="#{unidade}" target="#{fceGeracaoEnergiaController.fceEnergiaTermoeletricaUnidadeAux}"/>
+           		</p:commandLink>
+				<p:commandLink id="excluirUnidadeTermo" rendered="#{!fceGeracaoEnergiaController.desabilitarTudo}" title="#{bundle.btn_excluir}" onclick="confirmDlgExclusaoUnidade.show()" process="excluirUnidadeTermo">
+					<h:graphicImage title="Excluir" value="/resources/img/ico-excluir.png" />
+					<f:setPropertyActionListener value="#{unidade}" target="#{fceGeracaoEnergiaController.fceEnergiaTermoeletricaUnidadeAux}"/>
+           		</p:commandLink>
+			</p:column>
+			<p:columnGroup type="footer" rendered="#{!empty fceGeracaoEnergiaController.listaEnergiaTermoeletricaUnidade}">
+				<p:row>
+               		<p:column footerText="Total de Unidades" colspan="2" style="text-align:left;"/>
+               		<p:column footerText="#{fceGeracaoEnergiaController.numeroTotalUnidade}" />
+               	</p:row>
+               	<p:row>
+               		<p:column footerText="Potência Total (MW)" colspan="2" style="text-align:left;"/>
+               		<p:column>
+               			<f:facet name="footer">
+               				<h:outputText value="#{fceGeracaoEnergiaController.numeroTotalPotencia}">
+               					<f:convertNumber type="number" groupingUsed="true" minFractionDigits="2" pattern="###,##0.00"/>
+							</h:outputText>
+               			</f:facet>
+					</p:column>               		
+               		
+               	</p:row>	
+			</p:columnGroup>
+		</p:dataTable>
+		<br/><br/>	
+		<p:commandButton value="Voltar" action="#{fceGeracaoEnergiaController.voltar}" update="tabAbasGeracaoEnergia">
+			<f:setPropertyActionListener value="4" target="#{fceGeracaoEnergiaController.numeroAba}"/>
+		</p:commandButton>
+		<p:commandButton value="Avançar" rendered="#{!fceGeracaoEnergiaController.desabilitarTudo}" action="#{fceGeracaoEnergiaController.avancar}" style="float:right" update="tabAbasGeracaoEnergia">
+			<f:setPropertyActionListener value="4" target="#{fceGeracaoEnergiaController.numeroAba}"/>
+		</p:commandButton>
+		<p:commandButton value="Salvar" action="#{fceGeracaoEnergiaController.salvar}" rendered="#{!fceGeracaoEnergiaController.desabilitarTudo}" style="float:right; margin-right: 5px;">
+			<f:setPropertyActionListener value="4" target="#{fceGeracaoEnergiaController.numeroAba}"/>
+		</p:commandButton>
+	</h:form>	
+		
+					
+</ui:composition>

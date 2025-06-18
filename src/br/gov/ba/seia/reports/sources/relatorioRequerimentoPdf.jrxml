@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="relatorioRequerimento" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="b6981749-0b3a-4597-9f66-5ac5e3083cab">
+	<property name="ireport.zoom" value="1.3310000000000253"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="LOGO_SEIA" class="java.lang.String"/>
+	<parameter name="LOGO_INEMA" class="java.lang.String"/>
+	<parameter name="consulta" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[$P!{consulta}]]>
+	</queryString>
+	<field name="numeroRequerimento" class="java.lang.String"/>
+	<field name="dataFinalizacao" class="java.lang.String"/>
+	<field name="requerente" class="java.lang.String"/>
+	<field name="empreendimento" class="java.lang.String"/>
+	<field name="statusRequerimento" class="java.lang.String"/>
+	<field name="ideRequerimento" class="java.lang.String"/>
+	<variable name="totalRequerimentos" class="java.lang.Integer" calculation="Count">
+		<variableExpression><![CDATA[$F{ideRequerimento}]]></variableExpression>
+	</variable>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="53" splitType="Stretch">
+			<rectangle>
+				<reportElement positionType="Float" x="1" y="10" width="602" height="36" uuid="b6f104ac-3f59-4cce-93ba-5ed804fdc0d9"/>
+			</rectangle>
+			<rectangle>
+				<reportElement positionType="Float" x="603" y="10" width="197" height="36" uuid="be469f65-4b87-4682-8da5-f63d26bb5838"/>
+			</rectangle>
+			<staticText>
+				<reportElement positionType="Float" x="12" y="21" width="220" height="16" uuid="20e4d593-b713-484a-9810-3d6b39443d15"/>
+				<textElement textAlignment="Left" verticalAlignment="Top">
+					<font size="12" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Relatório de Requerimentos]]></text>
+			</staticText>
+			<image isLazy="true" onErrorType="Blank">
+				<reportElement x="608" y="16" width="86" height="24" forecolor="#FFFFFF" uuid="86997a1a-f5c0-4896-8db0-4d594e983df3"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<graphicElement>
+					<pen lineWidth="0.0"/>
+				</graphicElement>
+				<imageExpression><![CDATA[$P{LOGO_INEMA}]]></imageExpression>
+			</image>
+			<image scaleImage="RealHeight" hAlign="Center" vAlign="Middle" isUsingCache="false" onErrorType="Blank">
+				<reportElement x="699" y="14" width="97" height="27" forecolor="#FFFFFF" uuid="73f702ed-cbfa-4fdb-b78a-ddd3d4b3b748"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<graphicElement>
+					<pen lineWidth="0.0" lineStyle="Solid" lineColor="#FFFFFF"/>
+				</graphicElement>
+				<imageExpression><![CDATA[$P{LOGO_SEIA}]]></imageExpression>
+			</image>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="27">
+			<rectangle>
+				<reportElement x="1" y="3" width="799" height="22" uuid="f412db4c-a342-4b74-96be-e2bca2cfbf3e"/>
+			</rectangle>
+			<staticText>
+				<reportElement x="41" y="6" width="101" height="16" uuid="ffd2e597-cd15-4bd4-8965-b4844aaf40dc"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Requerimento]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="185" y="6" width="74" height="16" uuid="412eb643-5b6a-44a0-8bda-80fdbe912446"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Data]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="321" y="6" width="79" height="16" uuid="f4196aae-9762-4085-9e77-bc070178ab30"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Requerente]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="513" y="6" width="113" height="16" uuid="b8db82a6-10cf-456e-bbd6-b5d77981b722"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Empreendimento]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="684" y="6" width="106" height="16" uuid="59b3f80c-49a5-4ea5-97c2-59756e17510a"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Status]]></text>
+			</staticText>
+			<line>
+				<reportElement x="182" y="3" width="1" height="22" uuid="aa7e731d-846a-4b74-959b-632cf54350e2"/>
+			</line>
+			<line>
+				<reportElement x="261" y="3" width="1" height="22" uuid="ca59391e-19bc-4217-96f4-c2f37e253206"/>
+			</line>
+			<line>
+				<reportElement x="460" y="3" width="1" height="22" uuid="09ab660e-f04b-4823-8dc6-bc1c3315a741"/>
+			</line>
+			<line>
+				<reportElement x="671" y="3" width="1" height="22" uuid="f8aea6d0-9af3-401b-90cf-ccebd5919ae5"/>
+			</line>
+		</band>
+	</pageHeader>
+	<detail>
+		<band height="43">
+			<rectangle>
+				<reportElement x="1" y="1" width="799" height="42" uuid="c42f3644-c3fb-4e80-9816-b117f99d0e91"/>
+			</rectangle>
+			<line>
+				<reportElement x="182" y="0" width="1" height="43" uuid="8e53c4ff-240f-41a4-9b0c-fa791adf58a5"/>
+			</line>
+			<line>
+				<reportElement x="261" y="1" width="1" height="42" uuid="5579a1db-ee5f-4216-9a02-8c439fc28a73"/>
+			</line>
+			<line>
+				<reportElement x="460" y="0" width="1" height="43" uuid="e549c885-de02-4a3d-8bd2-41e2cb001353"/>
+			</line>
+			<line>
+				<reportElement x="671" y="1" width="1" height="41" uuid="e8c60b4c-83c6-4a96-8656-ababf47a5778"/>
+			</line>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="185" y="12" width="74" height="20" uuid="ed7ed65e-ae38-4939-a6c7-17424b06285a"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{dataFinalizacao} == null ? "---" : $F{dataFinalizacao}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="266" y="1" width="190" height="41" uuid="ddf4f0e8-a682-4773-8dd0-f720a4f61911"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{requerente}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="462" y="2" width="207" height="41" uuid="db9f142c-4802-40e5-a1ed-daa32f61354b"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{empreendimento} == null ? "---" : $F{empreendimento}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="679" y="12" width="117" height="20" uuid="bc56d426-fbed-4351-bcd0-8a3198c84e48"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{statusRequerimento}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="12" y="14" width="160" height="15" uuid="492d7b17-5a11-4dfe-ae75-3030c9b31d8c"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{numeroRequerimento} == null ? "---" : $F{numeroRequerimento}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="55" splitType="Stretch">
+			<rectangle>
+				<reportElement positionType="Float" mode="Opaque" x="1" y="10" width="800" height="24" uuid="86defcde-ebfa-4e57-b67b-340a6bc6452f"/>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</rectangle>
+			<textField>
+				<reportElement positionType="Float" x="739" y="16" width="24" height="12" uuid="a531130c-ba4f-44c8-a287-0bcc3e938404"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement positionType="Float" x="763" y="16" width="14" height="12" uuid="f28131e4-0206-44d4-a1d3-7e9e39dd28c5"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<text><![CDATA[|]]></text>
+			</staticText>
+			<textField evaluationTime="Report">
+				<reportElement positionType="Float" x="777" y="16" width="24" height="12" uuid="e44e7b9e-d753-4976-9df6-5f897276ae82"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField pattern="EEEEE dd MMMMM yyyy">
+				<reportElement positionType="Float" x="11" y="39" width="160" height="11" uuid="75c5f967-4235-4a5f-b15b-a325a0a08155"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement positionType="Float" x="350" y="38" width="450" height="12" uuid="bccf3027-42fb-48c2-b4ee-3a70e4140fcc"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8"/>
+				</textElement>
+				<text><![CDATA[INEMA/CAB: Avenida Luís Viana Filho, 6ª Avenida, nº 600 CAB. CEP:41.746-900 - Salvador  - Bahia - Brasil]]></text>
+			</staticText>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="34">
+			<textField>
+				<reportElement x="12" y="10" width="375" height="14" uuid="d6099cf5-db23-4296-86fe-c9b47f066597"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Total de requerimentos: " + $V{totalRequerimentos}]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
+</jasperReport>

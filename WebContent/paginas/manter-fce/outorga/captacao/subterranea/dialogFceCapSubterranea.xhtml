@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui">
+	
+	<p:dialog id="_fce_caracteristica_poco"
+			  widgetVar="fce_caracteristica_poco" 
+			  position="center"
+			  appendToBody="true" 
+			  draggable="true" 
+			  dynamic="true" 
+			  height="600"
+			  width="950" 
+			  resizable="false" 
+			  header="Características do Poço"
+			  modal="true">
+			  
+		<ui:include src="/paginas/manter-fce/outorga/captacao/subterranea/dialogCaracteristicaPoco.xhtml" />
+	</p:dialog>
+
+	<p:dialog id="_fce_cap_subterranea" 
+			  widgetVar="fce_cap_subterranea"
+			  position="center" 
+			  appendToBody="true" 
+			  draggable="true" 
+			  dynamic="true"
+			  height="450" 
+			  width="1100" 
+			  resizable="false"
+			  header="Captação Subterrânea" 
+			  modal="true">
+		
+		<p:ajax event="close" listener="#{fceCaptacaoSubterraneaController.limpar()}"/>
+		
+		<h:panelGroup id="pnlFceCapSub" layout="block">
+			<h:form id="formTabCapSub">
+				<p:tabView id="tabAbasId_fceCapSub"
+					activeIndex="#{fceCaptacaoSubterraneaController.activeTab}"
+					widgetVar="tabAbas" cache="false" dynamic="false">
+					<p:ajax event="tabChange"
+						listener="#{fceCaptacaoSubterraneaController.controlarAbas()}"
+						global="false" />
+					<p:tab id="abaDadosRequerimento" title="Dados do Requerimento">
+						<ui:include
+							src="/paginas/manter-fce/outorga/captacao/subterranea/abaDadosRequerimentoCapSub.xhtml" />
+					</p:tab>
+					<p:tab id="abaAdicionais" title="Adicionais">
+						<ui:include
+							src="/paginas/manter-fce/outorga/captacao/subterranea/abaDadosAdicionaisCapSub.xhtml" />
+					</p:tab>
+				</p:tabView>
+			</h:form>
+		</h:panelGroup>
+		
+	</p:dialog>
+
+	<p:confirmDialog header="Confirmação" appendToBody="true"
+		message="#{bundle.geral_msg_informacoes_nao_foram_salvas_deseja_continuar}"
+		severity="alert" widgetVar="confirmationVoltarFCEcapSub"
+		id="_confirmationVoltarFCEcapSub">
+		<h:form>
+			<p:commandButton value="Sim"
+				oncomplete="confirmationVoltarFCEcapSub.hide();fce_caracteristica_poco.hide();"
+				global="false" />
+			<p:commandButton value="Não"
+				onclick="confirmationVoltarFCEcapSub.hide();" type="button"
+				global="false" />
+		</h:form>
+	</p:confirmDialog>
+
+	<p:confirmDialog header="Confirmação" appendToBody="true"
+		message="#{bundle.geral_msg_informacoes_nao_foram_salvas_deseja_continuar}"
+		severity="alert" widgetVar="confirmationVoltarCapSub"
+		id="_confirmationVoltarCapSub">
+		<h:form>
+			<p:commandButton value="Sim" update="formDadosGerais"
+				oncomplete="fce_cap_subterranea.hide();confirmationVoltarCapSub.hide();"
+				global="false" />
+			<p:commandButton value="Não"
+				onclick="confirmationVoltarCapSub.hide();" type="button"
+				global="false" />
+		</h:form>
+	</p:confirmDialog>
+
+	<p:confirmDialog id="idConfirmarExclusaoUnidadeGeologica"
+		widgetVar="confirmarExclusaoUnidadeGeologica" header="Confirmação"
+		appendToBody="true" message="#{bundle.msg_generica_deseja_exclusao}"
+		severity="alert">
+		<h:form>
+			<p:commandButton value="Sim"
+				update="formCaracteristicaPoco:unidadeGeologica"
+				onclick="confirmarExclusaoUnidadeGeologica.hide()" global="false"
+				process="@this"
+				actionListener="#{fceCaptacaoSubterraneaController.excluirUnidadeGeologica()}">
+			</p:commandButton>
+			<p:commandButton value="Não"
+				onclick="confirmarExclusaoUnidadeGeologica.hide()" type="button"
+				global="false" />
+		</h:form>
+	</p:confirmDialog>
+
+	<p:confirmDialog id="idConfirmarExclusaoAquifero"
+		widgetVar="confirmarExclusaoAquifero" header="Confirmação"
+		appendToBody="true" message="#{bundle.msg_generica_deseja_exclusao}"
+		severity="alert">
+		<h:form>
+			<p:commandButton value="Sim" update="formCaracteristicaPoco:aquifero"
+				onclick="confirmarExclusaoAquifero.hide()" global="false"
+				process="@this"
+				actionListener="#{fceCaptacaoSubterraneaController.excluirAquifero()}">
+			</p:commandButton>
+			<p:commandButton value="Não" onclick="confirmarAquifero.hide()"
+				type="button" global="false" />
+		</h:form>
+	</p:confirmDialog>
+
+	<p:confirmDialog id="dlgImprimirRelatorioCaptacaoSubterranea" message="#{fceCaptacaoSubterraneaController.msgImprimirRelatorio('Captacão Subterrânea')}"	widgetVar="rel_cap_sub" header="Mensagem">
+		<div align="center">
+			<h:form>
+				<p:commandButton value="Sim" ajax="false" global="false" process="@this" 
+								 onclick="rel_cap_sub.hide();" style="margin-right:10px;">
+					<p:fileDownload	value="#{fceCaptacaoSubterraneaController.imprimirRelatorio}" />
+				</p:commandButton>
+				<p:commandButton value="Não" oncomplete="rel_cap_sub.hide();" process="@this"/>
+			</h:form>
+		</div>
+	</p:confirmDialog>
+</ui:composition>

@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="relatorio_imovel_natureza_especie" language="java" pageWidth="540" pageHeight="802" columnWidth="540" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="4933cd21-74f7-4e09-8795-ab54714547c3">
+	<property name="ireport.zoom" value="1.3310000000000004"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="ide_registro_floresta_producao_imovel" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[select
+	nef.nom_natureza_especie_floresta,
+	ef.nom_especie_floresta,
+	rfpep.val_ima,
+	rfpep.val_ciclo_corte,
+	rfpep.val_espacamento,
+	rfpep.val_estimativa_volume_total_final
+from
+ato_declaratorio at_
+inner join registro_floresta_producao rfp on rfp.ide_ato_declaratorio = at_.ide_ato_declaratorio
+inner join registro_floresta_producao_imovel rfpi on rfpi.ide_registro_floresta_producao = rfp.ide_registro_floresta_producao
+INNER JOIN registro_floresta_producao_imovel_especie_producao rfpep on rfpep.ide_registro_floresta_producao_imovel = rfpi.ide_registro_floresta_producao_imovel
+inner join especie_floresta ef on ef.ide_especie_floresta = rfpep.ide_especie_floresta
+inner join natureza_especie_floresta nef on nef.ide_natureza_especie_floresta = ef.ide_natureza_especie_floresta
+where rfpi.ide_registro_floresta_producao_imovel = $P{ide_registro_floresta_producao_imovel}]]>
+	</queryString>
+	<field name="nom_natureza_especie_floresta" class="java.lang.String"/>
+	<field name="nom_especie_floresta" class="java.lang.String"/>
+	<field name="val_ima" class="java.math.BigDecimal"/>
+	<field name="val_ciclo_corte" class="java.math.BigDecimal"/>
+	<field name="val_espacamento" class="java.math.BigDecimal"/>
+	<field name="val_estimativa_volume_total_final" class="java.math.BigDecimal"/>
+	<title>
+		<band height="20"/>
+	</title>
+	<columnHeader>
+		<band height="80" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="396299d6-8d36-47fe-8da0-39b85420b248" mode="Opaque" x="0" y="0" width="115" height="80" backcolor="#DDDDDD"/>
+				<box topPadding="5">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Natureza da espécie]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="59ee2930-9b87-4311-a28b-41ffbef33281" mode="Opaque" x="115" y="0" width="115" height="80" backcolor="#DDDDDD"/>
+				<box topPadding="5">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Nome]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="e85a0074-24c5-40ea-a59b-f5fdf563bf2f" mode="Opaque" x="230" y="0" width="75" height="80" backcolor="#DDDDDD"/>
+				<box topPadding="5">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" markup="html">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[IMA
+<br/>
+m³/ha/ano(s)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="f00256d2-d5ab-45a0-85c3-ba1588817a62" mode="Opaque" x="305" y="0" width="75" height="80" backcolor="#DDDDDD"/>
+				<box topPadding="5">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" markup="html">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Ciclo do corte
+<br/>
+Ano(s)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="90d75b84-6c90-4986-bd78-49a9fb5101c6" mode="Opaque" x="380" y="0" width="75" height="80" backcolor="#DDDDDD"/>
+				<box topPadding="5">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" markup="html">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Espaçamento
+<br/>
+m²]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="84e0a367-d6ed-4c35-b4bb-b901997cd085" mode="Opaque" x="455" y="0" width="85" height="80" backcolor="#DDDDDD"/>
+				<box topPadding="5">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" markup="html">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Estimativa do vol. de produção total no primeiro corte
+<br/>
+m³]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement uuid="753a8327-4df1-4428-a732-fd538f776063" stretchType="RelativeToBandHeight" x="0" y="0" width="115" height="20"/>
+				<box topPadding="5">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{nom_natureza_especie_floresta}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement uuid="87fc08b6-602c-4430-ad12-6741eb2f03c0" stretchType="RelativeToBandHeight" x="115" y="0" width="115" height="20"/>
+				<box topPadding="5">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{nom_especie_floresta}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="4b373d8e-0ba6-4a26-baaf-ad40a2b296f6" stretchType="RelativeToBandHeight" x="230" y="0" width="75" height="20"/>
+				<box topPadding="5">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{val_ima}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="77afb62a-0bf8-4423-b22b-6b2a2b8e972f" stretchType="RelativeToBandHeight" x="305" y="0" width="75" height="20"/>
+				<box topPadding="5">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{val_ciclo_corte}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="f2b3d40c-9fe0-4860-91de-b529e08dc687" stretchType="RelativeToBandHeight" x="380" y="0" width="75" height="20"/>
+				<box topPadding="5">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{val_espacamento}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="5c3f901e-6580-447b-9af1-15e3a8b59b8a" stretchType="RelativeToBandHeight" x="455" y="0" width="85" height="20"/>
+				<box topPadding="5">
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{val_estimativa_volume_total_final}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

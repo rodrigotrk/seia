@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="relatorio_subreport_caracterizacao_ambiental_silos_armazens_caracterizacao_atmosferica" language="java" pageWidth="514" pageHeight="752" columnWidth="514" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="a8ba11e7-5372-482c-aee5-0419d3bbdba2">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="ide_caracterizacao_ambiental_silos_armazens" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[select saca.* from caracterizacao_ambiental_silos_armazens casa
+inner join caracterizacao_ambiental_caracterizacao_atmosferica caca
+on casa.ide_caracterizacao_ambiental_silos_armazens = caca.ide_caracterizacao_ambiental_silos_armazens
+inner join silos_armazens_caracterizacao_atmosferica saca
+on caca.ide_silos_armazens_caracterizacao_atmosferica = saca.ide_silos_armazens_caracterizacao_atmosferica
+where casa.ide_caracterizacao_ambiental_silos_armazens = $P{ide_caracterizacao_ambiental_silos_armazens}]]>
+	</queryString>
+	<field name="ide_silos_armazens_caracterizacao_atmosferica" class="java.lang.Integer"/>
+	<field name="nom_caracterizacao_atmosferica" class="java.lang.String"/>
+	<field name="ind_ativo" class="java.lang.Boolean"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<columnHeader>
+		<band height="20" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="440d0a9c-2483-40a4-ad68-07f12c4074bb" x="0" y="0" width="514" height="20"/>
+				<box>
+					<bottomPen lineWidth="0.5"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Caracterização]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement uuid="f18c921c-4791-4b8b-9544-9bdfb30b0ece" positionType="Float" x="0" y="0" width="514" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nom_caracterizacao_atmosferica}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

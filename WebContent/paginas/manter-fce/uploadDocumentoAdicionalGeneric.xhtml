@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui">
+	<p:outputPanel autoUpdate="true">
+		<h:panelGrid id="dadoAdicional" style="margin-left:15px; margin-top: 15px; width:337px;">
+			<p:fileUpload id="btnUpload" widgetVar="btnUpload" fileUploadListener="#{uploadDocumentoAdicionalController.prepararUploadDocumentoAdicional}"
+				label="Upload dos Dados Adicionais"	mode="advanced" oncomplete="updateDataTableDoc()" auto="true" allowTypes="/(\.|\/)(pdf|gif|jpeg|png|jpg)$/"
+				invalidFileMessage="Tipo de arquivo inválido." process="@this" disabled="#{uploadDocumentoAdicionalController.uploadRealizado}" />
+			
+			<p:remoteCommand name="updateDataTableDoc" update="dadoAdicional" />
+			
+			<p:dataTable id="dtDocumentos" widgetVar="dtDocumentos" lazy="true" 
+				value="#{uploadDocumentoAdicionalController.listaArquivo}" var="arquivo" emptyMessage="#{bundle.msg_lista_vazia}"
+				style="width:333px;" rendered="#{uploadDocumentoAdicionalController.uploadRealizado}">
+				<p:column style="width:252px;">
+					<h:outputText value="#{arquivo}" />
+				</p:column>
+				<p:column style="width:35px;">
+					<h:commandButton value="#{arquivo}" image="/resources/img/ico-download.png" immediate="true" title="Download do arquivo">
+						<p:fileDownload value="#{uploadDocumentoAdicionalController.documentoAdicionalUpado}" />
+					</h:commandButton>
+					<p:commandLink oncomplete="confirmaExclusaoDadosAdicionais.show()" title="Excluir Dados Adicionais" process="@this" global="false" disabled="#{uploadDocumentoAdicionalController.desabilitar or uploadDocumentoAdicionalController.documentoValidado}">
+						<f:setPropertyActionListener value="#{arquivo}" target="#{uploadDocumentoAdicionalController.caminhoArquivoDocFceDeletar}"/>
+						<h:graphicImage title="Excluir" value="/resources/img/ico-excluir.png" />
+					</p:commandLink>
+				</p:column>
+			</p:dataTable>
+		</h:panelGrid>
+	</p:outputPanel>
+</ui:composition>

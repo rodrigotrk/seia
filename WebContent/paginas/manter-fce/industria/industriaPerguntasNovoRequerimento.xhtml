@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui">
+	
+		<!-- Perguntas do novo requerimento   -->
+		<h:panelGroup id="perguntaNR" layout="block" style="width:80%; border:1px solid gray; margin-left:25px; margin-top:10px;" rendered="#{fceIndustriaController.verificaPergunta_OrigensUsosAgua}" >
+			<br /><br />
+			<h:outputText styleClass="titulo-grupo" style="font-weight:bold; margin-left:15px;" value="Dados do Requerimento" />
+						
+			<h:panelGrid style="margin-left:15px; margin-top:5px;">
+			<h:outputText value="#{fceIndustriaController.perguntaNR_A4_P141.idePergunta.dscPergunta}" />
+				<!--<h:outputText value="1.5.1 O empreendimento faz ou fará captação de água?" />-->
+				<p:selectOneRadio value="#{fceIndustriaController.perguntaNR_A4_P141.indResposta}" disabled="true">  
+					<f:selectItem itemLabel="Sim" itemValue="true" />  
+					<f:selectItem itemLabel="Não" itemValue="false" />
+					<p:ajax global="false"/>
+				</p:selectOneRadio>
+			</h:panelGrid>
+			<h:panelGrid style="margin-left:15px; margin-top:5px;" rendered="#{fceIndustriaController.verificaPerguntaNR_A4_P141}" >
+			<h:outputText value="#{fceIndustriaController.perguntaNR_A4_P1411.idePergunta.dscPergunta}" />
+				<!-- <h:outputText value="1.5.1.1 O transporte de água será realizado com caminhão pipa?" /> -->
+				<p:selectOneRadio value="#{fceIndustriaController.perguntaNR_A4_P1411.indResposta}" disabled="true">  
+					<f:selectItem itemLabel="Sim" itemValue="true" />  
+					<f:selectItem itemLabel="Não" itemValue="false"/>
+					<p:ajax global="false"/>
+				</p:selectOneRadio>
+			</h:panelGrid>
+			
+			<h:panelGroup id="pnlGroup_CaminhaoPipaVol" rendered="#{fceIndustriaController.verificaPerguntaNR_A4_P1411}">
+				<h:panelGrid id="pnlGrid_CaminhaoPipaVol" columns="2" style="margin-left:15px;">
+					
+					<h:panelGroup style="width:300px;">
+						<h:outputText value="1.5.1.1.1. Informe o volume do caminhão:"/>
+						<br /><br />
+						<p:inputText style="width:80px;" onkeyup="maskIt(this, event, '99.999.999,99', true)" id="inpVol_Caminhao" value="#{fceIndustriaController.valorVolumeCaminhaoPipa}" disabled="true">
+							<p:ajax event="blur" process="@this" global="false"/>
+							<f:converter converterId="bigConverter"/>
+						</p:inputText>
+						<h:outputText value=" m3"/>
+					</h:panelGroup>
+					<h:panelGroup style="width:150px;">
+						<h:outputText value="1.5.1.1.2. Informe a média de transportes realizados:"/>
+						<br /><br />
+						<p:inputText style="width:50px;" onkeyup="SomenteNumero(this);" id="inpViagem_Caminhao" value="#{fceIndustriaController.qtdTransporteCaminhaoPipa}" maxlength="3" disabled="true">
+							<p:ajax event="blur" process="@this" global="false"/>
+						</p:inputText>
+						<h:outputText value=" viagem/dia"/>
+					</h:panelGroup>
+				</h:panelGrid>
+			</h:panelGroup>
+			
+			<h:panelGroup rendered="#{fceIndustriaController.verificaPerguntaNR_A4_P141}">
+				<h:panelGrid style="margin-left:15px; margin-top:5px;">
+					<h:panelGroup >
+						<h:outputText value="1.5.1.2. Qual(is) origem(ns) da(s) água(s) utilizada ou a ser utilizada?" />
+					</h:panelGroup>
+					
+					<h:panelGroup>
+						<p:selectBooleanCheckbox value="#{fceIndustriaController.captacaoConcessessionarioPublica}" disabled="true"/>
+						<h:outputText value="Captação de concessionária pública" />
+						<br /><br />								
+						<p:selectBooleanCheckbox value="#{fceIndustriaController.captacaoPrecipitacaoPluvial}" disabled="true"/>
+						<h:outputText value="Captação de água de chuva/pluviométrica" />
+						<br /><br />
+						<p:selectBooleanCheckbox value="#{fceIndustriaController.captacaoSubterranea}" disabled="true"/>
+						<h:outputText value="Captação subterrânea" />
+						<br /><br />
+						
+						<h:panelGroup >
+							<h:panelGrid rendered="#{(not empty fceIndustriaController.captacoesSubterraneas)}" >
+								<p:outputPanel autoUpdate="true" style="margin-left:15px;">
+									<p:commandLink global="false" oncomplete="dialogCapSub.show()" update="formDialogCaptacaoSubterranea" 
+										disabled="true" 
+										action="#{captacaoSubterraneaController.load()}">
+										<h:graphicImage title="Incluir coordenadas" value="/resources/img/ico-expandir.png" style="margin-right: 2px;"/>
+										<h:outputText value="Incluir coordenadas de captação subterrânea" />
+									</p:commandLink>
+								</p:outputPanel>	
+								<p:dataTable value="#{fceIndustriaController.captacoesSubterraneas}"  var="capSub"	style="width:245px; margin-left:20px;">
+									<p:column headerText="Latitude" style="text-align:center;">
+										<h:outputText value="#{capSub.pontos.get('latitude')}"/>
+									</p:column>
+									<p:column headerText="Longitude" style="text-align:center;">
+										<h:outputText value="#{capSub.pontos.get('longitude')}"/>
+									</p:column>
+									<p:column headerText="Ação" style="text-align:center;"/>
+								</p:dataTable>
+							</h:panelGrid>
+						</h:panelGroup>
+						
+						<p:selectBooleanCheckbox value="#{fceIndustriaController.captacaoSuperficial}" disabled="true"/>
+						<h:outputText value="Captação superficial" />
+						<br /><br />
+						
+						<h:panelGroup>
+							<h:panelGrid rendered="#{(not empty fceIndustriaController.captacaoesSuperficiais)}">
+								<p:outputPanel autoUpdate="true" style="margin-left:15px;">
+									<p:commandLink global="false" oncomplete="dialogCapSuper.show()" action="#{captacaoSuperficialController.load()}" 
+										update="formDialogCaptacaoSuperficial"  disabled="true">
+										<h:graphicImage title="Incluir coordenadas" value="/resources/img/ico-expandir.png" style="margin-right: 2px;"/>
+										<h:outputText value="Incluir coordenadas de captação superficial" />
+									</p:commandLink>
+								</p:outputPanel>
+								<p:dataTable var="capSup" value="#{fceIndustriaController.captacaoesSuperficiais}" style="width:245px; margin-left:20px;">
+									<p:column headerText="Latitude" style="text-align:center;">
+										<h:outputText value="#{capSup.pontos.get('latitude')}"/>
+									</p:column>
+									<p:column headerText="Longitude" style="text-align:center;">
+										<h:outputText value="#{capSup.pontos.get('longitude')}"/>
+									</p:column>
+									<p:column headerText="Ação" style="text-align:center;"/>
+								</p:dataTable>
+							</h:panelGrid>
+						</h:panelGroup>
+					</h:panelGroup>
+				</h:panelGrid>
+			</h:panelGroup>
+		</h:panelGroup>
+		<br /><br />
+		<!-- Fim das pergutas do novo requerimento -->
+	
+</ui:composition>

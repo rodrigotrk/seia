@@ -1,0 +1,398 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="fce_abastecimento_industrial" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="495" leftMargin="50" rightMargin="50" topMargin="20" bottomMargin="20" isFloatColumnFooter="true" uuid="23d2a5f4-60dd-470e-8e00-a51d516775d2">
+	<property name="template.type" value="columnar"/>
+	<property name="ireport.zoom" value="2.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="Title" forecolor="#000000" fontName="Times New Roman" fontSize="50" isBold="false" pdfFontName="Times-Bold"/>
+	<style name="SubTitle" forecolor="#666666" fontName="Times New Roman" fontSize="18" isBold="false" pdfFontName="Times-Roman"/>
+	<style name="Column header" forecolor="#666666" fontName="Times New Roman" fontSize="14" isBold="true" pdfFontName="Times-Roman"/>
+	<style name="Detail" mode="Transparent" fontName="Times New Roman" pdfFontName="Times-Roman"/>
+	<style name="Row" mode="Transparent" fontName="Times New Roman" pdfFontName="Times-Roman">
+		<conditionalStyle>
+			<conditionExpression><![CDATA[$V{REPORT_COUNT}%2 == 0]]></conditionExpression>
+			<style mode="Opaque" backcolor="#F0EFEF"/>
+		</conditionalStyle>
+	</style>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String"/>
+	<parameter name="LOGO_SEIA" class="java.lang.String"/>
+	<parameter name="LOGO_INEMA" class="java.lang.String"/>
+	<parameter name="ide_fce" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="ide_origem_fce" class="java.lang.Integer"/>
+	<parameter name="TIPO_DOC" class="java.lang.String"/>
+	<parameter name="NOM_DOC" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[select distinct
+fce.ide_fce,
+fce.dtc_criacao,
+rq.num_requerimento,
+pf.nom_pessoa,
+pj.nom_razao_social,
+pj.num_cnpj,
+pf.num_cpf,
+
+lemp.nom_logradouro as end_empreendimento,
+lreq.nom_logradouro as end_requerente,
+lemp.num_cep as cep_empreendimento,
+lreq.num_cep as cep_requerente,
+brreq.nom_bairro as bairro_requerente,
+bremp.nom_bairro as bairro_empreendimento,
+mpreq.nom_municipio as cidad_requerente,
+mpemp.nom_municipio as cidad_empreendimento,
+etreq.des_sigla as uf_requerente,
+etemp.des_sigla as uf_empreendimento
+
+from fce fce
+
+inner join requerimento rq on fce.ide_requerimento = rq.ide_requerimento
+inner join requerimento_pessoa rp on rp.ide_requerimento = rq.ide_requerimento and rp.ide_tipo_pessoa_requerimento = 1
+inner join pessoa p on rp.ide_pessoa = p.ide_pessoa
+left join pessoa_juridica pj on pj.ide_pessoa_juridica = p.ide_pessoa
+left join pessoa_fisica pf on pf.ide_pessoa_fisica = p.ide_pessoa
+
+left join empreendimento_requerimento er on er.ide_requerimento = rq.ide_requerimento
+left join empreendimento em on em.ide_empreendimento = er.ide_empreendimento
+
+left join endereco_pessoa ep on ep.ide_pessoa = p.ide_pessoa AND ep.ide_tipo_endereco = 1
+left join endereco ereq on ereq.ide_endereco = ep.ide_endereco
+left join logradouro lreq on lreq.ide_logradouro = ereq.ide_logradouro
+left join tipo_logradouro tlreq on tlreq.ide_tipo_logradouro = lreq.ide_tipo_logradouro
+left join bairro brreq on brreq.ide_bairro = lreq.ide_bairro
+left join municipio mpreq on mpreq.ide_municipio = lreq.ide_municipio
+left join estado etreq on etreq.ide_estado = mpreq.ide_estado
+
+left join endereco_empreendimento eem on eem.ide_empreendimento = er.ide_empreendimento and eem.ide_tipo_endereco = 4
+left join endereco eemp on eemp.ide_endereco = eem.ide_endereco
+left join logradouro lemp on lemp.ide_logradouro = eemp.ide_logradouro
+left join tipo_logradouro tlemp on tlemp.ide_tipo_logradouro = lemp.ide_tipo_logradouro
+left join bairro bremp on bremp.ide_bairro = lemp.ide_bairro
+left join municipio mpemp on mpemp.ide_municipio = lemp.ide_municipio
+left join estado etemp on etemp.ide_estado = mpemp.ide_estado
+
+inner join fce_abastecimento_industrial fceI on fce.ide_fce = fceI.ide_fce
+where fce.ide_fce = $P{ide_fce} AND fce.ide_origem_fce = $P{ide_origem_fce}]]>
+	</queryString>
+	<field name="ide_fce" class="java.lang.Integer"/>
+	<field name="dtc_criacao" class="java.sql.Timestamp"/>
+	<field name="num_requerimento" class="java.lang.String"/>
+	<field name="nom_pessoa" class="java.lang.String"/>
+	<field name="nom_razao_social" class="java.lang.String"/>
+	<field name="num_cnpj" class="java.lang.String"/>
+	<field name="num_cpf" class="java.lang.String"/>
+	<field name="end_empreendimento" class="java.lang.String"/>
+	<field name="end_requerente" class="java.lang.String"/>
+	<field name="cep_empreendimento" class="java.math.BigDecimal"/>
+	<field name="cep_requerente" class="java.math.BigDecimal"/>
+	<field name="bairro_requerente" class="java.lang.String"/>
+	<field name="bairro_empreendimento" class="java.lang.String"/>
+	<field name="cidad_requerente" class="java.lang.String"/>
+	<field name="cidad_empreendimento" class="java.lang.String"/>
+	<field name="uf_requerente" class="java.lang.String"/>
+	<field name="uf_empreendimento" class="java.lang.String"/>
+	<variable name="variable1" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<pageHeader>
+		<band height="14">
+			<subreport>
+				<reportElement uuid="3d2c73fd-7aba-4758-9b30-13e6e9897aef" x="0" y="0" width="495" height="14"/>
+				<subreportParameter name="SUBREPORT_DIR">
+					<subreportParameterExpression><![CDATA[$P{SUBREPORT_DIR}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="NOM_DOC">
+					<subreportParameterExpression><![CDATA[$P{NOM_DOC}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="TIPO_DOC">
+					<subreportParameterExpression><![CDATA[$P{TIPO_DOC}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="LOGO_SEIA">
+					<subreportParameterExpression><![CDATA[$P{LOGO_SEIA}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="LOGO_INEMA">
+					<subreportParameterExpression><![CDATA[$P{LOGO_INEMA}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "fce_cabecalho.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+	</pageHeader>
+	<detail>
+		<band height="92">
+			<staticText>
+				<reportElement uuid="be0e980b-f6f1-4be1-b5b7-343bf540689f" positionType="Float" x="3" y="0" width="93" height="12"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Arial" size="9" isBold="true"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<text><![CDATA[N° Requerimento SEIA:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement uuid="1cf4976f-f20c-4cc6-a740-6fbebd9b303a" positionType="Float" x="96" y="0" width="219" height="12"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Arial" size="9" isBold="true"/>
+					<paragraph leftIndent="2"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{num_requerimento}]]></textFieldExpression>
+			</textField>
+			<elementGroup>
+				<staticText>
+					<reportElement uuid="6ca63910-5515-4cda-91c0-4143d00cd261" positionType="Float" x="353" y="56" width="24" height="12"/>
+					<box>
+						<topPen lineWidth="0.0"/>
+						<bottomPen lineWidth="0.0"/>
+					</box>
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font fontName="Arial" size="9" isBold="false"/>
+						<paragraph leftIndent="2"/>
+					</textElement>
+					<text><![CDATA[CEP:]]></text>
+				</staticText>
+				<textField isBlankWhenNull="true">
+					<reportElement uuid="1a6a08e5-2282-4966-bc13-a66a7b25592a" positionType="Float" x="398" y="44" width="97" height="12"/>
+					<box>
+						<topPen lineWidth="0.0"/>
+						<bottomPen lineWidth="0.0"/>
+					</box>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Arial" size="9"/>
+						<paragraph leftIndent="2"/>
+					</textElement>
+					<textFieldExpression><![CDATA[($F{num_cnpj} == null ? new String($F{num_cpf}.substring(0,3) + "." + $F{num_cpf}.substring(3,6) + "." + $F{num_cpf}.substring(6,9) + "-" + $F{num_cpf}.substring(9,11)) : new String($F{num_cnpj}.substring(0,2) + "." + $F{num_cnpj}.substring(2,5) + "." + $F{num_cnpj}.substring(5,8) + "/" + $F{num_cnpj}.substring(8,12) + "-" + $F{num_cnpj}.substring(12,14)))]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement uuid="d336026b-e1f9-490d-a717-de0c35385d98" positionType="Float" x="10" y="70" width="79" height="12"/>
+					<box>
+						<topPen lineWidth="0.0"/>
+						<bottomPen lineWidth="0.0"/>
+					</box>
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font fontName="Arial" size="9" isBold="false"/>
+						<paragraph leftIndent="2"/>
+					</textElement>
+					<text><![CDATA[Bairro/Distrito:]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="49c7c543-de7d-4f72-810c-3e26e31b6f0f" positionType="Float" x="10" y="44" width="86" height="12"/>
+					<box>
+						<topPen lineWidth="0.0"/>
+						<bottomPen lineWidth="0.0"/>
+					</box>
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font fontName="Arial" size="9" isBold="false"/>
+						<paragraph leftIndent="2"/>
+					</textElement>
+					<text><![CDATA[Nome/Razão Social:]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="dca54aab-1fdb-4200-8a6b-3a8a55d7632a" positionType="Float" x="10" y="57" width="79" height="12"/>
+					<box>
+						<topPen lineWidth="0.0"/>
+						<bottomPen lineWidth="0.0"/>
+					</box>
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font fontName="Arial" size="9" isBold="false"/>
+						<paragraph leftIndent="2"/>
+					</textElement>
+					<text><![CDATA[Logradouro:]]></text>
+				</staticText>
+				<textField isBlankWhenNull="true">
+					<reportElement uuid="0cdcaffc-fbef-4b84-9472-8a239e3d8c84" positionType="Float" x="372" y="70" width="36" height="12" isRemoveLineWhenBlank="true"/>
+					<box>
+						<topPen lineWidth="0.0"/>
+						<bottomPen lineWidth="0.0"/>
+						<rightPen lineWidth="0.0"/>
+					</box>
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font fontName="Arial" size="9"/>
+						<paragraph leftIndent="2"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{uf_requerente}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement uuid="3cc335f8-b851-4135-91b1-cdc6602ac87a" positionType="Float" x="95" y="44" width="246" height="12"/>
+					<box>
+						<topPen lineWidth="0.0"/>
+						<bottomPen lineWidth="0.0"/>
+					</box>
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font fontName="Arial" size="9"/>
+						<paragraph leftIndent="2"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{nom_pessoa} != null ? $F{nom_pessoa} : $F{nom_razao_social}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement uuid="2642ba26-ba7c-490a-832c-61495ba2aedb" positionType="Float" x="353" y="44" width="45" height="12"/>
+					<box>
+						<topPen lineWidth="0.0"/>
+						<bottomPen lineWidth="0.0"/>
+					</box>
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font fontName="Arial" size="9" isBold="false"/>
+						<paragraph leftIndent="2"/>
+					</textElement>
+					<text><![CDATA[CPF/CNPJ:]]></text>
+				</staticText>
+				<textField isBlankWhenNull="true">
+					<reportElement uuid="9e96f846-5d6b-43f4-89b9-353d4f6c6706" positionType="Float" x="377" y="56" width="92" height="12" isRemoveLineWhenBlank="true"/>
+					<box>
+						<topPen lineWidth="0.0"/>
+						<bottomPen lineWidth="0.0"/>
+						<rightPen lineWidth="0.0"/>
+					</box>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Arial" size="9"/>
+						<paragraph leftIndent="2"/>
+					</textElement>
+					<textFieldExpression><![CDATA[new String($F{cep_requerente}.toString().substring(0,5)+"-"+$F{cep_requerente}.toString().substring(5))]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement uuid="704c0c18-bbc5-41d8-a731-8a0d320a9291" positionType="Float" x="208" y="70" width="34" height="12"/>
+					<box>
+						<topPen lineWidth="0.0"/>
+						<bottomPen lineWidth="0.0"/>
+					</box>
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font fontName="Arial" size="9" isBold="false"/>
+						<paragraph leftIndent="2"/>
+					</textElement>
+					<text><![CDATA[Cidade:]]></text>
+				</staticText>
+				<textField isBlankWhenNull="true">
+					<reportElement uuid="eb958e39-1b14-402e-a2fa-ad37fb3b89d1" positionType="Float" x="242" y="70" width="111" height="12" isRemoveLineWhenBlank="true"/>
+					<box>
+						<topPen lineWidth="0.0"/>
+						<bottomPen lineWidth="0.0"/>
+						<rightPen lineWidth="0.0"/>
+					</box>
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font fontName="Arial" size="9"/>
+						<paragraph leftIndent="2"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{cidad_requerente}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement uuid="059129dc-7cf8-4197-a9cf-1dd08025b746" positionType="Float" x="95" y="57" width="246" height="12" isRemoveLineWhenBlank="true"/>
+					<box>
+						<topPen lineWidth="0.0"/>
+						<bottomPen lineWidth="0.0"/>
+						<rightPen lineWidth="0.0"/>
+					</box>
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font fontName="Arial" size="9"/>
+						<paragraph leftIndent="2"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{end_requerente}]]></textFieldExpression>
+				</textField>
+				<textField isBlankWhenNull="true">
+					<reportElement uuid="4d2394eb-88f6-4187-ae04-83763683fc20" positionType="Float" x="95" y="70" width="113" height="12" isRemoveLineWhenBlank="true"/>
+					<box>
+						<topPen lineWidth="0.0"/>
+						<bottomPen lineWidth="0.0"/>
+						<rightPen lineWidth="0.0"/>
+					</box>
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font fontName="Arial" size="9"/>
+						<paragraph leftIndent="2"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{bairro_requerente}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement uuid="490f0746-4146-4307-8e5c-75379a4020be" positionType="Float" mode="Opaque" x="0" y="22" width="495" height="17" backcolor="#DDDDDD"/>
+					<box>
+						<topPen lineWidth="0.0"/>
+						<leftPen lineWidth="0.0"/>
+						<bottomPen lineWidth="0.0"/>
+						<rightPen lineWidth="0.0"/>
+					</box>
+					<textElement verticalAlignment="Middle">
+						<font fontName="Verdana" isBold="true"/>
+						<paragraph leftIndent="2"/>
+					</textElement>
+					<text><![CDATA[Dados do Requerente]]></text>
+				</staticText>
+				<staticText>
+					<reportElement uuid="43a33ac4-e06b-4de1-b374-66ee5cc9e90e" positionType="Float" x="353" y="70" width="19" height="12"/>
+					<box>
+						<topPen lineWidth="0.0"/>
+						<bottomPen lineWidth="0.0"/>
+					</box>
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font fontName="Arial" size="9" isBold="false"/>
+						<paragraph leftIndent="2"/>
+					</textElement>
+					<text><![CDATA[UF:]]></text>
+				</staticText>
+			</elementGroup>
+		</band>
+		<band height="65">
+			<textField pattern="dd &apos;de&apos; MMMMM &apos;de&apos; yyyy" isBlankWhenNull="true">
+				<reportElement uuid="e0990dd3-2251-4dd1-a1f8-98ad5639fa3b" positionType="Float" x="35" y="52" width="241" height="13"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{dtc_criacao}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="71a30650-a58a-4398-bffc-24b9aab8a999" positionType="Float" x="0" y="52" width="35" height="13"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[Data:]]></text>
+			</staticText>
+			<subreport runToBottom="false">
+				<reportElement uuid="378089c8-8f63-4b9f-afa4-b5007ba7bd93" positionType="Float" isPrintRepeatedValues="false" x="0" y="0" width="495" height="15" isRemoveLineWhenBlank="true"/>
+				<subreportParameter name="SUBREPORT_DIR">
+					<subreportParameterExpression><![CDATA[$P{SUBREPORT_DIR}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="ide_fce">
+					<subreportParameterExpression><![CDATA[$F{ide_fce}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="ide_origem_fce">
+					<subreportParameterExpression><![CDATA[$P{ide_origem_fce}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "fce_abastecimento_industrial_localizacao.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="25">
+			<textField>
+				<reportElement uuid="b076d875-b29c-436c-ba7a-074c9431890c" style="Column header" mode="Opaque" x="419" y="8" width="46" height="13" forecolor="#000000"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Arial" size="10" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Pág "+$V{PAGE_NUMBER}+" de"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement uuid="7cf90333-521b-4978-bcc4-ebb87c133c4e" style="Column header" mode="Opaque" x="465" y="8" width="15" height="13" forecolor="#000000"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="10" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField pattern="EEEEE dd MMMMM yyyy">
+				<reportElement uuid="c7a496ee-8dc8-4be2-99b8-c43bb3d61b91" style="Column header" mode="Opaque" x="11" y="5" width="95" height="13" forecolor="#000000"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Arial" size="10" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="34670993-83cd-4f96-96d2-1dd6fba7b4ca" x="109" y="7" width="298" height="13"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Arial" size="5"/>
+				</textElement>
+				<text><![CDATA[Avenida Luis Viana Filho, 6° Avenida n° 600 - CAB - CEP 41.745-900. Salvador - BA]]></text>
+			</staticText>
+		</band>
+	</pageFooter>
+</jasperReport>

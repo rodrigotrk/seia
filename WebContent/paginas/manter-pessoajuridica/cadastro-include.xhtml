@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+				xmlns:h="http://java.sun.com/jsf/html"
+				xmlns:f="http://java.sun.com/jsf/core"
+				xmlns:ui="http://java.sun.com/jsf/facelets"
+				xmlns:p="http://primefaces.prime.com.tr/ui">
+	<f:metadata>  
+    	<f:event type="preRenderView" listener="#{pessoaJuridicaController.validacaoUsuario}"/>  
+	</f:metadata> 
+
+	<ui:include src="/paginas/manter-pessoajuridica/documentoRepresentanteLegalDialogs.xhtml" />
+	<ui:include src="/paginas/manter-pessoajuridica/telefoneRepresentanteLegalDialogs.xhtml" />
+	
+	<h:panelGrid columns="1"> 
+		<p:tabView dynamic="true form_avancar" id="tabviewpj" activeIndex="#{pessoaJuridicaController.tabAtual}" style="width: 778px;">
+			
+			<p:ajax event="tabChange" listener="#{pessoaJuridicaController.onTabChange()}" update="tabviewpj, :form_avancar" />
+			
+			<p:tab title="Pessoa Jurídica">        
+				<ui:include src="/paginas/manter-pessoajuridica/formCadastro.xhtml" />
+			</p:tab>
+		
+			<p:tab title="CNAE" id="tabcnae" disabled="#{pessoaJuridicaController.disableAbasDependencias}" >
+				<h:panelGrid id="paneltabcnae">
+					<ui:include src="/paginas/manter-pessoajuridica/modalAtividadeCnae.xhtml" />
+				</h:panelGrid>
+			</p:tab>
+			
+			<p:tab title="Comp. Acionária" id="tabcomposicaoacionaria" disabled="#{pessoaJuridicaController.disableAbasDependencias}" >
+				<ui:include src="/paginas/manter-pessoajuridica/modalComposicaoAcionaria.xhtml" />
+			</p:tab>
+			
+			<p:tab title="Rep. Legal" id="tabrepresentantelegal" disabled="#{pessoaJuridicaController.disableAbasDependencias}" >
+				<ui:include src="/paginas/manter-pessoajuridica/representanteLegal.xhtml" />
+			</p:tab>
+			
+			<p:tab title="Telefone" id="tabtelefone" disabled="#{pessoaJuridicaController.disableAbasDependencias}" >
+				<ui:include src="/paginas/manter-pessoajuridica/telefonePessoaJuridica.xhtml" />
+			</p:tab>
+			
+			<p:tab title="Endereço" id="tabendereco" disabled="#{pessoaJuridicaController.disableAbasDependencias}" >
+				<ui:include src="/paginas/manter-endereco/endereco.xhtml" />
+			</p:tab>
+			
+			<p:tab title="Procurador" id="tabprocurador" disabled="#{pessoaJuridicaController.disableAbasDependencias}" >
+				<ui:include src="/paginas/manter-pessoajuridica/procuradorPessoaJuridica.xhtml" />
+			</p:tab>	
+		</p:tabView>
+	
+		<h:form id="form_avancar">
+		   <p:commandButton value="Voltar"  update=":tabviewpj form_avancar" action="#{pessoaJuridicaController.decrementaIndexAba}" rendered="#{pessoaJuridicaController.visualizaAnterior}"   style="float: left;" id="btnVoltarCdPessoaJuridica"/>
+		   <p:commandButton value="Avançar" update=":tabviewpj form_avancar" action="#{pessoaJuridicaController.incrementaIndexAba}" rendered="#{pessoaJuridicaController.visualizaProximo}" style="float:right;"/>
+		   <p:commandButton action="#{pessoaJuridicaController.finalizar}" value="Finalizar" ajax="false" rendered="#{pessoaJuridicaController.visualizaFinalizar}" style="float:right;" />
+	   </h:form>
+	</h:panelGrid>
+	
+</ui:composition>

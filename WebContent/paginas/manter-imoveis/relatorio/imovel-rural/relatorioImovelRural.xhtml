@@ -1,0 +1,1292 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui">
+
+<ui:composition template="/layout/template.xhtml">
+	<ui:define name="titulo-pagina">
+		<h3>Relatório de Imóveis Rurais</h3>
+	</ui:define>
+
+	<ui:define name="conteudo-principal">
+
+		<!-- Dialog Responsavel Tecnico Imovel Rural -->
+		<ui:include
+			src="/paginas/identificar-papel/dialogSelecionarSolicitante.xhtml" />
+
+		<style>
+button {
+	margin: 0px 0px 0px 4px !important;
+}
+</style>
+
+		<h3>
+			<h:outputLabel style="margin-left:15px;" styleClass="titulo-grupo"
+				value="INSTRUÇÕES" />
+		</h3>
+
+		<br />
+
+		<h:outputLabel style="margin-left:15px;"
+			value="- Para consultar um ou mais Imóveis Rurais, informe o(s) parâmetro(s) de consulta desejado(s) e clique no botão 'Consultar'." />
+
+		<p:spacer height="45px" />
+
+		<h3>
+			<h:outputLabel style="margin-left:15px;" styleClass="titulo-grupo"
+				value="PARÂMETROS DA CONSULTA" />
+		</h3>
+
+		<script type="text/javascript">
+			function desabilitaBotaoImprimir() {
+				$("[id*='btnImprimir']").hide();
+			}
+		</script>
+
+		<h:form id="formRelatorioImovelRural">
+			<h:panelGrid id="panelFiltros" width="100%">
+
+				<h:panelGrid id="tblFiltroProprietario" columns="6">
+					<h:outputLabel style="margin-left:10px;" id="lblProprietario"
+						value="Proprietário / Justo Possuidor" />
+					<p:spacer width="10px;" height="10px" />
+					<h:outputLabel style="margin-left:10px;" id="lblProcurador"
+						value="Procurador / Representante Legal" />
+					<p:spacer width="10px;" height="10px" />
+					<h:outputLabel style="margin-left:10px;"
+						value="Responsável Técnico" />
+					<p:spacer width="10px;" height="10px" />
+
+					<!-- Proprietario -->
+					<p:inputText id="nomProprietario"
+						value="#{relatorioImovelRuralController.nomProprietario}"
+						disabled="true" size="28" style="margin-left:5px;" />
+
+					<p:commandLink image="/resources/img/ico-pesquisa.png"
+						onclick="dlgBuscaProp.show();" update="form_dialog">
+						<h:graphicImage title="Pesquisar"
+							value="/resources/img/ico-pesquisa.png" />
+						<f:setPropertyActionListener value=""
+							target="#{empreendimentoController.nome}" />
+						<f:setPropertyActionListener value=""
+							target="#{empreendimentoController.documento}" />
+						<f:setPropertyActionListener value="0"
+							target="#{empreendimentoController.tipoPessoa}" />
+						<f:setPropertyActionListener value="#{null}"
+							target="#{empreendimentoController.pessoasFisicaModel}" />
+						<f:setPropertyActionListener value="#{null}"
+							target="#{empreendimentoController.pessoasJuridicaModel}" />
+					</p:commandLink>
+
+					<!-- Procurador -->
+					<p:inputText id="nomProcurador"
+						value="#{relatorioImovelRuralController.procurador.nomPessoa}"
+						disabled="true" size="28" style="margin-left:5px;" />
+
+					<p:commandLink image="/resources/img/ico-pesquisa.png"
+						onclick="dlgBuscaProcurador.show();"
+						update="form_dialog_procurador">
+						<h:graphicImage title="Pesquisar"
+							value="/resources/img/ico-pesquisa.png" />
+						<f:setPropertyActionListener value=""
+							target="#{empreendimentoController.nome}" />
+						<f:setPropertyActionListener value=""
+							target="#{empreendimentoController.documento}" />
+						<f:setPropertyActionListener value="0"
+							target="#{empreendimentoController.tipoPessoa}" />
+						<f:setPropertyActionListener value="#{null}"
+							target="#{empreendimentoController.pessoasFisicaModel}" />
+					</p:commandLink>
+
+					<!-- Responsavel Tecnico -->
+					<p:inputText id="nomRespTec"
+						value="#{relatorioImovelRuralController.filtroImovelRuralRelatorioDTO.responsavelTecnico.nomeRazao}"
+						disabled="true" size="28" style="margin-left:5px;" />
+
+					<p:commandLink
+						actionListener="#{selecionarSolicitanteController.init()}"
+						onclick="dialogSolicitante.show()"
+						update="form_dialog_solicitante" style="padding-right: 50px;">
+
+						<f:attribute name="metodoSelecionarSolicitante"
+							value="#{relatorioImovelRuralController.metodoSelecionarSolicitante}" />
+						<f:setPropertyActionListener value="false"
+							target="#{selecionarSolicitanteController.renderizaTipoPessoa}" />
+						<h:graphicImage title="Consultar"
+							value="/resources/img/ico-pesquisa.png" />
+					</p:commandLink>
+				</h:panelGrid>
+
+				<h:panelGrid>
+					<!-- Nome Imovel Rural -->
+					<h:outputLabel style="margin-left:10px;"
+						value="Nome do imóvel rural" />
+					<p:inputText id="idNomeImovel"
+						value="#{relatorioImovelRuralController.filtroImovelRuralRelatorioDTO.nomImovelRural}"
+						onchange="desabilitaBotaoImprimir();" size="30"
+						style="margin-left:10px;">
+
+						<p:ajax event="change" />
+					</p:inputText>
+				</h:panelGrid>
+
+				<p:spacer height="10px" />
+
+				<h:panelGrid columns="3">
+					<h:outputLabel style="margin-left:8px;" value="Filtrar por:" />
+					<p:spacer width="320px;" height="20px" />
+					<h:outputLabel style="margin-left:4px;"
+						value="#{bundle.cefir_lbl_status_cadastro}" />
+
+					<p:selectOneMenu id="comboTipoFiltro"
+						value="#{relatorioImovelRuralController.filtroImovelRuralRelatorioDTO.tipoFiltroSelecionado}"
+						style="height:20px;width:230px;margin-left:8px;"
+						valueChangeListener="#{relatorioImovelRuralController.limparFiltroSelecionado()}">
+						<f:selectItems
+							value="#{relatorioImovelRuralController.listaFiltro}"
+							var="filtro" itemValue="#{filtro.gid}" itemLabel="#{filtro.nome}" />
+						<p:ajax event="change" update="filtroTipoSelecionado" />
+					</p:selectOneMenu>
+
+					<h:panelGrid id="filtroTipoSelecionado" style="margin-left: 10px;">
+
+						<h:panelGrid
+							rendered="#{relatorioImovelRuralController.tipoFiltroSelecionadoSelecione}">
+							<p:spacer width="0px;" />
+						</h:panelGrid>
+
+						<h:panelGrid id="filtroMunicipio"
+							rendered="#{relatorioImovelRuralController.tipoFiltroSelecionadoMunicipio}">
+							<p:selectManyMenu id="idComboMunicipio"
+								onchange="desabilitaBotaoImprimir();"
+								value="#{relatorioImovelRuralController.filtroImovelRuralRelatorioDTO.listMunicipio}"
+								styleClass="form-input form-select"
+								style="width:280px;height:85px;font-size: 11px;"
+								showCheckbox="true">
+								<f:selectItems
+									value="#{relatorioImovelRuralController.listaMunicipios}"
+									var="municipio" itemValue="#{municipio.ideMunicipio}"
+									itemLabel="#{municipio.nomMunicipio}" />
+								<f:converter converterId="integerConverter" />
+								<p:ajax event="change" global="false" />
+							</p:selectManyMenu>
+							<h:outputText style="font-size: 9px;color: #FF8C00;"
+								value="*É possível selecionar mais de uma opção" />
+						</h:panelGrid>
+						<h:panelGrid id="filtroBioma"
+							rendered="#{relatorioImovelRuralController.tipoFiltroSelecionadoBioma}">
+							<p:selectOneMenu id="idComboBioma"
+								onchange="desabilitaBotaoImprimir();"
+								value="#{relatorioImovelRuralController.filtroImovelRuralRelatorioDTO.idBiomaSelecionado}"
+								style="width:230px;height:20px"
+								converter="simpleEntityConverter">
+								<f:selectItem itemLabel="#{bundle.geral_lbl_selecione}" />
+								<f:selectItems
+									value="#{relatorioImovelRuralController.listaBioma}"
+									var="bioma" itemValue="#{bioma}" itemLabel="#{bioma.nome}" />
+								<p:ajax event="change" global="false" />
+							</p:selectOneMenu>
+						</h:panelGrid>
+						<h:panelGrid id="filtroRPGA"
+							rendered="#{relatorioImovelRuralController.tipoFiltroSelecionadoRPGA}">
+							<p:selectOneMenu id="idComboRPGA"
+								onchange="desabilitaBotaoImprimir();"
+								value="#{relatorioImovelRuralController.filtroImovelRuralRelatorioDTO.idRPGASelecionado}"
+								style="width:230px;height:20px"
+								converter="simpleEntityConverter">
+								<f:selectItem itemLabel="#{bundle.geral_lbl_selecione}" />
+								<f:selectItems
+									value="#{relatorioImovelRuralController.listaRpga}" var="rpga"
+									itemValue="#{rpga}" itemLabel="#{rpga.nome}" />
+								<p:ajax event="change" global="false" />
+							</p:selectOneMenu>
+						</h:panelGrid>
+						<h:panelGrid id="filtroUnidade"
+							rendered="#{relatorioImovelRuralController.tipoFiltroSelecionadoUnidadeConservacao}">
+							<p:selectOneMenu id="idComboUnidade"
+								onchange="desabilitaBotaoImprimir();"
+								value="#{relatorioImovelRuralController.filtroImovelRuralRelatorioDTO.idUnidadeSelecionado}"
+								style="width:230px;height:20px"
+								converter="simpleEntityConverter">
+								<f:selectItem itemLabel="#{bundle.geral_lbl_selecione}" />
+								<f:selectItems
+									value="#{relatorioImovelRuralController.listaUnidadeConservacao}"
+									var="uc" itemValue="#{uc}" itemLabel="#{uc.nome}" />
+								<p:ajax event="change" global="false" />
+							</p:selectOneMenu>
+						</h:panelGrid>
+						<h:panelGrid id="filtroTerritorio"
+							rendered="#{relatorioImovelRuralController.tipoFiltroSelecionadoTerritorioIdentidade}">
+							<p:selectOneMenu id="idComboTerritorio"
+								onchange="desabilitaBotaoImprimir();"
+								value="#{relatorioImovelRuralController.filtroImovelRuralRelatorioDTO.idTerritorioSelecionado}"
+								style="width:230px;height:20px"
+								converter="simpleEntityConverter">
+								<f:selectItem itemLabel="#{bundle.geral_lbl_selecione}" />
+								<f:selectItems
+									value="#{relatorioImovelRuralController.listaTerritorioIdentidade}"
+									var="ti" itemValue="#{ti}" itemLabel="#{ti.nome}" />
+								<p:ajax event="change" global="false" />
+							</p:selectOneMenu>
+						</h:panelGrid>
+						<h:panelGrid id="filtroBacia"
+							rendered="#{relatorioImovelRuralController.tipoFiltroSelecionadoBacia}">
+							<p:selectOneMenu id="idComboBacia"
+								onchange="desabilitaBotaoImprimir();"
+								value="#{relatorioImovelRuralController.filtroImovelRuralRelatorioDTO.idBaciaSelecionado}"
+								style="width:230px;height:20px"
+								converter="simpleEntityConverter">
+								<f:selectItem itemLabel="#{bundle.geral_lbl_selecione}" />
+								<f:selectItems
+									value="#{relatorioImovelRuralController.listaBacia}"
+									var="bacia" itemValue="#{bacia}" itemLabel="#{bacia.nome}" />
+								<p:ajax event="change" global="false" />
+							</p:selectOneMenu>
+						</h:panelGrid>
+					</h:panelGrid>
+					<h:panelGrid columns="2" style="margin-top:5px;">
+						<h:selectBooleanCheckbox
+							value="#{relatorioImovelRuralController.registroIncompleto}">
+							<p:ajax event="change" global="false"
+								listener="#{relatorioImovelRuralController.limpaFiltrosBuscaAvancada()}"
+								update=":formRelatorioImovelRural:fieldFiltro" />
+						</h:selectBooleanCheckbox>
+						<h:outputText value="Registro incompleto" />
+
+						<h:selectBooleanCheckbox
+							value="#{relatorioImovelRuralController.registrado}">
+							<p:ajax event="change" global="false"
+								oncomplete="desabilitaBotaoImprimir();"
+								listener="#{relatorioImovelRuralController.limpaFiltrosBuscaAvancada()}"
+								update=":formRelatorioImovelRural:fieldFiltro" />
+						</h:selectBooleanCheckbox>
+						<h:outputText value="Registrado" />
+
+						<h:selectBooleanCheckbox
+							value="#{relatorioImovelRuralController.cadastrado}">
+							<p:ajax event="change" global="false"
+								oncomplete="desabilitaBotaoImprimir();"
+								listener="#{relatorioImovelRuralController.limpaFiltrosBuscaAvancada()}"
+								update=":formRelatorioImovelRural:fieldFiltro" />
+						</h:selectBooleanCheckbox>
+						<h:outputText value="Cadastrado" />
+
+						<h:selectBooleanCheckbox
+							value="#{relatorioImovelRuralController.pendente}">
+							<p:ajax event="change" global="false"
+								listener="#{relatorioImovelRuralController.limpaFiltrosBuscaAvancada()}"
+								update=":formRelatorioImovelRural:fieldFiltro" />
+						</h:selectBooleanCheckbox>
+						<h:outputText value="Pendente" />
+					</h:panelGrid>
+				</h:panelGrid>
+
+				<h:panelGrid style="float:right; margin-right: 40px;">
+					<p:commandLink id="idBuscaAvancada"
+						actionListener="#{relatorioImovelRuralController.selecionaBuscaAvancada()}"
+						update=":formRelatorioImovelRural:panelFiltros" process="@this">
+
+						<h:outputText value="Busca avançada" />
+					</p:commandLink>
+				</h:panelGrid>
+
+				<h:panelGrid
+					rendered="#{relatorioImovelRuralController.buscaAvancada}"
+					id="fieldFiltro" style="width:764px;border: 1px solid #9BBB59;">
+
+					<h:panelGrid style="height: 385px;" columns="3">
+						<h:panelGrid id="primeiraColunaFiltro" width="234px"
+							style="height: 375px;border-right: 1px dashed #727272; margin-left: 9px;">
+							<h:outputText value="Período da primeira finalização" />
+							<h:panelGrid style="margin: -7px 0 0 -4px;" columns="2">
+								<p:calendar
+									value="#{relatorioImovelRuralController.filtroImovelRuralRelatorioDTO.dtaInicioPeriodoPrimeiraFinalizacao}"
+									navigator="true" accesskey="true" showOn="button"
+									pattern="dd/MM/yyyy" locale="pt" readOnlyInputText="true"
+									yearRange="c-100"
+									maxdate="#{relatorioImovelRuralController.maxDateInicioPrimeiraFinalizacao}"
+									immediate="true" size="6" onchange="desabilitaBotaoImprimir();"
+									valueChangeListener="#{relatorioImovelRuralController.changeDataInicioPrimeiraFinalizacao()}"
+									disabled="#{relatorioImovelRuralController.disablePeriodoFinalizacao}">
+									<p:ajax event="dateSelect" global="true"
+										process=":formRelatorioImovelRural:primeiraColunaFiltro"
+										listener="#{relatorioImovelRuralController.validaVisualizacaoCamposBuscaAvancada()}"
+										update=":formRelatorioImovelRural:fieldFiltro" />
+								</p:calendar>
+
+								<p:calendar
+									value="#{relatorioImovelRuralController.filtroImovelRuralRelatorioDTO.dtaFimPeriodoPrimeiraFinalizacao}"
+									navigator="true" accesskey="true" showOn="button"
+									pattern="dd/MM/yyyy" locale="pt" readOnlyInputText="true"
+									yearRange="c-100"
+									mindate="#{relatorioImovelRuralController.minDateFimPrimeiraFinalizacao}"
+									maxdate="#{relatorioImovelRuralController.dataAtual}"
+									immediate="true" size="6" onchange="desabilitaBotaoImprimir();"
+									valueChangeListener="#{relatorioImovelRuralController.changeDataFimPrimeiraFinalizacao()}"
+									disabled="#{relatorioImovelRuralController.disablePeriodoFinalizacao}">
+									<p:ajax event="dateSelect" global="true"
+										process=":formRelatorioImovelRural:primeiraColunaFiltro"
+										listener="#{relatorioImovelRuralController.validaVisualizacaoCamposBuscaAvancada()}"
+										update=":formRelatorioImovelRural:fieldFiltro" />
+								</p:calendar>
+							</h:panelGrid>
+
+							<h:outputText value="Período da sincronização" />
+							<h:panelGrid style="margin: -7px 0 0 -4px;" columns="2">
+								<p:calendar
+									value="#{relatorioImovelRuralController.filtroImovelRuralRelatorioDTO.dtaInicioPeriodoPrimeiraSincronizacao}"
+									navigator="true" accesskey="true" showOn="button"
+									pattern="dd/MM/yyyy" locale="pt" readOnlyInputText="true"
+									yearRange="c-100"
+									maxdate="#{relatorioImovelRuralController.maxDateInicioPrimeiraSincronizacao}"
+									immediate="true" size="6" onchange="desabilitaBotaoImprimir();"
+									valueChangeListener="#{relatorioImovelRuralController.changeDataInicioPrimeiraSincronizacao()}"
+									disabled="#{relatorioImovelRuralController.disablePeriodoSincronizacao}">
+									<p:ajax event="dateSelect" global="true"
+										process=":formRelatorioImovelRural:primeiraColunaFiltro"
+										listener="#{relatorioImovelRuralController.validaVisualizacaoCamposBuscaAvancada()}"
+										update=":formRelatorioImovelRural:fieldFiltro" />
+								</p:calendar>
+
+								<p:calendar
+									value="#{relatorioImovelRuralController.filtroImovelRuralRelatorioDTO.dtaFimPeriodoPrimeiraSincronizacao}"
+									navigator="true" accesskey="true" showOn="button"
+									pattern="dd/MM/yyyy" locale="pt" readOnlyInputText="true"
+									yearRange="c-100"
+									mindate="#{relatorioImovelRuralController.minDateFimPrimeiraSincronizacao}"
+									maxdate="#{relatorioImovelRuralController.dataAtual}"
+									immediate="true" size="6" onchange="desabilitaBotaoImprimir();"
+									valueChangeListener="#{relatorioImovelRuralController.changeDataFimPrimeiraSincronizacao()}"
+									disabled="#{relatorioImovelRuralController.disablePeriodoSincronizacao}">
+									<p:ajax event="dateSelect" global="true"
+										process=":formRelatorioImovelRural:primeiraColunaFiltro"
+										update=":formRelatorioImovelRural:fieldFiltro" />
+								</p:calendar>
+							</h:panelGrid>
+							
+							<h:outputText value="Período de aprovação da Reserva Legal" />
+							<h:panelGrid style="margin: -7px 0 0 -4px;" columns="2">
+								<p:calendar
+									value="#{relatorioImovelRuralController.filtroImovelRuralRelatorioDTO.dtaInicioPeriodoReservaLegal}"
+									navigator="true" accesskey="true" showOn="button"
+									pattern="dd/MM/yyyy" locale="pt" readOnlyInputText="true"
+									yearRange="c-100"
+									maxdate="#{relatorioImovelRuralController.maxDateInicioPeriodoReservaLegal}"
+									immediate="true" size="6" onchange="desabilitaBotaoImprimir();"
+									valueChangeListener="#{relatorioImovelRuralController.changeDataInicioPeriodoReservaLegal()}">
+									<p:ajax event="dateSelect" global="true"
+										process=":formRelatorioImovelRural:primeiraColunaFiltro"
+										listener="#{relatorioImovelRuralController.validaVisualizacaoCamposBuscaAvancada()}"
+										update=":formRelatorioImovelRural:fieldFiltro" />
+								</p:calendar>
+
+								<p:calendar
+									value="#{relatorioImovelRuralController.filtroImovelRuralRelatorioDTO.dtaFimPeriodoReservaLegal}"
+									navigator="true" accesskey="true" showOn="button"
+									pattern="dd/MM/yyyy" locale="pt" readOnlyInputText="true"
+									yearRange="c-100"
+									mindate="#{relatorioImovelRuralController.minDateFimPeriodoReservaLegal}"
+									maxdate="#{relatorioImovelRuralController.dataAtual}"
+									immediate="true" size="6" onchange="desabilitaBotaoImprimir();"
+									valueChangeListener="#{relatorioImovelRuralController.changeDataFimPeriodoReservaLegal()}">
+									<p:ajax event="dateSelect" global="true"
+										process=":formRelatorioImovelRural:primeiraColunaFiltro"
+										update=":formRelatorioImovelRural:fieldFiltro" />
+								</p:calendar>
+							</h:panelGrid>
+
+							<h:outputLabel style="margin-left: 0px;" for="idGestorFinanceiro"
+								value="Gestor Financeiro*" />
+							<p:selectManyMenu id="idGestorFinanceiro"
+								value="#{relatorioImovelRuralController.filtroImovelRuralRelatorioDTO.listGestorFinanceiro}"
+								styleClass="form-input form-select"
+								style="width:203px;height:100px;font-size:10px; margin-top: -6px;"
+								disabled="#{relatorioImovelRuralController.disableGestorFinanceiro}"
+								showCheckbox="true">
+								<f:selectItems
+									value="#{relatorioImovelRuralController.listaGestorFinanceiro}"
+									var="gestor" itemValue="#{gestor.ideGestorFinanceiroCefir}"
+									itemLabel="#{gestor.nomGestorFinanceiroCefir}" />
+								<f:converter converterId="javax.faces.Integer" />
+								<p:ajax event="change"
+									update=":formRelatorioImovelRural:fieldFiltro"
+									listener="#{relatorioImovelRuralController.validaVisualizacaoCamposBuscaAvancada()}" />
+							</p:selectManyMenu>
+							<h:outputLabel style="margin-left: 0px;" for="idContratoConvenio"
+								value="Contrato/Convênio*" />
+							<p:selectManyMenu id="idContratoConvenio"
+								value="#{relatorioImovelRuralController.filtroImovelRuralRelatorioDTO.listContratoConvenio}"
+								styleClass="form-input form-select"
+								style="width:203px;height:100px;font-size: 10px; margin-top: -6px; margin-bottom: -7px;"
+								disabled="#{relatorioImovelRuralController.disableContratoConvenio}"
+								showCheckbox="true" onchange="desabilitaBotaoImprimir();">
+								<f:selectItems
+									value="#{relatorioImovelRuralController.listaContratoConvenio}"
+									var="contrato" itemValue="#{contrato.ideContratoConvenioCefir}"
+									itemLabel="#{contrato.nomContratoConvenioCefir}" />
+								<f:converter converterId="javax.faces.Integer" />
+								<p:ajax event="change"
+									update=":formRelatorioImovelRural:fieldFiltro"
+									listener="#{relatorioImovelRuralController.validaVisualizacaoCamposBuscaAvancada()}" />
+							</p:selectManyMenu>
+							<h:outputText style="font-size: 9px;color: #FF8C00;"
+								value="*É possível selecionar mais de uma opção" />
+						</h:panelGrid>
+
+						<h:panelGrid id="filtroCITC"
+							style="height: 375px; width: 282px; margin-left: 8px;">
+							<h:outputLabel value="Módulos fiscais" />
+							<h:panelGrid
+								style="margin-top: -12px;margin-left: -2px; padding-bottom: 10px;">
+								<h:selectOneRadio id="rbtModulosFiscais" layout="pageDirection"
+									value="#{relatorioImovelRuralController.filtroImovelRuralRelatorioDTO.modulosFiscais}"
+									valueChangeListener="#{relatorioImovelRuralController.changeModulosFiscais()}">
+
+									<f:selectItem itemLabel="Até 4 módulos" itemValue="1"
+										itemDisabled="#{relatorioImovelRuralController.disableAte4Modulos()}" />
+
+									<f:selectItem itemLabel="Acima de 4 módulos" itemValue="2"
+										itemDisabled="#{relatorioImovelRuralController.disableAcima4Modulos()}" />
+
+									<p:ajax event="change" process="rbtModulosFiscais"
+										global="false" update=":formRelatorioImovelRural:fieldFiltro" />
+								</h:selectOneRadio>
+							</h:panelGrid>
+							<h:outputLabel value="Tipo de reserva legal" />
+							<h:panelGrid
+								style="margin-top: -12px;margin-left: -2px; padding-bottom: 10px;">
+								<h:selectOneRadio id="rbtTipoArl" layout="pageDirection"
+									value="#{relatorioImovelRuralController.filtroImovelRuralRelatorioDTO.tipoArl}"
+									valueChangeListener="#{relatorioImovelRuralController.changeTipoRl()}">
+
+									<f:selectItem itemLabel="No próprio imóvel" itemValue="2"
+										itemDisabled="#{relatorioImovelRuralController.disableNoProprioImovel()}" />
+
+									<f:selectItem itemLabel="Em condomínio" itemValue="1"
+										itemDisabled="#{relatorioImovelRuralController.disableEmCondominio()}" />
+
+									<f:selectItem itemLabel="Em compensação por Servidão Ambiental"
+										itemValue="4"
+										itemDisabled="#{relatorioImovelRuralController.disableEmCompensacaoPorServidao()}" />
+
+									<f:selectItem
+										itemLabel="Em compensação entre imóveis de mesmo proprietário"
+										itemValue="3"
+										itemDisabled="#{relatorioImovelRuralController.disableEmcompensacaoEntreImoveisMesmoProprietario()}" />
+
+									<f:convertNumber integerOnly="true" />
+
+									<p:ajax event="change" process="rbtTipoArl" global="false"
+										update=":formRelatorioImovelRural:fieldFiltro" />
+								</h:selectOneRadio>
+							</h:panelGrid>
+
+							<h:outputLabel value="Documento final" />
+							<h:panelGrid
+								style="margin-top: -12px;margin-left: -2px; padding-bottom: 10px;">
+								<h:selectOneRadio id="rbtDocumentoFinal" layout="pageDirection"
+									valueChangeListener="#{relatorioImovelRuralController.changeDocumentoFinal()}"
+									value="#{relatorioImovelRuralController.filtroImovelRuralRelatorioDTO.documentoFinal}">
+									<f:selectItem itemLabel="Aviso" itemValue="4"
+										itemDisabled="#{relatorioImovelRuralController.disableAviso()}" />
+									<f:selectItem itemLabel="Termo de Compromisso" itemValue="3"
+										itemDisabled="#{relatorioImovelRuralController.disableTermoCompromisso()}" />
+									<f:selectItem itemLabel="Certificado de Inscrição"
+										itemValue="2"
+										itemDisabled="#{relatorioImovelRuralController.disableCertificado()}" />
+									<f:convertNumber integerOnly="true" />
+									<p:ajax event="change" process="rbtDocumentoFinal"
+										global="false" update=":formRelatorioImovelRural:fieldFiltro" />
+								</h:selectOneRadio>
+							</h:panelGrid>
+							<h:panelGrid style="margin-top:-9px;" columns="1">
+								<h:outputLabel for="idNumeroTermoCertificado"
+									value="Nº do Documento" />
+								<p:inputMask id="idNumeroTermoCertificado"
+									mask="?9999.999.999999" placeHolder=" " style="width: 155px;"
+									widgetVar="idNumeroTermoCertificado"
+									value="#{relatorioImovelRuralController.filtroImovelRuralRelatorioDTO.numCertificado}"
+									onchange="desabilitaBotaoImprimir();"
+									disabled="#{!relatorioImovelRuralController.termoOuCertificadoselecionaStatusCadastroSelecionado()}">
+									<p:ajax event="change" />
+								</p:inputMask>
+							</h:panelGrid>
+						</h:panelGrid>
+
+						<h:panelGrid
+							style="height: 450px;margin-left: -45px;">
+							<h:outputLabel value="Questionário" />
+							<h:panelGrid style="margin-top: -12px;margin-left: -2px;">
+								<h:selectOneRadio id="rbtQuestionario" layout="pageDirection"
+									value="#{relatorioImovelRuralController.filtroImovelRuralRelatorioDTO.questionario}"
+									valueChangeListener="#{relatorioImovelRuralController.changeQuestionario()}">
+									<f:selectItem itemLabel="Preenchido" itemValue="1"
+										itemDisabled="#{relatorioImovelRuralController.disableQuestionarioPreenchido()}" />
+									<f:selectItem itemLabel="Não preenchido" itemValue="2"
+										itemDisabled="#{relatorioImovelRuralController.disableQuestionarioNaoPreenchido()}" />
+									<f:convertNumber integerOnly="true" />
+									<p:ajax event="change" process="rbtQuestionario" global="false"
+										update=":formRelatorioImovelRural:fieldFiltro" />
+								</h:selectOneRadio>
+							</h:panelGrid>
+
+							<h:outputLabel value="Tipos de cadastros" />
+							<h:panelGrid columns="2"
+								style="margin-top: -6px;margin-left: -2px; padding-bottom: 10px;">
+								<h:selectBooleanCheckbox
+									disabled="#{relatorioImovelRuralController.disableBndes()}"
+									value="#{relatorioImovelRuralController.filtroImovelRuralRelatorioDTO.cadastroBndes}">
+									<p:ajax event="change"
+										listener="#{relatorioImovelRuralController.validaVisualizacaoCamposBuscaAvancada()}"
+										update=":formRelatorioImovelRural:fieldFiltro" />
+								</h:selectBooleanCheckbox>
+								<h:outputText value="BNDES" />
+								<h:selectBooleanCheckbox
+									disabled="#{relatorioImovelRuralController.disableCda()}"
+									value="#{relatorioImovelRuralController.filtroImovelRuralRelatorioDTO.cadastroCda}">
+									<p:ajax event="change"
+										listener="#{relatorioImovelRuralController.validaVisualizacaoCamposBuscaAvancada()}"
+										update=":formRelatorioImovelRural:fieldFiltro" />
+								</h:selectBooleanCheckbox>
+								<h:outputText value="CDA" />
+								<h:selectBooleanCheckbox
+									disabled="#{relatorioImovelRuralController.disableIncra()}"
+									value="#{relatorioImovelRuralController.filtroImovelRuralRelatorioDTO.cadastroIncra}">
+									<p:ajax event="change"
+										listener="#{relatorioImovelRuralController.validaVisualizacaoCamposBuscaAvancada()}"
+										update=":formRelatorioImovelRural:fieldFiltro" />
+								</h:selectBooleanCheckbox>
+								<h:outputText value="INCRA" />
+							</h:panelGrid>
+							
+							<h:outputLabel value="Módulos de cadastro" />
+							<h:panelGrid columns="2"
+								style="margin-top: -6px;margin-left: -2px; padding-bottom: 10px;">
+								<h:selectBooleanCheckbox
+									disabled="#{relatorioImovelRuralController.disableImovelRural()}"
+									value="#{relatorioImovelRuralController.filtroImovelRuralRelatorioDTO.moduloImovelRural}">
+									<p:ajax event="change"
+										listener="#{relatorioImovelRuralController.validaVisualizacaoCamposBuscaAvancada()}"
+										update=":formRelatorioImovelRural:fieldFiltro" />
+								</h:selectBooleanCheckbox>
+								<h:outputText value="Imóvel Rural" />
+								<h:selectBooleanCheckbox
+									disabled="#{relatorioImovelRuralController.disableAssentamento()}"
+									value="#{relatorioImovelRuralController.filtroImovelRuralRelatorioDTO.moduloAssentamento}">
+									<p:ajax event="change"
+										listener="#{relatorioImovelRuralController.validaVisualizacaoCamposBuscaAvancada()}"
+										update=":formRelatorioImovelRural:fieldFiltro" />
+								</h:selectBooleanCheckbox>
+								<h:outputText value="Assentamento" />
+								<h:selectBooleanCheckbox
+									disabled="#{relatorioImovelRuralController.disablePCT()}"
+									value="#{relatorioImovelRuralController.filtroImovelRuralRelatorioDTO.moduloPCT}">
+									<p:ajax event="change"
+										listener="#{relatorioImovelRuralController.validaVisualizacaoCamposBuscaAvancada()}"
+										update=":formRelatorioImovelRural:fieldFiltro" />
+								</h:selectBooleanCheckbox>
+								<h:outputText value="Povos e Comunidades Tradicionais" />
+							</h:panelGrid>
+
+							<h:outputLabel value="Imóveis com" />
+							<h:panelGrid columns="2"
+								style="margin-top: -6px;margin-left: -2px; padding-bottom: 10px;">
+
+								<h:selectBooleanCheckbox
+									value="#{relatorioImovelRuralController.filtroImovelRuralRelatorioDTO.praCadastrado}"
+									disabled="#{relatorioImovelRuralController.disablePraCadastrado()}">
+									<p:ajax event="change"
+										listener="#{relatorioImovelRuralController.validaVisualizacaoCamposBuscaAvancada()}"
+										update=":formRelatorioImovelRural:fieldFiltro" />
+								</h:selectBooleanCheckbox>
+								<h:outputText value="PRA cadastrado" />
+
+								<h:selectBooleanCheckbox
+									disabled="#{relatorioImovelRuralController.disableNumeroCar()}"
+									value="#{relatorioImovelRuralController.filtroImovelRuralRelatorioDTO.numeroCar}">
+									<p:ajax event="change"
+										listener="#{relatorioImovelRuralController.validaVisualizacaoCamposBuscaAvancada()}"
+										update=":formRelatorioImovelRural:fieldFiltro" />
+								</h:selectBooleanCheckbox>
+								<h:outputText value="Número CAR" />
+
+								<h:selectBooleanCheckbox
+									value="#{relatorioImovelRuralController.filtroImovelRuralRelatorioDTO.rlAprovada}"
+									disabled="#{relatorioImovelRuralController.disableRlAprovada()}">
+									<p:ajax event="change"
+										listener="#{relatorioImovelRuralController.validaVisualizacaoCamposBuscaAvancada()}"
+										update=":formRelatorioImovelRural:fieldFiltro" />
+								</h:selectBooleanCheckbox>
+								<h:outputText value="RL aprovada" />
+
+								<h:selectBooleanCheckbox
+									disabled="#{relatorioImovelRuralController.disableAreaRlMenorQue20PorCento}"
+									value="#{relatorioImovelRuralController.filtroImovelRuralRelatorioDTO.rlMenorQueVintePorCento}">
+									<p:ajax event="change"
+										listener="#{relatorioImovelRuralController.validaVisualizacaoCamposBuscaAvancada()}"
+										update=":formRelatorioImovelRural:fieldFiltro" />
+								</h:selectBooleanCheckbox>
+								<h:outputText
+									value="Área de RL menor que 20% da área do imóvel rural" />
+
+								<h:selectBooleanCheckbox
+									disabled="#{relatorioImovelRuralController.disableSobreposicaoRlApp()}"
+									value="#{relatorioImovelRuralController.filtroImovelRuralRelatorioDTO.sobreposicaoRLAPP}">
+									<p:ajax event="change"
+										listener="#{relatorioImovelRuralController.validaVisualizacaoCamposBuscaAvancada()}"
+										update=":formRelatorioImovelRural:fieldFiltro" />
+								</h:selectBooleanCheckbox>
+								<h:outputText value="Sobreposição de RL e APP" />
+
+								<h:selectBooleanCheckbox
+									value="#{relatorioImovelRuralController.filtroImovelRuralRelatorioDTO.outroPassivoAmbiental}"
+									disabled="#{relatorioImovelRuralController.disableOutroPassivoAmbiental()}">
+									<p:ajax event="change"
+										listener="#{relatorioImovelRuralController.validaVisualizacaoCamposBuscaAvancada()}"
+										update=":formRelatorioImovelRural:fieldFiltro" />
+								</h:selectBooleanCheckbox>
+								<h:outputText value="Outro passivo ambiental fora de APP e RL" />
+								
+								<h:selectBooleanCheckbox
+									value="#{relatorioImovelRuralController.filtroImovelRuralRelatorioDTO.limiteBloqueado}"
+									disabled="#{relatorioImovelRuralController.disableLimiteBloqueado()}">
+									<p:ajax event="change"
+										listener="#{relatorioImovelRuralController.validaVisualizacaoCamposBuscaAvancada()}"
+										update=":formRelatorioImovelRural:fieldFiltro" />
+								</h:selectBooleanCheckbox>
+								<h:outputText value="Limite Bloqueado" />
+
+
+							</h:panelGrid>
+							<p:spacer width="1px;" style="margin-top:-9px;" height="20px" />
+						</h:panelGrid>
+					</h:panelGrid>
+				</h:panelGrid>
+			</h:panelGrid>
+			<br />
+
+
+			<h:panelGrid id="panelColunasBuscaAvancada">
+
+				<h:panelGrid width="766px" columns="1"
+					style="border-top: 1px dashed #727272; padding-top: 38px;">
+					<h:outputLabel styleClass="titulo-grupo"
+						value="Colunas para exibição (Máximo de 6)" />
+					<h:panelGrid columns="7" id="panelColunas"
+						style="padding: 4px 0 13px 0;">
+						<h:panelGrid columns="2" style="margin-top: 16px;">
+							<h:selectBooleanCheckbox
+								value="#{relatorioImovelRuralController.colunasExibirImovelRuralRelatorioDTO.nomImovelRural}"
+								disabled="#{relatorioImovelRuralController.colunasExibirImovelRuralRelatorioDTO.limiteExibicaoAtingido() and !relatorioImovelRuralController.colunasExibirImovelRuralRelatorioDTO.nomImovelRural}">
+								<p:ajax event="change"
+									update="formRelatorioImovelRural:panelColunas formRelatorioImovelRural:panelTableImoveis"
+									listener="#{relatorioImovelRuralController.createDynamicColumns()}" />
+							</h:selectBooleanCheckbox>
+							<h:outputText value="Nome do imóvel rural" />
+
+							<h:selectBooleanCheckbox
+								value="#{relatorioImovelRuralController.colunasExibirImovelRuralRelatorioDTO.nomMunicipio}"
+								disabled="#{relatorioImovelRuralController.colunasExibirImovelRuralRelatorioDTO.limiteExibicaoAtingido() and !relatorioImovelRuralController.colunasExibirImovelRuralRelatorioDTO.nomMunicipio}">
+								<p:ajax event="change"
+									update="formRelatorioImovelRural:panelColunas formRelatorioImovelRural:panelTableImoveis"
+									listener="#{relatorioImovelRuralController.createDynamicColumns()}" />
+							</h:selectBooleanCheckbox>
+							<h:outputText value="Município" />
+
+							<h:selectBooleanCheckbox
+								value="#{relatorioImovelRuralController.colunasExibirImovelRuralRelatorioDTO.nomStatusCadastro}"
+								disabled="#{relatorioImovelRuralController.colunasExibirImovelRuralRelatorioDTO.limiteExibicaoAtingido() and !relatorioImovelRuralController.colunasExibirImovelRuralRelatorioDTO.nomStatusCadastro}">
+								<p:ajax event="change"
+									update="formRelatorioImovelRural:panelColunas formRelatorioImovelRural:panelTableImoveis"
+									listener="#{relatorioImovelRuralController.createDynamicColumns()}" />
+							</h:selectBooleanCheckbox>
+							<h:outputText value="#{bundle.cefir_lbl_status_cadastro}" />
+
+							<h:selectBooleanCheckbox
+								value="#{relatorioImovelRuralController.colunasExibirImovelRuralRelatorioDTO.dtaPrimeiraFinalizacao}"
+								disabled="#{relatorioImovelRuralController.colunasExibirImovelRuralRelatorioDTO.limiteExibicaoAtingido() and !relatorioImovelRuralController.colunasExibirImovelRuralRelatorioDTO.dtaPrimeiraFinalizacao}">
+								<p:ajax event="change"
+									update="formRelatorioImovelRural:panelColunas formRelatorioImovelRural:panelTableImoveis"
+									listener="#{relatorioImovelRuralController.createDynamicColumns()}" />
+							</h:selectBooleanCheckbox>
+							<h:outputText
+								value="#{bundle.cefir_lbl_dtc_primeira_finalizacao}" />
+
+						</h:panelGrid>
+						<p:spacer width="0px" height="0px" />
+						<h:panelGrid columns="2">
+							<h:selectBooleanCheckbox
+								rendered="#{relatorioImovelRuralController.requerenteVisivel}"
+								value="#{relatorioImovelRuralController.colunasExibirImovelRuralRelatorioDTO.nomRequerente}"
+								disabled="#{relatorioImovelRuralController.colunasExibirImovelRuralRelatorioDTO.limiteExibicaoAtingido() and !relatorioImovelRuralController.colunasExibirImovelRuralRelatorioDTO.nomRequerente}">
+								<p:ajax event="change"
+									update="formRelatorioImovelRural:panelColunas formRelatorioImovelRural:panelTableImoveis"
+									listener="#{relatorioImovelRuralController.createDynamicColumns()}" />
+							</h:selectBooleanCheckbox>
+							<h:outputText value="#{bundle.cefir_lbl_nome_requerente}"
+								rendered="#{relatorioImovelRuralController.requerenteVisivel}" />
+
+							<h:selectBooleanCheckbox
+								value="#{relatorioImovelRuralController.colunasExibirImovelRuralRelatorioDTO.valArea}"
+								disabled="#{relatorioImovelRuralController.colunasExibirImovelRuralRelatorioDTO.limiteExibicaoAtingido() and !relatorioImovelRuralController.colunasExibirImovelRuralRelatorioDTO.valArea}">
+								<p:ajax event="change"
+									update="formRelatorioImovelRural:panelColunas formRelatorioImovelRural:panelTableImoveis"
+									listener="#{relatorioImovelRuralController.createDynamicColumns()}" />
+							</h:selectBooleanCheckbox>
+							<h:outputText value="#{bundle.cefir_msg_relatorio_area_cartorio}" />
+
+							<h:selectBooleanCheckbox
+								value="#{relatorioImovelRuralController.colunasExibirImovelRuralRelatorioDTO.qtdModuloFiscal}"
+								disabled="#{relatorioImovelRuralController.colunasExibirImovelRuralRelatorioDTO.limiteExibicaoAtingido() and !relatorioImovelRuralController.colunasExibirImovelRuralRelatorioDTO.qtdModuloFiscal}">
+								<p:ajax event="change"
+									update="formRelatorioImovelRural:panelColunas formRelatorioImovelRural:panelTableImoveis"
+									listener="#{relatorioImovelRuralController.createDynamicColumns()}" />
+							</h:selectBooleanCheckbox>
+							<h:outputText
+								value="#{bundle.cefir_lbl_quantidade_modulos_fiscais}"
+								listener="#{relatorioImovelRuralController.createDynamicColumns()}" />
+
+							<h:selectBooleanCheckbox
+								value="#{relatorioImovelRuralController.colunasExibirImovelRuralRelatorioDTO.nomStatusReservaLegal}"
+								disabled="#{relatorioImovelRuralController.colunasExibirImovelRuralRelatorioDTO.limiteExibicaoAtingido() and !relatorioImovelRuralController.colunasExibirImovelRuralRelatorioDTO.nomStatusReservaLegal}">
+								<p:ajax event="change"
+									update="formRelatorioImovelRural:panelColunas formRelatorioImovelRural:panelTableImoveis"
+									listener="#{relatorioImovelRuralController.createDynamicColumns()}" />
+							</h:selectBooleanCheckbox>
+							<h:outputText value="#{bundle.cefir_lbl_status_reserva_legal}" />
+							<h:selectBooleanCheckbox
+								value="#{relatorioImovelRuralController.colunasExibirImovelRuralRelatorioDTO.nomeCadastrante}"
+								disabled="#{relatorioImovelRuralController.colunasExibirImovelRuralRelatorioDTO.limiteExibicaoAtingido() and !relatorioImovelRuralController.colunasExibirImovelRuralRelatorioDTO.nomeCadastrante}">								
+								<p:ajax event="change"
+									update="formRelatorioImovelRural:panelColunas formRelatorioImovelRural:panelTableImoveis"
+									listener="#{relatorioImovelRuralController.createDynamicColumns()}" />
+							</h:selectBooleanCheckbox>
+							<h:outputText value="Nome do cadastrante" />
+						</h:panelGrid>
+						<p:spacer width="0px" height="0px" />
+						<h:panelGrid columns="2">
+							<h:selectBooleanCheckbox
+								value="#{relatorioImovelRuralController.colunasExibirImovelRuralRelatorioDTO.numContratoConvenio}"
+								disabled="#{relatorioImovelRuralController.colunasExibirImovelRuralRelatorioDTO.limiteExibicaoAtingido() and !relatorioImovelRuralController.colunasExibirImovelRuralRelatorioDTO.numContratoConvenio}">
+								<p:ajax event="change"
+									update="formRelatorioImovelRural:panelColunas formRelatorioImovelRural:panelTableImoveis"
+									listener="#{relatorioImovelRuralController.createDynamicColumns()}" />
+							</h:selectBooleanCheckbox>
+							<h:outputText
+								value="#{bundle.cefir_lbl_relatorio_contrato_convenio}" />
+
+							<h:selectBooleanCheckbox
+								value="#{relatorioImovelRuralController.colunasExibirImovelRuralRelatorioDTO.nomTipoDocumento}"
+								disabled="#{relatorioImovelRuralController.colunasExibirImovelRuralRelatorioDTO.limiteExibicaoAtingido() and !relatorioImovelRuralController.colunasExibirImovelRuralRelatorioDTO.nomTipoDocumento}">
+								<p:ajax event="change"
+									update="formRelatorioImovelRural:panelColunas formRelatorioImovelRural:panelTableImoveis"
+									listener="#{relatorioImovelRuralController.createDynamicColumns()}" />
+							</h:selectBooleanCheckbox>
+							<h:outputText value="#{bundle.cefir_lbl_tipo_documento}" />
+
+							<h:selectBooleanCheckbox
+								rendered="#{!security.temAcessoPorPerfil('2')}"
+								value="#{relatorioImovelRuralController.colunasExibirImovelRuralRelatorioDTO.numCpfCnpjRequerente}"
+								disabled="#{relatorioImovelRuralController.colunasExibirImovelRuralRelatorioDTO.limiteExibicaoAtingido() and !relatorioImovelRuralController.colunasExibirImovelRuralRelatorioDTO.numCpfCnpjRequerente}">
+								<p:ajax event="change"
+									update="formRelatorioImovelRural:panelColunas formRelatorioImovelRural:panelTableImoveis"
+									listener="#{relatorioImovelRuralController.createDynamicColumns()}" />
+							</h:selectBooleanCheckbox>
+							<h:outputText value="#{bundle.cefir_lbl_cpf_cnpj_requerente}"
+								rendered="#{!security.temAcessoPorPerfil('2')}" />
+
+							<h:selectBooleanCheckbox
+								value="#{relatorioImovelRuralController.colunasExibirImovelRuralRelatorioDTO.dtaFinalizacao}"
+								disabled="#{relatorioImovelRuralController.colunasExibirImovelRuralRelatorioDTO.limiteExibicaoAtingido() and !relatorioImovelRuralController.colunasExibirImovelRuralRelatorioDTO.dtaFinalizacao}">
+								<p:ajax event="change"
+									update="formRelatorioImovelRural:panelColunas formRelatorioImovelRural:panelTableImoveis"
+									listener="#{relatorioImovelRuralController.createDynamicColumns()}" />
+							</h:selectBooleanCheckbox>
+							<h:outputText value="Data da última finalização" />
+
+						</h:panelGrid>
+						<p:spacer width="0px" height="0px" />
+						<h:panelGrid columns="2" style="margin-top: -20px;">
+							<h:selectBooleanCheckbox
+								value="#{relatorioImovelRuralController.colunasExibirImovelRuralRelatorioDTO.dtaSincronizacao}"
+								disabled="#{relatorioImovelRuralController.colunasExibirImovelRuralRelatorioDTO.limiteExibicaoAtingido() and !relatorioImovelRuralController.colunasExibirImovelRuralRelatorioDTO.dtaSincronizacao}">
+								<p:ajax event="change"
+									update="formRelatorioImovelRural:panelColunas formRelatorioImovelRural:panelTableImoveis"
+									listener="#{relatorioImovelRuralController.createDynamicColumns()}" />
+							</h:selectBooleanCheckbox>
+							<h:outputText value="Data da sincronização" />
+
+							<h:selectBooleanCheckbox
+								rendered="#{relatorioImovelRuralController.requerenteVisivel}"
+								value="#{relatorioImovelRuralController.colunasExibirImovelRuralRelatorioDTO.proprietario}"
+								disabled="#{relatorioImovelRuralController.colunasExibirImovelRuralRelatorioDTO.limiteExibicaoAtingido() and !relatorioImovelRuralController.colunasExibirImovelRuralRelatorioDTO.proprietario}">
+								<p:ajax event="change"
+									update="formRelatorioImovelRural:panelColunas formRelatorioImovelRural:panelTableImoveis"
+									listener="#{relatorioImovelRuralController.createDynamicColumns()}" />
+							</h:selectBooleanCheckbox>
+							<h:outputText value="#{bundle.cefir_lbl_proprietario}" />
+							<h:selectBooleanCheckbox
+								value="#{relatorioImovelRuralController.colunasExibirImovelRuralRelatorioDTO.responsavelTecnico}"
+								disabled="#{relatorioImovelRuralController.colunasExibirImovelRuralRelatorioDTO.limiteExibicaoAtingido() and !relatorioImovelRuralController.colunasExibirImovelRuralRelatorioDTO.responsavelTecnico}">
+								<p:ajax event="change"
+									update="formRelatorioImovelRural:panelColunas formRelatorioImovelRural:panelTableImoveis"
+									listener="#{relatorioImovelRuralController.createDynamicColumns()}" />
+							</h:selectBooleanCheckbox>
+							<h:outputText value="Responsável técnico" />
+							<h:selectBooleanCheckbox
+								value="#{relatorioImovelRuralController.colunasExibirImovelRuralRelatorioDTO.cpfCadastrante}"
+								disabled="#{relatorioImovelRuralController.colunasExibirImovelRuralRelatorioDTO.limiteExibicaoAtingido() and !relatorioImovelRuralController.colunasExibirImovelRuralRelatorioDTO.cpfCadastrante}">								
+								<p:ajax event="change"
+									update="formRelatorioImovelRural:panelColunas formRelatorioImovelRural:panelTableImoveis"
+									listener="#{relatorioImovelRuralController.createDynamicColumns()}" />
+							</h:selectBooleanCheckbox>
+							<h:outputText value="CPF do cadastrante" />
+						</h:panelGrid>
+					</h:panelGrid>
+				</h:panelGrid>
+
+			</h:panelGrid>
+
+			<br />
+
+			<h:panelGrid width="100%" id="panelTableImoveis">
+				<h:panelGrid columns="2" style="width: 90%;text-align: right;">
+					<h:panelGrid style="width: 677px; text-align: right;">
+						<p:commandButton id="btnConsultaImovel" value="Consultar"
+							action="#{relatorioImovelRuralController.consultarImoveisRuraisRelatorio()}"
+							process="@this" update="formRelatorioImovelRural"
+							widgetVar="btnConsultaImovel">
+						</p:commandButton>
+					</h:panelGrid>
+					<h:panelGrid style="text-align: right;">
+						<p:commandButton id="btnLimparFiltros" value="Limpar"
+							action="#{relatorioImovelRuralController.limparFiltrosImovelRuralRelatorio()}"
+							update="formRelatorioImovelRural" process="@this"
+							widgetVar="btnLimparFiltros">
+						</p:commandButton>
+					</h:panelGrid>
+				</h:panelGrid>
+				<br />
+				<br />
+
+				<h:panelGrid id="tabelaImoveis">
+					<p:dataTable id="dataTableRelImoveis" var="imovelDTO"
+						value="#{relatorioImovelRuralController.listaImoveisDT}"
+						lazy="true" paginator="true" rows="8" paginatorPosition="bottom"
+						paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}"
+						emptyMessage="#{bundle.cefir_msg_A012}"
+						widgetVar="dataTableRelImoveis" style="width: 100%;"
+						styleClass="middle"
+						rendered="#{relatorioImovelRuralController.mostrarTabela and relatorioImovelRuralController.colunasExibirImovelRuralRelatorioDTO.qtdColunasExibir > 0}">
+
+						<p:columnGroup type="header">
+							<p:row>
+								<p:column colspan="7"
+									style="vertical-align: middle;  display: inline-block; height: 18px; margin-top: 5px;"
+									headerText="#{bundle.cefir_lbl_lista_imoveis_rurais}" />
+							</p:row>
+							<p:row>
+								<p:column headerText="Nome&lt;br/&gt; Imóvel Rural"
+									style="min-width: 90px;"
+									styleClass="headerTableRelatorioImovel"
+									rendered="#{relatorioImovelRuralController.colunasExibirImovelRuralRelatorioDTO.nomImovelRural}" />
+
+								<p:column headerText="Município"
+									style="vertical-align: middle;  display: inline-block; height: 18px;"
+									styleClass="headerTableRelatorioImovel"
+									rendered="#{relatorioImovelRuralController.colunasExibirImovelRuralRelatorioDTO.nomMunicipio}" />
+
+								<p:column headerText="Status&lt;br/&gt; Cadastro"
+									style="min-width:73px;" styleClass="headerTableRelatorioImovel"
+									rendered="#{relatorioImovelRuralController.colunasExibirImovelRuralRelatorioDTO.nomStatusCadastro}" />
+
+								<p:column
+									headerText="Data&lt;br/&gt; Primeira&lt;br/&gt; Finalização"
+									styleClass="headerTableRelatorioImovel"
+									rendered="#{relatorioImovelRuralController.colunasExibirImovelRuralRelatorioDTO.dtaPrimeiraFinalizacao}" />
+
+								<p:column headerText="Requerente"
+									style="vertical-align: middle;  display: inline-block; height: 18px;"
+									styleClass="headerTableRelatorioImovel"
+									rendered="#{relatorioImovelRuralController.colunasExibirImovelRuralRelatorioDTO.nomRequerente}" />
+
+								<p:column headerText="Área&lt;br/&gt; Cadastrada(ha)"
+									style="min-width:77px;" styleClass="headerTableRelatorioImovel"
+									rendered="#{relatorioImovelRuralController.colunasExibirImovelRuralRelatorioDTO.valArea}" />
+
+								<p:column headerText="Quantidade&lt;br/&gt; Módulos Fiscais"
+									escape="false" styleClass="headerTableRelatorioImovel"
+									rendered="#{relatorioImovelRuralController.colunasExibirImovelRuralRelatorioDTO.qtdModuloFiscal}" />
+
+								<p:column headerText="Status &lt;br/&gt; Reserva Legal"
+									styleClass="headerTableRelatorioImovel"
+									rendered="#{relatorioImovelRuralController.colunasExibirImovelRuralRelatorioDTO.nomStatusReservaLegal}" />
+
+								<p:column headerText="Contrato&lt;br/&gt;Convênio"
+									styleClass="headerTableRelatorioImovel"
+									rendered="#{relatorioImovelRuralController.colunasExibirImovelRuralRelatorioDTO.numContratoConvenio}" />
+
+								<p:column headerText="Tipo Documento&lt;br/&gt; Cadastrado"
+									styleClass="headerTableRelatorioImovel"
+									rendered="#{relatorioImovelRuralController.colunasExibirImovelRuralRelatorioDTO.nomTipoDocumento}" />
+
+								<p:column headerText="CPF/CNPJ&lt;br/&gt; Requerente"
+									escape="false" styleClass="headerTableRelatorioImovel"
+									rendered="#{relatorioImovelRuralController.colunasExibirImovelRuralRelatorioDTO.numCpfCnpjRequerente and !security.temAcessoPorPerfil('2')}" />
+
+								<p:column headerText="Data Última&lt;br/&gt; Finalização"
+									styleClass="headerTableRelatorioImovel"
+									rendered="#{relatorioImovelRuralController.colunasExibirImovelRuralRelatorioDTO.dtaFinalizacao}" />
+
+								<p:column headerText="Data&lt;br/&gt; Sincronização"
+									styleClass="headerTableRelatorioImovel"
+									rendered="#{relatorioImovelRuralController.colunasExibirImovelRuralRelatorioDTO.dtaSincronizacao}" />
+
+								<p:column headerText="Proprietário/&lt;br/&gt; Possuidor"
+									escape="false" styleClass="headerTableRelatorioImovel"
+									rendered="#{relatorioImovelRuralController.colunasExibirImovelRuralRelatorioDTO.proprietario}" />
+
+								<p:column headerText="Responsável técnico" 
+									style="min-width: 90px;"
+									styleClass="headerTableRelatorioImovel"
+									rendered="#{relatorioImovelRuralController.colunasExibirImovelRuralRelatorioDTO.responsavelTecnico}" />
+								
+								<p:column headerText="CPF do cadastrante" 
+									style="min-width: 90px;"
+									styleClass="headerTableRelatorioImovel"
+									rendered="#{relatorioImovelRuralController.colunasExibirImovelRuralRelatorioDTO.cpfCadastrante}" />
+									
+								<p:column headerText="Nome do cadastrante" 
+									style="min-width: 90px;"
+									styleClass="headerTableRelatorioImovel"
+									rendered="#{relatorioImovelRuralController.colunasExibirImovelRuralRelatorioDTO.nomeCadastrante}" />
+
+								<p:column headerText="Ações"
+									style="vertical-align: middle;  display: inline-block; height: 18px; text-align: center;  min-width: 50px; max-width: 70px;"
+									styleClass="headerTableRelatorioImovel"
+									rendered="#{relatorioImovelRuralController.colunasExibirImovelRuralRelatorioDTO.qtdColunasExibir > 0 and !security.temAcessoPorPerfil('2')}" />
+							</p:row>
+						</p:columnGroup>
+
+						<p:column style="text-align: left; min-width: 140px;"
+							rendered="#{relatorioImovelRuralController.colunasExibirImovelRuralRelatorioDTO.nomImovelRural}">
+							<h:outputText value="#{imovelDTO.nomImovelRural}" />
+						</p:column>
+
+						<p:column style="text-align: left; min-width: 80px;"
+							rendered="#{relatorioImovelRuralController.colunasExibirImovelRuralRelatorioDTO.nomMunicipio}">
+							<h:outputText value="#{imovelDTO.nomMunicipio}" />
+						</p:column>
+
+						<p:column style="text-align: left; min-width: 70px;"
+							rendered="#{relatorioImovelRuralController.colunasExibirImovelRuralRelatorioDTO.nomStatusCadastro}">
+							<h:outputText value="#{imovelDTO.nomStatusCadastro}" />
+						</p:column>
+
+						<p:column style="text-align: left;"
+							rendered="#{relatorioImovelRuralController.colunasExibirImovelRuralRelatorioDTO.dtaPrimeiraFinalizacao}">
+							<h:outputText value="#{imovelDTO.dtaPrimeiraFinalizacao}">
+								<f:convertDateTime pattern="dd/MM/yyyy" locale="pt,BR" />
+							</h:outputText>
+						</p:column>
+
+						<p:column style="text-align: left;"
+							rendered="#{relatorioImovelRuralController.colunasExibirImovelRuralRelatorioDTO.nomRequerente}">
+							<h:outputText value="#{imovelDTO.nomRequerente}" />
+						</p:column>
+						<p:column style="text-align: left;"
+							rendered="#{relatorioImovelRuralController.colunasExibirImovelRuralRelatorioDTO.valArea}">
+							<h:outputText value="#{imovelDTO.valArea}">
+								<f:convertNumber pattern="#,###,##0.0000" locale="pt_BR" />
+							</h:outputText>
+						</p:column>
+
+						<p:column style="text-align: left;"
+							rendered="#{relatorioImovelRuralController.colunasExibirImovelRuralRelatorioDTO.qtdModuloFiscal}">
+							<h:outputText value="#{imovelDTO.qtdModuloFiscal}">
+								<f:convertNumber pattern="#,###,##0.0000" locale="pt_BR" />
+							</h:outputText>
+						</p:column>
+
+						<p:column style="text-align: left;"
+							rendered="#{relatorioImovelRuralController.colunasExibirImovelRuralRelatorioDTO.nomStatusReservaLegal}">
+							<h:outputText value="#{imovelDTO.nomStatusReservaLegal}" />
+						</p:column>
+
+						<p:column style="text-align: left;"
+							rendered="#{relatorioImovelRuralController.colunasExibirImovelRuralRelatorioDTO.numContratoConvenio}">
+							<h:outputText value="#{imovelDTO.numContratoConvenio}" />
+						</p:column>
+
+						<p:column style="text-align: left;"
+							rendered="#{relatorioImovelRuralController.colunasExibirImovelRuralRelatorioDTO.nomTipoDocumento}">
+							<h:outputText value="#{imovelDTO.nomTipoDocumento}" />
+						</p:column>
+
+						<p:column style="text-align: left;"
+							rendered="#{relatorioImovelRuralController.colunasExibirImovelRuralRelatorioDTO.numCpfCnpjRequerente and !security.temAcessoPorPerfil('2')}">
+
+							<h:outputText value="#{imovelDTO.numCpfCnpjRequerente}"
+								rendered="#{imovelDTO.cnpj}">
+								<f:converter converterId="cnpjConverter" />
+							</h:outputText>
+
+							<h:outputText value="#{imovelDTO.numCpfCnpjRequerente}"
+								rendered="#{imovelDTO.cpf}">
+								<f:converter converterId="cpfConverter" />
+							</h:outputText>
+						</p:column>
+
+
+						<p:column style="text-align: left;"
+							rendered="#{relatorioImovelRuralController.colunasExibirImovelRuralRelatorioDTO.dtaFinalizacao}">
+							<h:outputText value="#{imovelDTO.dtaFinalizacao}">
+								<f:convertDateTime for="dtcFormacao" pattern="dd/MM/yyyy"
+									locale="pt,BR" timeZone="Brazil/East" />
+							</h:outputText>
+						</p:column>
+
+						<p:column style="text-align: left;"
+							rendered="#{relatorioImovelRuralController.colunasExibirImovelRuralRelatorioDTO.dtaSincronizacao}">
+							<h:outputText value="#{imovelDTO.dtaSincronizacao}">
+								<f:convertDateTime for="dtcFormacao" pattern="dd/MM/yyyy"
+									locale="pt,BR" timeZone="Brazil/East" />
+							</h:outputText>
+						</p:column>
+
+						<p:column style="text-align: center;"
+							rendered="#{relatorioImovelRuralController.colunasExibirImovelRuralRelatorioDTO.proprietario}">
+							<p:commandLink
+								actionListener="#{relatorioImovelRuralController.carregarProprietarios(imovelDTO)}"
+								process="@this">
+								<h:graphicImage title="Visualizar proprietários"
+									value="/resources/img/ico-book.png" style="width: 20px;" />
+							</p:commandLink>
+						</p:column>
+						<p:column style="text-align: left;"
+							rendered="#{relatorioImovelRuralController.colunasExibirImovelRuralRelatorioDTO.responsavelTecnico}">
+							<h:outputText value="#{imovelDTO.nomeResponsavelTecnico}" />
+						</p:column>
+						<!-- CPF do cadastrante -->
+						<p:column style="text-align: left;"
+							rendered="#{relatorioImovelRuralController.colunasExibirImovelRuralRelatorioDTO.cpfCadastrante}">
+							<h:outputText value="#{imovelDTO.cpfCadastrante}">
+								<f:converter converterId="cpfConverter" />								
+							</h:outputText>
+						</p:column>
+						<!-- Nome do cadastrante -->
+						<p:column style="text-align: left;"
+							rendered="#{relatorioImovelRuralController.colunasExibirImovelRuralRelatorioDTO.nomeCadastrante}">
+							<h:outputText value="#{imovelDTO.nomeCadastrante}" />
+						</p:column>
+
+						<p:column style="text-align: center; max-width: 80px;"
+							rendered="#{relatorioImovelRuralController.colunasExibirImovelRuralRelatorioDTO.qtdColunasExibir > 0 and !security.temAcessoPorPerfil('2')}">
+
+							<h:panelGrid style="color:white;" columns="4">
+								<p:commandLink id="btnVisualizarImovelRural" title="Visualizar"
+									action="#{detalharImovelRuralController.visualizarRelatorioImovelRural()}"
+									update=":formDetalharImovelRural"
+									oncomplete="dialogDetalharImovelRuralRelatorio.show()"
+									style="margin: 0.7px;" process="@this"
+									image="ui-icon ui-icon-close">
+									<h:graphicImage title="Visualizar"
+										value="/resources/img/ico-pesquisa.png" />
+									<f:ajax execute="@this" />
+									<f:setPropertyActionListener value="#{false}"
+										target="#{contextoController.imprimindoImovel}" />
+									<f:setPropertyActionListener
+										value="#{imovelDTO.ideImovelRural}"
+										target="#{detalharImovelRuralController.imovelRural.ideImovelRural}" />
+
+								</p:commandLink>
+
+								<h:commandLink id="lnkGerarCertificado"
+									title="Visualizar Certificado" ajax="false"
+									rendered="#{imovelDTO.stsCertificado and listarImovelRuralController.habilitarBotoesStatusPendenteIdeImovel(imovelDTO.ideImovelRural)}"
+									style="margin: 0.7px;">
+									<h:graphicImage title="Visualizar Certificado"
+										value="/resources/img/cicon.png" />
+									<p:fileDownload
+										value="#{listarImovelRuralController.getImprimirCertificado(imovelDTO.ideImovelRural)}" />
+								</h:commandLink>
+
+								<h:commandLink id="lnkGerarTermoDeCompromisso"
+									title="Visualizar Termo de Compromisso" ajax="false"
+									rendered="#{imovelDTO.termoCompromisso and listarImovelRuralController.habilitarBotoesStatusPendenteIdeImovel(imovelDTO.ideImovelRural)}"
+									style="margin: 0.7px;">
+									<h:graphicImage title="Visualizar Termo de Compromisso"
+										value="/resources/img/ticon.png" />
+									<p:fileDownload
+										value="#{listarImovelRuralController.getImprimirTermoDeCompromisso(imovelDTO.ideImovelRural)}" />
+								</h:commandLink>
+
+								<h:outputLink value="#{imovelDTO.urlReciboInscricao}"
+									rendered="${imovelDTO.urlReciboInscricao != nulL and listarImovelRuralController.habilitarBotoesStatusPendenteIdeImovel(imovelDTO.ideImovelRural)}"
+									style="margin: 0.7px;" target="_blank">
+									<h:graphicImage title="Visualizar Recibo SICAR"
+										value="/resources/img/icon_car.png" />
+								</h:outputLink>
+
+								<h:commandLink id="lnkGerarAvisoBndes"
+									title="Visualizar Aviso Projeto CAR/BNDES/INEMA" ajax="false"
+									rendered="${imovelDTO.avisoBndes and listarImovelRuralController.habilitarBotoesStatusPendenteIdeImovel(imovelDTO.ideImovelRural)}"
+									style="margin: 0.7px;">
+									<h:graphicImage
+										title="Visualizar Aviso Projeto CAR/BNDES/INEMA"
+										value="/resources/img/aicon.png" />
+									<p:fileDownload
+										value="#{listarImovelRuralController.getImprimirAvisoBndes(imovelDTO.ideImovelRural)}" />
+								</h:commandLink>
+
+								<p:commandLink id="btnImpImovelRural" title="Imprimir"
+									action="#{detalharImovelRuralController.imprimirRelatorioImovelRural()}"
+									style="margin: 0.7px;" image="ui-icon ui-icon-close"
+									oncomplete="javascript:abrirModal('#statusDialog'); document.getElementById('formRelatorioImovelRural:btnConsultaImovel').click(); window.open('/paginas/manter-imoveis/cefir/imprimirImovelRural.xhtml','imprimir','height=600,width=850,toolbar=no,scrollbars=yes,resizable=no');"
+									target="imprimir">
+									<h:graphicImage title="Imprimir"
+										value="/resources/img/ico-impressao.png" />
+									<f:setPropertyActionListener value="#{true}"
+										target="#{contextoController.imprimindoImovel}" />
+									<f:setPropertyActionListener
+										value="#{imovelDTO.ideImovelRural}"
+										target="#{detalharImovelRuralController.imovelRural.ideImovelRural}" />
+								</p:commandLink>
+							</h:panelGrid>
+						</p:column>
+					</p:dataTable>
+				</h:panelGrid>
+				<h:panelGrid width="768px" columns="2"
+					style="border-bottom: 1px dashed #727272; padding-top: 44px;"
+					rendered="#{not empty relatorioImovelRuralController.listaImoveis}">
+					<h:panelGrid style="margin: -30px 0px 0 -8px;" columns="2">
+						<h:outputText value="Total de imóveis: "
+							rendered="#{not empty relatorioImovelRuralController.listaImoveis}" />
+						<h:outputText style="font-size: 11px;font-weight: bold;"
+							value="#{relatorioImovelRuralController.dscTotalImoveis}"
+							rendered="#{not empty relatorioImovelRuralController.listaImoveis}" />
+
+						<h:outputText value="Total de área(ha): "
+							rendered="#{not empty relatorioImovelRuralController.listaImoveis}" />
+						<h:outputText style="font-size: 11px;font-weight: bold;"
+							value="#{relatorioImovelRuralController.dscAreaTotalImoveis}"
+							rendered="#{not empty relatorioImovelRuralController.listaImoveis}" />
+					</h:panelGrid>
+
+					<h:panelGrid style="margin: -30px -92px 1px 0px;" rendered="false">
+						<p:commandButton id="btnDownloadAvisoCarLote"
+							style="margin-left:8px;"
+							title="Essa opção permite baixar de uma só vez todos os arquivos Aviso Projeto CAR/BNDES/INEMA listados acima"
+							process="@this" immediate="true" value="Baixar tudo"
+							rendered="#{relatorioImovelRuralController.renderedBtnDownloadAvisoCarLote}"
+							widgetVar="btnDownloadAvisoCarLote"
+							action="#{relatorioImovelRuralController.getDownloadAvisoCarBndesLote()}" />
+					</h:panelGrid>
+				</h:panelGrid>
+
+				<h:panelGrid columns="2"
+					style="width:90%; text-align:right; padding: 30px 0 30px 0;">
+					<h:panelGrid style="width: 576px; text-align: right;">
+						<p:commandButton id="btnImprimirQuantitativo"
+							value="Relatório quantitativo"
+							oncomplete="dlgSelecionaTemas.show();" update="form_dialog_temas"
+							widgetVar="btnImprimirQuantitativo"
+							rendered="#{not empty relatorioImovelRuralController.listaImoveis}"
+							process="@this"
+							actionListener="#{relatorioImovelRuralController.limparSelecaoTemas()}">
+						</p:commandButton>
+					</h:panelGrid>
+					<h:panelGrid style="width:175px; text-align:right;">
+						<p:commandButton id="btnSelecionaTipoDeImpressao"
+							style="width: 175px;" value="Relatório completo"
+							widgetVar="btnSelecionaTipoDeImpressao"
+							oncomplete="dlgSelecionaTipoDeImpressao.show();"
+							rendered="#{not empty relatorioImovelRuralController.listaImoveis}"
+							global="true" />
+					</h:panelGrid>
+				</h:panelGrid>
+
+			</h:panelGrid>
+		</h:form>
+
+		<!-- Modal detalhar Imóvel Rural -->
+		<p:dialog id="dialogDetalharImovelRuralRelatorio" closable="true"
+			draggable="true" resizable="false" header="Detalhes do Imóvel Rural"
+			widgetVar="dialogDetalharImovelRuralRelatorio" position="center"
+			modal="true" height="600" width="850">
+
+			<ui:include
+				src="/paginas/manter-imoveis/cefir/detalharImovelRural.xhtml" />
+		</p:dialog>
+
+		<!-- Modal Proprietario Imóvel Rural -->
+		<p:dialog id="dlgBuscaProp"
+			header="Selecionar Proprietário / Justo Possuidor"
+			widgetVar="dlgBuscaProp" modal="true" style="text-align:center;"
+			resizable="false" position="center">
+
+			<ui:include
+				src="/paginas/manter-imoveis/cefir/includes/dialogProprietarioJustoPossuidor.xhtml" />
+		</p:dialog>
+
+		<!-- Modal Procurador Imóvel Rural -->
+		<p:dialog id="dlgBuscaProcurador"
+			header="Selecionar Procurador / Representante Legal"
+			widgetVar="dlgBuscaProcurador" modal="true"
+			style="text-align:center;" resizable="false" position="center">
+
+			<ui:include
+				src="/paginas/manter-imoveis/cefir/includes/dialogProcuradorRepresentanteLegal.xhtml" />
+		</p:dialog>
+
+		<!-- Modal requerente Seleção dos Temas -->
+		<p:dialog id="dlgSelecionaTemas" header="Temas"
+			widgetVar="dlgSelecionaTemas" modal="true" style="text-align:center;"
+			resizable="false" position="center">
+			<ui:include
+				src="/paginas/manter-imoveis/cefir/includes/dialogSelecaoTemas.xhtml" />
+		</p:dialog>
+
+		<!-- Modal Seleção tipo de impressão -->
+		<p:dialog id="dlgSelecionaTipoDeImpressao" header="Tipo de arquivo"
+			widgetVar="dlgSelecionaTipoDeImpressao" modal="true"
+			style="text-align:center;" resizable="false" position="center"
+			width="200">
+			<h:panelGrid columns="1" style="text-align: center">
+				<h:form>
+					<p:selectOneRadio id="selecaoTipoDeImpressao"
+						value="#{relatorioImovelRuralController.tipoDeImpressaoPdf}"
+						layout="pageDirection"
+						style="font-size: 13px; margin: 19px 0 0 10px;">
+						<f:selectItem itemLabel="PDF" itemValue="#{true}" />
+						<f:selectItem itemLabel="XLS" itemValue="#{false}" />
+					</p:selectOneRadio>
+					<h:panelGrid
+						style="position:center; margin-top:40px; margin-left: 26px;">
+						<p:commandButton style="font-size: 12px; width: 100px;"
+							value="Gerar" onclick="dlgSelecionaTipoDeImpressao.hide()"
+							widgetVar="btnImprimirListagem" ajax="false" global="false">
+							<p:fileDownload
+								value="#{relatorioImovelRuralController.impRelatorioImoveisRurais}" />
+						</p:commandButton>
+					</h:panelGrid>
+				</h:form>
+			</h:panelGrid>
+		</p:dialog>
+
+		<p:dialog id="dialogProprietarios" header="Proprietário/Possuidor"
+			widgetVar="dialogProprietarios" modal="true"
+			style="text-align:center;" resizable="false" position="center"
+			width="600" height="300">
+			<ui:include
+				src="/paginas/manter-imoveis/cefir/includes/dialog_proprietario.xhtml" />
+		</p:dialog>
+
+		<script type="text/javascript">
+			desabilitaBotaoImprimir();
+		</script>
+	</ui:define>
+</ui:composition>
+</html>

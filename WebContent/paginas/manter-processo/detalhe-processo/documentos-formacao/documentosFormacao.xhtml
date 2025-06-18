@@ -1,0 +1,587 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui">
+
+	<h:panelGrid columns="1" rendered="#{detalharProcessoController.renderedDocumentoFormacaoProcesso}">
+	
+		<h3><h:outputLabel styleClass="titulo-grupo" value="Documento(s) de Formação do Processo" /></h3>
+		
+		<p:dataTable id="tabelaDocumentosRequerimento" scrollHeight="100" scrollable="true" paginator="false"   
+			style="width:900px; border:1px solid #ccc;" value="#{detalharProcessoController.vwProcesso.documentoObrigatorioRequerimentoList}" 
+			var="docRequerimento" emptyMessage="Nenhum registro encontrado.">
+			
+			<p:column style="width:190px;">
+				<f:facet name="header" >Descrição</f:facet>
+	           	<h:outputText value="#{docRequerimento.ideDocumentoAto.ideDocumentoObrigatorio.nomDocumentoObrigatorio}" 
+	           		rendered="#{docRequerimento.ideDocumentoAto != null}"/>
+	           	<h:outputText value=" #{docRequerimento.ideDocumentoObrigatorio.nomDocumentoObrigatorio}" 
+	           		rendered="#{docRequerimento.ideDocumentoAto == null}"/>
+	        </p:column>
+	        
+	        <p:column style="width:175px;">
+				<f:facet name="header">Nome do Arquivo</f:facet>
+	           	<h:outputText value="#{docRequerimento.dscCaminhoArquivoNome}" />
+	        </p:column>
+	        
+	        <p:column style="width:87px;">
+				<f:facet name="header">Tamanho (KB)</f:facet>
+	           	<h:outputText value="#{docRequerimento.fileSizeFormated}" />
+	        </p:column>
+	        
+	        <p:column style="width:94px;">
+				<f:facet name="header">Gravado em</f:facet>
+	           	<h:outputText value="#{docRequerimento.dtcValidacao}">
+					<f:convertDateTime pattern="dd/MM/yyyy" locale="pt,BR" timeZone="Brazil/East"/>
+				</h:outputText>
+	        </p:column>
+	        
+	        <p:column style="width:84px;">
+				<f:facet name="header">Usuário</f:facet>
+	           	<h:outputText value="#{docRequerimento.idePessoaValidacao.pessoaFisica.nomPessoa}" />
+	        </p:column>
+	        
+	        <p:column style="width:63px;">
+				<f:facet name="header">Download</f:facet>
+	            
+	            <h:commandButton image="/resources/img/ico-download.png" immediate="true" title="Download" rendered="#{!detalharProcessoController.isLac(docRequerimento) and detalharProcessoController.isVerificaExistenciaArquivo(docRequerimento)}">
+	            	<f:setPropertyActionListener value="#{docRequerimento}" target="#{detalharProcessoController.documentoObrigatorioRequerimento}" />
+	            	<p:fileDownload value="#{detalharProcessoController.documentoObrigatorioSC}" />
+				</h:commandButton>
+	            
+	            <h:commandLink ajax="false" rendered="#{!detalharProcessoController.isLac(docRequerimento) and !detalharProcessoController.isVerificaExistenciaArquivo(docRequerimento)}" disabled="true">
+					<h:graphicImage title="Caminho de arquivo não encontrado no Servidor do SEIA" value="/resources/img/ico-download-file-not-found.png" />
+	            </h:commandLink>
+				
+				<p:commandLink title="Lac de Erb" rendered="#{detalharProcessoController.isLacErb(docRequerimento)}" immediate="true" action="#{lacErbController.visualizar()}" oncomplete="lac.show();" update="form_lac">
+					<h:graphicImage title="Lac de Erb" value="/resources/img/ico-preencher.png" />
+					<f:setPropertyActionListener target="#{lacErbController.lacErb.ideDocumentoObrigatorio.ideDocumentoObrigatorio}" value="#{docRequerimento.ideDocumentoObrigatorio.ideDocumentoObrigatorio}" />
+					<f:setPropertyActionListener target="#{lacErbController.lacErb.ideRequerimento}" value="#{docRequerimento.ideRequerimento}" />
+				</p:commandLink>
+				
+				<p:commandLink title="Lac de Posto" rendered="#{detalharProcessoController.isLacPosto(docRequerimento)}" immediate="true" action="#{lacPostoController.visualizar()}" oncomplete="lac_posto.show();" update="posto_tab">
+					<h:graphicImage title="Lac de Posto" value="/resources/img/ico-preencher.png" />
+					<f:setPropertyActionListener target="#{lacPostoController.lacPostoCombustivel.ideDocumentoObrigatorio.ideDocumentoObrigatorio}" value="#{docRequerimento.ideDocumentoObrigatorio.ideDocumentoObrigatorio}" />
+					<f:setPropertyActionListener target="#{lacPostoController.lacPostoCombustivel.ideRequerimento}" value="#{docRequerimento.ideRequerimento}" />
+				</p:commandLink>
+	        </p:column>
+		</p:dataTable>
+	</h:panelGrid>
+	
+	
+	<h:panelGrid columns="1" rendered="#{detalharProcessoController.renderedDocumentoObrigatorioEnquadramento}">
+	
+		<h3><h:outputLabel styleClass="titulo-grupo" value="Documento(s) de Reenquadramento do Processo" /></h3>
+
+		<p:dataTable id="listaDoc" var="documento" value="#{detalharProcessoController.vwProcesso.documentoObrigatorioReenquadramentoList}">
+			<p:column headerText="Descrição">
+				<h:panelGroup layout="block" style="width: 300px; word-wrap: break-word;">
+					<h:outputText value="#{documento.ideDocumentoAto.ideDocumentoObrigatorio.nomDocumentoObrigatorio}" />
+				</h:panelGroup>
+			</p:column>
+			<p:column headerText="Nome Arquivo">
+				<h:panelGroup layout="block" style="width: 200px; word-wrap: break-word;">
+					<h:outputText value="#{documento.fileNameDoc}" />
+				</h:panelGroup>
+			</p:column>
+			<p:column headerText="Tamanho(KB)">
+				<h:panelGroup layout="block" style="width: 100px; word-wrap: break-word;">
+					<h:outputText value="#{documento.tamanhoDoc}" />
+				</h:panelGroup>
+			</p:column>	
+			<p:column headerText="Gravado em">
+				<h:panelGroup id="pnlValidado" layout="block" style="width: 50px;">
+					<h:outputText value="#{documento.dtcValidacao}">
+						<f:convertDateTime pattern="dd/MM/yyyy" locale="pt,BR" timeZone="Brazil/East"/>
+					</h:outputText>
+				</h:panelGroup>
+			</p:column>
+			<p:column headerText="Usuário">
+				<h:panelGroup id="pnlusuario" layout="block" style="width: 50px;">
+					<h:outputText value="#{documento.idePessoaValidacao.pessoaFisica.nomPessoa}" />
+				</h:panelGroup>
+			</p:column>
+			<p:column headerText="Ações">
+				<h:panelGroup id="pnlAcoes" layout="block" style="width: 50px; text-align: center;">
+					<h:commandLink title="Download do arquivo" rendered="#{!empty documento.dscCaminhoArquivo}">
+						<h:graphicImage title="Download do arquivo" value="/resources/img/ico-download.png" />
+						<p:fileDownload value="#{validacaoPreviaController.getFileDownload(documento.dscCaminhoArquivo)}"/>
+					</h:commandLink>
+				</h:panelGroup>
+			</p:column>
+		</p:dataTable>
+
+	</h:panelGrid>
+	
+	
+	<h:panelGrid columns="1" rendered="#{detalharProcessoController.renderedDocumentoIdentificacaoProcesso}">
+	
+		<h3><h:outputLabel styleClass="titulo-grupo" value="Documento(s) de Identificação do Processo" /></h3>
+		
+		<p:dataTable id="tabelaDocumentoIdentificacaoRequerimento" scrollHeight="100" scrollable="true" paginator="false" style="width:900px;"   
+			value="#{detalharProcessoController.vwProcesso.documentoIdentificacaoRequerimentoList}" var="dir" emptyMessage="Nenhum registro encontrado.">
+			
+			<p:column style="width:220px;">
+				<f:facet name="header">Documento</f:facet>
+	           	<h:outputText value="#{dir.ideDocumentoIdentificacao.ideTipoIdentificacao.nomTipoIdentificacao}" />
+	        </p:column>
+			
+<!-- 	        <p:column style="width:200px;">
+				<f:facet name="header">Nome do Arquivo</f:facet>
+	           	 <h:outputText value="#{dir.dscCaminhoArquivoNome}" />
+	        </p:column> -->
+	         
+	        
+	        <p:column style="width:94px;">
+				<f:facet name="header">Tamanho (KB)</f:facet>
+	           	<h:outputText value="#{dir.fileSizeFormated}" />
+	        </p:column>
+	        
+	        <p:column style="width:94px;">
+				<f:facet name="header">Gravado em</f:facet>
+	           	<h:outputText value="#{dir.dtcValidacao}">
+					<f:convertDateTime pattern="dd/MM/yyyy" locale="pt,BR" timeZone="Brazil/East"/>
+				</h:outputText>
+	        </p:column>
+	        
+	        <p:column style="width:95px;">
+				<f:facet name="header">Usuário</f:facet>
+	           	<h:outputText value="#{dir.idePessoaValidacao.pessoaFisica.nomPessoa}" />
+	        </p:column>
+	        
+	        <p:column style="width:70px;">
+				<f:facet name="header">Download</f:facet>
+				
+				<h:panelGroup layout="block" style="text-align:center;">
+					<h:commandButton image="/resources/img/ico-download.png" immediate="true" title="Download">	            	
+		            	<p:fileDownload value="#{detalharProcessoController.getDocumentoIdentificacaoRequerimentoSC(dir)}" />
+					</h:commandButton>
+				</h:panelGroup>
+	        </p:column>
+		</p:dataTable>
+	</h:panelGrid>
+	
+	<h:panelGrid columns="1" rendered="#{detalharProcessoController.renderedDocumentoRepresentacaoProcesso}">
+	
+		<h3><h:outputLabel styleClass="titulo-grupo" value="Documento(s) de Representação do Processo" /></h3>
+		
+		<p:dataTable id="tabelaDocumentoRepresentacaoRequerimento" scrollHeight="100" scrollable="true" paginator="false"   
+			style="width:900px; border:1px solid #ccc;" value="#{detalharProcessoController.vwProcesso.documentoRepresentacaoRequerimentoList}" 
+			var="drr" emptyMessage="Nenhum registro encontrado.">
+			
+			<p:column style="width:190px;">
+				<f:facet name="header" >Documento</f:facet>
+	           	<h:outputText value="#{drr.tipoDocumento}" />
+	        </p:column>
+			
+	        <p:column style="width:175px;">
+				<f:facet name="header">Nome do Arquivo</f:facet>
+	           	<h:outputText value="#{drr.dscCaminhoArquivoNome}" />
+	        </p:column>
+	        
+	        <p:column style="width:87px;">
+				<f:facet name="header">Tamanho (KB)</f:facet>
+	           	<h:outputText value="#{drr.sizeFile}" />
+	        </p:column>
+	        
+	        <p:column style="width:94px;">
+				<f:facet name="header">Gravado em</f:facet>
+	           	<h:outputText value="#{drr.dtcValidacao}">
+					<f:convertDateTime pattern="dd/MM/yyyy" locale="pt,BR" timeZone="Brazil/East"/>
+				</h:outputText>
+	        </p:column>
+	        
+	        <p:column style="width:84px;">
+				<f:facet name="header">Usuário</f:facet>
+	           	<h:outputText value="#{drr.idePessoaValidacao.pessoaFisica.nomPessoa}" />
+	        </p:column>
+	        
+	        <p:column style="width:63px;">
+				<f:facet name="header">Download</f:facet>
+				<h:commandButton image="/resources/img/ico-download.png" immediate="true" title="Download">	            	
+	            	<p:fileDownload value="#{detalharProcessoController.getDocumentoRepresentacaoRequerimentoSC(drr)}" />
+				</h:commandButton>
+	        </p:column>
+		</p:dataTable>
+	</h:panelGrid>
+	
+	<h:panelGrid columns="1" rendered="#{detalharProcessoController.rendereDocumentoRequerimentoEmpreendimento}">
+		
+		<h3><h:outputLabel styleClass="titulo-grupo" value="Documento(s) do Empreendimento do Processo" /></h3>
+		
+		<p:dataTable id="tabelaDocumentoRequerimentoEmpreendimento" value="#{detalharProcessoController.vwProcesso.documentoRequerimentoEmpreendimentoList}" var="docReqEmp" 
+			scrollHeight="100" scrollable="true" paginator="false" style="width:900px; border:1px solid #ccc;">
+
+			<p:column headerText="Documento" style="word-break: break-word;width:190px;">
+				<h:outputText value="#{docReqEmp.nomDocumento}" />
+			</p:column>
+
+			<p:column headerText="Nome Arquivo" style="word-break: break-word;width:175px;">
+				<h:outputText value="#{docReqEmp.fileNameDoc}" />
+			</p:column>
+
+			<p:column headerText="Tamanho(KB)" style="width:87px;">
+				<h:outputText value="#{docReqEmp.tamanhoDoc}" />
+			</p:column>
+			
+			<p:column headerText="Gravado em" style="width:94px;">
+				<h:outputText value="#{docReqEmp.dtcValidacao}">
+					<f:convertDateTime pattern="dd/MM/yyyy" locale="pt,BR" timeZone="Brazil/East"/>
+				</h:outputText>
+			</p:column>
+			
+			<p:column headerText="Usuário" style="width:84px;">
+				<h:outputText value="#{docReqEmp.idePessoaValidacao.pessoaFisica.nomPessoa}" />
+			</p:column>
+			
+			 <p:column headerText="Download" style="width:63px;">
+			 	<h:panelGroup id="pnlAcoes" layout="block" style="width: 50px; text-align: center;">
+					<h:commandLink title="Download do arquivo" rendered="#{!empty docReqEmp.dscCaminhoArquivo}">
+						<h:graphicImage title="Download do arquivo" value="/resources/img/ico-download.png" />
+						<p:fileDownload value="#{detalharProcessoController.getDocumentoRequerimentoEmpreendimentoDownload(docReqEmp)}"/>
+					</h:commandLink>
+				</h:panelGroup>	
+			 </p:column>
+		</p:dataTable>
+	</h:panelGrid>
+	
+	<h:panelGrid columns="1" rendered="#{detalharProcessoController.renderedFCE}">
+		
+		<h3><h:outputLabel styleClass="titulo-grupo" value="Formulário de Caracterização do Empreendimento - FCE" /></h3>
+		
+		<p:dataTable id="tabelaFce" value="#{detalharProcessoController.listaFce}" var="fce" emptyMessage="#{bundle.msg_lista_vazia}" style="width:900px; border:1px solid #ccc;">
+			<p:column style="width: 680px;">
+				<f:facet name="header">Descrição</f:facet>
+	           	<h:outputText value="#{fce.ideDocumentoObrigatorio.nomDocumentoObrigatorio}"/>
+	        </p:column>
+	        <p:column style="width: 60px;">
+				<f:facet name="header">Ações</f:facet>
+				<h:panelGroup layout="block" style="text-align:center;">
+					<h:commandLink title="Imprimir" global="true">
+						<p:fileDownload value="#{detalharProcessoController.imprimirRelatorio(fce)}"/>
+						<p:graphicImage value="/resources/img/ico-pdf.png" />
+					</h:commandLink>
+					<p:commandLink title="Visualizar" process="@this" global="true"  actionListener="#{detalharProcessoController.visualizarFce()}">
+						<f:attribute name="fce" value="#{fce}" />
+						<p:graphicImage value="/resources/img/ico-pesquisa.png" />
+					</p:commandLink>
+				</h:panelGroup>
+			</p:column>
+		</p:dataTable>
+		
+		<br/>
+	</h:panelGrid>
+	
+	<h:panelGrid id="listaFormularioAtoDeclaratorio" rendered="#{detalharProcessoController.renderedFormularioAtoDeclaratorio}">
+		<p:dataTable id="tabelaAtoDeclaratorio" value="#{detalharProcessoController.listaAtoDeclaratorio}" var="ato" 
+			emptyMessage="#{bundle.msg_lista_vazia}" style="width:900px; border:1px solid #ccc;">
+			
+			<f:facet name="header">
+				<h:outputText value="Formulário de Atos Declaratórios" />
+			</f:facet>
+			
+			<p:column style="width: 780px;">
+				<f:facet name="header">Descrição</f:facet>
+	           	<h:outputText value="#{ato.ideDocumentoObrigatorio.nomDocumentoObrigatorio}"/>
+	        </p:column>
+	        
+	        <p:column style="width: 70px;">
+				<f:facet name="header">Ações</f:facet>
+				
+				<h:panelGroup layout="block" style="text-align:center;">
+					<h:commandLink title="Imprimir" global="true">
+						<p:fileDownload value="#{detalharProcessoController.imprimirRelatorio(ato)}"/>
+						<p:graphicImage value="/resources/img/ico-pdf.png" />
+					</h:commandLink>
+					<p:commandLink title="Visualizar" process="@this" global="true" actionListener="#{detalharProcessoController.visualizarAtoDeclaratorio()}">
+						<f:attribute name="ato" value="#{ato}" />
+						<p:graphicImage value="/resources/img/ico-pesquisa.png" />
+					</p:commandLink>
+				</h:panelGroup>
+			</p:column>
+		</p:dataTable>
+		
+		<br/>
+	</h:panelGrid>
+
+	<h:panelGrid columns="1" rendered="#{detalharProcessoController.renderedComprovantePagamento}">
+		
+		<h3><h:outputLabel styleClass="titulo-grupo" value="Boleto do requerimento" /></h3>
+		
+		<p:dataTable id="tabelaBoleto"  paginator="false" style="width:900px; border:1px solid #ccc;" rendered="#{!detalharProcessoController.boletoIsento}"
+					 value="#{detalharProcessoController.vwProcesso.comprovantePagamentoList}" var="boleto" emptyMessage="#{bundle.msg_lista_vazia}">
+			
+			<p:column style="width:135px;">
+				<f:facet name="header">Número</f:facet>
+	           	<h:outputText value="#{boleto.ideBoletoPagamentoRequerimento.numBoleto}" />
+	        </p:column>
+	        
+	        <p:column style="width:165px;">
+				<f:facet name="header">Valor</f:facet>
+				<h:outputText value="R$ #{detalharProcessoController.valorBoletoSomadoEFormatado(boleto.ideBoletoPagamentoRequerimento)}" />
+			</p:column>
+	        
+	        <p:column style="width:165px;">
+				<f:facet name="header">Data de validação</f:facet>
+	           	<h:outputText value="#{boleto.dtcValidacao}">
+					<f:convertDateTime pattern="dd/MM/yyyy" locale="pt,BR" timeZone="Brazil/East"/>
+				</h:outputText>
+	        </p:column>
+	        
+	        <p:column style="width:165px;">
+				<f:facet name="header">Usuário validação</f:facet>
+	           	<h:outputText value="#{boleto.idePessoaValidacao.pessoaFisica.nomPessoa}"/>
+	        </p:column>
+	         
+			<p:column style="width:60px;">
+				<f:facet name="header">Download</f:facet>
+			
+				<h:panelGrid columns="2">
+				        
+				        <h:commandButton image="/resources/img/ico-download.png" style="width:16px; height:16px;" immediate="true" title="Comprovante" rendered="#{detalharProcessoController.renderedBotaoComprovantePagamento}">
+							<f:setPropertyActionListener value="#{boleto}" target="#{detalharProcessoController.comprovantePagamento}" />
+							<p:fileDownload value="#{detalharProcessoController.comprovantePagamentoSC}" />
+				        </h:commandButton>
+			        
+				        <h:commandButton image="/resources/imagens/boleto-icon.png" style="width:16px; height:16px;" immediate="true" title="Boleto">
+				        	<f:setPropertyActionListener value="#{boleto.ideBoletoPagamentoRequerimento.ideRequerimento}" target="#{comprovanteBoletoController.requerimento}"/>
+				        	<f:setPropertyActionListener value="#{boleto.ideBoletoPagamentoRequerimento}" target="#{comprovanteBoletoController.boleto}"/>
+							<p:fileDownload value="#{comprovanteBoletoController.fileDownloadBoleto}"/>
+				        </h:commandButton>
+				        
+				</h:panelGrid>
+		        
+		    </p:column>
+		</p:dataTable>
+		
+		<h:panelGroup rendered="#{detalharProcessoController.boletoIsento}">
+			<h:panelGrid columns="1">
+				<p:spacer height="1px" width="0px"/>
+				<h:outputText value="Requerimento isento de pagamento." />
+				<p:spacer height="1px" width="0px" rendered="#{detalharProcessoController.existeMotivoIsencaoBoleto}"/>
+				<h:outputText value="Motivo: #{detalharProcessoController.desMotivoIsencaoBoleto}" rendered="#{detalharProcessoController.existeMotivoIsencaoBoleto}"/>
+			</h:panelGrid>
+		</h:panelGroup>
+		
+		<br/>
+	</h:panelGrid>
+	
+	<h:panelGrid columns="1" rendered="#{detalharProcessoController.renderedComprovantePagamentoComplementar}">
+		
+		<h3><h:outputLabel styleClass="titulo-grupo" value="Boleto complementar" /></h3>
+		
+		<p:dataTable id="tabelaBoletoComplementar"  paginator="false" style="width:900px; border:1px solid #ccc;" rendered="#{!detalharProcessoController.boletoIsento}"
+					 value="#{detalharProcessoController.vwProcesso.comprovantePagamentoComplementarList}" var="boleto" emptyMessage="#{bundle.msg_lista_vazia}">
+			
+			<p:column style="width:135px;">
+				<f:facet name="header">Número</f:facet>
+	           	<h:outputText value="#{boleto.ideBoletoPagamentoRequerimento.numBoleto}" />
+	        </p:column>
+	        
+	        <p:column style="width:165px;">
+				<f:facet name="header">Valor</f:facet>
+				<h:outputText value="R$ #{detalharProcessoController.valorBoletoSomadoEFormatado(boleto.ideBoletoPagamentoRequerimento)}" />
+			</p:column>
+	        
+	        <p:column style="width:165px;">
+				<f:facet name="header">Data de validação</f:facet>
+	           	<h:outputText value="#{boleto.dtcValidacao}">
+					<f:convertDateTime pattern="dd/MM/yyyy" locale="pt,BR" timeZone="Brazil/East"/>
+				</h:outputText>
+	        </p:column>
+	        
+	        <p:column style="width:165px;">
+				<f:facet name="header">Usuário validação</f:facet>
+	           	<h:outputText value="#{boleto.idePessoaValidacao.pessoaFisica.nomPessoa}"/>
+	        </p:column>
+	         
+			<p:column style="width:60px;">
+				<f:facet name="header">Download</f:facet>
+			
+				<h:panelGrid columns="2">
+				        
+				        <h:commandButton image="/resources/img/ico-download.png" style="width:16px; height:16px;" immediate="true" title="Comprovante" rendered="#{detalharProcessoController.renderedBotaoComprovantePagamento}">
+							<f:setPropertyActionListener value="#{boleto}" target="#{detalharProcessoController.comprovantePagamento}" />
+							<p:fileDownload value="#{detalharProcessoController.comprovantePagamentoSC}" />
+				        </h:commandButton>
+			        
+				        <h:commandButton image="/resources/imagens/boleto-icon.png" style="width:16px; height:16px;" immediate="true" title="Boleto">
+				        	<f:setPropertyActionListener value="#{boleto.ideBoletoPagamentoRequerimento.ideRequerimento}" target="#{comprovanteBoletoController.requerimento}"/>
+				        	<f:setPropertyActionListener value="#{boleto.ideBoletoPagamentoRequerimento}" target="#{comprovanteBoletoController.boleto}"/>
+							<p:fileDownload value="#{comprovanteBoletoController.fileDownloadBoleto}"/>
+				        </h:commandButton>
+				        
+				</h:panelGrid>
+		        
+		    </p:column>
+		</p:dataTable>
+		
+		<h:panelGroup rendered="#{detalharProcessoController.boletoIsento}">
+			<h:panelGrid columns="1">
+				<p:spacer height="1px" width="0px"/>
+				<h:outputText value="Requerimento isento de pagamento." />
+				<p:spacer height="1px" width="0px" rendered="#{detalharProcessoController.existeMotivoIsencaoBoleto}"/>
+				<h:outputText value="Motivo: #{detalharProcessoController.desMotivoIsencaoBoleto}" rendered="#{detalharProcessoController.existeMotivoIsencaoBoleto}"/>
+			</h:panelGrid>
+		</h:panelGroup>
+		
+		<br/>
+	</h:panelGrid>
+	
+	<h:panelGrid columns="1" rendered="#{detalharProcessoController.renderedComprovantePagamentoDAE}">
+		<h3><h:outputLabel styleClass="titulo-grupo" value="DAE" /></h3>
+		<p:dataTable id="tabelaBoletoDae" paginator="false" style="width:900px; border:1px solid #ccc;" 
+					 value="#{detalharProcessoController.vwProcesso.comprovantePagamentoDaeList}" var="boletoDae" emptyMessage="Nenhum registro encontrado.">
+			
+			<p:column style="width:310px;">
+				<f:facet name="header">DAE</f:facet>
+	           	<h:outputText value="DAE" />
+	        </p:column>
+	        
+	        <p:column style="width:165px;">
+				<f:facet name="header">Data de validação</f:facet>
+	           	<h:outputText value="#{boletoDae.dtcValidacao}">
+					<f:convertDateTime pattern="dd/MM/yyyy" locale="pt,BR" timeZone="Brazil/East"/>
+				</h:outputText>
+	        </p:column>
+	        
+	        <p:column style="width:160px;">
+				<f:facet name="header">Usuário validação</f:facet>
+	           	<h:outputText value="#{boletoDae.idePessoaValidacao.pessoaFisica.nomPessoa}"/>
+	        </p:column>
+	        
+	        <p:column style="width:60px;">
+				<f:facet name="header">Download</f:facet>
+				
+				<h:panelGroup layout="block" style="text-align:center;">
+					<h:commandLink ajax="false" rendered="#{boletoDae!=null}">
+						<h:graphicImage title="Download" value="/resources/img/ico-download.png" />
+		            	<f:setPropertyActionListener value="#{boletoDae}" target="#{detalharProcessoController.comprovantePagamentoDae}" />
+		            	<p:fileDownload value="#{detalharProcessoController.comprovantePagamentoDaeSC}" />
+		            </h:commandLink>
+	            </h:panelGroup>
+	        </p:column>
+		</p:dataTable>
+		
+		<br/>
+	</h:panelGrid>
+	
+	<h:panelGrid rendered="#{detalharProcessoController.renderedDAE}">
+		<h3><h:outputLabel styleClass="titulo-grupo" value="DAE" /></h3>
+		
+		<p:dataTable value="#{detalharProcessoController.memoriaCalculoDaeParcelaLista}" var="dae">
+			
+			<p:column headerText="Nº parcela">
+				<h:outputText value="#{dae.numParcelaReferencia}" />
+			</p:column>
+		
+			<p:column headerText="Nosso numero">
+				<h:outputText value="#{dae.ideDae.dscNossoNumero}" />
+			</p:column>
+			
+			<p:column headerText="Código de referência">
+				<h:outputText value="#{dae.ideDae.cerhCodigoReceita.numCodigoCeceita}" />
+			</p:column>
+			
+			<p:column headerText="Data de emissão">
+				<h:outputText value="#{dae.ideDae.dtEmissao}">
+					<f:convertDateTime pattern="dd/MM/yyyy" locale="pt,BR" timeZone="Brazil/East"/>
+				</h:outputText>
+			</p:column>
+			
+			<p:column headerText="Data de Vencimento">
+				<h:outputText value="#{dae.ideDae.dtVencimento}">
+					<f:convertDateTime pattern="dd/MM/yyyy" locale="pt,BR" timeZone="Brazil/East"/>
+				</h:outputText>
+			</p:column>
+
+			<p:column headerText="Valor">
+				<h:outputText value="#{dae.valor}">
+					<f:convertNumber maxIntegerDigits="12" maxFractionDigits="4" pattern="###,##0.00" locale="pt_BR"/>
+				</h:outputText>
+			</p:column>
+			
+			<p:column headerText="Download">
+				<p:commandLink style="cursor: pointer; margin-left:5px;" onclick='javascript:#{gerarDaeController.gerarLinkDownloadDae(dae.ideDae.urlDae)}' 
+						global="false">
+						<h:graphicImage title="Baixar Dae" value="/resources/img/ico-boleto.png" />
+				</p:commandLink>
+			</p:column>
+		
+		</p:dataTable>
+	
+	</h:panelGrid>
+	
+	
+	<h:panelGrid columns="1" rendered="#{detalharProcessoController.renderedLocalizacaoGeografica}">
+	
+		<h3><h:outputLabel styleClass="titulo-grupo" value="Localização Geográfica" /></h3>
+		
+		<p:dataTable id="tabelaLocalizacaoGeografica" paginator="false" style="width:900px; border:1px solid #ccc;" 
+		 value="#{detalharProcessoController.vwProcesso.perguntas}" var="pergunta" emptyMessage="#{bundle.msg_lista_vazia}">
+			
+			<p:column style="width: 680px;">
+				<f:facet name="header">Pergunta</f:facet>
+	           	<h:outputText value="#{pergunta.idePergunta.dscPergunta}"/>
+	        </p:column>
+	        
+	        <p:column style="width: 60px;">
+				<f:facet name="header">Download</f:facet>
+				<h:panelGroup layout="block" style="text-align:center;" rendered="#{pergunta.ideLocalizacaoGeografica.ideLocalizacaoGeografica != null}">
+					<a onclick='javascript:${localizacaoGeograficaAllController.criarUrlShapeVisualizacao(pergunta.ideLocalizacaoGeografica)}'>
+						<img title="Visualizar Shape Persistido" src="/resources/img/ico-arl-relocacao.png" />
+					</a>
+	            </h:panelGroup>
+			</p:column>
+		</p:dataTable>
+		
+		<br/>
+	</h:panelGrid>
+	
+	<h:panelGrid columns="1" rendered="#{detalharProcessoController.renderedAlteracaoRazaoSocial}">
+		
+		<h3><h:outputLabel styleClass="titulo-grupo" value="Alteração(ões) de Razão Social realizadas" /></h3>
+		
+		<p:dataTable value="#{detalharProcessoController.listaPessoaJuridicaHistorico}" var="pjHistorico" >
+			<p:column headerText="Razão Social anterior" >  
+				<h:outputText value="#{pjHistorico.nomRazaoSocial}"/>
+			</p:column>
+			<p:column headerText="Data da Alteração" >
+				<h:outputText value="#{pjHistorico.dtcHistoricoFormatada}"/>
+			</p:column>
+		</p:dataTable>
+		
+		<br/>
+	</h:panelGrid>
+	
+	<h:panelGrid columns="1" rendered="#{not empty detalharProcessoController.devedorReposicaoFlorestal and not empty detalharProcessoController.devedorReposicaoFlorestal.dscCaminhoParecerTecnico}" >
+		
+		<h3><h:outputLabel styleClass="titulo-grupo" value="Parecer Técnico de Alteração do Volume de Referência" /></h3>
+		
+		<p:dataTable value="#{detalharProcessoController.devedorReposicaoFlorestal}" var="devededor" >
+			<p:column headerText="Nome do Arquivo">  
+				<h:outputText value="#{devededor.nomeArquivo}"/>
+			</p:column>
+			<p:column headerText="Tamanho (KB)">
+	           	<h:outputText value="#{devededor.tamanhoDoc}" />
+	        </p:column>
+			<p:column headerText="Gravado em">
+				<h:outputText value="#{devededor.dtcGravado}">
+					<f:convertDateTime pattern="dd/MM/yyyy" locale="pt,BR" timeZone="Brazil/East"/>
+				</h:outputText>
+			</p:column>
+			<p:column headerText="Donwload" style="width:70px;">
+				<h:panelGroup layout="block" style="text-align:center;">
+					<h:commandButton image="/resources/img/ico-download.png">
+						<p:fileDownload value="#{detalharProcessoController.documentoParecerTecnico}" />
+					</h:commandButton>
+				</h:panelGroup>
+			</p:column>
+		</p:dataTable>
+		
+		<br/>
+	</h:panelGrid>
+</ui:composition>

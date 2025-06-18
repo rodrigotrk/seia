@@ -1,0 +1,415 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.prime.com.tr/ui"
+	template="../../layout/template.xhtml">
+
+	<ui:define name="titulo-pagina">
+		<h3>Reenquadramento de Processos</h3>
+	</ui:define>
+
+	<ui:define name="conteudo-principal">
+	
+		<ui:include src="/paginas/manter-boleto/boleto_automatizado.xhtml" />
+		<ui:include src="/paginas/manter-enviardocobrigatorio/documento.xhtml" />
+		<ui:include src="/paginas/manter-efetuarvalidacaoprevia/validacaoPrevia.xhtml" />
+		<ui:include src="/paginas/manter-boleto/comprovante.xhtml" />
+		<ui:include src="/paginas/manter-boleto/validacao.xhtml" />
+		<ui:include src="/paginas/novo-requerimento/comunicacaoRequerente.xhtml" />
+		<ui:include src="/paginas/manter-processo/detalhe-processo/detalharProcesso.xhtml" />
+		<ui:include src="/paginas/manter-processo/fluxoAlternativo.xhtml" />
+		<ui:include src="/paginas/manter-enquadramento/enquadramento.xhtml" />
+		<ui:include src="/paginas/manter-atoambiental/dialogSelecionarAtoAmbiental.xhtml" />
+		<ui:include src="/paginas/manter-fce/include-fce.xhtml" />
+		<ui:include src="/paginas/manter-processo/dialogNaoReenquadrar.xhtml" />
+		<ui:include src="/paginas/manter-processo/dlgAlteracaoStatusReenquadramento.xhtml" />
+	
+		<p:dialog id="dialogGerarNovoBoleto" dynamic="true" header="#{bundle.gerar_novo_boleto_lbl_titulo}" widgetVar="dialogGerarNovoBoleto" modal="true" resizable="false" position="center center">
+			<ui:include src="/paginas/manter-boleto-complementar/gerarNovoBoleto.xhtml" />
+		</p:dialog>
+		
+		<p:confirmDialog widgetVar="excluirComprovanteBoleto" appendToBody="true" header="Alerta" message="#{bundle.consulta_boleto_confirmar_exlusao_comprovante}" severity="alert">
+			<h:form>
+				<p:commandButton value="Sim" global="false" update="formDialogComprovante" oncomplete="excluirComprovanteBoleto.hide()" action="#{boletoComplementarController.excluirComprovanteBoleto()}" />
+				<p:commandButton value="Não" global="false" oncomplete="excluirComprovanteBoleto.hide()" />
+			</h:form>
+		</p:confirmDialog>
+		
+		<p:dialog id="dialogEnviarComprovante" dynamic="true" header="#{bundle.enviar_comprovante_lbl_titulo}" widgetVar="dialogEnviarComprovante" width="600" modal="true" resizable="false" position="top" >
+			<ui:include src="/paginas/manter-boleto-complementar/enviarComprovante.xhtml" />
+		</p:dialog>
+		
+		<p:dialog id="dialogValidarComprovanteDae" dynamic="true" header="#{bundle.validar_comprovante_lbl_titulo}" widgetVar="dialogValidarComprovanteDae" modal="true" resizable="false" position="top" style="top: 20% !important; left: 35% !important;">
+			<ui:include src="/paginas/manter-boleto-complementar/validarComprovanteDae.xhtml" />
+		</p:dialog>
+		
+		<p:confirmDialog widgetVar="excluirComprovanteVitoria" appendToBody="true" header="Alerta" message="#{bundle.consulta_boleto_confirmar_exlusao_comprovante}" severity="alert">
+			<h:form>
+				<p:commandButton value="Sim" global="false" update="certificadoForm, vistoriaForm" oncomplete="excluirComprovanteVitoria.hide()" action="#{boletoComplementarController.excluirComprovanteDAE('vistoria')}" />
+				<p:commandButton value="Não" global="false" oncomplete="excluirComprovanteVitoria.hide()" />
+			</h:form>
+		</p:confirmDialog>
+	
+		<p:confirmDialog widgetVar="excluirComprovanteCertificado" appendToBody="true" header="Alerta" message="#{bundle.consulta_boleto_confirmar_exlusao_comprovante}" severity="alert">
+			<h:form>
+				<p:commandButton value="Sim" global="false" update="certificadoForm, vistoriaForm" oncomplete="excluirComprovanteCertificado.hide()" action="#{boletoComplementarController.excluirComprovanteDAE('certificado')}" />
+				<p:commandButton value="Não" global="false" oncomplete="excluirComprovanteCertificado.hide()" />
+			</h:form>
+		</p:confirmDialog>		
+		
+		<p:dialog widgetVar="dlgRequerimentoUnico" header="Mensagem" height="120" width="450" modal="true" resizable="false">
+			<h:form id="frmDlgRequerimentoUnico">
+				<h:panelGrid>
+					<h:panelGrid columns="1">
+						<h:outputText value="Não será possível realizar a edição de requerimentos abertos até novembro de 2014." />
+					</h:panelGrid>
+				</h:panelGrid>
+				<h:panelGroup layout="block" style="text-align: center">
+					<p:commandButton value="OK" 
+						update="enquadramento" 
+						process="@this"
+						oncomplete="dlgRequerimentoUnico.hide(); dialogEfetuarEnquadramento.show();"
+						actionListener="#{enquadramentoController.loadReenquadramento(novoRequerimentoController.processoReenquadramentoDTO)}">
+						<f:setPropertyActionListener value="/paginas/manter-processo/pautaReenquadramentoProcesso.xhtml" target="#{enquadramentoController.cameFrom}"/>
+					</p:commandButton>
+				</h:panelGroup>
+			</h:form>
+		</p:dialog>
+		
+		<h3><h:outputLabel styleClass="titulo-grupo" value="INSTRUÇÕES" style="font-weight:bold;" /></h3>
+		
+		<p class="titulo-grupo">
+			<h:outputText value="#{bundle.processo_lbl_consulta}" /><br />
+			<h:outputText value="#{bundle.processo_lbl_consulta_status}" />
+		</p>
+
+		<h3><h:outputLabel styleClass="titulo-grupo" value="PARÂMETROS DA CONSULTA" style="font-weight:bold;" /></h3>
+
+		<h:form id="frmPautaReenquadramentoProcesso">
+
+			<p:remoteCommand name="atualizarPauta" actionListener="#{pautaReenquadramentoProcessoController.consultar()}" update=":frmPautaReenquadramentoProcesso" />
+			
+			<h:panelGroup id="panel" layout="block">
+				
+				<h:panelGrid columns="3">
+					
+					<h:panelGroup layout="block">
+						<h:panelGroup layout="block" style="width: 100%">
+							<h:outputText value="Nº do Processo:" />
+						</h:panelGroup>
+						<h:panelGroup layout="block" style="width: 100%">
+							<p:inputText value="#{pautaReenquadramentoProcessoController.numProcesso}" />
+						</h:panelGroup>
+					</h:panelGroup>
+					<h:panelGroup layout="block">
+						<h:panelGroup layout="block" style="width: 100%">
+							<h:outputText value="Status Atual:" />
+						</h:panelGroup>
+						<h:panelGroup layout="block" style="width: 100%">
+							<p:selectOneMenu id="comboStatusFluxo"
+								value="#{pautaReenquadramentoProcessoController.statusReenquadramento}"
+								styleClass="form-input form-select"
+								converter="simpleEntityConverter">
+								<f:selectItem itemLabel="Selecione..." />
+								<f:selectItems value="#{pautaReenquadramentoProcessoController.listaStatusReenquadramento}"
+									var="status" itemValue="#{status}" itemLabel="#{status.nomStatusReenquadramento}" />
+							</p:selectOneMenu>
+						</h:panelGroup>
+					</h:panelGroup>
+					<h:panelGroup layout="block">
+						<h:panelGroup layout="block" style="width: 100%">
+							<h:outputText value="Período de Encaminhamento:" />
+						</h:panelGroup>
+						<h:panelGroup id="camposPeriodo" layout="block" style="width: 100%">
+							<h:outputText value="De " />
+							<p:calendar  showOn="button" size="10" disabled="#{pautaReenquadramentoProcessoController.oldProcessos}"
+								value="#{pautaReenquadramentoProcessoController.periodoInicio}" locale="pt"
+								pattern="dd/MM/yyyy" navigator="true" yearRange="c-50:c+10"
+								readOnlyInputText="true" maxdate="#{pautaReenquadramentoProcessoController.currentDate}">
+								</p:calendar>
+							<h:outputText value=" Até " />
+							<p:calendar showOn="button" size="10" disabled="#{pautaReenquadramentoProcessoController.oldProcessos}"
+								value="#{pautaReenquadramentoProcessoController.periodoFim}" locale="pt"
+								pattern="dd/MM/yyyy" navigator="true" readOnlyInputText="true"
+								 maxdate="#{pautaReenquadramentoProcessoController.currentDate}" />
+						</h:panelGroup>
+					</h:panelGroup>
+
+				</h:panelGrid>
+				<h:panelGrid columns="4">
+					<h:panelGroup layout="block" rendered="#{!contextoController.usuarioLogado.usuarioExterno}">
+						<h:panelGroup layout="block" style="width: 100%" >
+							<h:outputText value="Requerente:" />
+						</h:panelGroup>
+						<h:panelGroup layout="block" style="width: 100%">
+							<p:inputText value="#{pautaReenquadramentoProcessoController.nomeRequerente}" disabled="true" />
+					
+						</h:panelGroup>
+					</h:panelGroup>
+					<h:panelGroup layout="block">
+						<p:commandLink type="button" id="requerenteModal"
+							rendered="#{!contextoController.usuarioLogado.usuarioExterno}"
+							actionListener="#{requerenteController.load(novoRequerimentoController.metodoExterno)}"
+							onclick="requerente.show();">
+							<h:graphicImage url="/resources/img/ico-pesquisa.png" />
+						</p:commandLink>
+					</h:panelGroup>
+					<h:panelGroup id="panelRequerente" layout="block">
+						<h:panelGroup layout="block" style="width: 100%">
+							<h:outputText value="Empreendimento:" />
+						</h:panelGroup>
+						<h:panelGroup layout="block" style="width: 100%">
+						<p:selectOneMenu id="comboEmpreendimento" value="#{pautaReenquadramentoProcessoController.empreendimento.ideEmpreendimento}" 
+						disabled="#{pautaReenquadramentoProcessoController.requerente == null 
+						or pautaReenquadramentoProcessoController.requerente.idePessoa == null}" style="width:220px;">
+						<f:selectItem itemValue="0" itemLabel="Selecione..." />
+						<f:selectItems value="#{pautaReenquadramentoProcessoController.collEmpreendimento}" />
+					</p:selectOneMenu>
+						</h:panelGroup>
+					</h:panelGroup>
+							<h:panelGroup layout="block">
+						<h:panelGroup layout="block" style="width: 100%">
+							<h:outputText value="Processos encaminhados há mais de 180 dias:" />
+						</h:panelGroup>
+						<h:panelGroup layout="block" style="width: 100%">
+							<p:selectBooleanCheckbox value="#{pautaReenquadramentoProcessoController.oldProcessos}" >
+							 	<p:ajax update="frmPautaReenquadramentoProcesso:camposPeriodo" listener="#{pautaReenquadramentoProcessoController.updatePeriodo}" />
+							</p:selectBooleanCheckbox>
+						</h:panelGroup>
+					</h:panelGroup>
+				</h:panelGrid>
+				<h:panelGrid id="gridComboFiltro" columns="4">
+
+					<h:panelGroup layout="block">
+						<h:panelGroup layout="block" style="width: 100%">
+							<h:outputText value="Categoria:" />
+						</h:panelGroup>
+						<h:panelGroup layout="block" style="width: 100%">
+							<p:selectOneMenu id="comboTipoAto"
+								value="#{pautaReenquadramentoProcessoController.tipoAto}"
+								valueChangeListener="#{pautaReenquadramentoProcessoController.changeCategoria()}"
+								converter="simpleEntityConverter"
+								styleClass="form-input form-select">
+								<f:selectItem itemLabel="Selecione..." />
+								<f:selectItems value="#{pautaReenquadramentoProcessoController.tiposAto}" var="tipoAto" itemValue="#{tipoAto}" itemLabel="#{tipoAto.nomTipoAto}" />
+								<p:ajax event="change" update="gridComboFiltro" />
+							</p:selectOneMenu>
+						</h:panelGroup>
+					</h:panelGroup>
+	
+					<h:panelGroup layout="block">
+						<h:panelGroup layout="block" style="width: 100%">
+							<h:outputText value="Ato:" />
+						</h:panelGroup>
+						<h:panelGroup layout="block" style="width: 100%">
+							<p:selectOneMenu id="comboAto"
+								value="#{pautaReenquadramentoProcessoController.atoAmbiental}"
+								converter="simpleEntityConverter"
+								valueChangeListener="#{pautaReenquadramentoProcessoController.changeAtoAmbiental()}"
+								styleClass="form-input form-select" style="max-width:262px;"
+								disabled="#{pautaReenquadramentoProcessoController.comboAtoBlocked}">
+								<f:selectItem itemLabel="Selecione..." />
+								<f:selectItems value="#{pautaReenquadramentoProcessoController.atos}" var="ato" itemValue="#{ato}" itemLabel="#{ato.nomAtoAmbiental}" />
+								<p:ajax event="change" update="gridComboFiltro" process="@this" />
+							</p:selectOneMenu>
+						</h:panelGroup>
+					</h:panelGroup>
+	
+					<h:panelGroup layout="block">
+						<h:panelGroup layout="block" style="width: 100%">
+							<h:outputText value="Tipologia:" />
+						</h:panelGroup>
+						<h:panelGroup layout="block" style="width: 100%">
+							<p:selectOneMenu id="lstTipologia"
+								value="#{pautaReenquadramentoProcessoController.tipologia}"
+								converter="tipologiaConverter"
+								valueChangeListener="#{pautaReenquadramentoProcessoController.changeTipologia()}"
+								styleClass="form-input form-select" style="max-width:180px;"
+								disabled="#{pautaReenquadramentoProcessoController.comboTipologiaBlocked}">
+								<f:selectItem itemLabel="Selecione..." />
+								<f:selectItems value="#{pautaReenquadramentoProcessoController.listaTipologia}" var="tipologia" itemLabel="#{tipologia.desTipologia}" itemValue="#{tipologia}" />
+								<p:ajax event="change" update="gridComboFiltro" process="@this" />
+							</p:selectOneMenu>
+						</h:panelGroup>
+					</h:panelGroup>
+	
+					<h:panelGroup layout="block">
+						<h:panelGroup layout="block" style="width: 100%">
+							<h:outputText value="Finalidade:" />
+						</h:panelGroup>
+						<h:panelGroup layout="block" style="width: 100%">
+							<p:selectOneMenu id="lstFinalidade"
+								value="#{pautaReenquadramentoProcessoController.finalidadeUsoAgua}"
+								converter="simpleEntityConverter"
+								styleClass="form-input form-select" style="max-width:190px;"
+								disabled="#{pautaReenquadramentoProcessoController.comboFinalidadeBlocked}">
+								<f:selectItem itemLabel="Selecione..." />
+								<f:selectItems value="#{pautaReenquadramentoProcessoController.listaFinalidadeUsoAgua}" var="finalidade" itemLabel="#{finalidade.nomTipoFinalidadeUsoAgua}" itemValue="#{finalidade}" />
+								<p:ajax event="change" process="@this" />
+							</p:selectOneMenu>
+						</h:panelGroup>
+					</h:panelGroup>
+				</h:panelGrid>
+			
+
+				<h:panelGrid columns="2" styleClass="margin">
+					<p:commandButton value="Consultar" actionListener="#{pautaReenquadramentoProcessoController.consultar()}"
+					update="frmPautaReenquadramentoProcesso:tabelaProcessosReenquadramento" />
+					<p:commandButton value="Limpar" actionListener="#{pautaReenquadramentoProcessoController.limparTela()}" update="frmPautaReenquadramentoProcesso" />
+				</h:panelGrid>
+				
+				<h:panelGrid id="tabelaProcessosReenquadramento">
+					<p:dataTable id="dataTableProcessosReenquadramento" var="pr" value="#{pautaReenquadramentoProcessoController.listaProcessoReenquadramentoDTO}"
+						paginator="true" rows="8" paginatorPosition="bottom" lazy="true" style="width: 780px;" emptyMessage="Nenhum registro encontrado."
+						>
+						<p:column>
+							<f:facet name="header">Nº do Processo</f:facet>
+							<h:panelGroup layout="block" style="text-align: center;">
+								<p:commandLink actionListener="#{pautaReenquadramentoProcessoController.visualizarProcesso(pr.processoReenquadramento)}" process="@this">
+									<h:outputText value="#{pr.processoReenquadramento.ideProcesso.numProcessoTabela}" />
+								</p:commandLink>
+							</h:panelGroup>
+						</p:column>
+						<p:column>
+							<f:facet name="header">Data de<br/> Encaminhamento</f:facet>
+							<h:panelGroup layout="block" style="text-align: center;">
+								<h:outputText id="dtcFormacao" value="#{pr.processoReenquadramento.dtcFormacao}">
+									<f:convertDateTime for="dtcFormacao" pattern="dd/MM/yyyy" locale="pt,BR" timeZone="Brazil/East" />
+								</h:outputText>
+							</h:panelGroup>
+						</p:column>
+						<p:column  >
+							<f:facet name="header"   >Dias de <br/>Encaminhamento</f:facet>
+							
+							<h:panelGroup layout="block" style="text-align: center;">
+								<h:outputText id="diasEncaminhamento" styleClass="${pr.processoReenquadramento.diasEncaminhamento >= 180 ? 'redRow' : null}" value="#{pr.processoReenquadramento.diasEncaminhamento}"/>
+								
+							</h:panelGroup>
+						</p:column>
+						<p:column>
+							<f:facet name="header">Requerente</f:facet>
+							<h:panelGroup layout="block" style="text-align: center;">
+								<h:outputText value="#{pr.requerente.nomeRazao}" />
+							</h:panelGroup>
+						</p:column>
+						<p:column>
+							<f:facet name="header">Status</f:facet>
+							<h:panelGroup layout="block" style="text-align: center;">
+								<h:outputText value="#{pr.statusAtual.nomStatusReenquadramento}" />
+							</h:panelGroup>
+						</p:column>
+						<p:column >
+							<f:facet name="header">Ações</f:facet>
+							<h:panelGroup layout="block" style="text-align: center;">
+								
+								<p:commandLink rendered="#{pr.renderedFluxoAlternativo and security.temAcesso('5.85.29')}"
+								actionListener="#{fluxoAlternativoController.loadReenquadramento(false,false,pr)}"
+								oncomplete="dialogEncaminhar.show();" update="pnlFluxoAlternativo" process="@this">
+									<h:graphicImage style="margin: 2.5px;" title="Encaminhar" value="/resources/img/ico-encaminhar.png" />
+								</p:commandLink>
+								
+								
+								<p:commandLink rendered="#{pr.renderedReenquadrar and !pautaReenquadramentoProcessoController.usuarioExterno}"
+								actionListener="#{enquadramentoController.loadReenquadramento(pr)}"
+								update="enquadramento" process="@this" oncomplete="dialogEfetuarEnquadramento.show();">
+									<h:graphicImage style="margin: 2.5px;" title="Reenquadrar" value="/resources/img/document-resize.png" />
+									<f:setPropertyActionListener value="/paginas/manter-processo/incluirNovoRequerimento.xhtml" target="#{enquadramentoController.cameFrom}"/>
+								</p:commandLink>
+								
+								<h:commandLink rendered="#{!pautaReenquadramentoProcessoController.isRequerimentoUnico(pr)}" 
+								   action="#{novoRequerimentoController.carregarReenquadramentoVisualizacao(pr)}">
+									<h:graphicImage style="margin: 2.5px;" title="Visualizar Reenquadramento" value="/resources/img/ico-pesquisa.png" />
+								</h:commandLink>
+								
+								<h:commandLink rendered="#{pautaReenquadramentoProcessoController.isRenderedEditarReenquadramento(pr)
+								and !pautaReenquadramentoProcessoController.isRequerimentoUnico(pr)}" 
+								   action="#{novoRequerimentoController.carregarReenquadramento(pr)}">
+									<h:graphicImage style="margin: 2.5px;" title="Editar reenquadramento" value="/resources/img/ico-editar.png" />
+								</h:commandLink>
+								
+								
+								<p:commandLink rendered="#{pautaReenquadramentoProcessoController.isRenderedEditarReenquadramento(pr) 
+								and pautaReenquadramentoProcessoController.isRequerimentoUnico(pr) and !pautaReenquadramentoProcessoController.usuarioExterno}" 
+								   actionListener="#{novoRequerimentoController.carregarReenquadramento(pr)}"
+								   action="#{aceiteReenquadramentoController.carregarProcessoReenquadramento(pr)}"
+								   update="enquadramento" process="@this">
+									<h:graphicImage style="margin: 2.5px;" title="Editar reenquadramento" value="/resources/img/ico-editar.png" />
+								</p:commandLink>
+								
+								
+								<p:commandLink rendered="#{pr.renderedEnvioDocumentacao}"
+								actionListener="#{envioDocumentoController.loadDocumento(pr)}" 
+								oncomplete="dialogEnviarDocumento.show();updateDocumento();" update="documento" process="@this">
+									<h:graphicImage style="margin: 2.5px;" title="Enviar Documentação Obrigatória" value="/resources/img/ico-anexo.png" />
+								</p:commandLink>
+								
+								<p:commandLink rendered="#{pr.renderedValidacaoPrevia and !pautaReenquadramentoProcessoController.usuarioExterno}"
+								actionListener="#{validacaoPreviaController.loadReenquadramento(pr)}" 
+								oncomplete="dialogEfetuarValidacaoPrevia.show();expandAllValidacao();" update="validacaoPrevia" process="@this">
+									<h:graphicImage style="margin: 2.5px;" title="Efetuar Validação Prévia" value="/resources/img/ico-empreendimento.gif" />
+								</p:commandLink>
+								
+								<p:commandLink rendered="#{pr.renderedBoleto and !pautaReenquadramentoProcessoController.usuarioExterno}" actionListener="#{boletoComplementarController.novoBoletoPopup()}" 
+								oncomplete="dialogGerarNovoBoleto.show();carregarValores()" update=":form_dialog_boleto" process="@this">
+									<f:setPropertyActionListener target="#{boletoComplementarController.novoBoleto_tipo.ideTipoBoletoPagamento}" value="7" />
+									<f:setPropertyActionListener target="#{boletoComplementarController.novoBoleto_numero}" value="#{pr.processoReenquadramento.ideProcesso.numProcessoTabela}" />
+									<f:setPropertyActionListener target="#{boletoComplementarController.processoReenquadramentoDTO}" value="#{pr}" />
+									<h:graphicImage style="margin: 2.5px;" title="Gravar Taxa Boleto" value="/resources/img/ico-boleto.png" />
+								</p:commandLink>
+								<p:remoteCommand actionListener="#{boletoComplementarController.novoBoletoCarregaValores()}" name="carregarValores" update=":form_dialog_boleto:panel_boleto_geral" global="false" />
+								
+								<p:commandLink rendered="#{pr.renderedEnvioComprovante}" actionListener="#{boletoComplementarController.carregarEnviarComprovanteBoleto(pr)}">
+									<h:graphicImage style="margin: 2.5px;" title="Imprimir boleto / Enviar comprovante" value="/resources/img/ico-comprovante.png" />
+								</p:commandLink>
+								
+								<p:commandLink rendered="#{pr.renderedValidacaoComprovante and !pautaReenquadramentoProcessoController.usuarioExterno}" action="#{boletoComplementarController.carregarValidacaoComprovante(pr)}"
+								oncomplete="dialogValidarComprovanteDae.show()" update=":form_dialog_validacao" process="@this" >
+									<f:setPropertyActionListener target="#{boletoComplementarController.validarComprovante_boletoComplementar}" value="#{null}" />
+									<h:graphicImage style="margin: 2.5px;" title="Validar Boleto" value="/resources/img/ico-msg-sucesso.png" />
+								</p:commandLink>
+								
+								<p:commandLink 
+								action="#{comunicacaoRequerenteController.carregarReenquadramento(pr)}" 
+								oncomplete="dialoghistoricoComunicacao.show()" update="formHistorico">
+									<f:setPropertyActionListener target="#{contextoController.object}" value="#{pr.requerimento}" />
+									<h:graphicImage style="margin: 2.5px;" title="Visualizar histórico do Reenquadramento" value="/resources/img/ico-mnp.gif" />
+								</p:commandLink>
+								
+								<h:commandLink> 
+									<p:fileDownload value="#{pautaReenquadramentoProcessoController.gerarResumoRequerimento(pr.requerimento)}" />
+									<h:graphicImage style="margin: 2.5px;" title="Gerar Resumo do Requerimento" value="/resources/img/ico-pdf.png" />
+								</h:commandLink>
+								
+								<h:commandLink  rendered="#{!pautaReenquadramentoProcessoController.isRequerimentoUnico(pr) and not empty pr.requerimento.desCaminhoResumoOriginal}"> 
+									<p:fileDownload value="#{pautaReenquadramentoProcessoController.gerarResumoRequerimentoInicial(pr.requerimento)}" />
+									<h:graphicImage style="margin: 2.5px;" title="Gerar Resumo do Requerimento Inicial" value="/resources/img/icon-pdf-resumo.png" />
+								</h:commandLink>
+
+								<p:commandLink rendered="#{pautaReenquadramentoProcessoController.renderedNaoReenquadrar(pr)}"
+								 oncomplete="dlgNaoReenquadrar.show();"
+								 update="formNaoReenquadrar"
+								 action="#{pautaReenquadramentoProcessoController.iniciarNaoReenquadrar(pr)}">
+									<h:graphicImage style="margin: 2.5px;" title="Não Reenquadrar" value="/resources/img/ico-cancelar-projeto.png" />
+								</p:commandLink>
+
+								<p:commandLink rendered="#{pautaReenquadramentoProcessoController.exibirVoltarStatus(pr)}" action="#{alterarStatusReenquadramentoController.carregarAlterarStatus(pr)}"
+										oncomplete="dlgAlteracaoStatusReenquadramento.show()" update="dlgAlteracaoStatusReenquadramento" process="@this" >
+										<h:graphicImage style="margin: 2.5px;" title="#{bundle.reenquadramento_lbl_alterar_status}" value="/resources/img/voltar.png" />
+								</p:commandLink>
+							</h:panelGroup>
+						</p:column>
+					</p:dataTable>
+				</h:panelGrid>
+			</h:panelGroup>
+			
+			
+		</h:form>
+		
+			<p:dialog header="Selecionar Requerente" widgetVar="requerente" modal="true" style="text-align:center;" resizable="false"  position="center">  
+			<ui:include src="/paginas/manter-processo/pauta_reenquadramento_requerente.xhtml" />
+        </p:dialog>
+	</ui:define>
+</ui:composition>
