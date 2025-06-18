@@ -7,9 +7,11 @@
 	xmlns:p="http://primefaces.prime.com.tr/ui">	
 		<br/>
 		<h:form id="formEnderecoPesquisaCep" >
+        <ui:include src="/layout/csrfToken.xhtml" />
 			<h:panelGrid rendered="#{!responsavelCefirController.showIncluirResponsavel}" >
 				<h3>
-					<h:outputLabel id="idlblendereco" styleClass="titulo-grupo" value="ENDEREÇO" rendered="#{!responsavelCefirController.showIncluirResponsavel}"/>
+        <ui:include src="/layout/csrfToken.xhtml" />
+					<h:outputLabel id="idlblendereco" styleClass="titulo-grupo" value="ENDEREÃ‡O" rendered="#{!responsavelCefirController.showIncluirResponsavel}"/>
 				</h3>
 				<p:remoteCommand action="#{enderecoController.filtrarPorCep()}" update=":paginaImovel:paginaCefir:tabAbasCefir:formEndereco" name="filtrarCepResponsavel"/>
 				<h:outputLabel id="idlblcep" value="* CEP" /><br/>
@@ -60,16 +62,16 @@
 			</h:panelGrid>
 			
 			<h:panelGrid columns="2" id="panelmunicipioestado" width="100%">
-				<h:outputText id="idlblnumero" value="* Número"/>
+				<h:outputText id="idlblnumero" value="* NÃºmero"/>
 				<h:outputLabel id="idlblcomplemento" value="Complemento" />
-				<p:inputText style="width: 70%" disabled="#{!enderecoController.enableFormEndereco}" value="#{enderecoController.endereco.numEndereco}" maxlength="5" size="5" required="true" requiredMessage="O campo Número deve ser preenchido." />
+				<p:inputText style="width: 70%" disabled="#{!enderecoController.enableFormEndereco}" value="#{enderecoController.endereco.numEndereco}" maxlength="5" size="5" required="true" requiredMessage="O campo NÃºmero deve ser preenchido." />
 				<p:inputText style="width: 100%" value="#{enderecoController.endereco.desComplemento}" disabled="#{!enderecoController.enableFormEndereco}" />
 			</h:panelGrid>
 			
 			<h:panelGrid columns="2">
 			
 				<h:outputText id="idlbluf" value="* UF"/>
-				<h:outputLabel id="idlblmunicipio" value="* Município" />
+				<h:outputLabel id="idlblmunicipio" value="* MunicÃ­pio" />
 				
 				<p:selectOneMenu id="idcombouf" value="#{enderecoController.estado}" disabled="#{!enderecoController.showInputs}"  required="true" requiredMessage="O campo UF deve ser selecionado." 
 					valueChangeListener="#{estadoMunicipioController.changeEstado()}">
@@ -80,7 +82,7 @@
 					<p:ajax update="idcombomunicipio" />
 				</p:selectOneMenu>
 				
-				<p:selectOneMenu id="idcombomunicipio" value="#{enderecoController.municipio}" disabled="#{!enderecoController.showInputs}"  required="true" requiredMessage="O campo Município deve ser selecionado." >
+				<p:selectOneMenu id="idcombomunicipio" value="#{enderecoController.municipio}" disabled="#{!enderecoController.showInputs}"  required="true" requiredMessage="O campo MunicÃ­pio deve ser selecionado." >
 					<f:selectItems value="#{estadoMunicipioController.valuesComboBoxMunicipio}" />
 					<f:converter converterId="municipioConverter" />
 					<f:validator validatorId="municipioValidator"/>
@@ -88,7 +90,7 @@
 			</h:panelGrid>
 			
 			<h:panelGrid columns="1" width="100%">
-				<h:outputText id="idlblpontoreferencia" value="Ponto de Referência"  />
+				<h:outputText id="idlblpontoreferencia" value="Ponto de ReferÃªncia"  />
 				<p:inputText style="width: 100%" value="#{enderecoController.endereco.desPontoReferencia}" disabled="#{!enderecoController.enableFormEndereco}"/>
 			</h:panelGrid>
 			<h:panelGrid columns="2">	

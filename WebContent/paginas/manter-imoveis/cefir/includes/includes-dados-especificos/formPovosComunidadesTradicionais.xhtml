@@ -82,16 +82,16 @@
 							<p:selectBooleanCheckbox value="#{imovelRuralControllerNew.indRepresentanteFamilia}" disabled="#{empty imovelRuralControllerNew.pctImovelRural.pctFamiliaCollection}">
 								<p:ajax event="change" update="formCadImovelRural:tabAbasDadosEspecificos:gridRepresentanteFamilia"/>
 							</p:selectBooleanCheckbox>
-							<h:outputText value="Representante da famÌlia" />
+							<h:outputText value="Representante da fam√≠lia" />
 						</h:panelGrid>
 						
 						<h:panelGrid id="gridRepresentanteFamilia">
 							<h:panelGrid style="margin-left: -10px;" rendered="#{!imovelRuralControllerNew.indRepresentanteFamilia}">
 								<p:spacer height="5"/>
 								<h:panelGrid columns="2">
-									<h:outputText value="*Quem È o representante da famÌlia?" />
-									<h:graphicImage title="Os dados apresentados na lista s„o de pessoas cadastradas como representantes de famÌlias desta
-											comunidade que devem ser cadastradas antes dos demais membros. … necess·rio selecionar o representante da famÌlia da pessoa fÌsica que est· sendo adicionada." value="/resources/img/ico-ajuda.png" />	
+									<h:outputText value="*Quem √© o representante da fam√≠lia?" />
+									<h:graphicImage title="Os dados apresentados na lista s√£o de pessoas cadastradas como representantes de fam√≠lias desta
+											comunidade que devem ser cadastradas antes dos demais membros. √â necess√°rio selecionar o representante da fam√≠lia da pessoa f√≠sica que est√° sendo adicionada." value="/resources/img/ico-ajuda.png" />	
 								</h:panelGrid>
 								<h:panelGrid>
 									<p:selectOneMenu value="#{imovelRuralControllerNew.pessoaRepresentante}" style="min-width:200px;">
@@ -126,6 +126,7 @@
 						<br />
 						<h:panelGroup>
 							<h:form id="formUploadPlanilhaPCT" enctype="multipart/form-data" >
+        <ui:include src="/layout/csrfToken.xhtml" />
 								<h:panelGrid columns="2">
 									<p:fileUpload id="btnUpload" label="#{bundle.cefir_lbl_upload_planilha}" auto="true"
 											mode="advanced" fileUploadListener="#{imovelRuralControllerNew.handleFileUpload}"
@@ -153,7 +154,7 @@
 						
 						<p:column style="text-align: center !important;width:80px; white-space: pre-wrap;word-break: break-all;">
 							<f:facet name="header">
-								<h:outputText value="Membros da FamÌlia" />
+								<h:outputText value="Membros da Fam√≠lia" />
 							</f:facet>
 							<p:rowToggler />
 						</p:column>
@@ -171,7 +172,7 @@
 						</p:column>
 						<p:column style="text-align: center !important;">
 							<f:facet name="header">
-								<h:outputText value="AÁıes" />
+								<h:outputText value="A√ß√µes" />
 							</f:facet>
 							<p:commandLink id="excluirApp" oncomplete="dialogExcluirPctPessoa.show()" title="Remover" process="@this">
 								<h:graphicImage title="Excluir" value="/resources/img/ico-excluir.png" />
@@ -194,7 +195,7 @@
 								</p:column>
 								<p:column style="text-align: center !important;">
 									<f:facet name="header">
-										<h:outputText value="AÁıes" />
+										<h:outputText value="A√ß√µes" />
 									</f:facet>
 									<p:commandLink id="excluirApp"
 										oncomplete="dialogExcluirPctPessoa.show()" title="Remover"
@@ -225,7 +226,7 @@
 							<h:panelGroup id="gridTablePessoaJuridica" layout="block">
 								<h:panelGroup layout="block" rendered="#{imovelRuralControllerNew.pctImovelRural.renderedPessoaJuridicaPctListaConcedente}">
 									<h:panelGroup layout="block" style="margin-top:30px;">
-										<h:outputText value="AssociaÁıes adicionadas" styleClass="titulo-grupo" />
+										<h:outputText value="Associa√ß√µes adicionadas" styleClass="titulo-grupo" />
 									</h:panelGroup>
 									<h:panelGroup layout="block" style="margin-top:20px;">
 										<p:dataTable var="pessoaJuridica" value="#{imovelRuralControllerNew.pctImovelRural.pessoaJuridicaPctListaConcedente}"  style="width: 650px;">
@@ -234,10 +235,10 @@
 													<h:outputText value="#{pessoaJuridica.idePessoaJuridica.numCnpjFormatado}" />
 												</h:panelGroup>
 											</p:column>
-											<p:column headerText="NOME DA ASSOCIA«√O">
+											<p:column headerText="NOME DA ASSOCIA√á√ÉO">
 												<h:outputText value="#{pessoaJuridica.idePessoaJuridica.nomRazaoSocial}" />
 											</p:column>
-											<p:column headerText="AÁıes">
+											<p:column headerText="A√ß√µes">
 												<h:panelGroup layout="block" style="text-align: center;">
 													<p:commandLink title="Remover" actionListener="#{imovelRuralControllerNew.setarPessoaJuridicaExclusao()}" process="@this" 
 													oncomplete="dialogExcluirPctPessoaJuridica.show()">
@@ -256,7 +257,7 @@
 				
 				<fieldset style="margin-top: 20px; border: 1px solid #ccc; padding: 10px;">
 					<legend>
-						<h:outputText styleClass="titulo-grupo" value="Dados do concession·rio" />
+						<h:outputText styleClass="titulo-grupo" value="Dados do concession√°rio" />
 					</legend>
 					<f:subview id="concessionario">
 						<h:panelGroup id="panelPctCnpj" layout="block">
@@ -264,7 +265,7 @@
 							<h:panelGroup id="gridTablePessoaJuridica" layout="block">
 								<h:panelGroup layout="block" rendered="#{imovelRuralControllerNew.pctImovelRural.renderedPessoaJuridicaPctListaConcessionario}">
 									<h:panelGroup layout="block" style="margin-top:30px;">
-										<h:outputText value="AssociaÁıes adicionadas" styleClass="titulo-grupo" />
+										<h:outputText value="Associa√ß√µes adicionadas" styleClass="titulo-grupo" />
 									</h:panelGroup>
 									<h:panelGroup layout="block" style="margin-top:20px;">
 										<p:dataTable var="pessoaJuridica" value="#{imovelRuralControllerNew.pctImovelRural.pessoaJuridicaPctListaConcessionario}"  style="width: 650px;">
@@ -273,10 +274,10 @@
 													<h:outputText value="#{pessoaJuridica.idePessoaJuridica.numCnpjFormatado}" />
 												</h:panelGroup>
 											</p:column>
-											<p:column headerText="NOME DA ASSOCIA«√O">
+											<p:column headerText="NOME DA ASSOCIA√á√ÉO">
 												<h:outputText value="#{pessoaJuridica.idePessoaJuridica.nomRazaoSocial}" />
 											</p:column>
-											<p:column headerText="AÁıes">
+											<p:column headerText="A√ß√µes">
 												<h:panelGroup layout="block" style="text-align: center;">
 													<p:commandLink title="Remover" actionListener="#{imovelRuralControllerNew.setarPessoaJuridicaExclusao()}" process="@this" 
 													oncomplete="dialogExcluirPctPessoaJuridica.show()">
@@ -299,15 +300,15 @@
 		<fieldset style="margin-top: 20px; border: 1px solid #ccc; padding: 10px;">
 		
 			<legend>
-				<h:outputText styleClass="titulo-grupo" value="AssociaÁıes da comunidade" />
+				<h:outputText styleClass="titulo-grupo" value="Associa√ß√µes da comunidade" />
 			</legend>
 			
 			<h:panelGroup layout="block">
-				<h:outputText value="Existem associaÁıes nessa comunidade?" />
+				<h:outputText value="Existem associa√ß√µes nessa comunidade?" />
 				<p:selectOneRadio value="#{imovelRuralControllerNew.pctImovelRural.indAssociacaoComunidade}">
 					<f:selectItem itemLabel="Sim"
 						itemValue="#{true}" />
-					<f:selectItem itemLabel="N„o"
+					<f:selectItem itemLabel="N√£o"
 						itemValue="#{false}" />
 					<p:ajax event="change" process="@this" listener="#{imovelRuralControllerNew.existemAssociacoes}"/>	
 				</p:selectOneRadio>
@@ -321,7 +322,7 @@
 							<h:panelGroup id="gridTablePessoaJuridica" layout="block">
 								<h:panelGroup layout="block" rendered="#{imovelRuralControllerNew.pctImovelRural.renderedPessoaJuridicaPctListaAssociacao}">
 									<h:panelGroup layout="block" style="margin-top:30px;">
-										<h:outputText value="AssociaÁıes adicionadas" styleClass="titulo-grupo" />
+										<h:outputText value="Associa√ß√µes adicionadas" styleClass="titulo-grupo" />
 									</h:panelGroup>
 									<h:panelGroup layout="block" style="margin-top:20px;">
 										<p:dataTable var="pessoaJuridica" value="#{imovelRuralControllerNew.pctImovelRural.pessoaJuridicaPctListaAssociacao}"  style="width: 650px;">
@@ -330,10 +331,10 @@
 													<h:outputText value="#{pessoaJuridica.idePessoaJuridica.numCnpjFormatado}" />
 												</h:panelGroup>
 											</p:column>
-											<p:column headerText="NOME DA ASSOCIA«√O">
+											<p:column headerText="NOME DA ASSOCIA√á√ÉO">
 												<h:outputText value="#{pessoaJuridica.idePessoaJuridica.nomRazaoSocial}" />
 											</p:column>
-											<p:column headerText="AÁıes">
+											<p:column headerText="A√ß√µes">
 												<h:panelGroup layout="block" style="text-align: center;">
 													<p:commandLink title="Remover" actionListener="#{imovelRuralControllerNew.setarPessoaJuridicaExclusao()}" process="@this" 
 													oncomplete="dialogExcluirPctPessoaJuridica.show()">
@@ -366,13 +367,13 @@
 			
 			<p:spacer height="10px;" />
 			<h:panelGrid>
-				<h:outputText value="SÛ È possÌvel importar os dados do CSV para Pessoa FÌsica." style="font-weight: bold"/>
+				<h:outputText value="S√≥ √© poss√≠vel importar os dados do CSV para Pessoa F√≠sica." style="font-weight: bold"/>
 				<p:spacer/>
-				<h:outputText value="Os dados devem estar separados por 'ponto e vÌrgula'(;)." />
+				<h:outputText value="Os dados devem estar separados por 'ponto e v√≠rgula'(;)." />
 				<p:spacer/>
-				<h:outputText value="A codificaÁ„o do arquivo deve ser 'ISO-8859-1'." />
+				<h:outputText value="A codifica√ß√£o do arquivo deve ser 'ISO-8859-1'." />
 				<p:spacer/>
-				<h:outputText value="O cabeÁalho È obrigatÛrio." />
+				<h:outputText value="O cabe√ßalho √© obrigat√≥rio." />
 				<p:spacer/>
 				<h:outputText value="O arquivo deve ter o formato especificado abaixo:" />
 				<p:spacer/>
@@ -405,16 +406,16 @@
 				</p:dataTable>
 				<p:spacer/>
 				<h:panelGrid>
-					Os campos <b>CPF, DATA_NASCIMENTO, NOME_COMPLETO, NOME_MAE, CPF_REPRESENTANTE</b> s„o referentes ‡ pessoa fÌsica e sÛ devem ser preenchidos para esse tipo de pessoa.
+					Os campos <b>CPF, DATA_NASCIMENTO, NOME_COMPLETO, NOME_MAE, CPF_REPRESENTANTE</b> s√£o referentes √† pessoa f√≠sica e s√≥ devem ser preenchidos para esse tipo de pessoa.
 				</h:panelGrid>
 				<p:spacer/>
 				<h:outputText value="Os campos representam, respectivamente:" />
 				<p:spacer/>
 				<h:panelGrid style="margin-left: 20px">
-					<b>CPF:</b> n˙mero do Cadastro de Pessoa FÌsica do propriet·rio, possuidor ou concession·rio. Exemplo 11111111111 (sem pontos e traÁos, formatado como texto);<br /><br />
+					<b>CPF:</b> n√∫mero do Cadastro de Pessoa F√≠sica do propriet√°rio, possuidor ou concession√°rio. Exemplo 11111111111 (sem pontos e tra√ßos, formatado como texto);<br /><br />
 					<b>DATA_NASCIMENTO:</b> formatado em <i>DD/MM/AAAA</i>;<br /><br />
-					<b>NOME_COMPLETO:</b> nome completo do propriet·rio, possuidor ou concession·rio;<br /><br />
-					<b>NOME_MAE:</b> nome completo da m„e do propriet·rio, possuidor ou concession·rio;<br /><br />
+					<b>NOME_COMPLETO:</b> nome completo do propriet√°rio, possuidor ou concession√°rio;<br /><br />
+					<b>NOME_MAE:</b> nome completo da m√£e do propriet√°rio, possuidor ou concession√°rio;<br /><br />
 					<b>CPF_REPRESENTANTE:</b> CPF do representante;<br />
 				</h:panelGrid>
 			</h:panelGrid>
@@ -428,7 +429,7 @@
 			width="500" appendToBody="body">
 			
 			<h:panelGrid style="font-weight: bold;">
-				<h:outputText value="Existe inconsistÍncia em alguns dados da planilha. Verifique realizando o download do arquivo abaixo e aplique as devidas correÁıes." />
+				<h:outputText value="Existe inconsist√™ncia em alguns dados da planilha. Verifique realizando o download do arquivo abaixo e aplique as devidas corre√ß√µes." />
 			</h:panelGrid>
 			
 			<h:panelGrid>
@@ -446,7 +447,7 @@
 			</h:panelGrid>
 		</p:dialog>
 		
-		<p:dialog id="_dlgLiConcordoImportacaoPlanilha" widgetVar="dlgLiConcordoImportacaoPlanilha" header="ConfirmaÁ„o para ImportaÁ„o de Planilha" 
+		<p:dialog id="_dlgLiConcordoImportacaoPlanilha" widgetVar="dlgLiConcordoImportacaoPlanilha" header="Confirma√ß√£o para Importa√ß√£o de Planilha" 
 				  resizable="false" closable="true" modal="true" position="top" draggable="true" width="600" appendToBody="true">
 			<ui:include src="/paginas/manter-imoveis/modalConfirmacaoLiConcordoUploadPlanilha.xhtml" />
 		</p:dialog>

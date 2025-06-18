@@ -7,6 +7,7 @@
 	xmlns:p="http://primefaces.prime.com.tr/ui">
 
 	<h:form id="form_dialog_requerente">
+        <ui:include src="/layout/csrfToken.xhtml" />
 		<h:panelGrid columns="1">
 			<p:selectOneRadio value="${requerenteController.tipoPessoa}"
 				valueChangeListener="#{requerenteController.mudarTipoPessoa}">
@@ -41,7 +42,7 @@
 
 					<h:panelGrid id="panel_juridica" columns="2"
 						rendered="#{requerenteController.tipoPessoaDTO.tipoPessoaEnum.equals(requerenteController.tipoPessoaDTO.juridica)}">
-						<h:outputLabel value="Razão Social"
+						<h:outputLabel value="RazÃ£o Social"
 							style="float:left;" />
 						<h:outputLabel value="#{bundle.consultapj_lbl_cnpj}"
 							style="float:left;" />
@@ -111,7 +112,7 @@
 					</f:facet>
 					<p:column>
 						<f:facet name="header">
-							<h:outputText value="Razão Social" />
+							<h:outputText value="RazÃ£o Social" />
 						</f:facet>
 						<p:commandLink oncomplete="dialogselecionarRequerente.hide()"
 							update="formConsultarRequerimento:filtro">

@@ -6,7 +6,8 @@ xmlns:f="http://java.sun.com/jsf/core"
 xmlns:ui="http://java.sun.com/jsf/facelets" 
 xmlns:p="http://primefaces.prime.com.tr/ui">
 	
-	<p:dialog header="Alteração, Renovação ou Cancelamento de Outorga" dynamic="true" modal="true" widgetVar="dialogAlterCancelOutorga" resizable="false" width="600" height="700"  position="center">
+        <ui:include src="/layout/csrfToken.xhtml" />
+	<p:dialog header="AlteraÃ§Ã£o, RenovaÃ§Ã£o ou Cancelamento de Outorga" dynamic="true" modal="true" widgetVar="dialogAlterCancelOutorga" resizable="false" width="600" height="700"  position="center">
 		<h:form id="formDialogAlterCancelOutorga">
 		
 			<div style="overflow:auto; max-height: 700px;">
@@ -14,7 +15,7 @@ xmlns:p="http://primefaces.prime.com.tr/ui">
 				<p:outputPanel id="pnl01">
 					<h:panelGrid id="png01">
 						<h:panelGroup>
-							<h:outputText value="* 1. Definir solicitação:" />
+							<h:outputText value="* 1. Definir solicitaÃ§Ã£o:" />
 						</h:panelGroup>	
 						<p:outputPanel autoUpdate="true">
 							<p:selectOneRadio value="#{renovarAlterarOutorgaController.outorga.ideTipoSolicitacao}" layout="horizontal" converter="simpleEntityConverter" disabled="#{novoRequerimentoController.desabilitarTudo or not empty renovarAlterarOutorgaController.outorga.outorgaLocalizacaoGeograficaCollection}"
@@ -25,13 +26,13 @@ xmlns:p="http://primefaces.prime.com.tr/ui">
 						</p:outputPanel>
 						
 						<h:panelGrid columns="2" style="margin-left:-5px;">			
-							<h:outputText value="* 2. Informe o número do processo a ser alterado, renovado ou cancelado:" />
-							<h:outputText value="* 3. Informe o número da portaria:" />
+							<h:outputText value="* 2. Informe o nÃºmero do processo a ser alterado, renovado ou cancelado:" />
+							<h:outputText value="* 3. Informe o nÃºmero da portaria:" />
 							
 							<p:inputText value="#{renovarAlterarOutorgaController.outorga.numProcessoOutorga}" disabled="#{novoRequerimentoController.desabilitarTudo}"/>
 							<p:inputText value="#{renovarAlterarOutorgaController.outorga.numPortariaOutorga}" maxlength="50" disabled="#{novoRequerimentoController.desabilitarTudo}" />
 							
-							<h:outputText value="* 4. Informe a data da publicação da portaria:"/>
+							<h:outputText value="* 4. Informe a data da publicaÃ§Ã£o da portaria:"/>
 							<h:outputText value="* 5. Informe a validade:" style="margin-right:25px"/>			
 							
 							<p:calendar maxdate="#{novoRequerimentoController.dataHoje}" size="7" showOn="button" locale="pt" pattern="dd/MM/yyyy" readOnlyInputText="true" 
@@ -68,7 +69,7 @@ xmlns:p="http://primefaces.prime.com.tr/ui">
 				<p:outputPanel id="pnl03" autoUpdate="true">
 					<h:panelGrid rendered="#{renovarAlterarOutorgaController.outorga.ideTipoSolicitacao.ideTipoSolicitacao == 6 and	(renovarAlterarOutorgaController.outorga.tipoCaptacao.ideTipoCaptacao == 3 or renovarAlterarOutorgaController.outorga.tipoCaptacao.ideTipoCaptacao == 4 or renovarAlterarOutorgaController.outorga.ideModalidadeOutorga.ideModalidadeOutorga == 2)}">
 						<h:panelGroup>
-							<h:outputText value="* 6.1. Qual o tipo de alteração será realizada?" />
+							<h:outputText value="* 6.1. Qual o tipo de alteraÃ§Ã£o serÃ¡ realizada?" />
 						</h:panelGroup>			
 						<p:selectOneRadio value="#{renovarAlterarOutorgaController.outorga.ideTipoAlteracao}" layout="pageDirection" converter="simpleEntityConverter" 
 							disabled="#{novoRequerimentoController.desabilitarTudo or not empty renovarAlterarOutorgaController.outorga.outorgaLocalizacaoGeograficaCollection}">			 
@@ -82,7 +83,7 @@ xmlns:p="http://primefaces.prime.com.tr/ui">
 				<p:outputPanel id="pnl04" style="margin-top:-10px;" autoUpdate="true">
 					<h:panelGrid id="png04" rendered="#{renovarAlterarOutorgaController.outorga.ideTipoAlteracao != null or renovarAlterarOutorgaController.outorga.ideModalidadeOutorga.ideModalidadeOutorga == 4 or renovarAlterarOutorgaController.outorga.ideModalidadeOutorga.ideModalidadeOutorga == 3}">
 						<h:panelGroup>
-							<h:outputText value="* 7. Detalhamentos da localização geográfica" />
+							<h:outputText value="* 7. Detalhamentos da localizaÃ§Ã£o geogrÃ¡fica" />
 						</h:panelGroup>
 				
 						<h:panelGroup id="cmdLinkLocGeoOutorga">
@@ -91,7 +92,7 @@ xmlns:p="http://primefaces.prime.com.tr/ui">
 									action="#{localizacaoOutorgaController.load()}" rendered="#{!renovarAlterarOutorgaController.outorga.intervencao}"
 									disabled="#{novoRequerimentoController.desabilitarTudo}">
 									<h:graphicImage title="Incluir..." value="/resources/img/ico-expandir.png" />
-									<h:outputText value=" Incluir dados da alteração" />
+									<h:outputText value=" Incluir dados da alteraÃ§Ã£o" />
 								</p:commandLink>
 							</p:outputPanel>	
 						</h:panelGroup>
@@ -99,9 +100,9 @@ xmlns:p="http://primefaces.prime.com.tr/ui">
 						<h:panelGrid id="pnlCmdLinkIcluirIntervencao" rendered="#{renovarAlterarOutorgaController.outorga.intervencao}">
 							<p:commandLink oncomplete="dialogIntervencaoCorpoHidrico.show();" action="#{intervencaoController.load()}" process="@this" 
 								 global="true" update=":formIntervencaoCorpoHidrico, :formIntervencaoCorpoHidrico:panelIntervencaoCorpoHidrico" disabled="#{novoRequerimentoController.desabilitarTudo}">
-								<h:graphicImage title="Incluir dados da alteração da intervenção" value="/resources/img/ico-expandir.png" style="margin-right: 2px;"/>
+								<h:graphicImage title="Incluir dados da alteraÃ§Ã£o da intervenÃ§Ã£o" value="/resources/img/ico-expandir.png" style="margin-right: 2px;"/>
 								<f:setPropertyActionListener target="#{intervencaoController.isEtapa2}" value="#{true}"/>
-								<h:outputText value="Incluir dados da alteração da intervenção" />
+								<h:outputText value="Incluir dados da alteraÃ§Ã£o da intervenÃ§Ã£o" />
 							</p:commandLink>
 						</h:panelGrid>
 						
@@ -109,11 +110,11 @@ xmlns:p="http://primefaces.prime.com.tr/ui">
 							
 							<p:dataTable id="tableLocalizaoGeograficaOutorga" var="loc" value="#{renovarAlterarOutorgaController.outorga.outorgaLocalizacaoGeograficaCollection}" emptyMessage="#{bundle.consultapf_msg_empty_list}">
 							
-								<p:column headerText="Ponto referência">
+								<p:column headerText="Ponto referÃªncia">
 									<h:outputText value="#{loc.ideLocalizacaoGeografica.desLocalizacaoGeografica}" />
 								</p:column>
 							
-								<p:column headerText="Tipo de inserção">
+								<p:column headerText="Tipo de inserÃ§Ã£o">
 									<h:outputText value="#{loc.ideLocalizacaoGeografica.ideClassificacaoSecaoToString}" />
 								</p:column>
 							
@@ -121,7 +122,7 @@ xmlns:p="http://primefaces.prime.com.tr/ui">
 									<h:outputText value="#{loc.ideLocalizacaoGeografica.nomeSistemaCoordenadas}" />
 								</p:column>
 								
-								<p:column style="text-align: center;" headerText="Ação">
+								<p:column style="text-align: center;" headerText="AÃ§Ã£o">
 							
 									<p:commandLink oncomplete="localizacaoAlteracaoOutorga.show()" update="formLocalizacaoDialogOutorga formDialogAlterCancelOutorga" global="false" action="#{localizacaoOutorgaController.editar(loc)}" >
 										 <h:graphicImage title="Visualizar" value="/resources/img/ico-pesquisa.png" />
@@ -165,6 +166,7 @@ xmlns:p="http://primefaces.prime.com.tr/ui">
 	
 	<p:confirmDialog message="#{bundle.consultapf_msg_confimrexclusao}" header="Mensagem" severity="alert" widgetVar="excluirLocalizacaoAltRenovOutorga" >
 		<h:form>
+        <ui:include src="/layout/csrfToken.xhtml" />
 			<p:commandButton value="#{bundle.consultapf_lbl_sim}"  update="formDialogAlterCancelOutorga:pnl04 formDialogAlterCancelOutorga:tableLocalizaoGeograficaOutorga" 
 				actionListener="#{renovarAlterarOutorgaController.excluirLocalizacaoOutorga()}" oncomplete="excluirLocalizacaoAltRenovOutorga.hide()" global="false" process="@this"/>
 				<p:commandButton value="#{bundle.consultapf_lbl_nao}" onclick="excluirLocalizacaoAltRenovOutorga.hide()" global="false"/>

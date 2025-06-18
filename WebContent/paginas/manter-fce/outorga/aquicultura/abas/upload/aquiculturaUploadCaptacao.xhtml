@@ -5,8 +5,9 @@
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:p="http://primefaces.prime.com.tr/ui">
-	<h:form id="upDadoAdicionalCaptacao" style="width:650px;" rendered="#{fceOutorgaAquiculturaCaptacaoController.exibirUploadDocumentoAdicionalParaCaptacao}"> <!-- #6649 -->
-		<!-- INICIO GROUP INFO VIVEIRO - CAPTAÇÃO -->
+	<h:form id="upDadoAdicionalCaptacao" style="width:650px;" rendered="#{fceOutorgaAquiculturaCaptacaoController.exibirUploadDocumentoAdicionalParaCaptacao}">
+        <ui:include src="/layout/csrfToken.xhtml" /> <!-- #6649 -->
+		<!-- INICIO GROUP INFO VIVEIRO - CAPTAÃ‡ÃƒO -->
 		<h:panelGroup style="margin-left:10px;">
 			<h:outputText styleClass="titulo-grupo" style="font-weight:bold;" value="#{bundle.fce_out_aqui_da_viveiro_captacao}" />
 			<h:graphicImage title="#{bundle.fce_out_aqui_da_ajuda_captacao}" value="/resources/img/ico-ajuda.png" id="ajudaCaptacao" style="margin:1px 1px 1px 4px; text-align:justify;" />
@@ -20,7 +21,7 @@
 		<!-- INICIO DA GRID COM DOCUMENTO UPADO DE VIVEIRO - CAPTACAO -->
 		<h:panelGrid id="adicionalCaptacao" style="margin-left:15px;">
 			<p:fileUpload id="upAdicionalCaptacao" widgetVar="upAdicionalCaptacao" label="#{bundle.fce_out_aqui_da_upload_captacao}" fileUploadListener="#{fceOutorgaAquiculturaCaptacaoController.tratarUploadCaptacao()}"
-				mode="advanced" oncomplete="updateGridCaptacao()" auto="true" allowTypes="/(\.|\/)(pdf|png|jpg)$/" invalidFileMessage="Tipo de arquivo inválido." 
+				mode="advanced" oncomplete="updateGridCaptacao()" auto="true" allowTypes="/(\.|\/)(pdf|png|jpg)$/" invalidFileMessage="Tipo de arquivo invÃ¡lido." 
 				process="@this" disabled="#{fceOutorgaAquiculturaCaptacaoController.docAdicionalCaptacaoUpado or fceOutorgaAquiculturaCaptacaoController.desabilitarTudo}" />
 			<p:remoteCommand name="updateGridCaptacao" update="adicionalCaptacao" />
 			<p:dataTable id="docCaptacaoUpado" widgetVar="docCaptacaoUpado" rendered="#{fceOutorgaAquiculturaCaptacaoController.docAdicionalCaptacaoUpado}" value="#{fceOutorgaAquiculturaCaptacaoController.fceAquiculturaCaptacao.uploadCaminhoArquivo}" var="capUpado" lazy="true" style="width:590px;">

@@ -8,7 +8,8 @@
 	
 	<p:dialog 
 		widgetVar="dlgAutorizacaoManejoCabruca"
-		header="AutorizaÁ„o de Manejo da Cabruca" 
+        <ui:include src="/layout/csrfToken.xhtml" />
+		header="Autoriza√ß√£o de Manejo da Cabruca" 
 		resizable="false" 
 		position="center" 
 		closable="true"  
@@ -125,7 +126,7 @@
 							
 							<p:outputPanel id="plMaterialLenhoNovo">
 								<br />
-								<h:outputText styleClass="titulo-grupo" style="font-weight:bold;" value="EspecificaÁ„o do Produto da Supress„o" />
+								<h:outputText styleClass="titulo-grupo" style="font-weight:bold;" value="Especifica√ß√£o do Produto da Supress√£o" />
 								<br /><br />
 								<h:outputText styleClass="titulo-grupo" style="font-weight:bold; margin-left:10px;" value="* Especies"/>
 								<br />
@@ -147,7 +148,7 @@
 								<h:panelGrid id="gridTableEspecie">
 									<p:dataTable id="tblTipoClassificacao" value="#{autorizacaoManejoCabrucaController.listaEspecieSupressao}" var="especieSupressao" lazy="true" paginator="true" rows="15"  
 										paginatorPosition="bottom" paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}" rowsPerPageTemplate="5,10,15" 
-										emptyMessage="Nenhuma especie supress„o encontrado.">
+										emptyMessage="Nenhuma especie supress√£o encontrado.">
 										<p:column style="text-align:justify; width:640px;">
 											<f:facet name="header">
 												<h:outputText value="Nome" />
@@ -155,8 +156,8 @@
 											<h:outputText value="#{especieSupressao.nomEspecieSupressao}"/>
 										</p:column>
 										
-										<p:column style="width:40px; text-align:center;" headerText="AÁıes" rendered="#{autorizacaoManejoCabrucaController.renderedBtnSalvar}">
-											<p:commandLink title="Adicionar ClassificaÁ„o(ıes)" process="@this" update="formNomeVulgar" 
+										<p:column style="width:40px; text-align:center;" headerText="A√ß√µes" rendered="#{autorizacaoManejoCabrucaController.renderedBtnSalvar}">
+											<p:commandLink title="Adicionar Classifica√ß√£o(√µes)" process="@this" update="formNomeVulgar" 
 												 global="false" actionListener="#{autorizacaoManejoCabrucaController.obterNovoNomePopular()}" action="#{nomePopularEspecieController.abrirNomePopular(especieSupressao)}">
 												 <f:setPropertyActionListener target="#{autorizacaoManejoCabrucaController.listaEspecieSupressaoAutorizacao}" value="#{amc.listaEspecieSupressaoAutorizacao}"/>
 												 <f:setPropertyActionListener target="#{autorizacaoManejoCabrucaController.especieSupressaoSelecionada}" value="#{especieSupressao}" />
@@ -165,7 +166,7 @@
 												  <f:setPropertyActionListener target="#{nomePopularEspecieController.idDoComponenteParaSerAtualizado}" value="accAutorizacaoManejoCabruca:#{autorizacaoManejoCabrucaController.obterPosicaoNaLista(autorizacaoManejoCabrucaController.listaAutorizacaoManejoCabrucaDTO, amc)}:frmAutorizacaoManejoCabrucaPoligonal" />
 												 <f:setPropertyActionListener target="#{nomePopularEspecieController.listaItemRemovidoNomePopularEspecie}" value="#{especieSupressao.removidosNomePopularEspecie}" /> 
 												<f:setPropertyActionListener target="#{autorizacaoManejoCabrucaController.autorizacaoManejoCabrucaDTOSelecionado}" value="#{amc}" /> 
-												<h:graphicImage title="Adicionar ClassificaÁ„o(ıes)" value="/resources/img/ico-aprovar-notificacao.png" />
+												<h:graphicImage title="Adicionar Classifica√ß√£o(√µes)" value="/resources/img/ico-aprovar-notificacao.png" />
 											</p:commandLink>
 										</p:column>
 									</p:dataTable>
@@ -191,7 +192,7 @@
 													<h:outputText value="Volume total" /> <br /> <h:outputText value="fora de APP" />
 												</f:facet>
 												<h:panelGrid columns="3" id="pgVolumeForaAPP">
-													<h:outputText value="m≥" />
+													<h:outputText value="m¬≥" />
 													<p:spacer height="15px;"/>
 													<p:inputText value="#{especieSupressao.volumeTotalForaApp}" style="width:80px;" converter="doubleConverter" onkeyup="maskIt(this, event, '99.999.999,99', true)" maxlength="13" disabled="#{!autorizacaoManejoCabrucaController.renderedBtnSalvar or asvDadosGeraisController.desabilitarTudo or !especieSupressao.edicao}">
 								 		    			<p:ajax event="blur" process="@form" global="false" listener="#{autorizacaoManejoCabrucaController.calcularVolumeForaAPP(especieSupressao)}" partialSubmit="true" update="pgVolumeForaAPP teste"/>
@@ -214,7 +215,7 @@
 													<h:outputText value="Volume total" /> <br /> <h:outputText value="em APP" />
 												</f:facet>
 												<h:panelGrid columns="3" id="pgVolumeEmAPP">
-													<h:outputText value="m≥" />
+													<h:outputText value="m¬≥" />
 													<p:spacer height="15px;"/>
 													<p:inputText value="#{especieSupressao.volumeTotalEmApp}" style="width:80px;" converter="doubleConverter" onkeyup="maskIt(this, event, '99.999.999,99', true)" maxlength="13" disabled="#{!autorizacaoManejoCabrucaController.renderedBtnSalvar or asvDadosGeraisController.desabilitarTudo or !especieSupressao.edicao}">
 								 		    			<p:ajax event="blur" global="false" listener="#{asvSupressaoController.calcularVolumeEmAPP(especieSupressao)}" update="pgVolumeEmAPP"/>	
@@ -235,7 +236,7 @@
 											</p:column>
 											<p:column style="text-align:justify;">
 												<f:facet name="header">
-													<h:outputText value="Destino socioeconÍmico" /> <br /> <h:outputText value="do Produto" escape="false" />
+													<h:outputText value="Destino socioecon√™mico" /> <br /> <h:outputText value="do Produto" escape="false" />
 												</f:facet>
 												<h:panelGroup layout="block" style="overflow:auto;">		        
 								 		    		<p:selectManyCheckbox value="#{especieSupressao.listaDestinoSocioeconomicoSelecionado}" layout="pageDirection" converter="simpleEntityConverter" disabled="#{!especieSupressao.edicao or !autorizacaoManejoCabrucaController.renderedBtnSalvar}">
@@ -246,11 +247,11 @@
 											</p:column>
 											<p:column style="text-align:justify;width: 100px">
 												<f:facet name="header">
-													<h:outputText value="AÁıes" />
+													<h:outputText value="A√ß√µes" />
 												</f:facet>
 												
 												<h:panelGroup>
-													<p:commandLink title="Confirmar volumes e destino socioeconÙmico do produto" process="@this" global="false" 
+													<p:commandLink title="Confirmar volumes e destino socioecon√¥mico do produto" process="@this" global="false" 
 													disabled="#{!autorizacaoManejoCabrucaController.renderedBtnSalvar}"
 													rendered="#{especieSupressao.edicao}" actionListener="#{autorizacaoManejoCabrucaController.validarEspecie()}">
 							 		    				<f:attribute name="especieSupressao" value="#{especieSupressao}"/>
@@ -292,6 +293,7 @@
  			
  			<h:panelGroup id="pnlBotoesCabruca" layout="block" style="width: 100%; text-align: right; margin-top: 30px;">
 				<h:form id="frmAutorizacaoCabrucaBotoes">
+        <ui:include src="/layout/csrfToken.xhtml" />
 					<p:commandButton value="Voltar" process="@this" onclick="dlgAutorizacaoManejoCabruca.hide();" />
 					<p:commandButton  value="Salvar" actionListener="#{autorizacaoManejoCabrucaController.salvar()}"
 					rendered="#{autorizacaoManejoCabrucaController.renderedBtnSalvar}" 
@@ -302,13 +304,14 @@
 		</h:panelGroup>
 	</p:dialog>
 	
-<!-- 	<p:confirmDialog id="_dlgImprimirRelatorioAMC" message="Deseja imprimir o relatÛrio de AMC?" widgetVar="dlgImprimirRelatorioAMC" header="Mensagem">
+        <ui:include src="/layout/csrfToken.xhtml" />
+<!-- 	<p:confirmDialog id="_dlgImprimirRelatorioAMC" message="Deseja imprimir o relat√≥rio de AMC?" widgetVar="dlgImprimirRelatorioAMC" header="Mensagem">
 		<h:form id="frmImprimirRelatorioAMC">
 			<div align="center">
 				<p:commandButton value="Sim" ajax="false" global="false" process="@this" onclick="dlgImprimirRelatorioAMC.hide();" style="margin-right:10px;">
 					<p:fileDownload value="#{autorizacaoManejoCabrucaController.imprimirRelatorio}"/>
 				</p:commandButton>			
-				<p:commandButton value="N„o" oncomplete="dlgImprimirRelatorioAMC.hide();" process="@this"/>
+				<p:commandButton value="N√£o" oncomplete="dlgImprimirRelatorioAMC.hide();" process="@this"/>
 			</div>
 		</h:form>
 	</p:confirmDialog>  -->

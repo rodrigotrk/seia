@@ -12,7 +12,10 @@
 	<p:dialog 
 		id="_dialogNotificacar" 
 		widgetVar="dialogNotificacar" 
-		header="NotificaÁ„o" 
+        <ui:include src="/layout/csrfToken.xhtml" />
+        <ui:include src="/layout/csrfToken.xhtml" />
+        <ui:include src="/layout/csrfToken.xhtml" />
+		header="Notifica√ß√£o" 
 		position="top" 
 		closable="true" 
 		modal="true"
@@ -21,32 +24,32 @@
 		resizable="false" >
 		
 		<h:panelGroup id="pnlNotificacao" layout="block">
-			<!--  FORMUL¡RIO DE T…CNICO -->
+			<!--  FORMUL√ÅRIO DE T√âCNICO -->
 			<ui:include src="/paginas/manter-notificacao/notificacao-tecnico.xhtml" />
 			
-			<!--  FORMUL¡RIO DE LÕDER -->
+			<!--  FORMUL√ÅRIO DE L√çDER -->
 			<ui:include src="/paginas/manter-notificacao/notificacao-lider.xhtml" />
 		</h:panelGroup>
 		
 	</p:dialog>
 	
 	<p:confirmDialog id="_msgConfirmacaoExclusaoDocumento" widgetVar="msgConfirmacaoExclusaoDocumento" 
-		message="Deseja realmente excluir este documento?" header="ConfirmaÁ„o" severity="alert"
+		message="Deseja realmente excluir este documento?" header="Confirma√ß√£o" severity="alert"
 		width="450" closable="false">
 		<h:form  id="form_msg_confirmacao_exclusao_documento">
 			<p:commandButton global="true" value="Sim" actionListener="#{notificacaoFinalController.excluirDocumentoNotificacao()}" process="@this" 
 				update=":notificacaoFinalForm:documentosDaNotificacao :notificacaoFinalForm:botoes" oncomplete="msgConfirmacaoExclusaoDocumento.hide();" />
-			<p:commandButton global="true" value="N„o" oncomplete="msgConfirmacaoExclusaoDocumento.hide();" />
+			<p:commandButton global="true" value="N√£o" oncomplete="msgConfirmacaoExclusaoDocumento.hide();" />
 		</h:form>
 	</p:confirmDialog>
 		
 	<p:confirmDialog id="_msgConfirmacao" widgetVar="msgConfirmacao" 
-		message="ApÛs a est· tela de confirmaÁ„o a notificaÁ„o ser· automaticamente enviada para o requerente. Deseja realmente aprovar esta notificaÁ„o?" 
-		header="ConfirmaÁ„o" severity="alert" width="450" closable="false" >
+		message="Ap√≥s a est√° tela de confirma√ß√£o a notifica√ß√£o ser√° automaticamente enviada para o requerente. Deseja realmente aprovar esta notifica√ß√£o?" 
+		header="Confirma√ß√£o" severity="alert" width="450" closable="false" >
 		
 		<h:form  id="form_msg_confirmacao">
 			<p:commandButton global="true" value="Sim" action="#{notificacaoFinalController.enviarNotificacaoFinal()}" update="msgNotificacao" oncomplete="msgConfirmacao.hide();"/>
-			<p:commandButton value="N„o" oncomplete="msgConfirmacao.hide();" />
+			<p:commandButton value="N√£o" oncomplete="msgConfirmacao.hide();" />
 		</h:form>
 	</p:confirmDialog>
 	
@@ -57,8 +60,8 @@
 
 	<h:form>
 		<p>"Como o requerimento vinculado a este processo foi formado em data anterior a 01/10/2014, 
-		ainda na vers„o SEIA 1.0, n„o ser· possÌvel realizar o reenquadramento via NOT-C. Nesses casos, 
-		a orientaÁ„o È gerar uma NOT solicitando a formaÁ„o de um processo em separado com o novo ato a ser incluÌdo ou substituÌdo". </p>
+		ainda na vers√£o SEIA 1.0, n√£o ser√° poss√≠vel realizar o reenquadramento via NOT-C. Nesses casos, 
+		a orienta√ß√£o √© gerar uma NOT solicitando a forma√ß√£o de um processo em separado com o novo ato a ser inclu√≠do ou substitu√≠do". </p>
 
 	</h:form>
 	</p:dialog>

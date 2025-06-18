@@ -12,12 +12,14 @@
 	
 	
 	<h:form id="formpesquisacpf">
+        <ui:include src="/layout/csrfToken.xhtml" />
 		<h:panelGrid columns="1">
 			<h:outputLabel id="idlblcpf" value="* CPF" />
 			
 			<h:panelGrid columns="2">
 				<p:inputMask id="cpf" mask="#{bundle.consultapf_msk_cpf}"
-					value="#{pessoaFisicaController.pessoaPesquisa.numCpf}" required="true" requiredMessage="O campo CPF é de preenchimento obrigatório." 
+        <ui:include src="/layout/csrfToken.xhtml" />
+					value="#{pessoaFisicaController.pessoaPesquisa.numCpf}" required="true" requiredMessage="O campo CPF Ã© de preenchimento obrigatÃ³rio." 
 					disabled="#{pessoaFisicaController.userExterno}">
 					
 					<f:converter converterId="cpfConverter" />
@@ -44,11 +46,11 @@
 					
 					<p:inputText id="nomepessoafisica" disabled="#{pessoaFisicaController.disabledPerfil}"
 						value="#{pessoaFisicaController.pessoaSelecionada.nomPessoa}"
-						style="width: 300px; margin-top: 0px;" required="true" requiredMessage="O campo Nome é de preenchimento obrigatório."  />
+						style="width: 300px; margin-top: 0px;" required="true" requiredMessage="O campo Nome Ã© de preenchimento obrigatÃ³rio."  />
 					
 					<p:calendar label="Data de Nascimento" value="#{pessoaFisicaController.pessoaSelecionada.dtcNascimento}" navigator="true" 
 						readOnlyInputText="true"  yearRange="c-200" mindate="01/01/1822" maxdate="#{pessoaFisicaController.dataAtual}" accesskey="true" showOn="button" 
-						locale="pt" required="true" requiredMessage="O campo Data de Nascimento é de preenchimento obrigatório."
+						locale="pt" required="true" requiredMessage="O campo Data de Nascimento Ã© de preenchimento obrigatÃ³rio."
 						disabled="#{pessoaFisicaController.disabledPerfil}" pattern="dd/MM/yyyy" style="padding-top: 100px;" id="txtDtcNascimento">
 					
 						<f:validator validatorId="dataNascimentoValidator"/>
@@ -60,13 +62,13 @@
 				<h:panelGrid columns="2" >
 					<h:outputLabel id="idlblemail" value="* E-mail" />
 					
-					<h:outputLabel id="idlblNomeMae" value="* Nome da Mãe" />
+					<h:outputLabel id="idlblNomeMae" value="* Nome da MÃ£e" />
 					
 					<p:inputText id="txtDesEmail" value="#{pessoaFisicaController.pessoa.desEmail}" required="#{!consultaAtividadeSemLicenciamentoController.usuarioAtendente}" validator="emailValidator" 
-						requiredMessage="O campo E-mail é de preenchimento obrigatório." 
+						requiredMessage="O campo E-mail Ã© de preenchimento obrigatÃ³rio." 
 						disabled="#{pessoaFisicaController.disabledEmail}" style="width: 300px;"/>
 					
-					<p:inputText id="txtNomMae" value="#{pessoaFisicaController.pessoaSelecionada.nomMae}" required="true" requiredMessage="O campo Nome da Mãe é de preenchimento obrigatório." 
+					<p:inputText id="txtNomMae" value="#{pessoaFisicaController.pessoaSelecionada.nomMae}" required="true" requiredMessage="O campo Nome da MÃ£e Ã© de preenchimento obrigatÃ³rio." 
 						disabled="#{pessoaFisicaController.disabledPerfil}" style="width: 250px;"/>
 				</h:panelGrid>
 			</h:panelGroup>
@@ -80,11 +82,11 @@
 					<p:inputText maxlength="70" id="naturalidadePF" onkeyup="SomenteLetras(this.value);" 
 						disabled="#{pessoaFisicaController.disabledPerfil}" 
 						value="#{pessoaFisicaController.pessoaSelecionada.desNaturalidade}" required="#{!consultaAtividadeSemLicenciamentoController.usuarioAtendente}" 
-						requiredMessage="O campo Naturalidade é de preenchimento obrigatório." style="width: 300px;"/>
+						requiredMessage="O campo Naturalidade Ã© de preenchimento obrigatÃ³rio." style="width: 300px;"/>
 					
 					<h:selectOneMenu id="idcombopais" value="#{pessoaFisicaController.pessoaSelecionada.idePais}" 
 						disabled="#{pessoaFisicaController.disabledPerfil}" required="#{!consultaAtividadeSemLicenciamentoController.usuarioAtendente}" 
-						requiredMessage="O campo Nacionalidade é de preenchimento obrigatório.">
+						requiredMessage="O campo Nacionalidade Ã© de preenchimento obrigatÃ³rio.">
 						
 						<f:selectItem itemLabel="Selecione..." />
 						<f:selectItems value="#{paisController.valuesComboBox}" />

@@ -6,17 +6,18 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:p="http://primefaces.prime.com.tr/ui">
 	<h:form id="formAdubacao">
+        <ui:include src="/layout/csrfToken.xhtml" />
 		<h:panelGrid id="gridAdubacao">
-			<h:outputText value="Utiliza adubação?" styleClass="titulo-grupo" style="font-weight:bold;"/>
+			<h:outputText value="Utiliza adubaÃ§Ã£o?" styleClass="titulo-grupo" style="font-weight:bold;"/>
 			<p:selectOneRadio id="select01" value="#{adubacaoController.pergunta_1}" valueChangeListener="#{adubacaoController.changeUtilizaAdubacao()}">
 				<f:selectItem itemLabel="Sim" itemValue="true"/>
-				<f:selectItem itemLabel="Não" itemValue="false"/>
+				<f:selectItem itemLabel="NÃ£o" itemValue="false"/>
 				<p:ajax global="false" update="formGeral:tabAbasId_Agro:gridClassificacaoTipo"/>
 			</p:selectOneRadio>
 		</h:panelGrid>
 		<br />
 		<h:panelGrid id="gridClassificacaoTipo" style="margin-left:20px;">
-			<h:outputText value="Classificação" rendered="#{adubacaoController.pergunta_1}" styleClass="titulo-grupo" style="font-weight:bold;"/> 
+			<h:outputText value="ClassificaÃ§Ã£o" rendered="#{adubacaoController.pergunta_1}" styleClass="titulo-grupo" style="font-weight:bold;"/> 
 				<p:selectOneRadio id="classificacaoRadios" value="#{agrossilvopastorilController.fceAgrossilvopastoril.ideClassificacaoAdubacao}" layout="pageDirection" converter="simpleEntityConverter" rendered="#{adubacaoController.pergunta_1}">
 					<f:selectItems  value="#{adubacaoController.listaClassificacaoAdubacao}" var="classificacao" itemValue="#{classificacao}" itemLabel="#{classificacao.dscClassificacaoAdubacao}"/>
 					<p:ajax global="false"/>

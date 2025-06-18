@@ -7,6 +7,7 @@
 	xmlns:p="http://primefaces.prime.com.tr/ui">
 
 	<h:form id="formAbaBaseOperacional">
+        <ui:include src="/layout/csrfToken.xhtml" />
 		<h:panelGrid>
 			<h:panelGroup>
 			<h:outputText styleClass="titulo-grupo" style="font-weight:bold;" value="Fase do empreendimento: " />
@@ -15,20 +16,20 @@
 			<br />
 			<h:panelGrid columns="6">
 				<p:spacer width="10" height="10" rendered="#{baseOperacionalController.empreendimentoRequerimento.ideFaseEmpreendimento.ideFaseEmpreendimento == 1 || baseOperacionalController.empreendimentoRequerimento.ideFaseEmpreendimento.ideFaseEmpreendimento == 2}"/>
-				<h:outputLabel value="Data prevista para início da Operação: " rendered="#{baseOperacionalController.empreendimentoRequerimento.ideFaseEmpreendimento.ideFaseEmpreendimento == 1 || baseOperacionalController.empreendimentoRequerimento.ideFaseEmpreendimento.ideFaseEmpreendimento == 2}"/>
+				<h:outputLabel value="Data prevista para inÃ­cio da OperaÃ§Ã£o: " rendered="#{baseOperacionalController.empreendimentoRequerimento.ideFaseEmpreendimento.ideFaseEmpreendimento == 1 || baseOperacionalController.empreendimentoRequerimento.ideFaseEmpreendimento.ideFaseEmpreendimento == 2}"/>
 				<p:calendar value="#{baseOperacionalController.baseOperacional.dtcOperacao}" navigator="true" size="7" showOn="button" locale="pt" pattern="dd/MM/yyyy" readOnlyInputText="true"
 				rendered="#{baseOperacionalController.empreendimentoRequerimento.ideFaseEmpreendimento.ideFaseEmpreendimento == 1 or baseOperacionalController.empreendimentoRequerimento.ideFaseEmpreendimento.ideFaseEmpreendimento == 2}">
 					<p:ajax event="dateSelect" global="false" process="@this" />
 				</p:calendar>
 				<p:spacer width="10" height="10" rendered="#{baseOperacionalController.empreendimentoRequerimento.ideFaseEmpreendimento.ideFaseEmpreendimento == 3}"/>
-				<h:outputLabel value="Data do início da Operação: " rendered="#{baseOperacionalController.empreendimentoRequerimento.ideFaseEmpreendimento.ideFaseEmpreendimento == 3}"/>
+				<h:outputLabel value="Data do inÃ­cio da OperaÃ§Ã£o: " rendered="#{baseOperacionalController.empreendimentoRequerimento.ideFaseEmpreendimento.ideFaseEmpreendimento == 3}"/>
 				<p:calendar value="#{baseOperacionalController.baseOperacional.dtcOperacao}"  navigator="true" size="7" showOn="button" locale="pt" pattern="dd/MM/yyyy" readOnlyInputText="true"
 				rendered="#{baseOperacionalController.empreendimentoRequerimento.ideFaseEmpreendimento.ideFaseEmpreendimento == 3}">
 					<p:ajax event="dateSelect" global="false" process="@this" />
 				</p:calendar>
 			</h:panelGrid>
 			<br />
-			<h:outputText styleClass="titulo-grupo" style="font-weight:bold;" value="*Serviços (que serão) realizados na base " />
+			<h:outputText styleClass="titulo-grupo" style="font-weight:bold;" value="*ServiÃ§os (que serÃ£o) realizados na base " />
 			<br />
 	       	<h:panelGroup layout="block" style="height:115px; width:350px; overflow:auto; border:1px solid gray; margin-left:27px;">
 		    	<p:selectManyCheckbox value="#{baseOperacionalController.listaServicosBaseSelecionados}" converter="simpleEntityConverter" layout="pageDirection" >
@@ -37,16 +38,16 @@
 				</p:selectManyCheckbox>
 			</h:panelGroup>
 			<br />
-			<h:outputText styleClass="titulo-grupo" style="font-weight:bold;" value="*Área da Base Operacional" />
+			<h:outputText styleClass="titulo-grupo" style="font-weight:bold;" value="*Ãrea da Base Operacional" />
 			<br />
 			<h:panelGrid columns="3">
 				<p:spacer width="10" height="0"/>
-				<h:outputLabel value="Área Total(m²)" />
+				<h:outputLabel value="Ãrea Total(mÂ²)" />
 				<p:inputText value="#{baseOperacionalController.baseOperacional.numAreaTotal}" converter="doubleConverter" onkeyup="maskIt(this, event, '99.999.999,99', true)" maxlength="13">
 					<p:ajax process="@this" global="false"/>
 				</p:inputText>
 				<p:spacer width="10" height="0"/>
-				<h:outputLabel value="Área Construída(m²)" />
+				<h:outputLabel value="Ãrea ConstruÃ­da(mÂ²)" />
 				<p:inputText value="#{baseOperacionalController.baseOperacional.numAreaConstruida}" converter="doubleConverter" onkeyup="maskIt(this, event, '99.999.999,99', true)" maxlength="13">
 					<p:ajax process="@this" global="false"/>
 				</p:inputText>
@@ -70,7 +71,7 @@
 				<p:spacer width="10" height="0"/>
 				<p:outputPanel id="pnlResidSolid">
 					<p:spacer width="10" height="25"/>
-					<h:outputText value="*Residuos Sólidos" style="font-weight: bold; margin-left:-15px;" rendered="#{baseOperacionalController.exibirResiduosSolidos != 0}"/>
+					<h:outputText value="*Residuos SÃ³lidos" style="font-weight: bold; margin-left:-15px;" rendered="#{baseOperacionalController.exibirResiduosSolidos != 0}"/>
 					<br />
 					<br />
 					<p:spacer width="10" height="0"/>
@@ -83,7 +84,7 @@
 						</p:inputText>
 						
 						<p:spacer width="10" height="0" rendered="#{baseOperacionalController.exibirResiduosSolidos == 2 || baseOperacionalController.exibirResiduosSolidos == 3}"/>
-						<h:outputLabel style="margin-left:-5px;" value="Óleo lubrificante usado gerado anualmente (t/ano)" rendered="#{baseOperacionalController.exibirResiduosSolidos == 2 || baseOperacionalController.exibirResiduosSolidos == 3}"/>
+						<h:outputLabel style="margin-left:-5px;" value="Ã“leo lubrificante usado gerado anualmente (t/ano)" rendered="#{baseOperacionalController.exibirResiduosSolidos == 2 || baseOperacionalController.exibirResiduosSolidos == 3}"/>
 						<p:inputText value="#{baseOperacionalController.oleoLubrificante}" onkeyup="maskIt(this, event, '99.999.999,99', true)" 
 						rendered="#{baseOperacionalController.exibirResiduosSolidos == 2 || baseOperacionalController.exibirResiduosSolidos == 3}" converter="doubleConverter" maxlength="13">
 							<p:ajax process="@this" global="false"/>
@@ -101,17 +102,17 @@
 							<p:column headerText="Efluente" style="text-align: left; " >
 				            	<h:outputText  value="#{efluente.dscEfluente}"/>
 							</p:column>
-							<p:column style="text-align:center;" headerText="Vazão Média (m³)">
+							<p:column style="text-align:center;" headerText="VazÃ£o MÃ©dia (mÂ³)">
 								<p:inputText  value="#{efluente.numVazaoMedia}" converter="doubleConverter" onkeyup="maskIt(this, event, '99.999.999,99', true)" maxlength="13">
 									<p:ajax process="@this" global="false"/>
 								</p:inputText>
 							</p:column>
-							<p:column style="text-align:center;" headerText="DBO média do SAO (mg/L)">
+							<p:column style="text-align:center;" headerText="DBO mÃ©dia do SAO (mg/L)">
 								<p:inputText value="#{efluente.numDboMedia}" converter="doubleConverter" onkeyup="maskIt(this, event, '99.999.999,99', true)" maxlength="13">
 									<p:ajax process="@this" global="false"/>
 								</p:inputText>
 							</p:column>
-							<p:column style="text-align:center;" headerText="O&amp;G médio do SAO (mg/L)">
+							<p:column style="text-align:center;" headerText="O&amp;G mÃ©dio do SAO (mg/L)">
 								<p:inputText value="#{efluente.numOgMedio}" converter="doubleConverter" onkeyup="maskIt(this, event, '99.999.999,99', true)" maxlength="13">
 									<p:ajax process="@this" global="false"/>
 								</p:inputText>

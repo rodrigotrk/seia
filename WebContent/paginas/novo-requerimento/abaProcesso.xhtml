@@ -7,21 +7,22 @@
 	xmlns:p="http://primefaces.prime.com.tr/ui">
 
 	<h:form id="formAbaProcesso">
+        <ui:include src="/layout/csrfToken.xhtml" />
 			<h:panelGrid>
 				<h:panelGrid>
 					<h:panelGroup>
 						<h:outputText value="* #{abaProcessoController.perguntaNR_A1_P1.idePergunta.dscPergunta}" />
 						<h:graphicImage value="/resources/img/ico-ajuda.png" id="ajuda1_11" style="margin: 1px 1px 1px 4px;" />
 						<p:tooltip for="ajuda1_11" showEffect="fade" hideEffect="fade"
-							value="Ao inserir o número do processo, favor atentar para a inserção do número completo, seguindo o padrão da numeração do sistema que foi gerado. 
-								Ex. Padrão do número de processos SEIA: 2013.001.099999/INEMA/LIC-09999 
-								Padrão do número de processos CERBERUS: 2001-099999/TEC/LL-0999 
-								Padrão do número de processos PROHIDROS: 2013-099999/OUT/APPO-0999" />
+							value="Ao inserir o nÃºmero do processo, favor atentar para a inserÃ§Ã£o do nÃºmero completo, seguindo o padrÃ£o da numeraÃ§Ã£o do sistema que foi gerado. 
+								Ex. PadrÃ£o do nÃºmero de processos SEIA: 2013.001.099999/INEMA/LIC-09999 
+								PadrÃ£o do nÃºmero de processos CERBERUS: 2001-099999/TEC/LL-0999 
+								PadrÃ£o do nÃºmero de processos PROHIDROS: 2013-099999/OUT/APPO-0999" />
 					</h:panelGroup>
 	
 					<p:selectOneRadio value="#{abaProcessoController.perguntaNR_A1_P1.indResposta}" disabled="#{novoRequerimentoController.desabilitarTudo}">
 						<f:selectItem itemLabel="Sim" itemValue="true" />
-						<f:selectItem itemLabel="Não" itemValue="false" />
+						<f:selectItem itemLabel="NÃ£o" itemValue="false" />
 						<p:ajax  update="subViewAbas:tabAbasId"/>
 					</p:selectOneRadio>
 	
@@ -43,11 +44,11 @@
 								<h:outputText value="#{processoTramite.ideSistema.nomSistema}" />
 							</p:column>
 							<p:column>
-								<f:facet name="header">Número do Processo</f:facet>
+								<f:facet name="header">NÃºmero do Processo</f:facet>
 								<h:outputText value="#{processoTramite.numProcessoTramite}" />
 							</p:column>
 							<p:column style="text-align: center;">
-								<f:facet name="header">Ações</f:facet>
+								<f:facet name="header">AÃ§Ãµes</f:facet>
 								<p:commandLink id="editarProcessoTramiteInema" oncomplete="dialogProcessoInema.show()" action="#{processoTramiteController.editar(processoTramite)}" title="Editar" process="@this" update="formDialogProcessoInema" 
 									rendered="#{!novoRequerimentoController.desabilitarTudo}">
 									<h:graphicImage title="Editar" value="/resources/img/ico-editar.png" />
@@ -70,7 +71,7 @@
 
 					<p:selectOneRadio value="#{abaProcessoController.perguntaNR_A1_P2.indResposta}" disabled="#{novoRequerimentoController.desabilitarTudo}">
 						<f:selectItem itemLabel="Sim" itemValue="true" />
-						<f:selectItem itemLabel="Não" itemValue="false" />
+						<f:selectItem itemLabel="NÃ£o" itemValue="false" />
 						<p:ajax  update="subViewAbas:tabAbasId"/>
 					</p:selectOneRadio>
 
@@ -80,7 +81,7 @@
 								<tr>
 									<td />
 									<td colspan="2">
-										<h:outputText value="Para solicitação de Transferência de Titularidade, é necessário que os empreendimentos do atual e do futuro titular do(s) 
+										<h:outputText value="Para solicitaÃ§Ã£o de TransferÃªncia de Titularidade, Ã© necessÃ¡rio que os empreendimentos do atual e do futuro titular do(s) 
 											ato(s) a ser(em) transferido(s) estejam previamente cadastrados no SEIA." style="font-weight: bold; line-height: 150%;"/>
 									</td>
 								</tr>
@@ -92,8 +93,8 @@
 						<p:commandLink 
 							id="btnTitularidade" actionListener="#{transferenciaTitularidadeController.atualizarPosicionamentoDialog()}"   action="#{transferenciaTitularidadeController.load()}"
 							disabled="#{novoRequerimentoController.desabilitarTudo or not empty abaProcessoController.listaSolicitacaoAdministrativo}" >
-							<h:graphicImage title="Incluir dados para transferência de titularidade" value="/resources/img/ico-expandir.png" style="margin-right: 2px;"/>
-							<h:outputText value="Incluir dados para transferência de titularidade" style="font-size: 11px;"/>
+							<h:graphicImage title="Incluir dados para transferÃªncia de titularidade" value="/resources/img/ico-expandir.png" style="margin-right: 2px;"/>
+							<h:outputText value="Incluir dados para transferÃªncia de titularidade" style="font-size: 11px;"/>
 						</p:commandLink>
 					
 						<p:dataTable id="TblTranferenciaAtos" var="solicitacaoAdm" value="#{abaProcessoController.listaSolicitacaoAdministrativo}" lazy="true" 
@@ -103,7 +104,7 @@
 								<h:outputText value="#{solicitacaoAdm.numProcesso}" />
 							</p:column>
 							
-							<p:column headerText="Número da Portaria" style="padding:3px; margin:3px;">
+							<p:column headerText="NÃºmero da Portaria" style="padding:3px; margin:3px;">
 								<h:outputText value="#{solicitacaoAdm.numPortaria}" />
 							</p:column>
 							
@@ -111,13 +112,13 @@
 								<h:outputText value="#{solicitacaoAdm.ideEmpreendimento.nomEmpreendimento}" />
 							</p:column>
 							
-							<p:column headerText="Data da publicação da portaria" style="padding:3px; margin:3px;">
+							<p:column headerText="Data da publicaÃ§Ã£o da portaria" style="padding:3px; margin:3px;">
 								<h:outputText value="#{solicitacaoAdm.dtcPublicacaoPortaria}">
 									<f:convertDateTime pattern="dd/MM/yyyy" locale="pt,BR" timeZone="Brazil/East" />
 								</h:outputText>
 							</p:column>
 							
-							<p:column style="text-align: center; padding:3px; margin:3px;" headerText="Ações" >
+							<p:column style="text-align: center; padding:3px; margin:3px;" headerText="AÃ§Ãµes" >
 					
 								<p:commandLink 
 									oncomplete="transfTitularidade.show()" 
@@ -161,7 +162,7 @@
 						valueChangeListener="#{abaProcessoController.valueChangePerguntaNRA1P3()}">
 						
 						<f:selectItem itemLabel="Sim" itemValue="true" />
-						<f:selectItem itemLabel="Não" itemValue="false" />
+						<f:selectItem itemLabel="NÃ£o" itemValue="false" />
 						<p:ajax  update="subViewAbas:tabAbasId:formAbaProcesso"/>
 					</p:selectOneRadio>
 				</h:panelGrid>
@@ -180,7 +181,7 @@
 			
 			<h:panelGrid columns="4" style="margin-top:40px;">
 				<p:commandButton id="btnVoltar" value="Voltar" disabled="true" style="width:90px;"/>
-				<p:commandButton id="btnAvancar" value="Avançar" disabled="#{novoRequerimentoController.transferenciaTitularidade}"  action="#{novoRequerimentoController.avancarAbas()}" update="subViewAbas:tabAbasId" style="width:90px;"  />
+				<p:commandButton id="btnAvancar" value="AvanÃ§ar" disabled="#{novoRequerimentoController.transferenciaTitularidade}"  action="#{novoRequerimentoController.avancarAbas()}" update="subViewAbas:tabAbasId" style="width:90px;"  />
 				<p:spacer width="400" height="10"/>
 				<p:commandButton id="btnSalvarProcesso" value="Salvar" action="#{abaProcessoController.salvarAba()}" process="@form" update="formAbaProcesso formDialogProcessoInema"  rendered="#{!novoRequerimentoController.transferenciaTitularidade}" disabled="#{novoRequerimentoController.desabilitarTudo}"/>
 				<p:commandButton id="btnFinalizarRequerimento"  value="Finalizar" process="@form" update="formAbaProcesso formDialogProcessoInema"

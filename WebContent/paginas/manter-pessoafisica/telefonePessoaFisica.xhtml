@@ -8,6 +8,7 @@
 		<h3><h:outputLabel styleClass="titulo-grupo" value="TELEFONES" /></h3>
 		
 		<h:form id="formtelefone">
+        <ui:include src="/layout/csrfToken.xhtml" />
 			<h:outputLabel value="Incluir Telefone" />
 			
 			<p:commandLink id="linkDialogTelefone" 	oncomplete="$('.ui-messages-info').remove();$('.ui-messages-error').remove();telefoneDialog.show()" update=":tabviewpf:formdialogs:telefoneDialog" disabled="#{pessoaFisicaController.disableFormPessoaFisica}">
@@ -19,6 +20,7 @@
 		</h:form>
 		
 		<h:form id="formconteudo">
+        <ui:include src="/layout/csrfToken.xhtml" />
 		<h:panelGrid id="paneltabletelefone">
 		
 		<!-- DATATABLE TELEFONE -->
@@ -33,11 +35,12 @@
 					<h:outputText id="txtNomTipoTelefone" value="#{telefone.ideTipoTelefone.nomTipoTelefone}" />
 				</p:column>
 
-				<p:column headerText="Número" style="text-align: center;">
+        <ui:include src="/layout/csrfToken.xhtml" />
+				<p:column headerText="NÃºmero" style="text-align: center;">
 					<h:outputText id="txtNumTelefone" value="#{telefone.numTelefone}" />
 				</p:column>
 				
-				<p:column style="text-align: center;" headerText="Ações">	
+				<p:column style="text-align: center;" headerText="AÃ§Ãµes">	
 						
 						<p:commandLink id="lnkConsultar" update=":tabviewpf:formdialogs:display" oncomplete="$('.ui-messages-info').remove();$('.ui-messages-error').remove();telefoneDialog.show()" title="Visualizar">
 							<h:graphicImage title="Consultar" value="/resources/img/ico-pesquisa.png" />
@@ -78,7 +81,7 @@
 					actionListener="#{pessoaFisicaController.removerTelefone}"
 					oncomplete="confirmationTelefone.hide()" process="@this"/>
 				
-				<p:commandButton id="btnNao" value="Não" onclick="confirmationTelefone.hide()"
+				<p:commandButton id="btnNao" value="NÃ£o" onclick="confirmationTelefone.hide()"
 					type="button" />
 			
 			</p:confirmDialog>

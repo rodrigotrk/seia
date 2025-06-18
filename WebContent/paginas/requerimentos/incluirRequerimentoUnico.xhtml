@@ -14,6 +14,7 @@
 	<ui:define name="conteudo-principal">
 	
 		<h:form id="formForm">
+        <ui:include src="/layout/csrfToken.xhtml" />
 			<h:panelGrid columns="1" id="principal">
 				<h:inputHidden value="#{contextoController.pessoa.idePessoa}" />
 				
@@ -88,6 +89,7 @@
 		</h:form>
 				
 		<h:form id="formEndereco" rendered="${!urlReqUnicoController.bloqueiaEndContatoTemporario}">
+        <ui:include src="/layout/csrfToken.xhtml" />
 			<h:panelGroup>
 				<h:selectBooleanCheckbox value="#{requerimentoUnicoController.enderecoContato}" valueChangeListener="#{requerimentoUnicoController.enderecoContato}" disabled="${(requerimentoUnicoController.desabilitarTudo and urlReqUnicoController.disableImovelRural ) or urlReqUnicoController.bloqueiaEndContatoTemporario  or requerimentoUnicoController.salvoParcialmente or requerimentoUnicoController.desabilitarTudo}">
 					<f:ajax execute="@this" render="formEndereco" listener="#{enderecoController.limparEndereco()}"/>
@@ -206,6 +208,7 @@
 		
 		<p:dialog header="#{bundle.empreendimento_lbl_incluir_ponto}" widgetVar="dialogoIncluirVerticeReq" modal="true" id="dialogoIncluirVerticeReq" resizable="false">
 			<h:form id="locGeograficaVerticesReq" onmouseover="RemovMenosFracGrau();">
+        <ui:include src="/layout/csrfToken.xhtml" />
 				<h:outputLabel>
 				</h:outputLabel>
 				<br />
@@ -287,6 +290,7 @@
 		</p:dialog>
 		<p:confirmDialog id="confirmacaoExclusaoVertice" widgetVar="confirmacaoExclusaoVertice" header="#{bundle.geral_lbl_mensagem}" appendToBody="true" message="#{bundle.msg_confirma_exclusao}" severity="alert">
 			<h:form id="formexclusao">
+        <ui:include src="/layout/csrfToken.xhtml" />
 				<h:panelGroup>
 					<div style="text-align: center;">
 						<p:commandButton id="confirmarInclusaoBoleto" value="#{bundle.btn_sim}" update="formQuestionario:tabelaVertices" onclick="confirmacaoExclusaoVertice.hide()" action="${requerimentoUnicoController.excluirVertice}" />
@@ -298,6 +302,7 @@
 		
 		<p:confirmDialog id="confirmacaoExclusaoLocalizacaoReqImovel" widgetVar="confirmacaoExclusaoLocalizacaoReqImovel" header="#{bundle.geral_lbl_mensagem}" message="#{bundle.msg_confirma_exclusao}" appendToBody="true" closable="false" severity="alert">
 			<h:form id="formConfirmExclusaoLocGeoReqImovel">
+        <ui:include src="/layout/csrfToken.xhtml" />
 				<h:panelGroup>
 					<div style="text-align: center;">
 						<p:commandButton id="confirmarExclusaoLoc" process="@this" value="#{bundle.btn_sim}" update="formQuestionario:locGeoDasRespostas formQuestionario :formQuestionario:locGeoDasRespostas formQuestionario:locGeoDasRespostas formQuestionario" oncomplete="confirmacaoExclusaoLocalizacaoReqImovel.hide()"  action="${requerimentoUnicoController.excluirAPorraDaLocalizacao()}" />
@@ -313,6 +318,7 @@
 		
 		<p:confirmDialog id="confirmacaoExclusaoProcesso" widgetVar="confirmacaoExclusaoProcesso" header="#{bundle.geral_lbl_mensagem}" appendToBody="true" message="#{bundle.msg_confirma_exclusao}" severity="alert">
 			<h:form id="formexclusaoProcesso">
+        <ui:include src="/layout/csrfToken.xhtml" />
 				<h:panelGroup>
 					<div style="text-align: center;">
 						<p:commandButton id="confirmarExclusaoProcessoTramite" value="#{bundle.btn_sim}" update="formQuestionario:tabelaProcessoTramite" onclick="confirmacaoExclusaoProcesso.hide()" action="${requerimentoUnicoController.excluirProcessoTramite()}" />
@@ -324,6 +330,7 @@
 		
 		<p:confirmDialog id="dialogQuestaoDLA" widgetVar="dialogQuestaoDLA" header="#{bundle.geral_lbl_mensagem}" appendToBody="true" message="#{bundle.msg_gerar_DLA}" severity="alert">
 			<h:form id="formDialogQuestaoDLA">
+        <ui:include src="/layout/csrfToken.xhtml" />
 				<h:panelGroup>
 					<div style="text-align: center;">
 						<p:commandButton id="confirmacaoDialogQuestaoDLA" ajax="false" value="#{bundle.btn_sim}" oncomplete="dialogQuestaoDLA.hide()">
@@ -344,6 +351,7 @@
 		<p:dialog id="dialogDocumentos" widgetVar="dialogDocumentos" width="500" height="400" style="top:50px !important;" position="center" >
 			
 			<h:form>
+        <ui:include src="/layout/csrfToken.xhtml" />
 				<p:dataTable id="tableDocsObrigs"
 					value="#{efetuarEnquadramentoController.listDocsAtoAmbiental}"
 					var="atos">
@@ -379,6 +387,7 @@
 			message="#{bundle.enquadramento_msg_enquadramento_ainda_nao_efetuado_deseja_voltar}"
 			severity="alert">
 			<h:form>
+        <ui:include src="/layout/csrfToken.xhtml" />
 				<p:commandButton ajax="false" process="@this" immediate="true"
 					value="#{bundle.geral_lbl_sim}"
 					action="/paginas/novo-requerimento/consulta.xhtml" />
@@ -399,6 +408,7 @@
 			modal="true" id="dialogoIncluirVerticeVazao" resizable="false" appendToBody="true" >
 			
 		<h:form id="locGeograficaVerticesVazao" onmouseover="RemovMenosFracGrau();" style="z-index: 99999;">
+        <ui:include src="/layout/csrfToken.xhtml" />
 		
 			<p:remoteCommand name="carregaLocalizacao" action="#{requerimentoUnicoController.carregarLocalizacaoGeografica()}" update="formQuestionario:tabelaVertices" />
 		
@@ -490,6 +500,7 @@
 	</ui:define>
 		<p:confirmDialog id="confirmacaoCopiaRequerimentoUnicoAnterior" widgetVar="confirmacaoCopiaRequerimentoUnicoAnterior" header="#{bundle.geral_lbl_mensagem}" appendToBody="true" message="#{bundle.msg_confirma_copia_requerimento_unico_anterior}" severity="alert">
 			<h:form id="formConfirmacaoCopiaRequerimentoUnicoAnterior">
+        <ui:include src="/layout/csrfToken.xhtml" />
 				<h:panelGroup>
 					<div style="text-align: center;">
 						<p:commandButton id="confirmacaoCopiaRequerimentoUnicoAnterior" value="#{bundle.btn_sim}" update=":formForm :formEndereco :formQuestionario" onclick="confirmacaoCopiaRequerimentoUnicoAnterior.hide()" action="#{requerimentoUnicoController.utilizarDadosRequerimentoAnterior()}" />

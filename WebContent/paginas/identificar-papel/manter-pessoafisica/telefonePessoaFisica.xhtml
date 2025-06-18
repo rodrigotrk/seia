@@ -9,6 +9,7 @@
 	<h3><h:outputLabel styleClass="titulo-grupo" value="TELEFONES" /></h3>
 		
 	<h:form id="formtelefone">
+        <ui:include src="/layout/csrfToken.xhtml" />
 			<h:outputLabel value="Incluir Telefone" />
 			<p:commandLink id="linkDialogTelefone"
 				oncomplete="$('.ui-messages-info').remove();$('.ui-messages-error').remove();telefoneDialog.show()" update=":tabviewpf:formdialogs:telefoneDialog" disabled="#{pessoaFisicaController.disableFormPessoaFisica  or !pessoaFisicaController.enableFormPessoaFisica}">
@@ -20,6 +21,7 @@
 		</h:form>
 		
 		<h:form id="formconteudo">
+        <ui:include src="/layout/csrfToken.xhtml" />
 		<h:panelGrid id="paneltabletelefone">
 		<!-- DATATABLE TELEFONE -->
 			<p:dataTable id="tabelaTelefone" widgetVar="tabelaTelefone" var="telefone" style="width:400px;" rendered="#{pessoaFisicaController.mostrarTableTelefone}"
@@ -33,11 +35,13 @@
 					<h:outputText value="#{telefone.ideTipoTelefone.nomTipoTelefone}" />
 				</p:column>
 
-				<p:column headerText="Número" style="text-align: center;">
+        <ui:include src="/layout/csrfToken.xhtml" />
+        <ui:include src="/layout/csrfToken.xhtml" />
+				<p:column headerText="NÃºmero" style="text-align: center;">
 					<h:outputText value="#{telefone.numTelefone}" />
 				</p:column>
 				
-				<p:column style="text-align: center;" headerText="Ações">	
+				<p:column style="text-align: center;" headerText="AÃ§Ãµes">	
 						
 						<p:commandLink update=":tabviewpf:formdialogs:display" oncomplete="$('.ui-messages-info').remove();$('.ui-messages-error').remove();telefoneDialog.show()" title="Visualizar">
 							<h:graphicImage title="Visualizar" value="/resources/img/ico-pesquisa.png" />
@@ -76,7 +80,7 @@
 					actionListener="#{pessoaFisicaController.removerTelefone}"
 					oncomplete="confirmationTelefone.hide()" process="@this"/>
 				
-				<p:commandButton value="Não" onclick="confirmationTelefone.hide()"
+				<p:commandButton value="NÃ£o" onclick="confirmationTelefone.hide()"
 					type="button" />
 			
 			</p:confirmDialog>

@@ -15,7 +15,7 @@
 			  width="1200" 
 			  height="300"
 			  resizable="false" 
-			  header="Captação Superficial" 
+			  header="CaptaÃ§Ã£o Superficial" 
 			  modal="true">
 		
 		<p:ajax event="close" listener="#{fceCaptacaoSuperficialController.limpar()}"/>
@@ -35,7 +35,12 @@
 			  width="650" 
 			  height="440"
 			  resizable="false" 
-			  header="FCE - Captação Superficial" 
+        <ui:include src="/layout/csrfToken.xhtml" />
+        <ui:include src="/layout/csrfToken.xhtml" />
+        <ui:include src="/layout/csrfToken.xhtml" />
+        <ui:include src="/layout/csrfToken.xhtml" />
+        <ui:include src="/layout/csrfToken.xhtml" />
+			  header="FCE - CaptaÃ§Ã£o Superficial" 
 			  modal="true" 
 			  style="margin-top:120px;">
   		
@@ -43,7 +48,7 @@
   		
   		<p:tabView id="capSuperAbas" activeIndex="#{fceCaptacaoSuperficialController.activeTab}" widgetVar="capSuperAbas" cache="false" dynamic="true">
 			<p:ajax event="tabChange" global="false" listener="#{fceCaptacaoSuperficialController.controlarAbas}" update="capSuperAbas" />
-			<p:tab id="capSuperCaptacao" title="Captação" rendered="true">
+			<p:tab id="capSuperCaptacao" title="CaptaÃ§Ã£o" rendered="true">
 				<ui:include src="/paginas/manter-fce/outorga/captacao/superficial/capSuperAbaCaptacao.xhtml"/>
 			</p:tab>
 			<p:tab id="capSuperBarramento" title="Barramento" disabled="#{!fceCaptacaoSuperficialController.barragemExistente}" rendered="#{fceCaptacaoSuperficialController.listaCaracteristicaCaptacaoComBarragem}">
@@ -55,36 +60,36 @@
 		</p:tabView>
 	</p:dialog>
 
-	<p:confirmDialog header="Confirmação" appendToBody="true" message="#{bundle.geral_msg_informacoes_nao_foram_salvas_deseja_continuar}" severity="alert" widgetVar="confirmationVoltarFCEcaptacaoSuperficial" id="confirmationVoltarFCEcaptacaoSuperficial">
+	<p:confirmDialog header="ConfirmaÃ§Ã£o" appendToBody="true" message="#{bundle.geral_msg_informacoes_nao_foram_salvas_deseja_continuar}" severity="alert" widgetVar="confirmationVoltarFCEcaptacaoSuperficial" id="confirmationVoltarFCEcaptacaoSuperficial">
 		<h:form>
 			<p:commandButton value="Sim" update="formCapSuperDadosRequerimento" oncomplete="confirmationVoltarFCEcaptacaoSuperficial.hide(); cap_sup.hide();" global="false"/>
-			<p:commandButton value="Não" onclick="confirmationVoltarFCEcaptacaoSuperficial.hide();" type="button" global="false"/>
+			<p:commandButton value="NÃ£o" onclick="confirmationVoltarFCEcaptacaoSuperficial.hide();" type="button" global="false"/>
 		</h:form>
 	</p:confirmDialog> <!-- Fim do DIALOG VOLTAR DADOS REQUERIMENTO -->
 	
 	
-	<p:confirmDialog header="Confirmação" appendToBody="true" message="#{bundle.geral_msg_informacoes_nao_foram_salvas_deseja_continuar}" severity="alert" widgetVar="confirmationVoltarAbaCaptacao" id="confirmationVoltarAbaCaptacao">
+	<p:confirmDialog header="ConfirmaÃ§Ã£o" appendToBody="true" message="#{bundle.geral_msg_informacoes_nao_foram_salvas_deseja_continuar}" severity="alert" widgetVar="confirmationVoltarAbaCaptacao" id="confirmationVoltarAbaCaptacao">
 		<h:form>
 			<p:commandButton value="Sim" update="formCapSuperCaptacao" oncomplete="confirmationVoltarAbaCaptacao.hide(); fceCapSuper.hide();" global="false"/>
-			<p:commandButton value="Não" onclick="confirmationVoltarAbaCaptacao.hide();" type="button" global="false"/>
+			<p:commandButton value="NÃ£o" onclick="confirmationVoltarAbaCaptacao.hide();" type="button" global="false"/>
 		</h:form>
 	</p:confirmDialog> <!-- Fim do DIALOG VOLTAR ABA CAPTACAO -->
 	
 	
-	<p:confirmDialog header="Mensagem" appendToBody="true" message="#{bundle.fce_outorga_ajuda_007} Deseja preenchê-lo agora?" severity="alert" widgetVar="alertaFceBarragem" id="alertaFceBarragem">
+	<p:confirmDialog header="Mensagem" appendToBody="true" message="#{bundle.fce_outorga_ajuda_007} Deseja preenchÃª-lo agora?" severity="alert" widgetVar="alertaFceBarragem" id="alertaFceBarragem">
 		<h:form>
 			<p:commandButton value="Sim" actionListener="#{fceCaptacaoSuperficialController.prepararFceIntervencaoBarragem()}" oncomplete="alertaFceBarragem.hide(); tipoBarragem.show();" global="false"/>
-			<p:commandButton value="Não" onclick="alertaFceBarragem.hide();" type="button" global="false"/>
+			<p:commandButton value="NÃ£o" onclick="alertaFceBarragem.hide();" type="button" global="false"/>
 		</h:form>
 	</p:confirmDialog> <!-- Fim do DIALOG AlertaFceBarragem -->
 	
-	<p:confirmDialog id="dlgImprimirRelatorioCaptacaoSuperficial" message="#{fceCaptacaoSuperficialController.msgImprimirRelatorio('Captação Superficial')}" widgetVar="rel_capSuper" header="Mensagem">
+	<p:confirmDialog id="dlgImprimirRelatorioCaptacaoSuperficial" message="#{fceCaptacaoSuperficialController.msgImprimirRelatorio('CaptaÃ§Ã£o Superficial')}" widgetVar="rel_capSuper" header="Mensagem">
 		<div align="center">
 			<h:form>
 				<p:commandButton value="Sim" ajax="false" global="false" process="@this" onclick="rel_capSuper.hide();" style="margin-right:10px;">
 					<p:fileDownload value="#{fceCaptacaoSuperficialController.imprimirRelatorio}"/>
 				</p:commandButton>			
-				<p:commandButton value="Não" onclick="rel_capSuper.hide();" process="@this"/>
+				<p:commandButton value="NÃ£o" onclick="rel_capSuper.hide();" process="@this"/>
 			</h:form>
 		</div>
 	</p:confirmDialog> <!-- Fim do confirmar ralatorio -->
@@ -92,7 +97,7 @@
 	<p:confirmDialog header="Mensagem" appendToBody="true" message="#{bundle.fce_outorga_change_caracteristica_captacao}" severity="alert" widgetVar="alertaLimparAbaBarragem" id="alertaLimparAbaBarragem" closable="false" width="430" style="text-align:justify;">
 		<h:form>
 			<p:commandButton value="Sim" update="capSuperAbas:formCapSuperCaptacao:gridCaptacao" actionListener="#{fceCaptacaoSuperficialController.limparAbaBarramento()}" oncomplete="alertaLimparAbaBarragem.hide();" global="false"/>
-			<p:commandButton value="Não" update="capSuperAbas capSuperAbas:formCapSuperCaptacao:gridCaptacao" actionListener="#{fceCaptacaoSuperficialController.manterEmBarragemExistente()}" oncomplete="alertaLimparAbaBarragem.hide();" global="false"/>
+			<p:commandButton value="NÃ£o" update="capSuperAbas capSuperAbas:formCapSuperCaptacao:gridCaptacao" actionListener="#{fceCaptacaoSuperficialController.manterEmBarragemExistente()}" oncomplete="alertaLimparAbaBarragem.hide();" global="false"/>
 		</h:form>
 	</p:confirmDialog> <!-- Fim do DIALOG Alterar Caracteristica Captacao-->
 

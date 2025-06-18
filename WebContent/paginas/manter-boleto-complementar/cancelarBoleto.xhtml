@@ -7,6 +7,7 @@
 	xmlns:p="http://primefaces.prime.com.tr/ui">
 	
 	<h:form id="form_dialog_cancelar_boleto">
+        <ui:include src="/layout/csrfToken.xhtml" />
 		<h:panelGrid columns="1" id="panel_cancelar_boleto_geral">
 			
 			<h:outputText value="#{bundle.gerar_novo_boleto_lbl_dados_requerente}" style="font-weight: bold;"/>
@@ -65,7 +66,7 @@
 				<h:outputText value="#{bundle.motivo_cancelamento}:"/>
 				
 				<p:selectOneMenu value="#{boletoComplementarController.boletoPagamentHistorico.ideMotivoCancelamentoBoleto.ideMotivoCancelamentoBoleto}" required="true" 
-								 style="width: 300px;" requiredMessage="O motivo do cancelamento é de preenchimento obrigatório." 
+								 style="width: 300px;" requiredMessage="O motivo do cancelamento Ã© de preenchimento obrigatÃ³rio." 
 								 disabled="#{boletoComplementarController.boletoPagamentHistorico.ideMotivoCancelamentoBoleto.ideMotivoCancelamentoBoleto != null and boletoComplementarController.boletoPagamentHistorico.ideMotivoCancelamentoBoleto.ideMotivoCancelamentoBoleto != -1}">
 				
 					<f:selectItem itemLabel="#{bundle.geral_lbl_selecione}" itemValue="#{-1}"/>
@@ -76,8 +77,8 @@
 				
 				<h:outputText value="#{bundle.observacao}:"/>
 				
-				<p:inputTextarea autoResize="false" required="true" requiredMessage="Observação é de preenchimento Obrigatório." disabled="#{boletoComplementarController.boletoPagReqCancelar.cancelado}"
-								 value="#{boletoComplementarController.boletoPagamentHistorico.dscObservacao}" rows="6" cols="77" title="Observação para o motivo."/>
+				<p:inputTextarea autoResize="false" required="true" requiredMessage="ObservaÃ§Ã£o Ã© de preenchimento ObrigatÃ³rio." disabled="#{boletoComplementarController.boletoPagReqCancelar.cancelado}"
+								 value="#{boletoComplementarController.boletoPagamentHistorico.dscObservacao}" rows="6" cols="77" title="ObservaÃ§Ã£o para o motivo."/>
 				
 				<h:panelGrid columns="3" width="100%">
 					
@@ -103,8 +104,9 @@
 	
 	<p:confirmDialog widgetVar="modalConfirmarVoltar" appendToBody="true" header="Alerta" style="top: 40%!important; left: 40%!important;position: fixed;" message="#{bundle.geral_msg_informacoes_nao_foram_salvas_deseja_continuar}" severity="alert">
 		<h:form>
+        <ui:include src="/layout/csrfToken.xhtml" />
 			<p:commandButton value="Sim" global="false" update="dialogCancelarBoleto" oncomplete="modalConfirmarVoltar.hide(); dialogCancelarBoleto.hide();"/>
-			<p:commandButton value="Não" global="false" oncomplete="modalConfirmarVoltar.hide();"/>
+			<p:commandButton value="NÃ£o" global="false" oncomplete="modalConfirmarVoltar.hide();"/>
 		</h:form>
 	</p:confirmDialog>
 </ui:composition>

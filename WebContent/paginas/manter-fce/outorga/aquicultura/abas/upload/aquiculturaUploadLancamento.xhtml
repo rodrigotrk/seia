@@ -6,7 +6,8 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:p="http://primefaces.prime.com.tr/ui">
 	<h:form id="upDadoAdicionalLancamento" style="width:650px;" rendered="#{fceOutorgaAquiculturaLancamentoController.temLancamento}">
-		<!-- INICIO GROUP INFO VIVEIRO - LANÇAMENTO -->
+        <ui:include src="/layout/csrfToken.xhtml" />
+		<!-- INICIO GROUP INFO VIVEIRO - LANÃ‡AMENTO -->
 		<h:panelGroup style="margin-left:10px;">
 			<h:outputText styleClass="titulo-grupo" style="font-weight:bold;" value="#{bundle.fce_out_aqui_da_viveiro_lancamento}" />
 			<h:graphicImage title="#{bundle.fce_out_aqui_da_ajuda_lancamento}" value="/resources/img/ico-ajuda.png" id="ajudaLancamento" style="margin:1px 1px 1px 4px; text-align:justify;" />
@@ -15,12 +16,12 @@
 				<p:fileDownload value="#{fceOutorgaAquiculturaLancamentoController.dadosAdicionaisViveiroLancamento}" />
 			</p:commandButton>
 		</h:panelGroup>
-		<!-- FINAL GROUP INFO VIVEIRO - LANÇAMENTO -->
+		<!-- FINAL GROUP INFO VIVEIRO - LANÃ‡AMENTO -->
 		<br /><br />
-		<!-- INICIO DA GRID COM DOCUMENTO UPADO DE VIVEIRO - LANÇAMENTO -->
+		<!-- INICIO DA GRID COM DOCUMENTO UPADO DE VIVEIRO - LANÃ‡AMENTO -->
 		<h:panelGrid id="adicionalLancamento" style="margin-left:15px;">
 			<p:fileUpload id="upAdicionallancamento" widgetVar="upAdicionallancamento" label="#{bundle.fce_out_aqui_da_upload_lancamento}" fileUploadListener="#{fceOutorgaAquiculturaLancamentoController.tratarUploadLancamento()}"
-				mode="advanced" oncomplete="updateGridLancamento()" auto="true" allowTypes="/(\.|\/)(pdf|png|jpg)$/" invalidFileMessage="Tipo de arquivo inválido." 
+				mode="advanced" oncomplete="updateGridLancamento()" auto="true" allowTypes="/(\.|\/)(pdf|png|jpg)$/" invalidFileMessage="Tipo de arquivo invÃ¡lido." 
 				process="@this" disabled="#{fceOutorgaAquiculturaLancamentoController.docAdicionalLancamentoUpado or fceOutorgaAquiculturaLancamentoController.desabilitarTudo}" />
 			<p:remoteCommand name="updateGridLancamento" update="adicionalLancamento" />
 			<p:dataTable id="docLancamentoUpado" widgetVar="docLancamentoUpado" rendered="#{fceOutorgaAquiculturaLancamentoController.docAdicionalLancamentoUpado}" value="#{fceOutorgaAquiculturaLancamentoController.fceAquiculturaLancamento.uploadCaminhoArquivo}" var="lanUpado" lazy="true" style="width:590px;">
@@ -39,6 +40,6 @@
 				</p:column>
 			</p:dataTable>
 		</h:panelGrid>
-		<!-- FINAL DA GRID COM DOCUMENTO UPADO DE VIVEIRO - LANÇAMENTO -->
+		<!-- FINAL DA GRID COM DOCUMENTO UPADO DE VIVEIRO - LANÃ‡AMENTO -->
 	</h:form>
 </ui:composition>

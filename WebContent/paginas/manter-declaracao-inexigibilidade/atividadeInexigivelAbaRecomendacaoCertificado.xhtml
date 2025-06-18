@@ -8,8 +8,10 @@
 
 		<h:panelGrid id="panelRecomendacaoCertificado" columns="1">
 			<h:form id="formFiltroRecomendacao" rendered="#{!atividadeInexigivelController.visualizar}">
+        <ui:include src="/layout/csrfToken.xhtml" />
 			
-				<h:outputText  value="Descrição:" />
+        <ui:include src="/layout/csrfToken.xhtml" />
+				<h:outputText  value="DescriÃ§Ã£o:" />
 	 			<p:inputText value="#{atividadeInexigivelController.descricaoRecomendacao}" >
 				    <p:ajax event="keyup" listener="#{atividadeInexigivelController.filtrarRecomendacoes}"
 	       				 update="tabViewDI:formLista:dataTableRecomendacoes" process="@this" />
@@ -21,11 +23,11 @@
 				lazy="true" paginator="true" rows="5" paginatorPosition="bottom" paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}" rowsPerPageTemplate="5,10,15" emptyMessage="#{bundle.msg_lista_vazia}" style="width: 700px;">
 	
 	        		<f:facet name="header">
-						<h:outputText value="Recomendações" />
+						<h:outputText value="RecomendaÃ§Ãµes" />
 					</f:facet>
 					<p:column style="width: 350px;">  
 						<f:facet name="header">
-							<h:outputText value="Descrição" />  
+							<h:outputText value="DescriÃ§Ã£o" />  
 						</f:facet>
 						<h:outputText value="#{recomendacao.desRecomendacaoInexigibilidade}" />  
 					</p:column>		
@@ -34,7 +36,7 @@
 							<h:outputText value="#{bundle.msg_acoes}" />  
 						</f:facet>
 						<p:commandLink actionListener="#{atividadeInexigivelController.selecionarRecomendacao(recomendacao)}">
-							<h:graphicImage title="Selecionar Recomendacão" value="/resources/img/ico-msg-sucesso.png" />
+							<h:graphicImage title="Selecionar RecomendacÃ£o" value="/resources/img/ico-msg-sucesso.png" />
 						</p:commandLink>
 	        		</p:column>
 	    		</p:dataTable>
@@ -44,11 +46,11 @@
 							lazy="true" paginator="true" rows="5" paginatorPosition="bottom" paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}" rowsPerPageTemplate="5,10,15" emptyMessage="#{bundle.msg_lista_vazia}" style="width: 700px;">
 	
 	        		<f:facet name="header">
-						<h:outputText value="Recomendações Selecionadas" />
+						<h:outputText value="RecomendaÃ§Ãµes Selecionadas" />
 					</f:facet>
 					<p:column style="width: 350px;">  
 						<f:facet name="header">
-							<h:outputText value="Descrição" />  
+							<h:outputText value="DescriÃ§Ã£o" />  
 						</f:facet>
 						<h:outputText value="#{recomendacao.desRecomendacaoInexigibilidade}" />  
 					</p:column>		
@@ -57,7 +59,8 @@
 							<h:outputText value="#{bundle.msg_acoes}" />  
 						</f:facet>
 						<p:commandLink actionListener="#{atividadeInexigivelController.removerRecomendacao(recomendacao)}">
-							<h:graphicImage title="Remover Recomendacão" value="/resources/img/ico-excluir.png" />
+        <ui:include src="/layout/csrfToken.xhtml" />
+							<h:graphicImage title="Remover RecomendacÃ£o" value="/resources/img/ico-excluir.png" />
 						</p:commandLink>
 	        		</p:column>
 	    		</p:dataTable>
@@ -86,13 +89,13 @@
 						
 					<p:column style="width: 50px; text-align: center;">  
 						<f:facet name="header">
-							<h:outputText value="Código" />  
+							<h:outputText value="CÃ³digo" />  
 						</f:facet>
 						<h:outputText value="#{modelo.codigo}" />  
 					</p:column>						
 					<p:column style="width: 350px; text-align: center;" >  
 						<f:facet name="header">
-							<h:outputText value="Descrição"/>  
+							<h:outputText value="DescriÃ§Ã£o"/>  
 						</f:facet>
 						<h:outputText value="#{modelo.descricao}" />  
 					</p:column>		

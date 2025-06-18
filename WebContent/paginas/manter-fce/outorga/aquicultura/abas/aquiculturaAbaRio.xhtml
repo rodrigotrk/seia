@@ -6,12 +6,13 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:p="http://primefaces.prime.com.tr/ui">
 	<h:form id="formOutorgaAquiculturaAbaRio">
+        <ui:include src="/layout/csrfToken.xhtml" />
 	
 		<div style="width:350px; margin-left:245px; margin-bottom:15px;" align="center">
 			<h:outputText styleClass="titulo-grupo" style="font-weight:bold;" value="TANQUE-REDE OU SIMILARES/LOCAL: RIO"/>
 		</div>
 
-		<h:outputText styleClass="titulo-grupo" style="font-weight:bold;" value="Poligonal da Intervenção"/>
+		<h:outputText styleClass="titulo-grupo" style="font-weight:bold;" value="Poligonal da IntervenÃ§Ã£o"/>
 		<h:panelGrid style="margin-left:30px;">
 			<p:dataTable id="tabelaShapesRio" emptyMessage="#{bundle.lac_dadosGerais_msg007}" value="#{fceOutorgaAquiculturaRioController.listaFceOutorgaLocalizacaoGeografica}" var="shape" style="width:513px; margin-top:10px; margin-bottom:15px;">
 	 		    <p:column style="text-align:center; width:200px;" headerText="Sistema de Coordenada">
@@ -22,7 +23,7 @@
 	 		    		<p:ajax event="blur" global="false"/>
 	 		    	</p:inputText>
 	 		    </p:column>
-				<p:column headerText="Ações" style="width:40px; text-align:center;">
+				<p:column headerText="AÃ§Ãµes" style="width:40px; text-align:center;">
 					<p:commandLink action="#{fceOutorgaAquiculturaRioController.confirmarCoordenada()}"
 						rendered="#{!shape.confirmado}" disabled="#{fceOutorgaAquiculturaRioController.desabilitarTudo}" global="false"
 						update="aquiculturaAbas:formOutorgaAquiculturaAbaRio:tabelaShapesRio">
@@ -36,7 +37,7 @@
 						<f:setPropertyActionListener target="#{fceOutorgaAquiculturaRioController.fceOutorgaLocalizacaoGeograficaSelecionado}" value="#{shape}"/>
 					</p:commandLink>
 					<a onclick='javascript:${fceOutorgaAquiculturaRioController.getUrlToVisualizar(shape.ideLocalizacaoGeografica)}' accesskey="VISUALIZAR GEOBAHIA" style="cursor: pointer;" >
-						<h:graphicImage title="Localização da Poligonal no Geobahia" value="/resources/img/ico-arl-relocacao.png"/>
+						<h:graphicImage title="LocalizaÃ§Ã£o da Poligonal no Geobahia" value="/resources/img/ico-arl-relocacao.png"/>
 					</a>
 				</p:column>
 			</p:dataTable> <!-- FIM DA DATATABLE COM OS SHAPES -->
@@ -55,7 +56,7 @@
 					</f:facet>
 					<h:outputText value="#{aquiculturaTipoAtividade.nomAquiculturaTipoAtividade}" />
 				</p:column>
-				<p:column style="width: 35px; text-align:center;" headerText="Ações">		
+				<p:column style="width: 35px; text-align:center;" headerText="AÃ§Ãµes">		
 					<p:commandLink title="Adicionar" process="@this" action="#{fceOutorgaAquiculturaRioController.adicionarTipoAtividade()}" 
 					oncomplete="updateTipoAtividadeRio();" global="false" disabled="#{fceOutorgaAquiculturaRioController.desabilitarTudo}">
 						<h:graphicImage title="Adicionar Tipo Atividade" value="/resources/img/ico-adicionar.png"/>
@@ -80,7 +81,7 @@
 						<h:outputText value="#{tipoAtividade.nomAquiculturaTipoAtividade}" />
 					</h:panelGroup>
 				</p:column>
-				<p:column headerText="Espécie(s)" style="text-align:justify; border-style:hidden;">
+				<p:column headerText="EspÃ©cie(s)" style="text-align:justify; border-style:hidden;">
 					<h:panelGroup id="groupEspecie" layout="block" style="height:90px; width:325px; overflow:auto;">
 						<p:selectManyCheckbox id="manyEspecie" value="#{tipoAtividade.listaEspecieAquiculturaTipoAtividadesSelected}"
 							converter="simpleEntityConverter" layout="pageDirection" 
@@ -94,11 +95,11 @@
 						</p:selectManyCheckbox>
 					</h:panelGroup>
 				</p:column >
-				<p:column headerText="Ações" style="width: 35px; text-align:center;" rendered="#{!fceOutorgaAquiculturaRioController.existeTipologiaFromEtapa7}">
+				<p:column headerText="AÃ§Ãµes" style="width: 35px; text-align:center;" rendered="#{!fceOutorgaAquiculturaRioController.existeTipologiaFromEtapa7}">
 					<p:commandLink process="@this" global="false" oncomplete="confirmaExclusaoFceAquiculturaEspecieRio.show()" disabled="#{fceOutorgaAquiculturaRioController.desabilitarTudo}">
 						<h:graphicImage title="Excluir Tipo Atividades" value="/resources/img/ico-excluir.png" />
 						<f:setPropertyActionListener target="#{fceOutorgaAquiculturaRioController.tipoAtividadeSelecionado}" value="#{tipoAtividade}"/>
-					</p:commandLink> <!-- EXCLUSÃO -->
+					</p:commandLink> <!-- EXCLUSÃƒO -->
 				</p:column>
 			</p:dataTable>
 		</h:panelGrid>
@@ -106,7 +107,7 @@
 		
 	<h:outputText styleClass="titulo-grupo" style="font-weight:bold;" value="* Dados sobre o cultivo" />
 	<h:panelGrid style="margin-left:30px; margin-top:10px; margin-bottom:15px;" columns="4">
-		<h:outputText value="Nº de viveiros   " />
+		<h:outputText value="NÂº de viveiros   " />
 		<p:inputText value="#{fceOutorgaAquiculturaRioController.fceAquiculturaRio.numViveiro}" disabled="#{fceOutorgaAquiculturaRioController.desabilitarTudo}"
 		onkeyup="mascararNumeroAndAddZeros(this, event, 9, 0, '.', ',', 3);" maxlength="11" style="width:100px;">
 			<f:convertNumber integerOnly="true" />
@@ -114,7 +115,7 @@
 		</p:inputText>
 		<h:outputText value="   (unid)"/>
 		<p:spacer/>
-		<h:outputText value="Área total ocupada pelo cultivo   " />
+		<h:outputText value="Ãrea total ocupada pelo cultivo   " />
 		<p:inputText value="#{fceOutorgaAquiculturaRioController.fceAquiculturaRio.numAreaTotalOcupada}" disabled="#{fceOutorgaAquiculturaRioController.desabilitarTudo}"
 		onkeyup="mascararNumeroAndAddZeros(this, event, 9, 4, '.', ',', 3);"  maxlength="16" style="width:100px;">
 			<f:convertNumber integerOnly="false" minFractionDigits="4"/>
@@ -128,9 +129,9 @@
 			<f:convertNumber integerOnly="false" minFractionDigits="2"/>
 			<p:ajax event="blur" global="false"/>
 		</p:inputText>
-		<h:outputText value="   (m³)"/>
+		<h:outputText value="   (mÂ³)"/>
 		<p:spacer/>
-		<h:outputText value="Produção anual do cultivo   " />
+		<h:outputText value="ProduÃ§Ã£o anual do cultivo   " />
 		<p:inputText value="#{fceOutorgaAquiculturaRioController.fceAquiculturaRio.numProducaoCultivoAnual}" disabled="#{fceOutorgaAquiculturaRioController.desabilitarTudo}"
 		onkeyup="mascararNumeroAndAddZeros(this, event, 9, 2, '.', ',', 3);"  maxlength="14" style="width:100px;">
 			<f:convertNumber integerOnly="false" minFractionDigits="2"/>
@@ -147,7 +148,7 @@
 				process="formOutorgaAquiculturaAbaRio"
 				actionListener="#{fceOutorgaAquiculturaRioController.voltarAba()}"
 				global="false" />
-			<p:commandButton id="btnAvancar" value="Avançar" style="width:90px;"
+			<p:commandButton id="btnAvancar" value="AvanÃ§ar" style="width:90px;"
 				update="aquiculturaAbas" process="formOutorgaAquiculturaAbaRio"
 				actionListener="#{fceOutorgaAquiculturaRioController.avancarAba()}"
 				global="false" />

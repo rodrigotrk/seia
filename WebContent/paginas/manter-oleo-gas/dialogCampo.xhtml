@@ -7,13 +7,14 @@
 	xmlns:p="http://primefaces.prime.com.tr/ui">
 
 	<h:form id="formDialogCampo">
+        <ui:include src="/layout/csrfToken.xhtml" />
 		<h:panelGrid style="text-align: left;">
-			<h:outputText value="* Existem quantos poços de óleo e gás perfurados no campo?" />
+			<h:outputText value="* Existem quantos poÃ§os de Ã³leo e gÃ¡s perfurados no campo?" />
 			<p:inputText value="#{caepogController.caepogDefinicaoCampo.qtdPocos}" onkeyup="SomenteNumero(this);" disabled="#{caepogController.caepog.visualizando}" maxlength="6"/>
 			
 			<p:spacer width="0" height="10"/>
 			
-			<h:outputText value="* Número do Processo que concedeu a Licença Ambiental ao Campo:" />
+			<h:outputText value="* NÃºmero do Processo que concedeu a LicenÃ§a Ambiental ao Campo:" />
 			<p:inputText value="#{caepogController.caepogDefinicaoCampo.numProcessoCaepogCampo}" disabled="#{caepogController.caepog.visualizando}" maxlength="80" styleClass="maiusculo"/>
 			
 			<p:spacer width="0" height="10"/>
@@ -27,24 +28,24 @@
 			<p:spacer width="0" height="10"/>
 			
 			<h:panelGrid id="panelGridDataTable">
-				<h:outputText value="Localização do campo:" />
+				<h:outputText value="LocalizaÃ§Ã£o do campo:" />
 				
 				<h:panelGrid columns="2">
 					<p:commandLink oncomplete="dlgLocalizacaoGeograficaGeneric.show();" actionListener="#{caepogController.novaLocGeoCampo()}" process="@this" 
 						disabled="#{caepogController.caepogDefinicaoCampo.ideLocalizacaoGeografica != null || caepogController.caepog.visualizando}">
 						
-						<h:graphicImage title="Incluir Localização" value="/resources/img/ico-expandir.png" style="margin-right: 5px;" />
-						<h:outputText value="Incluir Localização" />
+						<h:graphicImage title="Incluir LocalizaÃ§Ã£o" value="/resources/img/ico-expandir.png" style="margin-right: 5px;" />
+						<h:outputText value="Incluir LocalizaÃ§Ã£o" />
 					</p:commandLink>
 					
 					<h:graphicImage value="/resources/img/ico-ajuda.png"  id="ajuda" style="margin: 3px 1px 2px 4px;" rendered="#{caepogController.caepogDefinicaoCampo.ideLocalizacaoGeografica == null}"/>
-				  	<p:tooltip for="ajuda" value="O shape deverá conter todos os poços já existentes." rendered="#{caepogController.caepogDefinicaoCampo.ideLocalizacaoGeografica == null}" showEffect="fade" hideEffect="fade"/>
+				  	<p:tooltip for="ajuda" value="O shape deverÃ¡ conter todos os poÃ§os jÃ¡ existentes." rendered="#{caepogController.caepogDefinicaoCampo.ideLocalizacaoGeografica == null}" showEffect="fade" hideEffect="fade"/>
 				</h:panelGrid>
 			
 				<p:dataTable id="dataTableLocalizacao" var="localizacao" value="#{caepogController.caepogDefinicaoCampo.ideLocalizacaoGeografica}"
 					rendered="#{caepogController.caepogDefinicaoCampo.ideLocalizacaoGeografica != null}" emptyMessage="#{bundle.consultapf_msg_empty_list}">
 					
-					<p:column headerText="Ponto de Referência">
+					<p:column headerText="Ponto de ReferÃªncia">
 						<h:outputText value="${localizacao.desLocalizacaoGeografica}" />
 					</p:column>
 					
@@ -56,10 +57,10 @@
 						<h:outputText value="${localizacao.nomeSistemaCoordenadas()}" />
 					</p:column>
 					
-					<p:column headerText="Ações">
+					<p:column headerText="AÃ§Ãµes">
 						<p:commandLink oncomplete="dlgLocalizacaoGeograficaGeneric.show();" action="#{localizacaoGeograficaGenericController.visualizarLocalizacaoGeografica()}" process="@this">
 							<f:setPropertyActionListener target="#{localizacaoGeograficaGenericController.localizacaoGeograficaSelecionada}" value="#{caepogController.caepogDefinicaoCampo.ideLocalizacaoGeografica}" />
-							<h:graphicImage title="Visualizar Localização no GeoBahia" value="/resources/img/ico-pesquisa.png" />
+							<h:graphicImage title="Visualizar LocalizaÃ§Ã£o no GeoBahia" value="/resources/img/ico-pesquisa.png" />
 						</p:commandLink>
 		
 						<p:commandLink oncomplete="dlgLocalizacaoGeograficaGeneric.show();" action="#{localizacaoGeograficaGenericController.editarLocalizacaoGeografica()}" 
@@ -67,7 +68,7 @@
 							
 							<f:setPropertyActionListener target="#{localizacaoGeograficaGenericController.localizacaoGeograficaSelecionada}" value="#{caepogController.caepogDefinicaoCampo.ideLocalizacaoGeografica}" />
 							<f:setPropertyActionListener target="#{localizacaoGeograficaGenericController.disableParaVisualizar}" value="#{false}" />
-							<h:graphicImage title="Editar Localização Geográfica" value="/resources/img/ico-editar.png" />
+							<h:graphicImage title="Editar LocalizaÃ§Ã£o GeogrÃ¡fica" value="/resources/img/ico-editar.png" />
 						</p:commandLink>
 						
 						<p:commandLink process="@this" oncomplete="confirmacaoExclusaoLocalizacaoGenerica.show();" disabled="#{caepogController.caepog.visualizando}">

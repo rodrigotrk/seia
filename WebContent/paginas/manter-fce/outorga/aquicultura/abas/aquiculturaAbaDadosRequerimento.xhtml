@@ -6,20 +6,21 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:p="http://primefaces.prime.com.tr/ui">
 	<h:form id="formOutorgaAquiculturaAbaDadosRequerimento">
+        <ui:include src="/layout/csrfToken.xhtml" />
 		<!-- INICIO GRID VIVEIRO ESCAVADO -->
 		<h:outputText styleClass="titulo-grupo" style="font-weight:bold;" value="#{bundle.fce_out_aqui_dr_viveiro}"/>
 		<h:panelGrid id="vivEscavado" style="margin-left:20px;">
 			<p:selectOneRadio value="#{fceOutorgaAquiculturaNavegacaoController.aquiculturaViveiroEscavado}" disabled="#{true}" style="margin-left:10px;">
 				<f:selectItem itemValue="true" itemLabel="Sim"/>
-				<f:selectItem itemValue="false" itemLabel="Não"/>
+				<f:selectItem itemValue="false" itemLabel="NÃ£o"/>
 			</p:selectOneRadio>
 		</h:panelGrid>
 		<h:panelGrid columns="2" rendered="#{fceOutorgaAquiculturaNavegacaoController.aquiculturaViveiroEscavado}" style="margin-left:35px;">
 	        <p:selectBooleanCheckbox value="#{fceOutorgaAquiculturaNavegacaoController.temCaptacao}" disabled="#{true}"/>
-	        <h:outputText value="Captação"/>
+	        <h:outputText value="CaptaÃ§Ã£o"/>
 	        
 	        <p:selectBooleanCheckbox value="#{fceOutorgaAquiculturaNavegacaoController.temLancamento}" disabled="#{true}"/>
-	        <h:outputText value="Lançamento de Efluente"/> 
+	        <h:outputText value="LanÃ§amento de Efluente"/> 
 		</h:panelGrid> 
 		<!-- FINAL GRID VIVEIRO ESCAVADO -->	
 		<br /><br />
@@ -28,7 +29,7 @@
 		<h:panelGrid id="tanqueRede" style="margin-left:20px;">
 			<p:selectOneRadio value="#{fceOutorgaAquiculturaNavegacaoController.aquiculturaTanqueRede}" disabled="#{true}" style="margin-left:10px;">
 				<f:selectItem itemValue="true" itemLabel="Sim"/>
-				<f:selectItem itemValue="false" itemLabel="Não"/>
+				<f:selectItem itemValue="false" itemLabel="NÃ£o"/>
 			</p:selectOneRadio>
 		</h:panelGrid>
 		<h:panelGrid columns="2" rendered="#{fceOutorgaAquiculturaNavegacaoController.aquiculturaTanqueRede}" style="margin-left:35px;">
@@ -46,7 +47,7 @@
 				process="formOutorgaAquiculturaAbaDadosRequerimento"
 				onclick="confirmationVoltar.show();"
 				global="false" />
-			<p:commandButton id="btnAvancar" value="Avançar" style="width:90px;"
+			<p:commandButton id="btnAvancar" value="AvanÃ§ar" style="width:90px;"
 				update="aquiculturaAbas" process="formOutorgaAquiculturaAbaDadosRequerimento"
 				actionListener="#{fceOutorgaAquiculturaNavegacaoController.avancarAba()}"
 				global="false" rendered="#{fceOutorgaAquiculturaNavegacaoController.aquiculturaViveiroEscavado or fceOutorgaAquiculturaNavegacaoController.aquiculturaTanqueRede}"/>

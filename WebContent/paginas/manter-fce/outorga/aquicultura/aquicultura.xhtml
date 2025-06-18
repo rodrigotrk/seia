@@ -30,13 +30,13 @@
 					<ui:include src="/paginas/manter-fce/outorga/aquicultura/abas/aquiculturaAbaDadosRequerimento.xhtml" />
 				</p:tab>
 				
-				<p:tab id="abaCaptacao" title="Viveiro Escavado - Captação" disabled="#{!fceOutorgaAquiculturaCaptacaoController.temCaptacao}">
+				<p:tab id="abaCaptacao" title="Viveiro Escavado - CaptaÃ§Ã£o" disabled="#{!fceOutorgaAquiculturaCaptacaoController.temCaptacao}">
 					<h:panelGroup rendered="#{fceOutorgaAquiculturaNavegacaoController.renderedAbaCaptacao}" layout="block">
 						<ui:include src="/paginas/manter-fce/outorga/aquicultura/abas/aquiculturaAbaCaptacao.xhtml" />
 					</h:panelGroup>
 				</p:tab>
 				
-				<p:tab id="abaLancamento" title="Viveiro Escavado - Lançamento" disabled="#{!fceOutorgaAquiculturaLancamentoController.temLancamento}">
+				<p:tab id="abaLancamento" title="Viveiro Escavado - LanÃ§amento" disabled="#{!fceOutorgaAquiculturaLancamentoController.temLancamento}">
 					<h:panelGroup rendered="#{fceOutorgaAquiculturaNavegacaoController.renderedAbaLancamento}" layout="block">
 						<ui:include src="/paginas/manter-fce/outorga/aquicultura/abas/aquiculturaAbaLancamento.xhtml" />
 					</h:panelGroup>
@@ -61,35 +61,45 @@
 		</h:panelGrid>
 	</p:dialog>
 	
-	<p:confirmDialog id="confirmationVoltar" widgetVar="confirmationVoltar" header="Confirmação" appendToBody="true" message="#{bundle.geral_msg_informacoes_nao_foram_salvas_deseja_continuar}" severity="alert">
+        <ui:include src="/layout/csrfToken.xhtml" />
+        <ui:include src="/layout/csrfToken.xhtml" />
+        <ui:include src="/layout/csrfToken.xhtml" />
+        <ui:include src="/layout/csrfToken.xhtml" />
+        <ui:include src="/layout/csrfToken.xhtml" />
+        <ui:include src="/layout/csrfToken.xhtml" />
+        <ui:include src="/layout/csrfToken.xhtml" />
+        <ui:include src="/layout/csrfToken.xhtml" />
+        <ui:include src="/layout/csrfToken.xhtml" />
+        <ui:include src="/layout/csrfToken.xhtml" />
+	<p:confirmDialog id="confirmationVoltar" widgetVar="confirmationVoltar" header="ConfirmaÃ§Ã£o" appendToBody="true" message="#{bundle.geral_msg_informacoes_nao_foram_salvas_deseja_continuar}" severity="alert">
 		<h:form>
 			<p:commandButton value="Sim" oncomplete="confirmationVoltar.hide(); outorgaAquicultura.hide();" global="false"/>
-			<p:commandButton value="Não" onclick="confirmationVoltar.hide();" type="button" global="false"/>
+			<p:commandButton value="NÃ£o" onclick="confirmationVoltar.hide();" type="button" global="false"/>
 		</h:form>
 	</p:confirmDialog>
 	
-	<p:confirmDialog id="confirmaExclusaoPoligonal" widgetVar="confirmaExclusaoPoligonal" header="Confirmação" appendToBody="true" severity="alert" message="#{bundle.msg_confirma_exclusao}">
+	<p:confirmDialog id="confirmaExclusaoPoligonal" widgetVar="confirmaExclusaoPoligonal" header="ConfirmaÃ§Ã£o" appendToBody="true" severity="alert" message="#{bundle.msg_confirma_exclusao}">
 		<h:form>
 			<p:commandButton global="false" id="confirmaExclusaoPoligonal" action="#{fceOutorgaAquiculturaCaptacaoController.excluirPoligonal()}" oncomplete="confirmaExclusaoPoligonal.hide()" value="#{bundle.btn_sim}"/>
 			<p:commandButton value="#{bundle.btn_nao}" type="button" onclick="confirmaExclusaoPoligonal.hide()" />
 		</h:form>
 	</p:confirmDialog>
 	
-	<p:confirmDialog id="confirmaExclusaoFceAquiculturaEspecieCaptacao" widgetVar="confirmaExclusaoFceAquiculturaEspecieCaptacao" header="Confirmação" appendToBody="true" severity="alert" message="#{bundle.msg_confirma_exclusao}">
+	<p:confirmDialog id="confirmaExclusaoFceAquiculturaEspecieCaptacao" widgetVar="confirmaExclusaoFceAquiculturaEspecieCaptacao" header="ConfirmaÃ§Ã£o" appendToBody="true" severity="alert" message="#{bundle.msg_confirma_exclusao}">
 		<h:form>
 			<p:commandButton global="false" process="@this" actionListener="#{fceOutorgaAquiculturaCaptacaoController.excluirTipoAtividade()}" oncomplete="updateTipoAtividadeCaptacao(); confirmaExclusaoFceAquiculturaEspecieCaptacao.hide()" value="#{bundle.btn_sim}"/>
 			<p:commandButton value="#{bundle.btn_nao}" type="button" onclick="confirmaExclusaoFceAquiculturaEspecieCaptacao.hide()" />
 		</h:form>
 	</p:confirmDialog>
 	
-	<p:confirmDialog id="confirmaExclusaoFceAquiculturaEspecieBarragem" widgetVar="confirmaExclusaoFceAquiculturaEspecieBarragem" header="Confirmação" appendToBody="true" severity="alert" message="#{bundle.msg_confirma_exclusao}">
+	<p:confirmDialog id="confirmaExclusaoFceAquiculturaEspecieBarragem" widgetVar="confirmaExclusaoFceAquiculturaEspecieBarragem" header="ConfirmaÃ§Ã£o" appendToBody="true" severity="alert" message="#{bundle.msg_confirma_exclusao}">
 		<h:form>
 			<p:commandButton global="false" process="@this" actionListener="#{fceOutorgaAquiculturaBarragemController.excluirTipoAtividade()}" oncomplete="updateTipoAtividadeBarragem(); confirmaExclusaoFceAquiculturaEspecieBarragem.hide()" value="#{bundle.btn_sim}"/>
 			<p:commandButton value="#{bundle.btn_nao}" type="button" onclick="confirmaExclusaoFceAquiculturaEspecieBarragem.hide()" />
 		</h:form>
 	</p:confirmDialog>
 	
-	<p:confirmDialog id="confirmaExclusaoFceAquiculturaEspecieRio" widgetVar="confirmaExclusaoFceAquiculturaEspecieRio" header="Confirmação" appendToBody="true" severity="alert" message="#{bundle.msg_confirma_exclusao}">
+	<p:confirmDialog id="confirmaExclusaoFceAquiculturaEspecieRio" widgetVar="confirmaExclusaoFceAquiculturaEspecieRio" header="ConfirmaÃ§Ã£o" appendToBody="true" severity="alert" message="#{bundle.msg_confirma_exclusao}">
 		<h:form>
 			<p:commandButton global="false" process="@this" actionListener="#{fceOutorgaAquiculturaRioController.excluirTipoAtividade()}" oncomplete="updateTipoAtividadeRio(); confirmaExclusaoFceAquiculturaEspecieRio.hide()" value="#{bundle.btn_sim}"/>
 			<p:commandButton value="#{bundle.btn_nao}" type="button" onclick="confirmaExclusaoFceAquiculturaEspecieRio.hide()" />
@@ -102,36 +112,36 @@
 				<p:commandButton value="Sim" ajax="false" global="false" process="@this" onclick="rel_aquicultura.hide();" style="margin-right:10px;">
 					<p:fileDownload value="#{fceOutorgaAquiculturaNavegacaoController.imprimirRelatorio}"/>
 				</p:commandButton>			
-				<p:commandButton value="Não" onclick="rel_aquicultura.hide();" process="@this"/>
+				<p:commandButton value="NÃ£o" onclick="rel_aquicultura.hide();" process="@this"/>
 			</h:form>
 		</div>
 	</p:confirmDialog>
 		
-	<p:confirmDialog header="Confirmação" appendToBody="true" message="#{bundle.lac_dadosGerais_msg004}" severity="alert" widgetVar="confirmaExclusaoDadosAdicionaisAquiculturaCaptacao" id="confirmaExclusaoDadosAdicionaisAquiculturaCaptacao">
+	<p:confirmDialog header="ConfirmaÃ§Ã£o" appendToBody="true" message="#{bundle.lac_dadosGerais_msg004}" severity="alert" widgetVar="confirmaExclusaoDadosAdicionaisAquiculturaCaptacao" id="confirmaExclusaoDadosAdicionaisAquiculturaCaptacao">
 		<h:form>
 			<p:commandButton value="Sim" oncomplete="updateGridCaptacao(); confirmaExclusaoDadosAdicionaisAquiculturaCaptacao.hide();" global="true" actionListener="#{fceOutorgaAquiculturaCaptacaoController.limparCaminhoDocumentoAdicional()}"/>
-			<p:commandButton value="Não" onclick="confirmaExclusaoDadosAdicionaisAquiculturaCaptacao.hide();" type="button" global="false"/>
+			<p:commandButton value="NÃ£o" onclick="confirmaExclusaoDadosAdicionaisAquiculturaCaptacao.hide();" type="button" global="false"/>
 		</h:form>
 	</p:confirmDialog> <!-- Fim do DIALOG EXCLUSAO DADOS ADICIONAIS -->
 	
-	<p:confirmDialog header="Confirmação" appendToBody="true" message="#{bundle.lac_dadosGerais_msg004}" severity="alert" widgetVar="confirmaExclusaoDadosAdicionaisAquiculturaLancamento" id="confirmaExclusaoDadosAdicionaisAquiculturaLancamento">
+	<p:confirmDialog header="ConfirmaÃ§Ã£o" appendToBody="true" message="#{bundle.lac_dadosGerais_msg004}" severity="alert" widgetVar="confirmaExclusaoDadosAdicionaisAquiculturaLancamento" id="confirmaExclusaoDadosAdicionaisAquiculturaLancamento">
 		<h:form>
 			<p:commandButton value="Sim" oncomplete="updateGridLancamento(); confirmaExclusaoDadosAdicionaisAquiculturaLancamento.hide();" global="true" actionListener="#{fceOutorgaAquiculturaLancamentoController.limparCaminhoDocumentoAdicional()}"/>
-			<p:commandButton value="Não" onclick="confirmaExclusaoDadosAdicionaisAquiculturaLancamento.hide();" type="button" global="false"/>
+			<p:commandButton value="NÃ£o" onclick="confirmaExclusaoDadosAdicionaisAquiculturaLancamento.hide();" type="button" global="false"/>
 		</h:form>
 	</p:confirmDialog> <!-- Fim do DIALOG EXCLUSAO DADOS ADICIONAIS -->
 	
-	<p:confirmDialog header="Confirmação" appendToBody="true" message="#{bundle.lac_dadosGerais_msg004}" severity="alert" widgetVar="confirmaExclusaoDadosAdicionaisAquiculturaBarragem" id="confirmaExclusaoDadosAdicionaisAquiculturaBarragem">
+	<p:confirmDialog header="ConfirmaÃ§Ã£o" appendToBody="true" message="#{bundle.lac_dadosGerais_msg004}" severity="alert" widgetVar="confirmaExclusaoDadosAdicionaisAquiculturaBarragem" id="confirmaExclusaoDadosAdicionaisAquiculturaBarragem">
 		<h:form>
 			<p:commandButton value="Sim" oncomplete="updateGridBarragem(); confirmaExclusaoDadosAdicionaisAquiculturaBarragem.hide();" global="true" actionListener="#{fceOutorgaAquiculturaBarragemController.limparCaminhoDocumentoAdicional()}"/>
-			<p:commandButton value="Não" onclick="confirmaExclusaoDadosAdicionaisAquiculturaBarragem.hide();" type="button" global="false"/>
+			<p:commandButton value="NÃ£o" onclick="confirmaExclusaoDadosAdicionaisAquiculturaBarragem.hide();" type="button" global="false"/>
 		</h:form>
 	</p:confirmDialog> <!-- Fim do DIALOG EXCLUSAO DADOS ADICIONAIS -->
 	
-	<p:confirmDialog header="Confirmação" appendToBody="true" message="#{bundle.lac_dadosGerais_msg004}" severity="alert" widgetVar="confirmaExclusaoDadosAdicionaisAquiculturaRio" id="confirmaExclusaoDadosAdicionaisAquiculturaRio">
+	<p:confirmDialog header="ConfirmaÃ§Ã£o" appendToBody="true" message="#{bundle.lac_dadosGerais_msg004}" severity="alert" widgetVar="confirmaExclusaoDadosAdicionaisAquiculturaRio" id="confirmaExclusaoDadosAdicionaisAquiculturaRio">
 		<h:form>
 			<p:commandButton value="Sim" oncomplete="updateGridRio(); confirmaExclusaoDadosAdicionaisAquiculturaRio.hide();" global="true" actionListener="#{fceOutorgaAquiculturaRioController.limparCaminhoDocumentoAdicional()}"/>
-			<p:commandButton value="Não" onclick="confirmaExclusaoDadosAdicionaisAquiculturaRio.hide();" type="button" global="false"/>
+			<p:commandButton value="NÃ£o" onclick="confirmaExclusaoDadosAdicionaisAquiculturaRio.hide();" type="button" global="false"/>
 		</h:form>
 	</p:confirmDialog> <!-- Fim do DIALOG EXCLUSAO DADOS ADICIONAIS -->
 </ui:composition>

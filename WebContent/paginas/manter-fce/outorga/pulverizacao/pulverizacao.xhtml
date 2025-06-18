@@ -15,7 +15,10 @@
 			  width="900" 
 			  height="650"
 			  resizable="false" 
-			  header="FCE - Pulverização" 
+        <ui:include src="/layout/csrfToken.xhtml" />
+        <ui:include src="/layout/csrfToken.xhtml" />
+        <ui:include src="/layout/csrfToken.xhtml" />
+			  header="FCE - PulverizaÃ§Ã£o" 
 			  modal="true">
 		
 		<p:ajax event="close" listener="#{fcePulverizacaoController.limpar()}"/>
@@ -23,7 +26,7 @@
 		<h:panelGroup id="pnlFcePulverizacao" layout="block">
 			<p:tabView id="pulverizacaoAbas" activeIndex="#{fcePulverizacaoController.activeTab}" widgetVar="pulverizacaoAbas" cache="false" dynamic="true">
 				<p:ajax event="tabChange" global="false" listener="#{fcePulverizacaoController.controlarAbas}" update="pulverizacaoAbas" />
-				<p:tab id="abaPulverizacao" title="Pulverização">
+				<p:tab id="abaPulverizacao" title="PulverizaÃ§Ã£o">
 					<ui:include src="/paginas/manter-fce/outorga/pulverizacao/pulverizacaoAbaPulverizacao.xhtml"/> 
 				</p:tab>
 				<p:tab id="abaAdicionais" title="Adicionais">
@@ -34,29 +37,29 @@
 		
 	</p:dialog>
 	
-	<p:confirmDialog id="confirmationVoltarPulverizacao" widgetVar="confirmationVoltarPulverizacao" header="Confirmação" appendToBody="true" message="#{bundle.geral_msg_informacoes_nao_foram_salvas_deseja_continuar}" severity="alert">
+	<p:confirmDialog id="confirmationVoltarPulverizacao" widgetVar="confirmationVoltarPulverizacao" header="ConfirmaÃ§Ã£o" appendToBody="true" message="#{bundle.geral_msg_informacoes_nao_foram_salvas_deseja_continuar}" severity="alert">
 		<h:form>
 			<p:commandButton value="Sim" update="formPulverizacao" oncomplete="confirmationVoltarPulverizacao.hide(); pulverizacao.hide();" global="false"/>
-			<p:commandButton value="Não" onclick="confirmationVoltarPulverizacao.hide();" type="button" global="false"/>
+			<p:commandButton value="NÃ£o" onclick="confirmationVoltarPulverizacao.hide();" type="button" global="false"/>
 		</h:form>
 	</p:confirmDialog> <!-- FIM DO CONFIRMAR VOLTAR -->
 	
-	<p:confirmDialog id="confirmaExclusaoCultura" widgetVar="confirmaExclusaoCultura" header="Confirmação" appendToBody="true" message="#{bundle.msg_generica_deseja_exclusao}" severity="alert">
+	<p:confirmDialog id="confirmaExclusaoCultura" widgetVar="confirmaExclusaoCultura" header="ConfirmaÃ§Ã£o" appendToBody="true" message="#{bundle.msg_generica_deseja_exclusao}" severity="alert">
 		<h:form>
 			<p:commandButton value="Sim" update="pulverizacaoAbas:formPulverizacao:selectCultura pulverizacaoAbas:formPulverizacao:gridCulturas" onclick="confirmaExclusaoCultura.hide()" 
 				global="false" process="@this" actionListener="#{fcePulverizacaoController.excluirCultura()}">
 			</p:commandButton>
-			<p:commandButton value="Não" onclick="confirmaExclusaoCultura.hide()" type="button" global="false"/>
+			<p:commandButton value="NÃ£o" onclick="confirmaExclusaoCultura.hide()" type="button" global="false"/>
 		</h:form>
 	</p:confirmDialog> <!-- FIM DO CONFIRMAR EXCLUSAO -->
 	
-	<p:confirmDialog id="dlgImprimirRelatorioPulverizacao" message="#{fcePulverizacaoController.msgImprimirRelatorio('Pulverização')}" widgetVar="rel_pulverizacao" header="Mensagem">
+	<p:confirmDialog id="dlgImprimirRelatorioPulverizacao" message="#{fcePulverizacaoController.msgImprimirRelatorio('PulverizaÃ§Ã£o')}" widgetVar="rel_pulverizacao" header="Mensagem">
 		<div align="center">
 			<h:form>
 				<p:commandButton value="Sim" ajax="false" global="false" process="@this" onclick="rel_pulverizacao.hide();" style="margin-right:10px;">
 					<p:fileDownload value="#{fcePulverizacaoController.imprimirRelatorio}"/>
 				</p:commandButton>			
-				<p:commandButton value="Não" onclick="rel_pulverizacao.hide();" process="@this"/>
+				<p:commandButton value="NÃ£o" onclick="rel_pulverizacao.hide();" process="@this"/>
 			</h:form>
 		</div>
 	</p:confirmDialog> <!-- FIM DO IMPRIMIR RELATORIO -->

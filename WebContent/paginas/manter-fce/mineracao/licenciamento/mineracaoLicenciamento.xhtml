@@ -15,7 +15,7 @@
 			  width="850" 
 			  height="650"
 			  resizable="false" 
-			  header="#{fceLicenciamentoMineracaoController.headerFce('FCE - Licenciamento para Mineração')}" 
+			  header="#{fceLicenciamentoMineracaoController.headerFce('FCE - Licenciamento para MineraÃ§Ã£o')}" 
 			  modal="true">
 		
 		<!-- <p:ajax event="close" listener="#{fceLicenciamentoMineracaoController.limpar()}"/> -->
@@ -90,125 +90,136 @@
 	<!-- INI VOLTAR -->
 	<p:confirmDialog id="voltarFceLicMineracao"
 					 widgetVar="voltarFceLicMineracao" 
-					 header="Confirmação"
+        <ui:include src="/layout/csrfToken.xhtml" />
+        <ui:include src="/layout/csrfToken.xhtml" />
+        <ui:include src="/layout/csrfToken.xhtml" />
+        <ui:include src="/layout/csrfToken.xhtml" />
+        <ui:include src="/layout/csrfToken.xhtml" />
+        <ui:include src="/layout/csrfToken.xhtml" />
+        <ui:include src="/layout/csrfToken.xhtml" />
+        <ui:include src="/layout/csrfToken.xhtml" />
+        <ui:include src="/layout/csrfToken.xhtml" />
+        <ui:include src="/layout/csrfToken.xhtml" />
+        <ui:include src="/layout/csrfToken.xhtml" />
+					 header="ConfirmaÃ§Ã£o"
 					 appendToBody="true"
 					 message="#{bundle.geral_msg_informacoes_nao_foram_salvas_deseja_continuar}"
 					 severity="alert">
 		<h:form>
 			<p:commandButton value="Sim" update="formIndustrio" oncomplete="voltarFceLicMineracao.hide(); mineracaoLicenciamento.hide();" />
-			<p:commandButton value="Não" onclick="voltarFceLicMineracao.hide();" type="button" global="false" />
+			<p:commandButton value="NÃ£o" onclick="voltarFceLicMineracao.hide();" type="button" global="false" />
 		</h:form>
 	</p:confirmDialog>
 	<!-- FIM VOLTAR -->
 	
 	<!-- DIALOG RELATORIO -->
-	<p:confirmDialog message="#{fceLicenciamentoMineracaoController.msgImprimirRelatorio('Licenciamento para Mineração')}" id="relLicMineracao" widgetVar="rel_lic_mineracao" header="Mensagem">
+	<p:confirmDialog message="#{fceLicenciamentoMineracaoController.msgImprimirRelatorio('Licenciamento para MineraÃ§Ã£o')}" id="relLicMineracao" widgetVar="rel_lic_mineracao" header="Mensagem">
 		<div align="center">
 			<h:form>
 				<p:commandButton value="Sim" ajax="false" global="false" process="@this" onclick="rel_lic_mineracao.hide();" style="margin-right:10px;">
 					<p:fileDownload value="#{fceLicenciamentoMineracaoController.imprimirRelatorio}"/>
 				</p:commandButton>			
-				<p:commandButton value="Não" onclick="rel_lic_mineracao.hide();" process="@this"/>
+				<p:commandButton value="NÃ£o" onclick="rel_lic_mineracao.hide();" process="@this"/>
 			</h:form>
 		</div>
 	</p:confirmDialog>
 	<!-- FIM DIALOG RELATORIO -->
 	
 	<!-- DIALOG EXCLUIR CONCENTRADO / PRODUTO -->
-	<p:confirmDialog id="confirmaExclusaoConcentrado" widgetVar="confirmaExclusaoConcentrado" header="Confirmação" appendToBody="true" message="#{bundle.msg_generica_deseja_exclusao}" severity="alert">
+	<p:confirmDialog id="confirmaExclusaoConcentrado" widgetVar="confirmaExclusaoConcentrado" header="ConfirmaÃ§Ã£o" appendToBody="true" message="#{bundle.msg_generica_deseja_exclusao}" severity="alert">
 		<h:form>
 			<p:commandButton value="Sim" update="tabLicMineracao:minLicCaracterizacaoAtividades:gridProducao" onclick="confirmaExclusaoConcentrado.hide()"
 				process="@this" actionListener="#{fceLicenciamentoMineracaoController.excluirConcentrado()}">
 			</p:commandButton>
-			<p:commandButton value="Não" onclick="confirmaExclusaoConcentrado.hide()" type="button" global="false"/>
+			<p:commandButton value="NÃ£o" onclick="confirmaExclusaoConcentrado.hide()" type="button" global="false"/>
 		</h:form>
 	</p:confirmDialog>
 	<!-- FIM DIALOG EXCLUIR CONCENTRADO / PRODUTO -->
 	
 	<!-- DIALOG EXCLUIR AREA SERVIDAO -->
-	<p:confirmDialog id="confirmaExclusaoServidaoMineraria" widgetVar="confirmaExclusaoServidaoMineraria" header="Confirmação" appendToBody="true" message="#{bundle.msg_generica_deseja_exclusao}" severity="alert">
+	<p:confirmDialog id="confirmaExclusaoServidaoMineraria" widgetVar="confirmaExclusaoServidaoMineraria" header="ConfirmaÃ§Ã£o" appendToBody="true" message="#{bundle.msg_generica_deseja_exclusao}" severity="alert">
 		<h:form>
 			<p:commandButton value="Sim" update="tabLicMineracao:minLicCaracterizacaoAtividades:gridTableServidao" onclick="confirmaExclusaoServidaoMineraria.hide()"
 				process="@this" actionListener="#{fceLicenciamentoMineracaoController.excluirServidaoMineraria()}">
 			</p:commandButton>
-			<p:commandButton value="Não" onclick="confirmaExclusaoServidaoMineraria.hide()" type="button" global="false"/>
+			<p:commandButton value="NÃ£o" onclick="confirmaExclusaoServidaoMineraria.hide()" type="button" global="false"/>
 		</h:form>
 	</p:confirmDialog>
 	<!-- FIM DIALOG EXCLUIR AREA SERVIDAO -->
 	
 	<!-- DIALOG EXCLUIR APP -->
-	<p:confirmDialog id="confirmaExclusaoAppMinerLic" widgetVar="confirmaExclusaoAppMinerLic" header="Confirmação" appendToBody="true" message="#{bundle.msg_generica_deseja_exclusao}" severity="alert">
+	<p:confirmDialog id="confirmaExclusaoAppMinerLic" widgetVar="confirmaExclusaoAppMinerLic" header="ConfirmaÃ§Ã£o" appendToBody="true" message="#{bundle.msg_generica_deseja_exclusao}" severity="alert">
 		<h:form>
 			<p:commandButton value="Sim" update="tabLicMineracao:minLicCaracterizacaoAtividades:gridTableApp" onclick="confirmaExclusaoAppMinerLic.hide()"
 				process="@this" actionListener="#{fceLicenciamentoMineracaoController.excluirApp()}">
 			</p:commandButton>
-			<p:commandButton value="Não" onclick="confirmaExclusaoAppMinerLic.hide()" type="button" global="false"/>
+			<p:commandButton value="NÃ£o" onclick="confirmaExclusaoAppMinerLic.hide()" type="button" global="false"/>
 		</h:form>
 	</p:confirmDialog>
 	<!-- DIALOG EXCLUIR APP -->
 	
 	<!-- DIALOG EXCLUIR DISPOSICAO REJEITO -->
-	<p:confirmDialog id="confirmaExclusaoDisposicaoRejeito" widgetVar="confirmaExclusaoDisposicaoRejeito" header="Confirmação" appendToBody="true" message="#{bundle.msg_generica_deseja_exclusao}" severity="alert">
+	<p:confirmDialog id="confirmaExclusaoDisposicaoRejeito" widgetVar="confirmaExclusaoDisposicaoRejeito" header="ConfirmaÃ§Ã£o" appendToBody="true" message="#{bundle.msg_generica_deseja_exclusao}" severity="alert">
 		<h:form>
 			<p:commandButton value="Sim" update="tabLicMineracao:minLicCaracterizacaoAtividades:gridBeneficiamento" onclick="confirmaExclusaoDisposicaoRejeito.hide()"
 				process="@this" actionListener="#{fceLicenciamentoMineracaoController.excluirDisposicaoRejeito()}">
 			</p:commandButton>
-			<p:commandButton value="Não" onclick="confirmaExclusaoDisposicaoRejeito.hide()" type="button" global="false"/>
+			<p:commandButton value="NÃ£o" onclick="confirmaExclusaoDisposicaoRejeito.hide()" type="button" global="false"/>
 		</h:form>
 	</p:confirmDialog>
 	<!-- DIALOG EXCLUIR DISPOSICAO REJEITO -->
 	
 	<!-- DIALOG EXCLUIR PROCESSO DNPM -->
-	<p:confirmDialog id="confirmaExclusaoProcessoDnpm" widgetVar="confirmaExclusaoProcessoDnpm" header="Confirmação" appendToBody="true" message="#{bundle.msg_generica_deseja_exclusao}" severity="alert">
+	<p:confirmDialog id="confirmaExclusaoProcessoDnpm" widgetVar="confirmaExclusaoProcessoDnpm" header="ConfirmaÃ§Ã£o" appendToBody="true" message="#{bundle.msg_generica_deseja_exclusao}" severity="alert">
 		<h:form>
 			<p:commandButton value="Sim" update="tabLicMineracao:minLicQuadroAreas:gridAreaDnpm tabLicMineracao:minLicQuadroAreas:gridLavra" onclick="confirmaExclusaoProcessoDnpm.hide()"
 				process="@this" actionListener="#{fceLicenciamentoMineracaoController.excluirProcessoDnpm()}">
 			</p:commandButton>
-			<p:commandButton value="Não" onclick="confirmaExclusaoProcessoDnpm.hide()" type="button" global="false"/>
+			<p:commandButton value="NÃ£o" onclick="confirmaExclusaoProcessoDnpm.hide()" type="button" global="false"/>
 		</h:form>
 	</p:confirmDialog>
 	<!-- DIALOG EXCLUIR PROCESSO DNPM -->
 
 	<!-- DIALOG EXCLUIR SUBSTANCIA MINERAL -->
-	<p:confirmDialog id="confirmaExclusaoSubstanciaMineral"  widgetVar="confirmaExclusaoSubstanciaMineral" header="Confirmação" appendToBody="true" message="#{bundle.msg_generica_deseja_exclusao}" severity="alert">
+	<p:confirmDialog id="confirmaExclusaoSubstanciaMineral"  widgetVar="confirmaExclusaoSubstanciaMineral" header="ConfirmaÃ§Ã£o" appendToBody="true" message="#{bundle.msg_generica_deseja_exclusao}" severity="alert">
 		<h:form>
 			<p:commandButton value="Sim" update="tabLicMineracao:minLicDadosGerais:gridSubstanciaMineral :formIncluirSubstancia" onclick="confirmaExclusaoSubstanciaMineral.hide()"
 				process="@this" actionListener="#{fceLicenciamentoMineracaoController.excluirSubstanciaMineral()}">
 			</p:commandButton>
-			<p:commandButton value="Não" onclick="confirmaExclusaoSubstanciaMineral.hide();" type="button" global="false" />
+			<p:commandButton value="NÃ£o" onclick="confirmaExclusaoSubstanciaMineral.hide();" type="button" global="false" />
 		</h:form>
 	</p:confirmDialog>
 	<!-- DIALOG EXCLUIR SUBSTANCIA MINERAL -->
 
 	<!-- DIALOG EXCLUIR POLIGONAL DNPM -->
-	<p:confirmDialog id="confirmaExclusaoPoligonalDnpm"  widgetVar="confirmaExclusaoPoligonalDnpm" header="Confirmação" appendToBody="true" message="#{bundle.msg_generica_deseja_exclusao}" severity="alert">
+	<p:confirmDialog id="confirmaExclusaoPoligonalDnpm"  widgetVar="confirmaExclusaoPoligonalDnpm" header="ConfirmaÃ§Ã£o" appendToBody="true" message="#{bundle.msg_generica_deseja_exclusao}" severity="alert">
 		<h:form>
 			<p:commandButton value="Sim" update=":minLicIncluirProcessoDnpm" onclick="confirmaExclusaoPoligonalDnpm.hide()"
 				process="@this" actionListener="#{fceLicenciamentoMineracaoController.excluirPoligonalRequeridaDnpm()}">
 			</p:commandButton>
-			<p:commandButton value="Não" onclick="confirmaExclusaoPoligonalDnpm.hide();" type="button" global="false" />
+			<p:commandButton value="NÃ£o" onclick="confirmaExclusaoPoligonalDnpm.hide();" type="button" global="false" />
 		</h:form>
 	</p:confirmDialog>
 	<!-- DIALOG EXCLUIR POLIGONAL DNPM -->
 	
 	<!-- DIALOG EXCLUIR POLIGONAL LAVRA -->
-	<p:confirmDialog id="confirmaExclusaoPoligonalLavra"  widgetVar="confirmaExclusaoPoligonalLavra" header="Confirmação" appendToBody="true" message="#{bundle.msg_generica_deseja_exclusao}" severity="alert">
+	<p:confirmDialog id="confirmaExclusaoPoligonalLavra"  widgetVar="confirmaExclusaoPoligonalLavra" header="ConfirmaÃ§Ã£o" appendToBody="true" message="#{bundle.msg_generica_deseja_exclusao}" severity="alert">
 		<h:form>
 			<p:commandButton value="Sim" update="tabLicMineracao:minLicQuadroAreas:gridLavra tabLicMineracao:minLicQuadroAreas:gridServidao" onclick="confirmaExclusaoPoligonalLavra.hide()"
 				process="@this" actionListener="#{fceLicenciamentoMineracaoController.excluirPoligonalLavra()}">
 			</p:commandButton>
-			<p:commandButton value="Não" onclick="confirmaExclusaoPoligonalLavra.hide();" type="button" global="false" />
+			<p:commandButton value="NÃ£o" onclick="confirmaExclusaoPoligonalLavra.hide();" type="button" global="false" />
 		</h:form>
 	</p:confirmDialog>
 	<!-- DIALOG EXCLUIR POLIGONAL LAVRA -->
 	
 	<!-- DIALOG EXCLUIR POLIGONAL SERVIDAO -->
-	<p:confirmDialog id="confirmaExclusaoPoligonalServidao"  widgetVar="confirmaExclusaoPoligonalServidao" header="Confirmação" appendToBody="true" message="#{bundle.msg_generica_deseja_exclusao}" severity="alert">
+	<p:confirmDialog id="confirmaExclusaoPoligonalServidao"  widgetVar="confirmaExclusaoPoligonalServidao" header="ConfirmaÃ§Ã£o" appendToBody="true" message="#{bundle.msg_generica_deseja_exclusao}" severity="alert">
 		<h:form>
 			<p:commandButton value="Sim" update="tabLicMineracao:minLicQuadroAreas:gridLavra tabLicMineracao:minLicQuadroAreas:gridServidao" onclick="confirmaExclusaoPoligonalServidao.hide()"
 				process="@this" actionListener="#{fceLicenciamentoMineracaoController.excluirPoligonalServidao()}">
 			</p:commandButton>
-			<p:commandButton value="Não" onclick="confirmaExclusaoPoligonalServidao.hide();" type="button" global="false" />
+			<p:commandButton value="NÃ£o" onclick="confirmaExclusaoPoligonalServidao.hide();" type="button" global="false" />
 		</h:form>
 	</p:confirmDialog>
 	<!-- DIALOG EXCLUIR POLIGONAL SERVIDAO -->

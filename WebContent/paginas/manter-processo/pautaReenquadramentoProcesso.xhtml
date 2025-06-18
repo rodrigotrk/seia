@@ -33,8 +33,13 @@
 		
 		<p:confirmDialog widgetVar="excluirComprovanteBoleto" appendToBody="true" header="Alerta" message="#{bundle.consulta_boleto_confirmar_exlusao_comprovante}" severity="alert">
 			<h:form>
+        <ui:include src="/layout/csrfToken.xhtml" />
 				<p:commandButton value="Sim" global="false" update="formDialogComprovante" oncomplete="excluirComprovanteBoleto.hide()" action="#{boletoComplementarController.excluirComprovanteBoleto()}" />
-				<p:commandButton value="Não" global="false" oncomplete="excluirComprovanteBoleto.hide()" />
+        <ui:include src="/layout/csrfToken.xhtml" />
+        <ui:include src="/layout/csrfToken.xhtml" />
+        <ui:include src="/layout/csrfToken.xhtml" />
+        <ui:include src="/layout/csrfToken.xhtml" />
+				<p:commandButton value="NÃ£o" global="false" oncomplete="excluirComprovanteBoleto.hide()" />
 			</h:form>
 		</p:confirmDialog>
 		
@@ -49,14 +54,14 @@
 		<p:confirmDialog widgetVar="excluirComprovanteVitoria" appendToBody="true" header="Alerta" message="#{bundle.consulta_boleto_confirmar_exlusao_comprovante}" severity="alert">
 			<h:form>
 				<p:commandButton value="Sim" global="false" update="certificadoForm, vistoriaForm" oncomplete="excluirComprovanteVitoria.hide()" action="#{boletoComplementarController.excluirComprovanteDAE('vistoria')}" />
-				<p:commandButton value="Não" global="false" oncomplete="excluirComprovanteVitoria.hide()" />
+				<p:commandButton value="NÃ£o" global="false" oncomplete="excluirComprovanteVitoria.hide()" />
 			</h:form>
 		</p:confirmDialog>
 	
 		<p:confirmDialog widgetVar="excluirComprovanteCertificado" appendToBody="true" header="Alerta" message="#{bundle.consulta_boleto_confirmar_exlusao_comprovante}" severity="alert">
 			<h:form>
 				<p:commandButton value="Sim" global="false" update="certificadoForm, vistoriaForm" oncomplete="excluirComprovanteCertificado.hide()" action="#{boletoComplementarController.excluirComprovanteDAE('certificado')}" />
-				<p:commandButton value="Não" global="false" oncomplete="excluirComprovanteCertificado.hide()" />
+				<p:commandButton value="NÃ£o" global="false" oncomplete="excluirComprovanteCertificado.hide()" />
 			</h:form>
 		</p:confirmDialog>		
 		
@@ -64,7 +69,7 @@
 			<h:form id="frmDlgRequerimentoUnico">
 				<h:panelGrid>
 					<h:panelGrid columns="1">
-						<h:outputText value="Não será possível realizar a edição de requerimentos abertos até novembro de 2014." />
+						<h:outputText value="NÃ£o serÃ¡ possÃ­vel realizar a ediÃ§Ã£o de requerimentos abertos atÃ© novembro de 2014." />
 					</h:panelGrid>
 				</h:panelGrid>
 				<h:panelGroup layout="block" style="text-align: center">
@@ -79,14 +84,14 @@
 			</h:form>
 		</p:dialog>
 		
-		<h3><h:outputLabel styleClass="titulo-grupo" value="INSTRUÇÕES" style="font-weight:bold;" /></h3>
+		<h3><h:outputLabel styleClass="titulo-grupo" value="INSTRUÃ‡Ã•ES" style="font-weight:bold;" /></h3>
 		
 		<p class="titulo-grupo">
 			<h:outputText value="#{bundle.processo_lbl_consulta}" /><br />
 			<h:outputText value="#{bundle.processo_lbl_consulta_status}" />
 		</p>
 
-		<h3><h:outputLabel styleClass="titulo-grupo" value="PARÂMETROS DA CONSULTA" style="font-weight:bold;" /></h3>
+		<h3><h:outputLabel styleClass="titulo-grupo" value="PARÃ‚METROS DA CONSULTA" style="font-weight:bold;" /></h3>
 
 		<h:form id="frmPautaReenquadramentoProcesso">
 
@@ -98,7 +103,7 @@
 					
 					<h:panelGroup layout="block">
 						<h:panelGroup layout="block" style="width: 100%">
-							<h:outputText value="Nº do Processo:" />
+							<h:outputText value="NÂº do Processo:" />
 						</h:panelGroup>
 						<h:panelGroup layout="block" style="width: 100%">
 							<p:inputText value="#{pautaReenquadramentoProcessoController.numProcesso}" />
@@ -121,7 +126,7 @@
 					</h:panelGroup>
 					<h:panelGroup layout="block">
 						<h:panelGroup layout="block" style="width: 100%">
-							<h:outputText value="Período de Encaminhamento:" />
+							<h:outputText value="PerÃ­odo de Encaminhamento:" />
 						</h:panelGroup>
 						<h:panelGroup id="camposPeriodo" layout="block" style="width: 100%">
 							<h:outputText value="De " />
@@ -130,7 +135,7 @@
 								pattern="dd/MM/yyyy" navigator="true" yearRange="c-50:c+10"
 								readOnlyInputText="true" maxdate="#{pautaReenquadramentoProcessoController.currentDate}">
 								</p:calendar>
-							<h:outputText value=" Até " />
+							<h:outputText value=" AtÃ© " />
 							<p:calendar showOn="button" size="10" disabled="#{pautaReenquadramentoProcessoController.oldProcessos}"
 								value="#{pautaReenquadramentoProcessoController.periodoFim}" locale="pt"
 								pattern="dd/MM/yyyy" navigator="true" readOnlyInputText="true"
@@ -172,7 +177,7 @@
 					</h:panelGroup>
 							<h:panelGroup layout="block">
 						<h:panelGroup layout="block" style="width: 100%">
-							<h:outputText value="Processos encaminhados há mais de 180 dias:" />
+							<h:outputText value="Processos encaminhados hÃ¡ mais de 180 dias:" />
 						</h:panelGroup>
 						<h:panelGroup layout="block" style="width: 100%">
 							<p:selectBooleanCheckbox value="#{pautaReenquadramentoProcessoController.oldProcessos}" >
@@ -266,7 +271,7 @@
 						paginator="true" rows="8" paginatorPosition="bottom" lazy="true" style="width: 780px;" emptyMessage="Nenhum registro encontrado."
 						>
 						<p:column>
-							<f:facet name="header">Nº do Processo</f:facet>
+							<f:facet name="header">NÂº do Processo</f:facet>
 							<h:panelGroup layout="block" style="text-align: center;">
 								<p:commandLink actionListener="#{pautaReenquadramentoProcessoController.visualizarProcesso(pr.processoReenquadramento)}" process="@this">
 									<h:outputText value="#{pr.processoReenquadramento.ideProcesso.numProcessoTabela}" />
@@ -302,7 +307,7 @@
 							</h:panelGroup>
 						</p:column>
 						<p:column >
-							<f:facet name="header">Ações</f:facet>
+							<f:facet name="header">AÃ§Ãµes</f:facet>
 							<h:panelGroup layout="block" style="text-align: center;">
 								
 								<p:commandLink rendered="#{pr.renderedFluxoAlternativo and security.temAcesso('5.85.29')}"
@@ -343,13 +348,13 @@
 								<p:commandLink rendered="#{pr.renderedEnvioDocumentacao}"
 								actionListener="#{envioDocumentoController.loadDocumento(pr)}" 
 								oncomplete="dialogEnviarDocumento.show();updateDocumento();" update="documento" process="@this">
-									<h:graphicImage style="margin: 2.5px;" title="Enviar Documentação Obrigatória" value="/resources/img/ico-anexo.png" />
+									<h:graphicImage style="margin: 2.5px;" title="Enviar DocumentaÃ§Ã£o ObrigatÃ³ria" value="/resources/img/ico-anexo.png" />
 								</p:commandLink>
 								
 								<p:commandLink rendered="#{pr.renderedValidacaoPrevia and !pautaReenquadramentoProcessoController.usuarioExterno}"
 								actionListener="#{validacaoPreviaController.loadReenquadramento(pr)}" 
 								oncomplete="dialogEfetuarValidacaoPrevia.show();expandAllValidacao();" update="validacaoPrevia" process="@this">
-									<h:graphicImage style="margin: 2.5px;" title="Efetuar Validação Prévia" value="/resources/img/ico-empreendimento.gif" />
+									<h:graphicImage style="margin: 2.5px;" title="Efetuar ValidaÃ§Ã£o PrÃ©via" value="/resources/img/ico-empreendimento.gif" />
 								</p:commandLink>
 								
 								<p:commandLink rendered="#{pr.renderedBoleto and !pautaReenquadramentoProcessoController.usuarioExterno}" actionListener="#{boletoComplementarController.novoBoletoPopup()}" 
@@ -375,7 +380,7 @@
 								action="#{comunicacaoRequerenteController.carregarReenquadramento(pr)}" 
 								oncomplete="dialoghistoricoComunicacao.show()" update="formHistorico">
 									<f:setPropertyActionListener target="#{contextoController.object}" value="#{pr.requerimento}" />
-									<h:graphicImage style="margin: 2.5px;" title="Visualizar histórico do Reenquadramento" value="/resources/img/ico-mnp.gif" />
+									<h:graphicImage style="margin: 2.5px;" title="Visualizar histÃ³rico do Reenquadramento" value="/resources/img/ico-mnp.gif" />
 								</p:commandLink>
 								
 								<h:commandLink> 
@@ -392,7 +397,7 @@
 								 oncomplete="dlgNaoReenquadrar.show();"
 								 update="formNaoReenquadrar"
 								 action="#{pautaReenquadramentoProcessoController.iniciarNaoReenquadrar(pr)}">
-									<h:graphicImage style="margin: 2.5px;" title="Não Reenquadrar" value="/resources/img/ico-cancelar-projeto.png" />
+									<h:graphicImage style="margin: 2.5px;" title="NÃ£o Reenquadrar" value="/resources/img/ico-cancelar-projeto.png" />
 								</p:commandLink>
 
 								<p:commandLink rendered="#{pautaReenquadramentoProcessoController.exibirVoltarStatus(pr)}" action="#{alterarStatusReenquadramentoController.carregarAlterarStatus(pr)}"

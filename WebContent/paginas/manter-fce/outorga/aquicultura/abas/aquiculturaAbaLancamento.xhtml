@@ -7,11 +7,12 @@
 	xmlns:p="http://primefaces.prime.com.tr/ui">
 	<!-- INICIO DA GRID BOTOES -->
 	<h:form id="formOutorgaAquiculturaAbaLancamento">
+        <ui:include src="/layout/csrfToken.xhtml" />
 		<div style="width:480px; margin-left:185px; margin-bottom:15px;" align="center">
-			<h:outputText styleClass="titulo-grupo" style="font-weight:bold;" value="LANÇAMENTO DE EFLUENTE PARA FINS DE DILUIÇÃO DA ATIVIDADE AQUICULTURA EM VIVEIRO - ESCAVADO, RACEWAY OU SIMILARES"/>
+			<h:outputText styleClass="titulo-grupo" style="font-weight:bold;" value="LANÃ‡AMENTO DE EFLUENTE PARA FINS DE DILUIÃ‡ÃƒO DA ATIVIDADE AQUICULTURA EM VIVEIRO - ESCAVADO, RACEWAY OU SIMILARES"/>
 		</div>
 		
-		<h:outputText styleClass="titulo-grupo" style="font-weight:bold;" value="* Coordenadas do ponto de lançamento"/>
+		<h:outputText styleClass="titulo-grupo" style="font-weight:bold;" value="* Coordenadas do ponto de lanÃ§amento"/>
 		
 		<h:panelGrid style="margin-left:30px;">
 		<p:dataTable id="tabelaPontoslancamento" style="margin-top:10px; margin-bottom:15px;" emptyMessage="#{bundle.lac_dadosGerais_msg007}" value="#{fceOutorgaAquiculturaLancamentoController.listaFceOutorgaLocalizacaoGeograficaLancamento}" var="coordenada">
@@ -30,7 +31,7 @@
  		    	<h:outputText value="#{coordenada.sistemaCoordenada}"/>
  		    </p:column>
  		    
-  	 		    <p:column headerText="Bacia Hidrográfica" style="text-align:center;">
+  	 		    <p:column headerText="Bacia HidrogrÃ¡fica" style="text-align:center;">
  		    	<h:outputText value="#{coordenada.bacia}"/>
  		    </p:column>
  		    
@@ -44,7 +45,7 @@
  		    	</p:inputText>
  		    </p:column>
    		    
-			<p:column headerText="Ações" style="width:40px; text-align:center;">
+			<p:column headerText="AÃ§Ãµes" style="width:40px; text-align:center;">
 				<p:commandLink action="#{fceOutorgaAquiculturaLancamentoController.confirmarCoordenada()}" disabled="#{fceOutorgaAquiculturaLancamentoController.desabilitarTudo}"
 					rendered="#{!coordenada.confirmado}" global="false" update="aquiculturaAbas:formOutorgaAquiculturaAbaLancamento:tabelaPontoslancamento">
 					<h:graphicImage title="Confirmar nome do Rio" value="/resources/img/ico-aprovar-notificacao.png" />
@@ -56,28 +57,28 @@
 					<f:setPropertyActionListener target="#{fceOutorgaAquiculturaLancamentoController.fceOutorgaLocalizacaoGeograficaSelecionada}" value="#{coordenada}"/>
 				</p:commandLink>
 	            <p:commandLink rendered="#{!fceOutorgaAquiculturaLancamentoController.fceTecnico}" onclick="javascript:${localizacaoGeograficaGenericController.retornarUrl(coordenada.ideOutorgaLocalizacaoGeografica.ideLocalizacaoGeografica)}">
-					<h:graphicImage title="Localização do Ponto no Geobahia" value="/resources/img/ico-arl-relocacao.png"/>
+					<h:graphicImage title="LocalizaÃ§Ã£o do Ponto no Geobahia" value="/resources/img/ico-arl-relocacao.png"/>
 	            </p:commandLink>
 				<p:commandLink rendered="#{fceOutorgaAquiculturaLancamentoController.fceTecnico}" onclick="javascript:${localizacaoGeograficaGenericController.retornarUrl(coordenada.ideLocalizacaoGeografica)}">
-					<h:graphicImage title="Localização do Ponto no Geobahia" value="/resources/img/ico-arl-relocacao.png"/>
+					<h:graphicImage title="LocalizaÃ§Ã£o do Ponto no Geobahia" value="/resources/img/ico-arl-relocacao.png"/>
 	            </p:commandLink>
 			</p:column>
 		</p:dataTable> <!-- FIM DA DATATABLE COM OS PONTOS -->
 	</h:panelGrid> <!-- FIM DO PANEL GRID -->
 
 		<h:panelGrid id="vazaoEfluente" columns="3" style="margin-bottom:15px;">
-			<h:outputText styleClass="titulo-grupo" style="font-weight:bold;" value="* Vazão do Efluente  "/>
+			<h:outputText styleClass="titulo-grupo" style="font-weight:bold;" value="* VazÃ£o do Efluente  "/>
 			<p:inputText value="#{fceOutorgaAquiculturaLancamentoController.fceAquiculturaLancamento.ideFceLancamentoEfluente.numVazaoEfluente}" disabled="#{fceOutorgaAquiculturaLancamentoController.desabilitarTudo}"
 			onkeyup="mascararNumeroAndAddZeros(this, event, 9, 3, '.', ',', 3);" maxlength="15" style="width:100px;">
 					<f:convertNumber integerOnly="false" minFractionDigits="3"/>
 				<p:ajax event="blur" global="false"/>
 			</p:inputText>
-			<h:outputText value="   (m³/dia)" />
-		</h:panelGrid> <!-- FIM DO PANELGRID Período Irrigacao -->
+			<h:outputText value="   (mÂ³/dia)" />
+		</h:panelGrid> <!-- FIM DO PANELGRID PerÃ­odo Irrigacao -->
 		
 		<h:panelGrid id="gridPeriodoLancamento">
 			<h:panelGroup>
-				<h:outputText styleClass="titulo-grupo" style="font-weight:bold;" value="* Período de Lançamento" />
+				<h:outputText styleClass="titulo-grupo" style="font-weight:bold;" value="* PerÃ­odo de LanÃ§amento" />
 			</h:panelGroup>
 			
 			<p:selectOneRadio id="periodoLancamento" style="margin-left:30px; width:120px;" layout="pageDirection" value="#{fceOutorgaAquiculturaLancamentoController.fceAquiculturaLancamento.ideTipoPeriodoDerivacao}" 
@@ -87,23 +88,23 @@
 	    	</p:selectOneRadio>
 	    	       
 			<h:panelGroup id="tempoLancamento" rendered="#{fceOutorgaAquiculturaLancamentoController.tipoPeriodoDerivacaoIntermitente}" style="margin-left:40px; margin-bottom:15px;">
-				<h:outputText value="Tempo de Lançamento   " />
+				<h:outputText value="Tempo de LanÃ§amento   " />
 				<p:inputText id="tempo" value="#{fceOutorgaAquiculturaLancamentoController.fceAquiculturaLancamento.ideFceLancamentoEfluente.numTempoLancamento}" disabled="#{fceOutorgaAquiculturaLancamentoController.desabilitarTudo}"
 				onkeyup="SomenteNumero(this);" converter="integerConverter" style="width:20px;" maxlength="2">
 					<p:ajax event="blur" global="false"/>
 				</p:inputText>
 				<h:outputText value="   (h/dia)"/>
 			</h:panelGroup>         
-		</h:panelGrid> <!-- FIM DO PANELGRID Período Irrigacao -->
+		</h:panelGrid> <!-- FIM DO PANELGRID PerÃ­odo Irrigacao -->
     	
     	<h:panelGrid style="margin-left:20px;">
     		<p:dataTable id="tabEfluentes" style="margin-bottom:15px; margin-top:20px;" value="#{fceOutorgaAquiculturaLancamentoController.listaFceLancamentoEfluenteCaracteristicas}" var="fceCaracteristica" >
     			<p:columnGroup type="header">
     				<p:row>
-    					<p:column rowspan="2" headerText="Principais Características"/>
+    					<p:column rowspan="2" headerText="Principais CaracterÃ­sticas"/>
     					<p:column colspan="2" headerText="Efluente"/>
-    					<p:column rowspan="2" headerText="Eficiência de Remoção"/>
-    					<p:column rowspan="2" headerText="Ações"/>
+    					<p:column rowspan="2" headerText="EficiÃªncia de RemoÃ§Ã£o"/>
+    					<p:column rowspan="2" headerText="AÃ§Ãµes"/>
     				</p:row>
     				<p:row>
     					<p:column headerText="Bruto"/>
@@ -163,7 +164,7 @@
 				process="formOutorgaAquiculturaAbaLancamento"
 				actionListener="#{fceOutorgaAquiculturaLancamentoController.voltarAba()}"
 				global="false" />
-			<p:commandButton id="btnAvancar" value="Avançar" style="width:90px;"
+			<p:commandButton id="btnAvancar" value="AvanÃ§ar" style="width:90px;"
 				update="aquiculturaAbas" process="formOutorgaAquiculturaAbaLancamento"
 				actionListener="#{fceOutorgaAquiculturaLancamentoController.avancarAba()}"
 				global="false" />

@@ -10,12 +10,13 @@
 	<f:view>
 		<h:panelGrid columns="1" rendered="#{not empty request.remoteUser}">
 			<h:form id="frmMenu">
+        <ui:include src="/layout/csrfToken.xhtml" />
 				<c:if test="${security.cadastroCompleto and !security.alteracaoSenhaExpirada and !security.usuarioInativado}">
 					<div class="inicialButton">
 						<h:commandLink action="/home.xhtml">Tela Inicial</h:commandLink>
 					</div>
 					<div class="accordionButton">
-						<h:commandLink onclick="return false;" value="Administração do Sistema" rendered="${security.temAcesso('1')}" />
+						<h:commandLink onclick="return false;" value="AdministraÃ§Ã£o do Sistema" rendered="${security.temAcesso('1')}" />
 					</div>
 					<div class="accordionContent">
 						<ul>
@@ -23,13 +24,13 @@
 								<h:commandLink 
 									action="/paginas/controle-acesso/acaoLst.xhtml" 
 									rendered="${security.temAcesso('1.1')}" immediate="true"
-									value="Controle das Ações"/>
+									value="Controle das AÃ§Ãµes"/>
 							</li>
 							<li>
 								<h:commandLink
 									action="/paginas/controle-acesso/areaLst.xhtml"
 									rendered="${security.temAcesso('1.2')}" immediate="true"
-									value="Controle das Áreas"/>
+									value="Controle das Ãreas"/>
 							</li>
 							<li>
 								<h:commandLink
@@ -47,56 +48,56 @@
 								<h:commandLink
 									action="/paginas/controle-acesso/permissaoLst.xhtml"
 									rendered="${security.temAcesso('1.10')}" immediate="true"
-									value="Controle das Permissões"/>
+									value="Controle das PermissÃµes"/>
 							</li>
 							<li>
 								<h:commandLink
 									action="/paginas/controle-acesso/orgaoLst.xhtml"
 									rendered="${security.temAcesso('1.5')}" immediate="true"
-									value="Controle dos Órgãos"/>
+									value="Controle dos Ã“rgÃ£os"/>
 							</li>
 							<li>
 								<h:commandLink
 									action="/paginas/controle-acesso/areaMunicipioLst.xhtml"
 									rendered="${security.temAcesso('1.6')}" immediate="true"
-									value="Controle das Relações entre Áreas e Municípios"/>
+									value="Controle das RelaÃ§Ãµes entre Ãreas e MunicÃ­pios"/>
 							</li>
 							<li>
 								<h:commandLink
 									action="/paginas/controle-acesso/secaoLst.xhtml"
 									rendered="${security.temAcesso('1.3')}" immediate="true"
-									value="Controle das Seções"/>
+									value="Controle das SeÃ§Ãµes"/>
 							</li>
 							<li>
 								<h:commandLink
 									action="/paginas/controle-acesso/usuarioExternoLst.xhtml"
 									rendered="${security.temAcesso('1.9')}" immediate="true"
-									value="Controle dos Usuários Externos"/>
+									value="Controle dos UsuÃ¡rios Externos"/>
 							</li>
 							<li>
 								<h:commandLink
 									action="/paginas/controle-acesso/usuarioInternoLst.xhtml"
 									rendered="${security.temAcesso('1.8')}" immediate="true"
-									value="Controle dos Usuários Internos"/>
+									value="Controle dos UsuÃ¡rios Internos"/>
 							</li>
 							<li>
 								<h:commandLink
 									action="/paginas/comunicacao/consulta.xhtml"
 									rendered="${security.temAcessoPorPerfil('1')}" immediate="true"
-									value="Controle de Comunicação"/>
+									value="Controle de ComunicaÃ§Ã£o"/>
 							</li>
 													
 							<li>
 								<h:commandLink
 									action="/paginas/manter-controle-municipio/controleMunicipio.xhtml"
 									rendered="${security.temAcesso('1.89', 'ATEND') or security.temAcessoPorPerfil('1')}"
-									value="Controle de Municípios"/>
+									value="Controle de MunicÃ­pios"/>
 							</li>							
 							<li>
 								<h:commandLink
 									action="/paginas/manter-residuos-perigosos/residuosList.xhtml"
 									rendered="${security.temAcesso('1.91', 'COIND') or security.temAcessoPorPerfil('1')}" immediate="true"
-									value="Controle de Resíduos Perigosos"/>
+									value="Controle de ResÃ­duos Perigosos"/>
 							</li>
 														
 							<li>
@@ -110,7 +111,7 @@
 								<h:commandLink
 									action="/paginas/controle-acesso/usuarioReativarLst.xhtml"
 									rendered="${security.temAcesso('1.30')}" immediate="true"
-									value="Reativar Usuários"/>
+									value="Reativar UsuÃ¡rios"/>
 							</li>
 							<li>
 								<h:commandLink
@@ -158,29 +159,29 @@
 								<h:commandLink
 									action="#{listarImovelRuralController.carregarPagListarImoveisRurais()}"
 									rendered="${security.temAcesso('3.33')}"
-									title="Solicitar Cadastro de Imóvel Rural"
-									value="Imóvel Rural - CEFIR"/>
+									title="Solicitar Cadastro de ImÃ³vel Rural"
+									value="ImÃ³vel Rural - CEFIR"/>
 							</li>
 							<li>
 								<h:commandLink
 									action="/paginas/manter-imoveis/contrato-convenio/listaContratoConvenio.xhtml"
 									rendered="${security.temAcesso('2.63')}"
-									title="Cadastro de Contratos e Convênios"
-									value="Contratos e Convênios"/>
+									title="Cadastro de Contratos e ConvÃªnios"
+									value="Contratos e ConvÃªnios"/>
 							</li>
 							<li>
 								<h:commandLink
 									action="/paginas/manter-imoveis/cefir/listaImportacaoCdaCefir.xhtml"
 									rendered="${security.temAcesso('2.65')}"
-									title="Importações de Imóveis CDA"
-									value="Importação CDA"/>
+									title="ImportaÃ§Ãµes de ImÃ³veis CDA"
+									value="ImportaÃ§Ã£o CDA"/>
 							</li>
 							<li>
 								<h:commandLink 
 									action="/paginas/manter-oleo-gas/consulta.xhtml" 
-									title="Perfuração Poço de Óleo e Gás" 
+									title="PerfuraÃ§Ã£o PoÃ§o de Ã“leo e GÃ¡s" 
 									rendered="${security.temAcesso('2.66.4')}"
-									value="Perfuração Poço de Óleo e Gás"/>
+									value="PerfuraÃ§Ã£o PoÃ§o de Ã“leo e GÃ¡s"/>
 							</li>
 							<li>
 								<h:commandLink 
@@ -193,23 +194,23 @@
 								<h:commandLink 
 									rendered="${!security.temAcessoPorPerfil('15') and !security.temAcessoPorPerfil('63') and !security.temAcessoPorPerfil('64') and !security.temAcessoPorPerfil('65') and !security.temAcessoPorPerfil('73')}"
 									action="/paginas/manter-cerh/consulta.xhtml" 
-									title="Cadastro Estadual de Usuários de Recursos Hídricos - CERH" 
-									value="Cadastro Estadual de Usuários de Recursos Hídricos - CERH"/>
+									title="Cadastro Estadual de UsuÃ¡rios de Recursos HÃ­dricos - CERH" 
+									value="Cadastro Estadual de UsuÃ¡rios de Recursos HÃ­dricos - CERH"/>
 							</li>	
 					
 <!-- 							<li>
 								<h:commandLink 
 									action="/paginas/manter-cerh/convenio/convenio.xhtml" 
 									rendered="${security.temAcesso('CADASTRO', 'CONVEIO_CERH', NULL) or security.temAcessoPorPerfil('1')}"
-									title="Cadastro Convênio dos Usuários de Recursos Hídricos" 
-									value="Cadastro Convênio dos Usuários de Recursos Hídricos"/>
+									title="Cadastro ConvÃªnio dos UsuÃ¡rios de Recursos HÃ­dricos" 
+									value="Cadastro ConvÃªnio dos UsuÃ¡rios de Recursos HÃ­dricos"/>
 							</li>	 -->
 							<li>
 								<h:commandLink 
 									action="/paginas/manter-cerh/convenio/convenio.xhtml" 
 									rendered="${security.temAcesso('12.98.1')}"
-									title="Cadastro Convênio dos Usuários de Recursos Hídricos" 
-									value="Cadastro de Convênio PCT/CERH"/>
+									title="Cadastro ConvÃªnio dos UsuÃ¡rios de Recursos HÃ­dricos" 
+									value="Cadastro de ConvÃªnio PCT/CERH"/>
 							</li>						
 						</ul>
 					</div>	
@@ -228,13 +229,13 @@
 								<h:commandLink id="lnkPessoaFisica"
 									action="#{pessoaFisicaController.finalizar()}"
 									rendered="${security.temAcesso('3.12')}" immediate="true"
-									value="Pessoa Física"/>
+									value="Pessoa FÃ­sica"/>
 							</li>
 							<li>
 								<h:commandLink id="lnkPessoaJuridica"
 									action="#{pessoaJuridicaController.finalizar()}"
 									rendered="${security.temAcesso('3.13')}" immediate="true"
-									value="Pessoa Jurídica"/>
+									value="Pessoa JurÃ­dica"/>
 							</li>
 							<li>
 								<h:commandLink id="lnkEmpreendimento"
@@ -247,7 +248,7 @@
 								<h:commandLink id="lnkDocumentoObrigatorio"
 									action="/paginas/manter-documentoobrigatorio/consulta.xhtml"
 									rendered="${security.temAcesso('3.22')}" immediate="true"
-									value="Documento Obrigatório"/>
+									value="Documento ObrigatÃ³rio"/>
 							</li>
 							<li>
 								<h:commandLink id="lnkAtoAmbiental"
@@ -272,7 +273,7 @@
 								<h:commandLink id="lnkCompensacaoAmbiental"
 									action="/paginas/manter-tcca/consultaTcca.xhtml"
 									immediate="true" rendered="${security.temAcesso('3.67.4')}"
-									value="Compensação Ambiental"/>
+									value="CompensaÃ§Ã£o Ambiental"/>
 							</li>
 							<li>
 								<h:commandLink id="lnkLoteBoleto"
@@ -307,7 +308,7 @@
 								<h:commandLink
 									action="#{contextoController.redirecionarParaRegulacaoAmbietalEmpreend()}"
 									rendered="${security.temAcesso('4.16')}" immediate="true"
-									value="Solicitar Regularização Ambiental"/>
+									value="Solicitar RegularizaÃ§Ã£o Ambiental"/>
 							</li>
 						</ul>
 					</div>
@@ -328,7 +329,7 @@
 								<h:commandLink 
 									action="/paginas/manter-processo/consultaNotificacao.xhtml"
 									rendered="${security.temAcesso('5.21')}" immediate="true" 
-									value="Consultar Notificação"/>
+									value="Consultar NotificaÃ§Ã£o"/>
 							</li>
 							<li>
 								<h:commandLink 
@@ -340,7 +341,7 @@
 								<h:commandLink
 									action="/paginas/manter-processo/pautaArea.xhtml"
 									rendered="${security.temAcesso('5.17')}" immediate="true" 
-									value="Pauta da Área"/>
+									value="Pauta da Ãrea"/>
 							</li>
 							<li>
 								<h:commandLink
@@ -352,7 +353,7 @@
 								<h:commandLink
 									action="/paginas/manter-processo/pautaTecnicoLider.xhtml"
 									rendered="${security.temAcesso('5.19')}" immediate="true" 
-									value="Pauta do Técnico / Lider"/>
+									value="Pauta do TÃ©cnico / Lider"/>
 							</li>
 							<ui:repeat var="pautaArea"
 								value="#{menuSeiaController.listaPautaAreaComAcessoConcedido}">
@@ -360,7 +361,7 @@
 									<h:commandLink
 										id="pautaArea" 
 										action="#{menuSeiaController.abrirPautaArea(pautaArea)}"
-										value="Pauta da Área - #{pautaArea.ideArea.nomArea}"/>
+										value="Pauta da Ãrea - #{pautaArea.ideArea.nomArea}"/>
 								</li>
 							</ui:repeat>
 
@@ -403,7 +404,7 @@
 						<h:commandLink onclick="return false;"
 							rendered="${security.temAcesso('9') or security.temAcesso('5.32')}"
 							immediate="true"
-							value="Relatórios"/>
+							value="RelatÃ³rios"/>
 					</div>
 					<div class="accordionContent">
 						<ul>
@@ -413,7 +414,7 @@
 									rendered="${security.temAcesso('9.50')}" immediate="true"
 									value="Financeiro"/>
 							</li>
-							<!-- <li><h:commandLink action="/paginas/manter-imoveis/relatorioQuantitativo.xhtml" rendered="${security.temAcesso('9.49')}" immediate="true">Quantitativo de Imóveis Rurais</h:commandLink></li> -->
+							<!-- <li><h:commandLink action="/paginas/manter-imoveis/relatorioQuantitativo.xhtml" rendered="${security.temAcesso('9.49')}" immediate="true">Quantitativo de ImÃ³veis Rurais</h:commandLink></li> -->
 							<li>
 								<h:commandLink
 									action="/paginas/manter-processo/relatorioQuantitativo.xhtml"
@@ -425,7 +426,7 @@
 								<h:commandLink
 									action="/paginas/manter-imoveis/relatorio/imovel-rural/relatorioImovelRural.xhtml"
 									rendered="${security.temAcesso('9.64')}" immediate="true"
-									value="Imóveis Rurais"/>
+									value="ImÃ³veis Rurais"/>
 							</li>
 						</ul>
 					</div>
@@ -454,7 +455,7 @@
 				</c:if>
 				<c:if test="${security.temAcesso('11.58') and !security.alteracaoSenhaExpirada and !security.usuarioInativado}">
 					<div class="inicialButton">
-						<h:commandLink title="Visualizar consulta pública" value="Consulta pública" action="/paginas/manter-consultapublica/consultaPublica.xhtml"/>
+						<h:commandLink title="Visualizar consulta pÃºblica" value="Consulta pÃºblica" action="/paginas/manter-consultapublica/consultaPublica.xhtml"/>
 					</div>
 				</c:if>
 			</h:form>

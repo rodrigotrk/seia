@@ -10,7 +10,14 @@
 		<ui:include src="/paginas/manter-fce/ses/dadosTratamentoEsgoto.xhtml"/>
 		<ui:include src="/paginas/manter-fce/ses/dadosLancamentoEfluente.xhtml"/>
 		
-		<p:confirmDialog id="confimarImpressaoRelatorioSes" widgetVar="confimarImpressaoRelatorioSes" header="Imprimir Relatório" appendToBody="true" message="#{bundle.msg_imprimir_relatorio_fce_ses}" severity="alert" >
+			<h:form>
+        <ui:include src="/layout/csrfToken.xhtml" />			
+        <ui:include src="/layout/csrfToken.xhtml" />
+        <ui:include src="/layout/csrfToken.xhtml" />
+        <ui:include src="/layout/csrfToken.xhtml" />
+        <ui:include src="/layout/csrfToken.xhtml" />
+        <ui:include src="/layout/csrfToken.xhtml" />
+        <ui:include src="/layout/csrfToken.xhtml" />
 			<h:form>			
 				<p:commandButton id="imprimirRelatorioSes" value="#{bundle.btn_sim}" ajax="false" global="false" process="@this" onclick="confimarImpressaoRelatorioSes.hide();" style="margin-right:10px;">
 					<p:fileDownload value="#{fceSesController.imprimirRelatorio}"/>
@@ -73,7 +80,7 @@
 				  width="850" 
 				  height="650"
 				  resizable="false" 
-				  header="#{fceSesController.headerFce('Sistema de Esgotamento Sanitário (SES)')}" 
+				  header="#{fceSesController.headerFce('Sistema de Esgotamento SanitÃ¡rio (SES)')}" 
 				  modal="true" closable="false">
 			
 		
@@ -85,11 +92,11 @@
 	
 					<p:tabView id="tabSes" activeIndex="#{fceSesController.activeTab}" widgetVar="saaAbas" cache="false" dynamic="true">
 						<p:ajax event="tabChange" listener="#{fceSesController.changeAba()}" update="formSes:pngButoes" global="false"  />
-						<p:tab id="tabCaracterizacao" title="Caracterização">
+						<p:tab id="tabCaracterizacao" title="CaracterizaÃ§Ã£o">
 		 					<ui:include src="/paginas/manter-fce/ses/sesAbaCaracterizacao.xhtml"/>
 						</p:tab>
 						
-						<p:tab id="tabLancamentoEfluentes" title="Lançamento de Efluentes" rendered="#{fceSesController.fceTecnico}">
+						<p:tab id="tabLancamentoEfluentes" title="LanÃ§amento de Efluentes" rendered="#{fceSesController.fceTecnico}">
 		 					<ui:include src="/paginas/manter-fce/ses/sesAbaLancamentoEfluentes.xhtml"/>
 						</p:tab>
 												
@@ -101,7 +108,7 @@
 						actionListener="#{fceSesController.voltarAba()}"
 						update="pnlSes formAvancarVoltar" process="@this" immediate="true" />
 						<p:commandButton id="btnAvancar" 
-						value="Avançar" 
+						value="AvanÃ§ar" 
 						rendered="#{!fceSesController.btnFinalizar}"
 						action="#{fceSesController.avancarAba()}"
 						update="pnlSes"/>
@@ -126,7 +133,7 @@
 				  width="850" 
 				  height="510"
 				  resizable="false" 
-				  header="Características do Ponto concedido na Outorga" 
+				  header="CaracterÃ­sticas do Ponto concedido na Outorga" 
 				  modal="true">
 				  
 	<h:form id="formLancamentoSes">
@@ -138,7 +145,7 @@
 		</h:panelGrid>
 		
 		<h:panelGrid id="checkBoxCaracterizacaoEfluenteSes" style="margin-left:20px;">
-			<h:outputText value="Caracterização do Efluente" />
+			<h:outputText value="CaracterizaÃ§Ã£o do Efluente" />
 			<p:selectManyCheckbox layout="pageDirection" converter="simpleEntityConverter" value="#{fceLancamentoEfluentesController.listaCaracterizacaoEfluentesEscolhidos}" disabled="true">
 				<f:selectItems itemValue="#{efluente}" itemLabel="#{efluente.dscCaracterizacaoEfluente}" value="#{fceLancamentoEfluentesController.listaCaracterizacaoEfluentes}" var="efluente"/>					      
 				<p:ajax global="false" event="change" update="gridPeriodoLancamento" />
@@ -147,17 +154,17 @@
 		
 		<h:panelGrid id="gridPeriodoLancamentoSes">
 	      	<h:panelGroup>
-				<h:outputText value="Vazão do Efluente  " style="margin-left:20px;"/>
+				<h:outputText value="VazÃ£o do Efluente  " style="margin-left:20px;"/>
 				<p:inputText value="#{fceLancamentoEfluentesController.fceLancamentoEfluente.numVazaoEfluente}" disabled="true" onkeyup="mascararNumeroAndAddZeros(this, event, 9, 3, '.', ',', 3);" 
 				style="margin-left:5px; width:80px;" maxlength="15">
 					<f:convertNumber integerOnly="false" minFractionDigits="3"/>
 					<p:ajax event="blur" global="false"/>
 				</p:inputText>
-				<h:outputText value="   (m³/dia)" />
+				<h:outputText value="   (mÂ³/dia)" />
 			</h:panelGroup> 
 			<br /><br />
 			<h:panelGroup>
-				<h:outputText style="margin-left:20px;" value="Período de Lançamento" />
+				<h:outputText style="margin-left:20px;" value="PerÃ­odo de LanÃ§amento" />
 			</h:panelGroup>
 			
 			<p:selectOneRadio id="periodoLancamentoSes" style="margin-left:30px; width:120px;" layout="pageDirection" value="#{fceLancamentoEfluentesController.fceLancamentoEfluente.ideTipoPeriodoDerivacao}" 
@@ -167,7 +174,7 @@
 	    	</p:selectOneRadio>
 	    	       
 			<h:panelGroup id="tempoLancamentoSes" rendered="#{fceLancamentoEfluentesController.periodoDerivacaoIntermitente}" style="margin-left:40px;">
-				<h:outputText value="Tempo de Lançamento   " />
+				<h:outputText value="Tempo de LanÃ§amento   " />
 				<p:inputText id="tempoSes" value="#{fceLancamentoEfluentesController.fceLancamentoEfluente.numTempoLancamento}" disabled="true"
 				onkeyup="SomenteNumero(this);" converter="integerConverter" style="width:20px;" maxlength="2">
 					<p:ajax event="blur" global="false"/>
@@ -181,9 +188,9 @@
     		<p:dataTable id="tabEfluentesSes" value="#{fceLancamentoEfluentesController.listaFceLancamentoEfluenteCaracteristicas}" var="fceCaracteristica" >
     			<p:columnGroup type="header">
     				<p:row>
-    					<p:column rowspan="2" headerText="Principais Características"/>
+    					<p:column rowspan="2" headerText="Principais CaracterÃ­sticas"/>
     					<p:column colspan="2" headerText="Efluente"/>
-    					<p:column rowspan="2" headerText="Eficiência de Remoção"/>
+    					<p:column rowspan="2" headerText="EficiÃªncia de RemoÃ§Ã£o"/>
     				</p:row>
     				<p:row>
     					<p:column headerText="Bruto"/>

@@ -8,13 +8,14 @@
 	template="../../layout/template.xhtml">
 
 	<ui:define name="titulo-pagina">
-		<h3>Disparar NotificaÁ„o de GeraÁ„o de DAE</h3>
+        <ui:include src="/layout/csrfToken.xhtml" />
+		<h3>Disparar Notifica√ß√£o de Gera√ß√£o de DAE</h3>
 	</ui:define>
 
 	<ui:define name="conteudo-principal">
 
 		<p:dialog id="dialogselecionarUsuarioAgua" dynamic="true"
-			header="Selecionar Usu·rio ¡gua" widgetVar="dialogselecionarUsuarioAgua"
+			header="Selecionar Usu√°rio √Ågua" widgetVar="dialogselecionarUsuarioAgua"
 			modal="true" position="center" resizable="false">
 			<ui:include
 				src="/paginas/manter-notificacao-geracaoDae-cerh/selecionarUsuarioAgua.xhtml" />
@@ -26,7 +27,7 @@
 
 				<h:panelGrid columns="3">
 					<h:outputLabel value="* RPGA" />
-					<h:outputLabel id="lblNomeUsuarioAgua" value="Usu·rio da ¡gua" style="margin-left:30px" />
+					<h:outputLabel id="lblNomeUsuarioAgua" value="Usu√°rio da √Ågua" style="margin-left:30px" />
 					<h:outputLabel  value="Empreendimento" style="margin-left:30px" />
 					
 					<p:selectOneMenu
@@ -51,7 +52,7 @@
 						<p:commandLink oncomplete="dialogselecionarUsuarioAgua.show()"
 							type="button"
 							update="form_dialog_usuario-agua">
-							<h:graphicImage title="Selecionar Usu·rio da ¡gua"
+							<h:graphicImage title="Selecionar Usu√°rio da √Ågua"
 								value="/resources/img/ico-pesquisa.png" />
 						</p:commandLink>
 					</h:panelGroup>
@@ -68,8 +69,8 @@
 				
 				<h:panelGrid columns="2">
 				
-					<p:commandButton actionListener="#{cerhNotificacaoDaeController.prepararEnvio}" value="Enviar notificaÁıes" />
-					<p:commandButton actionListener="#{cerhNotificacaoDaeController.carregarHistorico}" value="HistÛrico de envios" update="pnlDataTable"/>
+					<p:commandButton actionListener="#{cerhNotificacaoDaeController.prepararEnvio}" value="Enviar notifica√ß√µes" />
+					<p:commandButton actionListener="#{cerhNotificacaoDaeController.carregarHistorico}" value="Hist√≥rico de envios" update="pnlDataTable"/>
 					
 				</h:panelGrid>
 			</h:panelGrid>
@@ -80,16 +81,16 @@
 				<p:dataTable id="dataTable" style="width:830px \0/;" lazy="true" rendered="#{cerhNotificacaoDaeController.renderedTableHistorico}"
 					paginator="true" rows="8" paginatorPosition="bottom"
 					paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}"
-					emptyMessage="N„o existem dados para esta consulta."
+					emptyMessage="N√£o existem dados para esta consulta."
 					value="#{cerhNotificacaoDaeController.listHistorico}"
 					var="historico">
-					<f:facet name="header">HistÛrico de envio de NotificaÁıes</f:facet>
+					<f:facet name="header">Hist√≥rico de envio de Notifica√ß√µes</f:facet>
 					<p:column>
 						<f:facet name="header">RPGA</f:facet>
 						<h:outputText value="#{cerhNotificacaoDaeController.rpgaSelecionado.nome}"/>
 					</p:column>
 					<p:column>
-						<f:facet name="header">Usu·rio da ¡gua</f:facet>
+						<f:facet name="header">Usu√°rio da √Ågua</f:facet>
 						<h:outputText value="-" rendered="#{historico.ideUsuarioAgua.nomeRazao == null}"/>
 						<h:outputText value="#{historico.ideUsuarioAgua.nomeRazao}"/>
 					</p:column>
@@ -117,7 +118,8 @@
 
 		</h:form>
 		<h:panelGrid id="pnlDialog">
-			<p:confirmDialog header="Disparar NotificaÁ„o de GeraÁ„o de DAE" 
+        <ui:include src="/layout/csrfToken.xhtml" />
+			<p:confirmDialog header="Disparar Notifica√ß√£o de Gera√ß√£o de DAE" 
 				id="dialogEnviarNotificacoes"  
 				widgetVar="dialogEnviarNotificacoes" 
 				appendToBody="true" 
@@ -129,7 +131,7 @@
 						actionListener="#{cerhNotificacaoDaeController.enviarEmail()}"
 						update="formNotificacaoDae">
 					</p:commandButton>
-					<p:commandButton value="N„o" 
+					<p:commandButton value="N√£o" 
 						onclick="dialogEnviarNotificacoes.hide();" 
 						type="button" 
 						global="false" />

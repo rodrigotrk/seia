@@ -10,7 +10,12 @@
 	
 		<ui:define name="titulo-pagina">
 		
-			<h3>Silos e Armazéns</h3>
+        <ui:include src="/layout/csrfToken.xhtml" />
+        <ui:include src="/layout/csrfToken.xhtml" />
+        <ui:include src="/layout/csrfToken.xhtml" />
+        <ui:include src="/layout/csrfToken.xhtml" />
+        <ui:include src="/layout/csrfToken.xhtml" />
+			<h3>Silos e ArmazÃ©ns</h3>
 		</ui:define>	
 	
 		<ui:define name="conteudo-principal">
@@ -27,7 +32,7 @@
 				<p:commandButton value="Sim"
 					actionListener="#{silosArmazensController.excluirSicar()}"
 					style="margin-right:30px;" />
-				<p:commandButton value="Não"
+				<p:commandButton value="NÃ£o"
 					onclick="confirmarExclusaoImovelCar.hide();" />
 			</h:form>
 		</p:confirmDialog>
@@ -70,17 +75,17 @@
 			</h:form>
 		</p:dialog>
 		
-		<p:dialog id="dialogDeclaracaoLegal" widgetVar="dialogDeclaracaoLegal" header="Declaração do representante legal da empresa geradora" width="500" height="250" dynamic="true" modal="true" 
+		<p:dialog id="dialogDeclaracaoLegal" widgetVar="dialogDeclaracaoLegal" header="DeclaraÃ§Ã£o do representante legal da empresa geradora" width="500" height="250" dynamic="true" modal="true" 
 		position="center" resizable="false" draggable="true">
 		
 		<h:form id="formDeclaracaoLegal">
 		
 			<h:panelGrid columns="2" id="declaracaoLegalGrid" style="vertical-align: -webkit-baseline-middle;">
 				<p:selectBooleanCheckbox value="#{silosArmazensController.silosArmazen.indAceiteDeclaracaoFinal}" />
-				<h:outputText id="textoDeclaracao" value="Declaro serem verdadeiras as informações constantes neste CADASTRO DE SILOS E ARMAZÉNS DESTINADOS AO ARMAZENAMENTO, 
-				SECAGEM E BENEFICIAMENTO DE PRODUTOS AGRÍCOLAS NÃO INDUSTRIALIZADOS, estando ciente de que a falsidade de quaisquer dados constitui prática
-				de crime e resultará na aplicação das sanções penais cabíveis, nos termos dispostos no Código Penal (Decreto-Lei n°2.848/40), na lei de Crimes Ambientais 
-				(Lei n° 9.605/98) e nas suas normas regulamentadoras." />
+				<h:outputText id="textoDeclaracao" value="Declaro serem verdadeiras as informaÃ§Ãµes constantes neste CADASTRO DE SILOS E ARMAZÃ‰NS DESTINADOS AO ARMAZENAMENTO, 
+				SECAGEM E BENEFICIAMENTO DE PRODUTOS AGRÃCOLAS NÃƒO INDUSTRIALIZADOS, estando ciente de que a falsidade de quaisquer dados constitui prÃ¡tica
+				de crime e resultarÃ¡ na aplicaÃ§Ã£o das sanÃ§Ãµes penais cabÃ­veis, nos termos dispostos no CÃ³digo Penal (Decreto-Lei nÂ°2.848/40), na lei de Crimes Ambientais 
+				(Lei nÂ° 9.605/98) e nas suas normas regulamentadoras." />
 			</h:panelGrid>
 			
 			<p:spacer height="50"/>
@@ -103,7 +108,7 @@
 			<p:tabView id="tabViewSilosArmazens" activeIndex="#{silosArmazensController.activeTab}" dynamic="false" cache="false">
 				<p:ajax event="tabChange" update="tabViewSilosArmazens, formSilosArmazen:groupBotoes" process="@this" listener="#{silosArmazensController.onTabChangeEvent()}"/>
 				
-				<p:tab title="Dados Básicos" id="tabDadosBasicos">
+				<p:tab title="Dados BÃ¡sicos" id="tabDadosBasicos">
 					<ui:include src="/paginas/manter-atividade-nao-sujeita-licenciamento/silos_armazens/dadosBasicos.xhtml" />
 				</p:tab>
 				
@@ -113,12 +118,12 @@
 				</p:tab>
 				
 				
-				<p:tab title="Caracterização Ambiental" id="tabCarazterizacaoAmbiental" 
+				<p:tab title="CaracterizaÃ§Ã£o Ambiental" id="tabCarazterizacaoAmbiental" 
 				disabled="#{!(not empty silosArmazensController.silosArmazen.silosArmazensUnidadeArmazenadoras)}">
 					<ui:include src="/paginas/manter-atividade-nao-sujeita-licenciamento/silos_armazens/caracterizacao_ambiental.xhtml" />
 				</p:tab>
 					
-				<p:tab title="Segurança" id="tabSeguranca" 
+				<p:tab title="SeguranÃ§a" id="tabSeguranca" 
 				disabled="#{!(not empty silosArmazensController.caracterizacaoAmbientalSilosArmazen.ideCaracterizacaoAmbientalSilosArmazens)}">
 					<ui:include src="/paginas/manter-atividade-nao-sujeita-licenciamento/silos_armazens/seguranca_silos.xhtml" />
 				</p:tab>	
@@ -135,7 +140,7 @@
 				<div style="text-align: right; margin-top: -30px; margin-right: 20px;">
 				
 				<p:commandButton value="Voltar" action="#{silosArmazensController.voltar()}" update="tabViewSilosArmazens, formSilosArmazen:groupBotoes" rendered="#{silosArmazensController.activeTab>0}" process="@this" style="margin-right:10px;"/>
-				<p:commandButton value="Avançar" actionListener="#{silosArmazensController.avancarAbas()}" update="formSilosArmazen formSilosArmazen:groupBotoes" process="@this, formSilosArmazen" rendered="#{silosArmazensController.activeTab ne 4}" disabled="#{silosArmazensController.existeResponsavelPeloSilosArmazenSemCarteira}"/>
+				<p:commandButton value="AvanÃ§ar" actionListener="#{silosArmazensController.avancarAbas()}" update="formSilosArmazen formSilosArmazen:groupBotoes" process="@this, formSilosArmazen" rendered="#{silosArmazensController.activeTab ne 4}" disabled="#{silosArmazensController.existeResponsavelPeloSilosArmazenSemCarteira}"/>
 				<p:commandButton value="Finalizar" action="#{silosArmazensController.finalizar()}" process="@this, formSilosArmazen:tabViewSilosArmazens:tabDocumentosEstudos" rendered="#{silosArmazensController.activeTab eq 4}"/>
 				</div> 
 				

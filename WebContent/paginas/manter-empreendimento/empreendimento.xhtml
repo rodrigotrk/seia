@@ -16,10 +16,12 @@
 	<ui:define name="conteudo-principal">
 		
 		<h:form>
+        <ui:include src="/layout/csrfToken.xhtml" />
 			<p:poll interval="1" listener="#{empreendimentoController.poll()}" widgetVar="empreendimentoPoll" global="false" />
 		</h:form>
 		
 		<h:form id="filtroEmpreendimento" >
+        <ui:include src="/layout/csrfToken.xhtml" />
 			<h:panelGrid id="panel" columns="1">
 				<h:outputLabel id="lblRequerente" value="#{bundle.consulta_empree_requerente}" />
 				<h:panelGrid columns="2">
@@ -64,10 +66,14 @@
 			<br /><br />
 			
 			<h:form id="form_avancar">
+        <ui:include src="/layout/csrfToken.xhtml" />
 				<p:commandButton value="Voltar" update="form_avancar" oncomplete="abrirModal('#statusDialog')"
 					action="#{abasEmpreendimentoController.decrementaIndexAba()}" rendered="#{abasEmpreendimentoController.visualizaAnterior}" />
 				
-				<p:commandButton value="Avançar" update="form_avancar" style="float:right;" oncomplete="abrirModal('#statusDialog')"
+        <ui:include src="/layout/csrfToken.xhtml" />
+        <ui:include src="/layout/csrfToken.xhtml" />
+        <ui:include src="/layout/csrfToken.xhtml" />
+				<p:commandButton value="AvanÃ§ar" update="form_avancar" style="float:right;" oncomplete="abrirModal('#statusDialog')"
 					action="#{abasEmpreendimentoController.incrementaIndexAba}" rendered="#{abasEmpreendimentoController.visualizaProximo}"/>
 				
 				<p:commandButton value="Finalizar" style="float:right;" ajax="false" 

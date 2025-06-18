@@ -15,6 +15,7 @@
 		>
 		
 		<h:form id="formAutMinIncluirSubstancia">
+        <ui:include src="/layout/csrfToken.xhtml" />
 			
 			<p:tree value="#{fceAutorizacaoMineracaoController.root}" 
 				var="node" 
@@ -46,12 +47,15 @@
 		
 		
 	<!-- NumeroProcessoDnpm -->
-	<p:dialog id="dialogProcessoDnpm" widgetVar="dialogProcessoDnpm" header="Incluir Número do Processo" appendToBody="true" dynamic="true" position="center"  width="400" resizable="false" modal="true" draggable="true">
+        <ui:include src="/layout/csrfToken.xhtml" />
+        <ui:include src="/layout/csrfToken.xhtml" />
+        <ui:include src="/layout/csrfToken.xhtml" />
+	<p:dialog id="dialogProcessoDnpm" widgetVar="dialogProcessoDnpm" header="Incluir NÃºmero do Processo" appendToBody="true" dynamic="true" position="center"  width="400" resizable="false" modal="true" draggable="true">
 		<h:form  id="formProcessoDnpm" >
 			<h:panelGrid columns="1">
-				<h:outputText value="* Número do processo" />
+				<h:outputText value="* NÃºmero do processo" />
 				<h:panelGrid columns="2">
-					<p:inputMask mask="999999/9999" required="true" requiredMessage="Digite um número de processo no formato: xxxxxx/xxxx"  value="#{fceAutorizacaoMineracaoController.processoDnpm.numProcessoDnpm}" id="numProcessoDnpm"/>
+					<p:inputMask mask="999999/9999" required="true" requiredMessage="Digite um nÃºmero de processo no formato: xxxxxx/xxxx"  value="#{fceAutorizacaoMineracaoController.processoDnpm.numProcessoDnpm}" id="numProcessoDnpm"/>
 					<p:commandButton  value="Inserir"  actionListener="#{fceAutorizacaoMineracaoController.inserirProcessoDnpm()}" process="@form" update=":tabAutMineracao:minAutDadosGerais:dataTableMinAutinfoDnpm" />
 				</h:panelGrid><br/>
 			</h:panelGrid>	
@@ -60,16 +64,16 @@
 	<!-- NumeroProcessoDnpm -->
 
 	<h:form id="formExcluirFceAutMineracaoSubstancia">
-	    <p:confirmDialog style="top: 50% !important; left:50% !important;"  message="Deseja realmente excluir o registro? " widgetVar="excluirFceAutMineracaoSubstancia" header="Excluir substância" >
+	    <p:confirmDialog style="top: 50% !important; left:50% !important;"  message="Deseja realmente excluir o registro? " widgetVar="excluirFceAutMineracaoSubstancia" header="Excluir substÃ¢ncia" >
 	        <p:commandButton value="Sim" type="submit" oncomplete="excluirFceAutMineracaoSubstancia.hide();" actionListener="#{fceAutorizacaoMineracaoController.excluirSubstanciaMineral()}" process="formExcluirFceAutMineracaoSubstancia"  update=":tabAutMineracao:minAutDadosGerais:dataTableMinAutSubstancia :formAutMinIncluirSubstancia" />
-	        <p:commandButton value="Não" type="button" onclick="excluirFceAutMineracaoSubstancia.hide();" global="false" />
+	        <p:commandButton value="NÃ£o" type="button" onclick="excluirFceAutMineracaoSubstancia.hide();" global="false" />
 	    </p:confirmDialog>
 	</h:form>
 
 	<h:form id="formExcluirProcessoDpm">
 	    <p:confirmDialog style="top: 50% !important; left:50% !important;" message="Deseja realmente excluir o registro? " widgetVar="excluirFceAutMineracaoProcessoDnpm" header="Excluir processo">
 	        <p:commandButton value="Sim" type="submit" oncomplete="excluirFceAutMineracaoProcessoDnpm.hide();" actionListener="#{fceAutorizacaoMineracaoController.excluirProcessoDnpm()}" process="formExcluirProcessoDpm"  update=":tabAutMineracao:minAutDadosGerais:dataTableMinAutinfoDnpm" />
-	        <p:commandButton value="Não" type="button" onclick="excluirFceAutMineracaoProcessoDnpm.hide();" global="false" />
+	        <p:commandButton value="NÃ£o" type="button" onclick="excluirFceAutMineracaoProcessoDnpm.hide();" global="false" />
 	    </p:confirmDialog>
 	</h:form>
 	

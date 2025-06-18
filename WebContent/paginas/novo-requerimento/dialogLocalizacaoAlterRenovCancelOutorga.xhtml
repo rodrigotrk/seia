@@ -7,17 +7,19 @@ xmlns:ui="http://java.sun.com/jsf/facelets"
 xmlns:p="http://primefaces.prime.com.tr/ui">
 
 	<h:form>
+        <ui:include src="/layout/csrfToken.xhtml" />
 		<p:remoteCommand name="fecharDialogAlterarRenovarCancelarOutorga" actionListener="#{renovarAlterarOutorgaController.fecharTela()}" process="@this"/>
 	</h:form>
 
-	<p:dialog header="Localização da Alteração Outorga" widgetVar="localizacaoAlteracaoOutorga" dynamic="true" width="610" height="550"  position="center" resizable="false" onHide="fecharDialogAlterarRenovarCancelarOutorga();">
+        <ui:include src="/layout/csrfToken.xhtml" />
+	<p:dialog header="LocalizaÃ§Ã£o da AlteraÃ§Ã£o Outorga" widgetVar="localizacaoAlteracaoOutorga" dynamic="true" width="610" height="550"  position="center" resizable="false" onHide="fecharDialogAlterarRenovarCancelarOutorga();">
 		<h:form id="formLocalizacaoDialogOutorga" >
 			
 			<div style="overflow: auto">
 			
 			<h:panelGrid columns="3" width="100%">
 				<h:panelGrid columns="1">
-					<h:outputText value="* 1. Localização Geográfica:" />
+					<h:outputText value="* 1. LocalizaÃ§Ã£o GeogrÃ¡fica:" />
 					
 					<p:spacer height="3px" width="0px" />
 					
@@ -34,13 +36,13 @@ xmlns:p="http://primefaces.prime.com.tr/ui">
 			
 							<h:graphicImage title="Incluir vertice" value="/resources/img/ico-expandir.png" style="margin-right: 2px;"/>
 							
-							<h:outputText value="Incluir coordenadas onde ocorrerá aumento da vazão" rendered="#{renovarAlterarOutorgaController.outorga.ideTipoAlteracao.ideTipoAlteracao == 1}"/>
-							<h:outputText value="Incluir coordenadas onde ocorrerá redução da vazão" rendered="#{renovarAlterarOutorgaController.outorga.ideTipoAlteracao.ideTipoAlteracao == 2}"/>
+							<h:outputText value="Incluir coordenadas onde ocorrerÃ¡ aumento da vazÃ£o" rendered="#{renovarAlterarOutorgaController.outorga.ideTipoAlteracao.ideTipoAlteracao == 1}"/>
+							<h:outputText value="Incluir coordenadas onde ocorrerÃ¡ reduÃ§Ã£o da vazÃ£o" rendered="#{renovarAlterarOutorgaController.outorga.ideTipoAlteracao.ideTipoAlteracao == 2}"/>
 							<h:outputText value="Incluir coordenadas do novo ponto" rendered="#{renovarAlterarOutorgaController.outorga.ideTipoAlteracao.ideTipoAlteracao == 3}"/>
 							<h:outputText value="Incluir coordenadas do ponto a ser removido" rendered="#{renovarAlterarOutorgaController.outorga.ideTipoAlteracao.ideTipoAlteracao == 4}"/>
 							<h:outputText value="Incluir coordenadas onde pretende relocar" rendered="#{renovarAlterarOutorgaController.outorga.ideTipoAlteracao.ideTipoAlteracao == 5}"/>
 							<h:outputText value="Incluir coordenadas onde pretende alterar a finalidade" rendered="#{renovarAlterarOutorgaController.outorga.ideTipoAlteracao.ideTipoAlteracao == 6}"/>
-							<h:outputText value="Incluir coordenadas onde ocorrerá alteração do efluente" rendered="#{renovarAlterarOutorgaController.outorga.ideTipoAlteracao.ideTipoAlteracao == 7}"/>
+							<h:outputText value="Incluir coordenadas onde ocorrerÃ¡ alteraÃ§Ã£o do efluente" rendered="#{renovarAlterarOutorgaController.outorga.ideTipoAlteracao.ideTipoAlteracao == 7}"/>
 							<h:outputText value="Incluir coordenadas do ponto a ser desmembrado" rendered="#{renovarAlterarOutorgaController.outorga.ideTipoAlteracao.ideTipoAlteracao == 8}"/>
 							
 							<h:outputText value="Incluir coordenadas" rendered="#{renovarAlterarOutorgaController.outorga.ideModalidadeOutorga.ideModalidadeOutorga == 3 or renovarAlterarOutorgaController.outorga.ideModalidadeOutorga.ideModalidadeOutorga == 4}"/>
@@ -54,7 +56,7 @@ xmlns:p="http://primefaces.prime.com.tr/ui">
 			
 				<h:panelGroup rendered="#{novoRequerimentoController.imovelRural}">
 					<h:panelGroup>
-						<h:outputText value="Selecione o(s) imóvel(is):" />
+						<h:outputText value="Selecione o(s) imÃ³vel(is):" />
 					</h:panelGroup>	
 					
 					<h:panelGroup layout="block" style="height:75px; width:200px; overflow:auto; border:1px solid gray;margin-top:5px;">
@@ -70,7 +72,7 @@ xmlns:p="http://primefaces.prime.com.tr/ui">
 				
 					<p:dataTable var="localizacao" value="#{localizacaoOutorgaController.outorgaLocalizacaoGeografica.ideLocalizacaoGeografica}" rendered="#{localizacaoOutorgaController.outorgaLocalizacaoGeografica.ideLocalizacaoGeografica.ideLocalizacaoGeografica != null}">
 						
-						<p:column headerText="Ponto de Referência">
+						<p:column headerText="Ponto de ReferÃªncia">
 							<h:outputText value="${localizacao.desLocalizacaoGeografica}" />
 						</p:column>
 						
@@ -82,18 +84,18 @@ xmlns:p="http://primefaces.prime.com.tr/ui">
 							<h:outputText value="${localizacao.nomeSistemaCoordenadas()}" />
 						</p:column>
 						
-						<p:column headerText="Ações">
+						<p:column headerText="AÃ§Ãµes">
 					
 							<p:commandLink oncomplete="dlgLocalizacaoGeograficaGeneric.show();" process="@this" action="#{localizacaoGeograficaGenericController.visualizarLocalizacaoGeografica()}" >
 								<f:setPropertyActionListener target="#{localizacaoGeograficaGenericController.localizacaoGeograficaSelecionada}" value="#{localizacaoOutorgaController.outorgaLocalizacaoGeografica.ideLocalizacaoGeografica}" />
 								<f:setPropertyActionListener target="#{localizacaoGeograficaGenericController.objetoLocalizacao}" value="#{localizacaoOutorgaController.outorgaLocalizacaoGeografica}" />
-								<h:graphicImage title="Visualizar localização no GeoBahia" value="/resources/img/ico-pesquisa.png" />
+								<h:graphicImage title="Visualizar localizaÃ§Ã£o no GeoBahia" value="/resources/img/ico-pesquisa.png" />
 							</p:commandLink>
 							
 							<p:commandLink oncomplete="dlgLocalizacaoGeograficaGeneric.show();" process="@this" action="#{localizacaoGeograficaGenericController.editarLocalizacaoGeografica()}" rendered="#{!novoRequerimentoController.desabilitarTudo}">
 								<f:setPropertyActionListener target="#{localizacaoGeograficaGenericController.localizacaoGeograficaSelecionada}" value="#{localizacaoOutorgaController.outorgaLocalizacaoGeografica.ideLocalizacaoGeografica}" />
 								<f:setPropertyActionListener target="#{localizacaoGeograficaGenericController.objetoLocalizacao}" value="#{localizacaoOutorgaController.outorgaLocalizacaoGeografica}" />
-								<h:graphicImage title="Editar localização geográfica" value="/resources/img/ico-editar.png" />
+								<h:graphicImage title="Editar localizaÃ§Ã£o geogrÃ¡fica" value="/resources/img/ico-editar.png" />
 							</p:commandLink>
 						
 						</p:column>
@@ -111,11 +113,11 @@ xmlns:p="http://primefaces.prime.com.tr/ui">
 				<p:outputPanel>
 					<h:panelGroup>
 						<h:panelGroup>
-							<h:outputText value="* 1.1. Vazão a ser acrescida:" rendered="#{renovarAlterarOutorgaController.outorga.ideTipoAlteracao.ideTipoAlteracao == 1}" />
-							<h:outputText value="* 1.1. Vazão a ser reduzida:" rendered="#{renovarAlterarOutorgaController.outorga.ideTipoAlteracao.ideTipoAlteracao == 2}" />
-							<h:outputText value="* 1.1. Vazão do novo ponto:" rendered="#{renovarAlterarOutorgaController.outorga.ideTipoAlteracao.ideTipoAlteracao == 3}" />
-							<h:outputText value="* 1.1. Vazão do ponto outorgado que será removido:" rendered="#{renovarAlterarOutorgaController.outorga.ideTipoAlteracao.ideTipoAlteracao == 4}" />
-							<h:outputText value="* 1.1. Vazão do ponto a ser relocado:" rendered="#{renovarAlterarOutorgaController.outorga.ideTipoAlteracao.ideTipoAlteracao == 5}" />
+							<h:outputText value="* 1.1. VazÃ£o a ser acrescida:" rendered="#{renovarAlterarOutorgaController.outorga.ideTipoAlteracao.ideTipoAlteracao == 1}" />
+							<h:outputText value="* 1.1. VazÃ£o a ser reduzida:" rendered="#{renovarAlterarOutorgaController.outorga.ideTipoAlteracao.ideTipoAlteracao == 2}" />
+							<h:outputText value="* 1.1. VazÃ£o do novo ponto:" rendered="#{renovarAlterarOutorgaController.outorga.ideTipoAlteracao.ideTipoAlteracao == 3}" />
+							<h:outputText value="* 1.1. VazÃ£o do ponto outorgado que serÃ¡ removido:" rendered="#{renovarAlterarOutorgaController.outorga.ideTipoAlteracao.ideTipoAlteracao == 4}" />
+							<h:outputText value="* 1.1. VazÃ£o do ponto a ser relocado:" rendered="#{renovarAlterarOutorgaController.outorga.ideTipoAlteracao.ideTipoAlteracao == 5}" />
 						</h:panelGroup>
 						
 						<br /><br />
@@ -137,8 +139,8 @@ xmlns:p="http://primefaces.prime.com.tr/ui">
 					<h:panelGroup rendered="#{renovarAlterarOutorgaController.outorga.ideTipoAlteracao.ideTipoAlteracao == 1
 										or renovarAlterarOutorgaController.outorga.ideTipoAlteracao.ideTipoAlteracao == 2}">
 						<h:panelGroup>
-							<h:outputText value="* 1.2. Valor total do ponto após acréscimo:" rendered="#{renovarAlterarOutorgaController.outorga.ideTipoAlteracao.ideTipoAlteracao == 1}"/>
-							<h:outputText value="* 1.2. Valor total do ponto após redução:" rendered="#{renovarAlterarOutorgaController.outorga.ideTipoAlteracao.ideTipoAlteracao == 2}"/>
+							<h:outputText value="* 1.2. Valor total do ponto apÃ³s acrÃ©scimo:" rendered="#{renovarAlterarOutorgaController.outorga.ideTipoAlteracao.ideTipoAlteracao == 1}"/>
+							<h:outputText value="* 1.2. Valor total do ponto apÃ³s reduÃ§Ã£o:" rendered="#{renovarAlterarOutorgaController.outorga.ideTipoAlteracao.ideTipoAlteracao == 2}"/>
 						</h:panelGroup>
 						
 						<br /><br />
@@ -158,11 +160,11 @@ xmlns:p="http://primefaces.prime.com.tr/ui">
 									or renovarAlterarOutorgaController.outorga.ideTipoAlteracao.ideTipoAlteracao == 2
 									or renovarAlterarOutorgaController.outorga.ideTipoAlteracao.ideTipoAlteracao == 5)}">
 				<h:panelGroup>
-					<h:outputText value="* 2. Sobre a finalidade do ponto informado será necessário:" />
+					<h:outputText value="* 2. Sobre a finalidade do ponto informado serÃ¡ necessÃ¡rio:" />
 					<p:selectOneRadio value="#{localizacaoOutorgaController.outorgaLocalizacaoGeografica.indFinalidade}" layout="pageDirection" disabled="#{novoRequerimentoController.desabilitarTudo}">
 						<f:selectItem itemLabel="Incluir finalidade(s)" itemValue="1" />
-						<f:selectItem itemLabel="Alterar finalidade(s) já outorgada(s)" itemValue="2" />
-						<f:selectItem itemLabel="Manter finalidade(s) já outorgada(s)" itemValue="3" />
+						<f:selectItem itemLabel="Alterar finalidade(s) jÃ¡ outorgada(s)" itemValue="2" />
+						<f:selectItem itemLabel="Manter finalidade(s) jÃ¡ outorgada(s)" itemValue="3" />
 						
 						<p:ajax global="false" update="pnlInformFinalidades formselFinalidade:pnlFinalidade" />
 					</p:selectOneRadio>
@@ -236,7 +238,7 @@ xmlns:p="http://primefaces.prime.com.tr/ui">
 								<h:outputText value="#{finalidade.nomTipoFinalidadeUsoAgua}"/>
 							</p:column>
 							
-							<p:column style="text-align: center;" headerText="Ação">
+							<p:column style="text-align: center;" headerText="AÃ§Ã£o">
 							
 								<p:commandLink title="Remover" process="@this" update="formLocalizacaoDialogOutorga:pnlInformFinalidades" 
 									rendered="#{!novoRequerimentoController.desabilitarTudo}" global="false">
@@ -250,13 +252,13 @@ xmlns:p="http://primefaces.prime.com.tr/ui">
 					
 						<h:panelGrid rendered="#{localizacaoOutorgaController.outorgaLocalizacaoGeografica.irrigacao}">
 							<h:panelGroup>
-								<h:outputText value="* 2.1. Informe a área irrigada:" 
+								<h:outputText value="* 2.1. Informe a Ã¡rea irrigada:" 
 									rendered="#{renovarAlterarOutorgaController.outorga.ideTipoAlteracao.ideTipoAlteracao == 3
 											or renovarAlterarOutorgaController.outorga.ideTipoAlteracao.ideTipoAlteracao == 4
 											or renovarAlterarOutorgaController.outorga.ideTipoAlteracao.ideTipoAlteracao == 6
 											or renovarAlterarOutorgaController.outorga.ideTipoAlteracao.ideTipoAlteracao == 7}"/>
 							
-								<h:outputText value="* 3.1. Informe a área irrigada:" 
+								<h:outputText value="* 3.1. Informe a Ã¡rea irrigada:" 
 									rendered="#{renovarAlterarOutorgaController.outorga.ideTipoAlteracao.ideTipoAlteracao == 1
 											or renovarAlterarOutorgaController.outorga.ideTipoAlteracao.ideTipoAlteracao == 2
 											or renovarAlterarOutorgaController.outorga.ideTipoAlteracao.ideTipoAlteracao == 5}"/>
@@ -272,23 +274,23 @@ xmlns:p="http://primefaces.prime.com.tr/ui">
 						
 						<h:panelGrid rendered="#{localizacaoOutorgaController.outorgaLocalizacaoGeografica.pulverizacao}">
 							<h:panelGroup>
-								<h:outputText value="* 2.1. Informe a área pulverizada:" 
+								<h:outputText value="* 2.1. Informe a Ã¡rea pulverizada:" 
 									rendered="#{(!localizacaoOutorgaController.outorgaLocalizacaoGeografica.irrigacao) and (renovarAlterarOutorgaController.outorga.ideTipoAlteracao.ideTipoAlteracao == 3
 											or renovarAlterarOutorgaController.outorga.ideTipoAlteracao.ideTipoAlteracao == 4
 											or renovarAlterarOutorgaController.outorga.ideTipoAlteracao.ideTipoAlteracao == 6
 											or renovarAlterarOutorgaController.outorga.ideTipoAlteracao.ideTipoAlteracao == 7)}"/>
-								<h:outputText value="* 2.2. Informe a área pulverizada:" 
+								<h:outputText value="* 2.2. Informe a Ã¡rea pulverizada:" 
 									rendered="#{(localizacaoOutorgaController.outorgaLocalizacaoGeografica.irrigacao) and (renovarAlterarOutorgaController.outorga.ideTipoAlteracao.ideTipoAlteracao == 3
 											or renovarAlterarOutorgaController.outorga.ideTipoAlteracao.ideTipoAlteracao == 4
 											or renovarAlterarOutorgaController.outorga.ideTipoAlteracao.ideTipoAlteracao == 6
 											or renovarAlterarOutorgaController.outorga.ideTipoAlteracao.ideTipoAlteracao == 7)}"/>
 							
-								<h:outputText value="* 3.1. Informe a área pulverizada:" 
+								<h:outputText value="* 3.1. Informe a Ã¡rea pulverizada:" 
 									rendered="#{(!localizacaoOutorgaController.outorgaLocalizacaoGeografica.irrigacao) and (renovarAlterarOutorgaController.outorga.ideTipoAlteracao.ideTipoAlteracao == 1
 											or renovarAlterarOutorgaController.outorga.ideTipoAlteracao.ideTipoAlteracao == 2
 											or renovarAlterarOutorgaController.outorga.ideTipoAlteracao.ideTipoAlteracao == 5)}"/>
 											
-								<h:outputText value="* 3.2. Informe a área pulverizada:" 
+								<h:outputText value="* 3.2. Informe a Ã¡rea pulverizada:" 
 									rendered="#{(localizacaoOutorgaController.outorgaLocalizacaoGeografica.irrigacao) and (renovarAlterarOutorgaController.outorga.ideTipoAlteracao.ideTipoAlteracao == 1
 											or renovarAlterarOutorgaController.outorga.ideTipoAlteracao.ideTipoAlteracao == 2
 											or renovarAlterarOutorgaController.outorga.ideTipoAlteracao.ideTipoAlteracao == 5)}"/>

@@ -9,7 +9,8 @@
 	
 	<ui:composition template="/layout/template.xhtml">
 		<ui:define name="titulo-pagina">
-			<h3>Movimentação Financeira - Projeto</h3>
+        <ui:include src="/layout/csrfToken.xhtml" />
+			<h3>MovimentaÃ§Ã£o Financeira - Projeto</h3>
 		</ui:define>
 		
 		<ui:define name="conteudo-principal">
@@ -27,7 +28,7 @@
 				<h:panelGrid columns="2">
 					<h:panelGrid style="width: 400px;" styleClass="cleanPaddingTD">
 						<h:panelGrid columns="2">
-							<h:outputText value="Número do TCCA:" styleClass="bold"/>
+							<h:outputText value="NÃºmero do TCCA:" styleClass="bold"/>
 							<h:outputText value="#{projetoTccaController.tcca.numTcca}" />
 						</h:panelGrid>
 						
@@ -58,7 +59,7 @@
 						</h:panelGrid>
 						
 						<h:panelGrid columns="2">
-							<h:outputText value="Saldo Disponível do TCCA (R$): " styleClass="bold"/>
+							<h:outputText value="Saldo DisponÃ­vel do TCCA (R$): " styleClass="bold"/>
 							<h:outputText value="#{(projetoTccaController.tcca.ultimoSaldo.valSaldoNaoDestinadoProjeto)==null ? 0.00 : (projetoTccaController.tcca.ultimoSaldo.valSaldoNaoDestinadoProjeto)}"
 								styleClass="#{projetoprojetoTccaController.isValorNegativo(projetoTccaController.tcca.ultimoSaldo.valSaldoNaoDestinadoProjeto)}">
 								
@@ -76,7 +77,7 @@
 						</h:panelGrid>
 						
 						<h:panelGrid columns="2">
-							<h:outputText value="Saldo Para Execução (R$): " styleClass="bold"/>
+							<h:outputText value="Saldo Para ExecuÃ§Ã£o (R$): " styleClass="bold"/>
 							<h:outputText value="#{(projetoTccaController.tcca.ultimoSaldo.valSaldoParaExecucao)==null ? 0.00 : (projetoTccaController.tcca.ultimoSaldo.valSaldoParaExecucao)}"
 								styleClass="#{projetoTccaController.isValorNegativo(projetoTccaController.tcca.ultimoSaldo.valSaldoParaExecucao)}">
 								
@@ -322,14 +323,14 @@
 						<p:spacer width="0" height="50"/>
 						
 						<h:panelGroup>
-							<h:outputText value="* Valor da Operação (R$): " styleClass="bold"/>
+							<h:outputText value="* Valor da OperaÃ§Ã£o (R$): " styleClass="bold"/>
 							<p:inputText value="#{projetoTccaController.valorMovimentacao}" converter="bigConverter" maxlength="13"
 								onkeyup="mascararNumeroAndAddZeros(this, event, 8, 2, '.',',', 3);" 
 								onblur="mascararNumeroAndAddZeros(this, event, 8, 2, '.',',', 3);"/>
 							
 							<p:spacer width="30" height="0"/>
 							
-							<h:outputText value="Número da Resolução: " styleClass="bold"/>
+							<h:outputText value="NÃºmero da ResoluÃ§Ã£o: " styleClass="bold"/>
 							<p:inputText value="#{projetoTccaController.numResolucao}"/>
 						</h:panelGroup>
 					</s:divCentralizado>

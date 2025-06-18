@@ -9,14 +9,16 @@
 	
 	 	<p:confirmDialog widgetVar="dlgAlteracaoAba"
          	id="_dlgAlteracaoAba"
-	 		message="As alterações realizadas neste requerimento não serão salvas. Deseja continuar?" 
+	 		<h:form>
+        <ui:include src="/layout/csrfToken.xhtml" /> 
+        <ui:include src="/layout/csrfToken.xhtml" />
 	 		resizable="false" modal="true" width="600" position="center" 	 style="top: -100%; left: 20%; "> 
 	 		<h:form> 
 	 			<p:commandButton value="Sim" 
 	 				onclick="dlgNaoConcordo.show();dlgAlteracaoAba.hide();" 
 	 				styleClass="ui-confirmdialog-yes" icon="pi pi-check"
 	 			/> 
-	 			<p:commandButton value="Não" 
+	 			<p:commandButton value="NÃ£o" 
 	 				onclick="dlgAlteracaoAba.hide();" 
 	 				type="button" styleClass="ui-confirmdialog-no" icon="pi pi-times" /> 
 	 		</h:form> 
@@ -28,8 +30,8 @@
 			<tr>
 				<td />
 				<td colspan="2"><h:outputText
-						value="Atenção! Caso a solicitação identificada na resposta ao item 1 atenda a todas as necessidades do empreendimento, a pergunta 2 não deve ser respondida. 
-						Caso a pergunta 1 não se aplique ao empreendimento, responder apenas à pergunta 2."
+						value="AtenÃ§Ã£o! Caso a solicitaÃ§Ã£o identificada na resposta ao item 1 atenda a todas as necessidades do empreendimento, a pergunta 2 nÃ£o deve ser respondida. 
+						Caso a pergunta 1 nÃ£o se aplique ao empreendimento, responder apenas Ã  pergunta 2."
 						style="font-weight: bold; line-height: 150%;" /></td>
 			</tr>
 		</table>
@@ -39,8 +41,8 @@
 			<tr>
 				<td />
 				<td colspan="2">
-					<h:outputText value="Preencha a tabela abaixo apenas se a alteração proposta puder ser enquadrada nas tipologias
-								 de empreendimentos e atividades sujeitos a licenciamento ambiental, constantes no Anexo IV do Decreto nº 14.024/2012." style="font-weight: bold; line-height: 150%;"/>
+					<h:outputText value="Preencha a tabela abaixo apenas se a alteraÃ§Ã£o proposta puder ser enquadrada nas tipologias
+								 de empreendimentos e atividades sujeitos a licenciamento ambiental, constantes no Anexo IV do Decreto nÂº 14.024/2012." style="font-weight: bold; line-height: 150%;"/>
 				</td>
 			</tr>
 		</table>
@@ -50,7 +52,7 @@
 		<p:outputPanel id="panel01" rendered="#{abaFinalizarRequerimentoController.renderedAutorizacaoOuLicenca}">
 			
 			<h:panelGrid id="grid01" >
-				<h:outputText value="* 1. Caracterizar as atividades do empreendimento passíveis de Autorização Ambiental(AA), conforme art. 155 do Regulamento da Lei 10.431/06 aprovada pelo Decreto n° 14.024/2012 e suas devidas atualizações."/>
+				<h:outputText value="* 1. Caracterizar as atividades do empreendimento passÃ­veis de AutorizaÃ§Ã£o Ambiental(AA), conforme art. 155 do Regulamento da Lei 10.431/06 aprovada pelo Decreto nÂ° 14.024/2012 e suas devidas atualizaÃ§Ãµes."/>
 				<p:commandLink  process="@this" disabled="#{novoRequerimentoController.desabilitarTudo}" action="#{tipologiaController.load(true)}" oncomplete="dlgTipologia.show()"
 					update="formTipologia">
 					<h:graphicImage title="Incluir atividade" value="/resources/img/ico-expandir.png" />
@@ -62,7 +64,7 @@
 				<p:column headerText="Atividade" style="width:350px">
 					<h:outputText value="#{atividade.desTipologia}" />
 				</p:column>
-				<p:column headerText="Ações"  style="width:50px">
+				<p:column headerText="AÃ§Ãµes"  style="width:50px">
 					<p:commandLink  oncomplete="excluirAtividadeAutorizacao.show()" process="@this" rendered="#{!novoRequerimentoController.desabilitarTudo}">
 						<f:setPropertyActionListener target="#{abaFinalizarRequerimentoController.atividadeAExcluir}" value="#{atividade}"/>
 						<h:graphicImage title="Excluir" value="/resources/img/ico-excluir.png" />
@@ -75,13 +77,13 @@
 		
 		<p:outputPanel rendered="#{abaFinalizarRequerimentoController.renderedCaracterizacaoAtividadesEmpreendimento}">
 			<h:panelGroup rendered="#{(not abaFinalizarRequerimentoController.alteracaoLicenca and  abaFinalizarRequerimentoController.autorizacaoOuLicenca) or abaRenovacaoAlteracaoProrrogacaoController.renovacaoLicenca}">
-				<h:outputText value="2. Caracterizar as atividades do empreendimento passíveis de licença:" rendered="#{!empty abaFinalizarRequerimentoController.atividadesLicenca}"/>
+				<h:outputText value="2. Caracterizar as atividades do empreendimento passÃ­veis de licenÃ§a:" rendered="#{!empty abaFinalizarRequerimentoController.atividadesLicenca}"/>
 				
 				<p:dataTable rendered="#{!empty abaFinalizarRequerimentoController.atividadesLicenca}" var="atividade" value="#{abaFinalizarRequerimentoController.atividadesLicenca}">
 					<p:column headerText="Atividade">
 						<h:outputText value="#{atividade.desTipologia}" />
 					</p:column>
-					<p:column headerText="Capacidade/produção/área/volume">
+					<p:column headerText="Capacidade/produÃ§Ã£o/Ã¡rea/volume">
 						<p:cellEditor>
 	        				<f:facet name="output">  
 	                    		<h:outputText value="#{atividade.valAtividadeFormatada}"/>
@@ -89,14 +91,14 @@
 			                <f:facet name="input">  
 			                      <p:inputText value="#{atividade.valAtividade}" onkeyup="maskIt(this, event, '999.999.999,99', true)"
 				                      	required="false" disabled="#{novoRequerimentoController.desabilitarTudo}"
-			                       		style="width:100%"/><!-- requiredMessage="Para o cálculo do porte informe o valor das atividades corretamente. Não é permitido valor vazio ou menor ou igual a 0." -->
+			                       		style="width:100%"/><!-- requiredMessage="Para o cÃ¡lculo do porte informe o valor das atividades corretamente. NÃ£o Ã© permitido valor vazio ou menor ou igual a 0." -->
 			                </f:facet>
 	        			</p:cellEditor>
 					</p:column>
 					<p:column headerText="Unidade de medida">
 						<h:outputText value="#{atividade.tipologiaGrupo.unidadeMedidaTipologiaGrupo.ideUnidadeMedida.codUnidadeMedida}" />
 					</p:column>
-					<p:column headerText="Ações" style="width:40px" rendered="#{!novoRequerimentoController.desabilitarTudo}">
+					<p:column headerText="AÃ§Ãµes" style="width:40px" rendered="#{!novoRequerimentoController.desabilitarTudo}">
 						<p:rowEditor rendered="#{!novoRequerimentoController.desabilitarTudo or !empty atividade.tipologiaGrupo.unidadeMedidaTipologiaGrupo.ideUnidadeMedida}">
 						</p:rowEditor>
 					</p:column>
@@ -106,7 +108,7 @@
 			</h:panelGroup>
 			<br/>		
 			<h:panelGrid style="width: 100%;" rendered="#{abaFinalizarRequerimentoController.alteracaoLicenca and !abaFinalizarRequerimentoController.impactoAdicional}">
-				<h:outputText value="2. Caracterizar as atividades do empreendimento que serão incluídas ou alteradas:" />
+				<h:outputText value="2. Caracterizar as atividades do empreendimento que serÃ£o incluÃ­das ou alteradas:" />
 				
 				<h:panelGrid columns="2">
 					<h:outputText value="a) Selecionar a(s) tipologia(s) que deseja incluir" />
@@ -129,14 +131,14 @@
 	                		</f:facet>  
 			                <f:facet name="input">  
 			                      <p:inputText value="#{atividade.valAtividade}" onkeyup="maskIt(this, event, '999.999.999,99', true)" required="false"
-			                       		style="width:100%" /><!-- requiredMessage="Para o cálculo do porte informe o valor das atividades corretamente. Não é permitido valor vazio ou menor ou igual a 0." -->
+			                       		style="width:100%" /><!-- requiredMessage="Para o cÃ¡lculo do porte informe o valor das atividades corretamente. NÃ£o Ã© permitido valor vazio ou menor ou igual a 0." -->
 			                </f:facet>
 	        			</p:cellEditor>
 					</p:column>
 					<p:column headerText="Unidade de medida">
 						<h:outputText value="#{atividade.tipologiaGrupo.unidadeMedidaTipologiaGrupo.ideUnidadeMedida.codUnidadeMedida}" />
 					</p:column>
-					<p:column headerText="Ações" style="width:40px" rendered="#{!novoRequerimentoController.desabilitarTudo}">
+					<p:column headerText="AÃ§Ãµes" style="width:40px" rendered="#{!novoRequerimentoController.desabilitarTudo}">
 						<p:rowEditor rendered="#{!empty atividade.tipologiaGrupo.unidadeMedidaTipologiaGrupo.ideUnidadeMedida}"/>
 						<p:commandLink  oncomplete="excluirAtividadeEmpreendLicenca.show()" process="@this">
 							<f:setPropertyActionListener target="#{abaFinalizarRequerimentoController.atividadeAExcluir}" value="#{atividade}"/>
@@ -175,7 +177,7 @@
 	                		</f:facet>  
 			                <f:facet name="input">  
 								<p:inputText value="#{atividade.valorAtividade}" onkeyup="maskIt(this, event, '999.999.999,99', true)" converter="newBigConverter" required="false"
-			                       		style="width:100%"><!-- requiredMessage="Para o cálculo do porte informe o valor das atividades corretamente. Não é permitido valor vazio ou menor ou igual a 0." -->
+			                       		style="width:100%"><!-- requiredMessage="Para o cÃ¡lculo do porte informe o valor das atividades corretamente. NÃ£o Ã© permitido valor vazio ou menor ou igual a 0." -->
 									<f:convertNumber maxFractionDigits="2" minFractionDigits="2" integerOnly="false" />
 								</p:inputText>
 			                </f:facet>
@@ -184,21 +186,21 @@
 					<p:column headerText="Unidade de medida">
 						<h:outputText value="#{atividade.tipologiaGrupo.unidadeMedidaTipologiaGrupo.ideUnidadeMedida.codUnidadeMedida}" />
 					</p:column>
-					<p:column headerText="Opções" style="width:130px">
+					<p:column headerText="OpÃ§Ãµes" style="width:130px">
 						<p:cellEditor>
 	        				<f:facet name="output">  
 	                    		<h:outputText value="#{atividade.opcao.descricao}"/>
 	                		</f:facet>  
 			                <f:facet name="input">  
 		                      <p:selectOneMenu value="#{atividade.opcao}" required="true"
-		                      	converterMessage="O campo opção é de preenchimento obrigatório.">
+		                      	converterMessage="O campo opÃ§Ã£o Ã© de preenchimento obrigatÃ³rio.">
 									<f:selectItem itemValue="#{null}" itemLabel="Selecione..."/>
 									<f:selectItems value="#{abaFinalizarRequerimentoController.opcoes}" var="opcao" itemLabel="#{opcao.descricao}" itemValue="#{opcao}" />
 								</p:selectOneMenu>
 			                </f:facet>
 	        			</p:cellEditor>
 					</p:column>
-					<p:column headerText="Ações" style="width:40px" rendered="#{!novoRequerimentoController.desabilitarTudo}">
+					<p:column headerText="AÃ§Ãµes" style="width:40px" rendered="#{!novoRequerimentoController.desabilitarTudo}">
 						<p:rowEditor rendered="#{!empty atividade.tipologiaGrupo.unidadeMedidaTipologiaGrupo.ideUnidadeMedida}"/>
 						<p:commandLink  oncomplete="excluirAtividadeEmpreendLicenca.show()" process="@this" rendered="#{!novoRequerimentoController.desabilitarTudo}">
 							<f:setPropertyActionListener target="#{abaFinalizarRequerimentoController.atividadeAExcluir}" value="#{atividade}"/>
@@ -257,8 +259,8 @@
 			</h:panelGrid>
 			
 			<h:panelGrid id="pnlDataPergunta21" rendered="#{abaFinalizarRequerimentoController.renderAbaFinalizarRequerimentoPerguntaTresPontoUm}">
-				<h:outputText value="* 3.1. Informe a data da previsão para Localização ou Implantação:" rendered="#{abaFinalizarRequerimentoController.faseEmpreendimentoSelecionado.ideFaseEmpreendimento == 1 || abaFinalizarRequerimentoController.faseEmpreendimentoSelecionado.ideFaseEmpreendimento == 2}" />
-				<h:outputText value="* 3.1. Informe a data da previsão para início da Operação:" rendered="#{abaFinalizarRequerimentoController.faseEmpreendimentoSelecionado.ideFaseEmpreendimento == 3}" />
+				<h:outputText value="* 3.1. Informe a data da previsÃ£o para LocalizaÃ§Ã£o ou ImplantaÃ§Ã£o:" rendered="#{abaFinalizarRequerimentoController.faseEmpreendimentoSelecionado.ideFaseEmpreendimento == 1 || abaFinalizarRequerimentoController.faseEmpreendimentoSelecionado.ideFaseEmpreendimento == 2}" />
+				<h:outputText value="* 3.1. Informe a data da previsÃ£o para inÃ­cio da OperaÃ§Ã£o:" rendered="#{abaFinalizarRequerimentoController.faseEmpreendimentoSelecionado.ideFaseEmpreendimento == 3}" />
 				<p:calendar value="#{abaFinalizarRequerimentoController.dtcPrevistaFaseEmpreendimento}" id="dtPrevLoc" size="7" showOn="button" locale="pt"
 							pattern="dd/MM/yyyy" readOnlyInputText="true" rendered="#{abaFinalizarRequerimentoController.faseEmpreendimentoSelecionado != null}" disabled="#{novoRequerimentoController.desabilitarTudo}">
 					<p:ajax event="dateSelect"  process="@this" />
@@ -269,13 +271,13 @@
 		
 		
 		<h:panelGroup rendered="#{abaFinalizarRequerimentoController.renderedPnlAutorizacaoEspecial}">
-			<h:outputText value="2. Caracterizar as atividades do empreendimento passíveis de licença:" rendered="#{!empty abaFinalizarRequerimentoController.atividadesLicenca}"/>
+			<h:outputText value="2. Caracterizar as atividades do empreendimento passÃ­veis de licenÃ§a:" rendered="#{!empty abaFinalizarRequerimentoController.atividadesLicenca}"/>
 			
 			<p:dataTable rendered="#{!empty abaFinalizarRequerimentoController.atividadesLicenca}" var="atividade" value="#{abaFinalizarRequerimentoController.atividadesLicenca}">
 				<p:column headerText="Atividade">
 					<h:outputText value="#{atividade.desTipologia}" />
 				</p:column>
-				<p:column headerText="Capacidade/produção/área/volume">
+				<p:column headerText="Capacidade/produÃ§Ã£o/Ã¡rea/volume">
 					<p:cellEditor>
         				<f:facet name="output">  
                     		<h:outputText value="#{atividade.valAtividadeFormatada}"/>
@@ -283,14 +285,14 @@
 		                <f:facet name="input">  
 		                      <p:inputText value="#{atividade.valAtividade}" onkeyup="maskIt(this, event, '999.999.999,99', true)"
 			                      	required="false" disabled="#{novoRequerimentoController.desabilitarTudo}"
-		                       		style="width:100%"/><!-- requiredMessage="Para o cálculo do porte informe o valor das atividades corretamente. Não é permitido valor vazio ou menor ou igual a 0." -->
+		                       		style="width:100%"/><!-- requiredMessage="Para o cÃ¡lculo do porte informe o valor das atividades corretamente. NÃ£o Ã© permitido valor vazio ou menor ou igual a 0." -->
 		                </f:facet>
         			</p:cellEditor>
 				</p:column>
 				<p:column headerText="Unidade de medida">
 					<h:outputText value="#{atividade.tipologiaGrupo.unidadeMedidaTipologiaGrupo.ideUnidadeMedida.codUnidadeMedida}" />
 				</p:column>
-				<p:column headerText="Ações" style="width:40px" rendered="#{!novoRequerimentoController.desabilitarTudo}">
+				<p:column headerText="AÃ§Ãµes" style="width:40px" rendered="#{!novoRequerimentoController.desabilitarTudo}">
 					<p:rowEditor rendered="#{!novoRequerimentoController.desabilitarTudo or !empty atividade.tipologiaGrupo.unidadeMedidaTipologiaGrupo.ideUnidadeMedida}">
 					</p:rowEditor>
 				</p:column>
@@ -308,19 +310,19 @@
 				<h:outputText styleClass="font-req-declaracao" value="* Declaro para os devidos fins que assumo o compromisso de:" />
 				<h:panelGrid columns="2">
 					<p:selectBooleanCheckbox value="#{novoRequerimentoController.declaracaoAutorizacaoEspecial}" required="true" disabled="#{novoRequerimentoController.desabilitarTudo}"
-					requiredMessage="O campo Declaração é de preenchimento obrigatório.">
+					requiredMessage="O campo DeclaraÃ§Ã£o Ã© de preenchimento obrigatÃ³rio.">
 						<p:ajax process="@this"/>
 					</p:selectBooleanCheckbox>
 					<h:panelGroup layout="block">
 						<ul class="lista-roman">
 							<li class="lista-roman font-req-declaracao">
-								 <h:outputText value="Realizar a correta utilização de agrotóxicos e destinação adequada das respectivas embalagens e dos demais resíduos agrossilvopastoris;"/> 
+								 <h:outputText value="Realizar a correta utilizaÃ§Ã£o de agrotÃ³xicos e destinaÃ§Ã£o adequada das respectivas embalagens e dos demais resÃ­duos agrossilvopastoris;"/> 
 							</li>
 							<li class="lista-roman font-req-declaracao">
-								<h:outputText  value="Exercer práticas de conservação do solo, água e biota, inclusive de adoção de sistema de integração lavoura-pecuária-floresta e suas variações, cultivos orgânicos, de adoção de boas práticas de produção agropecuária ou outros sistemas agroecológicos;"/>
+								<h:outputText  value="Exercer prÃ¡ticas de conservaÃ§Ã£o do solo, Ã¡gua e biota, inclusive de adoÃ§Ã£o de sistema de integraÃ§Ã£o lavoura-pecuÃ¡ria-floresta e suas variaÃ§Ãµes, cultivos orgÃ¢nicos, de adoÃ§Ã£o de boas prÃ¡ticas de produÃ§Ã£o agropecuÃ¡ria ou outros sistemas agroecolÃ³gicos;"/>
 							</li>
 							<li class="lista-roman font-req-declaracao">
-								<h:outputText  value="Não introduzir espécies geneticamente modificadas previamente identificadas pela CTNBio como Classe de Risco 4, potencialmente causadoras de significativa degradação do meio ambiente."/>
+								<h:outputText  value="NÃ£o introduzir espÃ©cies geneticamente modificadas previamente identificadas pela CTNBio como Classe de Risco 4, potencialmente causadoras de significativa degradaÃ§Ã£o do meio ambiente."/>
 							</li>
 						</ul>
 					</h:panelGroup>
@@ -328,17 +330,17 @@
 			</h:panelGrid>
 			<h:panelGrid columns="2">						
 				<p:selectBooleanCheckbox value="#{novoRequerimentoController.declaracao}" required="true" disabled="#{novoRequerimentoController.desabilitarTudo}"
-					requiredMessage="O campo Declaração é de preenchimento obrigatório.">
+					requiredMessage="O campo DeclaraÃ§Ã£o Ã© de preenchimento obrigatÃ³rio.">
 					<p:ajax process="@this"/>
 				</p:selectBooleanCheckbox>
-				<h:outputText styleClass="font-req-declaracao" value="* Declaro serem verdadeiras as informações constantes deste documento, estando ciente de que a falsidade de quaisquer dados constitui prática de crime e resultará na aplicação das sanções penais cabíveis, nos termos dispostos no Código Penal (Decreto-Lei nº 2.848/40), na lei de Crimes Ambientais (Lei nº 9.605/98) e nas suas normas regulamentadoras." />
+				<h:outputText styleClass="font-req-declaracao" value="* Declaro serem verdadeiras as informaÃ§Ãµes constantes deste documento, estando ciente de que a falsidade de quaisquer dados constitui prÃ¡tica de crime e resultarÃ¡ na aplicaÃ§Ã£o das sanÃ§Ãµes penais cabÃ­veis, nos termos dispostos no CÃ³digo Penal (Decreto-Lei nÂº 2.848/40), na lei de Crimes Ambientais (Lei nÂº 9.605/98) e nas suas normas regulamentadoras." />
 			</h:panelGrid>
 		</h:panelGrid>
 		
 		 <h:panelGrid columns="5" style="margin-top:40px;">
 			<p:commandButton id="btnVoltar" value="Voltar" action="#{novoRequerimentoController.voltarAbas()}" update="subViewAbas:tabAbasId"  style="width:90px;" />
-			<p:commandButton id="btnAvancar" value="Avançar" disabled="true" style="width:90px;"  />
-		    <p:commandButton rendered="#{novoRequerimentoController.requerimentoDTO.reenquadramento}" disabled="#{novoRequerimentoController.desabilitarTudo}" value="Finalizar Edição" onclick="dlgFinalizarEdicaoParaReenquadramento.show();"  />	
+			<p:commandButton id="btnAvancar" value="AvanÃ§ar" disabled="true" style="width:90px;"  />
+		    <p:commandButton rendered="#{novoRequerimentoController.requerimentoDTO.reenquadramento}" disabled="#{novoRequerimentoController.desabilitarTudo}" value="Finalizar EdiÃ§Ã£o" onclick="dlgFinalizarEdicaoParaReenquadramento.show();"  />	
 			
 			<h:panelGroup layout="block" style="float:right; width:355px;" rendered="#{!novoRequerimentoController.requerimentoDTO.reenquadramento}">  
 				<p:commandButton value="Finalizar Requerimento" update=":subViewAbas:tabAbasId" 

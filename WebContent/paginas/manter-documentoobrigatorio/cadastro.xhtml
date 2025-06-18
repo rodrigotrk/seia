@@ -8,7 +8,8 @@
 	template="../../layout/template.xhtml">
 	
 	<ui:define name="titulo-pagina">		
-		<h3> Cadastrar Documentos Obrigatórios</h3>
+        <ui:include src="/layout/csrfToken.xhtml" />
+		<h3> Cadastrar Documentos ObrigatÃ³rios</h3>
 	</ui:define>
 	<ui:define name="conteudo-principal">
 		<h:form id="formDocumentoObrigatorio">
@@ -18,18 +19,18 @@
 					
 					<h:panelGrid columns="1">
 						<h:outputText value="* Nome"/>
-						<p:inputText id="inputNome" value="#{documentoObrigatorioController.nomeDocumento}" style="width: 300px; margin-top: 11px;" required="true" requiredMessage="O campo Nome é de preenchimento obrigatório."/>
+						<p:inputText id="inputNome" value="#{documentoObrigatorioController.nomeDocumento}" style="width: 300px; margin-top: 11px;" required="true" requiredMessage="O campo Nome Ã© de preenchimento obrigatÃ³rio."/>
 					</h:panelGrid>
 						
 					<h:panelGrid columns="1">
-						<h:outputText value="* Formulário"/>
+						<h:outputText value="* FormulÃ¡rio"/>
 						<p:selectBooleanCheckbox value="#{documentoObrigatorioController.indFormulario}">
 						     <p:ajax event="change" update="formDocumentoObrigatorio:panelGrid2 formDocumentoObrigatorio:panelGrid3" />
 						</p:selectBooleanCheckbox>
 					</h:panelGrid>
 		
 					<h:panelGrid columns="1">
-						<h:outputText value="* Público"/>
+						<h:outputText value="* PÃºblico"/>
 						<p:selectBooleanCheckbox value="#{documentoObrigatorioController.indPublico}"/>
 					</h:panelGrid>
 						
@@ -37,7 +38,7 @@
 						<h:panelGrid columns="1">
 							<h:outputText value="* Tipo Documento:" />					
 						</h:panelGrid>						
-							<p:selectOneMenu id="TipoDocumento" required="true" requiredMessage="O campo * Tipo Documento é obrigatorio."  value="#{documentoObrigatorioController.tipoDocumentoObrigatorioSelecionado}" converter="TipoDocumentoObrigatorioConverter" styleClass="form-input form-select" style="width: 208px;">
+							<p:selectOneMenu id="TipoDocumento" required="true" requiredMessage="O campo * Tipo Documento Ã© obrigatorio."  value="#{documentoObrigatorioController.tipoDocumentoObrigatorioSelecionado}" converter="TipoDocumentoObrigatorioConverter" styleClass="form-input form-select" style="width: 208px;">
 								<f:selectItem itemLabel="Selecione..."/>
 								<f:selectItems value="#{documentoObrigatorioController.tipoDocumentoObrigatorio}" var="tipo" itemValue="#{tipo}" itemLabel="#{tipo.nomTipoDocumentoObrigatorio}"/>
 							</p:selectOneMenu>
@@ -49,7 +50,7 @@
 					            mode="advanced"
 					            auto="true"
 					            update="panelGrid2 formDocumentoObrigatorio:panelGrid3"
-			                    invalidFileMessage="Selecione um arquivo com tipo válido."
+			                    invalidFileMessage="Selecione um arquivo com tipo vÃ¡lido."
 					            label="Selecione um Documento"
 					            allowTypes="/(\.|\/)(pdf|gif|jpeg|png|jpg|doc|docx)$/"/>
 					</h:panelGrid>
@@ -59,7 +60,7 @@
 				                 emptyMessage="#{bundle.consultapf_msg_empty_list}"
 				                 style="max-width: 777px;" id="tabelaDocumentos" widgetVar="pessoas">
 					        <f:facet name="header">
-								<h:outputText value="Documento Obrigatório Cadastrado" />
+								<h:outputText value="Documento ObrigatÃ³rio Cadastrado" />
 							</f:facet>
 					        <p:column style="text-align: center;">
 					           <f:facet name="header">Tamanho</f:facet>
@@ -70,7 +71,7 @@
 					            <h:outputText value="#{doc.dscCaminhoArquivo}" />
 					        </p:column>
 					        <p:column style="text-align: center;">
-					            <f:facet name="header">Ações</f:facet>
+					            <f:facet name="header">AÃ§Ãµes</f:facet>
 					          	<p:commandLink id="excluir" title="Excluir" process="excluir" update="formDocumentoObrigatorio">
 				          			 <h:graphicImage title="Excluir" value="/resources/img/ico-excluir.png" />
 				     			     <p:collector value="#{doc}" removeFrom="#{documentoObrigatorioController.listaDocumentoObrigatorioCadastrado}"  />

@@ -7,10 +7,11 @@
 	xmlns:p="http://primefaces.prime.com.tr/ui">
 
 	<h:form id="formHistoricoTramitacaoProcesso">
+        <ui:include src="/layout/csrfToken.xhtml" />
 		<h:panelGrid id="panelHistoricoTramitacaoProcesso" columns="1">
-			<h:outputText value="Número do Processo" style="font-weight:bold" />
+			<h:outputText value="NÃºmero do Processo" style="font-weight:bold" />
 			<h:outputText value="#{historicoTramitacaoProcessoController.vwProcesso.numProcesso}" />
-			<h3><h:outputLabel styleClass="titulo-grupo" value="Histórico de Tramitação" /></h3>
+			<h3><h:outputLabel styleClass="titulo-grupo" value="HistÃ³rico de TramitaÃ§Ã£o" /></h3>
 			<p:dataTable id="tabelaControleTramitacao" scrollable="true" scrollHeight="180" style="heght:150px; width:900px; border:1px solid #ccc;"
 				value="#{historicoTramitacaoProcessoController.vwProcesso.controleTramitacaoAllList}" var="controleTramitacao">
 				<p:column style="width:94px;text-align:center;">
@@ -23,15 +24,15 @@
 					<h:outputText value="#{controleTramitacao.ideStatusFluxo.dscStatusFluxo}" />
 				</p:column>
 				<p:column style="width:200px;">
-					<f:facet name="header">Observações</f:facet>
+					<f:facet name="header">ObservaÃ§Ãµes</f:facet>
 					<h:outputText value="#{controleTramitacao.dscComentarioInterno}" />
 				</p:column>
 				<p:column style="width:200px;">
-					<f:facet name="header">Usuário Destino</f:facet>
+					<f:facet name="header">UsuÃ¡rio Destino</f:facet>
 					<h:outputText value="#{historicoTramitacaoProcessoController.getUserDestino(controleTramitacao)}" />
 				</p:column>
 				<p:column style="width:200px;text-align:center;">
-					<f:facet name="header">Realizador da ação</f:facet>
+					<f:facet name="header">Realizador da aÃ§Ã£o</f:facet>
 					<h:outputText rendered="#{controleTramitacao.idePessoaFisica eq null}" value="--------------" />
 					<h:outputText rendered="#{controleTramitacao.idePessoaFisica ne null}" value="#{controleTramitacao.idePessoaFisica.nomPessoa}" />
 				</p:column>

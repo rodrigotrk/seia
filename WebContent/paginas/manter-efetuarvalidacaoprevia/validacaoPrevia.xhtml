@@ -8,6 +8,7 @@
 	
 	<p:confirmDialog widgetVar="modalConfirmarFechamentoDaTelaEfetuarValidacaoPrevia"  header="Alerta" message="#{bundle.geral_msg_confirmar_nao_salvar}" severity="alert">
 		<h:form>
+        <ui:include src="/layout/csrfToken.xhtml" />
 			<p:commandButton value="Sim" global="false" oncomplete="modalConfirmarFechamentoDaTelaEfetuarValidacaoPrevia.hide();dialogEfetuarValidacaoPrevia.hide();"/>
 			<p:commandButton value="Não" global="false" oncomplete="modalConfirmarFechamentoDaTelaEfetuarValidacaoPrevia.hide();"/>
 		</h:form>
@@ -18,6 +19,7 @@
 		message="Documento validado, deseja enviar email para o requerente?"
 		resizable="false" severity="alert">
 		<h:form>
+        <ui:include src="/layout/csrfToken.xhtml" />
 			<h:panelGroup>
 				<p:commandButton value="#{bundle.btn_sim}"  update="emailDocumentoValidado" 
 					oncomplete="confirmarEnvioEmailDocumentoValidado.hide();emailDocumentoValidado.show();"/>
@@ -29,7 +31,8 @@
 	
 		<p:dialog id="emailDocumentoValidado" modal="true" widgetVar="emailDocumentoValidado"  appendToBody="true" position="center"
 			header="Email Documento Validado" width="810" height="380" resizable="false" style="height:380px"><!-- onShow="$('.counter').html($('.textoEmail').val().length +' caracteres.')" -->
-		<h:form id="documentoValidado">			
+		<h:form id="documentoValidado">
+        <ui:include src="/layout/csrfToken.xhtml" />			
 			<h:panelGrid>				
 				<p:inputTextarea styleClass="textoEmail" cols="150" autoResize="false" maxHeight="280" rows="20" style="overflow-y:auto;"  
 					value="#{validacaoPreviaController.emailDocumentoValidado}" maxLength="4000" /><!-- onkeyup="$('.counter').html($('.textoEmail').val().length +' caracteres.')" -->
@@ -49,6 +52,7 @@
 		message="Deseja enviar um email para o requerente solicitando o envio da documentação não validada?"
 		resizable="false" severity="alert">
 		<h:form>
+        <ui:include src="/layout/csrfToken.xhtml" />
 			<h:panelGroup>
 				<p:commandButton value="#{bundle.btn_sim}"  update="pendenciaValidacao" action="#{validacaoPreviaController.salvarComunicacaoDocumentoPendente()}"
 					oncomplete="confirmarEnvioEmailPendenciaValidacao.hide();emailPendenciaValidacao.show();"/>
@@ -59,7 +63,8 @@
 	
 	<p:dialog id="emailPendenciaValidacao" modal="true" widgetVar="emailPendenciaValidacao"  appendToBody="true" position="center"
 			header="Email Validação Pendente" width="810" height="380" resizable="false" style="height:380px"><!-- onShow="$('.counter').html($('.textoEmail').val().length +' caracteres.')" -->
-		<h:form id="pendenciaValidacao">			
+		<h:form id="pendenciaValidacao">
+        <ui:include src="/layout/csrfToken.xhtml" />			
 			<h:panelGrid>				
 				<p:inputTextarea styleClass="textoEmail" cols="150" autoResize="false" maxHeight="280" rows="20" style="overflow-y:auto;"  
 					value="#{validacaoPreviaController.emailPendenciaValidacao}" maxLength="4000" /><!-- onkeyup="$('.counter').html($('.textoEmail').val().length +' caracteres.')" -->
@@ -78,6 +83,7 @@
 		style="max-height:80%; overflow: auto; border-collapse:collapse; margin: 100px auto 0px auto; margin-left: 50px \0/ !important">
 		
 		<h:form enctype="multipart/form-data">
+        <ui:include src="/layout/csrfToken.xhtml" />
 			<p:fileUpload uploadLabel="false" label="Upload Arquivo" auto="true"
 				invalidFileMessage="Tipo de arquivo inválido." mode="advanced"
 				fileUploadListener="#{validacaoPreviaController.gerenciarUploadDocumentoObrigatorio}"
@@ -90,6 +96,7 @@
 		width="850" widgetVar="dialogEfetuarValidacaoPrevia" resizable="false" draggable="false">
 		
 		<h:form id="validacaoPrevia">
+        <ui:include src="/layout/csrfToken.xhtml" />
 			<p:remoteCommand name="updateDocumento" update=":validacaoPrevia:pnlListaDocumentos" oncomplete="expandAll();"/>
 			<h1 style="font-size: 14px">EFETUAR VALIDAÇÃO PRÉVIA</h1>
 			<hr	style="width: 100%; margin-top: 5px; margin-bottom: 5px; border: none; border-top: 1px solid #ccc;" />

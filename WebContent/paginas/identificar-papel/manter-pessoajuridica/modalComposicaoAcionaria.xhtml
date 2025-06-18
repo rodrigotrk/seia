@@ -19,6 +19,7 @@
 	<h3><h:outputLabel styleClass="titulo-grupo" value="COMPOSIÇÃO ACIONÁRIA" /></h3>
 	
 	<h:form id="formBotaoNovaComposicao">
+        <ui:include src="/layout/csrfToken.xhtml" />
 		<h:panelGrid columns="1" id="gridBotaoNovaComposicao">
 			
 			<h:panelGrid columns="2">
@@ -47,6 +48,7 @@
 	
 	-->
 	<h:form id="formGridComposicao">
+        <ui:include src="/layout/csrfToken.xhtml" />
 		<h:panelGrid id="gridComposicao" columns="1" rendered="#{participacaoAcionariaController.emptyList}">
 			<p:dataTable id="tableParticipacaoAcionaria" widgetVar="tableParticipacaoAcionaria" value="#{participacaoAcionariaController.participacaoAcionariaList}" 
 				var="parAcio" paginator="true" rows="10" paginatorAlwaysVisible="false" paginatorPosition="bottom">
@@ -112,6 +114,7 @@
 			header="Mensagem" severity="alert" resizable="false" styleClass="centered">
 			
 		<h:form id="formDialogConfirmationCompAcionaria">
+        <ui:include src="/layout/csrfToken.xhtml" />
 		   <p:commandButton value="#{bundle.consultapf_lbl_sim}" oncomplete="confirmationCompAcionaria.hide()"
 		        	actionListener="#{participacaoAcionariaController.excluirParticipacaoAcionaria()}"
 		        	update="tabviewpj:formBotaoNovaComposicao tabviewpj:formGridComposicao" />
@@ -131,6 +134,7 @@
 	-->
 	<p:dialog id="dialogCompAcionaria" header="Composição Acionária" widgetVar="dialogCompAcionaria" resizable="false" modal="true" closable="false" position="center center" onShow="dialogCompAcionaria.initPosition()"> 
 		<h:form id="formDialogCompAcionaria">
+        <ui:include src="/layout/csrfToken.xhtml" />
 			<h:panelGrid columns="1" id="paneldiaglogCompAcionaria">
 				<h:selectOneRadio valueChangeListener="#{participacaoAcionariaController.alterarLayout}" value="#{participacaoAcionariaController.telaCpf}" 
 					disabled="#{!participacaoAcionariaController.enableBotaoPesquisa or participacaoAcionariaController.editMode}">  

@@ -6,6 +6,7 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:p="http://primefaces.prime.com.tr/ui">
 	<h:form id="minLicCaracterizacaoAtividades">
+        <ui:include src="/layout/csrfToken.xhtml" />
 		<h:panelGrid id="gridMetodoLavra" style="margin-left:10px;">
 			<h:outputText styleClass="titulo-grupo-bold" value="* #{bundle.fce_lic_min_metodo_lavra}" />
 			<p:selectManyCheckbox 
@@ -67,7 +68,7 @@
 				value="#{fceLicenciamentoMineracaoController.fceLicenciamentoMineral.indExplosivos}"
 				disabled="#{fceLicenciamentoMineracaoController.desabilitarTudo}">
 				<f:selectItem itemLabel="Sim" itemValue="true" />
-				<f:selectItem itemLabel="N„o" itemValue="false" />
+				<f:selectItem itemLabel="N√£o" itemValue="false" />
 				<p:ajax event="change"/>
 			</p:selectOneRadio>
 		</h:panelGrid>
@@ -79,7 +80,7 @@
 				valueChangeListener="#{fceLicenciamentoMineracaoController.changeBeneficiamentoProprio()}"
 				disabled="#{fceLicenciamentoMineracaoController.desabilitarTudo}">
 				<f:selectItem itemLabel="Sim" itemValue="true" />
-				<f:selectItem itemLabel="N„o" itemValue="false" />
+				<f:selectItem itemLabel="N√£o" itemValue="false" />
 				<p:ajax event="change" update="tabLicMineracao:minLicCaracterizacaoAtividades:gridBeneficiamento"/>
 			</p:selectOneRadio>
 			
@@ -118,7 +119,7 @@
 						</p:column>
 
 						<p:column style="width: 35px; text-align:center;"
-							headerText="AÁ„o">
+							headerText="A√ß√£o">
 							<p:commandLink title="Adicionar" process="@this"
 								update="tabLicMineracao:minLicCaracterizacaoAtividades:gridProducao"
 								disabled="#{fceLicenciamentoMineracaoController.desabilitarTudo}"
@@ -164,7 +165,7 @@
 						</p:column>
 
 						<p:column style="width: 35px; text-align:center;"
-							headerText="AÁ„o">
+							headerText="A√ß√£o">
 							<p:commandLink
 								update="tabLicMineracao:minLicCaracterizacaoAtividades:dataTableConcetradoProdutoSelected"
 								actionListener="#{fceLicenciamentoMineracaoController.confirmarConcentrado()}"
@@ -225,7 +226,7 @@
 					
 					<p:column style="width: 80px; vertical-align: middle;">
 						<f:facet name="header">
-							¡rea <br/> ocupada (ha)
+							√Årea <br/> ocupada (ha)
 						</f:facet>
 						<h:outputText value="#{disposicaoRejeito.areaOcupada}" converter="bigConverterQuatroDecimais" 
 						rendered="#{!disposicaoRejeito.outros 
@@ -256,7 +257,7 @@
 						and !disposicaoRejeito.outros 
 						and !disposicaoRejeito.cavaExaurida 
 						and !disposicaoRejeito.naoSeAplica}"/>
-						<h:outputText value="N„o" 
+						<h:outputText value="N√£o" 
 						rendered="#{!disposicaoRejeito.indSistemaImpermeabilizacao 
 						and !disposicaoRejeito.outros 
 						and !disposicaoRejeito.cavaExaurida 
@@ -269,7 +270,7 @@
 					
 					<p:column style="width: 150px; vertical-align: middle;">
 						<f:facet name="header">
-							ClassificaÁ„o de acordo <br/> com a Portaria <br/> DNPM 416/2012
+							Classifica√ß√£o de acordo <br/> com a Portaria <br/> DNPM 416/2012
 						</f:facet>
 						<h:outputText value="#{disposicaoRejeito.classificacaoRejeitoDnpm.desClassificacaoRejeitoDnpm}" 
 						rendered="#{!disposicaoRejeito.outros 
@@ -281,7 +282,7 @@
     					or disposicaoRejeito.naoSeAplica}"/>
 					</p:column>
 					
-					<p:column style="width: 35px; text-align:center; vertical-align: middle;" headerText="AÁ„o">
+					<p:column style="width: 35px; text-align:center; vertical-align: middle;" headerText="A√ß√£o">
 						<p:commandLink oncomplete="dialogIncluirFormaDisposicaoRejeito.show()" 
 							update="dialogIncluirFormaDisposicaoRejeito"
 							disabled="#{fceLicenciamentoMineracaoController.desabilitarTudo}"
@@ -322,7 +323,7 @@
 					<h:outputText value="#{servidaoMineraria.nomServidaoMineraria}" />
 				</p:column>
 
-				<p:column style="width: 35px; text-align:center;" headerText="AÁ„o">
+				<p:column style="width: 35px; text-align:center;" headerText="A√ß√£o">
 					<p:commandLink title="Adicionar" process="@this"
 						update="tabLicMineracao:minLicCaracterizacaoAtividades:gridTableServidao"
 						disabled="#{fceLicenciamentoMineracaoController.desabilitarTudo}"
@@ -354,7 +355,7 @@
 				<p:column style="text-align:center; width:120px;">
 					<f:facet name="header">
 						<!-- <h:outputText value="#{bundle.fce_lic_min_area_comprimento}" /> -->
-						¡rea (m≤) /<br/> Comprimento (km)
+						√Årea (m¬≤) /<br/> Comprimento (km)
 					</f:facet>
 					<p:inputText value="#{fceLicMinServidaoMineraria.areaServidaoMineraria}" onkeyup="mascararNumeroAndAddZeros(this, event, 13, 2, '.', ',', 3);" maxlength="16" 
 						disabled="#{fceLicMinServidaoMineraria.confirmado}" style="width:100px;">
@@ -363,7 +364,7 @@
 					</p:inputText>
 				</p:column>
 
-				<p:column style="width: 35px; text-align:center;" headerText="AÁ„o">
+				<p:column style="width: 35px; text-align:center;" headerText="A√ß√£o">
 					<p:commandLink update="tabLicMineracao:minLicCaracterizacaoAtividades:dataTableServidaoSelected" actionListener="#{fceLicenciamentoMineracaoController.confirmarServidaoMineraria()}"
 						rendered="#{!fceLicMinServidaoMineraria.confirmado}" disabled="#{fceLicenciamentoMineracaoController.desabilitarTudo}" process="tabLicMineracao:minLicCaracterizacaoAtividades:dataTableServidaoSelected">
 						<h:graphicImage title="Confirmar" value="/resources/img/ico-aprovar-notificacao.png" />
@@ -422,7 +423,7 @@
 				valueChangeListener="#{fceLicenciamentoMineracaoController.changePossuiApp()}"
 				disabled="#{fceLicenciamentoMineracaoController.desabilitarTudo}">
 				<f:selectItem itemLabel="Sim" itemValue="true" />
-				<f:selectItem itemLabel="N„o" itemValue="false" />
+				<f:selectItem itemLabel="N√£o" itemValue="false" />
 				<p:ajax update="tabLicMineracao:minLicCaracterizacaoAtividades:gridTableApp" />
 			</p:selectOneRadio>
 
@@ -443,7 +444,7 @@
 					<h:outputText value="#{app.dscTipoApp}" />
 				</p:column>
 
-				<p:column style="width: 35px; text-align:center;" headerText="AÁ„o">
+				<p:column style="width: 35px; text-align:center;" headerText="A√ß√£o">
 					<p:commandLink title="Adicionar" process="@this"
 						update="tabLicMineracao:minLicCaracterizacaoAtividades:gridTableApp"
 						disabled="#{fceLicenciamentoMineracaoController.desabilitarTudo}"
@@ -472,7 +473,7 @@
 					<h:outputText value="#{fceLicenciamentoMineralTipoApp.tipoApp.dscTipoApp}" />
 				</p:column>
 
-				<p:column style="width: 35px; text-align:center;" headerText="AÁ„o">
+				<p:column style="width: 35px; text-align:center;" headerText="A√ß√£o">
 					<p:commandLink oncomplete="confirmaExclusaoAppMinerLic.show()"
 						title="Excluir" 
 						process="@this" 
@@ -486,7 +487,7 @@
 		<!-- PANELGRID BOTOES -->
 		<h:panelGrid id="gridBotoes" rendered="#{!fceLicenciamentoMineracaoController.desabilitarTudo}" columns="2" style="margin-top:40px; margin-left:575px;">
 			<p:commandButton id="btnVoltar" value="Voltar"  style="width:90px;" update="tabLicMineracao" action="#{fceLicenciamentoMineracaoController.voltarAba()}" global="false"/>
-			<p:commandButton id="btnAvancar" value="AvanÁar" style="width:90px;" update="tabLicMineracao" process="minLicCaracterizacaoAtividades" action="#{fceLicenciamentoMineracaoController.avancarAba()}" /> 
+			<p:commandButton id="btnAvancar" value="Avan√ßar" style="width:90px;" update="tabLicMineracao" process="minLicCaracterizacaoAtividades" action="#{fceLicenciamentoMineracaoController.avancarAba()}" /> 
 		</h:panelGrid>
 		<!-- FIM DO PANELGRID BOTOES -->
 	</h:form>

@@ -6,7 +6,9 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:p="http://primefaces.prime.com.tr/ui">
 
-	<h:outputLabel value="IDENTIFICAÇÃO DA PESSOA FÍSICA" styleClass="titulo-secundario" />
+        <ui:include src="/layout/csrfToken.xhtml" />
+        <ui:include src="/layout/csrfToken.xhtml" />
+	<h:outputLabel value="IDENTIFICAÃ‡ÃƒO DA PESSOA FÃSICA" styleClass="titulo-secundario" />
 	
 	<h:panelGrid columns="2">
 
@@ -52,7 +54,7 @@
 					disabled="#{not identificarPapelSolicitacaoController.pessoaSolicitacao.possuiRequerente}"
 					value="#{identificarPapelSolicitacaoController.solicitacao.requerente.pessoaFisica.nomPessoa}" 
 					required="#{true}"
-					requiredMessage="O campo Nome é de preenchimento obrigatório"
+					requiredMessage="O campo Nome Ã© de preenchimento obrigatÃ³rio"
 					/>
 					
 			</h:panelGrid>
@@ -64,7 +66,7 @@
 					disabled="#{not identificarPapelSolicitacaoController.pessoaSolicitacao.possuiRequerente}"
 					rendered="#{identificarPapelSolicitacaoController.pessoaSolicitacao.possuiRequerente}"
 					value="#{identificarPapelSolicitacaoController.solicitacao.requerente.pessoaFisica.dtcNascimento}"
-					requiredMessage="O campo Data de nascimento é de preenchimento obrigatório"
+					requiredMessage="O campo Data de nascimento Ã© de preenchimento obrigatÃ³rio"
 					navigator="true" readOnlyInputText="true" yearRange="c-200" mindate="01/01/1822" accesskey="true" showOn="button" locale="pt"
 					pattern="dd/MM/yyyy">
 					<f:validator validatorId="dataNascimentoValidator" />
@@ -86,17 +88,17 @@
 					disabled="#{not identificarPapelSolicitacaoController.pessoaSolicitacao.possuiRequerente}"
 					value="#{identificarPapelSolicitacaoController.solicitacao.requerente.desEmail}"
 					required="#{true}"
-					requiredMessage="O campo E-mail é de preenchimento obrigatório"
+					requiredMessage="O campo E-mail Ã© de preenchimento obrigatÃ³rio"
 					validator="emailValidator"
 					/>
 			</h:panelGrid>
 		
 			<h:panelGrid columns="1">
-				<h:outputLabel value="Nome da mãe" />
+				<h:outputLabel value="Nome da mÃ£e" />
 				<p:inputText 
 					disabled="#{not identificarPapelSolicitacaoController.pessoaSolicitacao.possuiRequerente}"
 					value="#{identificarPapelSolicitacaoController.solicitacao.requerente.pessoaFisica.nomMae}"
-					requiredMessage="O campo nome da mãe é de preenchimento obrigatório"
+					requiredMessage="O campo nome da mÃ£e Ã© de preenchimento obrigatÃ³rio"
 					/>
 			</h:panelGrid>
 		
@@ -106,7 +108,7 @@
 					disabled="#{not identificarPapelSolicitacaoController.pessoaSolicitacao.possuiRequerente}"
 					value="#{identificarPapelSolicitacaoController.solicitacao.requerente.pessoaFisica.desNaturalidade}"
 					required="#{not identificarPapelSolicitacaoController.solicitacao.cadastroSimplificado}"
-					requiredMessage="O campo Naturalidade é de preenchimento obrigatório"
+					requiredMessage="O campo Naturalidade Ã© de preenchimento obrigatÃ³rio"
 					/>
 			</h:panelGrid>
 			
@@ -115,7 +117,7 @@
 				<p:selectOneMenu
 					disabled="#{not identificarPapelSolicitacaoController.pessoaSolicitacao.possuiRequerente}"
 					value="#{identificarPapelSolicitacaoController.solicitacao.requerente.pessoaFisica.idePais}"
-					requiredMessage="O campo pais é de preenchimento obrigatório">
+					requiredMessage="O campo pais Ã© de preenchimento obrigatÃ³rio">
 					<f:selectItem itemLabel="Selecione..." />
 					<f:selectItems value="#{paisController.valuesComboBox}" />
 					<f:converter converterId="simpleEntityConverter" />

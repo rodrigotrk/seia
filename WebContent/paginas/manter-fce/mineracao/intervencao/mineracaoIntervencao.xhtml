@@ -7,7 +7,11 @@
 	xmlns:p="http://primefaces.prime.com.tr/ui">
 	
 	<!-- Dialog geral informativo relativo a selecao do item "Outros" em qualuqer lista conforme RN 20 atualizada ate a presente data (20/08/2013)-->
-	<p:confirmDialog widgetVar="infoFceOutros" header="#{bundle.geral_lbl_mensagem}" appendToBody="true" message="Favor entrar em contato com o INEMA atravÈs do e-mail atendimento.seia@inema.ba.gov.br para que o cadastro da opÁ„o desejada seja realizado." severity="alert">
+        <ui:include src="/layout/csrfToken.xhtml" />
+        <ui:include src="/layout/csrfToken.xhtml" />
+        <ui:include src="/layout/csrfToken.xhtml" />
+        <ui:include src="/layout/csrfToken.xhtml" />
+	<p:confirmDialog widgetVar="infoFceOutros" header="#{bundle.geral_lbl_mensagem}" appendToBody="true" message="Favor entrar em contato com o INEMA atrav√©s do e-mail atendimento.seia@inema.ba.gov.br para que o cadastro da op√ß√£o desejada seja realizado." severity="alert">
 		<h:form>
 			<p:commandButton value="Fechar" onclick="infoFceOutros.hide()" type="button" />
 		</h:form>
@@ -20,20 +24,20 @@
 		<div align="center">
 			<h:form>
 				<br/>
-				<h:outputText value="#{fceIntervencaoMineracaoController.msgImprimirRelatorio('IntervenÁ„o em Recursos HÌdricos para Fins de MineraÁ„o')}" />
+				<h:outputText value="#{fceIntervencaoMineracaoController.msgImprimirRelatorio('Interven√ß√£o em Recursos H√≠dricos para Fins de Minera√ß√£o')}" />
 				<br/>
 				<p:spacer width="1" height="30"/>
 				<br/>
 				<p:commandButton value="Sim" ajax="false" global="false" process="@this" onclick="dRelInterMineracao.hide();mineracaoIntervencao.hide();" style="margin-right:10px;">
 					<p:fileDownload value="#{fceIntervencaoMineracaoController.imprimirRelatorio}"/>
 				</p:commandButton>			
-				<p:commandButton value="N„o" onclick="dRelInterMineracao.hide();mineracaoIntervencao.hide();" process="@this"/>
+				<p:commandButton value="N√£o" onclick="dRelInterMineracao.hide();mineracaoIntervencao.hide();" process="@this"/>
 			</h:form>
 		</div>
 	</p:dialog>
 	
 	<!-- CONFIRM DIALOG EXCLUIR LOCALIZACAO GEOGRAFICA -->
-	<p:confirmDialog header="ConfirmaÁ„o"
+	<p:confirmDialog header="Confirma√ß√£o"
 		id="dialogExcluirLocGeoLancEfluente"  
 		widgetVar="dialogExcluirLocGeoLancEfluente" 
 		appendToBody="true" 
@@ -46,7 +50,7 @@
 				process="@this" 
 				update="formFceInterMineracao:dataTableIntervMine" />
 				
-			<p:commandButton value="N„o" 
+			<p:commandButton value="N√£o" 
 				onclick="dialogExcluirLocGeoLancEfluente.hide();" 
 				type="button" 
 				global="false" />
@@ -62,7 +66,7 @@
 		  draggable="true" 
 		  dynamic="true" 
 		  resizable="false" 
-		  header="IntervenÁ„o em Recursos HÌdricos para Fins de MineraÁ„o" 
+		  header="Interven√ß√£o em Recursos H√≠dricos para Fins de Minera√ß√£o" 
 		  modal="true"
 		  height="440"  		  
 		  width="1100">
@@ -82,7 +86,7 @@
 				    		<p:column style="text-align:center;width:150px" headerText="Ponto Fim">
 								<h:outputText value="#{fceIntervencaoMineracaoController.getPonto(intervencao.ideLocalizacaoGeograficaFim)}"/>
 				 		    </p:column>
-				    		<p:column style="text-align:center;" headerText="Bacia Hidrogr·fica">
+				    		<p:column style="text-align:center;" headerText="Bacia Hidrogr√°fica">
 				    			<h:outputText value="#{fceIntervencaoMineracaoController.getBacia(intervencao)}"/>
 				 		    </p:column>
 				    		<p:column style="text-align:center;" headerText="Manancial">
@@ -91,7 +95,7 @@
 				    		<p:column style="text-align:center;" headerText="RPGA">
 				    			<h:outputText value="#{fceIntervencaoMineracaoController.getRPGA(intervencao)}"/>
 				 		    </p:column>
-							<p:column headerText="AÁıes" style="text-align:center;">
+							<p:column headerText="A√ß√µes" style="text-align:center;">
 								<p:commandLink actionListener="#{fceIntervencaoMineracaoController.validarManancial(intervencao, true)}" update="formFceInterMineracao:dataTableIntervencao" rendered="#{!intervencao.editar}" disabled="#{fceIntervencaoMineracaoController.desabilitarTudo}">
 									<h:graphicImage value="/resources/img/ico-editar.png"/>
 								</p:commandLink>
@@ -104,13 +108,13 @@
 									<f:setPropertyActionListener target="#{fceIntervencaoMineracaoController.fceIntervencaoTipoCaracticasExtracao}" value="#{fceIntervencaoMineracaoController.montarFceIntervencaoTipoCaractExtracao()}" />
 								</p:commandLink>
 								<a onclick='javascript:#{fceIntervencaoMineracaoController.getUrlToVisualizar(intervencao.ideLocalizacaoGeograficaIni)}' accesskey="VISUALIZAR GEOBAHIA" style="cursor: pointer;" >
-									<h:graphicImage title="LocalizaÁ„o da Poligonal no Geobahia" value="/resources/img/ico-arl-relocacao.png"/>
+									<h:graphicImage title="Localiza√ß√£o da Poligonal no Geobahia" value="/resources/img/ico-arl-relocacao.png"/>
 								</a>
 							</p:column>
 				    	</p:dataTable>
 						<br/>
 						<h:panelGrid columns="1">
-							<h:outputText value="Coordenadas de lanÁamento do efluente" style="font-weight: bold;"/>
+							<h:outputText value="Coordenadas de lan√ßamento do efluente" style="font-weight: bold;"/>
 							
 							<p:commandLink oncomplete="dlgLocalizacaoGeograficaGeneric.show();"	action="#{localizacaoGeograficaGenericController.carregarTela()}" update="locGeograficaVertices"
 									actionListener="#{localizacaoGeograficaGenericController.limparLocalizacaoGeografSelecionada()}" process="@this"
@@ -121,7 +125,7 @@
 									<f:setPropertyActionListener target="#{localizacaoGeograficaGenericController.localizacaoGeograficaSelecionada}" value="#{fceIntervencaoMineracaoController.lancamentoEfluenteLocalizacaoGeografica.ideLocalizacaoGeografica}" />
 									<f:setPropertyActionListener target="#{localizacaoGeograficaGenericController.metodoAtualizarExterno}" value="#{fceIntervencaoMineracaoController.metodoRetornoCoordenada}" />
 								<h:graphicImage title="#{bundle.fce_lic_min_incluir_shape}" value="/resources/img/ico-expandir.png" style="margin-right: 2px;" />
-								<h:outputText value="Incluir LocalizaÁ„o Geogr·fica" style="cursor: initial;" />
+								<h:outputText value="Incluir Localiza√ß√£o Geogr√°fica" style="cursor: initial;" />
 							</p:commandLink>
 							
 							<h:panelGroup id="dataTableIntervMine">
@@ -143,7 +147,7 @@
 						    		
 						    		<p:column style="text-align:center;">
 							    		<f:facet name="header">
-							                  Vaz„o de lanÁamento<br/>no manancial (m3/dia)
+							                  Vaz√£o de lan√ßamento<br/>no manancial (m3/dia)
 							            </f:facet>
 							            
 						 		    	<p:inputText disabled="#{!lancEfLoc.editar or fceIntervencaoMineracaoController.desabilitarTudo}" 
@@ -151,7 +155,7 @@
 						 		    		required="false" converter="bigConverter"/>
 						 		    </p:column>
 									
-									<p:column headerText="AÁıes" style="width:60px; text-align:center;">
+									<p:column headerText="A√ß√µes" style="width:60px; text-align:center;">
 										<p:commandLink actionListener="#{fceIntervencaoMineracaoController.validarVazaoLancamentoManancial(lancEfLoc, true)}" 
 											rendered="#{!lancEfLoc.editar}" disabled="#{fceIntervencaoMineracaoController.desabilitarTudo}">
 											
@@ -172,20 +176,20 @@
 										<a onclick='javascript:#{fceIntervencaoMineracaoController.getUrlToVisualizar(lancEfLoc.ideLocalizacaoGeografica)}' 
 											accesskey="VISUALIZAR GEOBAHIA" style="cursor: pointer;" >
 											
-											<h:graphicImage title="LocalizaÁ„o da Poligonal no Geobahia" value="/resources/img/ico-arl-relocacao.png"/>
+											<h:graphicImage title="Localiza√ß√£o da Poligonal no Geobahia" value="/resources/img/ico-arl-relocacao.png"/>
 										</a>
 									</p:column>
 						    	</p:dataTable>
 						    	
 						    	<h:panelGrid rendered="#{!empty fceIntervencaoMineracaoController.fceIntervencaoMineracao.lancamentoEfluenteLocalizacoesGeografica}">
 							    	<h:panelGrid columns="3">
-										<h:outputText styleClass="titulo-grupo-bold" value="DescriÁ„o do tratamento do efluente" style="font-weight: bold;"/>
+										<h:outputText styleClass="titulo-grupo-bold" value="Descri√ß√£o do tratamento do efluente" style="font-weight: bold;"/>
 										<h:graphicImage value="/resources/img/ico-ajuda.png" id="descMinAjuda" style="margin: 3px 1px 2px 4px;" />
-										<p:tooltip for="descMinAjuda" value="DescriÁ„o do tratamento do efluente antes do lanÁamento no curso d'·gua." showEffect="fade" hideEffect="fade" />
+										<p:tooltip for="descMinAjuda" value="Descri√ß√£o do tratamento do efluente antes do lan√ßamento no curso d'√°gua." showEffect="fade" hideEffect="fade" />
 									</h:panelGrid>
 									
 									<p:inputTextarea value="#{fceIntervencaoMineracaoController.fceIntervencaoMineracao.dscTratamentoEfluente}" rows="5" cols="100" maxlength="500" autoResize="false" style="resize: none" disabled="#{fceIntervencaoMineracaoController.desabilitarTudo}"/>
-						  			<h:outputText value="Tamanho m·ximo: 500 caracteres" />
+						  			<h:outputText value="Tamanho m√°ximo: 500 caracteres" />
 						    	</h:panelGrid>
 							</h:panelGroup>
 						</h:panelGrid>

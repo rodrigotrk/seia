@@ -14,6 +14,7 @@
 	<ui:define name="conteudo-principal">
 		 
 		<h:form>
+        <ui:include src="/layout/csrfToken.xhtml" />
 <!-- 			<p:poll interval="1" listener="#{imovelRuralControllerNew.atualizarPoll}" widgetVar="imovelRuralPoll" global="false"/> -->
 		</h:form>
 	 
@@ -78,6 +79,7 @@
 			
 			
 		<h:form id="formCadImovelRural">
+        <ui:include src="/layout/csrfToken.xhtml" />
 			<p:remoteCommand name="msgQuestionario" update="growMsg" process="@this"/>
 			<p:wizard widgetVar="wiz" flowListener="#{imovelRuralControllerNew.onFlowProcess}"  backLabel="Anterior" nextLabel="Próximo"  showNavBar="true" showStepStatus="true">
 				
@@ -199,6 +201,7 @@
 		
 		<p:dialog dynamic="true" id="dlgCronogramaEtapa" header="Incluir Cronograma" closable="true" onShow="dlgCronogramaEtapa.initPosition();"  resizable="false" width="455" height="200" widgetVar="dlgCronogramaEtapa" modal="true">	
 			<h:form id="formCronogramaEtapa">
+        <ui:include src="/layout/csrfToken.xhtml" />
 				<h:panelGrid id="pnlCronogramaEtapa">
 					<h:outputLabel value="* Atividade"/>
 					
@@ -323,6 +326,7 @@
 		
 		<!--  Finalização cadastro -->
 		<h:form id="formBntFinalizar" >
+        <ui:include src="/layout/csrfToken.xhtml" />
 		<p:outputPanel autoUpdate="true">
 		<p:commandButton id="btnFinalizarCadastroImovelRural" 
 						 action="#{imovelRuralControllerNew.validaFinalizaCadImovelRuralRequerimento()}" 
@@ -452,6 +456,7 @@
 							 closable="false" 
 							 appendToBody="true">
 	    	<h:form>
+        <ui:include src="/layout/csrfToken.xhtml" />
 					<p:commandButton id="btnImovelDuplicadoSim" 
 									 value="#{bundle.btn_ok}"
 									 ajax="false"
@@ -466,6 +471,7 @@
 							 severity="alert" 
 							 widgetVar="confirmationCompAcionaria" >
 						 <h:form>
+        <ui:include src="/layout/csrfToken.xhtml" />
 					        <p:commandButton value="#{bundle.consultapf_lbl_sim}" 
 					        				 actionListener="#{imovelRuralControllerNew.excluirPessoaImovel()}" 
 					        				 oncomplete="confirmationCompAcionaria.hide()" 
@@ -480,6 +486,7 @@
 							 message="#{bundle.cefir_msg_A011}" 
 							 severity="alert">
 				<h:form>
+        <ui:include src="/layout/csrfToken.xhtml" />
 					<p:commandButton value="#{bundle.btn_sim}"
 									 action="#{imovelRuralControllerNew.excluirDadosQuestionario(true)}" process="@this"
 									 ajax="true"
@@ -512,6 +519,7 @@
 						 message="#{bundle.msg_confirma_exclusao}" 
 						 severity="alert">
 						 <h:form>
+        <ui:include src="/layout/csrfToken.xhtml" />
 			<p:commandButton id="btnConfirmaExclusaoAssociacaoIncra" 
 							 action="#{imovelRuralControllerNew.excluirAssociacaoIncra()}" 
 				 			 oncomplete="confirmaExclusaoAssociacaoIncra.hide()" 
@@ -540,6 +548,7 @@
 						 message="#{bundle.msg_confirma_exclusao}" 
 						 severity="alert">
 						 <h:form>
+        <ui:include src="/layout/csrfToken.xhtml" />
 			<p:commandButton id="btnConfirmaExclusaoAssentadoIncra" 
 							 action="#{imovelRuralControllerNew.excluirAssentadoIncraImovelRural()}" 
 				 			 oncomplete="confirmaExclusaoAssentadoIncra.hide()" 
@@ -573,6 +582,7 @@
 					 message="#{bundle.msg_confirma_exclusao}" 
 					 severity="alert">
 			<h:form>
+        <ui:include src="/layout/csrfToken.xhtml" />
 				<p:commandButton id="btnConfirmaExclusaoAssociacaoAssentadoIncra" 
 								 action="#{imovelRuralControllerNew.excluirAssociacaoAssentadoImovelRuralIncra()}" 
 					 			 oncomplete="confirmaExclusaoAssociacaoAssentadoIncra.hide()" 
@@ -590,7 +600,8 @@
    		<p:confirmDialog id="confirmaExclusaoArquivoPlanoManejo" 
    							 widgetVar="confirmaExclusaoArquivoPlanoManejo" header="#{bundle.geral_lbl_mensagem}"  
 							 message="#{bundle.msg_confirma_exclusao}" severity="alert">		
-			<h:form id="formAreaProdutivaModal">			 
+			<h:form id="formAreaProdutivaModal">
+        <ui:include src="/layout/csrfToken.xhtml" />			 
 				<p:commandButton id="btnConfirmaExclusaoArquivoPlanoManejo" 
 								 process="@this" action="#{imovelRuralControllerNew.excluirDocumentoPlanoManejo()}" 
 					 			 update=":formAreaProdutiva:panelDocumentoPlanoManejo" 
@@ -608,6 +619,7 @@
 					closable="false"
 					message="#{bundle.cefir_msg_validacao_licenca_area_produtiva}">
 			<h:form>
+        <ui:include src="/layout/csrfToken.xhtml" />
 				<p:commandButton id="btnOkAtividadeDesenvolvidaIncompleta"
 							value="#{bundle.btn_ok}"
 							onclick="dlgAtividaDesenvolvidaIncompleta.hide();"
@@ -622,6 +634,7 @@
 			message="#{bundle.messagem_004}" 
 			severity="alert">
 			<h:form>
+        <ui:include src="/layout/csrfToken.xhtml" />
 				<p:commandButton value="Sim" 
 					onclick="dialogExcluirPctPessoa.hide()"
 					actionListener="#{imovelRuralControllerNew.excluirPctFamilia()}"
@@ -642,6 +655,7 @@
 			message="#{bundle.messagem_004}" 
 			severity="alert">
 			<h:form>
+        <ui:include src="/layout/csrfToken.xhtml" />
 				<p:commandButton value="Sim" 
 					onclick="dialogExcluirPctPessoaJuridica.hide()"
 					actionListener="#{imovelRuralControllerNew.excluirPctPessoaJuridica()}"
@@ -659,6 +673,7 @@
 				header="Mensagem" severity="alert" widgetVar="confirmacaoAlterarAssociacaoComunidade"
 				id="confirmacaoAlterarAssociacaoComunidade" width="520" closable="false">
 			<h:form>
+        <ui:include src="/layout/csrfToken.xhtml" />
 				<p:commandButton value="Sim" 
 					onclick="confirmacaoAlterarAssociacaoComunidade.hide()"
 					actionListener="#{imovelRuralControllerNew.atualizarGridAssociacao()}"
@@ -679,6 +694,7 @@
 			message="#{bundle.messagem_004}" 
 			severity="alert">
 			<h:form>
+        <ui:include src="/layout/csrfToken.xhtml" />
 				<p:commandButton value="Sim" 
 					onclick="dialogExcluirSegmento.hide()"
 					actionListener="#{imovelRuralControllerNew.removerSegmento()}"

@@ -6,11 +6,12 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:p="http://primefaces.prime.com.tr/ui">
 	<h:form id="formResiduos">
+        <ui:include src="/layout/csrfToken.xhtml" />
 		<!-- PanelGrid RESIDUOS SOLIDOS -->
-		<h:outputText styleClass="titulo-grupo" style="font-weight:bold; margin-left:10px;" value="* Resíduos gerados ou a serem gerados" />
+		<h:outputText styleClass="titulo-grupo" style="font-weight:bold; margin-left:10px;" value="* ResÃ­duos gerados ou a serem gerados" />
 		<h:panelGrid style="margin-left:20px;">
 			<br />
-			<h:outputText styleClass="titulo-grupo" value="Informar classe conforme Classificação da Norma Técnica ABNT NBR 10004:2004" />
+			<h:outputText styleClass="titulo-grupo" value="Informar classe conforme ClassificaÃ§Ã£o da Norma TÃ©cnica ABNT NBR 10004:2004" />
 			<p:selectManyCheckbox value="#{fceIndustriaController.listaResiduoGeradosEscolhidos}" layout="pageDirection" 
 			converter="simpleEntityConverter" disabled="#{fceIndustriaController.desabilitarTudo}">
 				<f:selectItems value="#{fceIndustriaController.listaResiduoGerados}" var="residuos" itemLabel="#{residuos.dscTipoResiduoGerado}" itemValue="#{residuos}"/>
@@ -20,7 +21,7 @@
 		<br /><br />
 		
 		<h:panelGrid style="margin-left:20px;" rendered="#{fceIndustriaController.LIouLA}">
-			<h:outputText styleClass="titulo-grupo" value="Informar classe conforme Classificação da Resolução CONAMA nº 307/2002" />
+			<h:outputText styleClass="titulo-grupo" value="Informar classe conforme ClassificaÃ§Ã£o da ResoluÃ§Ã£o CONAMA nÂº 307/2002" />
 			<p:selectManyCheckbox value="#{fceIndustriaController.listaResiduoConsCivilsEscolhidos}" layout="pageDirection" 
 			converter="simpleEntityConverter" disabled="#{fceIndustriaController.desabilitarTudo}">
 				<f:selectItems value="#{fceIndustriaController.listaResiduoConsCivils}" var="residuosConstrucao" itemLabel="#{residuosConstrucao.dscTipoResiduoConsCivil}" itemValue="#{residuosConstrucao}"/>
@@ -29,7 +30,7 @@
 		</h:panelGrid>
 		
 		<h:panelGrid style="margin-left:10px; margin-top:20px;">
-			<h:outputText styleClass="titulo-grupo" style="margin-left:-10px;" value="* Destino dos resíduos" />
+			<h:outputText styleClass="titulo-grupo" style="margin-left:-10px;" value="* Destino dos resÃ­duos" />
 			<p:selectManyCheckbox value="#{fceIndustriaController.listaDestinoResiduosEscolhidos}" layout="pageDirection" 
 			converter="simpleEntityConverter" disabled="#{fceIndustriaController.desabilitarTudo}">
 				<f:selectItems value="#{fceIndustriaController.listaDestinoResiduos}" var="destinoResiduos" itemLabel="#{destinoResiduos.dscDestinoResiduo}" itemValue="#{destinoResiduos}"/>
@@ -41,7 +42,7 @@
 		<!-- PANELGRID gridBotoes -->
 		<h:panelGrid id="gridBotoes" rendered="#{!fceIndustriaController.desabilitarTudo}" columns="2" style="margin-top:40px;">
 			<p:commandButton id="btnVoltar" value="Voltar"  style="width:90px;" update="industriaAbas" process="formResiduos" action="#{fceIndustriaController.voltarAba()}" global="false"/>
-			<p:commandButton id="btnAvancar" value="Avançar" style="width:90px;" update="industriaAbas" process="formResiduos" action="#{fceIndustriaController.avancarAbaResiduos()}" global="false" />  
+			<p:commandButton id="btnAvancar" value="AvanÃ§ar" style="width:90px;" update="industriaAbas" process="formResiduos" action="#{fceIndustriaController.avancarAbaResiduos()}" global="false" />  
 		</h:panelGrid> 
 		<!-- FIM DO PANELGRID gridBotoes -->
 	</h:form>

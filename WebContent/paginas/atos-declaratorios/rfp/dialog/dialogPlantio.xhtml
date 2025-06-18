@@ -10,10 +10,11 @@
 	xmlns:s="http://java.sun.com/jsf/composite/seia">
 	
 	<h:form id="formPlantio" styleClass="col-12">
+        <ui:include src="/layout/csrfToken.xhtml" />
 		
 		<h:panelGrid styleClass="col-12">
 		
-			<h:outputText value="Situação atual da floresta" />
+			<h:outputText value="SituaÃ§Ã£o atual da floresta" />
 
 			<p:selectOneMenu 
 				disabled="#{registroFlorestaPlantadaController.ideRegistroFlorestaProducaoImovelPlantio.visualizar or registroFlorestaPlantadaController.ideRegistroFlorestaProducaoImovelPlantio.editar}"	
@@ -30,7 +31,7 @@
 		<h:panelGrid id="periodo" styleClass="col-12" >
 		
 			<h:panelGrid id="previsto"  rendered="#{registroFlorestaPlantadaController.visivelPeriodoPrevisto}"  styleClass="col-12" >
-				<h:outputText value="Período previsto da implantação"/>
+				<h:outputText value="PerÃ­odo previsto da implantaÃ§Ã£o"/>
 				<h:panelGrid columns="2">
 					<p:calendar disabled="#{registroFlorestaPlantadaController.ideRegistroFlorestaProducaoImovelPlantio.visualizar}" value="#{registroFlorestaPlantadaController.ideRegistroFlorestaProducaoImovelPlantio.dtInicioPrevistaImplantacao}" locale="pt" showOn="button" size="20"  pattern="dd/MM/yyyy"  readOnlyInputText="true"  />
 					<p:calendar disabled="#{registroFlorestaPlantadaController.ideRegistroFlorestaProducaoImovelPlantio.visualizar}" value="#{registroFlorestaPlantadaController.ideRegistroFlorestaProducaoImovelPlantio.dtFimPrevistaImplantacao}" locale="pt" showOn="button" size="20"  pattern="dd/MM/yyyy"  readOnlyInputText="true"  />
@@ -38,7 +39,7 @@
 			</h:panelGrid>
 	
 			<h:panelGrid id="implantacao" rendered="#{registroFlorestaPlantadaController.visivelPeriodoImplantacao}" styleClass="col-12">
-				<h:outputText value="Período da implantação" />
+				<h:outputText value="PerÃ­odo da implantaÃ§Ã£o" />
 				<h:panelGrid columns="2">
 					<p:calendar disabled="#{registroFlorestaPlantadaController.ideRegistroFlorestaProducaoImovelPlantio.visualizar}" value="#{registroFlorestaPlantadaController.ideRegistroFlorestaProducaoImovelPlantio.dtInicioPeriodoImplantacao}" locale="pt" showOn="button" size="20"  pattern="dd/MM/yyyy"  readOnlyInputText="true" />
 					<p:calendar disabled="#{registroFlorestaPlantadaController.ideRegistroFlorestaProducaoImovelPlantio.visualizar}" value="#{registroFlorestaPlantadaController.ideRegistroFlorestaProducaoImovelPlantio.dtFimPeriodoImplantacao}" locale="pt" showOn="button" size="20"  pattern="dd/MM/yyyy"  readOnlyInputText="true" />
@@ -72,13 +73,13 @@
 						<h:outputText value="#{ip.ideLocalizacaoGeografica.ideSistemaCoordenada.nomSistemaCoordenada}" />
 					</p:column>
 			
-					<p:column headerText="Área (ha)">
+					<p:column headerText="Ãrea (ha)">
 						<h:outputText value="#{ip.valAreaPlantio}" >
 							<f:convertNumber maxIntegerDigits="9" maxFractionDigits="4" pattern="###,##0.0000" locale="pt_BR"/>
 						</h:outputText>
 					</p:column>
 				
-					<p:column headerText="Ações">
+					<p:column headerText="AÃ§Ãµes">
 
 						<p:commandLink oncomplete="confirmExcluirGeo.show()" disabled="#{registroFlorestaPlantadaController.ideRegistroFlorestaProducaoImovelPlantio.visualizar}">
 							<f:setPropertyActionListener value="#{ip}" target="#{localizacaoGeograficaGenericController.objetoLocalizacao}" />

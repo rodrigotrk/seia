@@ -11,7 +11,8 @@
 		
 			<p:ajax event="tabChange" listener="#{pessoaFisicaController.onTabChange}" update="tabviewpf form_avancar " />
 			
-			<p:tab title="Dados Básicos">
+        <ui:include src="/layout/csrfToken.xhtml" />
+			<p:tab title="Dados BÃ¡sicos">
 				<ui:include src="/paginas/manter-pessoafisica/formCadastro.xhtml" />
 			</p:tab>
 			<p:tab title="Documentos" disabled="#{pessoaFisicaController.disableAbasDependencias}">
@@ -20,7 +21,7 @@
 			<p:tab title="Telefones" disabled="#{pessoaFisicaController.disableAbasDependencias}">
 				<ui:include src="/paginas/manter-pessoafisica/telefonePessoaFisica.xhtml" /> 
 			</p:tab>
-			<p:tab title="Endereço" disabled="#{pessoaFisicaController.disableAbasDependencias}">
+			<p:tab title="EndereÃ§o" disabled="#{pessoaFisicaController.disableAbasDependencias}">
 				<ui:include src="/paginas/manter-endereco/endereco.xhtml" />
 			</p:tab>
 			<p:tab title="Procurador" disabled="#{pessoaFisicaController.disableAbasDependencias}">
@@ -31,7 +32,7 @@
 		<h:form id="form_avancar">
 			<p:outputPanel id="pnlBotoes" autoUpdate="true">
 				<p:commandButton id="btnVoltar" value="Voltar"  update="tabviewpf form_avancar" action="#{pessoaFisicaController.decrementaIndexAba}"  rendered="#{pessoaFisicaController.visualizaAnterior}" style="float: left;"></p:commandButton>
-				<p:commandButton id="btnAvancar" value="Avançar" update="tabviewpf form_avancar" action="#{pessoaFisicaController.incrementaIndexAba}" rendered="#{pessoaFisicaController.visualizaProximo and !pessoaFisicaController.disableAbasDependencias}" style="float:right;"></p:commandButton>
+				<p:commandButton id="btnAvancar" value="AvanÃ§ar" update="tabviewpf form_avancar" action="#{pessoaFisicaController.incrementaIndexAba}" rendered="#{pessoaFisicaController.visualizaProximo and !pessoaFisicaController.disableAbasDependencias}" style="float:right;"></p:commandButton>
 				<p:commandButton id="btnFinalizar" value="Finalizar" action="#{pessoaFisicaController.finalizar}" rendered="#{pessoaFisicaController.visualizaFinalizar}" ajax="false" style="float:right;"></p:commandButton>
 			</p:outputPanel>
 		</h:form>

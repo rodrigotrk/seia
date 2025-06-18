@@ -7,6 +7,7 @@
 	xmlns:p="http://primefaces.prime.com.tr/ui">	
 	
 		<h:form id="formUnidade">
+        <ui:include src="/layout/csrfToken.xhtml" />
 			<h:panelGrid>
 				<h:outputLabel value="Nome:" style="font-weight:bold;"/>
 				<p:inputText id="txtNomeUnidade" value="#{unidadeEnderecoController.declaracaoInfoUnidade.nomUnidade}" 
@@ -14,26 +15,26 @@
 					<p:ajax event="change" process="@this"/>
 				</p:inputText>
 				
-				<h:outputLabel value="Área: " rendered="#{not declaracaoInexigibilidadeController.atividadeAreaInundada()}"  style="font-weight:bold;"/>
+				<h:outputLabel value="Ãrea: " rendered="#{not declaracaoInexigibilidadeController.atividadeAreaInundada()}"  style="font-weight:bold;"/>
 				<h:panelGrid columns="2" rendered="#{not declaracaoInexigibilidadeController.atividadeAreaInundada()}">
 					<p:inputText id="txtArea" value="#{unidadeEnderecoController.declaracaoInfoUnidade.valArea}"
 								disabled="#{!unidadeEnderecoController.permiteEditar}" onkeyup="maskIt(this, event, '999.999.999,99', true)" maxlength="14">
 						<f:convertNumber integerOnly="false" maxFractionDigits="2" maxIntegerDigits="9" pattern="#,##0.00" locale="pt_BR"/>
 						<p:ajax event="change" process="@this"/>
 					</p:inputText>
-					<h:outputLabel value="(m²)" rendered="#{not declaracaoInexigibilidadeController.atividadeAreaInundada() and not declaracaoInexigibilidadeController.atividadeRecuperacaoEstrada()}"  style="font-weight:bold;"/>
+					<h:outputLabel value="(mÂ²)" rendered="#{not declaracaoInexigibilidadeController.atividadeAreaInundada() and not declaracaoInexigibilidadeController.atividadeRecuperacaoEstrada()}"  style="font-weight:bold;"/>
 					<h:outputLabel value="(km)" rendered="#{declaracaoInexigibilidadeController.atividadeRecuperacaoEstrada()}"  style="font-weight:bold;"/>
 					<h:outputLabel value="(ha)" rendered="#{declaracaoInexigibilidadeController.atividadeAreaInundada()}"  style="font-weight:bold;"/>
 				</h:panelGrid>
 				
-				<h:outputLabel value="Área Inundada: " rendered="#{declaracaoInexigibilidadeController.atividadeAreaInundada}"  style="font-weight:bold;"/>
+				<h:outputLabel value="Ãrea Inundada: " rendered="#{declaracaoInexigibilidadeController.atividadeAreaInundada}"  style="font-weight:bold;"/>
 				<h:panelGrid columns="2" rendered="#{declaracaoInexigibilidadeController.atividadeAreaInundada}">
 					<p:inputText id="txtAreaInundada" value="#{unidadeEnderecoController.declaracaoInfoUnidade.valAreaInundada}" 
 								disabled="#{!unidadeEnderecoController.permiteEditar}" onkeyup="maskItQuatro(this, event, '99.999.999,9999')">
 						<f:converter converterId="bigConverterQuatroDecimais"/>
 						<p:ajax event="change" process="@this"/>
 					</p:inputText>
-					<h:outputLabel value="(m²)" rendered="#{not declaracaoInexigibilidadeController.atividadeAreaInundada() and not declaracaoInexigibilidadeController.atividadeRecuperacaoEstrada()}"  style="font-weight:bold;"/>
+					<h:outputLabel value="(mÂ²)" rendered="#{not declaracaoInexigibilidadeController.atividadeAreaInundada() and not declaracaoInexigibilidadeController.atividadeRecuperacaoEstrada()}"  style="font-weight:bold;"/>
 					<h:outputLabel value="(km)" rendered="#{declaracaoInexigibilidadeController.atividadeRecuperacaoEstrada()}"  style="font-weight:bold;"/>
 					<h:outputLabel value="(ha)" rendered="#{declaracaoInexigibilidadeController.atividadeAreaInundada()}"  style="font-weight:bold;"/>
 				</h:panelGrid>
@@ -41,7 +42,7 @@
 			<br/>
 			
 			<h:panelGrid rendered="#{!declaracaoInexigibilidadeController.atividadeRecuperacaoEstrada()}">
-				<h:outputLabel value="Endereço" style="font-weight:bold;"/>
+				<h:outputLabel value="EndereÃ§o" style="font-weight:bold;"/>
 				<h:outputLabel id="idlblcep" value="* CEP"  style="font-weight:bold;"/>
 				
 			<p:inputMask id="cep" 
@@ -106,7 +107,7 @@
 			</h:panelGrid>
 			
 			<h:panelGrid columns="2" id="panelmunicipioestado" width="100%">
-				<h:outputText id="idlblnumero" value="* Número" style="font-weight:bold;"/>
+				<h:outputText id="idlblnumero" value="* NÃºmero" style="font-weight:bold;"/>
 				<h:outputLabel id="idlblcomplemento" value="Complemento" style="font-weight:bold;"/>
 				
 				<p:inputText style="width: 70%"  

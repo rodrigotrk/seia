@@ -7,12 +7,13 @@
 	xmlns:p="http://primefaces.prime.com.tr/ui"
     xmlns:c="http://java.sun.com/jsp/jstl/core">
 
-	<p:dialog id="_dialogdetalheNotificacao" dynamic="true" widgetVar="dialogdetalheNotificacao" width="810" height="620" modal="true" closable="true" position="center" resizable="false" header="Detalhes da Notificação" >
+        <ui:include src="/layout/csrfToken.xhtml" />
+	<p:dialog id="_dialogdetalheNotificacao" dynamic="true" widgetVar="dialogdetalheNotificacao" width="810" height="620" modal="true" closable="true" position="center" resizable="false" header="Detalhes da NotificaÃ§Ã£o" >
 		<h:form id="frmDetalharNotificacao">
 			<h:panelGrid id="panelDetalharNotificacao" columns="1">  
 				<h3>
-					<h:outputText value="Detalhes da notificação" styleClass="titulo-grupo" rendered="#{detalheNotificacaoController.notificacao.notificacaoPrazo}" />
-					<h:outputText value="Detalhes da notificação de comunicação" styleClass="titulo-grupo" rendered="#{detalheNotificacaoController.notificacao.notificacaoComunicacao}" />
+					<h:outputText value="Detalhes da notificaÃ§Ã£o" styleClass="titulo-grupo" rendered="#{detalheNotificacaoController.notificacao.notificacaoPrazo}" />
+					<h:outputText value="Detalhes da notificaÃ§Ã£o de comunicaÃ§Ã£o" styleClass="titulo-grupo" rendered="#{detalheNotificacaoController.notificacao.notificacaoComunicacao}" />
 				</h3>
 				<h:outputText value="#{detalheNotificacaoController.notificacao.numNotificacao}" style="font-weight:bold"/>
 				<p:spacer width="50" height="10" />
@@ -20,9 +21,9 @@
 			
 				<h:panelGrid columns="4">
 					<p:spacer width="10" height="10" />
-					<h:outputText value="Número do Processo" style="font-weight:bold"/>
+					<h:outputText value="NÃºmero do Processo" style="font-weight:bold"/>
 					<p:spacer width="30" height="10" />
-					<h:outputText value="Data de Formação" style="font-weight:bold"/>
+					<h:outputText value="Data de FormaÃ§Ã£o" style="font-weight:bold"/>
 					
 					<p:spacer width="10" height="10" />
 					<h:outputText value="#{detalheNotificacaoController.notificacao.ideProcesso.numProcesso}"/>
@@ -34,7 +35,7 @@
 				
 				<h:panelGrid columns="4">
 					<p:spacer width="10" height="10" />
-					<h:outputText value="Nome/Razão Social" style="font-weight:bold"/>
+					<h:outputText value="Nome/RazÃ£o Social" style="font-weight:bold"/>
 					<p:spacer width="110" height="10" />
 					<h:outputText value="CPF/CNPJ" style="font-weight:bold"/>
 					
@@ -46,7 +47,7 @@
 				
 				<h:panelGrid columns="4">
 					<p:spacer width="10" height="10" />
-					<h:outputText value="Endereço" style="font-weight:bold"/>
+					<h:outputText value="EndereÃ§o" style="font-weight:bold"/>
 					<p:spacer width="110" height="10" />	
 					<h:outputText value="Empreendimento" style="font-weight:bold"/>
 					
@@ -61,7 +62,7 @@
 				
 				<h:panelGrid columns="4">
 					<p:spacer width="10" height="10" />
-					<h:outputText value="Número do Requerimento" style="font-weight:bold"/>
+					<h:outputText value="NÃºmero do Requerimento" style="font-weight:bold"/>
 					<p:spacer width="50" height="10" />
 					<h:outputText value="Data de Abertura" style="font-weight:bold"/>
 					
@@ -87,7 +88,7 @@
 					<h:panelGrid rendered="#{not empty detalheNotificacaoController.notificacao.notificacaoMotivoNotificacaoCollectionComShape}">
 						<br/>
 						
-						<h:outputText value="Solicitação de Shapes" style="margin-left: 16px;"/>
+						<h:outputText value="SolicitaÃ§Ã£o de Shapes" style="margin-left: 16px;"/>
 						
 						<p:dataTable var="nmn" value="#{detalheNotificacaoController.notificacao.notificacaoMotivoNotificacaoCollectionComShape}" 
 							style="margin-left: 30px;">
@@ -96,7 +97,7 @@
 								<h:outputText value="#{nmn.ideMotivoNotificacao.nomMotivoNotificacao}" />
 							</p:column>
 							
-							<p:column headerText="Imóvel" rendered="#{detalheNotificacaoController.existePeloMenosUmImovel}">
+							<p:column headerText="ImÃ³vel" rendered="#{detalheNotificacaoController.existePeloMenosUmImovel}">
 								<ui:repeat var="imv" value="#{nmn.motivoNotificacaoImovelCollection}">
 									<h:outputText value="#{imv.ideImovel.nomeImovelRural}" rendered="#{not empty imv.ideImovel.nomeImovelRural}"/>
 									<h:outputText value=" ---- " rendered="#{empty imv.ideImovel.nomeImovelRural}"/>
@@ -122,18 +123,18 @@
 					<h:outputText value="#{detalheNotificacaoController.notificacao.validadeEmDias} dias" />
 				</h:panelGrid>
 				
-				<h3><h:outputLabel styleClass="titulo-grupo" value="Texto da Notificação Final" /></h3>
+				<h3><h:outputLabel styleClass="titulo-grupo" value="Texto da NotificaÃ§Ã£o Final" /></h3>
 				<h:panelGrid columns="2">
 					<p:spacer width="10" height="10" />
 					<h:inputTextarea value="#{detalheNotificacaoController.notificacao.dscNotificacao}" disabled="true" rows="5" cols="118" />
 				</h:panelGrid>
 				<br/>
-				<h3 ><h:outputLabel styleClass="titulo-grupo" value="Notificação Parcial" /></h3>
+				<h3 ><h:outputLabel styleClass="titulo-grupo" value="NotificaÃ§Ã£o Parcial" /></h3>
 				
 				<p:dataTable var="notificacao" value="#{detalheNotificacaoController.notificacao.notificacaoParcialCollection}"
 					emptyMessage="Nenhum registro encontrado.">
 					
-					<p:column headerText="Data de criação" style="text-align: center;">
+					<p:column headerText="Data de criaÃ§Ã£o" style="text-align: center;">
 						<h:outputText value="#{notificacao.dtcCriacao}" >
 							<f:convertDateTime pattern="dd/MM/yyyy" locale="pt,BR" timeZone="Brazil/East"/>
 						</h:outputText>
@@ -143,13 +144,13 @@
 						<h:outputText value="#{notificacao.indEmissaoString}" />
 					</p:column>
 					
-					<p:column headerText="Técnico Responsável" style="text-align: center;">
+					<p:column headerText="TÃ©cnico ResponsÃ¡vel" style="text-align: center;">
 						<h:outputText value="#{notificacao.idePauta.idePessoaFisica.pessoaFisica.nomPessoa}" />
 					</p:column>
 					
 					<p:column headerText="Visualizar" style="text-align: center;">
 						<p:commandLink onclick="dialogoVisualizarNP.show();" update=":frmDialogoVisualizarNP">
-							<h:graphicImage title="Visualizar Notificação Parcial" value="/resources/img/ico-pesquisa.png" />
+							<h:graphicImage title="Visualizar NotificaÃ§Ã£o Parcial" value="/resources/img/ico-pesquisa.png" />
 			            	<f:setPropertyActionListener value="#{notificacao}" target="#{notificacaoParcialController.notificacaoParcial}" />
 			            </p:commandLink>			            
 					</p:column>					

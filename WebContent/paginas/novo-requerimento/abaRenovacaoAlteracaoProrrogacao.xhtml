@@ -18,10 +18,11 @@
 	</p:layoutUnit>
 	
 	<h:form id="formAbaRenovacao">
+        <ui:include src="/layout/csrfToken.xhtml" />
 	
 		<h:panelGrid>
 			<h:panelGroup>
-				<h:outputLabel value="* 1. Definir solicitação quanto aos atos administrativos concedidos pelo INEMA:" />
+				<h:outputLabel value="* 1. Definir solicitaÃ§Ã£o quanto aos atos administrativos concedidos pelo INEMA:" />
 			</h:panelGroup>
 		</h:panelGrid>
 		
@@ -40,7 +41,7 @@
 						   disabled="#{novoRequerimentoController.desabilitarTudo or (abaRenovacaoAlteracaoProrrogacaoController.licencas != null and not empty abaRenovacaoAlteracaoProrrogacaoController.licencas)}"
 						   action="#{renovarAlterarLicencaController.load()}">
 				<h:graphicImage title="Incluir..." value="/resources/img/ico-expandir.png" style="margin-right: 2px;" />
-				<h:outputText value="Incluir dados da licença" />
+				<h:outputText value="Incluir dados da licenÃ§a" />
 			</p:commandLink>
 
 			<p:dataTable id="tableLicenca" var="licenca" value="#{abaRenovacaoAlteracaoProrrogacaoController.licencas}" emptyMessage="#{bundle.consultapf_msg_empty_list}"
@@ -54,7 +55,7 @@
 					<h:outputText value="#{licenca.numProcessoLicenca}" />
 				</p:column>
 				
-				<p:column style="width:auto;" headerText="Número da Portaria">
+				<p:column style="width:auto;" headerText="NÃºmero da Portaria">
 					<h:outputText value="#{licenca.numPortariaLicenca}" />
 				</p:column>
 				
@@ -62,7 +63,7 @@
 					<h:outputText value="#{licenca.dataValidadeLicencaFormatado}" />
 				</p:column>
 				
-				<p:column headerText="Ações">
+				<p:column headerText="AÃ§Ãµes">
 				
 					<p:commandLink id="visualizar" update=":formDialogRenAltLicenca" oncomplete="dialogIncluirLicenca.show()" 
 						action="#{renovarAlterarLicencaController.visualizar(licenca)}" rendered="#{novoRequerimentoController.desabilitarTudo}">
@@ -114,7 +115,7 @@
 					<h:outputText value="#{outorga.numProcessoOutorga}" />
 				</p:column>
 			
-				<p:column style="width:auto;" headerText="Número da Portaria">
+				<p:column style="width:auto;" headerText="NÃºmero da Portaria">
 					<h:outputText value="#{outorga.numPortariaOutorga}" />
 				</p:column>
 			
@@ -122,7 +123,7 @@
 					<h:outputText value="#{outorga.dtcValidadeOutorgaFormatado}"/>
 				</p:column>
 			
-				<p:column headerText="Ações">
+				<p:column headerText="AÃ§Ãµes">
 		
 					<p:commandLink oncomplete="dialogAlterCancelOutorga.show()" action="#{renovarAlterarOutorgaController.editar(outorga)}" update="formDialogAlterCancelOutorga"  
 							rendered="#{novoRequerimentoController.desabilitarTudo}">
@@ -148,8 +149,8 @@
 			
 			
 			<h:panelGrid rendered="#{abaRenovacaoAlteracaoProrrogacaoController.perguntaNR_A2_P2.indResposta}">
-				<h:outputText value="1.1 Vazão Total:" />
-				<p:inputText id="fdVazaoTotal" value="#{novoRequerimentoController.empreendimentoRequerimento.numVazaoTotal}" alt="Valor Total da Vazão" title="Valor Total da Vazão"
+				<h:outputText value="1.1 VazÃ£o Total:" />
+				<p:inputText id="fdVazaoTotal" value="#{novoRequerimentoController.empreendimentoRequerimento.numVazaoTotal}" alt="Valor Total da VazÃ£o" title="Valor Total da VazÃ£o"
 							 onkeyup="maskIt(this, event, '99.999.999,99', true)" disabled="#{novoRequerimentoController.desabilitarTudo}" converter="bigConverter">
 							<p:ajax event="blur" process="@this"  />
 				</p:inputText>
@@ -162,7 +163,7 @@
 					<p:selectOneRadio value="#{abaRenovacaoAlteracaoProrrogacaoController.perguntaNR_A2_P6.indResposta}" 
 									  valueChangeListener="#{abaRenovacaoAlteracaoProrrogacaoController.valueChangeDesmarcarPerguntaNRA2P6()}" disabled="#{novoRequerimentoController.desabilitarTudo}">
 						<f:selectItem itemLabel="Sim" itemValue="true" />
-						<f:selectItem itemLabel="Não" itemValue="false" />
+						<f:selectItem itemLabel="NÃ£o" itemValue="false" />
 						<p:ajax process="@this" update="subViewAbas:tabAbasId:formAbaRenovacao:pnlRenovAlterarCancelOutorga_ativa"  />
 					</p:selectOneRadio>
 				</h:panelGrid>
@@ -177,7 +178,7 @@
 			<h:panelGroup>
 				<h:outputLabel value="#{abaRenovacaoAlteracaoProrrogacaoController.perguntaNR_A2_P3.idePergunta.dscPergunta}" />
 				<h:graphicImage value="/resources/img/ico-ajuda.png" id="ajuda3" style="vertical-align: sub" />
-				<p:tooltip for="ajuda3" value="As licenças ou autorizações ambientais poderão ter os seus prazos de validade prorrogados pelo órgão ambiental licenciador, com base em justificativa técnica, uma única vez, devendo o requerimento ser fundamentado pelo empreendedor no prazo mínimo de 60 (sessenta) dias antes do vencimento (conforme Art. 160 do Decreto nº 14.024 de 06/06/2012)." showEffect="fade"	hideEffect="fade" />
+				<p:tooltip for="ajuda3" value="As licenÃ§as ou autorizaÃ§Ãµes ambientais poderÃ£o ter os seus prazos de validade prorrogados pelo Ã³rgÃ£o ambiental licenciador, com base em justificativa tÃ©cnica, uma Ãºnica vez, devendo o requerimento ser fundamentado pelo empreendedor no prazo mÃ­nimo de 60 (sessenta) dias antes do vencimento (conforme Art. 160 do Decreto nÂº 14.024 de 06/06/2012)." showEffect="fade"	hideEffect="fade" />
 			</h:panelGroup>
 		</h:panelGrid>
 	
@@ -185,7 +186,7 @@
 			<p:commandLink  oncomplete="prorrogPrazoValidade.show()"  update="formProrrogarPrazoValidade" rendered="#{abaRenovacaoAlteracaoProrrogacaoController.perguntaNR_A2_P3.indResposta}" disabled="#{novoRequerimentoController.desabilitarTudo}"
 				action="#{prorrogacaoPrazoValidadeController.load()}">
 				<h:graphicImage title="imagem" value="/resources/img/ico-expandir.png" style="margin-right: 2px;"/>
-				<h:outputText value="Incluir os dados para prorrogação de prazo de validade" />
+				<h:outputText value="Incluir os dados para prorrogaÃ§Ã£o de prazo de validade" />
 			</p:commandLink>
 
 			<p:dataTable var="pPrazoValidade" rendered="#{abaRenovacaoAlteracaoProrrogacaoController.perguntaNR_A2_P3.indResposta}" value="#{abaRenovacaoAlteracaoProrrogacaoController.prorrogacoes}"
@@ -196,14 +197,14 @@
 				<p:column style="width:auto;" headerText="Processo">
 					<h:outputText value="#{pPrazoValidade.numProcesso}" />
 				</p:column>
-				<p:column style="width:auto;" headerText="Número da Portaria">
-					<h:outputText value="#{pPrazoValidade.numPortaria == null ? 'Não há' : pPrazoValidade.numPortaria}" />
+				<p:column style="width:auto;" headerText="NÃºmero da Portaria">
+					<h:outputText value="#{pPrazoValidade.numPortaria == null ? 'NÃ£o hÃ¡' : pPrazoValidade.numPortaria}" />
 				</p:column>
 				<p:column style="width:auto;" headerText="Data de validade">
 					<h:outputText value="#{pPrazoValidade.dtcValidadeFormatado}" />
 				</p:column>
 
-				<p:column style="text-align: center;" headerText="Ações">
+				<p:column style="text-align: center;" headerText="AÃ§Ãµes">
 					<p:commandLink update="formProrrogarPrazoValidade formProrrogarPrazoValidade:tipoProrrogacaoDataTable" action="#{prorrogacaoPrazoValidadeController.editar(pPrazoValidade)}"
 						oncomplete="prorrogPrazoValidade.show();esconderCheck();"  rendered="#{!novoRequerimentoController.desabilitarTudo}">
 						<h:graphicImage title="Editar" value="/resources/img/ico-alterar.png" />
@@ -230,7 +231,7 @@
 			<p:commandLink  oncomplete="dialogRevisaoCondicionantes.show()" immediate="true" update="formRevisaoCondicionantes" rendered="#{abaRenovacaoAlteracaoProrrogacaoController.perguntaNR_A2_P4.indResposta}" disabled="#{novoRequerimentoController.desabilitarTudo}"
 				action="#{revisaoCondicionantesController.load()}">
 				<h:graphicImage title="imagem" value="/resources/img/ico-expandir.png" style="margin-right: 2px;"/>
-				<h:outputText value="Incluir dados do processo de revisão de condicionante(s)" />
+				<h:outputText value="Incluir dados do processo de revisÃ£o de condicionante(s)" />
 			</p:commandLink>
 
 			<p:dataTable id="tabelaRevisaoCondicionantes" var="cond" value="#{abaRenovacaoAlteracaoProrrogacaoController.condicionantes}"
@@ -241,13 +242,13 @@
 				<p:column style="width:auto;" headerText="Processo">
 					<h:outputText value="#{cond.numProcesso}" />
 				</p:column>
-				<p:column style="width:auto;" headerText="Número da Portaria">
+				<p:column style="width:auto;" headerText="NÃºmero da Portaria">
 					<h:outputText value="#{cond.numPortaria}" />
 				</p:column>
 				<p:column style="width:auto;" headerText="Data de validade">
 					<h:outputText value="#{cond.dtcValidadeFormatado}" />
 				</p:column>
-				<p:column style="width:auto;" headerText="Ações">
+				<p:column style="width:auto;" headerText="AÃ§Ãµes">
 					<p:commandLink  oncomplete="dialogRevisaoCondicionantes.show()" process="@this" action="#{revisaoCondicionantesController.editar(cond)}" 
 								   update="formRevisaoCondicionantes:panelGridRevisao" rendered="#{!novoRequerimentoController.desabilitarTudo}">
 						<h:graphicImage title="Editar" value="/resources/img/ico-alterar.png"/>
@@ -271,7 +272,7 @@
 	
 		<h:panelGrid columns="4" style="margin-top:40px;">
 			<p:commandButton id="btnVoltar" value="Voltar" action="#{novoRequerimentoController.voltarAbas()}" update="subViewAbas:tabAbasId"  style="width:90px;" />
-			<p:commandButton id="btnAvancar" value="Avançar" action="#{novoRequerimentoController.avancarAbas()}" update="subViewAbas:tabAbasId"  style="width:90px;"  />
+			<p:commandButton id="btnAvancar" value="AvanÃ§ar" action="#{novoRequerimentoController.avancarAbas()}" update="subViewAbas:tabAbasId"  style="width:90px;"  />
 			<p:spacer width="400" height="10"/>
 			<p:commandButton id="btnSalvarParcialmente" style="float:right;" value="Salvar" action="#{abaRenovacaoAlteracaoProrrogacaoController.salvarAba()}" process="@form" 
 							 update="formAbaRenovacao subViewAbas:tabAbasId"  disabled="#{novoRequerimentoController.desabilitarTudo}"/>

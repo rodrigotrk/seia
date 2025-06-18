@@ -6,23 +6,24 @@ xmlns:f="http://java.sun.com/jsf/core"
 xmlns:ui="http://java.sun.com/jsf/facelets" 
 xmlns:p="http://primefaces.prime.com.tr/ui">
 	<h:form id="formPulverizacao" style="width:800px">
+        <ui:include src="/layout/csrfToken.xhtml" />
 		
 		<p:outputPanel id="tipologia"> 
 			<h:panelGrid id="gridTipologia">
 				<h:panelGroup>
-					<h:outputText styleClass="titulo-grupo" style="font-weight:bold;" value="* Tipologia da Pulverização"/>
+					<h:outputText styleClass="titulo-grupo" style="font-weight:bold;" value="* Tipologia da PulverizaÃ§Ã£o"/>
 				</h:panelGroup>
 				<p:selectOneRadio style="margin-left:10px;" layout="pageDirection" value="#{fcePulverizacaoController.fcePulverizacao.tipologiaPulverizacao}" 
 				converter="simpleEntityConverter" disabled="#{fcePulverizacaoController.desabilitarTudo}">  
 		        	<f:selectItems value="#{fcePulverizacaoController.listaTipoPulverizacao}" var="escolhido" itemLabel="#{escolhido.dscTipologiaPulverizacao}" itemValue="#{escolhido}"/> 
 		        	<p:ajax global="false"/>
 		    	</p:selectOneRadio>	
-			</h:panelGrid> <!-- FIM DO PANELGRID Tipologia Pulverização -->
-		</p:outputPanel> <!-- FIM DO PANEL Tipologia Pulverização -->
+			</h:panelGrid> <!-- FIM DO PANELGRID Tipologia PulverizaÃ§Ã£o -->
+		</p:outputPanel> <!-- FIM DO PANEL Tipologia PulverizaÃ§Ã£o -->
 
         <p:outputPanel id="metodo"> 
 			<br />
-			<h:outputText styleClass="titulo-grupo" style="font-weight:bold;" value="* Método de Pulverização" />
+			<h:outputText styleClass="titulo-grupo" style="font-weight:bold;" value="* MÃ©todo de PulverizaÃ§Ã£o" />
 			<br /><br />	
 			<h:panelGrid id="gridTerrestre" columns="2" style="width:600px; height:35px; margin-left:10px;">
 				<h:panelGroup style="width:250px;">
@@ -34,7 +35,7 @@ xmlns:p="http://primefaces.prime.com.tr/ui">
 				</h:panelGroup>
 				<p:spacer id="space01" rendered="#{!fcePulverizacaoController.fcePulverizacao.indPulverizacaoTerrestre}"/>
 				<h:panelGroup rendered="#{fcePulverizacaoController.fcePulverizacao.indPulverizacaoTerrestre}">
-					<h:outputText value="Área" />
+					<h:outputText value="Ãrea" />
 					<p:inputText value="#{fcePulverizacaoController.fcePulverizacao.numVolumeTerrestre}" disabled="#{fcePulverizacaoController.desabilitarTudo}"
 					onkeyup="maskIt(this, event, '99.999.999,99', true)" onblur="maskIt(this, event, '99.999.999,99', true)" style="margin-left:5px; width:80px;">
 						<f:convertNumber integerOnly="false" minFractionDigits="2"/>
@@ -50,11 +51,11 @@ xmlns:p="http://primefaces.prime.com.tr/ui">
 					valueChangeListener="#{fcePulverizacaoController.changeMetodoAereo()}">  
 		           		<p:ajax update="gridAereo space02" global="false"/>  
 				    </p:selectBooleanCheckbox>
-					<h:outputText value="Aérea"/>
+					<h:outputText value="AÃ©rea"/>
 				</h:panelGroup>
 				<p:spacer id="space02" rendered="#{!fcePulverizacaoController.fcePulverizacao.indPulverizacaoAerea}"/>
 				<h:panelGroup rendered="#{fcePulverizacaoController.fcePulverizacao.indPulverizacaoAerea}" style="margin-left:75px;">
-					<h:outputText value="Área" />
+					<h:outputText value="Ãrea" />
 					<p:inputText value="#{fcePulverizacaoController.fcePulverizacao.numVolumeAerea}" disabled="#{fcePulverizacaoController.desabilitarTudo}"
 					onkeyup="maskIt(this, event, '99.999.999,99', true)" onblur="maskIt(this, event, '99.999.999,99', true)" style="margin-left:5px; width:80px;">
 						<f:convertNumber integerOnly="false" minFractionDigits="2"/>
@@ -63,7 +64,7 @@ xmlns:p="http://primefaces.prime.com.tr/ui">
 					<h:outputText value="   (ha)" />
 				</h:panelGroup>
 			</h:panelGrid> <!-- FIM DO GRID Aereo -->
-        </p:outputPanel> <!-- FIM DO PANEL Metodo Pulverização -->
+        </p:outputPanel> <!-- FIM DO PANEL Metodo PulverizaÃ§Ã£o -->
         
 		<p:outputPanel id="culturas">
 			<br />
@@ -93,7 +94,7 @@ xmlns:p="http://primefaces.prime.com.tr/ui">
 						<h:outputText value="#{cultura.dscTipologiaAtividade}" />
 					</p:column>
 					
-					<p:column style="width: 35px; text-align:center;" headerText="Ações">
+					<p:column style="width: 35px; text-align:center;" headerText="AÃ§Ãµes">
 						<p:commandLink title="Adicionar" process="@this"
 							update="pulverizacaoAbas:formPulverizacao:culturas"
 							disabled="#{fcePulverizacaoController.desabilitarTudo}"  
@@ -114,7 +115,7 @@ xmlns:p="http://primefaces.prime.com.tr/ui">
 						<h:outputText value="#{fceAtividadeArea.ideTipologiaAtividade.dscTipologiaAtividade}" />
 					</p:column>
 					
-					<p:column headerText="Área" style="width:115px; text-align:center;">
+					<p:column headerText="Ãrea" style="width:115px; text-align:center;">
 						<h:panelGroup rendered="#{!fceAtividadeArea.ideTipologiaAtividade.outros}">
 							<p:inputText id="area" value="#{fceAtividadeArea.numArea}" onkeyup="maskIt(this, event, '99.999.999,99', true)" onblur="maskIt(this, event, '99.999.999,99', true)" 
 							style="align:center; width:70px;" disabled="#{fceAtividadeArea.confirmado or fcePulverizacaoController.desabilitarTudo}">
@@ -125,7 +126,7 @@ xmlns:p="http://primefaces.prime.com.tr/ui">
 						</h:panelGroup>
 					</p:column>
 					
-					<p:column headerText="Ações" style="width:35px; text-align:center;">
+					<p:column headerText="AÃ§Ãµes" style="width:35px; text-align:center;">
 						<p:commandLink update="pulverizacaoAbas:formPulverizacao:gridCulturas" action="#{fcePulverizacaoController.confirmarCultura()}"
 						rendered="#{!fceAtividadeArea.confirmado and !fceAtividadeArea.ideTipologiaAtividade.outros}" global="false" 
 						disabled="#{fcePulverizacaoController.desabilitarTudo}">
@@ -145,7 +146,7 @@ xmlns:p="http://primefaces.prime.com.tr/ui">
 					
 					<p:columnGroup type="footer">  
 			            <p:row>  
-			                <p:column footerText="ÁREA TOTAL PULVERIZADA" style="text-align:left"  />  
+			                <p:column footerText="ÃREA TOTAL PULVERIZADA" style="text-align:left"  />  
 			                <p:column footerText="#{fceAtividadeAreaController.somatorioAreaTotalCultura}" colspan="2" style="text-align:left" rendered="#{fceAtividadeAreaController.areaTotalCalculada}"/>
 			                <p:column colspan="2" rendered="#{!fceAtividadeAreaController.areaTotalCalculada}"/>
 			            </p:row>  
@@ -153,7 +154,7 @@ xmlns:p="http://primefaces.prime.com.tr/ui">
 				</p:dataTable> <!-- FIM DATATABLE tableProdutos -->
 				<br />
 				<h:panelGroup rendered="#{fceAtividadeAreaController.culturaAdicionada}" id="areaPulverizada" style="margin-left:30px;">
-					<h:outputText value="Área a ser pulverizada por dia " />
+					<h:outputText value="Ãrea a ser pulverizada por dia " />
 					<p:inputText value="#{fcePulverizacaoController.fcePulverizacao.numAreaPulverizada}" disabled="#{fcePulverizacaoController.desabilitarTudo}"
 					onkeyup="maskIt(this, event, '99.999.999,99', true)" onblur="maskIt(this, event, '99.999.999,99', true)" style="margin-left:5px; width:80px;">
 						<f:convertNumber integerOnly="false" minFractionDigits="2"/>
@@ -167,22 +168,22 @@ xmlns:p="http://primefaces.prime.com.tr/ui">
         
         <p:outputPanel id="derivacao"> 
 			<h:panelGrid id="gridDerivacao">
-				<h:outputText styleClass="titulo-grupo" style="font-weight:bold;" value="* Derivação" />
+				<h:outputText styleClass="titulo-grupo" style="font-weight:bold;" value="* DerivaÃ§Ã£o" />
 				<h:panelGroup style="margin-left:10px;">
-					<h:outputText value="Vazão" />
+					<h:outputText value="VazÃ£o" />
 					<p:inputText value="#{fcePulverizacaoController.fcePulverizacao.numVolumeDerivar}" disabled="#{fcePulverizacaoController.desabilitarTudo}"
 					onkeyup="mascararNumeroAndAddZeros(this, event, 9, 3, '.', ',', 3);" style="margin-left:5px; width:80px;" maxlength="15">
 						<f:convertNumber integerOnly="false" minFractionDigits="3"/>
 						<p:ajax event="blur" global="false"/>
 					</p:inputText>
-				<h:outputText value="   (m³/dia)" />
+				<h:outputText value="   (mÂ³/dia)" />
 			</h:panelGroup>
-			</h:panelGrid> <!-- FIM DO PANELGRID Tipologia Pulverização -->
-		</p:outputPanel> <!-- FIM DO PANEL Tipologia Pulverização -->
+			</h:panelGrid> <!-- FIM DO PANELGRID Tipologia PulverizaÃ§Ã£o -->
+		</p:outputPanel> <!-- FIM DO PANEL Tipologia PulverizaÃ§Ã£o -->
         
 		<h:panelGrid id="gridBotoes" rendered="#{!fcePulverizacaoController.desabilitarTudo}" columns="2" style="margin-top:40px;">
 			<p:commandButton id="btnVoltar" value="Voltar" style="width:90px;" oncomplete="confirmationVoltarPulverizacao.show()" global="false"/>
-		 	<p:commandButton id="btnAvancar" value="Avançar" style="width:90px;" update="pulverizacaoAbas" process="formPulverizacao" action="#{fcePulverizacaoController.avancarAba()}" global="false"/>
+		 	<p:commandButton id="btnAvancar" value="AvanÃ§ar" style="width:90px;" update="pulverizacaoAbas" process="formPulverizacao" action="#{fcePulverizacaoController.avancarAba()}" global="false"/>
 		</h:panelGrid> <!-- FIM DO PANELGRID gridBotoes -->
 	</h:form>
 </ui:composition>

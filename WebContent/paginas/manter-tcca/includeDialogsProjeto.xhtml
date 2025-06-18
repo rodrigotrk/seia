@@ -12,10 +12,12 @@
 		<ui:include src="/paginas/manter-tcca/dialogRequerente.xhtml" />
 	</p:dialog>
 	
-	<!-- INCLUIR UNIDADE DE CONSERVAÇÃO -->
-	<p:dialog header="Selecionar Unidade de Conservação" widgetVar="dialogUC" modal="true" resizable="false" appendToBody="true" position="top" closable="true">
+        <ui:include src="/layout/csrfToken.xhtml" />
+        <ui:include src="/layout/csrfToken.xhtml" />
+	<!-- INCLUIR UNIDADE DE CONSERVAÃ‡ÃƒO -->
+	<p:dialog header="Selecionar Unidade de ConservaÃ§Ã£o" widgetVar="dialogUC" modal="true" resizable="false" appendToBody="true" position="top" closable="true">
 		<h:form id="formUC">
-			<h:outputText value="Lista de Unidades de Conservação:" styleClass="bold"/><br/><br/>
+			<h:outputText value="Lista de Unidades de ConservaÃ§Ã£o:" styleClass="bold"/><br/><br/>
 			
 			<div style="overflow-y: auto; max-height: 500px;">
 				<p:selectManyCheckbox value="#{projetoTccaController.listUnidadesConservacaoSelecionadas}" layout="pageDirection" 
@@ -34,7 +36,7 @@
 		</h:form>
 	</p:dialog>
 	
-	<!-- INCLUIR AÇÃO -->
+	<!-- INCLUIR AÃ‡ÃƒO -->
 	<p:dialog header="Incluir Atividade" widgetVar="dialogAcao" modal="true" resizable="false" appendToBody="true" position="top" closable="true">
 		<h:form id="formAcao">
 			<h:outputText value="Nome da Atividade: "/>
@@ -103,57 +105,65 @@
 		</h:form>
 	</p:dialog>
 	
-	<!-- CONSULTAR HISTÓRICO DO PROJETO -->
-    <p:dialog header="Relatório da movimentação Financeira" widgetVar="dialogRelatorioMovimentacaoProjeto" dynamic="true" modal="true" 
+        <ui:include src="/layout/csrfToken.xhtml" />
+        <ui:include src="/layout/csrfToken.xhtml" />
+        <ui:include src="/layout/csrfToken.xhtml" />
+        <ui:include src="/layout/csrfToken.xhtml" />
+        <ui:include src="/layout/csrfToken.xhtml" />
+        <ui:include src="/layout/csrfToken.xhtml" />
+        <ui:include src="/layout/csrfToken.xhtml" />
+        <ui:include src="/layout/csrfToken.xhtml" />
+	<!-- CONSULTAR HISTÃ“RICO DO PROJETO -->
+    <p:dialog header="RelatÃ³rio da movimentaÃ§Ã£o Financeira" widgetVar="dialogRelatorioMovimentacaoProjeto" dynamic="true" modal="true" 
     	width="1000" height="700" position="center" resizable="false">
     	
 		<ui:include src="/paginas/manter-tcca/consultaMovimentacaoFinanceiraProjeto.xhtml" />
 	</p:dialog>
 	
-	<!-- EXCLUSÃO DA UNIDADE DE CONSERVAÇÃO -->
-	<p:confirmDialog message="Deseja remover esta unidade de conservação?" header="Mensagem" severity="alert" widgetVar="dialogExcluirUC">
+	<!-- EXCLUSÃƒO DA UNIDADE DE CONSERVAÃ‡ÃƒO -->
+	<p:confirmDialog message="Deseja remover esta unidade de conservaÃ§Ã£o?" header="Mensagem" severity="alert" widgetVar="dialogExcluirUC">
 		<h:form>
 			<s:divCentralizado>
 		        <p:commandButton value="Sim" update="formCadastroProjeto:dataTableUC" oncomplete="dialogExcluirUC.hide()"
 		        	actionListener="#{projetoTccaController.excluirUnidadeConservacao()}" />
 		        	
-		        <p:commandButton value="Não" onclick="dialogExcluirUC.hide()" type="button" />
+		        <p:commandButton value="NÃ£o" onclick="dialogExcluirUC.hide()" type="button" />
 			</s:divCentralizado>
 	    </h:form>
     </p:confirmDialog>
 	
-	<!-- EXCLUSÃO DA AÇÃO -->
+	<!-- EXCLUSÃƒO DA AÃ‡ÃƒO -->
 	<p:confirmDialog message="Deseja remover esta atividade?" header="Mensagem" severity="alert" widgetVar="dialogExcluirAcao">
 		<h:form>
 			<s:divCentralizado>
 		        <p:commandButton value="Sim" update="formCadastroProjeto:dataTableAcao" oncomplete="dialogExcluirAcao.hide()"
 		        	actionListener="#{projetoTccaController.excluirAcao()}" />
 		        	
-		        <p:commandButton value="Não" onclick="dialogExcluirAcao.hide()" type="button" />
+		        <p:commandButton value="NÃ£o" onclick="dialogExcluirAcao.hide()" type="button" />
 			</s:divCentralizado>
 	    </h:form>
     </p:confirmDialog>
 	
-	<!-- EXCLUSÃO DO PRODUTO -->
+	<!-- EXCLUSÃƒO DO PRODUTO -->
 	<p:confirmDialog message="Deseja remover este produto?" header="Mensagem" severity="alert" widgetVar="dialogExcluirProduto">
 		<h:form>
 			<s:divCentralizado>
 		        <p:commandButton value="Sim" update="formAcao" oncomplete="dialogExcluirProduto.hide()"
 		        	actionListener="#{projetoTccaController.excluirProduto()}" />
 		        	
-		        <p:commandButton value="Não" onclick="dialogExcluirProduto.hide()" type="button" />
+		        <p:commandButton value="NÃ£o" onclick="dialogExcluirProduto.hide()" type="button" />
 			</s:divCentralizado>
 	    </h:form>
     </p:confirmDialog>
     
-	<!-- EXCLUSÃO DO PROJETO -->
+	<!-- EXCLUSÃƒO DO PROJETO -->
 	<p:confirmDialog message="Deseja remover este projeto?" header="Mensagem" severity="alert" widgetVar="dialogExcluirProjeto">
 		<h:form>
 			<s:divCentralizado>
 		        <p:commandButton value="Sim" update="formConsultaProjeto:dataTableProjetos" oncomplete="dialogExcluirProjeto.hide()"
 		        	actionListener="#{projetoTccaController.excluirProjeto()}" />
 		        	
-		        <p:commandButton value="Não" onclick="dialogExcluirProjeto.hide()" type="button" />
+		        <p:commandButton value="NÃ£o" onclick="dialogExcluirProjeto.hide()" type="button" />
 			</s:divCentralizado>
 	    </h:form>
     </p:confirmDialog>
@@ -165,37 +175,37 @@
 		        <p:commandButton value="Sim" update="formConsultaProjeto:dataTableProjetos" oncomplete="dialogCancelarProjeto.hide()"
 		        	actionListener="#{projetoTccaController.cancelarProjeto()}" />
 		        	
-		        <p:commandButton value="Não" onclick="dialogCancelarProjeto.hide()" type="button" />
+		        <p:commandButton value="NÃ£o" onclick="dialogCancelarProjeto.hide()" type="button" />
 			</s:divCentralizado>
 	    </h:form>
     </p:confirmDialog>
     
-	<!-- EXCLUSÃO DA EMPRESA EXECUTORA -->
+	<!-- EXCLUSÃƒO DA EMPRESA EXECUTORA -->
 	<p:confirmDialog message="Deseja realmente desativar a empresa executora?" header="Mensagem" severity="alert" widgetVar="dialogInativarEmpresa">
 		<h:form>
 			<s:divCentralizado>
 		        <p:commandButton value="Sim" update="formExecucaoProjeto:panelEmpresaExecutora" oncomplete="dialogInativarEmpresa.hide()"
 		        	actionListener="#{projetoTccaController.inativarEmpresaExecutora()}" />
 		        	
-		        <p:commandButton value="Não" onclick="dialogInativarEmpresa.hide()" type="button" />
+		        <p:commandButton value="NÃ£o" onclick="dialogInativarEmpresa.hide()" type="button" />
 			</s:divCentralizado>
 	    </h:form>
     </p:confirmDialog>
 	
-	<!-- CONFIRMAR EXECUÇÃO DO PROJETO -->
+	<!-- CONFIRMAR EXECUÃ‡ÃƒO DO PROJETO -->
 	<p:confirmDialog message="Deseja realmente salvar os valores inseridos?" header="Mensagem" severity="alert" widgetVar="dialogConfirmarExecucao">
 		<h:form>
 			<s:divCentralizado>
 		        <p:commandButton value="Sim" oncomplete="dialogConfirmarExecucao.hide()"
 		        	actionListener="#{projetoTccaController.salvarExecucaoProduto()}" />
 		        	
-		        <p:commandButton value="Não" onclick="dialogConfirmarExecucao.hide()" type="button" />
+		        <p:commandButton value="NÃ£o" onclick="dialogConfirmarExecucao.hide()" type="button" />
 			</s:divCentralizado>
 	    </h:form>
     </p:confirmDialog>
 	
-	<!-- CONFIRMAR MOVIMENTAÇÃO FINANCEIRA COM SALDO INSUFICIENTE -->
-	<p:confirmDialog message="Saldo insuficiente para a movimentação desejada. Confirma a operação?" header="Mensagem" severity="alert"
+	<!-- CONFIRMAR MOVIMENTAÃ‡ÃƒO FINANCEIRA COM SALDO INSUFICIENTE -->
+	<p:confirmDialog message="Saldo insuficiente para a movimentaÃ§Ã£o desejada. Confirma a operaÃ§Ã£o?" header="Mensagem" severity="alert"
 		widgetVar="dialogConfirmarMovimentacaoSaldoInsuficiente">
 		
 		<h:form>
@@ -203,7 +213,7 @@
 		        <p:commandButton value="Sim" oncomplete="dialogConfirmarMovimentacaoSaldoInsuficiente.hide()"
 		        	actionListener="#{projetoTccaController.salvarMovimentacaoFinanceiraProjeto()}" />
 		        	
-		        <p:commandButton value="Não" onclick="dialogConfirmarMovimentacaoSaldoInsuficiente.hide()" type="button" />
+		        <p:commandButton value="NÃ£o" onclick="dialogConfirmarMovimentacaoSaldoInsuficiente.hide()" type="button" />
 			</s:divCentralizado>
 	    </h:form>
     </p:confirmDialog>

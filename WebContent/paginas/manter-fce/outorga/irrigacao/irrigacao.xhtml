@@ -15,7 +15,11 @@
 			  width="1000" 
 			  height="650"
 			  resizable="false" 
-			  header="FCE - Irrigação" 
+        <ui:include src="/layout/csrfToken.xhtml" />
+        <ui:include src="/layout/csrfToken.xhtml" />
+        <ui:include src="/layout/csrfToken.xhtml" />
+        <ui:include src="/layout/csrfToken.xhtml" />
+			  header="FCE - IrrigaÃ§Ã£o" 
 			  modal="true">
 		
 		<h:panelGroup id="pnlFceIrrigacao" layout="block">
@@ -24,7 +28,7 @@
 				<p:tab id="abaDadosRequerimento" title="Dados do Requerimento">
 					<ui:include src="/paginas/manter-fce/outorga/irrigacao/irrigacaoAbaDadosRequerimento.xhtml"/> 
 				</p:tab>
-				<p:tab id="abaIrrigacao" title="Irrigação">
+				<p:tab id="abaIrrigacao" title="IrrigaÃ§Ã£o">
 					<ui:include src="/paginas/manter-fce/outorga/irrigacao/irrigacaoAbaIrrigacao.xhtml"/>
 				</p:tab>
 			</p:tabView>
@@ -32,38 +36,38 @@
 		
 	</p:dialog>
 	
-	<p:confirmDialog id="confirmationVoltarIrrigacao" widgetVar="confirmationVoltarIrrigacao" header="Confirmação" appendToBody="true" message="#{bundle.geral_msg_informacoes_nao_foram_salvas_deseja_continuar}" severity="alert">
+	<p:confirmDialog id="confirmationVoltarIrrigacao" widgetVar="confirmationVoltarIrrigacao" header="ConfirmaÃ§Ã£o" appendToBody="true" message="#{bundle.geral_msg_informacoes_nao_foram_salvas_deseja_continuar}" severity="alert">
 		<h:form>
 			<p:commandButton value="Sim" update="formIrrigacao" oncomplete="confirmationVoltarIrrigacao.hide(); irrigacao.hide();" global="false"/>
-			<p:commandButton value="Não" onclick="confirmationVoltarIrrigacao.hide();" type="button" global="false"/>
+			<p:commandButton value="NÃ£o" onclick="confirmationVoltarIrrigacao.hide();" type="button" global="false"/>
 		</h:form>
 	</p:confirmDialog>
 	
-	<p:confirmDialog id="confirmaExclusaoCulturaIrrigada" widgetVar="confirmaExclusaoCulturaIrrigada" header="Confirmação" appendToBody="true" message="#{bundle.msg_generica_deseja_exclusao}" severity="alert">
+	<p:confirmDialog id="confirmaExclusaoCulturaIrrigada" widgetVar="confirmaExclusaoCulturaIrrigada" header="ConfirmaÃ§Ã£o" appendToBody="true" message="#{bundle.msg_generica_deseja_exclusao}" severity="alert">
 		<h:form>
 			<p:commandButton value="Sim" update="irrigacaoAbas:formIrrigacao:culturas" onclick="confirmaExclusaoCulturaIrrigada.hide()" 
 				global="false" process="@this" actionListener="#{fceIrrigacaoController.excluirCultura()}">
 			</p:commandButton>
-			<p:commandButton value="Não" onclick="confirmaExclusaoCulturaIrrigada.hide()" type="button" global="false"/>
+			<p:commandButton value="NÃ£o" onclick="confirmaExclusaoCulturaIrrigada.hide()" type="button" global="false"/>
 		</h:form>
 	</p:confirmDialog>
 	
-	<p:confirmDialog id="confirmaExclusaoMetodoIrrigacao" widgetVar="confirmaExclusaoMetodoIrrigacao" header="Confirmação" appendToBody="true" message="#{bundle.msg_generica_deseja_exclusao}" severity="alert">
+	<p:confirmDialog id="confirmaExclusaoMetodoIrrigacao" widgetVar="confirmaExclusaoMetodoIrrigacao" header="ConfirmaÃ§Ã£o" appendToBody="true" message="#{bundle.msg_generica_deseja_exclusao}" severity="alert">
 		<h:form>
 			<p:commandButton value="Sim" update="irrigacaoAbas:formIrrigacao:metodos" onclick="confirmaExclusaoMetodoIrrigacao.hide()" 
 				global="false" process="@this" actionListener="#{fceIrrigacaoController.excluirMetodo()}">
 			</p:commandButton>
-			<p:commandButton value="Não" onclick="confirmaExclusaoMetodoIrrigacao.hide()" type="button" global="false"/>
+			<p:commandButton value="NÃ£o" onclick="confirmaExclusaoMetodoIrrigacao.hide()" type="button" global="false"/>
 		</h:form>
 	</p:confirmDialog>
 	
-	<p:confirmDialog id="dlgImprimirRelatorioIrrigacao" message="#{fceIrrigacaoController.msgImprimirRelatorio('Irrigação')}" widgetVar="rel_irrigacao" header="Mensagem">
+	<p:confirmDialog id="dlgImprimirRelatorioIrrigacao" message="#{fceIrrigacaoController.msgImprimirRelatorio('IrrigaÃ§Ã£o')}" widgetVar="rel_irrigacao" header="Mensagem">
 		<div align="center">
 			<h:form>
 				<p:commandButton value="Sim" ajax="false" global="false" process="@this" onclick="rel_irrigacao.hide();" style="margin-right:10px;">
 					<p:fileDownload value="#{fceIrrigacaoController.imprimirRelatorio}"/>
 				</p:commandButton>			
-				<p:commandButton value="Não" onclick="rel_irrigacao.hide();" process="@this"/>
+				<p:commandButton value="NÃ£o" onclick="rel_irrigacao.hide();" process="@this"/>
 			</h:form>
 		</div>
 	</p:confirmDialog> <!-- Fim do confirmar ralatorio -->

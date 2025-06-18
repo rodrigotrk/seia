@@ -8,17 +8,20 @@
 	template="../../layout/template.xhtml">
 	
 	<ui:define name="titulo-pagina">		
-		<h3> Consultar Documentos ObrigatÛrios</h3>
+        <ui:include src="/layout/csrfToken.xhtml" />
+        <ui:include src="/layout/csrfToken.xhtml" />
+        <ui:include src="/layout/csrfToken.xhtml" />
+		<h3> Consultar Documentos Obrigat√≥rios</h3>
 	</ui:define>
 		
 	<ui:define name="conteudo-principal">
-		<h3><h:outputLabel styleClass="titulo-grupo" style="font-weight:bold;" value="INSTRU«’ES" /></h3>
+		<h3><h:outputLabel styleClass="titulo-grupo" style="font-weight:bold;" value="INSTRU√á√ïES" /></h3>
 		<p class="titulo-grupo">
-			- Para consultar um ou mais documentos, informe o(s) par‚metro(s) de consulta desejado(s) e clique no bot„o "Consultar".<br />
-			- Para incluir um novo documento, clique no bot„o "Incluir".
+			- Para consultar um ou mais documentos, informe o(s) par√¢metro(s) de consulta desejado(s) e clique no bot√£o "Consultar".<br />
+			- Para incluir um novo documento, clique no bot√£o "Incluir".
 		</p>
 		<br />
-		<h3><h:outputLabel styleClass="titulo-grupo" style="font-weight:bold;" value="PAR¬METROS DA CONSULTA" /></h3>
+		<h3><h:outputLabel styleClass="titulo-grupo" style="font-weight:bold;" value="PAR√ÇMETROS DA CONSULTA" /></h3>
 		
 		<h:form id="form1" >
 			<h:panelGrid columns="1" >
@@ -38,26 +41,26 @@
 	                 emptyMessage="#{bundle.consultapf_msg_empty_list}"
 	                 style="width: 95%;" id="tabelaDocumentos" widgetVar="pessoas">
 		        <f:facet name="header">
-					<h:outputText value="Lista de Documentos ObrigatÛrios Cadastrados" />
+					<h:outputText value="Lista de Documentos Obrigat√≥rios Cadastrados" />
 				</f:facet>
 		        <p:column style="width: 70%;">
 		        	<f:facet name="header">Nome do Documento</f:facet>
 		            <h:outputText value="#{doc.nomDocumentoObrigatorio}" />
 		        </p:column>
 		        <p:column>
-		        	<f:facet name="header">Formul·rio?</f:facet>
-		            <h:outputText value="#{doc.indFormulario == false ? 'N„o' : 'Sim'}" />
+		        	<f:facet name="header">Formul√°rio?</f:facet>
+		            <h:outputText value="#{doc.indFormulario == false ? 'N√£o' : 'Sim'}" />
 		        </p:column>
                <p:column>
-		        	<f:facet name="header">P˙blico?</f:facet>
-		            <h:outputText value="#{doc.indPublico ? 'Sim' : 'N„o'}" />
+		        	<f:facet name="header">P√∫blico?</f:facet>
+		            <h:outputText value="#{doc.indPublico ? 'Sim' : 'N√£o'}" />
 		        </p:column>
 		        <p:column style="text-align: center;">
 		           <f:facet name="header">Tamanho</f:facet>
 		            <h:outputText value="#{doc.fileSizeFormated}" />
 		        </p:column>
 		        <p:column style="text-align: center;">
-		            <f:facet name="header">AÁıes</f:facet>
+		            <f:facet name="header">A√ß√µes</f:facet>
 		            <p:commandLink id="alterar" update=":formDocumentoObrigatorio" ajax="false" action="/paginas/manter-documentoobrigatorio/cadastro.xhtml" disabled="${!security.temAcesso('3.22.3')}">
             			<h:graphicImage title="Editar" value="/resources/img/ico-alterar.png"/>
             			<f:setPropertyActionListener target="${contextoController.object}" value="#{doc}" />

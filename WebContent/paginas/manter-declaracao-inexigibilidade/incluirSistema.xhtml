@@ -8,6 +8,7 @@
 	xmlns:s="http://java.sun.com/jsf/composite/seia">	
 	
 		<h:form id="formSistema">
+        <ui:include src="/layout/csrfToken.xhtml" />
 			<h:panelGrid>
 				<h:outputLabel value="Nome do Sistema" style="font-weight:bold;"/>
 				<p:inputText id="txtNomeSistema" value="#{sistemaEnderecoController.declaracaoInfoAbastecimento.nomSistema}" 
@@ -17,17 +18,17 @@
 			</h:panelGrid>
 			<p:outputPanel id="pnlCoordenada">
 			<h:panelGrid>
-				<h:outputLabel value="Localização geográfica" style="font-weight:bold;"/>
+				<h:outputLabel value="LocalizaÃ§Ã£o geogrÃ¡fica" style="font-weight:bold;"/>
 				<s:inputLocGeo
 		            ideObjetoLocalizacao="#{sistemaEnderecoController.declaracaoInfoAbastecimento}" 
-		            titulo="Incluir coordenada geográfica"
+		            titulo="Incluir coordenada geogrÃ¡fica"
 		            update="formSistema:pnlCoordenada"
 		            ideTipoSecaoGeometrica="#{seiaController.classificacaoSecaoEnum('CLASSIFICACAO_SECAO_PONTO')}"
 		            ideRequerimento="#{declaracaoInexigibilidadeController.requerimento}" 
 		            ideLocalizacaoGeografica="#{sistemaEnderecoController.declaracaoInfoAbastecimento.localizacaoGeografica}"
 		            disabled="#{!empty sistemaEnderecoController.declaracaoInfoAbastecimento.localizacaoGeografica.ideLocalizacaoGeografica}"
 		            />
-				<h:outputLabel id="lblCoordGeo" value="Coordenada Geográfica" rendered="#{!empty sistemaEnderecoController.declaracaoInfoAbastecimento.localizacaoGeografica.ideLocalizacaoGeografica}"/>
+				<h:outputLabel id="lblCoordGeo" value="Coordenada GeogrÃ¡fica" rendered="#{!empty sistemaEnderecoController.declaracaoInfoAbastecimento.localizacaoGeografica.ideLocalizacaoGeografica}"/>
 				<p:dataTable id="dtCoordGeo" var="loc" value="#{sistemaEnderecoController.declaracaoInfoAbastecimento.localizacaoGeografica}"
 					rendered="#{!empty sistemaEnderecoController.declaracaoInfoAbastecimento.localizacaoGeografica.ideLocalizacaoGeografica}">
 					<p:column headerText="Sistema de coordenadas">
@@ -42,7 +43,7 @@
 						<h:outputText value="#{loc.longitudeInicial}" />
 					</p:column>
 					
-					<p:column headerText="Ações">
+					<p:column headerText="AÃ§Ãµes">
 						<s:linkGeoBahia ideLocalizacaoGeografica="#{loc}" />
 						<p:commandLink  oncomplete="confirmExcluirGeo.show()" disabled="#{!sistemaEnderecoController.permiteEditar}" process="@this">
 	                        <f:setPropertyActionListener value="#{sistemaEnderecoController.declaracaoInfoAbastecimento}" target="#{localizacaoGeograficaGenericController.objetoLocalizacao}" />
@@ -57,7 +58,7 @@
 			</p:outputPanel>
 			<br/>
 			<h:panelGrid>
-				<h:outputLabel value="Vazão" style="font-weight:bold;"/>
+				<h:outputLabel value="VazÃ£o" style="font-weight:bold;"/>
 				<h:panelGrid columns="2">
 					<p:inputText id="txtVazao" value="#{sistemaEnderecoController.declaracaoInfoAbastecimento.valVazao}" onkeyup="maskIt(this, event, '99.999.999,99', true)"
 								maxlength="20" disabled="#{!sistemaEnderecoController.permiteEditar}">
@@ -69,7 +70,7 @@
 			</h:panelGrid>
 			<br/>
 			<h:panelGrid>
-				<h:outputLabel value="Endereço" style="font-weight:bold;"/>
+				<h:outputLabel value="EndereÃ§o" style="font-weight:bold;"/>
 				<h:outputLabel id="idlblcep" value="* CEP"  style="font-weight:bold;"/>
 <!-- 				<p:inputMask value="#{projetoEnderecoController.logradouroPesquisa.numCep}" mask="99.999-999"
 					disabled="#{!projetoEnderecoController.permiteEditar}">
@@ -142,7 +143,7 @@
 			</h:panelGrid>
 			
 			<h:panelGrid columns="2" id="panelmunicipioestado" width="100%">
-				<h:outputText id="idlblnumero" value="Número" style="font-weight:bold;"/>
+				<h:outputText id="idlblnumero" value="NÃºmero" style="font-weight:bold;"/>
 				<h:outputLabel id="idlblcomplemento" value="Complemento" style="font-weight:bold;"/>
 				
 				<p:inputText style="width: 70%"  

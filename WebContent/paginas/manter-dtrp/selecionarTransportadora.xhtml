@@ -7,6 +7,7 @@
 	xmlns:p="http://primefaces.prime.com.tr/ui">
 
 	<h:form id="form_dialog_transportadora">
+        <ui:include src="/layout/csrfToken.xhtml" />
 		<h:panelGrid columns="1">
 			<p:selectOneRadio value="${entidadeTransportadoraController.tipoPessoa}" valueChangeListener="#{entidadeTransportadoraController.mudarTipoPessoa}" disabled="#{!entidadeTransportadoraController.permiteEditar}">
 				<f:selectItem itemLabel="#{bundle.requerente_lbl_pessoa_fisica}" itemValue="0" />
@@ -57,11 +58,11 @@
 			<!--  lista -->
 			<p:outputPanel id="pnlDadosTransportadora">
 			<h:panelGrid id="panel_lista" columns="1" rendered="#{entidadeTransportadoraController.exibeInformacoes}">
-				<h:outputText value="Nome/Razão Social:" style="font-weight:bold;"/>
+				<h:outputText value="Nome/RazÃ£o Social:" style="font-weight:bold;"/>
 				<h:panelGrid>
 					<h:outputText value="#{entidadeTransportadoraController.entidadeTransportadora.nomeRazao}" />
 				</h:panelGrid>
-				<h:outputText value="Endereço:" style="font-weight:bold;"/>
+				<h:outputText value="EndereÃ§o:" style="font-weight:bold;"/>
 				<h:panelGrid columns="2">
 					<h:outputText value="Logradouro:" />
 					<h:outputText value="#{entidadeTransportadoraController.entidadeTransportadora.endereco.ideLogradouro.nomLogradouro}" />
@@ -73,10 +74,10 @@
 					<h:outputText value="#{entidadeTransportadoraController.entidadeTransportadora.endereco.ideLogradouro.ideMunicipio.nomMunicipio} UF: #{entidadeTransportadoraController.entidadeTransportadora.endereco.ideLogradouro.ideMunicipio.ideEstado.desSigla}" />
 				</h:panelGrid>
 				<h:panelGrid columns="2">
-					<h:outputText value="* Nº do processo de licenciamento:" />
+					<h:outputText value="* NÂº do processo de licenciamento:" />
 					<h:graphicImage value="/resources/img/ico-ajuda.png" id="titNumProcesso" style="margin: 3px 1px 2px 4px;" />
 					<p:tooltip for="titNumProcesso"
-							value="Se for de LAC, inserir número do processo, não do certificado."
+							value="Se for de LAC, inserir nÃºmero do processo, nÃ£o do certificado."
 							showEffect="fade" hideEffect="fade" />
 				</h:panelGrid>
 				<p:inputText id="txtNumProcesso" size="33" maxlength="35" value="#{entidadeTransportadoraController.numeroProcessoLicenca}" disabled="#{!entidadeTransportadoraController.permiteEditarNumProcesso}" style="margin-top: -16px"/>

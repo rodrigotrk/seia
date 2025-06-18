@@ -8,7 +8,8 @@
 	template="../../layout/template.xhtml">
 
 	<ui:define name="titulo-pagina">		
-		<h3>Cadastrar Usu·rios Externos</h3>		
+        <ui:include src="/layout/csrfToken.xhtml" />
+		<h3>Cadastrar Usu√°rios Externos</h3>		
 	</ui:define>	
 
     <ui:define name="conteudo-principal">
@@ -24,13 +25,13 @@
 			<h:outputLabel value="* #{bundle.lbl_cpf}:" />
 			<p:inputMask id="inpCpf" value="#{usuarioExternoController.usuarioExterno.pessoaFisica.numCpf}" mask="#{bundle.consultapf_msk_cpf}"
 				converter="cpfConverter" validator="cpfValidator" required="true" style="width: 160px;" 
-				requiredMessage="O campo CPF È de preenchimento obrigatÛrio.">
+				requiredMessage="O campo CPF √© de preenchimento obrigat√≥rio.">
 				<p:ajax event="blur" listener="${usuarioExternoController.consultarCpfCadastro()}" process="@this" update="@form"/>
 			</p:inputMask>
 			<h:outputLabel value="* #{bundle.lbl_nome}:" />
-			<p:inputText disabled="${usuarioExternoController.desabilitaCampos}" id="inpNomePessoa" value="#{usuarioExternoController.usuarioExterno.pessoaFisica.nomPessoa}" maxlength="200" style="width: 348px;" required="true" requiredMessage="O campo Nome È de preenchimento obrigatÛrio."/>
+			<p:inputText disabled="${usuarioExternoController.desabilitaCampos}" id="inpNomePessoa" value="#{usuarioExternoController.usuarioExterno.pessoaFisica.nomPessoa}" maxlength="200" style="width: 348px;" required="true" requiredMessage="O campo Nome √© de preenchimento obrigat√≥rio."/>
 			<h:outputLabel value="* #{bundle.lbl_data_nascimento}:" />
-			<p:calendar label="#{bundle.lbl_data_nascimento}" disabled="${usuarioExternoController.desabilitaCampos}" value="#{usuarioExternoController.usuarioExterno.pessoaFisica.dtcNascimento}" required="true" requiredMessage="O campo #{bundle.lbl_data_nascimento} È de preenchimento obrigatÛrio." showOn="button" size="10" locale="pt" 
+			<p:calendar label="#{bundle.lbl_data_nascimento}" disabled="${usuarioExternoController.desabilitaCampos}" value="#{usuarioExternoController.usuarioExterno.pessoaFisica.dtcNascimento}" required="true" requiredMessage="O campo #{bundle.lbl_data_nascimento} √© de preenchimento obrigat√≥rio." showOn="button" size="10" locale="pt" 
 				pattern="dd/MM/yyyy" navigator="true" accesskey="true" yearRange="c-200" mindate="01/01/1822" maxdate="#{usuarioExternoController.dataAtual}" readOnlyInputText="true">
 				<f:validator validatorId="dataNascimentoValidator"/>
 			</p:calendar>
@@ -49,27 +50,27 @@
 		         </p:inputText>
 		         <h:outputText id="contadorCaracter" value="#{usuarioExternoController.usuarioExterno.usuario.contadorCaractere}" />        
 	        </h:panelGrid>
-		        (S„o considerados caracteres v·lidos, letras min˙sculas, n˙meros e pontos)		        
+		        (S√£o considerados caracteres v√°lidos, letras min√∫sculas, n√∫meros e pontos)		        
 		
 		
 			<h:panelGrid id="panelSenha" rendered="#{not usuarioExternoController.editando}" >
-			  	<p:fieldset id="info" legend="AtenÁ„o"  style="background-color: rgb(257,231,219);">
+			  	<p:fieldset id="info" legend="Aten√ß√£o"  style="background-color: rgb(257,231,219);">
 			<h:panelGrid columns="1" styleClass="aviso-home" style="background-color: rgb(257,231,219);">
 				
-				<h:outputText value="Sua senha deve conter pelo menos um caractere especial, uma letra mai˙scula, um numeral e no mÌnimo de 8 caracteres."/>
+				<h:outputText value="Sua senha deve conter pelo menos um caractere especial, uma letra mai√∫scula, um numeral e no m√≠nimo de 8 caracteres."/>
 			</h:panelGrid>
 			</p:fieldset>
 	        	<h:outputLabel value="* #{bundle.lbl_senha}:" />
 		        <h:panelGrid columns="1">	
-		        	<p:password disabled="${usuarioExternoController.desabilitaCampos}" feedback="false" id="inpSenha" value="#{usuarioExternoController.usuarioExterno.usuario.dscSenha}" minLength="8" maxlength="15" required="true" requiredMessage="O campo Senha È de preenchimento obrigatÛrio."/>
+		        	<p:password disabled="${usuarioExternoController.desabilitaCampos}" feedback="false" id="inpSenha" value="#{usuarioExternoController.usuarioExterno.usuario.dscSenha}" minLength="8" maxlength="15" required="true" requiredMessage="O campo Senha √© de preenchimento obrigat√≥rio."/>
 		        </h:panelGrid>	
-	        	<h:outputLabel value="* ConfirmaÁ„o da Senha:" />
-	        	<p:password disabled="${usuarioExternoController.desabilitaCampos}" feedback="false" id="inpConfirmacaoSenha" value="#{usuarioExternoController.usuarioExterno.usuario.dscConfirmacaoSenha}" minLength="8" maxlength="15" required="true" requiredMessage="O campo ConfirmaÁ„o da Senha È de preenchimento obrigatÛrio."/>
+	        	<h:outputLabel value="* Confirma√ß√£o da Senha:" />
+	        	<p:password disabled="${usuarioExternoController.desabilitaCampos}" feedback="false" id="inpConfirmacaoSenha" value="#{usuarioExternoController.usuarioExterno.usuario.dscConfirmacaoSenha}" minLength="8" maxlength="15" required="true" requiredMessage="O campo Confirma√ß√£o da Senha √© de preenchimento obrigat√≥rio."/>
 			</h:panelGrid>
 			<h:outputLabel value="* #{bundle.lbl_email}:" />
-			<p:inputText disabled="${usuarioExternoController.desabilitaCampos}" id="inpEmail" value="#{usuarioExternoController.usuarioExterno.pessoaFisica.pessoa.desEmail}" maxlength="70" validator="emailValidator" style="width: 348px;" required="true" requiredMessage="O campo Email È de preenchimento obrigatÛrio."/>
-			<h:outputLabel value="* ConfirmaÁ„o de Email:" />
-			<p:inputText disabled="${usuarioExternoController.desabilitaCampos}"  id="inpConfirmacaoEmail" value="#{usuarioExternoController.usuarioExterno.pessoaFisica.pessoa.dscConfirmacaoEmail}" maxlength="70" validator="emailValidator" style="width: 348px;" required="true" requiredMessage="O campo Email È de preenchimento obrigatÛrio."/> 
+			<p:inputText disabled="${usuarioExternoController.desabilitaCampos}" id="inpEmail" value="#{usuarioExternoController.usuarioExterno.pessoaFisica.pessoa.desEmail}" maxlength="70" validator="emailValidator" style="width: 348px;" required="true" requiredMessage="O campo Email √© de preenchimento obrigat√≥rio."/>
+			<h:outputLabel value="* Confirma√ß√£o de Email:" />
+			<p:inputText disabled="${usuarioExternoController.desabilitaCampos}"  id="inpConfirmacaoEmail" value="#{usuarioExternoController.usuarioExterno.pessoaFisica.pessoa.dscConfirmacaoEmail}" maxlength="70" validator="emailValidator" style="width: 348px;" required="true" requiredMessage="O campo Email √© de preenchimento obrigat√≥rio."/> 
 			<!-- <h:outputLabel value="#{bundle.lbl_estado_civil}:" />
 	        <p:selectOneMenu disabled="${usuarioExternoController.desabilitaCampos}" id="selectOneEstadoCivil" value="#{usuarioExternoController.usuarioExterno.pessoaFisica.ideEstadoCivil}" style="width: 355px;" converter="estadoCivilConverter">
 	            <f:selectItem itemLabel="Selecione..." />
@@ -112,9 +113,9 @@
 		          position="center"
 		          
 		          > 
-	       <h3>Usu·rio cadastrado com sucesso.</h3>
+	       <h3>Usu√°rio cadastrado com sucesso.</h3>
 	       
-	       <p>VocÈ receber· no seu e-mail um link para ativar sua conta.</p>
+	       <p>Voc√© receber√° no seu e-mail um link para ativar sua conta.</p>
 	       <p>Clique <a href="/login.xhtml">aqui</a> para voltar para a tela de login.</p>
 		</p:dialog>
 	</h:form>

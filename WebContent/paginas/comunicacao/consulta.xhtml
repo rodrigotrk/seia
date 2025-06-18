@@ -7,7 +7,8 @@
 	xmlns:p="http://primefaces.prime.com.tr/ui"
 	template="../../layout/template.xhtml">
 	<ui:define name="titulo-pagina">
-		<h3>Consultar Comunicação</h3>
+        <ui:include src="/layout/csrfToken.xhtml" />
+		<h3>Consultar ComunicaÃ§Ã£o</h3>
 	</ui:define>
 	<ui:define name="conteudo-principal">
 		<ui:include src="/paginas/comunicacao/dlgVisualizarComunicacao.xhtml" />
@@ -16,7 +17,7 @@
 		<br />
 		<h3>
 			<h:outputLabel styleClass="titulo-grupo" style="font-weight:bold;"
-				value="PARÂMETROS DA CONSULTA" />
+				value="PARÃ‚METROS DA CONSULTA" />
 		</h3>
 		<h:form id="formConsultarComunicacao">
 			<h:panelGroup layout="block">
@@ -26,7 +27,7 @@
 							<h:outputLabel id="lblTitulo"
 								value="#{bundle.comunicacao_lbl_titulo}" />
 							<h:outputLabel value="Perfil" />
-							<h:outputLabel value="Situação" />
+							<h:outputLabel value="SituaÃ§Ã£o" />
 							<p:inputText value="#{comunicacaoController.descTitulo}" />
 							<p:selectOneMenu id="comboPerfil"
 								value="#{comunicacaoController.perfilSelecionado}"
@@ -50,7 +51,7 @@
 						<h:panelGrid columns="2">
 							<h:panelGrid columns="2">
 								<h:outputText value="Status" />
-								<h:outputText value="Tipo de Comunicação" />
+								<h:outputText value="Tipo de ComunicaÃ§Ã£o" />
 								<p:selectOneMenu id="comboStatus"
 									value="#{comunicacaoController.comunicacaoStatusSelecionado}"
 									converter="simpleEntityConverter" style="width:220px;">
@@ -64,14 +65,14 @@
 								<p:selectOneRadio id="tpComunicacao"
 									value="#{comunicacaoController.tpComunicacao}">
 									<f:selectItem itemLabel="Todos" itemValue="" />
-									<f:selectItem itemLabel="Notificação" itemValue="N" />
-									<f:selectItem itemLabel="Temporária" itemValue="T" />
+									<f:selectItem itemLabel="NotificaÃ§Ã£o" itemValue="N" />
+									<f:selectItem itemLabel="TemporÃ¡ria" itemValue="T" />
 								</p:selectOneRadio>
 
 							</h:panelGrid>
 						</h:panelGrid>
 						<h:panelGrid columns="4">
-							<h:outputText value="Período" />
+							<h:outputText value="PerÃ­odo" />
 							<h:outputText />
 							<h:outputText />
 							<h:outputText />
@@ -112,11 +113,11 @@
 						rows="10" paginatorPosition="bottom" lazy="true">
 
 						<p:column style="width:200px">
-							<f:facet name="header">Título</f:facet>
+							<f:facet name="header">TÃ­tulo</f:facet>
 							<h:outputText value="#{comunicacao.dscTitulo}" />
 						</p:column>
 						<p:column>
-							<f:facet name="header">Período</f:facet>
+							<f:facet name="header">PerÃ­odo</f:facet>
 							<h:outputText id="dtcInicio"
 								value="#{comunicacao.dtcPeriodoInicio}">
 								<f:convertDateTime for="dtcInicio" pattern="dd/MM/yyyy"
@@ -144,7 +145,7 @@
 							<h:outputText value="#{comunicacao.tpComunicacaoDesc}" />
 						</p:column>
 						<p:column>
-							<f:facet name="header">Situação</f:facet>
+							<f:facet name="header">SituaÃ§Ã£o</f:facet>
 							<h:outputText value="#{comunicacao.situacao}" />
 						</p:column>
 						<p:column>
@@ -152,7 +153,7 @@
 							<h:outputText value="#{comunicacao.comunicacaoStatus.dscStatus}" />
 						</p:column>
 						<p:column>
-							<f:facet name="header">Ações</f:facet>
+							<f:facet name="header">AÃ§Ãµes</f:facet>
 							<h:panelGroup layout="block" style="text-align:center">
 							<h:panelGrid columns="2">
 								<p:commandLink
@@ -160,7 +161,7 @@
 									update="formVisualizar1"
 									oncomplete="dlgVisualizarComunicacao.show();">
 									<h:graphicImage style="margin: 2.5px;"
-										title="Visualizar Comunicação"
+										title="Visualizar ComunicaÃ§Ã£o"
 										value="/resources/img/ico-pesquisa.png" />
 								</p:commandLink>
 								<p:commandLink process="@this" update=":formManterComunicacao"
@@ -199,7 +200,9 @@
 			</h:panelGroup>
 		</h:form>
 
-		<p:confirmDialog header="Confirmação"
+        <ui:include src="/layout/csrfToken.xhtml" />
+        <ui:include src="/layout/csrfToken.xhtml" />
+		<p:confirmDialog header="ConfirmaÃ§Ã£o"
 			id="_dialogConfirmarExcluirComunicacao"
 			widgetVar="dialogConfirmarExcluirComunicacao" appendToBody="true"
 			message="#{bundle.comunicacao_lbl_excluir}" severity="alert">
@@ -217,7 +220,7 @@
 			</h:form>
 		</p:confirmDialog>
 
-		<p:confirmDialog header="Confirmação"
+		<p:confirmDialog header="ConfirmaÃ§Ã£o"
 			id="_dialogConfirmarCancelarComunicacao"
 			widgetVar="dialogConfirmarCancelarComunicacao" appendToBody="true"
 			message="#{bundle.comunicacao_lbl_cancelar}" severity="alert">

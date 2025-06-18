@@ -8,15 +8,17 @@
 	
 	<h:panelGroup layout="block" style="max-height: 750px; min-width:570px; overflow-y:auto;">
 		<h:form id="formDialogPoco">
+        <ui:include src="/layout/csrfToken.xhtml" />
 			<h:panelGrid style="text-align: left;">
 				<p:tabView id="tabViewDialogPoco" activeIndex="#{caepogController.tabAtualPoco}" cache="false" dynamic="true">
 					<p:ajax event="tabChange" listener="#{caepogController.onTabChangePoco}" update="tabViewDialogPoco formBotoesNavegacaoPoco" />
 					
-					<p:tab title="Dados do Poço">
+        <ui:include src="/layout/csrfToken.xhtml" />
+					<p:tab title="Dados do PoÃ§o">
 						<ui:include src="/paginas/manter-oleo-gas/abaDadosDoPoco.xhtml" />
 					</p:tab>
 					
-					<p:tab title="Resíduos Gerados" disabled="#{caepogController.abaResiduoDesabilitada}">
+					<p:tab title="ResÃ­duos Gerados" disabled="#{caepogController.abaResiduoDesabilitada}">
 						<div  style="width: 100% !important;">
 						<ui:include src="/paginas/manter-oleo-gas/abaResiduosGerados.xhtml" />
 						</div>
@@ -34,7 +36,7 @@
 					
 					<p:spacer width="10" height="0"/>
 					
-					<p:commandButton value="Avançar" update="formDialogPoco:tabViewDialogPoco tabViewOleoGas:formBotoesNavegacaoPoco" action="#{caepogController.incrementaIndexAbaPoco}" 
+					<p:commandButton value="AvanÃ§ar" update="formDialogPoco:tabViewDialogPoco tabViewOleoGas:formBotoesNavegacaoPoco" action="#{caepogController.incrementaIndexAbaPoco}" 
 						rendered="#{caepogController.visualizaProximoPoco}" style="margin-right: 5px;"/>
 					
 					<p:commandButton value="Salvar" update="formDialogPoco:tabViewDialogPoco tabViewOleoGas" actionListener="#{caepogController.salvarPoco()}" 

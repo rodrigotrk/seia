@@ -12,10 +12,14 @@
 			<p:separator style="width:100%;" />
 			<h:form enctype="multipart/form-data" id="boletoDownloadForm"
 				style="width:570px;">
+        <ui:include src="/layout/csrfToken.xhtml" />
 				<h:panelGrid id="boletoDownloadCampos" columns="1" rendered="#{requerimentoUnicoController.existeBoletoPagamento}"
 					style="width:570px;">
 					<h:outputText styleClass="titulo-grupo" style="font-weight:bold;"
-						value="Faça o download do Boleto" />
+        <ui:include src="/layout/csrfToken.xhtml" />
+        <ui:include src="/layout/csrfToken.xhtml" />
+        <ui:include src="/layout/csrfToken.xhtml" />
+						value="FaÃ§a o download do Boleto" />
 					<h:commandLink value="Download Boleto">
 						<p:fileDownload contentDisposition="inline"
 							value="#{requerimentoUnicoController.downloadBoleto}" />
@@ -31,7 +35,7 @@
 						allowTypes="/(\.|\/)(pdf|gif|jpeg|png|jpg)$/" process="@this"
 						oncomplete="remoteCommandUpdateDataTable()"
 						fileUploadListener="#{requerimentoUnicoController.trataArquivo}"
-						invalidFileMessage="Tipo de arquivo inválido." />
+						invalidFileMessage="Tipo de arquivo invÃ¡lido." />
 						<p:remoteCommand name="remoteCommandUpdateDataTable" update="tblDocumento"/> 
 					<h:panelGrid id="tblDocumento">
 						<p:dataTable id="dataTableDocumentos"
@@ -68,7 +72,7 @@
 						auto="true" process="@this"
 						allowTypes="/(\.|\/)(pdf|gif|jpeg|png|jpg)$/"
 						fileUploadListener="#{requerimentoUnicoController.trataArquivoDaeCertificado()}"
-						invalidFileMessage="Tipo de arquivo inválido." />
+						invalidFileMessage="Tipo de arquivo invÃ¡lido." />
 						 <p:remoteCommand name="remoteCommandUpdateDataTableCertificado" immediate="true" update="tblDocumentoCertificado"/>
 					<h:panelGrid id="tblDocumentoCertificado">
 						<p:dataTable id="dataTableDocumentosCertificado"
@@ -105,7 +109,7 @@
 						auto="true" allowTypes="/(\.|\/)(pdf|gif|jpeg|png|jpg)$/"
 						process="@this"
 						fileUploadListener="#{requerimentoUnicoController.trataArquivoDaeVistoria()}"
-						invalidFileMessage="Tipo de arquivo inválido." />
+						invalidFileMessage="Tipo de arquivo invÃ¡lido." />
 					<p:remoteCommand name="remoteCommandUpdateDataTableVistoria" immediate="true" update="tblDocumentoVistoria"/>
 					<h:panelGrid id="tblDocumentoVistoria">
 						<p:dataTable id="dataTableDocumentosVistoria"

@@ -6,14 +6,15 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:p="http://primefaces.prime.com.tr/ui">
 
-	<h:form id="formUploadShapeAjustadoCefir">		
+	<h:form id="formUploadShapeAjustadoCefir">
+        <ui:include src="/layout/csrfToken.xhtml" />		
 		<h:panelGrid columns="3" cellpadding="6">
 				<h:outputLabel styleClass="form-label" value="* Identificador" />
 				<h:outputLabel styleClass="form-label" value="* Tipo" />
 				<h:outputLabel styleClass="form-label" value="* Sistema de Coordenadas" />
 				
 				<p:selectOneMenu id="IdentificadorShape" converter="integerNewConverter"
-					value="#{atualizarShapesController.ideLocalizacaoGeograficaSelect}" required="true" requiredMessage="O campo Identificador é de preenchimento obrigatório."
+					value="#{atualizarShapesController.ideLocalizacaoGeograficaSelect}" required="true" requiredMessage="O campo Identificador Ã© de preenchimento obrigatÃ³rio."
 					style="width: 160px;">
 					<f:selectItem itemLabel="Selecione..." />
 					<f:selectItems value="#{atualizarShapesController.listaLocalizacaoGeo}" var="localizacao"
@@ -22,7 +23,7 @@
 				</p:selectOneMenu>
 				
 				
-				<p:selectOneMenu id="tipoSecaoGeometrica" required="true" requiredMessage="O campo Tipo é de preenchimento obrigatório."
+				<p:selectOneMenu id="tipoSecaoGeometrica" required="true" requiredMessage="O campo Tipo Ã© de preenchimento obrigatÃ³rio."
 					value="#{atualizarShapesController.secaoGeoSeleccionada}"
 					style="width: 160px;">
 					<f:selectItem itemLabel="Selecione..." />
@@ -32,7 +33,7 @@
 					<p:ajax event="change" process="@this"/>
 				</p:selectOneMenu>
 
-				<p:selectOneMenu id="combodatum" required="true" requiredMessage="O campo Sistema de Coordenadas é de preenchimento obrigatório."
+				<p:selectOneMenu id="combodatum" required="true" requiredMessage="O campo Sistema de Coordenadas Ã© de preenchimento obrigatÃ³rio."
 					label="#{bundle.empreendimento_lbl_datum}"
 					value="#{atualizarShapesController.sistemaCoordSelecionado}"
 					style="width: 260px;">
@@ -53,11 +54,11 @@
 						  label="Selecione o(s) arquivo(s)" 
 						  fileUploadListener="#{atualizarShapesController.importarShape()}" 
 						  fileLimit="3" 
-						  invalidFileMessage="Tipo de arquivo inválido." mode="advanced"
+						  invalidFileMessage="Tipo de arquivo invÃ¡lido." mode="advanced"
 						  update="formAtualizacaoShape formAcao" 
 						  auto="true" 
 						  required="true" 
-						  requiredMessage="Arquivo é Obrigatório!" 
+						  requiredMessage="Arquivo Ã© ObrigatÃ³rio!" 
 						  allowTypes="/(\.|\/)(shp|dbf|shx|SHP|DBF|SHX)$/" 
 						  immediate="true"
 						  multiple="true"/>

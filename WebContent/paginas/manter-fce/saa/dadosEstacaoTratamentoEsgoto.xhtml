@@ -14,6 +14,7 @@
 	  	message="#{bundle.msg_confirma_exclusao}" 
 	  	severity="alert">
 		<h:form id="formconfirmaExclusaoLocalizacaoEstacaoTratamentoEsgoto">
+        <ui:include src="/layout/csrfToken.xhtml" />
 			<div style="text-align: center;">
 				<p:commandButton actionListener="#{fceSaaController.excluirFceSaaLocalizacaoGeograficaEta}" 
 					 update="tabSaa" oncomplete="confirmaExclusaoLocalizacaoEstacaoTratamentoEsgoto.hide()" value="#{bundle.btn_sim}" id="btnconfirmaExclusaoLocalizacaoEstacaoTratamentoEsgoto" />
@@ -31,7 +32,8 @@
 			  width="850" 
 			  height="700"
 			  resizable="false" 
-			  header="Dados da Estação de Tratamento" 
+				<h:form id="formSaaTratamentoEsgoto">
+        <ui:include src="/layout/csrfToken.xhtml" />	
 			  modal="true">
 		
 			<h:panelGroup id="pnlSaaEsgoto" layout="block">
@@ -41,7 +43,7 @@
 					<h:panelGrid id="pngTratamentoEsgoto" columns="1">
 						
 						<h:panelGrid columns="2">
-							<h:outputLabel value="* Identificação" />
+							<h:outputLabel value="* IdentificaÃ§Ã£o" />
 							<p:inputText value="#{fceSaaController.fceSaaLocalizacaoGeograficaEta.nomeIdentificacao}" disabled="#{fceSaaController.desabilitarTudo}"/>
 						</h:panelGrid>
 						
@@ -72,15 +74,15 @@
 									<p:column headerText="Sistema de Coordenadas">
 										<h:outputText value="#{localizacao.ideLocalizacaoGeografica.nomeSistemaCoordenadas()}" />
 									</p:column>
-									<p:column headerText="Vazão(m3/dia)">
+									<p:column headerText="VazÃ£o(m3/dia)">
 										<p:inputText id="vazaoTratada" value="#{fceSaaController.fceSaaLocalizacaoGeograficaEta.valorVazaoMedia}" styleClass="campoNumericoComDecimal-2" disabled="#{localizacao.desabilitarVazao}">
 											<f:convertNumber integerOnly="false" locale="pt,BR" minFractionDigits="2"/>
 										</p:inputText>
 									</p:column>						
-									<p:column headerText="Ações">
+									<p:column headerText="AÃ§Ãµes">
 								
 										<p:commandLink rendered="#{!localizacao.desabilitarVazao}" disabled="#{fceSaaController.desabilitarTudo}" action="#{fceSaaController.desabilitarVazaoTratamentoEsgoto(localizacao)}" process="@this,vazaoTratada" update="tableLocalizacaoEstacaoTratamentoEsgoto" >
-											<h:graphicImage title="Confirmar valor da vazão" value="/resources/img/ico-msg-sucesso.png" />
+											<h:graphicImage title="Confirmar valor da vazÃ£o" value="/resources/img/ico-msg-sucesso.png" />
 										</p:commandLink>		
 										
 										<p:commandLink rendered="#{localizacao.desabilitarVazao}" disabled="#{fceSaaController.desabilitarTudo}" action="#{fceSaaController.habilitarVazaoTratamentoEsgoto(localizacao)}" process="@this" update="tableLocalizacaoEstacaoTratamentoEsgoto" >
@@ -96,7 +98,7 @@
 										
 										<p:commandLink disabled="#{fceSaaController.desabilitarTudo}" oncomplete="confirmaExclusaoLocalizacaoEstacaoTratamentoEsgoto.show();" process="@this" >
 											<f:setPropertyActionListener target="#{fceSaaController.fceSaaLocalizacaoGeograficaEta}" value="#{localizacao}" />
-											<h:graphicImage title="Excluir localização geográfica" value="/resources/img/ico-excluir.png" />
+											<h:graphicImage title="Excluir localizaÃ§Ã£o geogrÃ¡fica" value="/resources/img/ico-excluir.png" />
 										</p:commandLink>
 									</p:column>
 								</p:dataTable>
@@ -105,7 +107,7 @@
 						
 						<h:panelGrid>
 						
-							<h:outputText value="* Informe as Unidades que compõem a Estação de Tratamento" />
+							<h:outputText value="* Informe as Unidades que compÃµem a EstaÃ§Ã£o de Tratamento" />
 							
 							<p:outputPanel autoUpdate="true">
 								
@@ -116,10 +118,10 @@
 										<p:column headerText="Nome">
 											<h:outputText value="#{tipoComposicao.descricaoFceSaaTipoComposicao}" />
 										</p:column>				
-										<p:column headerText="Ações">
+										<p:column headerText="AÃ§Ãµes">
 									
 											<p:commandLink disabled="#{fceSaaController.desabilitarTudo}" actionListener="#{fceSaaController.selecionarTipoComposicao(tipoComposicao)}" update="formSaaTratamentoEsgoto" >
-												<h:graphicImage title="Selecionar composições" value="/resources/img/ico-msg-sucesso.png" />
+												<h:graphicImage title="Selecionar composiÃ§Ãµes" value="/resources/img/ico-msg-sucesso.png" />
 											</p:commandLink>
 											
 										</p:column>
@@ -143,7 +145,7 @@
 											</p:inputText>
 										</p:column>										
 												
-										<p:column headerText="Ações">
+										<p:column headerText="AÃ§Ãµes">
 									
 											<p:commandLink rendered="#{!composicao.desabilitarItem}" disabled="#{fceSaaController.desabilitarTudo}" action="#{fceSaaController.confirmarQtdComposicao(composicao)}" process="@this, quantidadeReserva" update="tableComposicoesSelecionadas" >
 												<h:graphicImage title="Confirmar Quantidade" value="/resources/img/ico-msg-sucesso.png" />
@@ -170,7 +172,7 @@
 					
 					<h:panelGroup>
 						<p:commandButton value="Voltar" onclick="dlgDadosTratamentoEsgoto.hide();" />
-						<p:commandButton id="btnSavar" disabled="#{fceSaaController.desabilitarTudo}" value="Salvar" process="@this, formSaaTratamentoEsgoto" global="true"  action="#{fceSaaController.salvarDadosEstaçãoTratamento()}"/>
+						<p:commandButton id="btnSavar" disabled="#{fceSaaController.desabilitarTudo}" value="Salvar" process="@this, formSaaTratamentoEsgoto" global="true"  action="#{fceSaaController.salvarDadosEstaÃ§Ã£oTratamento()}"/>
 					</h:panelGroup>
 					
 				</h:form>	

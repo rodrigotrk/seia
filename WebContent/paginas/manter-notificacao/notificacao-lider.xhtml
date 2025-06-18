@@ -9,22 +9,23 @@
 	xmlns:c="http://java.sun.com/jsp/jstl/core">
 	
 	<h:form id="notificacaoFinalForm" style="font-size: 11px !important;" rendered="#{notificacaoFinalController.dto.usuarioLider or notificacaoFinalController.dto.usuarioCoordenador}">
+        <ui:include src="/layout/csrfToken.xhtml" />
 		
 		<h:panelGroup id="pnlTopo">
 			<p class="titulo-grupo">
-				<h:outputText rendered="#{notificacaoFinalController.notificacaoPrazo}" value="NotificaÁ„o de prazo" />
-				<h:outputText rendered="#{notificacaoFinalController.notificacaoComunicacao}" value="NotificaÁ„o de comunicaÁ„o:" />
+				<h:outputText rendered="#{notificacaoFinalController.notificacaoPrazo}" value="Notifica√ß√£o de prazo" />
+				<h:outputText rendered="#{notificacaoFinalController.notificacaoComunicacao}" value="Notifica√ß√£o de comunica√ß√£o:" />
 			</p>
 			<h:panelGroup>
-				<h:outputText value="N∞ do Processo: " />
+				<h:outputText value="N¬∞ do Processo: " />
 				<h:outputText value="#{notificacaoFinalController.dto.vwProcesso.numProcesso}" disabled="true" />
 				<br />
-				<h:outputText value="Data de formaÁ„o: " />
+				<h:outputText value="Data de forma√ß√£o: " />
 				<h:outputText value="#{notificacaoFinalController.dto.vwProcesso.dtcFormacao}" disabled="true">
 					<f:convertDateTime pattern="dd/MM/yyyy" locale="pt,BR" timeZone="Brazil/East" />
 				</h:outputText>
 				<br />
-				<h:outputText value="Nome/Raz„o Social: " />
+				<h:outputText value="Nome/Raz√£o Social: " />
 				<h:outputText value="#{notificacaoFinalController.dto.vwProcesso.nomRequerente}" disabled="true" style="width:480px;" />
 				<br />
 				<h:outputText value="Email: " />
@@ -40,9 +41,9 @@
 					<tr>
 						<td />
 						<td colspan="2">
-							<h:outputText value="AtenÁ„o!" style="font-weight: bold;"/>
+							<h:outputText value="Aten√ß√£o!" style="font-weight: bold;"/>
 							<br />
-							<h:outputText value="A partir de terceira notificaÁ„o ser· necess·ria a aprovaÁ„o do DIRETOR imediato." style="line-height: 150%;"/>
+							<h:outputText value="A partir de terceira notifica√ß√£o ser√° necess√°ria a aprova√ß√£o do DIRETOR imediato." style="line-height: 150%;"/>
 							
 						</td>
 					</tr>
@@ -53,14 +54,14 @@
 				<table style="width: 100%; font-size: 11px; background-color: #E6F9E6;">
 					<tr>
 						<td />
-						<td colspan="2"><h:outputText value="AtenÁ„o ‡s seguintes orientaÁıes!" style="font-weight: bold;" /> <br />
+						<td colspan="2"><h:outputText value="Aten√ß√£o √†s seguintes orienta√ß√µes!" style="font-weight: bold;" /> <br />
 							<ul>
-								<li>1. A partir de terceira notificaÁ„o ser· necess·ria a
-									aprovaÁ„o do DIRETOR imediato.</li>
-								<li>2. NotificaÁıes de reenquadramento n„o dever„o pedir
+								<li>1. A partir de terceira notifica√ß√£o ser√° necess√°ria a
+									aprova√ß√£o do DIRETOR imediato.</li>
+								<li>2. Notifica√ß√µes de reenquadramento n√£o dever√£o pedir
 									estudos nem documentos.</li>
-								<li>3. NotificaÁıes de reenquadramento n„o se aplicam caso
-									o processo deva ser convertido em ato de natureza declaratÛria.</li>
+								<li>3. Notifica√ß√µes de reenquadramento n√£o se aplicam caso
+									o processo deva ser convertido em ato de natureza declarat√≥ria.</li>
 							</ul>
 						</td>
 					</tr>
@@ -95,12 +96,12 @@
 					<p:selectBooleanCheckbox value="#{notificacaoFinalController.dto.alterarAtoAutorizativo}">
 						<p:ajax event="change" listener="#{notificacaoFinalController.alterarAtosAutorizativos()}" update="notificacaoFinalForm:pnlReequadramentoProcesso,notificacaoFinalForm:pnlDocumentosNotificacao" />
 					</p:selectBooleanCheckbox>
-					<h:outputText value="SubstituiÁ„o de ato(s) autorizativo(s)" />
+					<h:outputText value="Substitui√ß√£o de ato(s) autorizativo(s)" />
 				</h:panelGroup>
 				<h:panelGroup layout="block" class="margin" rendered="#{notificacaoFinalController.dto.alterarAtoAutorizativo}">
 					<h:panelGroup layout="block" class="margin">
 						<h:panelGrid>
-							<h:outputText value="* Selecione o ato a ser substituÌdo:" />
+							<h:outputText value="* Selecione o ato a ser substitu√≠do:" />
 							<p:selectManyCheckbox value="#{notificacaoFinalController.dto.listaProcessoAtoParaReenquadramento}"
 							layout="pageDirection" 
 							converter="simpleEntityConverter">
@@ -176,7 +177,7 @@
 										</h:panelGroup>
 									</h:panelGroup>
 								</p:column>
-								<p:column headerText="AÁıes" style="width: 53px;">
+								<p:column headerText="A√ß√µes" style="width: 53px;">
 									<h:panelGroup layout="block" style="text-align: center;">
 										<p:commandLink actionListener="#{selecionarAtoAmbientalController.load()}" process="@this" onclick="">
 											<h:graphicImage title="Selecionar novo ato ambiental..." value="/resources/img/ico-alterar-ato.png" />
@@ -197,7 +198,7 @@
 					<p:selectBooleanCheckbox value="#{notificacaoFinalController.dto.incluirNovoAtoAutorizativo}">
 						<p:ajax event="change" listener="#{notificacaoFinalController.incluirNovoAtoAutorizativo()}" update="notificacaoFinalForm:pnlReequadramentoProcesso" />
 					</p:selectBooleanCheckbox>
-					<h:outputText value="Inclus„o de novo(s) ato(s) autorizativo(s)" />
+					<h:outputText value="Inclus√£o de novo(s) ato(s) autorizativo(s)" />
 				</h:panelGroup>
 				<h:panelGroup layout="block" class="margin" rendered="#{notificacaoFinalController.dto.incluirNovoAtoAutorizativo}">
 					<h:panelGroup layout="block" class="margin">
@@ -265,7 +266,7 @@
 								</p:column>
 								<p:column>
 									<f:facet name="header">
-										<h:outputText value="AÁıes" />
+										<h:outputText value="A√ß√µes" />
 									</f:facet>
 									<h:panelGroup layout="block" style="text-align: center;">
 										<p:commandLink actionListener="#{notificacaoFinalController.removerInclusaoAtoAmbiental(rpa)}">
@@ -282,7 +283,7 @@
 					<p:selectBooleanCheckbox value="#{notificacaoFinalController.dto.alterarPotencialPoluidor}">
 						<p:ajax event="change" listener="#{notificacaoFinalController.alterarPotencialPoluidor()}" update="notificacaoFinalForm:pnlReequadramentoProcesso" />
 					</p:selectBooleanCheckbox>
-					<h:outputText value="AlteraÁ„o de potencial poluidor da atividade" />
+					<h:outputText value="Altera√ß√£o de potencial poluidor da atividade" />
 				</h:panelGroup>
 				<h:panelGroup layout="block" class="margin" rendered="false" ><!-- rendered="#{notificacaoFinalController.dto.alterarPotencialPoluidor}"--> 
 					<h:panelGroup layout="block" class="margin">
@@ -327,7 +328,7 @@
 					<p:selectBooleanCheckbox value="#{notificacaoFinalController.dto.alterarClasseEmpreendimento}">
 						<p:ajax event="change" listener="#{notificacaoFinalController.alterarClasseEmpreendimento()}" update="notificacaoFinalForm:pnlReequadramentoProcesso" />
 					</p:selectBooleanCheckbox>
-					<h:outputText value="AlteraÁ„o de classe do empreendimento" />
+					<h:outputText value="Altera√ß√£o de classe do empreendimento" />
 				</h:panelGroup>
 				
 				<h:panelGroup layout="block" class="margin" rendered="false"> <!--rendered="#{notificacaoFinalController.dto.alterarClasseEmpreendimento}"> -->
@@ -347,7 +348,7 @@
 					<p:selectBooleanCheckbox value="#{notificacaoFinalController.dto.alterarTipologia}">
 						<p:ajax event="change" listener="#{notificacaoFinalController.alterarTipologia()}" update="notificacaoFinalForm:pnlReequadramentoProcesso" />
 					</p:selectBooleanCheckbox>
-					<h:outputText value="AlteraÁ„o de tipologia" />
+					<h:outputText value="Altera√ß√£o de tipologia" />
 				</h:panelGroup>
 				<h:panelGroup layout="block" class="margin" rendered="false"> <!-- rendered="#{notificacaoFinalController.dto.alterarTipologia}" > -->
 					<h:panelGroup layout="block" class="margin">
@@ -370,7 +371,7 @@
 							</p:column>
 							<p:column>
 								<f:facet name="header">
-									<h:outputText value="AÁıes" />
+									<h:outputText value="A√ß√µes" />
 								</f:facet>
 								<h:panelGroup layout="block" style="text-align: center;">
 									<p:commandLink actionListener="#{notificacaoFinalController.removerTipologia(rt)}">
@@ -386,7 +387,7 @@
 					<p:selectBooleanCheckbox value="#{notificacaoFinalController.dto.corrigirPorte}">
 						<p:ajax event="change" listener="#{notificacaoFinalController.corrigirPorte()}" update="notificacaoFinalForm:pnlReequadramentoProcesso" />
 					</p:selectBooleanCheckbox>
-					<h:outputText value="CorreÁ„o do porte do empreendimento" />
+					<h:outputText value="Corre√ß√£o do porte do empreendimento" />
 				</h:panelGroup>
 				
 			</h:panelGroup>
@@ -395,7 +396,7 @@
 		<h:panelGroup layout="block" rendered="#{not empty notificacaoFinalController.dto.notificacaoFinal.notificacaoParcialCollection}">
 			<hr class="margin" style="width:100%; border: none; border-top: 1px solid #ccc;" />
 			<p class="titulo-grupo">
-				<h:outputText value="Minutas da NotificaÁ„o:" />
+				<h:outputText value="Minutas da Notifica√ß√£o:" />
 			</p>
 			<ui:repeat var="notificacao" value="#{notificacaoFinalController.dto.notificacaoFinal.notificacaoParcialCollection}">
 				<div>
@@ -415,10 +416,10 @@
 
 		<h:panelGroup id="pnlTextoNotificacao" layout="block">
 			<p class="titulo-grupo">
-				<h:outputText value="DescriÁ„o da NotificaÁ„o:" />
+				<h:outputText value="Descri√ß√£o da Notifica√ß√£o:" />
 			</p>
 			<h:panelGroup layout="block" style="width:100%;">
-				<p><h:outputText rendered="#{notificacaoFinalController.renderedTextoNotificacao}" value="Texto da notificaÁ„o:" /></p>
+				<p><h:outputText rendered="#{notificacaoFinalController.renderedTextoNotificacao}" value="Texto da notifica√ß√£o:" /></p>
 				<h:inputTextarea id="texto_final" value="#{notificacaoFinalController.dto.notificacaoFinal.dscNotificacao}" cols="9" style="width:100%;height:500px;" />
 			</h:panelGroup>
 		</h:panelGroup>
@@ -438,7 +439,7 @@
 				</p:selectBooleanCheckbox>
 				
 				<h:outputText rendered="#{notificacaoFinalController.renderedApensarDocumentos}"
-				value="Apensar documento ‡ notificaÁ„o" />
+				value="Apensar documento √† notifica√ß√£o" />
 			
 			</h:panelGrid>				
 		</h:panelGroup>
@@ -446,12 +447,12 @@
 		<h:panelGroup id="documentosDaNotificacao" layout="block">
 			<h:panelGroup rendered="#{notificacaoFinalController.dto.notificacaoComArquivosApensados}" >
 				<p style="text-align: justify;line-height: 1.5;">
-					Caso deseje apensar algum documento a essa notificaÁ„o, realize o upload do(s) documento(s) abaixo. Esses documentos 
-					ser„o disponibilizados para o requerente juntamente com a notificaÁ„o.
+					Caso deseje apensar algum documento a essa notifica√ß√£o, realize o upload do(s) documento(s) abaixo. Esses documentos 
+					ser√£o disponibilizados para o requerente juntamente com a notifica√ß√£o.
 				</p>
 				<p:fileUpload 
 					id="fileupload" mode="advanced" allowTypes="/(\.|\/)(pdf|gif|jpeg|png|jpg)$/" 
-					label="Selecione um Arquivo" auto="true" invalidFileMessage="Tipo de arquivo inv·lido."
+					label="Selecione um Arquivo" auto="true" invalidFileMessage="Tipo de arquivo inv√°lido."
 					fileUploadListener="#{notificacaoFinalController.trataArquivo()}"
 					update=":notificacaoFinalForm:documentosDaNotificacao"
 					process="@this,notificacaoFinalForm:listaDeDocumentosDaNotificacao" />
@@ -466,7 +467,7 @@
 					<p:ajax event="rowEditCancel" listener="#{notificacaoFinalController.onRowCancel()}" update=":notificacaoFinalForm:botoes" />
 					
 					<f:facet name="header">
-						<h:outputText value="Lista de Documentos apensados a notificaÁ„o" />
+						<h:outputText value="Lista de Documentos apensados a notifica√ß√£o" />
 					</f:facet>
 					
 					<p:column>
@@ -488,7 +489,7 @@
 						</h:outputText>
 					</p:column>
 					
-					<p:column headerText="DescriÁ„o" sortBy="#{documento.dscArquivoProcesso}">
+					<p:column headerText="Descri√ß√£o" sortBy="#{documento.dscArquivoProcesso}">
 						<p:cellEditor>
 							<f:facet name="output">
 								<h:outputText value="#{documento.dscArquivoProcesso}" />
@@ -532,7 +533,7 @@
 				</p:column>
 			</p:dataTable>
 			
-			<p><h:outputText value="SolicitaÁ„o de shapes:" /></p>
+			<p><h:outputText value="Solicita√ß√£o de shapes:" /></p>
 			<p:dataTable id="motivo" var="nmn" rowIndexVar="index"
 			 value="#{notificacaoFinalController.dto.listaNotificacaoMotivoNotificacaoEnvioShape}"
 			 scrollable="true" scrollHeight="150" style="border-bottom:1px solid #ccc;">
@@ -574,7 +575,7 @@
 		
 		<h:panelGroup layout="block">
 			<p class="titulo-grupo">
-				<h:outputText value="ObservaÁ„o:" />
+				<h:outputText value="Observa√ß√£o:" />
 			</p>
 			<h:inputTextarea value="#{notificacaoFinalController.dto.observacao}" styleClass="maxlength500 limitedTextArea" style="width:100%;height:50px;"/>
 		</h:panelGroup>

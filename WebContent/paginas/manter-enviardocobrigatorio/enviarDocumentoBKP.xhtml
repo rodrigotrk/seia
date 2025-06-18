@@ -8,14 +8,18 @@
 	<div>
 		<h3>
 			<h:outputLabel styleClass="titulo-grupo"
-				value="Enviar Documentação Obrigatória" />
+        <ui:include src="/layout/csrfToken.xhtml" />
+        <ui:include src="/layout/csrfToken.xhtml" />
+        <ui:include src="/layout/csrfToken.xhtml" />
+        <ui:include src="/layout/csrfToken.xhtml" />
+				value="Enviar DocumentaÃ§Ã£o ObrigatÃ³ria" />
 		</h3>
 		<p:outputPanel style="float:left;width:300px%">
 			<h:form id="formulariosSistema">
 				<h:panelGrid columns="1">
 					<br />
 					<h:outputLabel styleClass="titulo-grupo"
-						value="Formulários a preencher" />
+						value="FormulÃ¡rios a preencher" />
 					<p:separator style="width:300px;" />
 					<br />
 					<p:commandLink oncomplete="lac.show();"
@@ -37,7 +41,7 @@
 				<h:panelGrid columns="1">
 					<br />
 					<h:outputLabel styleClass="titulo-grupo"
-						value="Formulários Download" />
+						value="FormulÃ¡rios Download" />
 					<p:separator style="width:300px;" />
 					<br />
 					<ui:repeat var="docObrigatorio"
@@ -56,7 +60,7 @@
 					<br />
 					<br />
 					<p:separator style="width:300px;" />
-					<h:outputLabel styleClass="titulo-grupo" value="Formulários Upload" />
+					<h:outputLabel styleClass="titulo-grupo" value="FormulÃ¡rios Upload" />
 					<p:selectOneMenu
 						value="#{enviarDocumentoController.docObrigatorioFormSelected}"
 						converter="documentoObrigatorioConverter"
@@ -70,19 +74,19 @@
 					</p:selectOneMenu>
 				</h:panelGrid>
 				<h:panelGrid columns="1" id="uploadFormulario">
-					<p:fileUpload uploadLabel="false" label="Upload Formulários"
+					<p:fileUpload uploadLabel="false" label="Upload FormulÃ¡rios"
 						fileUploadListener="#{enviarDocumentoController.handleFileUploadFormularioObrigatorio}"
 						mode="advanced" update="formulariosdownload"
 						auto="true" allowTypes="/(\.|\/)(pdf|gif|jpeg|png|jpg)$/"
-						invalidFileMessage="Tipo de arquivo inválido." />
+						invalidFileMessage="Tipo de arquivo invÃ¡lido." />
 					<p:dataTable id="tabelaFormulariosDowload"
 						widgetVar="tabelaFormulariosDowload"
 						value="#{enviarDocumentoController.arqvsFormsObrigatorios}"
 						var="formularios">
 						<f:facet name="header">
-							<h:outputText value="Formulários" />
+							<h:outputText value="FormulÃ¡rios" />
 						</f:facet>
-						<p:column headerText="Formulário">
+						<p:column headerText="FormulÃ¡rio">
 							<h:outputText value="#{formularios.nomDocumentoObrigatorio}" />
 						</p:column>
 						<p:column headerText="Nome Arquivo">
@@ -91,7 +95,7 @@
 						<p:column headerText="Tamanho(KB)">
 							<h:outputText value="#{formularios.fileSizeFormated}" />
 						</p:column>
-						<p:column headerText="Ações">
+						<p:column headerText="AÃ§Ãµes">
 							<h:link>
 								<h:graphicImage title="Excluir" value="/resources/img/ico-excluir.png" />
 							</h:link>
@@ -130,7 +134,7 @@
 						<f:facet name="header">
 							<h:outputText value="Documentos" />
 						</f:facet>
-						<p:column headerText="Formulário">
+						<p:column headerText="FormulÃ¡rio">
 							<h:outputText value="#{documentos.nomDocumentoObrigatorio}" />
 						</p:column>
 						<p:column headerText="Nome Arquivo">
@@ -139,7 +143,7 @@
 						<p:column headerText="Tamanho(KB)">
 							<h:outputText value="#{documentos.fileSizeFormated}" />
 						</p:column>
-						<p:column headerText="Ações">
+						<p:column headerText="AÃ§Ãµes">
 							<p:commandLink update="documentosdownload"
 								oncomplete="confirmationDocument.show()" title="Remover">
 								<h:graphicImage title="Excluir" value="/resources/img/ico-excluir.png" />

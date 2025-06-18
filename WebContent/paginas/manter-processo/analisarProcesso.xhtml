@@ -6,13 +6,14 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:p="http://primefaces.prime.com.tr/ui">
 	<h:form id="formAnalisarProcesso" binding="#{analiseTecnicaController.formularioASerLimpo}">
+        <ui:include src="/layout/csrfToken.xhtml" />
 		<h3><h:outputLabel styleClass="titulo-grupo" style="font-weight:bolder" value="Dados do processo" /></h3>	
 		<h:panelGrid>
 			<h:panelGrid columns="4">
 				<p:spacer width="10" height="10" />
-				<h:outputText value="Número do Processo:" style="font-weight:bold"/>
+				<h:outputText value="NÃºmero do Processo:" style="font-weight:bold"/>
 				<p:spacer width="60" height="10" />
-				<h:outputText value="Data de Formação do processo:" style="font-weight:bold"/>
+				<h:outputText value="Data de FormaÃ§Ã£o do processo:" style="font-weight:bold"/>
 				
 				<p:spacer width="10" height="10" />
 				<h:outputText value="#{analiseTecnicaController.vwProcesso.numProcesso}"/>
@@ -35,18 +36,18 @@
 							widgetVar="tblImovel">
 		
 							<f:facet name="header">
-								<h:outputText value="Lista de Imóveis Rurais" />
+								<h:outputText value="Lista de ImÃ³veis Rurais" />
 							</f:facet>
 							
 							<p:column style="width: 60px;" headerText="ITR/NIRF">						
 								<h:outputText value="#{imovel.imovelRural.numItr}" />
 							</p:column>
 		
-							<p:column style="width: 155px;" headerText="Nome Imóvel Rural">						
+							<p:column style="width: 155px;" headerText="Nome ImÃ³vel Rural">						
 								<h:outputText value="#{imovel.imovelRural.desDenominacao}" />
 							</p:column>
 		
-							<p:column style="width: 185px;" headerText="Proprietário/Justo Possuidor">
+							<p:column style="width: 185px;" headerText="ProprietÃ¡rio/Justo Possuidor">
 								<h:outputText value="#{analiseTecnicaController.retornaNomeDaPessoa(imovel.proprietario)}" />
 							</p:column>
 		
@@ -55,7 +56,7 @@
 									value="#{imovel.ideEndereco.ideLogradouro.ideMunicipio.nomMunicipio}" />
 							</p:column>
 		
-							<p:column style="width: 90px;" headerText="Status Imóvel">						
+							<p:column style="width: 90px;" headerText="Status ImÃ³vel">						
 								<h:outputText value="#{analiseTecnicaController.retornaStatusImovel(imovel.imovelRural)}" rendered="${!analiseTecnicaController.habilitarLinkStatusPendenteImovel(imovel.imovelRural)}"/>
 								
 								<p:commandLink rendered="${analiseTecnicaController.habilitarLinkStatusPendenteImovel(imovel.imovelRural)}"
@@ -73,14 +74,14 @@
 							</p:column>
 							
 							<p:column style="width: 25px; text-align: center;" headerText="ASV">						
-								<h:graphicImage title="Com Restrinção de solicitação de ASV"
+								<h:graphicImage title="Com RestrinÃ§Ã£o de solicitaÃ§Ã£o de ASV"
 											value="/resources/img/ico-msg-erro.png" rendered="${imovel.imovelRural.indPermissaoASV != null and imovel.imovelRural.indPermissaoASV == false}" />
-								<h:graphicImage title="Sem Restrinção de solicitação de ASV"
+								<h:graphicImage title="Sem RestrinÃ§Ã£o de solicitaÃ§Ã£o de ASV"
 											value="/resources/img/ico-aprovar-notificacao.png" rendered="${imovel.imovelRural.indPermissaoASV == null or imovel.imovelRural.indPermissaoASV == true}" />
 								<h:outputText value="" />
 							</p:column>
 		
-							<p:column style="width: 55px; text-align: center;" headerText="Ações">			
+							<p:column style="width: 55px; text-align: center;" headerText="AÃ§Ãµes">			
 								<h:panelGrid style="color:white;text-align:center;" columns="3">								
 									<p:commandLink id="btnVisualizarImovelRural" title="Visualizar"
 										action="#{detalharImovelRuralController.detalharImovelRural()}"

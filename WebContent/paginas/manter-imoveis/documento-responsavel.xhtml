@@ -9,6 +9,7 @@
 
 	<p:outputPanel autoUpdate="true">	
 			<h:form id="formExpandirDoc" prependId="false">
+        <ui:include src="/layout/csrfToken.xhtml" />
 				<h3><h:outputLabel styleClass="titulo-grupo" value="DOCUMENTO" rendered="#{!responsavelCefirController.showIncluirResponsavel}"/></h3>
 				<h:panelGrid rendered="#{!responsavelCefirController.showIncluirResponsavel}">
 					<h:panelGroup>
@@ -28,6 +29,7 @@
 
 		
 		<h:form id="formdocumentos" >
+        <ui:include src="/layout/csrfToken.xhtml" />
 		
 		<!-- DATATABLE DOCUMENTOS -->
 		<h:panelGrid id="panDocumento" rendered="#{!responsavelCefirController.showIncluirResponsavel}"> 
@@ -42,11 +44,11 @@
 					<h:outputText value="#{documento.ideTipoIdentificacao.nomTipoIdentificacao}" />
 				</p:column>
 				
-				<p:column headerText="Número Documento">
+				<p:column headerText="NÃºmero Documento">
 					<h:outputText value="#{documento.numDocumento}" />
 				</p:column>
 				
-				<p:column headerText="Data Emissão" style="width:80px">
+				<p:column headerText="Data EmissÃ£o" style="width:80px">
 					<h:outputText value="#{documento.dtcEmissao}">
 						<f:convertDateTime pattern="dd/MM/yyyy" locale="pt,BR" timeZone="Brazil/East"/>
 					</h:outputText>
@@ -58,7 +60,7 @@
 					</h:outputText>
 				</p:column>
 
-				<p:column style="text-align: center;" headerText="Ações">	
+				<p:column style="text-align: center;" headerText="AÃ§Ãµes">	
 						
 						<p:commandLink update=":formdocumentos:dialogdocumentos paginaImovel:paginaCefir:tabAbasCefir:formdocumentos" oncomplete="limparMsgErro();dialogdocumentos.show();" title="Visualizar" process="@this">
 							<h:graphicImage title="Visualizar" value="/resources/img/ico-pesquisa.png" />
@@ -91,11 +93,11 @@
 			<h:panelGrid id="paneldocumentos" columns="1">
 				<h:panelGrid columns="2">
 						<h:outputLabel value="*Tipo de Documento" />
-						<h:outputLabel value="*Número de Documento" />
+						<h:outputLabel value="*NÃºmero de Documento" />
 						<p:selectOneMenu style="width: 260px;" id="tipoDocumento" 
 							disabled="true"
 							value="#{documentoIdentificacaoController.documentoIdentificacaoSelecionado.ideTipoIdentificacao}"
-							valueChangeListener="#{documentoIdentificacaoController.listenerValor}" required="true" requiredMessage="O campo Tipo de Documento é de preenchimento obrigatório.">
+							valueChangeListener="#{documentoIdentificacaoController.listenerValor}" required="true" requiredMessage="O campo Tipo de Documento Ã© de preenchimento obrigatÃ³rio.">
 							<f:selectItem itemLabel="Selecione..." />
 							<f:selectItems value="#{tipoIdentificacaoController.valuesComboBox}" />
 							<f:converter converterId="tipoIdentificacaoConverter" />
@@ -104,27 +106,27 @@
 						</p:selectOneMenu>
 						<p:inputText style="width: 136px;" id="numDocumento" maxlength="15"
 							value="#{documentoIdentificacaoController.documentoIdentificacaoSelecionado.numDocumento}" required="true"
-							disabled="#{!responsavelCefirController.temPessoaSelecionada}" requiredMessage="O campo Número de Documento é de preenchimento obrigatório." />
+							disabled="#{!responsavelCefirController.temPessoaSelecionada}" requiredMessage="O campo NÃºmero de Documento Ã© de preenchimento obrigatÃ³rio." />
 				</h:panelGrid>
 				<h:panelGrid columns="2">
-					<h:outputText value="*Orgão Emissor" />
+					<h:outputText value="*OrgÃ£o Emissor" />
 					<h:outputText value="*UF:" rendered="#{!documentoIdentificacaoController.campoSerie}" />
-					<h:outputText value="*Série:" rendered="#{documentoIdentificacaoController.campoSerie}" />
+					<h:outputText value="*SÃ©rie:" rendered="#{documentoIdentificacaoController.campoSerie}" />
 					<p:selectOneMenu style="width: 260px;" id="orgaoEmissor" value="#{documentoIdentificacaoController.documentoIdentificacaoSelecionado.ideOrgaoExpedidor}"
-						disabled="#{documentoIdentificacaoController.desabCombOrg and documentoIdentificacaoController.editModeCampoTipoDeDocumento}" required="true" requiredMessage="O campo Órgão Emissor é de preenchimento obrigatório." >		
+						disabled="#{documentoIdentificacaoController.desabCombOrg and documentoIdentificacaoController.editModeCampoTipoDeDocumento}" required="true" requiredMessage="O campo Ã“rgÃ£o Emissor Ã© de preenchimento obrigatÃ³rio." >		
 						<f:selectItem itemLabel="Selecione..." />
 						<f:selectItems value="#{documentoIdentificacaoController.listaOrgaoExpedidor}" var="orgao" itemLabel="#{orgao.dscOrgaoExpedidor}" itemValue="#{orgao}" />
 						<f:converter converterId="OrgaoExpedidorConverter" />					
 					</p:selectOneMenu>
 
-					<p:inputText title="Série" maxlength="15" value="#{documentoIdentificacaoController.documentoIdentificacaoSelecionado.numSerie}" rendered="#{documentoIdentificacaoController.campoSerie}" 
-						required="true" disabled="#{!documentoIdentificacaoController.editModeDocumento}" requiredMessage="O campo Número de série é de preenchimento obrigatório" />
+					<p:inputText title="SÃ©rie" maxlength="15" value="#{documentoIdentificacaoController.documentoIdentificacaoSelecionado.numSerie}" rendered="#{documentoIdentificacaoController.campoSerie}" 
+						required="true" disabled="#{!documentoIdentificacaoController.editModeDocumento}" requiredMessage="O campo NÃºmero de sÃ©rie Ã© de preenchimento obrigatÃ³rio" />
 					<h:outputText value="*UF:" rendered="#{documentoIdentificacaoController.campoSerie}"  />
 					<h:outputText value="" rendered="#{documentoIdentificacaoController.campoSerie}" />
 					
 					<p:selectOneMenu style="width: 130px;" id="uforgaoemissor"
 						value="#{documentoIdentificacaoController.documentoIdentificacaoSelecionado.ideEstado}"
-						disabled="#{!documentoIdentificacaoController.editModeDocumento}" required="true" requiredMessage="O campo UF é de preenchimento obrigatório." >
+						disabled="#{!documentoIdentificacaoController.editModeDocumento}" required="true" requiredMessage="O campo UF Ã© de preenchimento obrigatÃ³rio." >
 						<f:selectItem  itemLabel="Selecione..." />
 						<f:selectItems value="#{documentoIdentificacaoController.listaEstados}" var="estado" itemLabel="#{estado.desSigla}" itemValue="#{estado}" />
 						<f:converter converterId="estadoConverter" />
@@ -132,18 +134,18 @@
 				</h:panelGrid>
 
 				<h:panelGrid columns="2">
-					<h:outputText value="Data de Emissão" />
+					<h:outputText value="Data de EmissÃ£o" />
 					<h:outputText value="Data de Validade" style="margin-left:-25px" />
 					
 					<h:panelGroup>
 					<h:outputText value="De  " />
-					<p:calendar showOn="button" id="dataEmissao" label="Data de Emissão" validator="dataPosteriorValidator"
+					<p:calendar showOn="button" id="dataEmissao" label="Data de EmissÃ£o" validator="dataPosteriorValidator"
 						value="#{documentoIdentificacaoController.documentoIdentificacaoSelecionado.dtcEmissao}"
 						locale="pt" pattern="dd/MM/yyyy" navigator="true"
 						disabled="#{!responsavelCefirController.temPessoaSelecionada}"   
 						readOnlyInputText="true" yearRange="c-100" maxdate="#{documentoIdentificacaoController.dataAtual}"
 					/>
-					<h:outputText value="   Até" />
+					<h:outputText value="   AtÃ©" />
 					</h:panelGroup>
 					<p:calendar showOn="button" id="dataValidade"  
 						value="#{documentoIdentificacaoController.documentoIdentificacaoSelecionado.dtcValidade}" 
@@ -151,12 +153,12 @@
 						disabled="#{!responsavelCefirController.temPessoaSelecionada}" 
 						readOnlyInputText="true" yearRange="c-100:c+100" mindate="#{documentoIdentificacaoController.dataAtual}"
 					/>
-					<h:outputText value="*Cópia do Documento (.pdf.jpg - Máximo 5MB)"
+					<h:outputText value="*CÃ³pia do Documento (.pdf.jpg - MÃ¡ximo 5MB)"
 						rendered="#{!responsavelCefirController.temPessoaSelecionada}" />
 					<h:outputText value="" />
 				</h:panelGrid>
 
-				<p:fileUpload uploadLabel="false" label="Upload Documento" invalidFileMessage="Tipo de arquivo inválido."
+				<p:fileUpload uploadLabel="false" label="Upload Documento" invalidFileMessage="Tipo de arquivo invÃ¡lido."
 					fileUploadListener="#{documentoIdentificacaoController.trataArquivo}"
 					mode="advanced" update="dataTableDocumentos" auto="true"
 					allowTypes="/(\.|\/)(pdf|gif|jpeg|png|jpg)$/"
@@ -188,7 +190,7 @@
 			<p:ajax event="close" listener="#{documentoIdentificacaoController.fecharDialog()}" update=":formdocumentos:dialogdocumentos paginaImovel:paginaCefir:tabAbasCefir:formdocumentos"/>
 		</p:dialog>
 		
-		<p:confirmDialog message="Tem certeza que deseja excluir a(s) opção(ões) selecionadas?"
+		<p:confirmDialog message="Tem certeza que deseja excluir a(s) opÃ§Ã£o(Ãµes) selecionadas?"
 				header="Mensagem" severity="alert"
 				widgetVar="confirmationDocumento" id="confirmationDocumento">
 				
@@ -196,7 +198,7 @@
 					actionListener="#{documentoIdentificacaoController.removerDocumento}"
 					oncomplete="confirmationDocumento.hide()" process="@this" />
 				
-				<p:commandButton value="Não" onclick="confirmationDocumento.hide()"
+				<p:commandButton value="NÃ£o" onclick="confirmationDocumento.hide()"
 					type="button" />
 			
 			</p:confirmDialog>

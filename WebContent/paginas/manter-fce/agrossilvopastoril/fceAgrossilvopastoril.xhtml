@@ -13,24 +13,30 @@ xmlns:p="http://primefaces.prime.com.tr/ui">
 			<p:tab id="abaDadosGerais" title="Dados Gerais" >
 				<ui:include src="/paginas/manter-fce/agrossilvopastoril/abaDadosGerais.xhtml"/>
 			</p:tab>
-			<p:tab id="abaCriacaoAnimais" title="Criação de Animais confinados em sistema intensivo" disabled="#{agrossilvopastorilController.desabilitarAbas()}">
+        <ui:include src="/layout/csrfToken.xhtml" />
+        <ui:include src="/layout/csrfToken.xhtml" />
+        <ui:include src="/layout/csrfToken.xhtml" />
+        <ui:include src="/layout/csrfToken.xhtml" />
+        <ui:include src="/layout/csrfToken.xhtml" />
+        <ui:include src="/layout/csrfToken.xhtml" />
+			<p:tab id="abaCriacaoAnimais" title="CriaÃ§Ã£o de Animais confinados em sistema intensivo" disabled="#{agrossilvopastorilController.desabilitarAbas()}">
 				<ui:include src="/paginas/manter-fce/agrossilvopastoril/abaCriacaoAnimais.xhtml"/>
 			</p:tab>
 			<p:tab id="abaSilvicultura" title="Silvicultura" disabled="#{agrossilvopastorilController.desabilitarAbas()}">
 				<ui:include src="/paginas/manter-fce/agrossilvopastoril/abaSilvicultura.xhtml"/>
 			</p:tab>
 			
-			<p:tab id="abaDefensivosAgricolas" title ="Defensivos Agrícolas" disabled="#{agrossilvopastorilController.desabilitarAbas()}">
+			<p:tab id="abaDefensivosAgricolas" title ="Defensivos AgrÃ­colas" disabled="#{agrossilvopastorilController.desabilitarAbas()}">
 				<ui:include src="/paginas/manter-fce/agrossilvopastoril/abaDefensivosAgricolas.xhtml" />
 			</p:tab>
 			
-			<p:tab id="abaAdubacao" title="Adubação" disabled="#{agrossilvopastorilController.desabilitarAbas()}">
+			<p:tab id="abaAdubacao" title="AdubaÃ§Ã£o" disabled="#{agrossilvopastorilController.desabilitarAbas()}">
 				<ui:include src="/paginas/manter-fce/agrossilvopastoril/abaAdubacao.xhtml" />
 			</p:tab>
 		</p:tabView>
 	</p:dialog>
 	
-	<!-- Dialog de exclusão de Tipo de Cultura, Aba Criação de Animais -->
+	<!-- Dialog de exclusÃ£o de Tipo de Cultura, Aba CriaÃ§Ã£o de Animais -->
 	<p:confirmDialog widgetVar="excluirTipoCultura" header="#{bundle.geral_lbl_mensagem}" appendToBody="true" message="#{bundle.lac_dadosGerais_msg004}" severity="alert">
 		<h:form>
 			<p:commandButton value="#{bundle.btn_sim}" update="formGeral:tabAbasId_Agro:tblTipoCriacao formGeral:tabAbasId_Agro:pnlTipoCriacaoSelecionados" 
@@ -39,15 +45,15 @@ xmlns:p="http://primefaces.prime.com.tr/ui">
 		</h:form>
 	</p:confirmDialog>
 	
-	<!-- Dialog geral informativo relativo a seleção do item "Outros" em qualuqer lista conforme RN 20 atualizada até a presente data (20/08/2013)-->
-	<p:confirmDialog widgetVar="infoOutros" header="#{bundle.geral_lbl_mensagem}" appendToBody="true" message="Favor entrar em contato com o INEMA através do e-mail atendimento.seia@inema.ba.gov.br
-		para que o cadastro da opção desejada seja realizado." severity="alert" >
+	<!-- Dialog geral informativo relativo a seleÃ§Ã£o do item "Outros" em qualuqer lista conforme RN 20 atualizada atÃ© a presente data (20/08/2013)-->
+	<p:confirmDialog widgetVar="infoOutros" header="#{bundle.geral_lbl_mensagem}" appendToBody="true" message="Favor entrar em contato com o INEMA atravÃ©s do e-mail atendimento.seia@inema.ba.gov.br
+		para que o cadastro da opÃ§Ã£o desejada seja realizado." severity="alert" >
 		<h:form>
 			<p:commandButton value="Fechar" onclick="infoOutros.hide()" type="button" />
 		</h:form>
 	</p:confirmDialog>
 	
-	<!-- Dialog de exclusão de Especies ou Hibridos, Aba Silvicultura -->
+	<!-- Dialog de exclusÃ£o de Especies ou Hibridos, Aba Silvicultura -->
 	<p:confirmDialog widgetVar="excluirEspecieHibrido" header="#{bundle.geral_lbl_mensagem}" appendToBody="true" message="#{bundle.lac_dadosGerais_msg004}" severity="alert">
 		<h:form>
 			<p:commandButton value="#{bundle.btn_sim}" update="formGeral:tabAbasId_Agro:tblEspecieHibrido formGeral:tabAbasId_Agro:pngEspecieHibridoSelecionados" 
@@ -56,7 +62,7 @@ xmlns:p="http://primefaces.prime.com.tr/ui">
 		</h:form>
 	</p:confirmDialog>
 	
-	<!-- Dialog de exclusão dos tipos de uso do solo, Aba Dados Gerais -->
+	<!-- Dialog de exclusÃ£o dos tipos de uso do solo, Aba Dados Gerais -->
 	<p:confirmDialog widgetVar="excluirFceAgroSolo" header="#{bundle.geral_lbl_mensagem}" appendToBody="true" message="#{bundle.lac_dadosGerais_msg004}" severity="alert">
 		<h:form>
 			<p:commandButton value="#{bundle.btn_sim}" update="tabAbasId_Agro:formAbaDadosGerais:tblUsoSoloSelecionados tabAbasId_Agro:formAbaDadosGerais:tblUsoSolo" 	action="#{agrossilvopastorilController.excluirUsoSolo()}" oncomplete="excluirFceAgroSolo.hide()" process="@this" global="false" />
@@ -72,11 +78,11 @@ xmlns:p="http://primefaces.prime.com.tr/ui">
 		</p:confirmDialog>
 	</h:form>
 	
-	<p:confirmDialog header="Confirmação" appendToBody="true" message="#{bundle.geral_msg_informacoes_nao_foram_salvas_deseja_continuar}"
+	<p:confirmDialog header="ConfirmaÃ§Ã£o" appendToBody="true" message="#{bundle.geral_msg_informacoes_nao_foram_salvas_deseja_continuar}"
 		severity="alert" widgetVar="confirmationVoltarFCEAgro" id="confirmationVoltarFCEAgro">
 		<h:form>
 			<p:commandButton value="Sim" update="formGeral" oncomplete="confirmationVoltarFCEAgro.hide();fce_agrossilvo.hide();" global="false"/>
-			<p:commandButton value="Não" onclick="confirmationVoltarFCEAgro.hide();" type="button" global="false"/>
+			<p:commandButton value="NÃ£o" onclick="confirmationVoltarFCEAgro.hide();" type="button" global="false"/>
 		</h:form>
 	</p:confirmDialog>
 

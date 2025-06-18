@@ -6,6 +6,7 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:p="http://primefaces.prime.com.tr/ui">
 	<h:form id="upDadoAdicionalRio" style="width:650px;" rendered="#{fceOutorgaAquiculturaRioController.temRio}">
+        <ui:include src="/layout/csrfToken.xhtml" />
 		<!-- INICIO GROUP INFO TANQUE - RIO -->
 		<h:panelGroup style="margin-left:10px;">
 			<h:outputText styleClass="titulo-grupo" style="font-weight:bold;" value="#{bundle.fce_out_aqui_da_rede_rio}" />
@@ -20,7 +21,7 @@
 		<!-- INICIO DA GRID COM DOCUMENTO UPADO DE TANQUE - RIO -->
 		<h:panelGrid id="adicionalRio" style="margin-left:15px;">
 			<p:fileUpload id="upAdicionalRio" widgetVar="upAdicionalRio" label="#{bundle.fce_out_aqui_da_upload_rio}" fileUploadListener="#{fceOutorgaAquiculturaRioController.tratarUploadRio()}"
-				mode="advanced" oncomplete="updateGridRio()" auto="true" allowTypes="/(\.|\/)(pdf|png|jpg)$/" invalidFileMessage="Tipo de arquivo inválido." 
+				mode="advanced" oncomplete="updateGridRio()" auto="true" allowTypes="/(\.|\/)(pdf|png|jpg)$/" invalidFileMessage="Tipo de arquivo invÃ¡lido." 
 				process="@this" disabled="#{fceOutorgaAquiculturaRioController.docAdicionalRioUpado or fceOutorgaAquiculturaRioController.desabilitarTudo}" />
 			<p:remoteCommand name="updateGridRio" update="adicionalRio" />
 			<p:dataTable id="docRioUpado" widgetVar="docRioUpado" rendered="#{fceOutorgaAquiculturaRioController.docAdicionalRioUpado}" value="#{fceOutorgaAquiculturaRioController.fceAquiculturaRio.uploadCaminhoArquivo}" var="rioUpado" lazy="true" style="width:590px;">

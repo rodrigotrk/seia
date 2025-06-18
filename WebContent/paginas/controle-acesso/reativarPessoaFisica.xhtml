@@ -7,6 +7,7 @@
 	xmlns:p="http://primefaces.prime.com.tr/ui">
 
 	<h:form id="formPessoaReabilitar" binding="#{reativarPessoaFisicaController.formularioASerLimpo}">
+        <ui:include src="/layout/csrfToken.xhtml" />
 		<h:panelGrid id="panelPessoaReabilitar" columns="1">
 			
 			<h:outputLabel value="#{bundle.lbl_cpf}: " />
@@ -25,14 +26,15 @@
 	</h:form>
 	
 	
-	<!-- Dialog de confirmação -->
+		<h:form >
+        <ui:include src="/layout/csrfToken.xhtml" />	
 	<p:confirmDialog message="#{bundle.consultapf_msg_confimrativacao}" header="Mensagem" severity="alert" widgetVar="confirmDlgAtivacaoUsuario" id="confirmDlgAtivacaoUsuario">
 		<h:form >	
 			<p:commandButton value="Sim"  actionListener="#{reativarPessoaFisicaController.reativarUsuario}"
 					 oncomplete="confirmDlgAtivacaoUsuario.hide(); dlgPessoaReabilitar.hide();" 
 					 update="formListaPessoaReativar:dataTablePessoaReativar"/>
 					 
-			<p:commandButton value="Não" onclick="confirmDlgAtivacaoUsuario.hide()" 	type="button" />
+			<p:commandButton value="NÃ£o" onclick="confirmDlgAtivacaoUsuario.hide()" 	type="button" />
 		</h:form>	
 	</p:confirmDialog>
 

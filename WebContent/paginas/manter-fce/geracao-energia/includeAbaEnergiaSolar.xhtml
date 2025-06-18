@@ -8,6 +8,7 @@
 	
 	
 	<h:form id="formAbaEnergiaSolar">
+        <ui:include src="/layout/csrfToken.xhtml" />
 			<h:outputText value="Usina(s) fotovoltaica(s)" style="font-weight: bold;"/>
 			<div class="line"/>		
 		<br/><br/>
@@ -18,17 +19,17 @@
 		</p:commandLink>
 		
 		<br/><br/>
-		<p:dataTable emptyMessage="Não existe nenhuma Usina Fotovoltaica cadastrada." id="listaEnergiaSolarUsina" rows="5" var="usina"
+		<p:dataTable emptyMessage="NÃ£o existe nenhuma Usina Fotovoltaica cadastrada." id="listaEnergiaSolarUsina" rows="5" var="usina"
 			value="#{fceGeracaoEnergiaController.listaEnergiaSolarUsina}" paginator="true" paginatorPosition="bottom" paginatorAlwaysVisible="false">
-			<p:column headerText="Identificação" style="width: 350px; text-align:center;">
+			<p:column headerText="IdentificaÃ§Ã£o" style="width: 350px; text-align:center;">
 				<h:outputText value="#{usina.desIdentificacaoUsina}" />
 			</p:column>
-			<p:column headerText="Área" style="text-align:center;">
+			<p:column headerText="Ãrea" style="text-align:center;">
 				<h:outputText value="#{usina.valorAreaUsina}">
 					<f:convertNumber type="number" groupingUsed="true" minFractionDigits="2" pattern="###,##0.00"/>
 				</h:outputText>
 			</p:column>
-			<p:column headerText="Ações" style="text-align:center;">
+			<p:column headerText="AÃ§Ãµes" style="text-align:center;">
 				<p:commandLink id="visualizarUsina" action="#{fceGeracaoEnergiaController.visualizarUsina}" title="Visualizar" update="formIncFotovoltaica" onsuccess="incluirFotovoltaica.show()" process="@this">
 					<h:graphicImage title="Visualizar" value="/resources/img/ico-pesquisa.png" />
 					<f:setPropertyActionListener value="#{usina}" target="#{fceGeracaoEnergiaController.fceEnergiaSolarUsinaAux}"/>
@@ -48,7 +49,7 @@
                		<p:column footerText="#{fceGeracaoEnergiaController.numeroTotalUsina}"/>
                	</p:row>
                	<p:row>
-               		<p:column footerText="Área Total (ha)" colspan="2" style="text-align:left;"/>
+               		<p:column footerText="Ãrea Total (ha)" colspan="2" style="text-align:left;"/>
                		<p:column>
                			<f:facet name="footer">
                				<h:outputText value="#{fceGeracaoEnergiaController.areaTotalUsina}">
@@ -63,7 +64,7 @@
 		<p:commandButton value="Voltar" action="#{fceGeracaoEnergiaController.voltar}" update="tabAbasGeracaoEnergia">
 			<f:setPropertyActionListener value="3" target="#{fceGeracaoEnergiaController.numeroAba}"/>
 		</p:commandButton>
-		<p:commandButton value="Avançar" action="#{fceGeracaoEnergiaController.avancar}" rendered="#{!fceGeracaoEnergiaController.desabilitarTudo}" style="float:right" update="tabAbasGeracaoEnergia">
+		<p:commandButton value="AvanÃ§ar" action="#{fceGeracaoEnergiaController.avancar}" rendered="#{!fceGeracaoEnergiaController.desabilitarTudo}" style="float:right" update="tabAbasGeracaoEnergia">
 			<f:setPropertyActionListener value="3" target="#{fceGeracaoEnergiaController.numeroAba}"/>
 		</p:commandButton>
 		<p:commandButton value="Salvar" action="#{fceGeracaoEnergiaController.salvar}" rendered="#{!fceGeracaoEnergiaController.desabilitarTudo}" style="float:right; margin-right: 5px;">

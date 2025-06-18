@@ -23,6 +23,7 @@
 		</p:dialog>
 
 		<h:form id="formDialogSegmentos">
+        <ui:include src="/layout/csrfToken.xhtml" />
 
 			<h:panelGrid columns="2">
 				<h:outputText value="#{bundle.lbl_segmento}" />
@@ -95,6 +96,7 @@
 		
         <p:confirmDialog message="#{bundle.consultapf_msg_confimrexclusao}" header="Mensagem" severity="alert" widgetVar="confirmation" id="confirmation">
             <h:form id="excluir">
+        <ui:include src="/layout/csrfToken.xhtml" />
                 <p:commandButton id="confirmarExcluir"  value="#{bundle.consultapf_lbl_sim}" update=":formDialogSegmentos:dataTableSegmentos" actionListener="#{segmentoController.excluir()}" onsuccess="confirmation.hide()" process="@this" />
                 <p:commandButton value="#{bundle.consultapf_lbl_nao}" onclick="confirmation.hide()" type="button" />
             </h:form>

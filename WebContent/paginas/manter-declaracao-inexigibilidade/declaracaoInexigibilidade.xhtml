@@ -9,7 +9,13 @@
 	template="../../layout/template.xhtml">
 
 	<ui:define name="titulo-pagina">
-		<h3>Declaração de Inexigibilidade</h3>
+        <ui:include src="/layout/csrfToken.xhtml" />
+        <ui:include src="/layout/csrfToken.xhtml" />
+        <ui:include src="/layout/csrfToken.xhtml" />
+        <ui:include src="/layout/csrfToken.xhtml" />
+        <ui:include src="/layout/csrfToken.xhtml" />
+        <ui:include src="/layout/csrfToken.xhtml" />
+		<h3>DeclaraÃ§Ã£o de Inexigibilidade</h3>
 	</ui:define>
 
 	<ui:define name="conteudo-principal">
@@ -20,19 +26,19 @@
 				<ui:include src="/paginas/manter-declaracao-inexigibilidade/abaAtividade.xhtml" />
 			</p:tab>
 			
-			<p:tab title="Informações Adicionais" id="tab02" disabled="#{declaracaoInexigibilidadeController.desabilitaTab02}">
+			<p:tab title="InformaÃ§Ãµes Adicionais" id="tab02" disabled="#{declaracaoInexigibilidadeController.desabilitaTab02}">
 				<ui:include src="/paginas/manter-declaracao-inexigibilidade/abaInfoAdicional.xhtml" />
 			</p:tab>
 			
-			<p:tab title="Recomendações" id="tab03" disabled="#{declaracaoInexigibilidadeController.desabilitaTab03}">
+			<p:tab title="RecomendaÃ§Ãµes" id="tab03" disabled="#{declaracaoInexigibilidadeController.desabilitaTab03}">
 				<ui:include src="/paginas/manter-declaracao-inexigibilidade/abaRecomendacao.xhtml" />
 			</p:tab>
 		</p:tabView>
 		
-		<p:confirmDialog id="confirmExcluirGeo" widgetVar="confirmExcluirGeo" header="Excluir Localização Geografica " message="Excluir Localização Geografica?" severity="alert">
+		<p:confirmDialog id="confirmExcluirGeo" widgetVar="confirmExcluirGeo" header="Excluir LocalizaÃ§Ã£o Geografica " message="Excluir LocalizaÃ§Ã£o Geografica?" severity="alert">
 	        <h:form>
 	            <p:commandButton value="Sim" actionListener="#{localizacaoGeograficaGenericController.excluirLocGeo()}" update="formSistema:pnlCoordenada" onsuccess="confirmExcluirGeo.hide()"/>
-	            <p:commandButton value="Não" type="button" onclick="confirmExcluirGeo.hide()" />
+	            <p:commandButton value="NÃ£o" type="button" onclick="confirmExcluirGeo.hide()" />
 	        </h:form>
 	    </p:confirmDialog>
 	    
@@ -86,7 +92,7 @@
 			</h:form>
 		</p:confirmDialog>
 		
-		<p:dialog id="dialogEnderecoRealizacaoAtividade" dynamic="true" header="Incluir endereço" widgetVar="dialogEnderecoRealizacaoAtividade" modal="true" 
+		<p:dialog id="dialogEnderecoRealizacaoAtividade" dynamic="true" header="Incluir endereÃ§o" widgetVar="dialogEnderecoRealizacaoAtividade" modal="true" 
 				position="center" resizable="false">
 			<p:ajax event="close" process="@this" listener="#{enderecoRealizacaoAtividadeController.limparEndereco()}"/>	
 			<ui:include src="/paginas/manter-declaracao-inexigibilidade/enderecoRealizacaoAtividade.xhtml" />

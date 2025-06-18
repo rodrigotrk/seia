@@ -17,15 +17,16 @@
 		
 		-->
 		<h:form id="formGridResponsaveisCadastrados">
+        <ui:include src="/layout/csrfToken.xhtml" />
 			<h:panelGrid id="gridResponsaveisCadastrados" rendered="#{responsavelEmpreendimentoController.showGridResponsaveisCadastrados}">
 				<p:dataTable id="dataTableResponsaveisCadastrados" value="#{responsavelEmpreendimentoController.listaResponsaveis}" var="responsavelTecnico" rowIndexVar="index" 
 					emptyMessage="Nenhum registro encontrado." style="width:715px;">
 					
 					<f:facet name="header">  
-						<h:outputText value="Respons·veis TÈcnicos Cadastrados" />
+						<h:outputText value="Respons√°veis T√©cnicos Cadastrados" />
 					</f:facet>
 					
-					<p:column headerText="N˙mero do CPF" style="text-align: center !important;">
+					<p:column headerText="N√∫mero do CPF" style="text-align: center !important;">
 						<h:outputText value="#{responsavelTecnico.idePessoaFisica.numCpf}" />
 					</p:column>
 					
@@ -37,7 +38,7 @@
 						<h:outputText value="#{responsavelTecnico.idePessoaFisica.ideEscolaridade.nomEscolaridade}" />
 					</p:column>
 					
-					<p:column headerText="AÁıes">
+					<p:column headerText="A√ß√µes">
 						<p:commandLink title="Editar" action="#{responsavelEmpreendimentoController.editarResponsavel()}" disabled="#{empreendimentoController.visualizarEmpreendimento}"
 							update="tabAbas:formBotaoNovoResponsavel tabAbas:formCPFNovoResponsavel tabAbas:formDadosDoNovoResponsavel 
 									tabAbas:formBotaoDocumentoObrigatorio tabAbas:formDocumentoObrigatorio tabAbas:formBotaoTelefone tabAbas:formGridTelefone 
@@ -69,6 +70,7 @@
 		
 		-->
 		<h:form id="formDialogRemoverResponsavel">
+        <ui:include src="/layout/csrfToken.xhtml" />
 			<p:confirmDialog id="dlgResponsavel" widgetVar="dlgResponsavel" 
 				header="#{bundle.hdr_confirma_exclusao}" message="#{bundle.msg_confirma_exclusao}" 
 				severity="alert" style="top: 270px !important; left: 40% !important;">
@@ -78,7 +80,10 @@
 							tabAbas:formDadosDoNovoResponsavel tabAbas:formBotaoDocumentoObrigatorio tabAbas:formDocumentoObrigatorio tabAbas:formBotaoTelefone 
 							tabAbas:formGridTelefone tabAbas:formCEPEndereco tabAbas:formDadosEndereco tabAbas:formART"/> 
 				
-				<p:commandButton value="N„o" type="button" onclick="dlgResponsavel.hide()" />
+        <ui:include src="/layout/csrfToken.xhtml" />
+        <ui:include src="/layout/csrfToken.xhtml" />
+        <ui:include src="/layout/csrfToken.xhtml" />
+				<p:commandButton value="N√£o" type="button" onclick="dlgResponsavel.hide()" />
 				
 			</p:confirmDialog>
 		</h:form>
@@ -94,7 +99,7 @@
 		<h:form id="formBotaoNovoResponsavel">
 			<h:panelGrid id="gridBotaoNovoResponsavel" columns="2" rendered="true">
 				
-				<h:outputText value="Incluir Novo Respons·vel TÈcnico " />
+				<h:outputText value="Incluir Novo Respons√°vel T√©cnico " />
 				
 				<p:commandLink 
 					action="#{responsavelEmpreendimentoController.incluirNovoResponsavelTecnico()}"
@@ -103,7 +108,7 @@
 					process="@this"
 					update="tabAbas:formBotaoNovoResponsavel tabAbas:formCPFNovoResponsavel">
 						
-					<h:graphicImage title="Incluir Respons·vel TÈcnico" value="/resources/img/ico-expandir.png" />
+					<h:graphicImage title="Incluir Respons√°vel T√©cnico" value="/resources/img/ico-expandir.png" />
 					<f:setPropertyActionListener target="#{responsavelEmpreendimentoController.responsavel}" value="#{null}" />
 					<f:setPropertyActionListener target="#{responsavelEmpreendimentoController.responsavelEmpreendimento}" value="#{null}" />
 					<f:setPropertyActionListener target="#{telefoneController.pessoa}" value="#{null}" />
@@ -140,12 +145,12 @@
 		<h:form id="formCPFNovoResponsavel" >
 			<h:panelGrid rendered="#{responsavelEmpreendimentoController.showCPFDoNovoResponsavel}">
 				
-				<h:outputText value="DADOS DO RESPONS¡VEL T…CNICO" styleClass="titulo-grupo" />
+				<h:outputText value="DADOS DO RESPONS√ÅVEL T√âCNICO" styleClass="titulo-grupo" />
 				<br />
 				<h:outputText id="idlblcpf" value="* CPF" />
 							
 			    <p:inputMask value="#{responsavelEmpreendimentoController.responsavel.numCpf}" onblur="consultar_resp_cpf();"  
-			    	required="true" requiredMessage="O campo CPF È de preenchimento obrigatÛrio." mask="#{bundle.consultapf_msk_cpf}"
+			    	required="true" requiredMessage="O campo CPF √© de preenchimento obrigat√≥rio." mask="#{bundle.consultapf_msk_cpf}"
 			    	disabled="#{responsavelEmpreendimentoController.disabledDadosResponsavel}">
 					<f:converter converterId="cpfConverter" />
 					<f:validator validatorId="cpfValidator"/>
@@ -185,11 +190,11 @@
 	   	    <h:panelGrid columns="1" id="panelDadosDoNovoResponsavel" rendered="#{responsavelEmpreendimentoController.showDadosDoNovoResponsavel}">	
 				
 				<h:outputText id="idlblnome" value="* Nome" />
-				<p:inputText value="#{responsavelEmpreendimentoController.responsavel.nomPessoa}" required="true" requiredMessage="O campo Nome È de preenchimento obrigatÛrio" 
+				<p:inputText value="#{responsavelEmpreendimentoController.responsavel.nomPessoa}" required="true" requiredMessage="O campo Nome √© de preenchimento obrigat√≥rio" 
 					disabled="#{responsavelEmpreendimentoController.disabledDadosResponsavel}" style="width: 600px;"/>
 									
 				<h:outputLabel id="idlblnacionalidade" value="* #{bundle.lbl_nacionalidade}" />
-				<p:selectOneMenu id="idcombopais" required="true" requiredMessage="O campo Nacionalidade È de preenchimento obrigatÛrio." 
+				<p:selectOneMenu id="idcombopais" required="true" requiredMessage="O campo Nacionalidade √© de preenchimento obrigat√≥rio." 
 					disabled="#{responsavelEmpreendimentoController.disabledDadosResponsavel}" 
 					value="#{responsavelEmpreendimentoController.responsavel.idePais}" converter="paisConverter">
 				    
@@ -198,7 +203,7 @@
 				</p:selectOneMenu>
 									
 				<h:outputText id="idtextFORMACAO" value="* Escolaridade " />
-				<p:selectOneMenu id="idcomboformacao" converter="escolaridadeConverter" required="true" requiredMessage="O campo Escolaridade È de preenchimento obrigatÛrio" 
+				<p:selectOneMenu id="idcomboformacao" converter="escolaridadeConverter" required="true" requiredMessage="O campo Escolaridade √© de preenchimento obrigat√≥rio" 
 					value="#{responsavelEmpreendimentoController.responsavel.ideEscolaridade}" disabled="#{responsavelEmpreendimentoController.disabledResponsavelEscolaridade}"  >							  		
 			  		
 			  		<f:selectItem itemLabel="Selecione..." />
@@ -206,7 +211,7 @@
 				</p:selectOneMenu>
 				
 				<h:outputText id="idtextEMAIL" value="* E-mail"  />
-				<p:inputText required="true" requiredMessage="O campo E-mail È de preenchimento obrigatÛrio." validator="emailValidator" 
+				<p:inputText required="true" requiredMessage="O campo E-mail √© de preenchimento obrigat√≥rio." validator="emailValidator" 
 					value="#{responsavelEmpreendimentoController.responsavel.pessoa.desEmail}" style="width: 600px;" 
 					disabled="#{responsavelEmpreendimentoController.disabledDadosResponsavel}"  />
 				
@@ -244,6 +249,7 @@
 		
 		-->
 		<h:form id="formBotaoDocumentoObrigatorio" prependId="false">
+        <ui:include src="/layout/csrfToken.xhtml" />
 			<h:panelGrid id="gridBotaoDocumentoObrigatorio" rendered="#{responsavelEmpreendimentoController.showDocumentoTelefoneEndereco}">
 				<h3>
 					<h:outputLabel styleClass="titulo-grupo" value="DOCUMENTO" />
@@ -275,6 +281,7 @@
 		
 		-->
 		<h:form id="formDocumentoObrigatorio" >
+        <ui:include src="/layout/csrfToken.xhtml" />
 			<h:panelGrid id="gridDocumentoObrigatorio" rendered="#{responsavelEmpreendimentoController.showDocumentoTelefoneEndereco}"> 
 				<p:dataTable id="tabeladocumentos" rendered="#{documentoIdentificacaoController.mostraLista}" widgetVar="tabeladocumentos" var="documento" style="width:715px;"
 					value="#{documentoIdentificacaoController.modelDocumentosIdentificacao}">
@@ -287,11 +294,11 @@
 						<h:outputText value="#{documento.ideTipoIdentificacao.nomTipoIdentificacao}" />
 					</p:column>
 					
-					<p:column headerText="N˙mero Documento">
+					<p:column headerText="N√∫mero Documento">
 						<h:outputText value="#{documento.numDocumento}" />
 					</p:column>
 					
-					<p:column headerText="Data Emiss„o" style="width:80px">
+					<p:column headerText="Data Emiss√£o" style="width:80px">
 						<h:outputText value="#{documento.dtcEmissao}">
 							<f:convertDateTime pattern="dd/MM/yyyy" locale="pt,BR" timeZone="Brazil/East"/>
 						</h:outputText>
@@ -303,7 +310,7 @@
 						</h:outputText>
 					</p:column>
 	
-					<p:column headerText="AÁıes" style="text-align: center; min-width: 70px;">	
+					<p:column headerText="A√ß√µes" style="text-align: center; min-width: 70px;">	
 						<!-- VISUALIZAR -->
 						<p:commandLink update="tabAbas:formDocumentoObrigatorio" oncomplete="limparMsgErro();dialogDocumentoObrigatorio.show();" title="Visualizar" process="@this">
 							<h:graphicImage value="/resources/img/ico-pesquisa.png" title="Visualizar"/>
@@ -346,9 +353,9 @@
 					<h:panelGrid columns="2">
 						<h:outputLabel value="*Tipo de Documento" />
 						
-						<h:outputLabel value="*N˙mero de Documento" />
+						<h:outputLabel value="*N√∫mero de Documento" />
 						
-						<p:selectOneMenu style="width: 260px;" id="tipoDocumento" required="true" requiredMessage="O campo Tipo de Documento È de preenchimento obrigatÛrio."
+						<p:selectOneMenu style="width: 260px;" id="tipoDocumento" required="true" requiredMessage="O campo Tipo de Documento √© de preenchimento obrigat√≥rio."
 							value="#{documentoIdentificacaoController.documentoIdentificacaoSelecionado.ideTipoIdentificacao}"
 							valueChangeListener="#{documentoIdentificacaoController.listenerValor}"
 							disabled="#{!documentoIdentificacaoController.editModeDocumento}">
@@ -361,28 +368,28 @@
 								update="tabAbas:formDocumentoObrigatorio:paneldocumentos" process="@this"/>
 						</p:selectOneMenu>
 						
-						<p:inputText style="width: 136px;" id="numDocumento" maxlength="15" required="true" requiredMessage="O campo N˙mero de Documento È de preenchimento obrigatÛrio."
+						<p:inputText style="width: 136px;" id="numDocumento" maxlength="15" required="true" requiredMessage="O campo N√∫mero de Documento √© de preenchimento obrigat√≥rio."
 							value="#{documentoIdentificacaoController.documentoIdentificacaoSelecionado.numDocumento}" 
 							disabled="#{!responsavelEmpreendimentoController.temPessoaSelecionada or !documentoIdentificacaoController.editModeDocumento}"/>
 					</h:panelGrid>
 					
 					<h:panelGrid columns="2">
-						<h:outputText value="*Org„o Emissor" />
+						<h:outputText value="*Org√£o Emissor" />
 						
 						<h:outputText value="*UF:" rendered="#{!documentoIdentificacaoController.campoSerie}" />
-						<h:outputText value="*SÈrie:" rendered="#{documentoIdentificacaoController.campoSerie}" />
+						<h:outputText value="*S√©rie:" rendered="#{documentoIdentificacaoController.campoSerie}" />
 						
 						<p:selectOneMenu id="orgaoEmissor" value="#{documentoIdentificacaoController.documentoIdentificacaoSelecionado.ideOrgaoExpedidor}" style="width: 260px;"
 							disabled="#{(documentoIdentificacaoController.desabCombOrg and documentoIdentificacaoController.editModeCampoTipoDeDocumento) or !documentoIdentificacaoController.editModeDocumento}" 
-							required="true" requiredMessage="O campo ”rg„o Emissor È de preenchimento obrigatÛrio." >
+							required="true" requiredMessage="O campo √ìrg√£o Emissor √© de preenchimento obrigat√≥rio." >
 							
 							<f:selectItem itemLabel="Selecione..." />
 							<f:selectItems value="#{documentoIdentificacaoController.listaOrgaoExpedidor}" var="orgao" itemLabel="#{orgao.dscOrgaoExpedidor}" itemValue="#{orgao}" />
 							<f:converter converterId="OrgaoExpedidorConverter" />
 						</p:selectOneMenu>
 	
-						<p:inputText value="#{documentoIdentificacaoController.documentoIdentificacaoSelecionado.numSerie}" title="SÈrie" maxlength="15" 
-							rendered="#{documentoIdentificacaoController.campoSerie}" required="true" requiredMessage="O campo N˙mero de sÈrie È de preenchimento obrigatÛrio" 
+						<p:inputText value="#{documentoIdentificacaoController.documentoIdentificacaoSelecionado.numSerie}" title="S√©rie" maxlength="15" 
+							rendered="#{documentoIdentificacaoController.campoSerie}" required="true" requiredMessage="O campo N√∫mero de s√©rie √© de preenchimento obrigat√≥rio" 
 							disabled="#{!documentoIdentificacaoController.editModeDocumento}"/>
 						
 						<h:outputText value="*UF:" rendered="#{documentoIdentificacaoController.campoSerie}"  />
@@ -390,7 +397,7 @@
 						<h:outputText value="" rendered="#{documentoIdentificacaoController.campoSerie}" />
 						
 						<p:selectOneMenu style="width: 130px;" id="uforgaoemissor" value="#{documentoIdentificacaoController.documentoIdentificacaoSelecionado.ideEstado}"
-							required="true" requiredMessage="O campo UF È de preenchimento obrigatÛrio." disabled="#{!documentoIdentificacaoController.editModeDocumento}">
+							required="true" requiredMessage="O campo UF √© de preenchimento obrigat√≥rio." disabled="#{!documentoIdentificacaoController.editModeDocumento}">
 							
 							<f:selectItem  itemLabel="Selecione..." />
 							<f:selectItems value="#{documentoIdentificacaoController.listaEstados}" var="estado" itemLabel="#{estado.desSigla}" itemValue="#{estado}" />
@@ -399,20 +406,20 @@
 					</h:panelGrid>
 					
 					<h:panelGrid columns="2">
-						<h:outputText value="*Data de Emiss„o" />
+						<h:outputText value="*Data de Emiss√£o" />
 						
 						<h:outputText value="Data de Validade" style="margin-left:-25px" />
 						
 						<h:panelGroup>
 							<h:outputText value="De " />
 							
-							<p:calendar showOn="button" id="dataEmissao" label="Data de Emiss„o" validator="dataPosteriorValidator"
+							<p:calendar showOn="button" id="dataEmissao" label="Data de Emiss√£o" validator="dataPosteriorValidator"
 								value="#{documentoIdentificacaoController.documentoIdentificacaoSelecionado.dtcEmissao}"
 								disabled="#{!responsavelEmpreendimentoController.temPessoaSelecionada or !documentoIdentificacaoController.editModeDocumento}" 
-								locale="pt" pattern="dd/MM/yyyy" navigator="true" required="true" requiredMessage="O campo Data de emiss„o È de preenchimento obrigatÛrio."
+								locale="pt" pattern="dd/MM/yyyy" navigator="true" required="true" requiredMessage="O campo Data de emiss√£o √© de preenchimento obrigat√≥rio."
 								readOnlyInputText="true" yearRange="c-100" maxdate="#{documentoIdentificacaoController.dataAtual}"/>
 								
-							<h:outputText value=" AtÈ" />
+							<h:outputText value=" At√©" />
 						</h:panelGroup>
 						
 						<p:calendar showOn="button" id="dataValidade" 
@@ -421,14 +428,14 @@
 							disabled="#{!responsavelEmpreendimentoController.temPessoaSelecionada or !documentoIdentificacaoController.editModeDocumento}" 
 							readOnlyInputText="true" yearRange="c-100:c+100" mindate="#{documentoIdentificacaoController.dataAtual}"/>
 							
-						<h:outputText value="*CÛpia do Documento (.pdf.jpg - M·ximo 5MB)" rendered="#{!responsavelEmpreendimentoController.temPessoaSelecionada}" />
+						<h:outputText value="*C√≥pia do Documento (.pdf.jpg - M√°ximo 5MB)" rendered="#{!responsavelEmpreendimentoController.temPessoaSelecionada}" />
 						<h:outputText value="" />
 					</h:panelGrid>
 					
 					<p:fileUpload id="fUpload" auto="true" label="*Upload Documento" allowTypes="/(\.|\/)(pdf|gif|jpeg|png|jpg)$/"
 						fileUploadListener="#{documentoIdentificacaoController.trataArquivo}" invalidFileMessage="#{bundle.geral_lbl_tipo_arquivo_invalido}"
 						update="tabAbas:formDocumentoObrigatorio:gridDataTableDocumentos" disabled="#{!documentoIdentificacaoController.editModeDocumento}" 
-						required="true" requiredMessage="O campo upload de documento È de preenchimento obrigatÛrio."/>
+						required="true" requiredMessage="O campo upload de documento √© de preenchimento obrigat√≥rio."/>
 				</h:panelGrid>
 				
 				<h:panelGrid id="gridDataTableDocumentos">
@@ -471,13 +478,15 @@
 		
 		-->
 		<h:form id="formDialogRemoverDocumento">
-			<p:confirmDialog message="Tem certeza que deseja excluir a(s) opÁ„o(ıes) selecionadas?"	header="Mensagem" severity="alert"
+        <ui:include src="/layout/csrfToken.xhtml" />
+        <ui:include src="/layout/csrfToken.xhtml" />
+			<p:confirmDialog message="Tem certeza que deseja excluir a(s) op√ß√£o(√µes) selecionadas?"	header="Mensagem" severity="alert"
 				widgetVar="confirmationDocumento" id="confirmationDocumento" style="top:30% !important; left: 35% !important;">
 				
 				<p:commandButton value="Sim" actionListener="#{documentoIdentificacaoController.removerDocumento}"
 					update="tabAbas:formDocumentoObrigatorio" oncomplete="confirmationDocumento.hide()" process="@this" />
 				
-				<p:commandButton value="N„o" onclick="confirmationDocumento.hide()" type="button" />
+				<p:commandButton value="N√£o" onclick="confirmationDocumento.hide()" type="button" />
 			</p:confirmDialog>
 		</h:form>
 		<!-- 
@@ -491,40 +500,40 @@
 		-->
 		<h:form id="formART">
 			<h:panelGrid rendered="#{responsavelEmpreendimentoController.showDocumentoTelefoneEndereco}">
-				<h3><h:outputLabel styleClass="titulo-grupo" value="N⁄MERO ART" /></h3>
+				<h3><h:outputLabel styleClass="titulo-grupo" value="N√öMERO ART" /></h3>
 				
 				<p:fieldset legend="Aviso" style="background-color: rgb(257,231,219);">
 					<h:panelGrid styleClass="aviso-home">
-						… obrigatÛrio informar os dados da ART para os atos: 
-							<br/>- EPMF (AprovaÁ„o da ExecuÁ„o das Etapas do Plano de Manejo Florestal Sustent·vel);
-							<br/>- ACFP (AprovaÁ„o da ExploraÁ„o ou Corte de Florestas Plantadas - EssÍncias Nativas); 
-							<br/>- APMF (AprovaÁ„o de Plano de Manejo Florestal Sustent·vel);
+						√â obrigat√≥rio informar os dados da ART para os atos: 
+							<br/>- EPMF (Aprova√ß√£o da Execu√ß√£o das Etapas do Plano de Manejo Florestal Sustent√°vel);
+							<br/>- ACFP (Aprova√ß√£o da Explora√ß√£o ou Corte de Florestas Plantadas - Ess√™ncias Nativas); 
+							<br/>- APMF (Aprova√ß√£o de Plano de Manejo Florestal Sustent√°vel);
 							<br/>- AML (Aproveitamento de Material Lenhoso);
-							<br/>- ASV (AutorizaÁ„o de Supress„o de VegetaÁ„o); 
+							<br/>- ASV (Autoriza√ß√£o de Supress√£o de Vegeta√ß√£o); 
 							<br/>- RVFR (Reconhecimento de Volume Florestal Remanescente); 
-							<br/>- AMC (AutorizaÁ„o de Manejo da Cabruca).
+							<br/>- AMC (Autoriza√ß√£o de Manejo da Cabruca).
 					</h:panelGrid>
 				</p:fieldset>
 				
 				<h:panelGrid>
-					<h:outputLabel value="Deseja inserir o n˙mero da ART?" />
+					<h:outputLabel value="Deseja inserir o n√∫mero da ART?" />
 					
 					<p:selectOneRadio value="#{responsavelEmpreendimentoController.responsavelEmpreendimento.possuiART}">  
 						<f:selectItem itemLabel="Sim" itemValue="true" />  
-						<f:selectItem itemLabel="N„o" itemValue="false" />
+						<f:selectItem itemLabel="N√£o" itemValue="false" />
 						<p:ajax update="tabAbas:formART" />
 					</p:selectOneRadio>
 				</h:panelGrid>
 				
 				<h:panelGrid columns="2" rendered="#{responsavelEmpreendimentoController.responsavelEmpreendimento.possuiART}">
-					<h:outputLabel value="N˙mero da ART:" />
+					<h:outputLabel value="N√∫mero da ART:" />
 					<p:inputText value="#{responsavelEmpreendimentoController.responsavelEmpreendimento.numART}" style="width:178px;"
 						onblur="SomenteNumero(this);" onkeyup="SomenteNumero(this);" onkeydown="SomenteNumero(this);" maxlength="15"/>
 				</h:panelGrid>
 				
 				<h:panelGrid columns="3" style="margin-left:4px;">
 					<p:fileUpload fileUploadListener="#{responsavelEmpreendimentoController.tratarArquivo}" allowTypes="/(\.|\/)(pdf|gif|jpeg|png|jpg)$/"
-						label="Upload ART" invalidFileMessage="Tipo de arquivo inv·lido." mode="advanced" auto="true" fileLimit="1" style="text-align:center;" 
+						label="Upload ART" invalidFileMessage="Tipo de arquivo inv√°lido." mode="advanced" auto="true" fileLimit="1" style="text-align:center;" 
 						rendered="#{responsavelEmpreendimentoController.responsavelEmpreendimento.possuiART}" oncomplete="updateDataTableART()"
 						disabled="#{responsavelEmpreendimentoController.disableUploadART}"/>
 						
@@ -544,7 +553,7 @@
 								<h:outputText value="#{responsavelEmpreendimentoController.fileNameART}" />
 							</p:column>
 							
-							<p:column style="text-align: center;" headerText="AÁıes">
+							<p:column style="text-align: center;" headerText="A√ß√µes">
 					        	<h:commandLink title="Download do arquivo">
 									<p:fileDownload value="#{responsavelEmpreendimentoController.downloadART}"/>
 									<h:graphicImage title="Download do arquivo" value="/resources/img/ico-download.png" />
@@ -573,13 +582,16 @@
 		
 		-->
 		<h:form id="formDialogRemoverART">
-			<p:confirmDialog message="Tem certeza que deseja excluir a(s) opÁ„o(ıes) selecionadas?"	header="Mensagem" severity="alert"
+        <ui:include src="/layout/csrfToken.xhtml" />
+        <ui:include src="/layout/csrfToken.xhtml" />
+        <ui:include src="/layout/csrfToken.xhtml" />
+			<p:confirmDialog message="Tem certeza que deseja excluir a(s) op√ß√£o(√µes) selecionadas?"	header="Mensagem" severity="alert"
 				widgetVar="exclusaoDocumentoART" style="top:30% !important; left: 35% !important;">
 				
 				<p:commandButton value="Sim" actionListener="#{responsavelEmpreendimentoController.limparDocumentoART}"
 					update="tabAbas:formART" oncomplete="exclusaoDocumentoART.hide()" process="@this" />
 				
-				<p:commandButton value="N„o" onclick="exclusaoDocumentoART.hide()" type="button" />
+				<p:commandButton value="N√£o" onclick="exclusaoDocumentoART.hide()" type="button" />
 			</p:confirmDialog>
 		</h:form>
 		<!-- 
@@ -632,11 +644,11 @@
 						<h:outputText value="#{telefone.ideTipoTelefone.nomTipoTelefone}" />
 					</p:column>
 	
-					<p:column headerText="N˙mero" style="text-align: center;">
+					<p:column headerText="N√∫mero" style="text-align: center;">
 						<h:outputText value="#{telefone.numTelefone}" />
 					</p:column>
 					
-					<p:column style="text-align: center;" headerText="AÁıes">	
+					<p:column style="text-align: center;" headerText="A√ß√µes">	
 						<p:commandLink update=":formGridTelefone:tabelaTelefone :tabAbas:formGridTelefone :tabAbas" oncomplete="limparMsgErro();telefoneDialog.show()" title="Visualizar">
 							<h:graphicImage title="Visualizar" value="/resources/img/ico-pesquisa.png" />
 							<f:setPropertyActionListener value="#{telefone}" target="#{telefoneController.telefone}" />	
@@ -671,6 +683,7 @@
 		
 		-->
 		<h:form id="formDialogTelefone" >
+        <ui:include src="/layout/csrfToken.xhtml" />
 			<p:dialog id="telefoneDialog" widgetVar="telefoneDialog" header="Telefone" closable="true" draggable="true" resizable="false" modal="true"
 		  		style="top: 165px !important; left: 40% !important;">
 				
@@ -725,13 +738,16 @@
 		
 		-->
 		<h:form id="formDialogRemoverTelefone">
-			<p:confirmDialog message="Tem certeza que deseja excluir a(s) opÁ„o(ıes) selecionadas?"
+        <ui:include src="/layout/csrfToken.xhtml" />
+        <ui:include src="/layout/csrfToken.xhtml" />
+        <ui:include src="/layout/csrfToken.xhtml" />
+			<p:confirmDialog message="Tem certeza que deseja excluir a(s) op√ß√£o(√µes) selecionadas?"
 				width="200" header="Mensagem" severity="alert" widgetVar="confirmationTelefone" id="confirmationTelefone">
 				
 				<p:commandButton value="Sim" update=":formGridTelefone:tabelaTelefone :tabAbas:formGridTelefone"
 					actionListener="#{telefoneController.removerTelefone}" oncomplete="confirmationTelefone.hide()" />
 				
-				<p:commandButton value="N„o" onclick="confirmationTelefone.hide()" type="button" />
+				<p:commandButton value="N√£o" onclick="confirmationTelefone.hide()" type="button" />
 			</p:confirmDialog>
 		</h:form>
 		<!-- 
@@ -746,7 +762,7 @@
 		<h:form id="formCEPEndereco">
 			<h:panelGrid id="gridCEPEndereco" rendered="#{responsavelEmpreendimentoController.showDocumentoTelefoneEndereco}">
 				<h3>
-					<h:outputLabel id="idlblendereco" styleClass="titulo-grupo" value="ENDERE«O"/>
+					<h:outputLabel id="idlblendereco" styleClass="titulo-grupo" value="ENDERE√áO"/>
 				</h3>
 				
 				<h:outputLabel id="idlblcep" value="* CEP" />

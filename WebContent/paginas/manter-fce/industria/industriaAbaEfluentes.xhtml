@@ -5,9 +5,10 @@
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:p="http://primefaces.prime.com.tr/ui">
-	<h:form id="formEfluentes">	
+	<h:form id="formEfluentes">
+        <ui:include src="/layout/csrfToken.xhtml" />	
 		<!-- PanelGrid EFLUENTES LIQUIDOS -->
-		<h:outputText styleClass="titulo-grupo" style="font-weight:bold; margin-left:10px;" value="* Efluentes Líquidos" />
+		<h:outputText styleClass="titulo-grupo" style="font-weight:bold; margin-left:10px;" value="* Efluentes LÃ­quidos" />
 		<!-- Perguntas do novo requerimento   -->
 		<h:panelGroup id="pnlGroupResiduosLiquidos" layout="block" style="border:1px solid gray; margin-left:25px; margin-top:10px;" rendered="#{fceIndustriaController.verificaPergunta_OrigensUsosAgua}">
 			<h:panelGrid id="panelResiduosLiquidos" style="margin-left:15px; margin-top:8px;">
@@ -17,7 +18,7 @@
 				<h:panelGroup>
 					<p:selectOneRadio style="margin-top:5px;" value="#{fceIndustriaController.perguntaNR_A4_P142.indResposta}" disabled="true">
 						<f:selectItem itemLabel="Sim" itemValue="true" />
-						<f:selectItem itemLabel="Não" itemValue="false" />
+						<f:selectItem itemLabel="NÃ£o" itemValue="false" />
 						<p:ajax update="pnlGroupLiquidoManancial" global="false" />
 					</p:selectOneRadio>
 				</h:panelGroup>
@@ -26,7 +27,7 @@
 				<p:commandLink style="margin-top:10px;" oncomplete="dialogLancamentoEfluentes.show();" action="#{lancamentoEfluentesController.load()}"  global="false" update="formDialogResiduosLiquidos" 
 					disabled="true">
 					<h:graphicImage title="Incluir coordenadas" value="/resources/img/ico-expandir.png" style="margin-right: 2px;" />
-					<h:outputText value="Incluir coordenadas do(s) receptor(es) dos efluentes em Corpo Hídrico" />
+					<h:outputText value="Incluir coordenadas do(s) receptor(es) dos efluentes em Corpo HÃ­drico" />
 				</p:commandLink>
 			</p:outputPanel>
 			<h:panelGroup id="pnlGroupLiquidoManancial" rendered="#{fceIndustriaController.verificaPerguntaNR_A4_P142}" >
@@ -38,7 +39,7 @@
 						<p:column headerText="Longitude" style="text-align:center;">
 							<h:outputText value="#{Lancamento.pontos.get('longitude')}" />
 						</p:column>
-						<p:column headerText="Ação" style="text-align:center;"/>
+						<p:column headerText="AÃ§Ã£o" style="text-align:center;"/>
 					</p:dataTable>
 				</h:panelGrid>
 			</h:panelGroup>
@@ -57,18 +58,18 @@
 		</h:panelGrid>
 		<br />
 		
-		<!--//TODO COMENTADO PARA O TICKET "" DO RESULTADO DA HOMOLOGAÇÃO DE 11/06
+		<!--//TODO COMENTADO PARA O TICKET "" DO RESULTADO DA HOMOLOGAÃ‡ÃƒO DE 11/06
 		
 		<h:panelGrid id="lancamentoEfluente" style="margin-left:20px;">
-			<h:outputText styleClass="titulo-grupo" value="Lançamento de efluentes em corpo hídrico regularizado" />
+			<h:outputText styleClass="titulo-grupo" value="LanÃ§amento de efluentes em corpo hÃ­drico regularizado" />
 			<p:selectOneRadio style="margin-left:15px;" value="#{fceIndustriaController.fceIndustria.indLancamentoRegularizado}" layout="pageDirection" valueChangeListener="#{fceIndustriaController.changeLancamentoRegularizado()}">  
 				<f:selectItem itemLabel="Sim" itemValue="true" />
-				<f:selectItem itemLabel="Não" itemValue="false" />
+				<f:selectItem itemLabel="NÃ£o" itemValue="false" />
 				<p:ajax update="lancamentoEfluente" global="false"/>
 			</p:selectOneRadio>
 			<p:selectOneRadio value="#{fceIndustriaController.fceIndustria.indLancamentoOutorgado}" rendered="#{fceIndustriaController.lancamentoEfluenteRegularizado}" layout="pageDirection" style="margin-left:40px;">
 				<f:selectItem itemLabel="Outorgado" itemValue="true" />
-				<f:selectItem itemLabel="Não outorgado" itemValue="false" />
+				<f:selectItem itemLabel="NÃ£o outorgado" itemValue="false" />
 				<p:ajax global="false"/>
 			</p:selectOneRadio>	
 		</h:panelGrid>
@@ -77,7 +78,7 @@
 		<br /><br />
 		
 		<!-- PanelGrid EMISSOES ATMOSFERICAS-->
-		<h:outputText styleClass="titulo-grupo" style="font-weight:bold; margin-left:10px;" value="* Emissões Atmosféricas" />
+		<h:outputText styleClass="titulo-grupo" style="font-weight:bold; margin-left:10px;" value="* EmissÃµes AtmosfÃ©ricas" />
 		<h:panelGrid style="margin-left:20px;">
 			<p:selectManyCheckbox style="margin-left:5px;" value="#{fceIndustriaController.listaEmissaoAtmosfericasEscolhidos}" 
 			layout="pageDirection" converter="simpleEntityConverter" disabled="#{fceIndustriaController.desabilitarTudo}">
@@ -90,7 +91,7 @@
 	
 		<h:panelGrid id="gridBotoes" rendered="#{!fceIndustriaController.desabilitarTudo}" columns="2" style="margin-top:40px;">
 			<p:commandButton id="btnVoltar" value="Voltar"  style="width:90px;" update="industriaAbas" process="formEfluentes" action="#{fceIndustriaController.voltarAba()}" global="false"/>
-			<p:commandButton id="btnAvancar" value="Avançar" style="width:90px;" update="industriaAbas" process="formEfluentes" action="#{fceIndustriaController.avancarAbaEfluentes()}" global="false"/>
+			<p:commandButton id="btnAvancar" value="AvanÃ§ar" style="width:90px;" update="industriaAbas" process="formEfluentes" action="#{fceIndustriaController.avancarAbaEfluentes()}" global="false"/>
 		</h:panelGrid> <!-- FIM DO PANELGRID BOTOES -->
 	</h:form>
 </ui:composition>

@@ -15,13 +15,15 @@
 	
 		<p:dialog id="dlgDetalhe" widgetVar="dlgDetalhe" header="Detalhe" width="650" height="600" modal="true" resizable="false" dynamic="true" >
 			<h:form id="frmDetalhe">
+        <ui:include src="/layout/csrfToken.xhtml" />
 				<h:panelGroup id="pnlDetalhe">
 					<h:panelGrid columns="1">
-						<h:outputText  value="Número do processo:" />
+        <ui:include src="/layout/csrfToken.xhtml" />
+						<h:outputText  value="NÃºmero do processo:" />
 						<p:inputText readonly="true" style="width:220px;" value="#{sinaflorController.processoSinaflor.ideProcesso.numProcesso}" />
 					</h:panelGrid>
 					<h:panelGrid columns="1">
-						<h:outputText  value="Data da última sincronização:" />
+						<h:outputText  value="Data da Ãºltima sincronizaÃ§Ã£o:" />
 						<p:inputText readonly="true" style="width:220px;" value="#{sinaflorController.processoSinaflor.dtcSincronizacao}">
 							<f:convertDateTime pattern="HH:mm:ss - dd/MM/yyyy" locale="pt,BR" timeZone="Brazil/East"/>
 						</p:inputText>
@@ -44,7 +46,7 @@
 			
 			<h:panelGroup id="pnlFiltro" layout="block">
 				<h:panelGrid columns="1">
-					<h:outputText  value="Número do processo:" />
+					<h:outputText  value="NÃºmero do processo:" />
 					<p:inputText style="width:220px;" value="#{sinaflorController.numProcesso}" />
 				</h:panelGrid>
 				
@@ -56,7 +58,7 @@
 				</h:panelGrid>
 				
 <!-- 				<h:panelGrid  columns="2" style="margin-top:25px;"> -->
-<!-- 					<p:commandButton value="Forçar sincronização" actionListener="#{sinaflorController.teste()}" process="@this" /> -->
+<!-- 					<p:commandButton value="ForÃ§ar sincronizaÃ§Ã£o" actionListener="#{sinaflorController.teste()}" process="@this" /> -->
 <!-- 				</h:panelGrid> -->
 			</h:panelGroup>
 			
@@ -69,7 +71,7 @@
 					<p:column>
 						<f:facet name="header">
 							<div style="white-space: pre-line;">
-								<h:outputText value="Número do processo" />
+								<h:outputText value="NÃºmero do processo" />
 							</div>
 						</f:facet>
 						<h:panelGroup layout="block" style="text-align: center;">
@@ -79,7 +81,7 @@
 					<p:column>
 						<f:facet name="header">
 							<div style="white-space: pre-line;">
-								<h:outputText value="Data da sincronização" />
+								<h:outputText value="Data da sincronizaÃ§Ã£o" />
 							</div>
 						</f:facet>
 						<h:panelGroup layout="block" style="text-align: center;">
@@ -91,7 +93,7 @@
 					<p:column>
 						<f:facet name="header">
 							<div style="white-space: pre-line;">
-								<h:outputText value="Ações" />
+								<h:outputText value="AÃ§Ãµes" />
 							</div>
 						</f:facet>
 						<h:panelGroup layout="block" style="text-align: center;" rendered="#{security.temAcesso('ADMINISTRACAO', 'SINAFLOR', 'VISUALIZAR')}">

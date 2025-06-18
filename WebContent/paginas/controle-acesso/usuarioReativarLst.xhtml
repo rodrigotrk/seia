@@ -8,18 +8,21 @@
 	template="../../layout/template.xhtml">
 
 	<ui:define name="titulo-pagina">		
-		<h3>Reativar Usuários Excluídos</h3>		
-	</ui:define>	
+			<h:form >
+        <ui:include src="/layout/csrfToken.xhtml" />	
+        <ui:include src="/layout/csrfToken.xhtml" />
+		<h:form id="formListaUsuariosReativar">
+        <ui:include src="/layout/csrfToken.xhtml" />				
 
 	<ui:define name="conteudo-principal">
 		
-		<!-- Dialog de confirmação -->
+		<!-- Dialog de confirmaÃ§Ã£o -->
 		<p:confirmDialog message="#{bundle.consultapf_msg_confimrativacao}" header="Mensagem" severity="alert" widgetVar="confirmDlgAtivacaoUsuario" id="confirmDlgAtivacaoUsuario">
 			<h:form >	
 				<p:commandButton value="Sim"  actionListener="#{usuarioReativarController.reativarUsuario}"
 						oncomplete="confirmDlgAtivacaoUsuario.hide(); :dialogUsuarioReativar.hide()" 
 						 action="/paginas/controle-acesso/usuarioReativarLst.xhtml"/>
-				<p:commandButton value="Não" onclick="confirmDlgAtivacaoUsuario.hide()" type="button" />
+				<p:commandButton value="NÃ£o" onclick="confirmDlgAtivacaoUsuario.hide()" type="button" />
 			</h:form>	
 		</p:confirmDialog>
 	

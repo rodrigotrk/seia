@@ -13,6 +13,7 @@
 		width="400"
 		position="center">
 		<h:form>
+        <ui:include src="/layout/csrfToken.xhtml" />
 			<h:panelGroup layout="block" style="height:auto;" >
 				<p>
 					<span class="ui-icon ui-icon-alert ui-confirm-dialog-severity" />
@@ -34,6 +35,7 @@
 		width="500"
 		position="center">
 		<h:form id="formModal">
+        <ui:include src="/layout/csrfToken.xhtml" />
 			<h:panelGroup layout="block" style="height:auto;" >
 				<p>
 				  <h:outputText value="#{bundle.analise_tecnica_lbl_dlg_deferir_fatos}" />
@@ -60,6 +62,7 @@
 		<h:panelGroup id="pnlAnaliseTecnica" layout="block">
 			
 			<h:form id="frmAnaliseTecnica" rendered="#{processoAnaliseTecnicaController.vwProcesso ne null}">
+        <ui:include src="/layout/csrfToken.xhtml" />
 				
 				<h:panelGrid id="pnlDadosProcesso" columns="2">
 					<h:outputText value="#{bundle.analise_tecnica_lbl_num_processo}: " />
@@ -77,23 +80,23 @@
 				<p:spacer height="15" />
 				<fieldset style="background-color:rgb(257,231,219);">
 					
-					<legend>AtenÁ„o</legend>
+					<legend>Aten√ß√£o</legend>
 					
 					<h:panelGrid columns="1" styleClass="aviso-home" >
 						<span>
-							Prezado TÈcnico(a),
+							Prezado T√©cnico(a),
 							<br></br>
 							<br></br>
-							ReforÁamos a necessidade de preencher os Dados Concedidos <img src="/resources/img/prototipo/icon_Revisar.png" alt="Fornecer dados preenchidos" style="margin: 2px; height:16px; width:16px;"/>  						
-							na tela de An·lise TÈcnica <img src="/resources/img/prototipo/icon_pauta.png" alt="" style="margin: 2px;height:16px;width: 16px"/> ao final da an·lise dos atos deferidos. 
-							Caso n„o haja preenchimento dessa tela, os dados concedidos n„o entrar„o na base de dados do INEMA,
-							dificultando a gest„o dessas informaÁıes e integraÁ„o das mesmas com outros sistemas.
+							Refor√ßamos a necessidade de preencher os Dados Concedidos <img src="/resources/img/prototipo/icon_Revisar.png" alt="Fornecer dados preenchidos" style="margin: 2px; height:16px; width:16px;"/>  						
+							na tela de An√°lise T√©cnica <img src="/resources/img/prototipo/icon_pauta.png" alt="" style="margin: 2px;height:16px;width: 16px"/> ao final da an√°lise dos atos deferidos. 
+							Caso n√£o haja preenchimento dessa tela, os dados concedidos n√£o entrar√£o na base de dados do INEMA,
+							dificultando a gest√£o dessas informa√ß√µes e integra√ß√£o das mesmas com outros sistemas.
 							<br></br>
 							<br></br>
 							Em especial, lembramos que o deferimento de atos florestais sem o correto preenchimento dos Dados Concedidos,
-							implica em problemas na integraÁ„o com o sistema SINAFLOR e desatendimento ao disposto nas InstruÁıes Normativas 
-							IBAMA 21/2014, 14/2018 e suas alteraÁıes,
-							acarretando em dificuldades na obtenÁ„o do DOF pelos detentores de atos florestais.
+							implica em problemas na integra√ß√£o com o sistema SINAFLOR e desatendimento ao disposto nas Instru√ß√µes Normativas 
+							IBAMA 21/2014, 14/2018 e suas altera√ß√µes,
+							acarretando em dificuldades na obten√ß√£o do DOF pelos detentores de atos florestais.
 							<br></br>
 							<br></br>
 						</span>										
@@ -204,27 +207,29 @@
 	</p:dialog>
 	
 		
-	<!-- dialog Reserva de ¡gua -->
+        <ui:include src="/layout/csrfToken.xhtml" />
+        <ui:include src="/layout/csrfToken.xhtml" />
+	<!-- dialog Reserva de √Ågua -->
 	<p:confirmDialog message="#{bundle.reserva_agua_reservar}" id="confirmar_reserva_agua" widgetVar="confirmar_reserva_agua" header="Mensagem" closable="false">
 		<div align="center">
 			<h:form>
 				<p:commandButton value="Sim" process="@this" actionListener="#{reservaAguaController.reservar()}" oncomplete="confirmar_reserva_agua.hide();" style="margin-right:10px;"/>
-				<p:commandButton value="N„o" onclick="confirmar_reserva_agua.hide();" type="button"/>
+				<p:commandButton value="N√£o" onclick="confirmar_reserva_agua.hide();" type="button"/>
 			</h:form>
 		</div>
 	</p:confirmDialog>
-	<!-- dialog Reserva de ¡gua -->
+	<!-- dialog Reserva de √Ågua -->
 	
-	<!-- dialog Cancelar Reserva de ¡gua -->
+	<!-- dialog Cancelar Reserva de √Ågua -->
 	<p:confirmDialog message="#{bundle.reserva_agua_cancelar}"	id="confirmar_cancelamento_reserva_agua" widgetVar="confirmar_cancelamento_reserva_agua" header="Mensagem" closable="false">
 		<div align="center">
 			<h:form>
 				<p:commandButton value="Sim" process="@this" actionListener="#{reservaAguaController.cancelarReservaAgua()}" oncomplete="confirmar_cancelamento_reserva_agua.hide();" style="margin-right:10px;"/>
-				<p:commandButton value="N„o" onclick="confirmar_cancelamento_reserva_agua.hide();" type="button"/>
+				<p:commandButton value="N√£o" onclick="confirmar_cancelamento_reserva_agua.hide();" type="button"/>
 			</h:form>
 		</div>
 	</p:confirmDialog>
-	<!-- dialog Cancelar Reserva de ¡gua -->
+	<!-- dialog Cancelar Reserva de √Ågua -->
 	
 	<ui:include src="/paginas/manter-processo/autorizacaoManejoCabruca.xhtml" />
 </ui:composition>

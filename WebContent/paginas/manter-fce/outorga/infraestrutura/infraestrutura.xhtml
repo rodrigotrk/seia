@@ -15,21 +15,22 @@
 			<hr style="width:560px;"/>
 			
 			<h:form id="formInfraestrutura" style="margin-left:20px">
+        <ui:include src="/layout/csrfToken.xhtml" />
 				<h:panelGrid id="vazao" columns="3">
-					<h:outputText value="* Vazão" style="font-weight:bold;"/>
+					<h:outputText value="* VazÃ£o" style="font-weight:bold;"/>
 					<p:inputText size="11" style="text-align:right" value="#{fceInfraestruturaController.fceOutorgaInfraestrutura.valVazao}" maxlength="13"
 						onblur="mascararNumeroAndAddZeros(this, event, 8, 2, '.', ',', 3);" onkeyup="mascararNumeroAndAddZeros(this, event, 8, 2, '.', ',', 3);"
 						disabled="#{fceInfraestruturaController.desabilitarTudo}">
 						
 						<f:convertNumber maxIntegerDigits="8" maxFractionDigits="2" pattern="###,##0.000" locale="pt_BR"/>
 					</p:inputText>
-					<h:outputText value="(m³/dia)" />
+					<h:outputText value="(mÂ³/dia)" />
 				</h:panelGrid>
 				
 				<p:spacer width="0" height="10"/>
 				
 				<h:panelGrid id="periodoDerivacao" columns="1">
-					<h:outputText value="* Período de derivação" style="font-weight:bold;"/>
+					<h:outputText value="* PerÃ­odo de derivaÃ§Ã£o" style="font-weight:bold;"/>
 					
 					<p:selectOneRadio layout="pageDirection" style="margin-left:15px;"
 						value="#{fceInfraestruturaController.fceOutorgaInfraestrutura.ideTipoPeriodoDerivacao}"
@@ -45,7 +46,7 @@
 					<h:panelGrid id="tempoCaptacao" columns="3" style="margin-left:52px; margin-top:-10px;" 
 						rendered="#{fceInfraestruturaController.renderizaTempoCaptacao}">
 						
-						<h:outputText value="*  Tempo de Captação" />
+						<h:outputText value="*  Tempo de CaptaÃ§Ã£o" />
 						<p:inputText size="1" maxlength="2" style="text-align:right" onblur="SomenteNumero(this);" onkeyup="SomenteNumero(this);"
 							value="#{fceInfraestruturaController.fceOutorgaInfraestrutura.valTempoCaptacao}"
 							disabled="#{fceInfraestruturaController.desabilitarTudo}"/>
@@ -73,24 +74,25 @@
 					    		
 					    		<p:tooltip for="ajuda" showEffect="fade" hideEffect="fade" 
 					    			rendered="#{fceInfraestruturaController.getRenderizaHintUtilidadePublica(tipoInfra.dscFceTipoInfraestrutura)}">
-					    				De acordo com o Art. 3° da Lei Federal nº 12.651, de 25 de maio de 2012, entende-se por utilidade pública:
-										<br/><br/>a) as atividades de segurança nacional e proteção sanitária;
-										<br/><br/>b) as obras de infraestrutura destinadas às concessões e aos serviços públicos de transporte, sistema viário, inclusive aquele necessário aos parcelamentos de solo urbano aprovados pelos Municípios, saneamento, gestão de resíduos, energia, telecomunicações, radiodifusão, instalações necessárias à realização de competições esportivas estaduais, nacionais ou internacionais, bem como mineração, exceto, neste último caso, a extração de areia, argila, saibro e cascalho;
+					    				De acordo com o Art. 3Â° da Lei Federal nÂº 12.651, de 25 de maio de 2012, entende-se por utilidade pÃºblica:
+										<br/><br/>a) as atividades de seguranÃ§a nacional e proteÃ§Ã£o sanitÃ¡ria;
+										<br/><br/>b) as obras de infraestrutura destinadas Ã s concessÃµes e aos serviÃ§os pÃºblicos de transporte, sistema viÃ¡rio, inclusive aquele necessÃ¡rio aos parcelamentos de solo urbano aprovados pelos MunicÃ­pios, saneamento, gestÃ£o de resÃ­duos, energia, telecomunicaÃ§Ãµes, radiodifusÃ£o, instalaÃ§Ãµes necessÃ¡rias Ã  realizaÃ§Ã£o de competiÃ§Ãµes esportivas estaduais, nacionais ou internacionais, bem como mineraÃ§Ã£o, exceto, neste Ãºltimo caso, a extraÃ§Ã£o de areia, argila, saibro e cascalho;
 										<br/><br/>c) atividades e obras de defesa civil;
-										<br/><br/>d) atividades que comprovadamente proporcionem melhorias na proteção das funções ambientais referidas no inciso II deste artigo;
-										<br/><br/>e) outras atividades similares devidamente caracterizadas e motivadas em procedimento administrativo próprio, quando inexistir alternativa técnica e locacional ao empreendimento proposto, definidas em ato do Chefe do Poder Executivo federal;
+										<br/><br/>d) atividades que comprovadamente proporcionem melhorias na proteÃ§Ã£o das funÃ§Ãµes ambientais referidas no inciso II deste artigo;
+										<br/><br/>e) outras atividades similares devidamente caracterizadas e motivadas em procedimento administrativo prÃ³prio, quando inexistir alternativa tÃ©cnica e locacional ao empreendimento proposto, definidas em ato do Chefe do Poder Executivo federal;
 								</p:tooltip>
 								
 								<p:tooltip for="ajuda" showEffect="fade" hideEffect="fade"
 									rendered="#{fceInfraestruturaController.getRenderizaHintInteresseSocial(tipoInfra.dscFceTipoInfraestrutura)}">
-										De acordo com o Art. 3° da Lei Federal nº 12.651, de 25 de maio de 2012, entende-se por interesse social:
-										<br/><br/>a) as atividades imprescindíveis à proteção da integridade da vegetação nativa, tais como prevenção, combate e controle do fogo, controle da erosão, erradicação de invasoras e proteção de plantios com espécies nativas;
-										<br/><br/>b) a exploração agroflorestal sustentável praticada na pequena propriedade ou posse rural familiar ou por povos e comunidades tradicionais, desde que não descaracterize a cobertura vegetal existente e não prejudique a função ambiental da área;
-										<br/><br/>c) a implantação de infraestrutura pública destinada a esportes, lazer e atividades educacionais e culturais ao ar livre em áreas urbanas e rurais consolidadas, observadas as condições estabelecidas nesta Lei;
-										<br/><br/>d) a regularização fundiária de assentamentos humanos ocupados predominantemente por população de baixa renda em áreas urbanas consolidadas, observadas as condições estabelecidas na Lei no 11.977, de 7 de julho de 2009;
-										<br/><br/>e) implantação de instalações necessárias à captação e condução de água e de efluentes tratados para projetos cujos recursos hídricos são partes integrantes e essenciais da atividade;
-										<br/><br/>f) as atividades de pesquisa e extração de areia, argila, saibro e cascalho, outorgadas pela autoridade competente;
-										<br/><br/>g) outras atividades similares devidamente caracterizadas e motivadas em procedimento administrativo próprio, quando inexistir alternativa técnica e locacional à atividade proposta, definidas em ato do Chefe do Poder Executivo federal;
+										De acordo com o Art. 3Â° da Lei Federal nÂº 12.651, de 25 de maio de 2012, entende-se por interesse social:
+										<br/><br/>a) as atividades imprescindÃ­veis Ã  proteÃ§Ã£o da integridade da vegetaÃ§Ã£o nativa, tais como prevenÃ§Ã£o, combate e controle do fogo, controle da erosÃ£o, erradicaÃ§Ã£o de invasoras e proteÃ§Ã£o de plantios com espÃ©cies nativas;
+										<br/><br/>b) a exploraÃ§Ã£o agroflorestal sustentÃ¡vel praticada na pequena propriedade ou posse rural familiar ou por povos e comunidades tradicionais, desde que nÃ£o descaracterize a cobertura vegetal existente e nÃ£o prejudique a funÃ§Ã£o ambiental da Ã¡rea;
+										<br/><br/>c) a implantaÃ§Ã£o de infraestrutura pÃºblica destinada a esportes, lazer e atividades educacionais e culturais ao ar livre em Ã¡reas urbanas e rurais consolidadas, observadas as condiÃ§Ãµes estabelecidas nesta Lei;
+										<br/><br/>d) a regularizaÃ§Ã£o fundiÃ¡ria de assentamentos humanos ocupados predominantemente por populaÃ§Ã£o de baixa renda em Ã¡reas urbanas consolidadas, observadas as condiÃ§Ãµes estabelecidas na Lei no 11.977, de 7 de julho de 2009;
+        <ui:include src="/layout/csrfToken.xhtml" />
+										<br/><br/>e) implantaÃ§Ã£o de instalaÃ§Ãµes necessÃ¡rias Ã  captaÃ§Ã£o e conduÃ§Ã£o de Ã¡gua e de efluentes tratados para projetos cujos recursos hÃ­dricos sÃ£o partes integrantes e essenciais da atividade;
+										<br/><br/>f) as atividades de pesquisa e extraÃ§Ã£o de areia, argila, saibro e cascalho, outorgadas pela autoridade competente;
+										<br/><br/>g) outras atividades similares devidamente caracterizadas e motivadas em procedimento administrativo prÃ³prio, quando inexistir alternativa tÃ©cnica e locacional Ã  atividade proposta, definidas em ato do Chefe do Poder Executivo federal;
 								</p:tooltip>
 			    			</h:panelGrid>
 			    		</div>
@@ -116,7 +118,7 @@
 				<p:commandButton value="Sim" ajax="false" global="false" process="@this" onclick="relatorioInfraestrutura.hide();" style="margin-right:10px;">
 					<p:fileDownload value="#{fceInfraestruturaController.imprimirRelatorio()}"/>
 				</p:commandButton>			
-				<p:commandButton value="Não" onclick="relatorioInfraestrutura.hide();" process="@this"/>
+				<p:commandButton value="NÃ£o" onclick="relatorioInfraestrutura.hide();" process="@this"/>
 			</h:form>
 		</div>
 	</p:confirmDialog>

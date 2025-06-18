@@ -17,7 +17,7 @@
 			
 			<p:ajax event="tabChange" listener="#{pessoaJuridicaController.onTabChange()}" update="tabviewpj, :form_avancar" />
 			
-			<p:tab title="Pessoa Jurídica">        
+			<p:tab title="Pessoa JurÃ­dica">        
 				<ui:include src="/paginas/manter-pessoajuridica/formCadastro.xhtml" />
 			</p:tab>
 		
@@ -27,7 +27,8 @@
 				</h:panelGrid>
 			</p:tab>
 			
-			<p:tab title="Comp. Acionária" id="tabcomposicaoacionaria" disabled="#{pessoaJuridicaController.disableAbasDependencias}" >
+        <ui:include src="/layout/csrfToken.xhtml" />
+			<p:tab title="Comp. AcionÃ¡ria" id="tabcomposicaoacionaria" disabled="#{pessoaJuridicaController.disableAbasDependencias}" >
 				<ui:include src="/paginas/manter-pessoajuridica/modalComposicaoAcionaria.xhtml" />
 			</p:tab>
 			
@@ -39,7 +40,7 @@
 				<ui:include src="/paginas/manter-pessoajuridica/telefonePessoaJuridica.xhtml" />
 			</p:tab>
 			
-			<p:tab title="Endereço" id="tabendereco" disabled="#{pessoaJuridicaController.disableAbasDependencias}" >
+			<p:tab title="EndereÃ§o" id="tabendereco" disabled="#{pessoaJuridicaController.disableAbasDependencias}" >
 				<ui:include src="/paginas/manter-endereco/endereco.xhtml" />
 			</p:tab>
 			
@@ -50,7 +51,7 @@
 	
 		<h:form id="form_avancar">
 		   <p:commandButton value="Voltar"  update=":tabviewpj form_avancar" action="#{pessoaJuridicaController.decrementaIndexAba}" rendered="#{pessoaJuridicaController.visualizaAnterior}"   style="float: left;" id="btnVoltarCdPessoaJuridica"/>
-		   <p:commandButton value="Avançar" update=":tabviewpj form_avancar" action="#{pessoaJuridicaController.incrementaIndexAba}" rendered="#{pessoaJuridicaController.visualizaProximo}" style="float:right;"/>
+		   <p:commandButton value="AvanÃ§ar" update=":tabviewpj form_avancar" action="#{pessoaJuridicaController.incrementaIndexAba}" rendered="#{pessoaJuridicaController.visualizaProximo}" style="float:right;"/>
 		   <p:commandButton action="#{pessoaJuridicaController.finalizar}" value="Finalizar" ajax="false" rendered="#{pessoaJuridicaController.visualizaFinalizar}" style="float:right;" />
 	   </h:form>
 	</h:panelGrid>

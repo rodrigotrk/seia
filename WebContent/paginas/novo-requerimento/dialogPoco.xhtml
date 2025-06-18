@@ -7,17 +7,19 @@
 	xmlns:p="http://primefaces.prime.com.tr/ui">
 	
 	<h:form>
+        <ui:include src="/layout/csrfToken.xhtml" />
 		<p:remoteCommand name="fecharDialogPoco" actionListener="#{pocoController.fecharTela()}" process="@this"/>
 	</h:form>
 
-	<p:dialog  header="Perfuração de Poço" widgetVar="dialogPoco" height="255" appendToBody="true" modal="true" style="overflow:auto;" dynamic="true" width="640" resizable="false" position="center" onHide="fecharDialogPoco();">
+        <ui:include src="/layout/csrfToken.xhtml" />
+	<p:dialog  header="PerfuraÃ§Ã£o de PoÃ§o" widgetVar="dialogPoco" height="255" appendToBody="true" modal="true" style="overflow:auto;" dynamic="true" width="640" resizable="false" position="center" onHide="fecharDialogPoco();">
 		<h:form id="formDialogPoco">
 			<h:panelGrid columns="3" width="100%" id="png1">
 				<h:panelGrid columns="3">
 					<p:outputPanel autoUpdate="true">
 						<h:panelGrid>
 							<h:panelGroup style="width:250px">
-								<h:outputText value="* 1. Informe a localização geográfica:" />
+								<h:outputText value="* 1. Informe a localizaÃ§Ã£o geogrÃ¡fica:" />
 							</h:panelGroup>	
 							<p:commandLink  oncomplete="dlgLocalizacaoGeograficaGeneric.show();" update="localizacaoGeografica" action="#{localizacaoGeograficaGenericController.carregarTelaSistemaCoordenadasSirgas2000()}" process="@this" style="margin-left:45px;" 
 								actionListener="#{localizacaoGeograficaGenericController.limparLocalizacaoGeografSelecionada()}" disabled="#{pocoController.outorgaLocalizacaoGeografica.ideLocalizacaoGeografica.ideLocalizacaoGeografica != null}" >
@@ -28,8 +30,8 @@
 								<f:setPropertyActionListener target="#{localizacaoGeograficaGenericController.pontoUnico}" value="#{true}" />
 								<f:setPropertyActionListener target="#{localizacaoGeograficaGenericController.isPerfuracaoPocoOuCaptacaoOuAquicuturaEmRede}" value="#{true}" />
 				
-								<h:graphicImage title="Incluir coordenada geográfica" value="/resources/img/ico-expandir.png" style="margin-right: 2px;"/>
-								<h:outputText value="Incluir coordenada geográfica" />
+								<h:graphicImage title="Incluir coordenada geogrÃ¡fica" value="/resources/img/ico-expandir.png" style="margin-right: 2px;"/>
+								<h:outputText value="Incluir coordenada geogrÃ¡fica" />
 							</p:commandLink>
 						</h:panelGrid>
 					</p:outputPanel>
@@ -37,7 +39,7 @@
 					<h:panelGroup rendered="#{!novoRequerimentoController.empreendimento.indCessionario and novoRequerimentoController.imovelSelecionado.imovelUrbano == null}">
 						<h:panelGrid id='pnl1211'>
 							<h:panelGroup>
-								<h:outputText value="* Selecione o imóvel:" />
+								<h:outputText value="* Selecione o imÃ³vel:" />
 							</h:panelGroup>	
 							<h:panelGroup layout="block" style="width:250px; overflow:auto; border:1px solid gray;">
 								<p:selectOneRadio converter="simpleEntityConverter" value="#{pocoController.outorgaLocalizacaoGeografica.imovelToList}" layout="pageDirection" 
@@ -60,7 +62,7 @@
 				<p:dataTable var="localizacao" value="#{pocoController.outorgaLocalizacaoGeografica.ideLocalizacaoGeografica}" style="margin-top: 10px;"
 					rendered="#{pocoController.outorgaLocalizacaoGeografica.ideLocalizacaoGeografica.ideLocalizacaoGeografica != null}" >
 					
-					<p:column headerText="Ponto de Referência">
+					<p:column headerText="Ponto de ReferÃªncia">
 						<h:outputText value="${localizacao.desLocalizacaoGeografica}" />
 					</p:column>
 					
@@ -72,19 +74,19 @@
 						<h:outputText value="${localizacao.nomeSistemaCoordenadas()}" />
 					</p:column>
 					
-					<p:column headerText="Ações">
+					<p:column headerText="AÃ§Ãµes">
 				
 						<p:commandLink oncomplete="dlgLocalizacaoGeograficaGeneric.show();" process="@this" action="#{localizacaoGeograficaGenericController.visualizarLocalizacaoGeografica()}" >
 							<f:setPropertyActionListener target="#{localizacaoGeograficaGenericController.localizacaoGeograficaSelecionada}" value="#{pocoController.outorgaLocalizacaoGeografica.ideLocalizacaoGeografica}" />
 							<f:setPropertyActionListener target="#{localizacaoGeograficaGenericController.objetoLocalizacao}" value="#{pocoController.outorgaLocalizacaoGeografica}" />
-							<h:graphicImage title="Visualizar localização no GeoBahia" value="/resources/img/ico-pesquisa.png" />
+							<h:graphicImage title="Visualizar localizaÃ§Ã£o no GeoBahia" value="/resources/img/ico-pesquisa.png" />
 						</p:commandLink>
 						
 						<p:commandLink oncomplete="dlgLocalizacaoGeograficaGeneric.show();" process="@this" action="#{localizacaoGeograficaGenericController.editarLocalizacaoGeografica()}" disabled="#{novoRequerimentoController.desabilitarTudo}">
 							<f:setPropertyActionListener target="#{localizacaoGeograficaGenericController.localizacaoGeograficaSelecionada}" value="#{pocoController.outorgaLocalizacaoGeografica.ideLocalizacaoGeografica}" />
 							<f:setPropertyActionListener target="#{localizacaoGeograficaGenericController.objetoLocalizacao}" value="#{pocoController.outorgaLocalizacaoGeografica}" />
 							<f:setPropertyActionListener target="#{localizacaoGeograficaGenericController.pontoUnico}" value="#{true}" />
-							<h:graphicImage title="Editar localização geográfica" value="/resources/img/ico-editar.png" />
+							<h:graphicImage title="Editar localizaÃ§Ã£o geogrÃ¡fica" value="/resources/img/ico-editar.png" />
 						</p:commandLink>
 					</p:column>
 				</p:dataTable>

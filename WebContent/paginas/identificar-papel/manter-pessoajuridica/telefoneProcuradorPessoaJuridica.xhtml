@@ -15,6 +15,7 @@
 		<h3><h:outputLabel styleClass="titulo-grupo" value="TELEFONES" /></h3>
 		
 		<h:form id="formtelefoneprocpj" >
+        <ui:include src="/layout/csrfToken.xhtml" />
 			<h:outputLabel value="Incluir Telefone" />
 			<p:commandLink id="linkDialogTelefone" action="#{telefoneController.limpar}"
 				oncomplete="telefoneDialog.show()" update=":tabviewpj:tabviewproc:formconteudotelefonepjproc,:tabviewpj:tabviewproc:frmDialogTelefonepjProc" >
@@ -23,6 +24,7 @@
 		</h:form>
 		
 		<h:form id="formconteudotelefonepjproc">
+        <ui:include src="/layout/csrfToken.xhtml" />
 		<h:panelGrid id="paneltabelatelefone">
 		<!-- DATATABLE TELEFONE -->
 			<p:dataTable id="tabelaTelefone" widgetVar="tabelaTelefone" var="telefone" style="width:400px;"
@@ -36,11 +38,12 @@
 					<h:outputText value="#{telefone.ideTipoTelefone.nomTipoTelefone}" />
 				</p:column>
 
-				<p:column headerText="Número" style="text-align: center;">
+        <ui:include src="/layout/csrfToken.xhtml" />
+				<p:column headerText="NÃºmero" style="text-align: center;">
 					<h:outputText value="#{telefone.numTelefone}" />
 				</p:column>
 				
-				<p:column style="text-align: center;" headerText="Ações">	
+				<p:column style="text-align: center;" headerText="AÃ§Ãµes">	
 						
 						<p:commandLink update=":formconteudotelefonepjproc,:tabviewpj:tabviewproc:frmDialogTelefonepjProc" oncomplete="limparMsgErro();telefoneDialog.show()" title="Visualizar">
 							<h:graphicImage title="Visualizar" value="/resources/img/ico-pesquisa.png" />
@@ -139,7 +142,7 @@
 					actionListener="#{telefoneController.removerTelefonePessoaProcurador()}"
 					oncomplete="confirmationTelefonePj.hide()" />
 				
-				<p:commandButton value="Não" onclick="confirmationTelefonePj.hide()"
+				<p:commandButton value="NÃ£o" onclick="confirmationTelefonePj.hide()"
 					type="button" />
 			
 			</p:confirmDialog>

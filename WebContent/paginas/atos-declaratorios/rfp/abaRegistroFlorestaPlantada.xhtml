@@ -9,6 +9,7 @@
 
 	<h:panelGrid styleClass="col-12">
 		<h:form id="formAbaRegistroFlorestaPlantada" styleClass="col-12">
+        <ui:include src="/layout/csrfToken.xhtml" />
 
 			<h:panelGrid styleClass="col-12" id="pnlRegistroFlorestaProducaoImovelPlantio">
 
@@ -18,7 +19,7 @@
 						update=":formFlorestaProducaoPlantada" disabled="#{registroFlorestaPlantadaController.ideRegistroFlorestaProducao.ideAtoDeclaratorio.desabilitaTudo}">
 						
 						<h:graphicImage title="#{bundle.fce_lic_min_incluir_shape}" value="/resources/img/ico-expandir.png"  style="margin-right: 2px;" />
-						<h:outputText value=" Incluir dados da floresta de produção" />
+						<h:outputText value=" Incluir dados da floresta de produÃ§Ã£o" />
 					</p:commandLink>
 
 				</h:panelGrid>
@@ -28,21 +29,21 @@
 					emptyMessage="Nenhum registro encontrado"
 					var="ip" styleClass="col-12">
 					
-					<p:column headerText="Imóvel">
+					<p:column headerText="ImÃ³vel">
 						<h:outputText value="#{ip.ideImovel.nomImovel}" />
 					</p:column>
 					
-					<p:column headerText="Situação Atual do Plantio">
+					<p:column headerText="SituaÃ§Ã£o Atual do Plantio">
 						<h:outputText value="#{registroFlorestaPlantadaController.situacaoAtual(ip)}" />
 					</p:column>
 
-					<p:column headerText="Área do plantio (ha)">
+					<p:column headerText="Ãrea do plantio (ha)">
 						<h:outputText value="#{ip.areaTotalPlantio}" >
 							<f:convertNumber maxIntegerDigits="9" maxFractionDigits="4" pattern="###,##0.0000" locale="pt_BR"/>
 						</h:outputText>
 					</p:column>
 					
-					<p:column headerText="Ações" style="width: 70px;text-align: center;">
+					<p:column headerText="AÃ§Ãµes" style="width: 70px;text-align: center;">
 				
 						<p:commandLink id="visualizar" title="Visualizar" actionListener="#{registroFlorestaPlantadaController.carregarImoveisArrendados()}" 
 							oncomplete="dialogFlorestaProducaoPlantada.show()" update=":formFlorestaProducaoPlantada">
@@ -78,7 +79,7 @@
 
 
 			<h:panelGrid>
-				<h:outputText value="Data prevista para o último corte" />
+				<h:outputText value="Data prevista para o Ãºltimo corte" />
 				<p:calendar value="#{registroFlorestaPlantadaController.ideRegistroFlorestaProducao.dtPrevistaUltimoCorte}" readOnlyInputText="true" 
 					showOn="button" size="21" locale="pt" pattern="dd/MM/yyyy" navigator="true" accesskey="true"
 					disabled="#{registroFlorestaPlantadaController.ideRegistroFlorestaProducao.ideAtoDeclaratorio.desabilitaTudo}">
@@ -89,7 +90,7 @@
 
 
 			<h:panelGrid id="somaAreas">
-				<h:outputText value="Área total do plantio" />
+				<h:outputText value="Ãrea total do plantio" />
 
 				<h:panelGrid columns="2" styleClass="clean">
 					 					
@@ -111,7 +112,7 @@
 						actionListener="#{registroFlorestaPlantadaController.exibirResponsavelTecnico()}">
 						
 						<h:graphicImage title="#{bundle.fce_lic_min_incluir_shape}"	value="/resources/img/ico-expandir.png" style="margin-right: 2px;" />
-						<h:outputText value="Incluir dados do responsável técnico pelo registro de floresta de produção" />
+						<h:outputText value="Incluir dados do responsÃ¡vel tÃ©cnico pelo registro de floresta de produÃ§Ã£o" />
 					</p:commandLink>
 				</h:panelGrid>
 
@@ -131,7 +132,7 @@
 						</h:outputText>
 					</p:column>
 
-					<p:column headerText="Ações" style="width: 70px;text-align: center;">
+					<p:column headerText="AÃ§Ãµes" style="width: 70px;text-align: center;">
 
 						<p:commandLink id="visualizar" title="Visualizar" oncomplete="dialogResponsavelTecnico.show()" update="formResponsavelTecnico">
 							<f:setPropertyActionListener value="#{resp}" target="#{registroFlorestaPlantadaController.ideRegistroFlorestaProducaoResponsavelTecnico}" />

@@ -7,10 +7,11 @@ xmlns:ui="http://java.sun.com/jsf/facelets"
 xmlns:p="http://primefaces.prime.com.tr/ui">
 
 	<h:form id="formIrrigacao" style="width:800px">
+        <ui:include src="/layout/csrfToken.xhtml" />
 		<p:outputPanel id="tipologia"> 
 			<h:panelGrid id="gridTipologia">
 				<h:panelGroup>
-					<h:outputText styleClass="titulo-grupo" style="font-weight:bold;" value="* Tipologia da Irrigação"/>
+					<h:outputText styleClass="titulo-grupo" style="font-weight:bold;" value="* Tipologia da IrrigaÃ§Ã£o"/>
 				</h:panelGroup>
 				<p:selectOneRadio style="margin-left:10px;" layout="pageDirection" value="#{fceIrrigacaoController.fceIrrigacao.ideTipologiaIrrigacao}" 
 				converter="simpleEntityConverter" disabled="#{fceIrrigacaoController.desabilitarTudo}">  
@@ -50,7 +51,7 @@ xmlns:p="http://primefaces.prime.com.tr/ui">
 						<h:outputText value="#{cultura.dscTipologiaAtividade}" />
 					</p:column>
 					
-					<p:column style="width: 35px; text-align:center;" headerText="Ações">
+					<p:column style="width: 35px; text-align:center;" headerText="AÃ§Ãµes">
 						<p:commandLink title="Adicionar" process="@this"
 							update="irrigacaoAbas:formIrrigacao:culturas" 
 							disabled="#{fceIrrigacaoController.desabilitarTudo}" 
@@ -70,7 +71,7 @@ xmlns:p="http://primefaces.prime.com.tr/ui">
 					<p:column headerText="Cultura Irrigada" style="width:140px; text-align:justify;">
 						<h:outputText value="#{fceAtividadeArea.ideTipologiaAtividade.dscTipologiaAtividade}" />
 					</p:column>
-					<p:column headerText="Método de Irrigação" style="width:140px; text-align:center;">
+					<p:column headerText="MÃ©todo de IrrigaÃ§Ã£o" style="width:140px; text-align:center;">
 						<p:selectOneMenu style="width:130px;" value="#{fceAtividadeArea.ideMetodoIrrigacao}" converter="simpleEntityConverter" 
 						disabled="#{fceAtividadeArea.confirmado or fceIrrigacaoController.desabilitarTudo}" rendered="#{!fceAtividadeArea.ideTipologiaAtividade.outros}">
 							<f:selectItem noSelectionOption="true" itemLabel="Selecione"/> 
@@ -78,7 +79,7 @@ xmlns:p="http://primefaces.prime.com.tr/ui">
 				            <p:ajax event="change" global="false"/>
 				        </p:selectOneMenu>
 			        </p:column>
-					<p:column headerText="Área Irrigada" style="width:105px; text-align:center;">
+					<p:column headerText="Ãrea Irrigada" style="width:105px; text-align:center;">
 						<h:panelGroup rendered="#{!fceAtividadeArea.ideTipologiaAtividade.outros}">
 							<p:inputText value="#{fceAtividadeArea.numArea}" onkeyup="maskIt(this, event, '99.999.999,99', true)" onblur="maskIt(this, event, '99.999.999,99', true)" 
 							style="margin-left:5px; width:80px;" disabled="#{fceAtividadeArea.confirmado or fceIrrigacaoController.desabilitarTudo}">
@@ -95,10 +96,10 @@ xmlns:p="http://primefaces.prime.com.tr/ui">
 								<f:convertNumber integerOnly="false" minFractionDigits="3"/>
 								<p:ajax event="blur" global="false"/>
 							</p:inputText>
-							<h:outputText value="   (m³/dia)" />
+							<h:outputText value="   (mÂ³/dia)" />
 						</h:panelGroup>
 					</p:column>
-					<p:column headerText="Período de Derivação" style="width:135px; text-align:center;" styleClass="ui-panelgrid">
+					<p:column headerText="PerÃ­odo de DerivaÃ§Ã£o" style="width:135px; text-align:center;" styleClass="ui-panelgrid">
 						<h:panelGroup>
 							<p:selectOneRadio style="margin-left:10px; text-align:left;" layout="pageDirection" value="#{fceAtividadeArea.ideTipoPeriodoDerivacao}" converter="simpleEntityConverter" valueChangeListener="#{fceIrrigacaoController.changePeriodoDerivacaodaGrid()}" disabled="#{fceAtividadeArea.confirmado or fceIrrigacaoController.desabilitarTudo}" rendered="#{!fceAtividadeArea.ideTipologiaAtividade.outros}">  
 			        			<f:selectItems value="#{fceIrrigacaoController.listaTipoPeriodoDerivacao}" var="periodoDerivacao" itemLabel="#{periodoDerivacao.dscTipoPeriodoDerivacao}" itemValue="#{periodoDerivacao}"/> 
@@ -109,7 +110,7 @@ xmlns:p="http://primefaces.prime.com.tr/ui">
 					
 					<p:column style="width:60px; text-align:center;">
 						<f:facet name="header">
-	   	 		   			Tempo de <br/> Captação
+	   	 		   			Tempo de <br/> CaptaÃ§Ã£o
 	   	 		  		</f:facet>
 						<h:panelGroup rendered="#{!fceAtividadeArea.ideTipologiaAtividade.outros}">
 							<p:inputText id="tempoCapSuper" value="#{fceAtividadeArea.numTempoCaptacao}" onkeyup="SomenteNumero(this);" converter="integerConverter" style="width:20px;" maxlength="2" 
@@ -120,7 +121,7 @@ xmlns:p="http://primefaces.prime.com.tr/ui">
 						</h:panelGroup>
 					</p:column>
 					
-					<p:column headerText="Ações" style="width:35px; text-align:center;">
+					<p:column headerText="AÃ§Ãµes" style="width:35px; text-align:center;">
 						<p:commandLink update="irrigacaoAbas:formIrrigacao:gridCulturas" action="#{fceIrrigacaoController.confirmarCultura()}"
 						rendered="#{!fceAtividadeArea.confirmado and !fceAtividadeArea.ideTipologiaAtividade.outros}" global="false" disabled="#{fceIrrigacaoController.desabilitarTudo}">
 							<h:graphicImage title="Confirmar" value="/resources/img/ico-aprovar-notificacao.png" />
@@ -140,7 +141,7 @@ xmlns:p="http://primefaces.prime.com.tr/ui">
 					
 					<p:columnGroup type="footer">  
 			            <p:row>  
-			                <p:column footerText="ÁREA TOTAL IRRIGADA" colspan="2" style="text-align:left"  />  
+			                <p:column footerText="ÃREA TOTAL IRRIGADA" colspan="2" style="text-align:left"  />  
 			                <p:column footerText="#{fceAtividadeAreaController.somatorioAreaTotalCultura}" colspan="5" style="text-align:left; margin-left:15px;" rendered="#{fceAtividadeAreaController.areaTotalCalculada}"/>
 			                <p:column colspan="5" rendered="#{!fceAtividadeAreaController.areaTotalCalculada}"/>
 			            </p:row>  
@@ -153,7 +154,7 @@ xmlns:p="http://primefaces.prime.com.tr/ui">
         <br /><br />
 			<h:panelGrid id="gridDerivacao">
 				<h:panelGroup>
-					<h:outputText styleClass="titulo-grupo" style="font-weight:bold;" value="* Período de derivação" />
+					<h:outputText styleClass="titulo-grupo" style="font-weight:bold;" value="* PerÃ­odo de derivaÃ§Ã£o" />
 				</h:panelGroup>
 				
 				<p:selectOneRadio style="margin-left:10px; width:120px;" layout="pageDirection" value="#{fceIrrigacaoController.fceIrrigacao.ideTipoPeriodoDerivacao}" 
@@ -163,7 +164,7 @@ xmlns:p="http://primefaces.prime.com.tr/ui">
 		    	</p:selectOneRadio>
 		    	       
 				<h:panelGroup rendered="#{fceIrrigacaoController.periodoDerivacaoIntermitente}" style="margin-left:40px;">
-					<h:outputText value="Tempo de Captação   " />
+					<h:outputText value="Tempo de CaptaÃ§Ã£o   " />
 					<p:inputText id="tempoCapSuper" value="#{fceIrrigacaoController.fceIrrigacao.numTempoCaptacao}" onkeyup="SomenteNumero(this);" 
 					converter="integerConverter" style="width:20px;" maxlength="2" disabled="#{fceIrrigacaoController.desabilitarTudo}">
 						<p:ajax event="blur" global="false"/>
@@ -172,16 +173,16 @@ xmlns:p="http://primefaces.prime.com.tr/ui">
 				</h:panelGroup>         
 				<br />
 				<h:panelGroup style="margin-left:10px;">
-					<h:outputText value="Vazão   " />
+					<h:outputText value="VazÃ£o   " />
 					<p:inputText value="#{fceIrrigacaoController.fceIrrigacao.numVolumeDerivar}" disabled="#{fceIrrigacaoController.desabilitarTudo}"
 					style="margin-left:5px; width:80px;" onkeyup="mascararNumeroAndAddZeros(this, event, 9, 3, '.', ',', 3);" maxlength="14">
 						<f:convertNumber integerOnly="false" minFractionDigits="3"/>
 						<p:ajax event="blur" global="false"/>
 					</p:inputText>
-				<h:outputText value="   (m³/dia)" />
+				<h:outputText value="   (mÂ³/dia)" />
 			</h:panelGroup>
-			</h:panelGrid> <!-- FIM DO PANELGRID Período Irrigacao -->
-		</p:outputPanel> <!-- FIM DO PANEL Período Irrigacao -->
+			</h:panelGrid> <!-- FIM DO PANELGRID PerÃ­odo Irrigacao -->
+		</p:outputPanel> <!-- FIM DO PANEL PerÃ­odo Irrigacao -->
         
 		<h:panelGrid id="gridBotoes" rendered="#{!fceIrrigacaoController.desabilitarTudo}" columns="2" style="margin-top:40px;">
 			<p:commandButton id="btnVoltar" value="Voltar" style="width:90px;" action="#{fceIrrigacaoController.voltarAba()}" update="irrigacaoAbas" global="false"/>

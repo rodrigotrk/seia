@@ -16,7 +16,8 @@
 				  width="850" 
 				  height="650"
 				  resizable="false" 
-				    header="#{fceSesController.headerFce('Dados da Estação de Tratamento de Esgoto')}"
+				<h:form id="formSesDadosTratamentoEsgoto">
+        <ui:include src="/layout/csrfToken.xhtml" />	
 				  modal="true">		
 		
 		
@@ -29,12 +30,12 @@
 					<h:panelGrid id="pngDadosTratamentoEsgoto" columns="1">
 						
 						<h:panelGrid columns="2">
-							<h:outputText value="* Identificação da estação" />
+							<h:outputText value="* IdentificaÃ§Ã£o da estaÃ§Ã£o" />
 							<p:inputText value="#{fceSesController.fceSesDadosEstacaoTratamentoEsgoto.nomeEstacao}" disabled="#{fceSesController.desabilitarTudo}" />
 						</h:panelGrid>
 						
 						<h:panelGrid columns="1">
-							<h:outputText value="* Coordenada da estação" />
+							<h:outputText value="* Coordenada da estaÃ§Ã£o" />
 							<p:outputPanel autoUpdate="true">
 								<p:commandLink global="false" oncomplete="dlgLocalizacaoGeograficaGeneric.show();" update="locGeograficaVertices" action="#{localizacaoGeograficaGenericController.carregarTela()}" 
 									process="@this" disabled="#{fceSesController.fceSesDadosEstacaoTratamentoEsgoto.ideLocalizacaoGeografica.ideLocalizacaoGeografica != null}" actionListener="#{localizacaoGeograficaGenericController.limparLocalizacaoGeografSelecionada()}">
@@ -60,20 +61,20 @@
 									<p:column headerText="Sistema de Coordenadas">
 										<h:outputText value="#{localizacao.ideLocalizacaoGeografica.nomeSistemaCoordenadas()}" />
 									</p:column>				
-									<p:column headerText="Ações">
+									<p:column headerText="AÃ§Ãµes">
 																												
 										<p:commandLink oncomplete="dlgLocalizacaoGeograficaGeneric.show();" disabled="#{fceSesController.desabilitarTudo}" process="@this" action="#{localizacaoGeograficaGenericController.visualizarLocalizacaoGeografica()}" >
 											<f:setPropertyActionListener target="#{localizacao.localizacaoFinal}" value="#{false}" />
 											<f:setPropertyActionListener target="#{localizacaoGeograficaGenericController.localizacaoGeograficaSelecionada}" value="#{localizacao.ideLocalizacaoGeografica}" />
 											<f:setPropertyActionListener target="#{localizacaoGeograficaGenericController.objetoLocalizacao}" value="#{localizacao}" />
 											<f:setPropertyActionListener target="#{localizacaoGeograficaGenericController.empreendimento}" value="#{fceSesController.requerimento.ultimoEmpreendimento}" />
-											<h:graphicImage title="Visualizar localização no GeoBahia" value="/resources/img/ico-pesquisa.png" />
+											<h:graphicImage title="Visualizar localizaÃ§Ã£o no GeoBahia" value="/resources/img/ico-pesquisa.png" />
 										</p:commandLink>
 										
 										<p:commandLink disabled="#{fceSesController.desabilitarTudo}" oncomplete="confirmaExclusaoLocGeoDeSes.show();" process="@this">
 											<f:setPropertyActionListener target="#{fceSesController.localizacaoGeograficaSelecionada}" value="#{localizacao.ideLocalizacaoGeografica}" />
 											<f:setPropertyActionListener target="#{fceSesController.fceSesDadosEstacaoTratamentoEsgoto}" value="#{localizacao}" />
-											<h:graphicImage title="Excluir localização geográfica" value="/resources/img/ico-excluir.png" />
+											<h:graphicImage title="Excluir localizaÃ§Ã£o geogrÃ¡fica" value="/resources/img/ico-excluir.png" />
 										</p:commandLink>
 									</p:column>
 								</p:dataTable>
@@ -82,16 +83,16 @@
 						
 						
 						<h:panelGrid columns="3">
-							<h:outputText value="* Vazão" />
+							<h:outputText value="* VazÃ£o" />
 							<p:inputText value="#{fceSesController.fceSesDadosEstacaoTratamentoEsgoto.valorVazaoMedia}" styleClass="campoNumericoComDecimal-2" disabled="#{fceSesController.desabilitarTudo}">
 								<f:convertNumber integerOnly="false" locale="pt,BR" minFractionDigits="2"/>
 							</p:inputText>
-							<h:outputLabel value="(m³/dia)" />
+							<h:outputLabel value="(mÂ³/dia)" />
 						</h:panelGrid>	
 						
 						<h:panelGrid>
 						
-							<h:outputText value="* Informe as Unidades que compõem a Estação de Tratamento" />
+							<h:outputText value="* Informe as Unidades que compÃµem a EstaÃ§Ã£o de Tratamento" />
 							
 							<p:outputPanel autoUpdate="true">
 								
@@ -102,10 +103,10 @@
 										<p:column headerText="Nome">
 											<h:outputText value="#{tipoComposicao.descricaoFceSesTipoComposicao}" />
 										</p:column>				
-										<p:column headerText="Ações">
+										<p:column headerText="AÃ§Ãµes">
 									
 											<p:commandLink disabled="#{fceSesController.desabilitarTudo}" actionListener="#{fceSesController.selecionarTipoComposicao(tipoComposicao)}" update="pnlSaaElevatoria" >
-												<h:graphicImage title="Selecionar composições" value="/resources/img/ico-msg-sucesso.png" />
+												<h:graphicImage title="Selecionar composiÃ§Ãµes" value="/resources/img/ico-msg-sucesso.png" />
 											</p:commandLink>
 											
 										</p:column>
@@ -127,21 +128,21 @@
 											<p:inputText id="quantidadeTratEsgoto" value="#{composicao.valorQuantidadeAtivo}" onkeyup="SomenteNumero(this);" disabled="#{composicao.desabilitarItem or fceSesController.desabilitarTudo}" required="true" requiredMessage="#{fceSesController.getRequireMesage('Quantidade(Und)')}"/>
 										</p:column>			
 										
-										<p:column headerText="Extensão(m)">
-											<p:inputText id="extensatoTratEsgoto" value="#{composicao.valorExtensaoAtivo}" styleClass="campoNumericoComDecimal-2" rendered="#{composicao.indDigestorAnaerobio}" disabled="#{composicao.desabilitarItem or fceSesController.desabilitarTudo}" required="true" requiredMessage="#{fceSesController.getRequireMesage('Extensão')}">
+										<p:column headerText="ExtensÃ£o(m)">
+											<p:inputText id="extensatoTratEsgoto" value="#{composicao.valorExtensaoAtivo}" styleClass="campoNumericoComDecimal-2" rendered="#{composicao.indDigestorAnaerobio}" disabled="#{composicao.desabilitarItem or fceSesController.desabilitarTudo}" required="true" requiredMessage="#{fceSesController.getRequireMesage('ExtensÃ£o')}">
 												<f:convertNumber integerOnly="false" locale="pt,BR" minFractionDigits="2"/>
 											</p:inputText>
 											<h:outputText value="-" rendered="#{!composicao.indDigestorAnaerobio}"/>
 										</p:column>		
 										
-										<p:column headerText="Diâmetro">
+										<p:column headerText="DiÃ¢metro">
 																				
 											<p:selectOneMenu id="selectFaixaDiametro" 
 												rendered="#{composicao.indDigestorAnaerobio}"
 												value="#{composicao.ideFaixaDiametroAdutora}"
 												converter="simpleEntityConverter"
 									    		disabled="#{composicao.desabilitarItem or fceSesController.desabilitarTudo}"
-									    		required="true" requiredMessage="#{fceSesController.getRequireMesage('Diâmetro')}">
+									    		required="true" requiredMessage="#{fceSesController.getRequireMesage('DiÃ¢metro')}">
 												<f:selectItem itemLabel="Selecione"/>
 												<f:selectItems value="#{fceSesController.listFaixaAdutoraTratEsgoto}" var="lfate" itemLabel="#{lfate.descricaoFaixaDiametroAdutora}" 
 												itemValue="#{lfate}"/>
@@ -151,7 +152,7 @@
 																								
 										</p:column>			
 										
-										<p:column headerText="Ações">
+										<p:column headerText="AÃ§Ãµes">
 									
 											<p:commandLink rendered="#{!composicao.desabilitarItem}" disabled="#{fceSesController.desabilitarTudo}" action="#{fceSesController.confirmarComposicao(composicao)}" process="@this, quantidadeTratEsgoto,extensatoTratEsgoto,selectFaixaDiametro" update="formSesDadosTratamentoEsgoto:tableComposicoesSelecionadasTratEsgoto" >
 												<h:graphicImage title="Confirmar" value="/resources/img/ico-msg-sucesso.png" />

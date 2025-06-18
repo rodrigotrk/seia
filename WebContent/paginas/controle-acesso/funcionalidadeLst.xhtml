@@ -14,6 +14,7 @@
 	<ui:define name="conteudo-principal">
 
 		<h:form id="formFiltroFuncionalidade">
+        <ui:include src="/layout/csrfToken.xhtml" />
 			<h:outputFormat value="#{bundle.lbl_descricao_funcionalidade}:"/><p:inputText value="#{funcionalidadeController.descricaoFuncionalidade}" />
 			&nbsp;
 			<p:commandButton value="#{bundle.btn_pesquisar}" action="#{funcionalidadeController.pesquisarFuncionalidade}" ajax="false" process="pesquisar"/>
@@ -22,6 +23,7 @@
 		</h:form>
 		<br />
 		<h:form id="formListaFuncionalidades">
+        <ui:include src="/layout/csrfToken.xhtml" />
 			<p:dataTable id="dataTableFuncionalidades" widgetVar="dtTbFuncionalidades" value="#{funcionalidadeController.modelFuncionalidades}" var="funcionalidade" 
 			lazy="true" paginator="true" rows="10" paginatorPosition="bottom" paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}" rowsPerPageTemplate="5,10,15" emptyMessage="#{bundle.msg_lista_vazia}" style="width: 700px;">
 

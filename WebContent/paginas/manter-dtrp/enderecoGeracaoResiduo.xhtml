@@ -10,7 +10,9 @@
                 <tr>
                     <td />
                     <td colspan="2">
-                        <h:outputText value="Informe o endereço de geração dos resíduos conforme consta na licença" style="line-height: 150%;font-weight: bold;"/>
+        <ui:include src="/layout/csrfToken.xhtml" />
+        <ui:include src="/layout/csrfToken.xhtml" />
+                        <h:outputText value="Informe o endereÃ§o de geraÃ§Ã£o dos resÃ­duos conforme consta na licenÃ§a" style="line-height: 150%;font-weight: bold;"/>
                         <br />
                         <h:outputText value="do gerador (se existente)." style="line-height: 150%;font-weight: bold;"/>
                     </td>
@@ -74,7 +76,7 @@
 			<!-- LOGRADOURO -->
 			
 			<h:panelGrid columns="2" id="panelmunicipioestado" width="100%">
-				<h:outputText id="idlblnumero" value="* Número"/>
+				<h:outputText id="idlblnumero" value="* NÃºmero"/>
 				<h:outputLabel id="idlblcomplemento" value="Complemento" />
 				<p:inputText style="width: 100px" disabled="#{!declaracaoEnderecoGeradorResiduoController.enableFormEndereco}" 
 					value="#{declaracaoEnderecoGeradorResiduoController.endereco.numEndereco}" maxlength="5" size="5" />
@@ -104,14 +106,14 @@
 			</h:panelGrid>
 			
 			<h:panelGrid columns="1">
-				<h:outputText id="idlblLicencaAnterior" value="Possui licença ou autorização anterior?" />
+				<h:outputText id="idlblLicencaAnterior" value="Possui licenÃ§a ou autorizaÃ§Ã£o anterior?" />
 				<p:selectOneRadio id="rdPossuiLicenca" value="#{declaracaoEnderecoGeradorResiduoController.enderecoSelecionado.indPossuiLicencaAutorizacao}"
 				disabled="#{!declaracaoEnderecoGeradorResiduoController.permiteEditar}">
 					<f:selectItem itemValue="true" itemLabel="Sim"/>
-					<f:selectItem itemValue="false" itemLabel="Não"/>
+					<f:selectItem itemValue="false" itemLabel="NÃ£o"/>
 					<p:ajax event="change" listener="#{declaracaoEnderecoGeradorResiduoController.mudarNumProcesso()}" update="formEndereco:txtNumProcesso"/>
 				</p:selectOneRadio>
-				<h:outputText id="idlblNumProcesso" value="Nº do processo da licença/autorização" />
+				<h:outputText id="idlblNumProcesso" value="NÂº do processo da licenÃ§a/autorizaÃ§Ã£o" />
 				<p:inputText id="txtNumProcesso" size="33" maxlength="35" value="#{declaracaoEnderecoGeradorResiduoController.enderecoSelecionado.numProcessoLicencaAutorizacao}"
 				disabled="#{!declaracaoEnderecoGeradorResiduoController.enderecoSelecionado.indPossuiLicencaAutorizacao or !declaracaoEnderecoGeradorResiduoController.permiteEditar}" />
 

@@ -6,9 +6,10 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:p="http://primefaces.prime.com.tr/ui">
 	<h:form id="asvFormAbaDadosGerais">
+        <ui:include src="/layout/csrfToken.xhtml" />
 	
 		<h:panelGroup style="margin-left:-7px;" id="gridClassificacao">
-			<h:outputText value="* Classificação da Vegetação" styleClass="titulo-grupo" style="font-weight:bold;"/>
+			<h:outputText value="* ClassificaÃ§Ã£o da VegetaÃ§Ã£o" styleClass="titulo-grupo" style="font-weight:bold;"/>
 		</h:panelGroup>
 		<h:panelGrid id="gridBusca">
 			<br/>
@@ -17,7 +18,7 @@
 				<p:inputText id="pesq_classificacao" value="#{asvDadosGeraisController.nomClassificacao}" onkeyup="pesq_tipo_classificacao();" style="width:250px;" disabled="#{asvDadosGeraisController.desabilitarTudo}">
 					<p:ajax process="@this" global="false"/>
 				</p:inputText>
-				<p:watermark for="pesq_classificacao" value="Digite uma classificação" />
+				<p:watermark for="pesq_classificacao" value="Digite uma classificaÃ§Ã£o" />
 				<p:remoteCommand name="pesq_tipo_classificacao" actionListener="#{asvDadosGeraisController.pesquisarClassificacao()}" global="false"
 				 update="tabAbasASVid:asvFormAbaDadosGerais:tblTipoClassificacao tabAbasASVid:asvFormAbaDadosGerais:gridTblClassSelecionados tabAbasASVid:asvFormAbaDadosGerais:tblTipoClassificacaoSelecionados" />
 			</h:panelGroup>
@@ -25,17 +26,17 @@
 		<h:panelGrid id="gridTableTipoClassificacao">
 			<p:dataTable id="tblTipoClassificacao" value="#{asvDadosGeraisController.listaClassificacao}" var="classificacao" lazy="true" paginator="true" rows="15"  
 				paginatorPosition="bottom" paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}" rowsPerPageTemplate="5,10,15" 
-				emptyMessage="Nenhum tipo de classificação encontrado." style="width: 723px;">
+				emptyMessage="Nenhum tipo de classificaÃ§Ã£o encontrado." style="width: 723px;">
 				<p:column style="text-align:justify; width:640px;">
 					<f:facet name="header">
-						<h:outputText value="Classificações" />
+						<h:outputText value="ClassificaÃ§Ãµes" />
 					</f:facet>
 					<h:outputText value="#{classificacao.dscClassificacaoVegetacao}" />
 				</p:column>
-				<p:column style="width:40px; text-align:center;" headerText="Ações">
-					<p:commandLink title="Adicionar Classificação(ões)" process="@this" update="tabAbasASVid:asvFormAbaDadosGerais:gridTblClassSelecionados tabAbasASVid:asvFormAbaDadosGerais:gridTableTipoClassificacao gridBotoes" 
+				<p:column style="width:40px; text-align:center;" headerText="AÃ§Ãµes">
+					<p:commandLink title="Adicionar ClassificaÃ§Ã£o(Ãµes)" process="@this" update="tabAbasASVid:asvFormAbaDadosGerais:gridTblClassSelecionados tabAbasASVid:asvFormAbaDadosGerais:gridTableTipoClassificacao gridBotoes" 
 							action="#{asvDadosGeraisController.adicionarClassificacao()}" global="false" disabled="#{asvDadosGeraisController.desabilitarTudo}">
-						<h:graphicImage title="Adicionar Classificação(ões)" value="/resources/img/ico-aprovar-notificacao.png" />
+						<h:graphicImage title="Adicionar ClassificaÃ§Ã£o(Ãµes)" value="/resources/img/ico-aprovar-notificacao.png" />
 						<f:setPropertyActionListener target="#{asvDadosGeraisController.tipoClassificacao}" value="#{classificacao}"/>
 					</p:commandLink>
 				</p:column>
@@ -45,12 +46,12 @@
 		<h:panelGrid id="gridTblClassSelecionados">
 			<p:dataTable id="tblTipoClassificacaoSelecionados" value="#{asvDadosGeraisController.listaClassificacaoSelecionada}" var="vegetacao" emptyMessage="#{bundle.lac_dadosGerais_msg007}" 
 			rendered="#{asvDadosGeraisController.temClassificacao}" style="width: 723px;" >
-			<p:column headerText="Classificação"  styleClass="text-center" style="text-align:justify; width: 635px;">
+			<p:column headerText="ClassificaÃ§Ã£o"  styleClass="text-center" style="text-align:justify; width: 635px;">
 				<h:outputText value="#{vegetacao.dscClassificacaoVegetacao}" />
 			</p:column>
-			<p:column headerText="Ações" style="width: 40px;" styleClass="text-center">
+			<p:column headerText="AÃ§Ãµes" style="width: 40px;" styleClass="text-center">
 		        <p:commandLink oncomplete="excluirClassificacao.show()" title="Excluir" process="@this" global="false" disabled="#{asvDadosGeraisController.desabilitarTudo}">
-	          		 <h:graphicImage title="Excluir Classificação" value="/resources/img/ico-excluir.png" />
+	          		 <h:graphicImage title="Excluir ClassificaÃ§Ã£o" value="/resources/img/ico-excluir.png" />
 	     		     <f:setPropertyActionListener target="#{asvDadosGeraisController.tipoClassificacao}" value="#{vegetacao}"/>
 	    		     <p:ajax global="false"/>
 		    	</p:commandLink>
@@ -59,7 +60,7 @@
 			<br />
 			<h:panelGrid id="gridBotoes" columns="2" style="margin-top:40px;" rendered="#{!asvDadosGeraisController.desabilitarTudo}">
 				<p:commandButton id="btnVoltar" value="Voltar" oncomplete="confirmationVoltarFCE.show();" style="width:90px;" update="tabAbasASVid" global="false"/>
-				<p:commandButton id="btnAvancar" value="Avançar" style="width:90px;" update="tabAbasASVid" process="@form" actionListener="#{asvDadosGeraisController.avancarAba()}" global="false" rendered="#{asvDadosGeraisController.temClassificacao}"/> 
+				<p:commandButton id="btnAvancar" value="AvanÃ§ar" style="width:90px;" update="tabAbasASVid" process="@form" actionListener="#{asvDadosGeraisController.avancarAba()}" global="false" rendered="#{asvDadosGeraisController.temClassificacao}"/> 
 			</h:panelGrid>
 		</h:panelGrid>
 	</h:form>

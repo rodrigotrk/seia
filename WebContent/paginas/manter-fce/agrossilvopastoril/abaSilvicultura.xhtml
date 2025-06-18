@@ -6,9 +6,10 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:p="http://primefaces.prime.com.tr/ui">
 	<h:form id="formSilvicultura">
+        <ui:include src="/layout/csrfToken.xhtml" />
 		<h:panelGrid style="margin-left:-7px;">
 		   <h:panelGrid id="pngFlorestaProducao">
-			    <h:outputText value="*Dados para Floresta de produÁ„o" styleClass="titulo-grupo" style="font-weight:bold;"/>
+			    <h:outputText value="*Dados para Floresta de produ√ß√£o" styleClass="titulo-grupo" style="font-weight:bold;"/>
 			    <ui:repeat var="flor_prod" value="#{silviculturaController.listaSilviculturaFlorestaProducao}">
 				   	<h:panelGrid columns="2">
 			   		<p:selectBooleanCheckbox value="#{flor_prod.indProjeto}" rendered="#{flor_prod.tipoProjetoOuFloresta == 'Projeto'}">
@@ -20,7 +21,7 @@
 				   	<h:outputText value="#{flor_prod.tipoProjetoOuFloresta == 'Floresta Implantada' ? 'Floresta Implantada' : 'Projeto'}" style="font-weight:bold;"/>					    
 				   </h:panelGrid>
 				     <h:panelGrid columns="6" rendered="#{flor_prod.indProjeto || flor_prod.indFlorestaImplantada}">
-				     	 <h:outputText value="*Previs„o de plantio (mÍs/ano)"/>
+				     	 <h:outputText value="*Previs√£o de plantio (m√™s/ano)"/>
 				     	 <p:selectOneMenu value="#{flor_prod.dtcMesPrevisaoPlantio}" converter="mesConverter">  
 				            <f:selectItem itemLabel="Selecione" itemValue="" />
 				            <f:selectItems value="#{silviculturaController.listaMes}" var="mes" itemLabel="#{mes.nomMes}" itemValue="#{mes}" />  
@@ -32,11 +33,11 @@
 		        		 	<p:ajax event="change" global="false" immediate="true"/>
 		        		 </p:selectOneMenu>
 		        		 <p:spacer height="0" width="20"/>
-		        		 <h:outputText value="*¡rea total de plantio(ha):"/>
+		        		 <h:outputText value="*√Årea total de plantio(ha):"/>
 		        		 <p:inputText value="#{flor_prod.numAreaTotal}" converter="doubleConverter" onkeyup="maskIt(this, event, '99.999.999,99', true)" maxlength="13">
 		        		 	<p:ajax global="false"/>
 		        		 </p:inputText>
-		        		 <h:outputText value="*Previs„o de corte (mÍs/ano)"/>
+		        		 <h:outputText value="*Previs√£o de corte (m√™s/ano)"/>
 				     	 <p:selectOneMenu value="#{flor_prod.dtcMesPrevisaoCorte}" converter="mesConverter">
 				            <f:selectItem itemLabel="Selecione" itemValue="" />
 				            <f:selectItems value="#{silviculturaController.listaMes}" var="mes" itemLabel="#{mes.nomMes}" itemValue="#{mes}" />  
@@ -48,7 +49,7 @@
 		        			<p:ajax global="false"/>
 		        		 </p:selectOneMenu>
 		        		 <p:spacer height="0" width="20"/>
-		        		 <h:outputText value="*Estimativa do volume de produÁ„o final (m≥)"/>
+		        		 <h:outputText value="*Estimativa do volume de produ√ß√£o final (m¬≥)"/>
 		        		 <p:inputText value="#{flor_prod.numVolumeFinal}" converter="doubleConverter" onkeyup="maskIt(this, event, '99.999.999,99', true)" maxlength="13">
 		        		 	<p:ajax global="false" />
 		        		 </p:inputText>
@@ -56,7 +57,7 @@
 			     </ui:repeat>
 		   </h:panelGrid>
 		    <br />
-		    <h:outputText value="*EspÈcies e variedades propostas/implantadas no reflorestamento" styleClass="titulo-grupo" style="font-weight:bold;"/>
+		    <h:outputText value="*Esp√©cies e variedades propostas/implantadas no reflorestamento" styleClass="titulo-grupo" style="font-weight:bold;"/>
 		    <h:panelGrid id="pngEspeciesReflorestamento">
 			    <ui:repeat var="esp_refl" value="#{silviculturaController.listaSilviculturaEspecieReflores}">
 				   	<h:panelGrid columns="2">
@@ -70,25 +71,25 @@
 				   						    
 				   </h:panelGrid>
 				     <h:panelGrid columns="5" rendered="#{esp_refl.indProjeto || esp_refl.indFlorestaImplantada}">
-				     	 <h:outputText value="*Previs„o de plantio (ano)"/>
+				     	 <h:outputText value="*Previs√£o de plantio (ano)"/>
 				     	 <p:selectOneMenu value="#{esp_refl.dtcAnoPrevisaoPlantio}">  
 				            <f:selectItem itemLabel="Selecione" itemValue="" />
 				            <f:selectItems value="#{silviculturaController.listaAno}" var="ano" itemLabel="#{ano}" itemValue="#{ano}" />  
 		        			<p:ajax global="false" />
 		        		 </p:selectOneMenu>
 		        		 <p:spacer height="0" width="20"/>
-		        		 <h:outputText value="*¡rea total de plantio(ha):"/>
+		        		 <h:outputText value="*√Årea total de plantio(ha):"/>
 		        		 <p:inputText value="#{esp_refl.numAreaTotal}" converter="doubleConverter" onkeyup="maskIt(this, event, '99.999.999,99', true)" maxlength="13">
 		        		 	<p:ajax global="false" />
 		        		 </p:inputText>
-		        		 <h:outputText value="*Previs„o de corte (ano)"/>
+		        		 <h:outputText value="*Previs√£o de corte (ano)"/>
 				     	 <p:selectOneMenu value="#{esp_refl.dtcAnoPrevisaoCorte}">
 				            <f:selectItem itemLabel="Selecione" itemValue="" />
 				            <f:selectItems value="#{silviculturaController.listaAno}" var="ano" itemLabel="#{ano}" itemValue="#{ano}" />  
 		        		 	<p:ajax global="false" />
 		        		 </p:selectOneMenu>
 		        		 <p:spacer height="0" width="20"/>
-		        		 <h:outputText value="*Estimativa do volume de produÁ„o final (m≥)"/>
+		        		 <h:outputText value="*Estimativa do volume de produ√ß√£o final (m¬≥)"/>
 		        		 <p:inputText value="#{esp_refl.numVolumeFinal}" converter="doubleConverter" onkeyup="maskIt(this, event, '99.999.999,99', true)" maxlength="13">
 		        		 	<p:ajax global="false" />
 		        		 </p:inputText>
@@ -97,24 +98,24 @@
 		   </h:panelGrid>
 		   <h:panelGrid id="pngEspecieHibrido">
 				<h:panelGroup style="margin-top:20px; margin-bottom:10px;">
-					<h:outputText value="EspÈcie(s) ou Hibrido(s)"/>
+					<h:outputText value="Esp√©cie(s) ou Hibrido(s)"/>
 					<p:spacer width="5" height="0"/>
 					<p:inputText id="pesquisar_especie" value="#{silviculturaController.nomEspecieHibridos}" onkeyup="pesq_tipo_especie();" style="width:250px;">
 						<p:ajax event="blur" process="@this" global="false"/>
 					</p:inputText>
-					<p:watermark for="pesquisar_especie" value="Digite o nome da EspÈcie ou hÌbrido" />
+					<p:watermark for="pesquisar_especie" value="Digite o nome da Esp√©cie ou h√≠brido" />
 					<p:remoteCommand name="pesq_tipo_especie" actionListener="#{silviculturaController.pesquisarEspecieHibrido()}" global="false" update="formGeral:tabAbasId_Agro:tblEspecieHibrido" />
 				</h:panelGroup>
 				<p:dataTable id="tblEspecieHibrido" value="#{silviculturaController.listaEspecieHibrido}" var="espec" lazy="true" paginator="true" rows="10"  
 				paginatorPosition="bottom" paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}" rowsPerPageTemplate="5,10,15" 
-				emptyMessage="Nenhuma espÈcie encontrada." style="width: 958px;">
-					<p:column headerText="EspÈcie" style="width: 290px; text-align:justify;">
+				emptyMessage="Nenhuma esp√©cie encontrada." style="width: 958px;">
+					<p:column headerText="Esp√©cie" style="width: 290px; text-align:justify;">
 						<h:outputText value="#{espec.dscEspecieHibrido}" />
 					</p:column>
 					<p:column headerText="Nome Vulgar" style="width: 290px; text-align:justify;">
 						<h:outputText value="#{espec.nomVulgar}" />
 					</p:column>
-					<p:column style="width: 40px; text-align:center;" headerText="AÁıes">		
+					<p:column style="width: 40px; text-align:center;" headerText="A√ß√µes">		
 						<p:commandLink title="Confirmar" process="@this" update="formGeral:tabAbasId_Agro:tblEspecieHibrido formGeral:tabAbasId_Agro:pngEspecieHibridoSelecionados" 
 						action="#{silviculturaController.adicionarEspecie()}" global="false">
 							<h:graphicImage title="Confirmar" value="/resources/img/ico-aprovar-notificacao.png" />
@@ -127,7 +128,7 @@
 				<p:dataTable id="tblEspecieHibridoSelecionados" value="#{silviculturaController.listaSilvicultura}" var="espec_sel" lazy="true" paginator="true" rows="10"  
 				paginatorPosition="bottom" paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}" rowsPerPageTemplate="5,10,15" 
 				style="width: 958px;" rendered="#{silviculturaController.exibirEspecieHibrido}">
-					<p:column headerText="EspÈcie">
+					<p:column headerText="Esp√©cie">
 						<h:outputText value="#{espec_sel.ideEspecieHibrido.dscEspecieHibrido}" />
 					</p:column>
 					
@@ -157,7 +158,7 @@
 						</center>
 					</p:column>
 					
-					<p:column headerText="*Previs„o plantio">
+					<p:column headerText="*Previs√£o plantio">
 						 <p:selectOneMenu value="#{espec_sel.dtcAnoPrevisaoPlantio}" disabled="#{espec_sel.indFlorestaImplantada or espec_sel.desabilitado}">  
 				            <f:selectItem itemLabel="Selecione" itemValue="" />
 				            <f:selectItems value="#{silviculturaController.listaAno}" var="ano" itemLabel="#{ano}" itemValue="#{ano}" />
@@ -165,7 +166,7 @@
 		        		 </p:selectOneMenu>
 					</p:column>
 					
-					<p:column headerText="*Previs„o corte">
+					<p:column headerText="*Previs√£o corte">
 						 <p:selectOneMenu value="#{espec_sel.dtcAnoPrevisaoCorte}" disabled="#{espec_sel.desabilitado}">   
 				            <f:selectItem itemLabel="Selecione" itemValue="" />
 				            <f:selectItems value="#{silviculturaController.listaAno}" var="ano" itemLabel="#{ano}" itemValue="#{ano}" />  
@@ -175,7 +176,7 @@
 					
 					<p:column style="width:78px;">
 						<f:facet name="header">
-							*¡rea total <br/> (ha)
+							*√Årea total <br/> (ha)
 						</f:facet>
 						<p:inputText value="#{espec_sel.numAreaTotal}" converter="doubleConverter" onkeyup="maskIt(this, event, '99.999.999,99', true)" style="width:70px;" maxlength="13" disabled="#{espec_sel.desabilitado}">
 							<p:ajax global="false" />
@@ -184,13 +185,13 @@
 					
 					<p:column>
 						<f:facet name="header">
-							*Estimativa do volume <br />de produÁ„o final (m≥)
+							*Estimativa do volume <br />de produ√ß√£o final (m¬≥)
 						</f:facet>
 						<p:inputText value="#{espec_sel.numVolumeFinal}" converter="doubleConverter" onkeyup="maskIt(this, event, '99.999.999,99', true)" maxlength="13" disabled="#{espec_sel.desabilitado}">
 							<p:ajax global="false" />
 						</p:inputText>
 					</p:column>
-					<p:column style="width: 40px; text-align:center;" headerText="AÁıes">		
+					<p:column style="width: 40px; text-align:center;" headerText="A√ß√µes">		
 						<p:commandLink actionListener="#{espec_sel.setDesabilitado(false)}" update="formGeral:tabAbasId_Agro:pngEspecieHibridoSelecionados" 
 		           	 	title="Editar" process="@this" global="false" rendered="#{espec_sel.desabilitado}">
 	          			 <h:graphicImage title="Editar criacao animal" value="/resources/img/ico-editar.png" />
@@ -200,14 +201,14 @@
 	          			 <h:graphicImage title="Salvar criacao animal" value="/resources/img/ico-aprovar-notificacao.png" />
 		            </p:commandLink>
 						<p:commandLink title="Excluir" process="@this" onclick="excluirEspecieHibrido.show()" global="false">
-							<h:graphicImage title="Excluir espÈcie" value="/resources/img/ico-excluir.png" />
+							<h:graphicImage title="Excluir esp√©cie" value="/resources/img/ico-excluir.png" />
 							<f:setPropertyActionListener target="#{silviculturaController.especieHibrido}" value="#{espec_sel.ideEspecieHibrido}"/>
 						</p:commandLink>
 					</p:column>
 				</p:dataTable>				
 			</h:panelGrid>
 			
-			<h:outputText value="*Incremento MÈdio Anual Estimado - IMA (m≥/ha/ano)" styleClass="titulo-grupo" style="font-weight:bold;"/>
+			<h:outputText value="*Incremento M√©dio Anual Estimado - IMA (m¬≥/ha/ano)" styleClass="titulo-grupo" style="font-weight:bold;"/>
 		    <h:panelGrid id="pngIMA">
 			    <ui:repeat var="ima" value="#{silviculturaController.listaSilviculturaIMA}">
 				   	<h:panelGrid columns="2">
@@ -220,7 +221,7 @@
 				   	<h:outputText value="#{ima.tipoProjetoOuFloresta == 'Projeto' ? 'Projeto' : 'Floresta Implantada'}" style="font-weight:bold;"/>					    
 				   </h:panelGrid>
 				     <h:panelGrid columns="6" rendered="#{ima.indProjeto || ima.indFlorestaImplantada}">
-				     	 <h:outputText value="*Previs„o de plantio (mÍs/ano)"/>
+				     	 <h:outputText value="*Previs√£o de plantio (m√™s/ano)"/>
 				     	 <p:selectOneMenu value="#{ima.dtcMesPrevisaoPlantio}" converter="mesConverter">  
 				            <f:selectItem itemLabel="Selecione" itemValue="" />
 				            <f:selectItems value="#{silviculturaController.listaMes}" var="mes" itemLabel="#{mes.nomMes}" itemValue="#{mes}" />  
@@ -232,11 +233,11 @@
 		        		 	<p:ajax global="false" />
 		        		 </p:selectOneMenu>
 		        		 <p:spacer height="0" width="20"/>
-		        		 <h:outputText value="*¡rea total de plantio(ha):"/>
+		        		 <h:outputText value="*√Årea total de plantio(ha):"/>
 		        		 <p:inputText value="#{ima.numAreaTotal}" converter="doubleConverter" onkeyup="maskIt(this, event, '99.999.999,99', true)" maxlength="13">
 		        		 	<p:ajax global="false" />
 		        		 </p:inputText>
-		        		 <h:outputText value="*Previs„o de corte (mÍs/ano)"/>
+		        		 <h:outputText value="*Previs√£o de corte (m√™s/ano)"/>
 				     	 <p:selectOneMenu value="#{ima.dtcMesPrevisaoCorte}" converter="mesConverter">
 				            <f:selectItem itemLabel="Selecione" itemValue="" />
 				            <f:selectItems value="#{silviculturaController.listaMes}" var="mes" itemLabel="#{mes.nomMes}" itemValue="#{mes}" />  
@@ -248,7 +249,7 @@
 		        			<p:ajax global="false" />
 		        		 </p:selectOneMenu>
 		        		 <p:spacer height="0" width="20"/>
-		        		 <h:outputText value="*Estimativa do volume de produÁ„o final (m≥)"/>
+		        		 <h:outputText value="*Estimativa do volume de produ√ß√£o final (m¬≥)"/>
 		        		 <p:inputText value="#{ima.numVolumeFinal}" converter="doubleConverter" onkeyup="maskIt(this, event, '99.999.999,99', true)" maxlength="13">
 		        		 	<p:ajax global="false" />
 		        		 </p:inputText>
@@ -256,7 +257,7 @@
 			     </ui:repeat>
 		   </h:panelGrid>
 		  	<h:panelGrid id="pngSoloAguas">
-			   <h:outputText value="*Praticas existentes e planejadas, de manejo e conservaÁ„o dos solos e ·guas" styleClass="titulo-grupo" style="font-weight:bold;"/>
+			   <h:outputText value="*Praticas existentes e planejadas, de manejo e conserva√ß√£o dos solos e √°guas" styleClass="titulo-grupo" style="font-weight:bold;"/>
 				<h:panelGroup layout="block" style="height:150px; width:250px; overflow:auto;">		        
 			     <p:selectManyCheckbox value="#{silviculturaController.listaTipoConservSoloAguaSelecionados}" converter="simpleEntityConverter" layout="pageDirection" valueChangeListener="#{silviculturaController.changeCheckBoxSoloAguas()}">
 					<f:selectItems value="#{silviculturaController.listaTipoConservSoloAgua}" var="conserv" itemLabel="#{conserv.dscTipoConservacaoSoloAgua}" itemValue="#{conserv}"/>
@@ -267,7 +268,7 @@
 			<h:panelGrid columns="3" style="margin-top:25px;">
 				<p:commandButton value="Voltar" global="false" action="#{agrossilvopastorilController.voltarAba()}" update="tabAbasId_Agro"/>
 				<p:spacer width="15" height="0"/>
-			 	<p:commandButton value="AvanÁar" action="#{silviculturaController.salvarAbaSilvicultura(false)}" update="tabAbasId_Agro" global="false" />
+			 	<p:commandButton value="Avan√ßar" action="#{silviculturaController.salvarAbaSilvicultura(false)}" update="tabAbasId_Agro" global="false" />
 			</h:panelGrid>
 		</h:panelGrid>
 	</h:form>

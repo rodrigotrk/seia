@@ -14,6 +14,7 @@
 
 	<ui:define name="conteudo-principal">
 		<h:form>
+        <ui:include src="/layout/csrfToken.xhtml" />
 			<p:remoteCommand name="verificarImoveisRegistroIncompleto"
 				action="#{listarImovelRuralController.verificarImovelCadastroIncompleto()}"
 				global="true" />
@@ -23,6 +24,7 @@
 
 		<!-- form -->
 		<h:form id="filtroImoveis">
+        <ui:include src="/layout/csrfToken.xhtml" />
 			<p:poll interval="1" global="false"
 				rendered="#{listarImovelRuralController.rendererPoll}"
 				listener="#{listarImovelRuralController.pollAjax()}"
@@ -687,6 +689,7 @@
 		<!-- fim form -->
 
 		<h:form id="formBtnDownloadAvisoCarLote" rendered="false">
+        <ui:include src="/layout/csrfToken.xhtml" />
 			<div style="text-align: right;">
 				<p:commandButton id="btnDownloadAvisoCarLote"
 					title="Essa opção permite baixar de uma só vez todos os arquivos Aviso Projeto CAR/BNDES/INEMA listados acima"
@@ -712,6 +715,7 @@
 			message="O cadastro ainda não foi concluído. Deseja cancelá-lo?"
 			severity="alert">
 			<h:form>
+        <ui:include src="/layout/csrfToken.xhtml" />
 				<h:panelGroup>
 					<p:commandButton type="submit" value="#{bundle.btn_sim}"
 						oncomplete="confirmarFecharValidacao.hide();dialogEfetuarValidacaoPrevia.hide();"
@@ -731,6 +735,7 @@
 			header="#{bundle.hdr_confirma_exclusao}"
 			message="#{bundle.msg_confirma_exclusao}" severity="alert">
 			<h:form>
+        <ui:include src="/layout/csrfToken.xhtml" />
 				<p:commandButton id="confirmarExclusao" value="#{bundle.btn_sim}"
 					update=":filtroImoveis:panel @form"
 					action="#{listarImovelRuralController.excluirImovel}"
@@ -748,6 +753,7 @@
 			header="#{bundle.hdr_confirma_exclusao}"
 			message="#{bundle.msg_confirma_inativacao}" severity="alert">
 			<h:form>
+        <ui:include src="/layout/csrfToken.xhtml" />
 				<p:commandButton id="btnConfirmarInativacao"
 					value="#{bundle.btn_sim}" update=":filtroImoveis:panel @form"
 					action="#{listarImovelRuralController.inativarImovel}"
@@ -765,6 +771,7 @@
 			message="#{bundle.cefir_msg_confirma_edicao_cadastro_finalizado}"
 			severity="alert" width="480">
 			<h:form>
+        <ui:include src="/layout/csrfToken.xhtml" />
 				<p:commandButton id="confirmarEdicao" value="#{bundle.btn_ok}"
 					action="#{imovelRuralControllerNew.editarImovelRural()}"
 					ajax="false" oncomplete="confirmDlgEdicaoImovelRural.hide()" />
@@ -844,6 +851,7 @@
 			<br />
 
 			<h:form>
+        <ui:include src="/layout/csrfToken.xhtml" />
 				<h:commandLink id="downloandDBF">
 					<h:outputLabel value="#{atualizarShapesController.nomeDBF}"
 						style="cursor:pointer;" />
@@ -853,6 +861,7 @@
 			</h:form>
 
 			<h:form>
+        <ui:include src="/layout/csrfToken.xhtml" />
 				<h:commandLink id="downloandSHP">
 					<h:outputLabel value="#{atualizarShapesController.nomeSHP}"
 						style="cursor:pointer;" />
@@ -862,6 +871,7 @@
 			</h:form>
 
 			<h:form>
+        <ui:include src="/layout/csrfToken.xhtml" />
 				<h:commandLink id="downloandSHX">
 					<h:outputLabel value="#{atualizarShapesController.nomeSHX}"
 						style="cursor:pointer;" />
@@ -872,6 +882,7 @@
 		</p:dialog>
 
 		<h:form id="formConfirmacaoAprovacaoRl">
+        <ui:include src="/layout/csrfToken.xhtml" />
 			<p:confirmDialog id="confirmacaoAprovacaoRl"
 				widgetVar="confirmacaoAprovacaoRl"
 				header="#{bundle.geral_lbl_mensagem}"
@@ -913,6 +924,7 @@
 				</p:outputPanel>
 			</f:facet>
 			<h:form>
+        <ui:include src="/layout/csrfToken.xhtml" />
 				<p:commandButton id="dialogCadastroConcluidobutton" process="@this"
 					value="#{bundle.btn_ok}" ajax="true"
 					onclick="dialogCadastroConcluido.hide()"
@@ -929,6 +941,7 @@
 				</p:outputPanel>
 			</f:facet>
 			<h:form>
+        <ui:include src="/layout/csrfToken.xhtml" />
 				<p:commandButton id="dialogStatusCadastrobutton" process="@this"
 					value="#{bundle.btn_ok}" ajax="true"
 					onclick="dialogStatusCadastro.hide()" />
@@ -946,6 +959,7 @@
 				</p:outputPanel>
 			</f:facet>
 			<h:form>
+        <ui:include src="/layout/csrfToken.xhtml" />
 				<p:commandButton id="dlgErroCarbutton" process="@this"
 					value="#{bundle.btn_ok}" ajax="true" onclick="dlgErroCar.hide()" />
 			</h:form>
@@ -982,6 +996,7 @@
 		
 		<!--  
 		<h:form id="formConfirmacaoDesbloqueioLimite">
+        <ui:include src="/layout/csrfToken.xhtml" />
 			<p:confirmDialog id="confirmacaoDesbloqueioLimite"
 				widgetVar="confirmacaoDesbloqueioLimite"
 				header="#{bundle.cefir_lbl_desbloqueio_imovel}"

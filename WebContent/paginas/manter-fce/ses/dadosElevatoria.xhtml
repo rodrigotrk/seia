@@ -16,7 +16,8 @@
 				  width="850" 
 				  height="650"
 				  resizable="false" 
-				    header="#{fceSesController.headerFce('Dados da Elevatória')}"
+				<h:form id="formSesDadosElevatoria">
+        <ui:include src="/layout/csrfToken.xhtml" />	
 				  modal="true">		
 		
 		
@@ -26,13 +27,13 @@
 					<h:panelGrid id="pngDadosElevatoria" columns="1">
 						
 						<h:panelGrid columns="2">
-							<h:outputText value="* Identificação da elevatória" />
-							<p:inputText value="#{fceSesController.fceSesElevatoriaDTO.dadosElevatoria.descricaoIdentificacao}" disabled="#{fceSesController.desabilitarTudo}" required="TRUE" requiredMessage="#{fceSesController.getRequireMesage('Identificação da elevatória')}"/>
+							<h:outputText value="* IdentificaÃ§Ã£o da elevatÃ³ria" />
+							<p:inputText value="#{fceSesController.fceSesElevatoriaDTO.dadosElevatoria.descricaoIdentificacao}" disabled="#{fceSesController.desabilitarTudo}" required="TRUE" requiredMessage="#{fceSesController.getRequireMesage('IdentificaÃ§Ã£o da elevatÃ³ria')}"/>
 						</h:panelGrid>
 												
 						<h:panelGrid columns="1">
 						<br/>
-							<h:outputText value="* Coordenada da elevatória"/> 
+							<h:outputText value="* Coordenada da elevatÃ³ria"/> 
 							<p:outputPanel autoUpdate="true">
 								<p:commandLink global="false" oncomplete="dlgLocalizacaoGeograficaGeneric.show();" update="locGeograficaVertices" action="#{localizacaoGeograficaGenericController.carregarTela()}" 
 									process="@this" disabled="#{fceSesController.fceSesElevatoriaDTO.localizacaoElevatoria.ideLocalizacaoGeografica != null}" actionListener="#{localizacaoGeograficaGenericController.limparLocalizacaoGeografSelecionada()}">
@@ -58,14 +59,14 @@
 									<p:column headerText="Sistema de Coordenadas">
 										<h:outputText value="#{localizacao.localizacaoElevatoria.nomeSistemaCoordenadas()}" />
 									</p:column>				
-									<p:column headerText="Ações">
+									<p:column headerText="AÃ§Ãµes">
 																												
 										<p:commandLink oncomplete="dlgLocalizacaoGeograficaGeneric.show();" disabled="#{fceSesController.desabilitarTudo}" process="@this" action="#{localizacaoGeograficaGenericController.visualizarLocalizacaoGeografica()}" >
 											<f:setPropertyActionListener target="#{localizacao.localizacaoFinal}" value="#{false}" />
 											<f:setPropertyActionListener target="#{localizacaoGeograficaGenericController.localizacaoGeograficaSelecionada}" value="#{localizacao.localizacaoElevatoria}" />
 											<f:setPropertyActionListener target="#{localizacaoGeograficaGenericController.objetoLocalizacao}" value="#{localizacao}" />
 											<f:setPropertyActionListener target="#{localizacaoGeograficaGenericController.empreendimento}" value="#{fceSesController.requerimento.ultimoEmpreendimento}" />
-											<h:graphicImage title="Visualizar localização no GeoBahia" value="/resources/img/ico-pesquisa.png" />
+											<h:graphicImage title="Visualizar localizaÃ§Ã£o no GeoBahia" value="/resources/img/ico-pesquisa.png" />
 										</p:commandLink>
 										
 										<p:commandLink disabled="#{fceSesController.desabilitarTudo}" oncomplete="confirmaExclusaoLocGeoDeSes.show();" process="@this" >
@@ -73,7 +74,7 @@
 											<f:setPropertyActionListener target="#{localizacaoGeograficaGenericController.objetoLocalizacao}" value="#{localizacao}" />
 											<f:setPropertyActionListener target="#{localizacaoGeograficaGenericController.empreendimento}" value="#{fceSesController.requerimento.ultimoEmpreendimento}" />
 											<f:setPropertyActionListener target="#{fceSesController.localizacaoGeograficaSelecionada}" value="#{localizacao.localizacaoElevatoria}" />
-											<h:graphicImage title="Excluir localização geográfica" value="/resources/img/ico-excluir.png" />
+											<h:graphicImage title="Excluir localizaÃ§Ã£o geogrÃ¡fica" value="/resources/img/ico-excluir.png" />
 										</p:commandLink>
 									</p:column>
 								</p:dataTable>
@@ -108,14 +109,14 @@
 									<p:column headerText="Sistema de Coordenadas">
 										<h:outputText value="#{localizacao.localizacaoExtravazamento.nomeSistemaCoordenadas()}" />
 									</p:column>				
-									<p:column headerText="Ações">
+									<p:column headerText="AÃ§Ãµes">
 																												
 										<p:commandLink oncomplete="dlgLocalizacaoGeograficaGeneric.show();" disabled="#{fceSesController.desabilitarTudo}" process="@this" action="#{localizacaoGeograficaGenericController.visualizarLocalizacaoGeografica()}" >
 											<f:setPropertyActionListener target="#{localizacao.localizacaoFinal}" value="#{false}" />
 											<f:setPropertyActionListener target="#{localizacaoGeograficaGenericController.localizacaoGeograficaSelecionada}" value="#{localizacao.localizacaoExtravazamento}" />
 											<f:setPropertyActionListener target="#{localizacaoGeograficaGenericController.objetoLocalizacao}" value="#{localizacao}" />
 											<f:setPropertyActionListener target="#{localizacaoGeograficaGenericController.empreendimento}" value="#{fceSesController.requerimento.ultimoEmpreendimento}" />
-											<h:graphicImage title="Visualizar localização no GeoBahia" value="/resources/img/ico-pesquisa.png" />
+											<h:graphicImage title="Visualizar localizaÃ§Ã£o no GeoBahia" value="/resources/img/ico-pesquisa.png" />
 										</p:commandLink>
 										
 										<p:commandLink disabled="#{fceSesController.desabilitarTudo}" oncomplete="confirmaExclusaoLocGeoDeSes.show();" process="@this" >
@@ -123,7 +124,7 @@
 											<f:setPropertyActionListener target="#{localizacaoGeograficaGenericController.objetoLocalizacao}" value="#{localizacao}" />
 											<f:setPropertyActionListener target="#{localizacaoGeograficaGenericController.empreendimento}" value="#{fceSesController.requerimento.ultimoEmpreendimento}" />
 											<f:setPropertyActionListener target="#{fceSesController.localizacaoGeograficaSelecionada}" value="#{localizacao.localizacaoExtravazamento}" />
-											<h:graphicImage title="Excluir localização geográfica" value="/resources/img/ico-excluir.png" />
+											<h:graphicImage title="Excluir localizaÃ§Ã£o geogrÃ¡fica" value="/resources/img/ico-excluir.png" />
 										</p:commandLink>
 									</p:column>
 								</p:dataTable>
@@ -133,11 +134,11 @@
 					</h:panelGrid>	
 					
 					<h:panelGrid columns="3" id="pngVazaoDadosElevatoria">
-						<h:outputLabel value="* Vazão" />
-						<p:inputText value="#{fceSesController.fceSesElevatoriaDTO.dadosElevatoria.valorVazao}" styleClass="campoNumericoComDecimal-2" disabled="#{fceSesController.desabilitarTudo}" required="TRUE" requiredMessage="#{fceSesController.getRequireMesage('Vazão')}">
+						<h:outputLabel value="* VazÃ£o" />
+						<p:inputText value="#{fceSesController.fceSesElevatoriaDTO.dadosElevatoria.valorVazao}" styleClass="campoNumericoComDecimal-2" disabled="#{fceSesController.desabilitarTudo}" required="TRUE" requiredMessage="#{fceSesController.getRequireMesage('VazÃ£o')}">
 							<f:convertNumber integerOnly="false" locale="pt,BR" minFractionDigits="2"/>
 						</p:inputText>
-						<h:outputLabel value="(m³/dia)" />
+						<h:outputLabel value="(mÂ³/dia)" />
 						<br />
 					</h:panelGrid>
 					
@@ -148,8 +149,8 @@
 					</h:panelGrid>		
 					
 						<h:panelGrid columns="3" id="pngExtensaoDadosElevatoria">
-							<h:outputText value="* Extensão da Linha de Recalque" style="margin-left: 0%;"/>
-							<p:inputText value="#{fceSesController.fceSesElevatoriaDTO.dadosElevatoria.valorExtensaoLinha}" styleClass="campoNumericoComDecimal-2" disabled="#{fceSesController.desabilitarTudo}" required="TRUE" requiredMessage="#{fceSesController.getRequireMesage('Extensão da linha')}">
+							<h:outputText value="* ExtensÃ£o da Linha de Recalque" style="margin-left: 0%;"/>
+							<p:inputText value="#{fceSesController.fceSesElevatoriaDTO.dadosElevatoria.valorExtensaoLinha}" styleClass="campoNumericoComDecimal-2" disabled="#{fceSesController.desabilitarTudo}" required="TRUE" requiredMessage="#{fceSesController.getRequireMesage('ExtensÃ£o da linha')}">
 								<f:convertNumber integerOnly="false" locale="pt,BR" minFractionDigits="2"/>
 							</p:inputText>
 							<h:outputLabel value="(m)" />
@@ -157,9 +158,9 @@
 						
 						<h:panelGrid id="pngFaixaDadosElevatoria">
 							<br />
-							<h:outputText value="* Selecione a faixa de diâmetro predominante da linha de recalque"/>
+							<h:outputText value="* Selecione a faixa de diÃ¢metro predominante da linha de recalque"/>
 							<p:selectOneRadio id="listaFaixaDiametroLinha" disabled="#{fceSesController.desabilitarTudo}"
-								value="#{fceSesController.fceSesElevatoriaDTO.dadosElevatoria.ideFaixaDiametroAdutora}" required="true" requiredMessage="#{fceSesController.getRequireMesage('Faixa de diâmetro da linha')}"> 
+								value="#{fceSesController.fceSesElevatoriaDTO.dadosElevatoria.ideFaixaDiametroAdutora}" required="true" requiredMessage="#{fceSesController.getRequireMesage('Faixa de diÃ¢metro da linha')}"> 
 								<f:converter converterId="simpleEntityConverter" />
 								<f:selectItems value="#{fceSesController.listFaixaAdutora}" var="lfa" itemLabel="#{lfa.descricaoFaixaDiametroAdutora}" itemValue="#{lfa}"/>
 							</p:selectOneRadio>	

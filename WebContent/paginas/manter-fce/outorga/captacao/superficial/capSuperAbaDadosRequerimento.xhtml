@@ -9,8 +9,9 @@
 	
 	
 	<h:form id="formCapSuperDadosRequerimento">
-		<h:outputText styleClass="titulo-grupo" style="font-weight:bold; margin-left:10px;" value="Coordenada da CaptaÁ„o" rendered="#{fceCaptacaoSuperficialController.unicaCaptacao}"/>
-		<h:outputText styleClass="titulo-grupo" style="font-weight:bold; margin-left:10px;" value="Coordenadas das CaptaÁıes" rendered="#{!fceCaptacaoSuperficialController.unicaCaptacao}"/>
+        <ui:include src="/layout/csrfToken.xhtml" />
+		<h:outputText styleClass="titulo-grupo" style="font-weight:bold; margin-left:10px;" value="Coordenada da Capta√ß√£o" rendered="#{fceCaptacaoSuperficialController.unicaCaptacao}"/>
+		<h:outputText styleClass="titulo-grupo" style="font-weight:bold; margin-left:10px;" value="Coordenadas das Capta√ß√µes" rendered="#{!fceCaptacaoSuperficialController.unicaCaptacao}"/>
 		
 		<br /><br />
 		
@@ -30,7 +31,7 @@
  		    	<h:outputText value="#{fceOutorgaLocGeo.sistemaCoordenada}" />
  		    </p:column>
  		    
-	 		<p:column headerText="Bacia Hidrogr·fica" id="bacia" style="text-align:center; width:113px;">
+	 		<p:column headerText="Bacia Hidrogr√°fica" id="bacia" style="text-align:center; width:113px;">
  		    	<h:outputText value="#{fceOutorgaLocGeo.bacia}" />
  		    </p:column>
  		    
@@ -51,7 +52,7 @@
    		    
    		    <p:column id="vazaoMaxima" style="text-align:center;">
  		    	<f:facet name="header">
-   	 		   		Vaz„o <br/> M·xima <br/> Captada
+   	 		   		Vaz√£o <br/> M√°xima <br/> Captada
    	 		  	</f:facet>
  		    	<h:outputText value="#{fceOutorgaLocGeo.maskNumVazao}" style="width:45px;" rendered="#{!fceCaptacaoSuperficialController.fceTecnico}"/> 
  		    	
@@ -63,12 +64,12 @@
  		    		<p:ajax event="blur" global="false" />
 					<f:convertNumber integerOnly="false" minFractionDigits="2" />
 				</p:inputText>
-				<h:outputText value=" (m≥/dia)"/>
+				<h:outputText value=" (m¬≥/dia)"/>
  		    </p:column>
  		    
    		    <p:column id="tempoCaptacao" style="text-align:center; width:55px;">
 		    		<f:facet name="header">
-   	 		   		Tempo <br/> de <br/> CaptaÁ„o
+   	 		   		Tempo <br/> de <br/> Capta√ß√£o
    	 		  	</f:facet>
 		    	
    				<p:inputText id="tempoCapSuper" value="#{fceOutorgaLocGeo.numTempoCaptacao}" onkeyup="SomenteNumero(this);" 
@@ -80,15 +81,15 @@
  		    
   	 		   <p:column id="vazaoMaxCapHoras" style="text-align:center; width:90px;">
  		   		<f:facet name="header">
-   	 		   		Vaz„o Captada<br/> por Hora
+   	 		   		Vaz√£o Captada<br/> por Hora
    	 		  	</f:facet>
  		    	<p:inputText value="#{fceOutorgaLocGeo.vazaoHora}" size="8" disabled="true"  converter="doubleConverter" style="width:65px;">
  		    		<f:convertNumber integerOnly="false"  minFractionDigits="2" maxFractionDigits="2"/>
  		    	</p:inputText>
- 		    	<h:outputText value=" (m≥/h)" />
+ 		    	<h:outputText value=" (m¬≥/h)" />
  		    </p:column>
  		    
-			<p:column headerText="AÁıes" style="width:45px; text-align:center;">
+			<p:column headerText="A√ß√µes" style="width:45px; text-align:center;">
 			
 				<p:commandLink update="formCapSuperDadosRequerimento:capSupTabelaPontos" action="#{fceCaptacaoSuperficialController.confirmar()}"
 					rendered="#{!fceOutorgaLocGeo.confirmado}" global="false" disabled="#{fceCaptacaoSuperficialController.desabilitarTudo}">
@@ -104,13 +105,13 @@
 			
 				<h:panelGroup rendered="#{!fceCaptacaoSuperficialController.fceTecnico}">
 					<a onclick="javascript:${localizacaoGeograficaGenericController.retornarUrl(fceOutorgaLocGeo.ideOutorgaLocalizacaoGeografica.ideLocalizacaoGeografica)}">
-						<h:graphicImage title="LocalizaÁ„o do Ponto no Geobahia" value="/resources/img/ico-arl-relocacao.png" />
+						<h:graphicImage title="Localiza√ß√£o do Ponto no Geobahia" value="/resources/img/ico-arl-relocacao.png" />
 					</a>
 				</h:panelGroup>
 			
 				<h:panelGroup rendered="#{fceCaptacaoSuperficialController.fceTecnico}">
 					<a onclick="javascript:${localizacaoGeograficaGenericController.retornarUrl(fceOutorgaLocGeo.ideLocalizacaoGeografica)}">
-						<h:graphicImage title="LocalizaÁ„o do Ponto no Geobahia" value="/resources/img/ico-arl-relocacao.png" />
+						<h:graphicImage title="Localiza√ß√£o do Ponto no Geobahia" value="/resources/img/ico-arl-relocacao.png" />
 					</a>
 			
 					<p:commandLink oncomplete="dlgLocalizacaoGeograficaGeneric.show();" process="@this" actionListener="#{localizacaoGeograficaGenericController.editarLocGeoComActionEvent()}" rendered="#{fceOutorgaLocGeo.confirmado and !fceCaptacaoSuperficialController.desabilitarTudo}">
@@ -119,19 +120,19 @@
 						<f:attribute name="analiseTecnica" value="#{fceCaptacaoSuperficialController.fceTecnico}"/>
 						<f:attribute name="objetoLocalizacao" value="#{fceOutorgaLocGeo.ideLocalizacaoGeografica}"/>
 						<f:attribute name="ideRequerimento" value="#{fceCaptacaoSuperficialController.fce.ideRequerimento.ideRequerimento}"/>
-						<h:graphicImage title="Editar localizaÁ„o geogr·fica" value="/resources/img/edit_loc_geo.png" />
+						<h:graphicImage title="Editar localiza√ß√£o geogr√°fica" value="/resources/img/edit_loc_geo.png" />
 					</p:commandLink>
 					
 					<!-- 7534 
-					<p:commandLink title="Reservar ¡gua" immediate="true" oncomplete="confirmar_reserva_agua.show()" rendered="#{!fceOutorgaLocGeo.aguaReservada and !fceCaptacaoSuperficialController.desabilitarTudo}">
+					<p:commandLink title="Reservar √Ågua" immediate="true" oncomplete="confirmar_reserva_agua.show()" rendered="#{!fceOutorgaLocGeo.aguaReservada and !fceCaptacaoSuperficialController.desabilitarTudo}">
 						<f:setPropertyActionListener target="#{reservaAguaController.fceOutorgaLocalizacaoGeografica}" value="#{fceOutorgaLocGeo}"/>
 						<f:setPropertyActionListener target="#{reservaAguaController.ideToUpdate}" value="formCapSuperDadosRequerimento:capSupTabelaPontos"/>
-						<h:graphicImage title="Reservar ¡gua" value="/resources/img/reserva_agua_16.png" />
+						<h:graphicImage title="Reservar √Ågua" value="/resources/img/reserva_agua_16.png" />
 					</p:commandLink>
-					<p:commandLink title="Cancelar Reserva de ¡gua" immediate="true" oncomplete="confirmar_cancelamento_reserva_agua.show()" rendered="#{fceOutorgaLocGeo.aguaReservada and !fceCaptacaoSuperficialController.desabilitarTudo}">
+					<p:commandLink title="Cancelar Reserva de √Ågua" immediate="true" oncomplete="confirmar_cancelamento_reserva_agua.show()" rendered="#{fceOutorgaLocGeo.aguaReservada and !fceCaptacaoSuperficialController.desabilitarTudo}">
 						<f:setPropertyActionListener target="#{reservaAguaController.fceOutorgaLocalizacaoGeografica}" value="#{fceOutorgaLocGeo}"/>
 						<f:setPropertyActionListener target="#{reservaAguaController.ideToUpdate}" value="formCapSuperDadosRequerimento:capSupTabelaPontos"/>
-						<h:graphicImage title="Cancelar Reserva de ¡gua" value="/resources/img/cancelar_reserva_agua_16.png" />
+						<h:graphicImage title="Cancelar Reserva de √Ågua" value="/resources/img/cancelar_reserva_agua_16.png" />
 					</p:commandLink>
 					-->
 					
@@ -147,7 +148,7 @@
 				
 				<p:commandLink update="fceCapSuper" process="@this" global="false" oncomplete="fceCapSuper.show();" 
 					action="#{fceCaptacaoSuperficialController.prepararFceCaptacaoSuperficial()}" rendered="#{fceOutorgaLocGeo.confirmado}">
-					<h:graphicImage title="Informar caracterÌsticas da CaptaÁ„o Superficial" value="/resources/img/ico-preencher.png" />
+					<h:graphicImage title="Informar caracter√≠sticas da Capta√ß√£o Superficial" value="/resources/img/ico-preencher.png" />
 					<f:setPropertyActionListener target="#{fceCaptacaoSuperficialController.fceOutorgaLocalizacaoGeograficaSelecionada}" value="#{fceOutorgaLocGeo}"/>
 				</p:commandLink>
 							

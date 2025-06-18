@@ -19,17 +19,19 @@
 		<ui:include src="/paginas/manter-fce/outorga/intervencao/barragem/tipoBarragem.xhtml" />
 		<h3>
 			<h:outputLabel styleClass="titulo-grupo" style="font-weight:bold;"
-				value="INSTRUÇÕES" />
+        <ui:include src="/layout/csrfToken.xhtml" />
+        <ui:include src="/layout/csrfToken.xhtml" />
+				value="INSTRUÃ‡Ã•ES" />
 		</h3>
 		<br />
 		<h:outputLabel styleClass="titulo-grupo"
-			value="Para consultar uma ou mais requerimentos, informe o(s) parâmetro(s) de consulta desejado(s) e clique no botão &#34;Consultar&#34;." />
+			value="Para consultar uma ou mais requerimentos, informe o(s) parÃ¢metro(s) de consulta desejado(s) e clique no botÃ£o &#34;Consultar&#34;." />
 		<br />
 		<br />
 		<br />
 		<h3>
 			<h:outputLabel styleClass="titulo-grupo" style="font-weight:bold;"
-				value="PARÂMETROS DA CONSULTA" />
+				value="PARÃ‚METROS DA CONSULTA" />
 		</h3>
 
 		<h:panelGrid id="pnlGridMsgEnquadramento">
@@ -87,7 +89,7 @@
 						</p:selectOneMenu>
 					</h:panelGrid>
 					<h:panelGrid columns="3">
-						<h:outputText value="Nº do Requerimento" />
+						<h:outputText value="NÂº do Requerimento" />
 						<h:outputText  />
 						<h:outputText value="Status" />
 						<p:inputText
@@ -125,7 +127,7 @@
 						</h:panelGrid>
 					</h:panelGrid>
 					<h:panelGrid columns="4">
-						<h:outputText value="Período" />
+						<h:outputText value="PerÃ­odo" />
 						<h:outputText />
 						<h:outputText />
 						<h:outputText />
@@ -137,7 +139,7 @@
 								value="${requerimentoUnicoController.periodoInicio}"
 								label="Data de Inicio" validator="dataPosteriorValidator" />
 						</h:panelGroup>
-						<h:outputText value="Até" />
+						<h:outputText value="AtÃ©" />
 						<p:calendar showOn="button" size="10" locale="pt"
 							pattern="dd/MM/yyyy" navigator="true" mindate="01/01/1900"
 							accesskey="true" readOnlyInputText="true"
@@ -209,7 +211,7 @@
 						<c:if
 							test="${!contextoController.usuarioLogado.usuarioExterno}">
 						<p:column  style="width:90px">
-							<f:facet name="header">Usuário</f:facet>
+							<f:facet name="header">UsuÃ¡rio</f:facet>
 							<h:outputText
 								value="${requerimentoUnico.pessoaTramitacao.pessoaFisica.nomPessoa} ${requerimentoUnico.pessoaTramitacao.pessoaJuridica.nomRazaoSocial}" />
 						</p:column>
@@ -219,7 +221,7 @@
 							<f:facet name="header">
 								<h:outputText value="#{bundle.consultapf_lbl_acoes}" />
 							</f:facet>
-							<!-- Teste do relatório Resumo do Requerimento -->
+							<!-- Teste do relatÃ³rio Resumo do Requerimento -->
 							<h:commandLink id="resumo_Requerimento"
 								rendered="#{security.temAcesso('4.34.14')}"
 								disabled="#{requerimentoUnico.statusRequerimento.ideStatusRequerimento == 9}">
@@ -307,11 +309,11 @@
 								rendered="#{requerimentoUnicoController.rendered(requerimentoUnico, 3) and security.temAcesso('4.25.12')}"
 								oncomplete="dialogEnviarDocumentoObrigatorio.show();expandAll();" action="#{enviarDocumentoController.carregarTela(requerimentoUnico.requerimentoUnico)}"
 								disabled="#{requerimentoUnico.statusRequerimento.ideStatusRequerimento == 9}" update=":formulariosdownload :formulariosUpload">
-								<h:graphicImage title="Enviar Documentação Obrigatória"
+								<h:graphicImage title="Enviar DocumentaÃ§Ã£o ObrigatÃ³ria"
 									value="/resources/img/ico-anexo.png" />
 							</p:commandLink>
 							<!-- Fim -->
-							<!-- 4 - efetuar validação prévia-->
+							<!-- 4 - efetuar validaÃ§Ã£o prÃ©via-->
 							<p:commandLink
 								rendered="#{requerimentoUnicoController.rendered(requerimentoUnico, 4) and security.temAcesso('4.26.13')}"
 								oncomplete="dialogEfetuarValidacaoPrevia.show();expandAllValidacao();" action="#{efetuarValidacaoPreviaController.carregarTela(requerimentoUnico)}" update=":formulariosValidacao"
@@ -325,7 +327,7 @@
 								<f:setPropertyActionListener
 									target="${requerimentoUnicoController.emailValidacao}"
 									value="#{null}" />
-								<h:graphicImage title="Efetuar Validação Prévia"
+								<h:graphicImage title="Efetuar ValidaÃ§Ã£o PrÃ©via"
 									value="/resources/img/ico-empreendimento.gif" />
 							</p:commandLink>
 							<!-- Fim -->
@@ -375,11 +377,11 @@
 									target="${requerimentoUnicoController.requerimentoUnicoDTO}"
 									value="${requerimentoUnico}" />
 							</p:commandLink>
-							<!-- Gerar relatório de ato declaratório -->
+							<!-- Gerar relatÃ³rio de ato declaratÃ³rio -->
 							<h:commandLink
 								rendered="#{requerimentoUnicoController.rendered(requerimentoUnico,8)   and security.temAcesso('4.35.14')}"
 								disabled="${requerimentoUnico.statusRequerimento.ideStatusRequerimento == 9}">
-								<h:graphicImage title="Gerar Relatório de Ato Declaratório"
+								<h:graphicImage title="Gerar RelatÃ³rio de Ato DeclaratÃ³rio"
 									value="/resources/img/ico-pdf.png" />
 								<f:setPropertyActionListener
 									target="#{requerimentoUnicoController.requerimentoUnicoDTO}"
@@ -388,7 +390,7 @@
 									value="#{requerimentoUnicoController.gerarDocumentoDeclaracaoPdf}" />
 							</h:commandLink>
 							<!-- Fim -->
-							<!-- Gerar relatório de DLA -->
+							<!-- Gerar relatÃ³rio de DLA -->
 							<h:commandLink
 								rendered="#{requerimentoUnico.requerimentoUnico.indDla and security.temAcesso('4.36.14')}"
 								disabled="${requerimentoUnico.statusRequerimento.ideStatusRequerimento == 9}">
@@ -425,12 +427,12 @@
 									target="#{lacPostoController.lacPostoCombustivel.ideRequerimento.ideRequerimento}"
 									value="#{requerimentoUnico.requerimentoUnico.ideRequerimentoUnico}" />
 							</p:commandLink>
-							<!-- Imprimir Relatório Final da Lac de ERB -->	
+							<!-- Imprimir RelatÃ³rio Final da Lac de ERB -->	
 							<h:commandLink
 								rendered="#{requerimentoUnicoController.rendered(requerimentoUnico,11) and requerimentoUnicoController.isLacErb(requerimentoUnico) and security.temAcesso('4.39.5')}"
 								ajax="false"
 								disabled="${requerimentoUnico.statusRequerimento.ideStatusRequerimento == 9}">
-								<h:graphicImage title="Imprimir Relatório Final da Lac de ERB"
+								<h:graphicImage title="Imprimir RelatÃ³rio Final da Lac de ERB"
 									value="/resources/img/licon.png" />
 								<f:setPropertyActionListener
 									target="#{lacErbController.lacErb.ideRequerimento.ideRequerimento}"
@@ -438,12 +440,12 @@
 								<p:fileDownload
 									value="#{lacErbController.imprimirRelatorioFinalLac}" />
 							</h:commandLink>
-							<!-- Imprimir Relatório Final da Lac de Posto -->	
+							<!-- Imprimir RelatÃ³rio Final da Lac de Posto -->	
 							<h:commandLink
 								rendered="#{requerimentoUnicoController.rendered(requerimentoUnico,11) and requerimentoUnicoController.isLacPosto(requerimentoUnico) and security.temAcesso('4.40.5')}"
 								ajax="false"
 								disabled="${requerimentoUnico.statusRequerimento.ideStatusRequerimento == 9}">
-								<h:graphicImage title="Imprimir Relatório Final da Lac de Posto"
+								<h:graphicImage title="Imprimir RelatÃ³rio Final da Lac de Posto"
 									value="/resources/img/licon.png" />
 								<f:setPropertyActionListener
 									target="#{lacPostoController.lacPostoCombustivel.ideRequerimento.ideRequerimento}"
@@ -451,12 +453,12 @@
 								<p:fileDownload
 									value="#{lacPostoController.imprimirRelatorioFinal}" />
 							</h:commandLink>
-							<!-- Imprimir Relatório Final da Lac Transportadora -->	
+							<!-- Imprimir RelatÃ³rio Final da Lac Transportadora -->	
 							<h:commandLink
 								rendered="#{requerimentoUnicoController.rendered(requerimentoUnico,16) and requerimentoUnicoController.isLacTransportadora(requerimentoUnico) and security.temAcesso('4.55.5')}"
 								ajax="false"
 								disabled="${requerimentoUnico.statusRequerimento.ideStatusRequerimento == 9}">
-								<h:graphicImage title="Imprimir Relatório Final da Lac Transportadora"
+								<h:graphicImage title="Imprimir RelatÃ³rio Final da Lac Transportadora"
 									value="/resources/img/licon.png" />
 								<f:setPropertyActionListener
 									target="#{lacTransporteController.requerimentoUnico}"
@@ -464,12 +466,12 @@
 								<p:fileDownload
 									value="#{lacTransporteController.imprimirRelatorioFinal}" />
 							</h:commandLink>
-							<!-- Imprimir Relatório Final da FCE ASV -->	
+							<!-- Imprimir RelatÃ³rio Final da FCE ASV -->	
 							<h:commandLink
 								rendered="#{requerimentoUnicoController.rendered(requerimentoUnico,17) and requerimentoUnicoController.isFceAsv(requerimentoUnico) and security.temAcesso('4.56.5')}"
 								ajax="false"
 								disabled="${requerimentoUnico.statusRequerimento.ideStatusRequerimento == 9}">
-								<h:graphicImage title="Imprimir Relatório Final da FCE ASV"
+								<h:graphicImage title="Imprimir RelatÃ³rio Final da FCE ASV"
 									value="/resources/img/licon.png" />
 								<f:setPropertyActionListener
 									target="#{asvDadosGeraisController.requerimentoUnico}"
@@ -538,13 +540,13 @@
 								<p:fileDownload
 									value="#{requerimentoUnicoController.getImprimirRelatorioCorteFloresta(requerimentoUnico)}" />
 							</h:commandLink>
-							<!-- Gerar Certificado de Floresta de Produção Plantada -->			
+							<!-- Gerar Certificado de Floresta de ProduÃ§Ã£o Plantada -->			
 							<h:commandLink
 								rendered="#{requerimentoUnicoController.rendered(requerimentoUnico,15) and  security.temAcesso('4.45.14')}"
 								ajax="false"
 								disabled="${requerimentoUnico.statusRequerimento.ideStatusRequerimento == 9}">
 								<h:graphicImage
-									title="Gerar Certificado de Registro de Floresta de Produção Plantada"
+									title="Gerar Certificado de Registro de Floresta de ProduÃ§Ã£o Plantada"
 									value="/resources/img/ico-pdf.png" />
 								<p:fileDownload
 									value="#{requerimentoUnicoController.getRegistroCorteFlorestaProducaoPlantada(requerimentoUnico)}" />
@@ -557,7 +559,25 @@
 									target="${contextoController.object}"
 									value="#{requerimentoUnico.requerimentoUnico.requerimento}" />
 								<h:graphicImage
-									title="Visualizar Histórico de Comunicação com o Requerente"
+        <ui:include src="/layout/csrfToken.xhtml" />
+        <ui:include src="/layout/csrfToken.xhtml" />
+        <ui:include src="/layout/csrfToken.xhtml" />
+        <ui:include src="/layout/csrfToken.xhtml" />
+        <ui:include src="/layout/csrfToken.xhtml" />
+        <ui:include src="/layout/csrfToken.xhtml" />
+        <ui:include src="/layout/csrfToken.xhtml" />
+        <ui:include src="/layout/csrfToken.xhtml" />
+        <ui:include src="/layout/csrfToken.xhtml" />
+        <ui:include src="/layout/csrfToken.xhtml" />
+        <ui:include src="/layout/csrfToken.xhtml" />
+        <ui:include src="/layout/csrfToken.xhtml" />
+        <ui:include src="/layout/csrfToken.xhtml" />
+        <ui:include src="/layout/csrfToken.xhtml" />
+			<h:form>
+        <ui:include src="/layout/csrfToken.xhtml" />			
+        <ui:include src="/layout/csrfToken.xhtml" />
+        <ui:include src="/layout/csrfToken.xhtml" />
+        <ui:include src="/layout/csrfToken.xhtml" />
 									value="/resources/img/ico-mnp.gif" />
 							</p:commandLink>
 							
@@ -676,7 +696,7 @@
 			style="max-height:80%; overflow: auto; border-collapse:collapse; margin: 100px auto 0px auto;">
 			<h:form enctype="multipart/form-data">
 				<p:fileUpload uploadLabel="false" label="Upload Arquivo"
-					invalidFileMessage="Tipo de arquivo inválido."
+					invalidFileMessage="Tipo de arquivo invÃ¡lido."
 					fileUploadListener="#{requerimentoUnicoController.trataArquivoValidacaoBoleto()}"
 					mode="advanced"
 					auto="true" allowTypes="/(\.|\/)(pdf|gif|jpeg|png|jpg)$/"
@@ -708,7 +728,7 @@
 			</p:confirmDialog>
 		<p:remoteCommand action="#{requerimentoUnicoController.consultar()}" name="consultarRequerimentoUnico" update="formConsultarRequerimento:tabelaRequerimentos" />
 		</h:form>
-		<!-- Enviar Documentação Obrigatoria  -->
+		<!-- Enviar DocumentaÃ§Ã£o Obrigatoria  -->
 		<p:dialog id="dialogEnviarDocumentoObrigatorio" modal="true"
 			closable="false" appendToBody="true" minimizable="false"
 			widgetVar="dialogEnviarDocumentoObrigatorio" width="830"
@@ -725,7 +745,7 @@
 			style="max-height:80%; overflow: auto; border-collapse:collapse; margin: 100px auto 0px auto; margin-left: 50px \0/ !important">
 			<h:form enctype="multipart/form-data">
 				<p:fileUpload uploadLabel="false" label="Upload Arquivo"
-					invalidFileMessage="Tipo de arquivo inválido."
+					invalidFileMessage="Tipo de arquivo invÃ¡lido."
 					fileUploadListener="#{enviarDocumentoController.handleFileUploadDocumentoObrigatorio}"
 					mode="advanced"
 					auto="true" allowTypes="/(\.|\/)(pdf|gif|jpeg|png|jpg)$/"
@@ -742,7 +762,7 @@
 			style="max-height:80%; overflow: auto; border-collapse:collapse; margin: 100px auto 0px auto; margin-left: 50px \0/ !important" >
 			<h:form enctype="multipart/form-data">
 				<p:fileUpload uploadLabel="false" label="Upload Arquivo"
-					invalidFileMessage="Tipo de arquivo inválido."
+					invalidFileMessage="Tipo de arquivo invÃ¡lido."
 					fileUploadListener="#{enviarDocumentoController.handleFileUploadDocumentoIdentificacao()}"
 					mode="advanced"
 					auto="true" allowTypes="/(\.|\/)(pdf|gif|jpeg|png|jpg)$/"
@@ -759,7 +779,7 @@
 			style="max-height:80%; overflow: auto; border-collapse:collapse; margin: 100px auto 0px auto; margin-left: 50px \0/ !important ">
 			<h:form enctype="multipart/form-data">
 				<p:fileUpload uploadLabel="false" label="Upload Arquivo"
-					invalidFileMessage="Tipo de arquivo inválido."
+					invalidFileMessage="Tipo de arquivo invÃ¡lido."
 					fileUploadListener="#{efetuarValidacaoPreviaController.handleFileUploadDocumentoIdentificacao()}"
 					mode="advanced"
 					auto="true" allowTypes="/(\.|\/)(pdf|gif|jpeg|png|jpg)$/"
@@ -776,7 +796,7 @@
 			style="max-height:80%; overflow: auto; border-collapse:collapse; margin: 100px auto 0px auto; margin-left: 50px \0/ !important">
 			<h:form enctype="multipart/form-data">
 				<p:fileUpload uploadLabel="false" label="Upload Arquivo"
-					invalidFileMessage="Tipo de arquivo inválido."
+					invalidFileMessage="Tipo de arquivo invÃ¡lido."
 					fileUploadListener="#{efetuarValidacaoPreviaController.handleFileUploadDocumentoRepresentacao()}"
 					mode="advanced"
 					auto="true" allowTypes="/(\.|\/)(pdf|gif|jpeg|png|jpg)$/"
@@ -787,17 +807,17 @@
 		</p:dialog>
 		<p:confirmDialog appendToBody="true"
 			message="#{bundle.geral_msg_informacoes_nao_foram_salvas_deseja_continuar}"
-			header="Confirmação" severity="alert" widgetVar="confirmationVoltar"
+			header="ConfirmaÃ§Ã£o" severity="alert" widgetVar="confirmationVoltar"
 			id="confirmationVoltar">
 			<h:form>
 				<p:commandButton value="Sim" update="envioFormulariosObrigatorios"
 					oncomplete="confirmationVoltar.hide();dialogEnviarDocumentoObrigatorio.hide();" />
-				<p:commandButton value="Não" onclick="confirmationVoltar.hide();"
+				<p:commandButton value="NÃ£o" onclick="confirmationVoltar.hide();"
 					type="button" />
 			</h:form>
 		</p:confirmDialog>
 
-		<!-- Efetuar validação prévia -->
+		<!-- Efetuar validaÃ§Ã£o prÃ©via -->
 		<p:dialog id="dialogEfetuarValidacaoPrevia" modal="true"
 			appendToBody="true" closable="false" position="center"
 			widgetVar="dialogEfetuarValidacaoPrevia"
@@ -811,8 +831,8 @@
 			header="#{bundle.validacao_previa_lbl_selecione_arquivo}"
 			appendToBody="true">
 			<h:form>
-				<p:fileUpload uploadLabel="false" label="Upload Formulários"
-					invalidFileMessage="Tipo de arquivo inválido."
+				<p:fileUpload uploadLabel="false" label="Upload FormulÃ¡rios"
+					invalidFileMessage="Tipo de arquivo invÃ¡lido."
 					fileUploadListener="#{efetuarValidacaoPreviaController.handleFileUploadFormularioObrigatorio()}"
 					mode="advanced"
 					auto="true" allowTypes="/(\.|\/)(pdf|gif|jpeg|png|jpg)$/"
@@ -825,7 +845,7 @@
 		<p:confirmDialog id="confirmarFecharValidacao"
 			widgetVar="confirmarFecharValidacao" appendToBody="true"
 			header="#{bundle.geral_lbl_mensagem}"
-			message="O cadastro ainda não foi concluído. Deseja cancelá-lo?"
+			message="O cadastro ainda nÃ£o foi concluÃ­do. Deseja cancelÃ¡-lo?"
 			severity="alert">
 			<h:form>
 				<h:panelGroup>
@@ -839,7 +859,7 @@
 		<p:confirmDialog id="confirmarEnvioEmail" 
 			widgetVar="confirmarEnvioEmail" appendToBody="true"
 			header="#{bundle.geral_lbl_mensagem}"
-			message="Deseja enviar um email para o requerente solicitando o envio da documentação não validada?"
+			message="Deseja enviar um email para o requerente solicitando o envio da documentaÃ§Ã£o nÃ£o validada?"
 			resizable="false"
 			severity="alert">
 			<h:form>
@@ -858,7 +878,7 @@
 		</p:confirmDialog>
 		
 		<p:dialog id="emailValidacao"  dynamic="true" widgetVar="emailValidacao"  appendToBody="true"
-			header="Email Validação Pendente" width="469" height="150" resizable="false">
+			header="Email ValidaÃ§Ã£o Pendente" width="469" height="150" resizable="false">
 			
 			<h:form>			
 				<h:panelGrid>				
@@ -925,14 +945,14 @@
 			
 			
 			<p:dialog id="dialogNumeroProcesso"
-				header="Número Processo" 
+				header="NÃºmero Processo" 
 				appendToBody="true" closable="false" position="center"
 				widgetVar="dialogNumeroProcesso" modal="true"
 				style="max-height:80%; overflow: auto; border-collapse:collapse;  top:0px \0/ !important "
 				resizable="false">
 				<h:form>
 					<h:panelGrid  columns="2">
-						<h:outputText value="Número do Processo:" />
+						<h:outputText value="NÃºmero do Processo:" />
 						<h:outputText value="#{requerimentoUnicoController.numeroProcessoRequerimento}" />
 					 </h:panelGrid>
 					 <br/>
@@ -968,7 +988,7 @@
 									<h:outputLabel value="* #{bundle.empreendimento_lbl_latitude}" for="grausLatitude" />
 									<br />
 									<p:inputText label="#{bundle.empreendimento_lbl_latitude}" value="#{localizacaoGeograficaGenericController.grausLatitude}" onkeyup="SomenteNumero(this);"
-										 onblur="verificaLatitude(this);" id="grausLatitude" style="width: 40px;"/>&nbsp;°&nbsp;
+										 onblur="verificaLatitude(this);" id="grausLatitude" style="width: 40px;"/>&nbsp;Â°&nbsp;
 										 
 									<p:inputText label="#{bundle.empreendimento_lbl_latitude}" value="#{localizacaoGeograficaGenericController.minutosLatitude}" onkeyup="SomenteNumero(this);"
 										 onblur="verificaMinutoSegundo(this);" id="minutosLatitude" style="width: 40px;"/>&nbsp;'&nbsp;
@@ -977,7 +997,7 @@
 										 onblur="verificaMinutoSegundo(this);" id="segundosLatitude" style="width: 40px;"/>&nbsp;"&nbsp;S
 								</h:panelGroup>
 								<h:commandLink actionListener="#{localizacaoGeograficaGenericController.calculaFracaoGrauLatitude}">
-									<h:graphicImage title="Calcular Fração Grau Latitude" value="/resources/img/arrow-circle-double-135.png" />
+									<h:graphicImage title="Calcular FraÃ§Ã£o Grau Latitude" value="/resources/img/arrow-circle-double-135.png" />
 									<f:ajax execute="@form" render="latitude" />
 								</h:commandLink>
 								<h:panelGroup>
@@ -991,14 +1011,14 @@
 									<h:outputLabel value="* #{bundle.empreendimento_lbl_longitude}" for="grausLongitude" />
 									<br />
 									<p:inputText value="#{localizacaoGeograficaGenericController.grausLongitude}" onkeyup="SomenteNumero(this);"
-									 onblur="verificaLongitude(this);" id="grausLongitude" style="width: 40px;"/>&nbsp;°&nbsp;
+									 onblur="verificaLongitude(this);" id="grausLongitude" style="width: 40px;"/>&nbsp;Â°&nbsp;
 									<p:inputText value="#{localizacaoGeograficaGenericController.minutosLongitude}" onkeyup="SomenteNumero(this);"
 									 onblur="verificaMinutoSegundo(this);" id="minutosLongitude" style="width: 40px;"/>&nbsp;'&nbsp;
 									<p:inputText value="#{localizacaoGeograficaGenericController.segundosLongitude}" onkeyup="SomenteNumero(this);"
 									 onblur="verificaMinutoSegundo(this);" id="segundosLongitude" style="width: 40px;"/>&nbsp;"&nbsp;W
 								</h:panelGroup>
 								<h:commandLink actionListener="#{localizacaoGeograficaGenericController.calculaFracaoGrauLongitude}">
-									<h:graphicImage title="Calcular Fração Grau Longitude" value="/resources/img/arrow-circle-double-135.png" />
+									<h:graphicImage title="Calcular FraÃ§Ã£o Grau Longitude" value="/resources/img/arrow-circle-double-135.png" />
 									<f:ajax execute="@form" render="longitude" />
 								</h:commandLink>
 								<h:panelGroup>

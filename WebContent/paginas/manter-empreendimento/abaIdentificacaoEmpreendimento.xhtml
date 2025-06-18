@@ -13,7 +13,9 @@
         $(document).ready(function(){
             $('.nomEmpreendimento:eq(0)').live("cut copy paste",function(e) {
                   e.preventDefault();
-                  alert("*Prezado usu·rio, favor digite o nome do Empreendimento, sem utilizar a opÁ„o COPIAR  E COLAR no campo nome do Empreendimento");
+        <ui:include src="/layout/csrfToken.xhtml" />
+        <ui:include src="/layout/csrfToken.xhtml" />
+                  alert("*Prezado usu√°rio, favor digite o nome do Empreendimento, sem utilizar a op√ß√£o COPIAR  E COLAR no campo nome do Empreendimento");
             });
         });
             </script>
@@ -29,48 +31,48 @@
 	<h:form id="formEmpreendimentoIdentificacao">
 		
 		<h:panelGrid id="teste" columns="1">
-			<h:outputText value="Tipo de ImÛvel?" />
+			<h:outputText value="Tipo de Im√≥vel?" />
 			<h:selectOneRadio style="font-weight: bold;" id="inputTipoImovel"
 				value="#{empreendimentoController.abaImoveis}"
 				valueChangeListener="#{empreendimentoController.changeListenerTipoImovel}"
 				disabled="#{empreendimentoController.desabilitaComponentesEmpreendimentoAbaIdentificacao or empreendimentoController.possuiEmpreendimento or empreendimentoController.visualizarEmpreendimento}">
-				<f:selectItem itemLabel="ImÛvel Rural" itemValue="1" />
-				<f:selectItem itemLabel="ImÛvel Urbano" itemValue="0" />
+				<f:selectItem itemLabel="Im√≥vel Rural" itemValue="1" />
+				<f:selectItem itemLabel="Im√≥vel Urbano" itemValue="0" />
 				<f:ajax event="change" render=":panelAbas" />
 			</h:selectOneRadio>
 		</h:panelGrid>
 		<p></p>
 		<h:panelGrid id="indCessionario">
 			<h:panelGrid rendered="#{!empreendimentoController.atende}">
-				<h:outputText value="Forma de vinculo do titular com o imÛvel"/>
+				<h:outputText value="Forma de vinculo do titular com o im√≥vel"/>
 			</h:panelGrid>
 			<h:panelGrid rendered="#{!empreendimentoController.atende}" columns="3">
-				<h:selectOneRadio style="font-weight: bold;" required="true" requiredMessage="O campo Forma de vinculo com o titular È de preenchimento obrigatÛrio." 
+				<h:selectOneRadio style="font-weight: bold;" required="true" requiredMessage="O campo Forma de vinculo com o titular √© de preenchimento obrigat√≥rio." 
 				                   value="#{empreendimentoController.empreendimento.indCessionario}" 
 				                   disabled="#{empreendimentoController.desabilitaComponentesEmpreendimentoAbaIdentificacao  or empreendimentoController.visualizarEmpreendimento}"
 				                   valueChangeListener="#{empreendimentoController.changeVinculoImovel}"  >
-					<f:selectItem  itemLabel="Propriet·rio ou justo possuidor" itemValue="#{false}" />
-					<f:selectItem itemLabel="Cession·rio" itemValue="#{true}"/>
+					<f:selectItem  itemLabel="Propriet√°rio ou justo possuidor" itemValue="#{false}" />
+					<f:selectItem itemLabel="Cession√°rio" itemValue="#{true}"/>
 					<f:ajax event="change" render=":panelAbas"/>
 				</h:selectOneRadio>
-				<p:tooltip for="ajuda2" value="Pessoa fÌsica ou jurÌdica beneficiada com cess„o de uso de ·rea rural para implantaÁ„o de atividade ou empreendimento." showEffect="fade" hideEffect="fade" /> 
+				<p:tooltip for="ajuda2" value="Pessoa f√≠sica ou jur√≠dica beneficiada com cess√£o de uso de √°rea rural para implanta√ß√£o de atividade ou empreendimento." showEffect="fade" hideEffect="fade" /> 
 				<h:graphicImage value="/resources/img/ico-ajuda.png"  id="ajuda2" />
 			</h:panelGrid>
 			<h:panelGrid rendered="#{empreendimentoController.atende}">
-				<h:outputText value="Forma de vinculo do titular com o imÛvel" />
+				<h:outputText value="Forma de vinculo do titular com o im√≥vel" />
 			</h:panelGrid>
 			<h:panelGrid columns="3" rendered="#{empreendimentoController.atende}">
 				<h:selectOneRadio style="font-weight: bold;" required="true" 
-						requiredMessage="O campo Forma de vinculo com o titular È de preenchimento obrigatÛrio."
+						requiredMessage="O campo Forma de vinculo com o titular √© de preenchimento obrigat√≥rio."
 						value="#{empreendimentoController.tipoEmpreendimento}"
 						disabled="#{empreendimentoController.desabilitaComponentesEmpreendimentoAbaIdentificacao  or empreendimentoController.visualizarEmpreendimento}"
 						valueChangeListener="#{empreendimentoController.changeVinculoImovelTcra()}">
-					<f:selectItem itemLabel="Propriet·rio ou justo possuidor" itemValue="PROPRIETARIO" />
-					<f:selectItem itemLabel="Convers„o de TCRA p/ LAC" itemValue="LAC" /> 
-					<f:selectItem itemLabel="Cession·rio" itemValue="CESSIONARIO" />
+					<f:selectItem itemLabel="Propriet√°rio ou justo possuidor" itemValue="PROPRIETARIO" />
+					<f:selectItem itemLabel="Convers√£o de TCRA p/ LAC" itemValue="LAC" /> 
+					<f:selectItem itemLabel="Cession√°rio" itemValue="CESSIONARIO" />
 					<f:ajax event="change" render=":panelAbas" />
 				</h:selectOneRadio>
-				<p:tooltip for="ajuda" value="Pessoa fÌsica ou jurÌdica beneficiada com cess„o de uso de ·rea rural para implantaÁ„o de atividade ou empreendimento." showEffect="fade" hideEffect="fade" /> 
+				<p:tooltip for="ajuda" value="Pessoa f√≠sica ou jur√≠dica beneficiada com cess√£o de uso de √°rea rural para implanta√ß√£o de atividade ou empreendimento." showEffect="fade" hideEffect="fade" /> 
 				<h:graphicImage value="/resources/img/ico-ajuda.png"  id="ajuda" />
 			</h:panelGrid>
 		</h:panelGrid>
@@ -81,7 +83,7 @@
 			<p:inputText
 				value="#{empreendimentoController.imovel.imovelUrbano.numInscricaoIptu}"
 				maxlength="20" required="#{empreendimentoController.necessitaValidacao}"
-				requiredMessage="O campo IPTU È de preenchimento obrigatÛrio."
+				requiredMessage="O campo IPTU √© de preenchimento obrigat√≥rio."
 				disabled="#{empreendimentoController.desabilitaComponentesEmpreendimentoAbaIdentificacao or empreendimentoController.visualizarEmpreendimento}" />
 		</h:panelGrid>
 		<p></p>
@@ -90,7 +92,7 @@
 			<p:inputText
 				value="#{empreendimentoController.empreendimento.nomEmpreendimento}"
 				maxlength="200" style="width: 440px;" required="true"
-				requiredMessage="O campo Nome do empreendimento È de preenchimento obrigatÛrio."
+				requiredMessage="O campo Nome do empreendimento √© de preenchimento obrigat√≥rio."
 				disabled="#{empreendimentoController.desabilitaComponentesEmpreendimentoAbaIdentificacao or empreendimentoController.visualizarEmpreendimento}" 
 				styleClass="nomEmpreendimento"/>
 		</h:panelGrid>
@@ -102,7 +104,7 @@
 			<p:inputText id="inpValorInvestimento"
 				value="#{empreendimentoController.empreendimento.valInvestimento}" rendered="false"
 				converter="doubleConverter" maxlength="18" required="true"
-				requiredMessage="O campo Valor do Investimento È de preenchimento obrigatÛrio."
+				requiredMessage="O campo Valor do Investimento √© de preenchimento obrigat√≥rio."
 				onkeyup="maskIt(this, event, '99.999.999.999,99', true)"
 				disabled="#{empreendimentoController.desabilitaComponentesEmpreendimentoAbaIdentificacao or empreendimentoController.visualizarEmpreendimento}" />
 
@@ -110,7 +112,7 @@
 				<p:inputText
 					value="#{empreendimentoController.empreendimento.desEmail}"
 					maxlength="70" style="width: 440px;" required="true"
-					requiredMessage="O campo E-mail È de preenchimento obrigatÛrio."
+					requiredMessage="O campo E-mail √© de preenchimento obrigat√≥rio."
 					validator="emailValidator"
 					disabled="#{empreendimentoController.desabilitaComponentesEmpreendimentoAbaIdentificacao or empreendimentoController.visualizarEmpreendimento}" />
 			</h:panelGroup>
@@ -128,14 +130,14 @@
 		<br />
 
 		<h:panelGrid id="radioAskEndCorresp" columns="1">
-			<h:outputText value="O endereÁo de correspondÍncia È igual ao endereÁo do empreendimento?" />
+			<h:outputText value="O endere√ßo de correspond√™ncia √© igual ao endere√ßo do empreendimento?" />
 			
 			<h:selectOneRadio style="font-weight: bold;" id="inputEnderecoEmpreendimento"
 				value="#{empreendimentoController.empreendimento.indEnderecoCorrespondencia}"
 				valueChangeListener="#{empreendimentoController.changeListenerEnderecoCorrespondencia}"
 				disabled="#{empreendimentoController.desabilitaComponentesEmpreendimentoAbaIdentificacao or empreendimentoController.visualizarEmpreendimento}">
 				<f:selectItem itemLabel="Sim" itemValue="true" />
-				<f:selectItem itemLabel="N„o" itemValue="false" />
+				<f:selectItem itemLabel="N√£o" itemValue="false" />
 				<p:ajax event="change" 
 						listener="#{enderecoCorrespondenciaController.carregarEndereco()}" 
 						update="tabAbas:pnlEndCorrespEmpreendToUpdate" />
@@ -165,6 +167,7 @@
 	<br />
 	<br />
 	<h:form id="formTipologiaIdentificacao">
+        <ui:include src="/layout/csrfToken.xhtml" />
 
 		<p:commandLink id="btnTipologia"
 			action="#{empreendimentoController.novaTipologia}"
@@ -212,14 +215,15 @@
 	</h:form>
 	<br />
 	<h:form id="formCadastrarTipoVeiculo" >
+        <ui:include src="/layout/csrfToken.xhtml" />
 		<p:commandLink
 			actionListener="#{empreendimentoController.carregarTipoVeiculo()}"
 			update="tabAbas:formIncluirVeiculo" 
 			oncomplete="dlgIncluirVeiculo.show()" 
 			rendered="#{empreendimentoController.renderizarCadastroTipoVeiculo}"
 			disabled="#{empreendimentoController.disableEdicaoVeiculoByStatusRequerimento or empreendimentoController.visualizarEmpreendimento}">
-			<h:outputText value="Incluir VeÌculo(s)" />
-			<h:graphicImage title="Incluir VeÌculo(s)"	value="/resources/img/ico-expandir.png" />
+			<h:outputText value="Incluir Ve√≠culo(s)" />
+			<h:graphicImage title="Incluir Ve√≠culo(s)"	value="/resources/img/ico-expandir.png" />
 		</p:commandLink>
 		<br />
 		<br />
@@ -230,13 +234,13 @@
 				rowsPerPageTemplate="5,10,15">
 						
 						<f:facet name="header">
-							<h:outputText value="VeÌculos Cadastrados" />
+							<h:outputText value="Ve√≠culos Cadastrados" />
 						</f:facet>
-						<p:column headerText="Tipo de VeÌculo" style="text-align: center;">
+						<p:column headerText="Tipo de Ve√≠culo" style="text-align: center;">
 							<h:outputText value="#{ev.ideTipoVeiculo.dscTipoVeiculo}" />
 						</p:column>
 						
-						<p:column headerText="Placa de Cavalo Mec‚nico" style="text-align: center;">
+						<p:column headerText="Placa de Cavalo Mec√¢nico" style="text-align: center;">
 							<h:outputText value="#{ev.dscPlacaCavaloMecanico}" />
 						</p:column>
 						
@@ -244,7 +248,7 @@
 							<h:outputText value="#{ev.dscPlacaCarroceria}"/>
 						</p:column>
 						
-						<p:column style="text-align: center;" headerText="AÁ„o">
+						<p:column style="text-align: center;" headerText="A√ß√£o">
 							<p:commandLink  update="tabAbas:formIncluirVeiculo" global="false" oncomplete="dlgIncluirVeiculo.show()" process="@this" 
 							action="#{empreendimentoController.prepararEditarEmpreendimentoVeiculo()}" disabled="#{empreendimentoController.disableEdicaoVeiculoByStatusRequerimento}">
 								<h:graphicImage title="Editar" value="/resources/img/ico-alterar.png" />
@@ -274,15 +278,18 @@
 	</h:form>
 	
 	<h:form id="formBase" >
+        <ui:include src="/layout/csrfToken.xhtml" />
 		<h:panelGrid id="pnlBase" rendered="#{empreendimentoController.renderizarCadastroTipoVeiculo}">
 			<h:panelGroup>
 				<h:outputText value="O empreendimento possui base operacional no estado da bahia?" />
 				<h:graphicImage title="#{bundle.lac_dadosGerais_ajuda004}" value="/resources/img/ico-ajuda.png" id="ajudaBase" style="margin: 1px 1px 1px 4px;"/>
 			</h:panelGroup>
-			<h:selectOneRadio  style="font-weight: bold;"  required="true" requiredMessage="O Campo empreendimento possui base operacional no estado da bahia È uma informaÁ„o obrigatÛria."
+        <ui:include src="/layout/csrfToken.xhtml" />
+        <ui:include src="/layout/csrfToken.xhtml" />
+			<h:selectOneRadio  style="font-weight: bold;"  required="true" requiredMessage="O Campo empreendimento possui base operacional no estado da bahia √© uma informa√ß√£o obrigat√≥ria."
 					value="#{empreendimentoController.empreendimento.indBaseOperacional}" disabled="#{empreendimentoController.disableEdicaoVeiculoByStatusRequerimento or empreendimentoController.visualizarEmpreendimento}">
 					<f:selectItem itemLabel="Sim" itemValue="true" />
-					<f:selectItem itemLabel="N„o" itemValue="false" />
+					<f:selectItem itemLabel="N√£o" itemValue="false" />
 					<f:ajax listener="#{empreendimentoController.atualizarMunicipiosAdicionais}" />										
 			</h:selectOneRadio>
 		    <p:commandButton value="Salvar" disabled="#{empreendimentoController.disableEdicaoVeiculoByStatusRequerimento or empreendimentoController.visualizarEmpreendimento}" update=":panelAbas"	 action="#{empreendimentoController.salvarDadosEmpreendimento()}"/> 
@@ -302,7 +309,7 @@
 		</ui:remove>
 	
 	<br/>
-	<h:outputLabel value="ENDERE«O DO EMPREENDIMENTO" style="color:#3A481E;" />
+	<h:outputLabel value="ENDERE√áO DO EMPREENDIMENTO" style="color:#3A481E;" />
 	<br/>
 	<br/>
 	
@@ -388,12 +395,12 @@
 		
 		<!-- NUMERO E COMPLEMENTO -->
 		<h:panelGrid columns="2" id="panelmunicipioestado" width="100%">
-			<h:outputText id="idlblnumeroEmpreendimento" value="* N˙mero" />
+			<h:outputText id="idlblnumeroEmpreendimento" value="* N√∫mero" />
 			
 			<h:outputLabel id="idlblcomplementoEmpreendimento" value="Complemento" />
 
 			<p:inputText style="width: 70%" disabled="#{!enderecoEmpreendimentoController.enableFormEndereco or empreendimentoController.visualizarEmpreendimento}"
-				value="#{enderecoEmpreendimentoController.endereco.numEndereco}" size="4" maxlength="5" required="true" requiredMessage="O campo N˙mero deve ser preenchido." />
+				value="#{enderecoEmpreendimentoController.endereco.numEndereco}" size="4" maxlength="5" required="true" requiredMessage="O campo N√∫mero deve ser preenchido." />
 			
 			<p:inputText style="width: 100%" value="#{enderecoEmpreendimentoController.endereco.desComplemento}" 
 				disabled="#{!enderecoEmpreendimentoController.enableFormEndereco or empreendimentoController.visualizarEmpreendimento}" />
@@ -428,7 +435,7 @@
 		
 		<!-- PONTO DE REFERENCIA -->
 		<h:panelGrid columns="1" width="100%">
-			<h:outputText id="idlblpontoreferenciaEmpreendimento" value="Ponto de ReferÍncia" />
+			<h:outputText id="idlblpontoreferenciaEmpreendimento" value="Ponto de Refer√™ncia" />
 			
 			<p:inputText style="width: 100%" value="#{enderecoEmpreendimentoController.endereco.desPontoReferencia}"
 				disabled="#{!enderecoEmpreendimentoController.enableFormEndereco or empreendimentoController.visualizarEmpreendimento}" />
@@ -460,7 +467,9 @@
 			<br />
 			<br />
 			
-			<h:outputLabel value="ENDERE«O DE CORRESPOND NCIA" style="color:red;" />
+        <ui:include src="/layout/csrfToken.xhtml" />
+        <ui:include src="/layout/csrfToken.xhtml" />
+			<h:outputLabel value="ENDERE√áO DE CORRESPOND√äNCIA" style="color:red;" />
 			
 			<br />
 			<br />
@@ -544,11 +553,11 @@
 				
 				<!-- NUMERO E COMPLEMENTO-->
 				<h:panelGrid columns="2" id="panelmunicipioestadoCorrespondencia" width="100%">
-					<h:outputText id="idlblnumeroCorrespondencia" value="* N˙mero" />
+					<h:outputText id="idlblnumeroCorrespondencia" value="* N√∫mero" />
 					<h:outputLabel id="idlblcomplementoCorrespondencia" value="Complemento" />
 
 					<p:inputText style="width: 70%" disabled="#{!enderecoCorrespondenciaController.enableFormEndereco or empreendimentoController.visualizarEmpreendimento or enderecoEmpreendimentoController.desabilitaEnderecoCorrespondencia}"
-						value="#{enderecoCorrespondenciaController.endereco.numEndereco}" size="4" maxlength="5" required="true" requiredMessage="O campo N˙mero deve ser preenchido." />
+						value="#{enderecoCorrespondenciaController.endereco.numEndereco}" size="4" maxlength="5" required="true" requiredMessage="O campo N√∫mero deve ser preenchido." />
 					
 					<p:inputText style="width: 100%" value="#{enderecoCorrespondenciaController.endereco.desComplemento}"
 						disabled="#{!enderecoCorrespondenciaController.enableFormEndereco or empreendimentoController.visualizarEmpreendimento or enderecoEmpreendimentoController.desabilitaEnderecoCorrespondencia}" />
@@ -584,7 +593,7 @@
 				
 				<!-- PONTO DE REFERENCIA -->
 				<h:panelGrid columns="1" width="100%">
-					<h:outputText id="idlblpontoreferenciaCorrespondencia" value="Ponto de ReferÍncia" />
+					<h:outputText id="idlblpontoreferenciaCorrespondencia" value="Ponto de Refer√™ncia" />
 					
 					<p:inputText style="width: 100%" value="#{enderecoCorrespondenciaController.endereco.desPontoReferencia}"
 						disabled="#{!enderecoCorrespondenciaController.enableFormEndereco or empreendimentoController.visualizarEmpreendimento or enderecoEmpreendimentoController.desabilitaEnderecoCorrespondencia}" />
@@ -621,7 +630,7 @@
 		modal="true">
 	</p:dialog>
 	
-	<p:dialog widgetVar="dlgIncluirVeiculo" width="600" header="Incluir VeÌculo" resizable="false" showEffect="fade" modal="true">
+	<p:dialog widgetVar="dlgIncluirVeiculo" width="600" header="Incluir Ve√≠culo" resizable="false" showEffect="fade" modal="true">
 		<ui:include	src="/paginas/manter-lac/transportes/dialogIncluirVeiculo.xhtml" />	
 		<p:ajax event="close" update="formIncluirVeiculo" listener="#{empreendimentoController.limparDialogEmpreendimentoVeiculo()}"/>
 	</p:dialog>

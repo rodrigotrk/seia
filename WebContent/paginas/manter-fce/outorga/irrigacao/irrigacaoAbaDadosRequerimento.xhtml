@@ -7,10 +7,11 @@
 	xmlns:p="http://primefaces.prime.com.tr/ui">
 	
 	<h:form id="formDadosRequerimento">
-		<h:outputText styleClass="titulo-grupo" style="font-weight:bold;" value="Coordenadas das Captações"/>
+        <ui:include src="/layout/csrfToken.xhtml" />
+		<h:outputText styleClass="titulo-grupo" style="font-weight:bold;" value="Coordenadas das CaptaÃ§Ãµes"/>
 		<br /><br />
 		<h:panelGrid rendered="#{!fceIrrigacaoController.fceTecnico}">
-			<h:outputText styleClass="titulo-grupo" style="font-weight:bold; margin-left:15px;" value="Captação Subterrânea"/>
+			<h:outputText styleClass="titulo-grupo" style="font-weight:bold; margin-left:15px;" value="CaptaÃ§Ã£o SubterrÃ¢nea"/>
 			<p:dataTable id="tabelaPontosSubterranea" style="margin-left:25px;" emptyMessage="#{bundle.lac_dadosGerais_msg007}" value="#{fceIrrigacaoController.listaCaptacaoSubterranea}" var="outorgaLocGeo">
 	 		    <p:column headerText="Latitude" style="text-align:center;">
 	 		    	<h:outputText value="#{outorgaLocGeo.ideLocalizacaoGeografica.latitudeInicial}"/>
@@ -27,7 +28,7 @@
 	 		    	<h:outputText value="#{outorgaLocGeo.ideLocalizacaoGeografica.nomeSistemaCoordenadas}"/>
 	 		    </p:column>
 	 		     		    
-   	 		    <p:column headerText="Bacia Hidrográfica" id="bacia" style="text-align:center; width:120px;">
+   	 		    <p:column headerText="Bacia HidrogrÃ¡fica" id="bacia" style="text-align:center; width:120px;">
 	 		    	<h:outputText value="#{outorgaLocGeo.ideLocalizacaoGeografica.baciaHidrografica}"/>
 	 		    </p:column>
 	 		    
@@ -39,14 +40,14 @@
 	 		    	<h:outputText value="#{outorgaLocGeo.ideLocalizacaoGeografica.rpga}"/>
 	 		    </p:column>
 	 		    
-				<p:column headerText="Ações" style="width:35px; text-align:center;">
+				<p:column headerText="AÃ§Ãµes" style="width:35px; text-align:center;">
 					<a onclick="javascript:${localizacaoGeograficaGenericController.retornarUrl(outorgaLocGeo.ideLocalizacaoGeografica)}">
-						<h:graphicImage title="Localização do Ponto no Geobahia" value="/resources/img/ico-arl-relocacao.png" />
+						<h:graphicImage title="LocalizaÃ§Ã£o do Ponto no Geobahia" value="/resources/img/ico-arl-relocacao.png" />
 					</a>
 				</p:column>
 			</p:dataTable> <!-- FIM DA DATATABLE COM OS PONTOS Subterranea-->
 			<br /> <br />
-			<h:outputText styleClass="titulo-grupo" style="font-weight:bold; margin-left:15px;" value="Captação Superficial"/>
+			<h:outputText styleClass="titulo-grupo" style="font-weight:bold; margin-left:15px;" value="CaptaÃ§Ã£o Superficial"/>
 			<p:dataTable id="tabelaPontos" style="margin-left:25px;" emptyMessage="#{bundle.lac_dadosGerais_msg007}" value="#{fceIrrigacaoController.listaCaptacaoSuperficial}" var="outorgaLocGeo">
 	 		    <p:column headerText="Latitude" style="text-align:center;">
 	 		    	<h:outputText value="#{outorgaLocGeo.ideLocalizacaoGeografica.latitudeInicial}"/>
@@ -63,7 +64,7 @@
 	 		    	<h:outputText value="#{outorgaLocGeo.ideLocalizacaoGeografica.nomeSistemaCoordenadas}"/>
 	 		    </p:column>
 	 		     		    
-   	 		    <p:column headerText="Bacia Hidrográfica" id="bacia" style="text-align:center; width:120px;">
+   	 		    <p:column headerText="Bacia HidrogrÃ¡fica" id="bacia" style="text-align:center; width:120px;">
 	 		    	<h:outputText value="#{outorgaLocGeo.ideLocalizacaoGeografica.baciaHidrografica}"/>
 	 		    </p:column>
 	 		    
@@ -75,9 +76,9 @@
 	 		    	<h:outputText value="#{outorgaLocGeo.ideLocalizacaoGeografica.rpga}"/>
 	 		    </p:column>
 	 		    
-				<p:column headerText="Ações" style="width:35px; text-align:center;">
+				<p:column headerText="AÃ§Ãµes" style="width:35px; text-align:center;">
 					<a onclick="javascript:${localizacaoGeograficaGenericController.retornarUrl(outorgaLocGeo.ideLocalizacaoGeografica)}">
-						<h:graphicImage title="Localização do Ponto no Geobahia" value="/resources/img/ico-arl-relocacao.png" />
+						<h:graphicImage title="LocalizaÃ§Ã£o do Ponto no Geobahia" value="/resources/img/ico-arl-relocacao.png" />
 					</a>
 				</p:column>
 			</p:dataTable> <!-- FIM DA DATATABLE COM OS PONTOS Superficial-->
@@ -89,7 +90,7 @@
 		
 		<h:panelGrid id="gridBotoes" rendered="#{!fceIrrigacaoController.desabilitarTudo}" columns="2" style="margin-top:40px;">
 			<p:commandButton id="btnVoltar" value="Voltar" onclick="confirmationVoltarIrrigacao.show();" style="width:90px;" update="@form" global="false"/>
-			<p:commandButton id="btnAvancar" value="Avançar" style="width:90px;" update="irrigacaoAbas irrigacaoAbas:formIrrigacao" process="formDadosRequerimento" action="#{fceIrrigacaoController.avancarAba()}" global="false"/> 
+			<p:commandButton id="btnAvancar" value="AvanÃ§ar" style="width:90px;" update="irrigacaoAbas irrigacaoAbas:formIrrigacao" process="formDadosRequerimento" action="#{fceIrrigacaoController.avancarAba()}" global="false"/> 
 		</h:panelGrid> <!-- FIM DO PANELGRID BOTOES -->
 	</h:form>
 </ui:composition>

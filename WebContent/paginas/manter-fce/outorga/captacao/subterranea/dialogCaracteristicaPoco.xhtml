@@ -7,11 +7,12 @@
 	xmlns:p="http://primefaces.prime.com.tr/ui">
 	
 	<h:form id="formCaracteristicaPoco">
+        <ui:include src="/layout/csrfToken.xhtml" />
 	 	<h:panelGrid>
-			<h:outputText style="margin-left:5px; font-weight:bold; font-size:14px" styleClass="titulo-grupo" value="Dados do Poço" />
+			<h:outputText style="margin-left:5px; font-weight:bold; font-size:14px" styleClass="titulo-grupo" value="Dados do PoÃ§o" />
 			<br/>
 			<h:panelGrid id="pngPoco" columns="1"> 
-				<h:outputText value="*Tipo do Poço" style="margin-left:35px;"/>
+				<h:outputText value="*Tipo do PoÃ§o" style="margin-left:35px;"/>
 				<p:selectOneRadio  value="#{fceCaptacaoSubterraneaController.fceCaptacaoSubterranea.ideTipoPoco}" disabled="#{fceCaptacaoSubterraneaController.desabilitarTudo}"
 				style="margin-left:55px;" layout="pageDirection" converter="simpleEntityConverter">
 					<f:selectItems value="#{fceCaptacaoSubterraneaController.listaTipoPoco}" var="lista" itemLabel="#{lista.dscTipoPoco}" itemValue="#{lista}"/>
@@ -23,7 +24,7 @@
 				<br />
 				<h:panelGrid id="selectUnidadeGeologica" columns="3" style="margin-left:-10px;">
 					<br /><br />
-					<h:outputText styleClass="titulo-grupo" style="font-weight:bold;" value="* Unidade Geológica Aflorante"/>
+					<h:outputText styleClass="titulo-grupo" style="font-weight:bold;" value="* Unidade GeolÃ³gica Aflorante"/>
 					<p:spacer/>
 					<p:spacer/>
 					
@@ -32,7 +33,7 @@
 						<p:ajax event="blur" process="@this" global="false" immediate="true" update="dataTableUnidadeGeologica"/>
 					</p:inputText>
 					
-					<p:watermark for="buscaUnidadeGeologica" value="Pesquisar pelo nome da Unidade Geológica Aflorante" />
+					<p:watermark for="buscaUnidadeGeologica" value="Pesquisar pelo nome da Unidade GeolÃ³gica Aflorante" />
 					
 					<p:remoteCommand name="pesquisarUnidadeGeologica" actionListener="#{fceCaptacaoSubterraneaController.pesquisarUnidadesGeologicas()}" global="false" update="dataTableUnidadeGeologica" />
 					
@@ -42,17 +43,17 @@
 					
 						<p:column style="width: 400px; text-align:justify;">
 							<f:facet name="header">
-								<h:outputText value="Unidade Geológica Aflorante" />
+								<h:outputText value="Unidade GeolÃ³gica Aflorante" />
 							</f:facet>
 							<h:outputText value="#{unidadeAflorante.dscUnidadeGeologicaAflorante}" />
 						</p:column>
 						
-						<p:column style="width: 35px; text-align:center;" headerText="Ações">
+						<p:column style="width: 35px; text-align:center;" headerText="AÃ§Ãµes">
 							<p:commandLink title="Adicionar" process="@this"
 								update="formCaracteristicaPoco:unidadeGeologica"  
 								disabled="#{fceCaptacaoSubterraneaController.desabilitarTudo}"  
 								action="#{fceCaptacaoSubterraneaController.selecionarUnidadeAflorante()}" global="false" immediate="true">
-								<h:graphicImage title="Adicionar Unidade Geológica Aflorante" value="/resources/img/ico-adicionar.png"/>
+								<h:graphicImage title="Adicionar Unidade GeolÃ³gica Aflorante" value="/resources/img/ico-adicionar.png"/>
 								<f:setPropertyActionListener target="#{fceCaptacaoSubterraneaController.fceCaptacaoSubterranea.ideUnidadeGeologicaAflorante}" value="#{unidadeAflorante}"/>
 							</p:commandLink>
 						</p:column>
@@ -64,10 +65,10 @@
 					<p:dataTable id="tableUnidadeAfloranteSelecionada" value="#{fceCaptacaoSubterraneaController.listaUnidadesGeologicasAflorantesSelecionada}" var="unidadeAfloranteSelecionada" style="width: 500px; margin-left:10px;" 
 						emptyMessage="#{bundle.lac_dadosGerais_msg007}"
 						rendered="#{fceCaptacaoSubterraneaController.unidadeAfloranteSelecionada}">
-						<p:column headerText="Unidade Geológica Aflorante" style="text-align:justify;">
+						<p:column headerText="Unidade GeolÃ³gica Aflorante" style="text-align:justify;">
 							<h:outputText value="#{unidadeAfloranteSelecionada.dscUnidadeGeologicaAflorante}" />
 						</p:column>
-						<p:column headerText="Ações" style="width:35px; text-align:center;">
+						<p:column headerText="AÃ§Ãµes" style="width:35px; text-align:center;">
 							<p:commandLink oncomplete="confirmarExclusaoUnidadeGeologica.show()" title="Excluir" process="@this" 
 							global="false" disabled="#{fceCaptacaoSubterraneaController.desabilitarTudo}">
 								<h:graphicImage title="Excluir" value="/resources/img/ico-excluir.png" />
@@ -91,7 +92,7 @@
 						<p:ajax event="blur" process="@this" global="false" immediate="true" update="dataTableAquifero"/>
 					</p:inputText>
 					
-					<p:watermark for="buscaAquifero" value="Pesquisar pelo nome do Aquífero" />
+					<p:watermark for="buscaAquifero" value="Pesquisar pelo nome do AquÃ­fero" />
 					
 					<p:remoteCommand name="pesquisarAquifero" actionListener="#{fceCaptacaoSubterraneaController.pesquisarAquifero()}" global="false" update="dataTableAquifero" />
 					
@@ -101,17 +102,17 @@
 					
 						<p:column style="width: 400px; text-align:justify;">
 							<f:facet name="header">
-								<h:outputText value="Nome do Aquífero" />
+								<h:outputText value="Nome do AquÃ­fero" />
 							</f:facet>
 							<h:outputText value="#{aquifero.nomAquifero}" />
 						</p:column>
 						
-						<p:column style="width: 35px; text-align:center;" headerText="Ações">
+						<p:column style="width: 35px; text-align:center;" headerText="AÃ§Ãµes">
 							<p:commandLink title="Adicionar" process="@this"
 								update="formCaracteristicaPoco:aquifero"  
 								disabled="#{fceCaptacaoSubterraneaController.desabilitarTudo}"  
 								action="#{fceCaptacaoSubterraneaController.selecionarAquifero()}" global="false" immediate="true">
-								<h:graphicImage title="Selecionar Aquífero" value="/resources/img/ico-adicionar.png"/>
+								<h:graphicImage title="Selecionar AquÃ­fero" value="/resources/img/ico-adicionar.png"/>
 								<f:setPropertyActionListener target="#{fceCaptacaoSubterraneaController.fceCaptacaoSubterranea.ideAquifero}" value="#{aquifero}"/>
 							</p:commandLink>
 						</p:column>
@@ -123,10 +124,10 @@
 					<p:dataTable id="tableAquiferoSelecionado" value="#{fceCaptacaoSubterraneaController.listaAquiferoSelecionado}" var="aquiferoSelecionado" style="width: 500px; margin-left:10px;" 
 						emptyMessage="#{bundle.lac_dadosGerais_msg007}"
 						rendered="#{fceCaptacaoSubterraneaController.aquiferoSelecionado}">
-						<p:column headerText="Nome do Aquífero" style="text-align:justify;">
+						<p:column headerText="Nome do AquÃ­fero" style="text-align:justify;">
 							<h:outputText value="#{aquiferoSelecionado.nomAquifero}" />
 						</p:column>
-						<p:column headerText="Ações" style="width:35px; text-align:center;">
+						<p:column headerText="AÃ§Ãµes" style="width:35px; text-align:center;">
 							<p:commandLink oncomplete="confirmarExclusaoAquifero.show()" title="Excluir" process="@this" 
 							global="false" disabled="#{fceCaptacaoSubterraneaController.desabilitarTudo}">
 								<h:graphicImage title="Excluir" value="/resources/img/ico-excluir.png" />
@@ -137,7 +138,7 @@
 			</p:outputPanel>	
 		</h:panelGrid>
 		<h:panelGrid id="pngTipoAquifero" columns="1"  style="margin-left:70px;">
-			<h:outputText value="*Tipo do Aquífero"/>
+			<h:outputText value="*Tipo do AquÃ­fero"/>
 				<p:selectOneRadio id="comboAquifero" value="#{fceCaptacaoSubterraneaController.fceCaptacaoSubterranea.ideTipoAquifero}" 
 				style="margin-left:25px;" layout="pageDirection" converter="simpleEntityConverter" disabled="#{fceCaptacaoSubterraneaController.desabilitarTudo}">
 					<f:selectItems value="#{fceCaptacaoSubterraneaController.listaTipoAquifero}" var="listaAquifero" itemLabel="#{listaAquifero.nomTipoAquifero}" itemValue="#{listaAquifero}"/>
@@ -145,39 +146,39 @@
 				</p:selectOneRadio>
 		</h:panelGrid>
 		<h:panelGroup id="pngDadosHidroelogico">
-			<h:outputText id="obrigatorioDadosHidroelogico" value="* Dados Hidrogeológicos" styleClass="titulo-grupo"  style="margin-left:35px; font-weight:bold;" rendered="#{fceCaptacaoSubterraneaController.fceCaptacaoSubterranea.ideTipoPoco.ideTipoPoco == 1}"/>
-			<h:outputText id="dadosHidroelogico" value="Dados Hidrogeológicos" styleClass="titulo-grupo"  style="margin-left:35px; font-weight:bold;" rendered="#{fceCaptacaoSubterraneaController.fceCaptacaoSubterranea.ideTipoPoco.ideTipoPoco != 1}"/>
+			<h:outputText id="obrigatorioDadosHidroelogico" value="* Dados HidrogeolÃ³gicos" styleClass="titulo-grupo"  style="margin-left:35px; font-weight:bold;" rendered="#{fceCaptacaoSubterraneaController.fceCaptacaoSubterranea.ideTipoPoco.ideTipoPoco == 1}"/>
+			<h:outputText id="dadosHidroelogico" value="Dados HidrogeolÃ³gicos" styleClass="titulo-grupo"  style="margin-left:35px; font-weight:bold;" rendered="#{fceCaptacaoSubterraneaController.fceCaptacaoSubterranea.ideTipoPoco.ideTipoPoco != 1}"/>
 		</h:panelGroup>
 		<h:panelGrid id="pngDadosHidroelogicos" columns="3"  style="margin-left:70px;">
-			<h:outputText value="Profundidade do Poço"/>
+			<h:outputText value="Profundidade do PoÃ§o"/>
 			<p:inputText value="#{fceCaptacaoSubterraneaController.fceCaptacaoSubterranea.numProfunidadePoco}" disabled="#{fceCaptacaoSubterraneaController.desabilitarTudo}"
 			converter="doubleConverterNaoPermitirZero" onkeyup="maskIt(this, event, '99.999.999,99', true)" maxlength="13">
 				<p:ajax event="blur" global="false"  />
 			</p:inputText> 
 			<h:outputText value="(m)"/>
-			<h:outputText value="Nível Estático"/>
+			<h:outputText value="NÃ­vel EstÃ¡tico"/>
 			<p:inputText value="#{fceCaptacaoSubterraneaController.fceCaptacaoSubterranea.numNivelEstatico}" disabled="#{fceCaptacaoSubterraneaController.desabilitarTudo}"
 			converter="doubleConverterNaoPermitirZero" onkeyup="maskIt(this, event, '99.999.999,99', true)" maxlength="13">
 				<p:ajax event="blur" global="false" update="InputVazaoEspecifica" listener="#{fceCaptacaoSubterraneaController.calcularVazaoEspecificia()}"/>
 			</p:inputText> 
 			<h:outputText value="(m)"/>
-			<h:outputText value="Nível Dinâmico"/>
+			<h:outputText value="NÃ­vel DinÃ¢mico"/>
 			<p:inputText value="#{fceCaptacaoSubterraneaController.fceCaptacaoSubterranea.numNivelDinamico}" disabled="#{fceCaptacaoSubterraneaController.desabilitarTudo}"
 			converter="doubleConverterNaoPermitirZero" onkeyup="maskIt(this, event, '99.999.999,99', true)" maxlength="13">
 			 	<p:ajax event="blur" global="false" update="InputVazaoEspecifica" listener="#{fceCaptacaoSubterraneaController.calcularVazaoEspecificia()}"/>
 			 </p:inputText> 
 			<h:outputText value="(m)"/>
-			<h:outputText value="Vazão de Teste"/>
+			<h:outputText value="VazÃ£o de Teste"/>
 			<p:inputText value="#{fceCaptacaoSubterraneaController.fceCaptacaoSubterranea.numVazaoTeste}" disabled="#{fceCaptacaoSubterraneaController.desabilitarTudo}"
 			converter="doubleConverterNaoPermitirZero" onkeyup="maskIt(this, event, '99.999.999,99', true)" maxlength="13">
 				<p:ajax event="blur" global="false" update="InputVazaoEspecifica" listener="#{fceCaptacaoSubterraneaController.calcularVazaoEspecificia()}"/>
 			</p:inputText> 
-			<h:outputText value="(m³/h)"/>
-			<h:outputText value="Vazão Específica"/>
+			<h:outputText value="(mÂ³/h)"/>
+			<h:outputText value="VazÃ£o EspecÃ­fica"/>
 			<p:inputText id="InputVazaoEspecifica" value="#{fceCaptacaoSubterraneaController.fceCaptacaoSubterranea.numVazaoEspecifica}" disabled="true" converter="doubleConverterNaoPermitirZero" onkeyup="maskIt(this, event, '99.999.999,99', true)" maxlength="13">
 				<p:ajax event="blur" global="false" />
 			</p:inputText> 
-			<h:outputText value="(m³/h/m)"/>
+			<h:outputText value="(mÂ³/h/m)"/>
 		</h:panelGrid>
 		</h:panelGrid>
 		
@@ -215,7 +216,7 @@
 						<h:outputText value="#{fceSubterraneaCnae.ideCnae.desCnae}" />
 					</p:column>
 					<p:column headerText="#{bundle.cnaeLabelTabAtividadePrincipal}">
-						<h:outputText value="#{fceSubterraneaCnae.indCnaePrincipal eq true ? 'Sim' : 'Não'}" />				
+						<h:outputText value="#{fceSubterraneaCnae.indCnaePrincipal eq true ? 'Sim' : 'NÃ£o'}" />				
 					</p:column>				
 					<p:column headerText="#{bundle.cnaeLabelTabAtividadeAcoes}">
 						<p:commandLink actionListener="#{cnaeController.editarItemLista(fceSubterraneaCnae)}" disabled="#{fceCaptacaoSubterraneaController.desabilitarTudo}">
@@ -235,9 +236,9 @@
     	</h:panelGrid>	
     	<!-- 
     	<h:panelGrid style="margin-left:68px;" layout="pageDirection" columns="3" rendered="#{fceCaptacaoSubterraneaController.renderCamposCnaeEVazao}"> 
-		   	<h:outputLabel value="Vazão da captação"/>
+		   	<h:outputLabel value="VazÃ£o da captaÃ§Ã£o"/>
 		    <p:inputText value="#{fceCaptacaoSubterraneaController.fceCaptacaoSubterranea.numVazao}" size="10" disabled="#{fceCaptacaoSubterraneaController.desabilitarTudo}" id="vazao"  />
-		    <h:outputText value="(m³/dia)" />
+		    <h:outputText value="(mÂ³/dia)" />
     	</h:panelGrid>	
 		<br /><br />-->
 		<h:panelGrid id="gridBotoes" rendered="#{!fceCaptacaoSubterraneaController.desabilitarTudo}" columns="2" style="margin-left:38px;">

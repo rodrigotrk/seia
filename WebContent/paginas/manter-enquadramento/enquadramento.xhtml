@@ -13,6 +13,7 @@
 		widgetVar="dialogEfetuarEnquadramento" width="901" position="top"
 		resizable="false">
 		<h:form id="enquadramento">
+        <ui:include src="/layout/csrfToken.xhtml" />
 			<h:panelGroup id="cabecalhoEnquadramento"
 				rendered="#{!enquadramentoController.reenquadramento}">
 				<h1 style="font-size: 14px">EFETUAR ENQUADRAMENTO</h1>
@@ -21,7 +22,7 @@
 					<h:outputText value="Dados do requerimento" />
 				</p>
 				<h:panelGrid columns="4">
-					<h:outputLabel value="N∞ Requerimento : " styleClass="tit-requerimento" />
+					<h:outputLabel value="N¬∞ Requerimento : " styleClass="tit-requerimento" />
 					<h:outputText value="#{enquadramentoController.requerimento.numRequerimento}" styleClass="dados-requerimento" />
 					<h:outputLabel value="Empreendimento : " styleClass="tit-requerimento" />
 					<h:outputText value="#{enquadramentoController.requerimento.ultimoEmpreendimento.nomEmpreendimento}" styleClass="dados-requerimento" />
@@ -38,11 +39,11 @@
 				<h1 style="font-size: 14px">EFETUAR REENQUADRAMENTO</h1>
 				<hr style="width: 100%; margin-top: 5px; margin-bottom: 5px; border: none; border-top: 1px solid #ccc;" />
 				<h:panelGrid columns="4">
-					<h:outputLabel value="N∞ do Processo : " styleClass="tit-requerimento" />
+					<h:outputLabel value="N¬∞ do Processo : " styleClass="tit-requerimento" />
 					<h:outputText value="#{enquadramentoController.processoReenquadramentoDTO.processoReenquadramento.ideProcesso.numProcesso}" styleClass="dados-requerimento" />
 					<h:outputLabel value="Requerente : " styleClass="tit-requerimento" />
 					<h:outputText value="#{enquadramentoController.processoReenquadramentoDTO.requerente.nomeRazao}" styleClass="dados-requerimento" />
-					<h:outputLabel value="N∞ Requerimento : " styleClass="tit-requerimento" />
+					<h:outputLabel value="N¬∞ Requerimento : " styleClass="tit-requerimento" />
 					<h:outputText value="#{enquadramentoController.processoReenquadramentoDTO.requerimento.numRequerimento}" styleClass="dados-requerimento" />
 					<h:outputLabel value="Empreendimento : " styleClass="tit-requerimento" />
 					<h:outputText value="#{fn:length(enquadramentoController.processoReenquadramentoDTO.empreendimento.nomEmpreendimento) gt 55 ?
@@ -61,7 +62,7 @@
 			<h:panelGroup id="groupEnquadramento" layout="block">
 				
 				<h:panelGrid rendered="#{enquadramentoController.enquadramentoJaIniciado}">
-					<h1>O enquadramento deste requerimento j· foi iniciado!</h1>
+					<h1>O enquadramento deste requerimento j√° foi iniciado!</h1>
 				</h:panelGrid>
 
 				<h:panelGrid style="margin-top: 15px;">
@@ -72,11 +73,11 @@
 				<h:panelGroup layout="block" rendered="#{not enquadramentoController.enquadramentoJaIniciado}" style="margin-top: 15px;">
 					
 					<h:panelGrid rendered="#{enquadramentoController.outrosAtos or enquadramentoController.reenquadramento}">
-						<h:outputText rendered="#{!enquadramentoController.reenquadramento}" value="* … possÌvel realizar o enquadramento?" />
-						<h:outputText rendered="#{enquadramentoController.reenquadramento}" value="* … possÌvel realizar o reenquadramento?" />
+						<h:outputText rendered="#{!enquadramentoController.reenquadramento}" value="* √â poss√≠vel realizar o enquadramento?" />
+						<h:outputText rendered="#{enquadramentoController.reenquadramento}" value="* √â poss√≠vel realizar o reenquadramento?" />
 						<p:selectOneRadio value="#{enquadramentoController.enquadramento.indEnquadramentoAprovado}">
 							<f:selectItem itemLabel="Sim" itemValue="#{true}" />
-							<f:selectItem itemLabel="N„o" itemValue="#{false}" />
+							<f:selectItem itemLabel="N√£o" itemValue="#{false}" />
 							<p:ajax event="change" listener="#{enquadramentoController.exibirTextoEmailReprovado()}" update="@form" />
 						</p:selectOneRadio>
 					</h:panelGrid>
@@ -84,10 +85,10 @@
 					<h:panelGroup layout="block" rendered="#{!enquadramentoController.reenquadramento}">
 						
 						<h:panelGrid rendered="#{enquadramentoController.dla}">
-							<h:outputText value="AlÈm da DLA, deseja enquadrar o requerimento em algum ato ambiental?" />
+							<h:outputText value="Al√©m da DLA, deseja enquadrar o requerimento em algum ato ambiental?" />
 							<p:selectOneRadio value="#{enquadramentoController.outrosAtos}">
 								<f:selectItem itemLabel="Sim" itemValue="#{true}" />
-								<f:selectItem itemLabel="N„o" itemValue="#{false}" />
+								<f:selectItem itemLabel="N√£o" itemValue="#{false}" />
 								<p:ajax event="change" global="false" update="@form" />
 							</p:selectOneRadio>
 						</h:panelGrid>
@@ -95,15 +96,15 @@
 						<h:panelGrid id="aprovado" rendered="#{enquadramentoController.outrosAtos and enquadramentoController.enquadramento.indEnquadramentoAprovado}" style="width:800px">
 	
 							<h:panelGrid id="uploadER">
-								<h:outputText value="O empreendimento È passÌvel de EIA/RIMA?" />
+								<h:outputText value="O empreendimento √© pass√≠vel de EIA/RIMA?" />
 								<p:selectOneRadio value="#{enquadramentoController.enquadramento.indPassivelEiarima}"
 									disabled="#{not empty enquadramentoController.enquadramento.dscCaminhoArquivoRima}">
 									<f:selectItem itemLabel="Sim" itemValue="#{true}" />
-									<f:selectItem itemLabel="N„o" itemValue="#{false}" />
+									<f:selectItem itemLabel="N√£o" itemValue="#{false}" />
 									<p:ajax global="false" update="uploadER" process="@this" />
 								</p:selectOneRadio>
 								<p:fileUpload uploadLabel="false" label="Upload Documento"
-									invalidFileMessage="Tipo de arquivo inv·lido."
+									invalidFileMessage="Tipo de arquivo inv√°lido."
 									update="aprovado"
 									fileUploadListener="#{enquadramentoController.manipularArquvio}"
 									mode="advanced" auto="true"
@@ -196,7 +197,7 @@
 				<h:panelGroup layout="block" style="margin-top: 10px; width: 100%;">
 					<p:wizard rendered="#{enquadramentoController.exibirAtosCadastados}"
 						style="width: 100%;" step="#{enquadramentoController.step}"
-						widgetVar="wiz" id="wiz" showNavBar="false" nextLabel="AvanÁar"
+						widgetVar="wiz" id="wiz" showNavBar="false" nextLabel="Avan√ßar"
 						backLabel="Voltar"
 						flowListener="#{enquadramentoController.onFlowProcess}"
 						showStepStatus="true">
@@ -227,7 +228,7 @@
 									<h:outputText rendered="#{not empty atoTipologia.listaDocumentosAtos}" value="#{enquadramentoController.countDocsAtosReenquadramento(atoTipologia.listaDocumentosAtos)}" />
 									<h:outputText rendered="#{empty atoTipologia.listaDocumentosAtos}" value="0" />
 								</p:column>
-								<p:column headerText="AÁıes">
+								<p:column headerText="A√ß√µes">
 									<p:commandLink global="false" action="#{enquadramentoController.carregarDocs(atoTipologia)}" process="@this" update="@form">
 										<h:graphicImage title="Adicionar Documentos" value="/resources/img/ico-anexo.png" />
 									</p:commandLink>
@@ -277,13 +278,13 @@
 											value="#{documentoAto.ideTipoFinalidadeUsoAgua != null ? documentoAto.ideTipoFinalidadeUsoAgua.nomTipoFinalidadeUsoAgua : ' - '}"
 											style="font-weight:bold" />
 									</p:column>
-									<p:column headerText="AÁıes" style="width:35px">
+									<p:column headerText="A√ß√µes" style="width:35px">
 										<p:selectBooleanCheckbox value="#{documentoAto.checked}" disabled="#{enquadramentoController.reenquadramento}">
 											<p:ajax global="false" process="@this"
 												listener="#{enquadramentoController.armazenarDocAtoSelecionado(documentoAto)}" />
 										</p:selectBooleanCheckbox>
 									</p:column>
-									<p:column headerText="AÁıes" style="width:35px" rendered="#{enquadramentoController.reenquadramento}">
+									<p:column headerText="A√ß√µes" style="width:35px" rendered="#{enquadramentoController.reenquadramento}">
 										<p:selectBooleanCheckbox value="#{documentoAto.checkedReenquadramento}" disabled="#{!documentoAto.ideDocumentoObrigatorio.indAtivo}">
 											<p:ajax global="false" process="@this"
 												listener="#{enquadramentoController.armazenarDocAtoReenquadramentoSelecionado(documentoAto)}" />
@@ -343,23 +344,28 @@
 		header="Alerta" message="Tem certeza que deseja remover o item?"
 		severity="alert">
 		<h:form>
+        <ui:include src="/layout/csrfToken.xhtml" />
 			<p:commandButton value="Sim" global="false"
 				update="enquadramento"
 				action="#{enquadramentoController.excluirAto()}"
 				oncomplete="modalExcluir.hide()" />
-			<p:commandButton value="N„o" global="false" oncomplete="modalExcluir.hide()" />
+        <ui:include src="/layout/csrfToken.xhtml" />
+        <ui:include src="/layout/csrfToken.xhtml" />
+        <ui:include src="/layout/csrfToken.xhtml" />
+        <ui:include src="/layout/csrfToken.xhtml" />
+			<p:commandButton value="N√£o" global="false" oncomplete="modalExcluir.hide()" />
 		</h:form>
 	</p:confirmDialog>
 	
 	<p:confirmDialog widgetVar="modalExcluirTipoAlteracao" appendToBody="true"
-		header="Alerta" message="Existe uma solicitaÁ„o de alteraÁ„o do ato selecionado, deseja realmente remove-lo do processo?"
+		header="Alerta" message="Existe uma solicita√ß√£o de altera√ß√£o do ato selecionado, deseja realmente remove-lo do processo?"
 		severity="alert">
 		<h:form>
 			<p:commandButton value="Sim" global="false"
 				update="enquadramento"
 				action="#{enquadramentoController.excluirAto()}"
 				oncomplete="modalExcluirTipoAlteracao.hide()" />
-			<p:commandButton value="N„o" global="false" oncomplete="modalExcluirTipoAlteracao.hide()" />
+			<p:commandButton value="N√£o" global="false" oncomplete="modalExcluirTipoAlteracao.hide()" />
 		</h:form>
 	</p:confirmDialog>
 	
@@ -372,7 +378,7 @@
 				update="enquadramento:aprovado"
 				action="#{enquadramentoController.excluirArquivoEIA()}"
 				oncomplete="modalExcluirRima.hide()" />
-			<p:commandButton value="N„o" global="false" oncomplete="modalExcluirRima.hide()" />
+			<p:commandButton value="N√£o" global="false" oncomplete="modalExcluirRima.hide()" />
 		</h:form>
 	</p:confirmDialog>
 
@@ -382,18 +388,18 @@
 		message="#{bundle.geral_msg_confirmar_nao_salvar}" severity="alert">
 		<h:form>
 			<p:commandButton value="Sim" global="false" oncomplete="modalConfirmarFechamentoDaTelaEnquadramento.hide();dialogEfetuarEnquadramento.hide();" />
-			<p:commandButton value="N„o" global="false" oncomplete="modalConfirmarFechamentoDaTelaEnquadramento.hide();" />
+			<p:commandButton value="N√£o" global="false" oncomplete="modalConfirmarFechamentoDaTelaEnquadramento.hide();" />
 		</h:form>
 	</p:confirmDialog>
 	
 	<p:confirmDialog
 		widgetVar="modalConfirmarAletaracaoDeEnquadramentoAtoAmbiental"
 		appendToBody="true" header="Alerta"
-		message="Deseja concluir o reenquadramento sem alterar o ato sinalizado na notificaÁ„o?" severity="alert">
+		message="Deseja concluir o reenquadramento sem alterar o ato sinalizado na notifica√ß√£o?" severity="alert">
 		<h:form>
 			<p:commandButton value="Sim" oncomplete="modalConfirmarAletaracaoDeEnquadramentoAtoAmbiental.hide();" 
 				actionListener="#{enquadramentoController.concluirSemAlterar()}" global="true" update="@form" />
-			<p:commandButton value="N„o" global="false" oncomplete="modalConfirmarAletaracaoDeEnquadramentoAtoAmbiental.hide();" />
+			<p:commandButton value="N√£o" global="false" oncomplete="modalConfirmarAletaracaoDeEnquadramentoAtoAmbiental.hide();" />
 		</h:form>
 	</p:confirmDialog>
 

@@ -16,7 +16,8 @@
 				  width="850" 
 				  height="650"
 				  resizable="false" 
-				  header="Características do ponto já outorgado"
+				<h:form id="formDadosCaracteristasEfluente">
+        <ui:include src="/layout/csrfToken.xhtml" />	
 				  modal="true">		
 		<br/>
 		      <p:layoutUnit position="center" resizable="false"  style="border-color: green;"> 
@@ -24,7 +25,7 @@
                   <tr> 
                       <td /> 
                       <td colspan="2"> 
-                          <h:outputText value="ATENÇÃO! O preenchimento das informações dessa tela não é obrigatório." style="line-height: 1"/>
+                          <h:outputText value="ATENÃ‡ÃƒO! O preenchimento das informaÃ§Ãµes dessa tela nÃ£o Ã© obrigatÃ³rio." style="line-height: 1"/>
                       </td> 
                   </tr> 
               </table> 
@@ -39,7 +40,7 @@
 						<hr style="margin-top: 0;"/>
 					
 				<h:panelGrid id="pngCaracterizacaoEfluente">
-					<h:outputText value="Caracterização do efluente:"/>	
+					<h:outputText value="CaracterizaÃ§Ã£o do efluente:"/>	
 					<p:selectManyCheckbox id="caracterizacao" layout="pageDirection" value="#{fceSesController.listCaracterizacaoEfluenteSelecionados}" converter="simpleEntityConverter">
 						<f:selectItems value="#{fceSesController.listCaracterizacaoEfluente}" 
 						               var="caract" 
@@ -50,8 +51,8 @@
 				
 				<h:panelGrid id="pngPeriodoDerivacao">
 					<br />
-					<h:outputText value="Período de Lançamento:"/>
-					<p:selectOneRadio id="listaPerídoLançamento" layout="pageDirection" disabled="#{fceSesController.desabilitarTudo}"
+					<h:outputText value="PerÃ­odo de LanÃ§amento:"/>
+					<p:selectOneRadio id="listaPerÃ­doLanÃ§amento" layout="pageDirection" disabled="#{fceSesController.desabilitarTudo}"
 						value="#{fceSesController.fceSesCoordenadasLancamentoLocalizacaoGeografica.ideTipoDerivacao}" required="true"> 
 						<f:converter converterId="simpleEntityConverter" />
 						<f:selectItems value="#{fceSesController.listPeriodoDerivacao}" var="lpl" itemLabel="#{lpl.dscTipoPeriodoDerivacao}" itemValue="#{lpl}"/>
@@ -63,10 +64,10 @@
 		    		<p:dataTable id="tabEfluentes" value="#{fceSesController.listCaracteristicaLancamento}" var="fceCaracteristica" >
 		    			<p:columnGroup type="header">
 		    				<p:row>
-		    					<p:column rowspan="2" headerText="Principais Características"/>
+		    					<p:column rowspan="2" headerText="Principais CaracterÃ­sticas"/>
 		    					<p:column colspan="2" headerText="Efluente"/>
-		    					<p:column rowspan="2" headerText="Eficiência de Remoção" escape="false" style="white-space:normal; width: 85px;" />
-		    					<p:column rowspan="2" headerText="Ações"/>
+		    					<p:column rowspan="2" headerText="EficiÃªncia de RemoÃ§Ã£o" escape="false" style="white-space:normal; width: 85px;" />
+		    					<p:column rowspan="2" headerText="AÃ§Ãµes"/>
 		    				</p:row>
 		    				<p:row>
 		    					<p:column headerText="Bruto"/>
@@ -126,11 +127,11 @@
 		    	
 <!-- 	    		<h:panelGrid>
 	    		<br/>
-					<h:outputText value="Parte do efluente será usada para reuso?"  />
+					<h:outputText value="Parte do efluente serÃ¡ usada para reuso?"  />
 		
 					<p:selectOneRadio value="#{fceSesController.fceSesCoordenadasLancamento.indEfluenteReuso}">  
 							<f:selectItem itemLabel="Sim" itemValue="true"/>
-							<f:selectItem itemLabel="Não" itemValue="false"/>
+							<f:selectItem itemLabel="NÃ£o" itemValue="false"/>
 					        <p:ajax update="vazaoEfluenteTratado" event="change"/> 
 					</p:selectOneRadio> 
 					
@@ -139,21 +140,21 @@
 <!-- 				<h:panelGrid id="vazaoEfluenteTratado">	
 					
 					<h:panelGrid columns="3" rendered="#{fceSesController.fceSesCoordenadasLancamento.indEfluenteReuso}">
-						<h:outputText value="Vazão do efluente tratado" />
+						<h:outputText value="VazÃ£o do efluente tratado" />
 						<p:inputText value="#{fceSesController.fceSesCoordenadasLancamento.vazaoEfluenteTratado}" styleClass="campoNumericoComDecimal-2">
 							<f:convertNumber integerOnly="false" locale="pt,BR" minFractionDigits="2"/>
 						</p:inputText>
-						<h:outputText value="(m³/dia)" />
+						<h:outputText value="(mÂ³/dia)" />
 					</h:panelGrid>
 					
 				</h:panelGrid>	 -->
 				
 					<h:panelGrid columns="3">
-						<h:outputText value="Vazão média do efluente" />
+						<h:outputText value="VazÃ£o mÃ©dia do efluente" />
 						<p:inputText value="#{fceSesController.fceSesCoordenadasLancamentoLocalizacaoGeografica.valorVazaoMedia}" styleClass="campoNumericoComDecimal-2">
 							<f:convertNumber integerOnly="false" locale="pt,BR" minFractionDigits="2"/>
 						</p:inputText>
-						<h:outputText value="(m³/dia)" />
+						<h:outputText value="(mÂ³/dia)" />
 					</h:panelGrid>				
 				
 				</h:panelGrid>

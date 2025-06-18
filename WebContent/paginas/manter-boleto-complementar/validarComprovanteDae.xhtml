@@ -7,6 +7,7 @@
 	xmlns:p="http://primefaces.prime.com.tr/ui">
 	
 	<h:form id="form_dialog_validacao_dae">
+        <ui:include src="/layout/csrfToken.xhtml" />
 		<h:panelGrid columns="1" id="panel_boleto_geral">
 			<h:panelGrid columns="1" id="panel_boleto_dados" >
 				<h:outputText value="#{bundle.gerar_novo_boleto_lbl_dados_requerente}" style="font-weight: bold;"/>
@@ -43,7 +44,7 @@
 			            <h:outputText value="#{boletoComplementarController.getTamanhoDoc(validar.dscCaminhoArquivo)}" />
 			        </p:column>
 			        
-			        <!-- Açoes -->
+			        <!-- AÃ§oes -->
 			        <p:column style="text-align: center !important;">
 			        	<h:panelGrid columns="2">
 							<h:commandLink id="visualizarComprovante" rendered="#{security.temAcesso('3.56.6')}" immediate="true" ajax="false">
@@ -88,7 +89,7 @@
 			
 				<h:selectOneRadio value="#{boletoComplementarController.validarComprovante_documentoValidado}" style="margin-right: 15px; vertical-align: middle;" >
 					<f:selectItem itemLabel="Sim" itemValue="true"/>
-					<f:selectItem itemLabel="Não" itemValue="false"/>
+					<f:selectItem itemLabel="NÃ£o" itemValue="false"/>
 					<f:ajax event="change" render="panel_boleto_validacao panel_boleto_botoes" />
 				</h:selectOneRadio>
 				

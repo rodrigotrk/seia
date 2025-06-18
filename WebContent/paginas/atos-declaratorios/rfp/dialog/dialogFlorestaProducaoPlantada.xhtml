@@ -7,11 +7,12 @@
 	xmlns:p="http://primefaces.prime.com.tr/ui">
 	
 	<h:form id="formFlorestaProducaoPlantada" styleClass="col-12">
+        <ui:include src="/layout/csrfToken.xhtml" />
 	
 		<h:panelGrid>
 			<h:panelGrid>
 			
-				<h:outputText value="Selecione o imóvel" />
+				<h:outputText value="Selecione o imÃ³vel" />
 				<p:selectOneMenu 
 						converter="simpleEntityConverter" 
 						value="#{registroFlorestaPlantadaController.ideRegistroFlorestaProducaoImovel.ideImovel}" 
@@ -29,7 +30,7 @@
 							or registroFlorestaPlantadaController.ideRegistroFlorestaProducaoImovel.editar}">
 						
 						<h:graphicImage title="#{bundle.fce_lic_min_incluir_shape}" value="/resources/img/ico-expandir.png"  style="margin-right: 2px;"/>
-						<h:outputText value=" Incluir imóvel" />
+						<h:outputText value=" Incluir imÃ³vel" />
 					</p:commandLink>
 				</h:panelGrid>
 			</h:panelGrid>
@@ -52,21 +53,21 @@
 					emptyMessage="Nenhum registro encontrado"
 					var="imovelPlantio" styleClass="col-12"	>
 					
-					<p:column headerText="Situação atual da floresta">
+					<p:column headerText="SituaÃ§Ã£o atual da floresta">
 						<h:outputText value="#{imovelPlantio.ideSituacaoAtualFlorestaProducao.desSituacaoFlorestaProducao}" />
 					</p:column>
 				
-					<p:column headerText="Área do plantio">
+					<p:column headerText="Ãrea do plantio">
 						<h:outputText value="#{imovelPlantio.valAreaPlantio}" >
 							<f:convertNumber maxIntegerDigits="9" maxFractionDigits="4" pattern="###,##0.0000" locale="pt_BR"/>
 						</h:outputText>
 					</p:column>
 			
-					<p:column headerText="Período">
+					<p:column headerText="PerÃ­odo">
 						<h:outputText value="#{imovelPlantio.periodo}"/>
 					</p:column>
 				
-					<p:column headerText="Ações">
+					<p:column headerText="AÃ§Ãµes">
 						
 						<p:commandLink id="visualizar" title="Visualizar"  oncomplete="dialogPlantio.show()" update="formPlantio">
 							<f:setPropertyActionListener value="#{imovelPlantio}" target="#{registroFlorestaPlantadaController.ideRegistroFlorestaProducaoImovelPlantio}"/>
@@ -100,7 +101,7 @@
 						disabled="#{registroFlorestaPlantadaController.ideRegistroFlorestaProducaoImovel.visualizar}">
 						
 						<h:graphicImage title="#{bundle.fce_lic_min_incluir_shape}" value="/resources/img/ico-expandir.png" style="margin-right: 2px;"/>
-						<h:outputText value=" Incluir dados da espécie(s) produção" />
+						<h:outputText value=" Incluir dados da espÃ©cie(s) produÃ§Ã£o" />
 					</p:commandLink>
 				</h:panelGrid>
 				 
@@ -119,14 +120,14 @@
 					<p:column>
 						<f:facet name="header">
 							<h:outputText value="Estimativa de volume" /><br/>
-							<h:outputText value="de produção final" /><br/>
+							<h:outputText value="de produÃ§Ã£o final" /><br/>
 							<h:outputText value="no primeiro corte" />
 						</f:facet>
 
 						<h:outputText value="#{fp.valEstimativaVolumeTotalFinal}" />
 					</p:column>
 				
-					<p:column headerText="Ações">
+					<p:column headerText="AÃ§Ãµes">
 						
 						<p:commandLink id="visualizar" title="Visualizar" action="#{registroFlorestaPlantadaController.carregarEspecieProducao}" oncomplete="dialogEspecieProducao.show()" update="formEspecieProducao">
 							<f:setPropertyActionListener value="#{fp}" target="#{registroFlorestaPlantadaController.ideRegistroFlorestaProducaoImovelEspecieProducao}"/>

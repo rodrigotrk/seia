@@ -5,17 +5,19 @@
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:p="http://primefaces.prime.com.tr/ui">
-        <!-- FIM DIALOG CONFIRMAÇÃO DA EXCLUSÃO -->
+        <ui:include src="/layout/csrfToken.xhtml" />
+        <ui:include src="/layout/csrfToken.xhtml" />
+        <!-- FIM DIALOG CONFIRMAÃ‡ÃƒO DA EXCLUSÃƒO -->
 			<h3>
 				<h:outputLabel id="lblIdentificacaoProcurador" styleClass="titulo-grupo"
-					value="IDENTIFICAÇÃO DO PROCURADOR" />
+					value="IDENTIFICAÃ‡ÃƒO DO PROCURADOR" />
 			</h3>			
 			
 			<h:form id="formpesquisacpfproc">
 				<h:outputLabel id="idlblcpf" value="* CPF" />
 				<h:panelGrid columns="2">
 					<p:inputMask id="cpfproc" mask="#{bundle.consultapf_msk_cpf}" disabled="#{procuradorPessoaFisicaController.disabledFormPessoaFisicaProcurador}" 
-						value="#{procuradorPessoaFisicaController.pessoaPesquisa.numCpf}" required="true" requiredMessage="Campo CPF é de preenchimento obrigatório." >
+						value="#{procuradorPessoaFisicaController.pessoaPesquisa.numCpf}" required="true" requiredMessage="Campo CPF Ã© de preenchimento obrigatÃ³rio." >
 						<f:converter converterId="cpfConverter" />
 						<f:validator validatorId="cpfValidator" />
 					</p:inputMask>
@@ -32,7 +34,7 @@
 						<h:outputText id="idlblnome" value="* Nome" />
 						<p:inputText id="nomepessoafisica" disabled="#{procuradorPessoaFisicaController.disabledFormPessoaFisicaProcurador}"
 							value="#{procuradorPessoaFisicaController.pessoaSelecionada.nomPessoa}"
-							style="width: 300px;" required="true" requiredMessage="Campo Nome é de preenchimento obrigatório."/>
+							style="width: 300px;" required="true" requiredMessage="Campo Nome Ã© de preenchimento obrigatÃ³rio."/>
 					</h:panelGrid>
 					<h:panelGrid columns="2">
 						<p:commandButton id="btnLimpar" value="Limpar" action="#{procuradorPessoaFisicaController.limparObjetosPessoaFisicaAction}" update="tabviewpf:paneltabviewprocpf" process="@this"/>

@@ -9,22 +9,25 @@
 	
 	
 	<ui:define name="titulo-pagina">		
-		<h3> Consultar Pessoas JurÌdicas</h3>		
-	</ui:define>	
+		<h:form id="filtroPessoaJuridica">
+        <ui:include src="/layout/csrfToken.xhtml" />		
+		<h:form id="idformpessoajuridicatabela" >
+        <ui:include src="/layout/csrfToken.xhtml" />		
+        <ui:include src="/layout/csrfToken.xhtml" />
 	
 	<ui:define name="conteudo-principal">
 	
-	<h3><h:outputLabel styleClass="titulo-grupo" value="INSTRU«’ES" /></h3><br />
-	- Para consultar uma ou mais pessoas, informe o(s) par‚metro(s) de consulta desejado(s) e clique no bot„o "Consultar".<br />
-	- Para incluir uma nova pessoa jurÌdica, clique no bot„o "Incluir Pessoa JurÌdica". 
+	<h3><h:outputLabel styleClass="titulo-grupo" value="INSTRU√á√ïES" /></h3><br />
+	- Para consultar uma ou mais pessoas, informe o(s) par√¢metro(s) de consulta desejado(s) e clique no bot√£o "Consultar".<br />
+	- Para incluir uma nova pessoa jur√≠dica, clique no bot√£o "Incluir Pessoa Jur√≠dica". 
 	<br /><br />
-	<h3><h:outputLabel styleClass="titulo-grupo" value="PAR¬METROS DA CONSULTA" /></h3>
+	<h3><h:outputLabel styleClass="titulo-grupo" value="PAR√ÇMETROS DA CONSULTA" /></h3>
 		<h:form id="filtroPessoaJuridica">		
 			<h:panelGrid columns="2">
 				<h:outputText id="idtextrazaosocial" value="Razao Social" />
 				<h:outputText id="idtextcnpj" value="CNPJ" />
 				<p:inputText value="#{pessoaJuridicaController.razao}" style="width: 450px;"/>
-				<p:inputMask value="#{pessoaJuridicaController.cnpj}" mask="#{bundle.consultapj_msk_cnpj}"  style="width: 150px;" converterMessage="Cnpj inv·lido">
+				<p:inputMask value="#{pessoaJuridicaController.cnpj}" mask="#{bundle.consultapj_msk_cnpj}"  style="width: 150px;" converterMessage="Cnpj inv√°lido">
 				    <f:converter converterId="cnpjConverter"/>
 				    <f:validator validatorId="cnpjValidator"/> 
 			    </p:inputMask>
@@ -43,9 +46,9 @@
 				<p:dataTable var="pessoaJuridica" id="tabelapessoajuridica" widgetVar="tabelapessoajuridica" value="#{pessoaJuridicaController.modelPessoasJuridicas}" paginator="true"  paginatorPosition="bottom"  paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}" 
 				 rows="10" emptyMessage="Nenhum registro encontrado." >					  
 					        <f:facet name="header">  
-					            Lista de Pessoas JurÌdicas Cadastradas   
+					            Lista de Pessoas Jur√≠dicas Cadastradas   
 					        </f:facet>
-					        <p:column headerText="Raz„o Social" style="width: 450px;">  
+					        <p:column headerText="Raz√£o Social" style="width: 450px;">  
 		            				<h:outputText value="#{pessoaJuridica.nomRazaoSocial}" />  
 		        			</p:column>    
 		        			<p:column headerText="CNPJ" style="width: 150px; text-align: center;">  
@@ -54,7 +57,7 @@
 		            				</h:outputText>  
 		        			</p:column>
 		        			
-		        			<p:column headerText="AÁıes"  style="text-align: center;">		        			
+		        			<p:column headerText="A√ß√µes"  style="text-align: center;">		        			
 							<p:commandLink title="Editar" action="#{pessoaJuridicaController.prepararParaEditar()}" ajax="false" process="@this">
 				          			 <h:graphicImage title="Editar" value="/resources/img/ico-alterar.png" />
 				                     <f:setPropertyActionListener value="#{pessoaJuridica}" target="#{pessoaJuridicaController.pessoaJuridicaSelecionada}" />

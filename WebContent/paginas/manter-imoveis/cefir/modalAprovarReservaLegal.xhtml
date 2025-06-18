@@ -6,7 +6,8 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:p="http://primefaces.prime.com.tr/ui">
 	
-<!-- Centralizando o título (header) do modal no centro -->
+	<h:form id="formAprovarRL">
+        <ui:include src="/layout/csrfToken.xhtml" />		
 <style>
 	.ui-dialog .ui-dialog-title {
 		    float: unset !important;
@@ -15,7 +16,7 @@
 	
 	<h:form id="formAprovarRL">		
 		<h:panelGrid id="nomeImovel" columns="2">			
-			<h:outputText value="Nome do imóvel rural:" style="font-weight:bold" />			
+			<h:outputText value="Nome do imÃ³vel rural:" style="font-weight:bold" />			
 			<h:outputText value="#{analiseTecnicaController.imovelSelecionado.imovelRural.desDenominacao}" />			
 		</h:panelGrid>
 		<br />
@@ -23,7 +24,7 @@
 			<h:outputLink
 				value="#{analiseTecnicaController.caminhoDesenharGeoBahia}"
 				title="GEOBAHIA" target="_blank">
-				<h:outputText value="VISUALIZAR SHAPE DO IMÓVEL" />
+				<h:outputText value="VISUALIZAR SHAPE DO IMÃ“VEL" />
 				<f:param name="acao" value="view" />
 				<f:param name="idimov"
 					value="#{analiseTecnicaController.imovelSelecionado.imovelRural.ideImovelRural}" />
@@ -56,17 +57,17 @@
 						widgetVar="tblImovel">
 					
 				<f:facet name="header">
-					<h:outputText value="Esta RL está nos seguintes imóveis:" />
+					<h:outputText value="Esta RL estÃ¡ nos seguintes imÃ³veis:" />
 				</f:facet>
 				<p:column style="max-width: 208px;">
 					<f:facet name="header">
-						<h:outputText value="Nome do imóvel rural" />
+						<h:outputText value="Nome do imÃ³vel rural" />
 					</f:facet>
 					<h:outputText value="#{imovel.desDenominacao}" />
 				</p:column>							
 				<p:column>
 					<f:facet name="header">
-						<h:outputText value="Área da RL" />
+						<h:outputText value="Ãrea da RL" />
 					</f:facet>					
 					<h:outputText value="#{imovel.valArea}">
 						<f:convertNumber pattern="#,###,##0.0000" locale="pt_BR"/>
@@ -74,7 +75,7 @@
 				</p:column>
 				<p:column style="text-align: center; max-width: 80px;">
 					<f:facet name="header">
-						<h:outputText value="Ações" />
+						<h:outputText value="AÃ§Ãµes" />
 					</f:facet>
 					<p:commandLink id="btnVisualizarImovelRural" title="Visualizar"
 								   action="#{detalharImovelRuralController.visualizarRelatorioImovelRural()}"
@@ -93,7 +94,7 @@
 		</h:panelGrid>
 		<br/>
 		<h:panelGrid rendered="#{not empty analiseTecnicaController.listaArquivoReservaAprovada}">
-			<h:outputText value="Documento que comprova aprovação:" style="font-weight:bold"/>			
+			<h:outputText value="Documento que comprova aprovaÃ§Ã£o:" style="font-weight:bold"/>			
 			<p:dataTable id="dataTableDocumentosReservaAprovada" widgetVar="dataTableDocumentosReservaAprovada" 
 						 value="#{analiseTecnicaController.listaArquivoReservaAprovada}"   var="arquivo"
 						 lazy="true" emptyMessage="#{bundle.cefir_msg_A012}" style="width:250px;">
@@ -125,11 +126,11 @@
 				/>
 		</h:panelGrid>		
 		<br/>
-		<h3><h:outputLabel styleClass="titulo-grupo" style="font-weight:bolder" value="* Deseja aprovar a localização da reserva legal?" /></h3>	
+		<h3><h:outputLabel styleClass="titulo-grupo" style="font-weight:bolder" value="* Deseja aprovar a localizaÃ§Ã£o da reserva legal?" /></h3>	
 		<h:panelGrid columns="2">			
 			<p:selectOneRadio value="#{analiseTecnicaController.indAprovacao}" required="true"
 				id="aprovada0" 
-				requiredMessage="Favor preencher os campos obrigatório."
+				requiredMessage="Favor preencher os campos obrigatÃ³rio."
 				disabled="#{analiseTecnicaController.sendoAnalisado}">				
 				<f:selectItem itemLabel="#{bundle.geral_lbl_sim}"
 					itemValue="#{true}" />				
@@ -137,7 +138,7 @@
 			</p:selectOneRadio>			
 			<p:selectOneRadio value="#{analiseTecnicaController.indAprovacao}"
 				id="aprovada1" disabled="true"
-				requiredMessage="Favor preencher os campos obrigatório.">				
+				requiredMessage="Favor preencher os campos obrigatÃ³rio.">				
 				<f:selectItem itemLabel="#{bundle.geral_lbl_nao}"
 					itemValue="#{false}" />				
 				
@@ -146,8 +147,8 @@
 		</h:panelGrid>
 		<h:panelGrid>
 			<h:panelGrid id="observacao">
-				<h:outputText value="*Observações:" style="font-weight:bold" rendered="#{!analiseTecnicaController.indAprovacao}"/>
-				<h:outputText value="Observações:" style="font-weight:bold" rendered="#{analiseTecnicaController.indAprovacao}"/>
+				<h:outputText value="*ObservaÃ§Ãµes:" style="font-weight:bold" rendered="#{!analiseTecnicaController.indAprovacao}"/>
+				<h:outputText value="ObservaÃ§Ãµes:" style="font-weight:bold" rendered="#{analiseTecnicaController.indAprovacao}"/>
 			</h:panelGrid>
 			<h:inputTextarea value="#{analiseTecnicaController.imovelSelecionado.imovelRural.reservaLegal.observacao}"  style="height:100px; width:385px;" disabled="#{analiseTecnicaController.sendoAnalisado}"/>
 		</h:panelGrid>

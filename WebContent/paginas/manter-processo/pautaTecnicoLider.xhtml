@@ -8,10 +8,10 @@
 	template="../../layout/template.xhtml">
 
 	<ui:define name="titulo-pagina">
-		<h3>Pauta Técnica</h3>
+		<h3>Pauta TÃ©cnica</h3>
 
 		<script>
-			//função bloqueia o tab
+			//funÃ§Ã£o bloqueia o tab
 			$(document).ready(function() {
 				$(this).delegate('#notificacaoParcialForm\\:texto_parcial','keyup',function() { 
 					var texto = $('#notificacaoParcialForm\\:texto_parcial').val();
@@ -40,7 +40,9 @@
 	</ui:define>
 
 	<ui:define name="conteudo-principal">
-		<p:confirmDialog header="Confirmação" 
+        <ui:include src="/layout/csrfToken.xhtml" />
+        <ui:include src="/layout/csrfToken.xhtml" />
+		<p:confirmDialog header="ConfirmaÃ§Ã£o" 
 			id="dialogExcluirSubterraneaCnae"  
 			widgetVar="dialogExcluirSubterraneaCnae" 
 			appendToBody="true" 
@@ -53,14 +55,14 @@
 					process="@this" 
 					update=":formCaracteristicaPoco:pnlTableSubterraneaCnae">
 				</p:commandButton>
-				<p:commandButton value="Não" 
+				<p:commandButton value="NÃ£o" 
 					onclick="dialogExcluirSubterraneaCnae.hide();" 
 					type="button" 
 					global="false" />
 			</h:form>
 		</p:confirmDialog>	
 		
-		<p:confirmDialog header="Confirmação" 
+		<p:confirmDialog header="ConfirmaÃ§Ã£o" 
 				id="dialogExcluirCnae"  
 				widgetVar="dialogExcluirCnae" 
 				appendToBody="true" 
@@ -73,7 +75,7 @@
 						process="@this" 
 						update=":capSuperAbas:formCapSuperCaptacao:pnlTableCnae">
 					</p:commandButton>
-					<p:commandButton value="Não" 
+					<p:commandButton value="NÃ£o" 
 						onclick="dialogExcluirCnae.hide();" 
 						type="button" 
 						global="false" />
@@ -111,13 +113,13 @@
 
 		<p:dialog id="_dialogAnalisarProcesso" closable="true"
 			draggable="true" resizable="false" position="center"
-			header="Imóveis Rurais do Empreendimento" widgetVar="dialogAnalisarProcesso"
+			header="ImÃ³veis Rurais do Empreendimento" widgetVar="dialogAnalisarProcesso"
 			width="985" modal="true">
 			<ui:include src="/paginas/manter-processo/analisarProcesso.xhtml" />
 		</p:dialog>
 		
 		<p:dialog id="dialogAprovarRL" closable="true" draggable="true"
-			resizable="false" header="Aprovação de Reserva Legal"
+			resizable="false" header="AprovaÃ§Ã£o de Reserva Legal"
 			widgetVar="dialogAprovarRL" position="center" modal="false"
 			onShow="dialogAprovarRL.initPosition();">
 			<ui:include
@@ -125,7 +127,7 @@
 		</p:dialog>
 		
 		<p:dialog id="dialogDetalharImovelRural" closable="true"
-			draggable="true" resizable="false" header="Detalhes do Imóvel Rural"
+			draggable="true" resizable="false" header="Detalhes do ImÃ³vel Rural"
 			widgetVar="dialogDetalharImovelRural" position="center" modal="false"
 			height="600" width="850">
 			<ui:include
@@ -133,7 +135,10 @@
 		</p:dialog>
 		
 		<p:dialog id="dialogPendenciaCadastro" closable="true" modal="true" draggable="true" resizable="false" position="center"
-			header="Pendência(s) no(s) Cadastro(s)" widgetVar="dialogPendenciaCadastro">
+        <ui:include src="/layout/csrfToken.xhtml" />
+        <ui:include src="/layout/csrfToken.xhtml" />
+        <ui:include src="/layout/csrfToken.xhtml" />
+			header="PendÃªncia(s) no(s) Cadastro(s)" widgetVar="dialogPendenciaCadastro">
 			
 			<h:panelGrid id="panelPendenciaCadastro">
 				<ui:include src="/paginas/manter-imoveis/cefir/suspensao-cadastro/visualizarPendenciaCadastro.xhtml" />
@@ -175,7 +180,7 @@
 			<p:confirmDialog id="confirmacaoAprovacaoRl"
 				widgetVar="confirmacaoAprovacaoRl"
 				header="#{bundle.geral_lbl_mensagem}"
-				message="Confirma a aprovação da localização da reserva Legal?"
+				message="Confirma a aprovaÃ§Ã£o da localizaÃ§Ã£o da reserva Legal?"
 				severity="alert">
 				
 				<p:commandButton value="#{bundle.btn_sim}"
@@ -189,7 +194,7 @@
 		</h:form>
 
 		<h3>
-			<h:outputLabel styleClass="titulo-grupo" value="INSTRUÇÕES"  style="font-weight:bold;"/>
+			<h:outputLabel styleClass="titulo-grupo" value="INSTRUÃ‡Ã•ES"  style="font-weight:bold;"/>
 		</h3>
 		<br />
 		<p class="titulo-grupo">
@@ -198,7 +203,7 @@
 		<br />
 		<br />
 		<h3>
-			<h:outputLabel styleClass="titulo-grupo" style="font-weight:bold;"	value="PARÂMETROS DA CONSULTA" />
+			<h:outputLabel styleClass="titulo-grupo" style="font-weight:bold;"	value="PARÃ‚METROS DA CONSULTA" />
 		</h3>
 
 		<h:form id="formPautaTecnico">
@@ -208,7 +213,7 @@
 					<br />
 					<h:panelGrid columns="3">
 						<h:panelGrid columns="1">
-							<h:outputText value="Nº do Processo:" />
+							<h:outputText value="NÂº do Processo:" />
 							<p:inputText value="#{pautaTecnicoController.numProcesso}" />
 						</h:panelGrid>
 
@@ -226,7 +231,7 @@
 						</h:panelGrid>
 						
 						<h:panelGrid columns="3">
-							<h:outputText value="Período de Formação:" />
+							<h:outputText value="PerÃ­odo de FormaÃ§Ã£o:" />
 							<h:outputText />
 							<h:outputText />
 	
@@ -236,7 +241,7 @@
 									value="#{pautaTecnicoController.periodoInicio}" locale="pt"
 									pattern="dd/MM/yyyy" navigator="true" yearRange="c-50:c+10" />
 							</h:panelGroup>
-							<h:outputText value="Até" />
+							<h:outputText value="AtÃ©" />
 							<p:calendar showOn="button" size="10"
 								value="#{pautaTecnicoController.periodoFim}" locale="pt"
 								pattern="dd/MM/yyyy" navigator="true" yearRange="c-50:c+10" />
@@ -319,7 +324,7 @@
 						paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}"
 						currentPageReportTemplate="Registro(s) {startRecord}/{endRecord} de {totalRecords} registro(s)">
 						<p:column>
-							<f:facet name="header">Nº do Processo</f:facet>
+							<f:facet name="header">NÂº do Processo</f:facet>
 							<p:commandLink
 								action="#{detalharProcessoController.visualizarProcesso()}"
 								update=":formDetalharProcesso:tabviewprocesso"
@@ -342,7 +347,7 @@
 							<h:outputText value="#{vwProcesso.nomRequerente}" />
 						</p:column>
 						<p:column>
-							<f:facet name="header">Data Formação</f:facet>
+							<f:facet name="header">Data FormaÃ§Ã£o</f:facet>
 							<h:outputText value="#{vwProcesso.dtcFormacao}">
 								<f:convertDateTime pattern="dd/MM/yyyy" locale="pt,BR"
 									timeZone="Brazil/East" />
@@ -385,7 +390,7 @@
 							<h:outputText value="#{vwProcesso.statusFluxo.dscStatusFluxo}" />
 						</p:column>
 						<p:column style="text-align: center;">
-							<f:facet name="header">Ações</f:facet>
+							<f:facet name="header">AÃ§Ãµes</f:facet>
 							
 							<!-- ENCAMINHAR -->
 							<p:commandLink actionListener="#{fluxoAlternativoController.verificarDadoConcedidoECarregarFluxoAlternativo(false,true,vwProcesso)}" 
@@ -400,7 +405,7 @@
 								oncomplete="dialogNotificacar.show();" process="@this"
 								update=":pnlNotificacao">
 								<h:graphicImage style="margin: 2px;"
-									title="Emitir notificação de prazo"
+									title="Emitir notificaÃ§Ã£o de prazo"
 									value="/resources/img/ico-notificar.png" />
 							</p:commandLink>
 							<p:commandLink global="true"
@@ -409,7 +414,7 @@
 								oncomplete="dialogNotificacar.show();" process="@this"
 								update=":pnlNotificacao">
 								<h:graphicImage style="margin: 2px;"
-									title="Emitir notificação de comunicação"
+									title="Emitir notificaÃ§Ã£o de comunicaÃ§Ã£o"
 									value="/resources/img/ico_notc.png" />
 							</p:commandLink>
 							
@@ -424,7 +429,7 @@
 							</p:commandLink>
 							
 							<p:commandLink global="true" actionListener="#{processoAnaliseTecnicaController.load(vwProcesso)}" process="@this" update=":formAnalisarProcesso">
-								<h:graphicImage style="margin: 2px; height:16px; width: 16px;" title="Análise Técnica" value="/resources/img/prototipo/icon_pauta.png" />
+								<h:graphicImage style="margin: 2px; height:16px; width: 16px;" title="AnÃ¡lise TÃ©cnica" value="/resources/img/prototipo/icon_pauta.png" />
 							</p:commandLink>
 							
 							<p:spacer width="5" height="10" />
@@ -434,7 +439,7 @@
 								update=":formAnalisarProcesso"
 								oncomplete="dialogAnalisarProcesso.show()" process="@this"
 								rendered="${security.temAcesso('5.19.45') and vwProcesso.podeExibirAnaliseTecnicaImovelRural}">
-								<h:graphicImage title="Listar Imóveis Vinculados"
+								<h:graphicImage title="Listar ImÃ³veis Vinculados"
 									value="/resources/img/ico-rl-verde.png" />
 								<f:setPropertyActionListener value="#{vwProcesso}"
 									target="#{analiseTecnicaController.vwProcesso}" />

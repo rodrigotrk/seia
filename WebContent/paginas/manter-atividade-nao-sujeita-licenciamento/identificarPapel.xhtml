@@ -8,7 +8,8 @@
 <ui:composition template="/layout/template.xhtml">
 
 	<ui:define name="titulo-pagina">
-		<h3>IdentificaÁ„o do respons·vel desta solicitaÁ„o</h3>
+        <ui:include src="/layout/csrfToken.xhtml" />
+		<h3>Identifica√ß√£o do respons√°vel desta solicita√ß√£o</h3>
 	</ui:define>
 
 	<ui:define name="conteudo-principal">
@@ -86,7 +87,8 @@
 				<h:graphicImage value="/resources/img/ico-ajuda.png" id="ajuda9"
 					style="margin: 3px 1px 2px 140px;" />
 				<p:tooltip for="ajuda9"
-					value="Selecione essa opÁ„o caso vocÍ seja um cadastrante conveniado e queira que o cadastro seja emitido em nome do representante da comunidade PF"
+        <ui:include src="/layout/csrfToken.xhtml" />
+					value="Selecione essa op√ß√£o caso voc√™ seja um cadastrante conveniado e queira que o cadastro seja emitido em nome do representante da comunidade PF"
 					showEffect="fade" hideEffect="fade" />	
 				</h:panelGroup>
 			</h:form>
@@ -103,12 +105,12 @@
 					<h:outputText style="padding-right: 620px;" />
 					<h:outputText />
 					<h:panelGroup id="panelGroupAvancar">
-						<p:commandButton value="AvanÁar" id="buttonAvancar"
+						<p:commandButton value="Avan√ßar" id="buttonAvancar"
 							disabled="#{!identificarPapelController.showIdentificarPapel}"
 							action="#{identificarPapelController.avancar()}" ajax="false" rendered="#{!identificarPapelController.isPCT}">
 						</p:commandButton>
 						
-						<p:commandButton value="AvanÁar" id="buttonAvancarPct"
+						<p:commandButton value="Avan√ßar" id="buttonAvancarPct"
 							
 							onclick="dialogAceitePct.show();" ajax="true" rendered="#{identificarPapelController.isPCT and identificarPapelController.renderedCadastranteConvenioPCT}" process="@this">
 						</p:commandButton>

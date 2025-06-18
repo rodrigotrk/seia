@@ -8,6 +8,7 @@
 		<h3><h:outputLabel styleClass="titulo-grupo" value="TELEFONES" /></h3>
 
 		<h:form id="formtelefone">
+        <ui:include src="/layout/csrfToken.xhtml" />
 			<h:outputLabel value="Incluir Telefone" />
 			<p:commandLink id="linkDialogTelefone" onclick="telefoneDialog.show()"
 				action="#{responsavelEmpreendimentoController.novoTelefone}" 	
@@ -19,6 +20,7 @@
 		</h:form>
 
 		<h:form id="formconteudo">
+        <ui:include src="/layout/csrfToken.xhtml" />
 		
 		<!-- DATATABLE TELEFONE -->
 			<p:dataTable id="tabelaTelefone" widgetVar="tabelaTelefone" var="telefone" style="width:400px;"
@@ -32,11 +34,11 @@
 					<h:outputText value="#{telefone.ideTipoTelefone.nomTipoTelefone}" />
 				</p:column>
 
-				<p:column headerText="Número" style="text-align: center;">
+				<p:column headerText="NÃºmero" style="text-align: center;">
 					<h:outputText value="#{telefone.numTelefone}" />
 				</p:column>
 				
-				<p:column style="text-align: center;" headerText="Ações">	
+				<p:column style="text-align: center;" headerText="AÃ§Ãµes">	
 						
 						<p:commandLink update=":formconteudo:display" oncomplete="limparMsgErro();telefoneDialog.show()" title="Visualizar">
 							<h:graphicImage title="Visualizar" value="/resources/img/ico-pesquisa.png" />
@@ -61,7 +63,8 @@
 			
 			
 			
-			<p:confirmDialog message="Tem certeza que deseja excluir a(s) opção(ões) selecionadas?"
+	<h:form id="frmTelefoneDialog">
+        <ui:include src="/layout/csrfToken.xhtml" />	
 				width="200" header="Mensagem" severity="alert"
 				widgetVar="confirmationTelefone" id="confirmationTelefone">
 				
@@ -69,7 +72,7 @@
 					actionListener="#{responsavelEmpreendimentoController.removerTelefone}"
 					oncomplete="confirmationTelefone.hide()" />
 				
-				<p:commandButton value="Não" onclick="confirmationTelefone.hide()"
+				<p:commandButton value="NÃ£o" onclick="confirmationTelefone.hide()"
 					type="button" />
 			
 			</p:confirmDialog>

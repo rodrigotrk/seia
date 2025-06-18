@@ -8,11 +8,12 @@
 	xmlns:c="http://java.sun.com/jsp/jstl/core">
 
 	<h:form id="formTipoVinculo"  style="margin-bottom:-20px;">
+        <ui:include src="/layout/csrfToken.xhtml" />
 		
 	<h:panelGrid rendered="#{identificarPapelController.showCadastranteConvenio and identificarPapelController.renderedCadastranteConvenioPCT}">
 		
 		<h:panelGrid>
-		<h:outputText value="* Escolha o convênio" />	
+		<h:outputText value="* Escolha o convÃªnio" />	
 			
 		</h:panelGrid>
 		
@@ -33,7 +34,7 @@
 		
 		<h:panelGrid>
 		<h:outputText
-			value="* Vinculo do cadastrante com a comunidade / território"
+			value="* Vinculo do cadastrante com a comunidade / territÃ³rio"
 			style="margin-bottom:10px;" />
 		</h:panelGrid>
 			
@@ -54,9 +55,9 @@
 		
 		<h:panelGrid id="vinculoText">
 			<h:panelGrid rendered="#{identificarPapelController.tipoVinculoPCT.dscTipoVinculoPCT eq 'Outros'}">
-				<h:outputText value="* Descriçao do vinculo do cadastrante com a comunidade / território" />
+				<h:outputText value="* DescriÃ§ao do vinculo do cadastrante com a comunidade / territÃ³rio" />
 				<p:inputText value="#{identificarPapelController.tipoVinculoPCT.dscTipoVinculoPCTOutros}" maxlength="100" size="80" required="true" 
-				requiredMessage="O campo Descriçao do vinculo do cadastrante com a comunidade / território é de preenchimento obrigatório">
+				requiredMessage="O campo DescriÃ§ao do vinculo do cadastrante com a comunidade / territÃ³rio Ã© de preenchimento obrigatÃ³rio">
 					<p:ajax event="keyup" process="@this" immediate="true" global="false"/>
 				</p:inputText>
 				<p:spacer height="10"/>
@@ -64,10 +65,10 @@
 		</h:panelGrid>
 		
 		<h:panelGrid id="tipoPessoa">
-			<h:outputText value="* O representante da comunidade é:" />
+			<h:outputText value="* O representante da comunidade Ã©:" />
 			<p:selectOneRadio value="#{identificarPapelController.tipoPessoa}">
-				<f:selectItem itemLabel="Pessoa Física" itemValue="fisica"/>
-				<f:selectItem itemLabel="Pessoa Jurídica" itemValue="juridica"/>
+				<f:selectItem itemLabel="Pessoa FÃ­sica" itemValue="fisica"/>
+				<f:selectItem itemLabel="Pessoa JurÃ­dica" itemValue="juridica"/>
 				<p:ajax event="change" process="@this" update="panelidentificarpapel formavancar" listener="#{identificarPapelController.limpar()}"/>
 			</p:selectOneRadio>
 		</h:panelGrid>

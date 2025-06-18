@@ -9,12 +9,14 @@
 	
 	
 	<ui:define name="titulo-pagina">		
-		<h3> Consultar Pessoas Jurídicas</h3>		
+        <ui:include src="/layout/csrfToken.xhtml" />
+		<h:form id="idformpessoajuridicatabela" >
+        <ui:include src="/layout/csrfToken.xhtml" />		
 	</ui:define>
 	
 	<ui:define name="conteudo-principal">
 	
-		<p:dialog header="Histórico Alteração" widgetVar="dlgBuscaHistPessoaJuridica" modal="true"
+		<p:dialog header="HistÃ³rico AlteraÃ§Ã£o" widgetVar="dlgBuscaHistPessoaJuridica" modal="true"
          dynamic="false" id="dlgBuscaHistoricoPessoaJuridica"
          closable="true" draggable="true" 
          style="text-align:center;" height="600" width="850" resizable="false" position="center">
@@ -22,18 +24,18 @@
 	    </p:dialog>	
 	    
 		<h:form id="filtroPessoaJuridica" >
-			<h3><h:outputLabel styleClass="titulo-grupo" style="font-weight:bold;" value="INSTRUÇÕES" /></h3>
+			<h3><h:outputLabel styleClass="titulo-grupo" style="font-weight:bold;" value="INSTRUÃ‡Ã•ES" /></h3>
 			<p class="titulo-grupo">
-				- Para consultar uma ou mais pessoas, informe o(s) parâmetro(s) de consulta desejado(s) e clique no botão "Consultar".<br />
-				<h:outputText rendered="#{!contextoController.usuarioLogado.usuarioExterno}" value="- Para incluir uma nova pessoa jurídica, clique no botão &#34;Incluir Pessoa Jurídica&#34;."/>
+				- Para consultar uma ou mais pessoas, informe o(s) parÃ¢metro(s) de consulta desejado(s) e clique no botÃ£o "Consultar".<br />
+				<h:outputText rendered="#{!contextoController.usuarioLogado.usuarioExterno}" value="- Para incluir uma nova pessoa jurÃ­dica, clique no botÃ£o &#34;Incluir Pessoa JurÃ­dica&#34;."/>
 			</p>
 			<br />
-			<h3><h:outputLabel styleClass="titulo-grupo" style="font-weight:bold;" value="PARÂMETROS DA CONSULTA" /></h3>			
+			<h3><h:outputLabel styleClass="titulo-grupo" style="font-weight:bold;" value="PARÃ‚METROS DA CONSULTA" /></h3>			
 			<h:panelGrid columns="2" >
-				<h:outputText id="idtextrazaosocial" value="Razão Social" />
+				<h:outputText id="idtextrazaosocial" value="RazÃ£o Social" />
 				<h:outputText id="idtextcnpj" value="CNPJ" />
 				<p:inputText value="#{pessoaJuridicaController.razao}" style="width: 475px;" disabled="${!security.temAcesso('3.13.4')}"/>
-					<p:inputMask value="#{pessoaJuridicaController.cnpj}" mask="#{bundle.consultapj_msk_cnpj}"  style="width: 150px;" converterMessage="Cnpj inválido" disabled="${!security.temAcesso('3.13.4')}">
+					<p:inputMask value="#{pessoaJuridicaController.cnpj}" mask="#{bundle.consultapj_msk_cnpj}"  style="width: 150px;" converterMessage="Cnpj invÃ¡lido" disabled="${!security.temAcesso('3.13.4')}">
 					    <f:converter converterId="cnpjConverter"/>
 					    <f:validator validatorId="cnpjValidator"/> 
 				    </p:inputMask>
@@ -55,9 +57,9 @@
 				paginator="true"  paginatorPosition="bottom"  paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}" 
 				lazy="true" rows="8" emptyMessage="Nenhum registro encontrado." >					  
 					        <f:facet name="header">  
-					            Lista de Pessoas Jurídicas Cadastradas   
+					            Lista de Pessoas JurÃ­dicas Cadastradas   
 					        </f:facet>
-					        <p:column headerText="Razão Social" style="width: 475px;">  
+					        <p:column headerText="RazÃ£o Social" style="width: 475px;">  
 		            				<h:outputText value="#{pessoaJuridica.nomRazaoSocial}" />  
 		        			</p:column>    
 		        			<p:column headerText="CNPJ" style="width: 150px; text-align: center;">  
@@ -66,7 +68,7 @@
 		            				</h:outputText>  
 		        			</p:column>
 		        			
-		        			<p:column headerText="Ações"  style="text-align: center;">
+		        			<p:column headerText="AÃ§Ãµes"  style="text-align: center;">
 		        			<p:commandLink title="Visualizar" action="#{pessoaJuridicaController.prepararParaVisualizar()}" ajax="false" process="@this" rendered="${security.temAcesso('3.13.6')}">
 				          			 <h:graphicImage title="Visualizar" value="/resources/img/ico-pesquisa.png" />
 				                     <f:setPropertyActionListener value="#{pessoaJuridica}" target="#{pessoaJuridicaController.pessoaJuridicaSelecionada}" />
@@ -90,9 +92,10 @@
 				            
                     		<p:commandLink id="historicoAlteracaoPessoaJuridica"
                     			rendered="${security.temAcesso('3.12.6')}"
-								title="Pesquisar histórico de alteração"
+        <ui:include src="/layout/csrfToken.xhtml" />
+								title="Pesquisar histÃ³rico de alteraÃ§Ã£o"
 								oncomplete="dlgBuscaHistPessoaJuridica.show();">
-								<h:graphicImage title="Pesquisar histórico de alteração" value="/resources/img/ico-mnp.gif" />
+								<h:graphicImage title="Pesquisar histÃ³rico de alteraÃ§Ã£o" value="/resources/img/ico-mnp.gif" />
 								<f:setPropertyActionListener target="#{procuradorRepresentanteController.pessoaJuridica}" value="#{pessoaJuridica}"/>
 							</p:commandLink>
 				            </p:column>		    

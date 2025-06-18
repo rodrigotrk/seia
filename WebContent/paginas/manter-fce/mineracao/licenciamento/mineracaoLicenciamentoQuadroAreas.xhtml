@@ -6,6 +6,7 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:p="http://primefaces.prime.com.tr/ui">
 	<h:form id="minLicQuadroAreas">
+        <ui:include src="/layout/csrfToken.xhtml" />
 
 		<h:panelGrid id="gridAreaDnpm" style="margin-left:10px;">
 			<h:outputText styleClass="titulo-grupo-bold" value="* #{bundle.fce_lic_min_informacao_area_dnpm}" />
@@ -28,18 +29,18 @@
 				rendered="#{fceLicenciamentoMineracaoController.processoDnpmAdicionado}">
 				<p:column style="width: 100px; text-align:center; vertical-align: middle;">
 					<f:facet name="header">
-						Número do<br/>Processo
+						NÃºmero do<br/>Processo
 					</f:facet>
 					<h:outputText value="#{processoDnpm.numProcessoDnpm}" />
 				</p:column>
 				
-				<p:column style="width: 160px; vertical-align: middle;" headerText="Área (ha)">
+				<p:column style="width: 160px; vertical-align: middle;" headerText="Ãrea (ha)">
 					<p:inputText value="#{processoDnpm.areaProcessoDnpm}" onblur="mascararNumeroAndAddZeros(this, event, 9, 4, '.', ',', 3);" maxlength="13" disabled="#{true}">
 						<f:convertNumber integerOnly="false" maxIntegerDigits="9" maxFractionDigits="4"/>
 					</p:inputText>
 				</p:column>
 				
-				<p:column style="width: 40px; text-align:center; vertical-align: middle;" headerText="Ação">
+				<p:column style="width: 40px; text-align:center; vertical-align: middle;" headerText="AÃ§Ã£o">
 					<h:panelGroup>
 						<p:commandLink style="cursor: pointer; margin-left:5px;"
 							onclick='javascript:${fceLicenciamentoMineracaoController.visualizarLocalizacao(processoDnpm.ideLocalizacaoGeografica)}'
@@ -83,7 +84,7 @@
 				</p:commandLink>
 				
 				<h:panelGrid id="gridAreaLavra" columns="5" rendered="#{fceLicenciamentoMineracaoController.poligonalAreaEfetivaLavraSalva}">
-					<h:outputText value="Área" />
+					<h:outputText value="Ãrea" />
 					<p:inputText value="#{fceLicenciamentoMineracaoController.fceLicenciamentoMineral.areaDeLavra}"
 						style="width:100px; margin-left:5px;"
 						disabled="true">
@@ -129,7 +130,7 @@
 				<h:outputText value="#{bundle.fce_lic_min_incluir_shape}" style="cursor: initial;" />
 			</p:commandLink>
 			<h:panelGrid id="gridAreaServidao" columns="5" rendered="#{fceLicenciamentoMineracaoController.poligonalAreaServidaoSalva}">
-				<h:outputText value="Área" />
+				<h:outputText value="Ãrea" />
 				<p:inputText value="#{fceLicenciamentoMineracaoController.fceLicenciamentoMineral.areaDeServidao}"
 					style="width:100px; margin-left:5px;"
 					disabled="true">
@@ -155,7 +156,7 @@
 		<!-- PANELGRID BOTOES -->
 		<h:panelGrid id="gridBotoes" rendered="#{!fceLicenciamentoMineracaoController.desabilitarTudo}" columns="2" style="margin-top:40px; margin-left:575px;">
 			<p:commandButton id="btnVoltar" value="Voltar"  style="width:90px;" update="tabLicMineracao" action="#{fceLicenciamentoMineracaoController.voltarAba()}" global="false"/>
-			<p:commandButton id="btnAvancar" value="Avançar" style="width:90px;" update="tabLicMineracao" process="minLicQuadroAreas" action="#{fceLicenciamentoMineracaoController.avancarAba()}" /> 
+			<p:commandButton id="btnAvancar" value="AvanÃ§ar" style="width:90px;" update="tabLicMineracao" process="minLicQuadroAreas" action="#{fceLicenciamentoMineracaoController.avancarAba()}" /> 
 		</h:panelGrid>
 		<!-- FIM DO PANELGRID BOTOES -->
 	</h:form>

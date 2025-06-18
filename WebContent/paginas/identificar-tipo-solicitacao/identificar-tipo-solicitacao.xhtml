@@ -14,6 +14,7 @@
 	
 		<p:dialog widgetVar="dlgInformaProcessoConcluido" header="Processo no INEMA" height="120" width="270" modal="true" resizable="false">
 			<h:form id="frmDlgInformarProcessoConcluido">
+        <ui:include src="/layout/csrfToken.xhtml" />
 				<h:panelGrid>
 					<h:panelGrid columns="2">
 						<h:outputText value="*1. Informe o número do processo" />
@@ -38,6 +39,7 @@
 
 		<h:panelGrid id="panelidentificartiposolicitacao">
 			<h:form id="formGeral" style="margin: 3px 0;">
+        <ui:include src="/layout/csrfToken.xhtml" />
 
 				<p:selectOneRadio value="#{identificarTipoSolicitacaoController.indiceTela}" layout="pageDirection"
 				disabled="#{identificarTipoSolicitacaoController.desabilitarTudo or identificarTipoSolicitacaoController.salvoParcialmente or identificarTipoSolicitacaoController.modoEdicao}">
@@ -149,6 +151,7 @@
 			</h:form>
 			
 			<h:form id="formEndereco" rendered="#{!urlReqUnicoController.bloqueiaEndContatoTemporario}">
+        <ui:include src="/layout/csrfToken.xhtml" />
 				<h:panelGroup>
 					<h:selectBooleanCheckbox value="#{identificarTipoSolicitacaoController.enderecoContato}"  disabled="#{(identificarTipoSolicitacaoController.desabilitarTudo or urlReqUnicoController.disableImovelRural ) or urlReqUnicoController.bloqueiaEndContatoTemporario or identificarTipoSolicitacaoController.modoEdicao}">
 						<f:ajax execute="@this" render="formEndereco" listener="#{enderecoController.limparEndereco()}"/>
@@ -279,6 +282,7 @@
 			</h:form>
 			
 			<h:form id="formavancar">
+        <ui:include src="/layout/csrfToken.xhtml" />
 				<h:panelGrid columns="4">
 					<h:outputText style="padding-right: 620px;" />
 					<h:outputText />

@@ -6,13 +6,14 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:p="http://primefaces.prime.com.tr/ui">
 	
-	<p:dialog id="dialogIntervencaoCorpoHidrico" widgetVar="dialogIntervencaoCorpoHidrico" header="IntervenÁ„o" dynamic="true" modal="true" resizable="false" height="450" width="630" position="center">
+        <ui:include src="/layout/csrfToken.xhtml" />
+	<p:dialog id="dialogIntervencaoCorpoHidrico" widgetVar="dialogIntervencaoCorpoHidrico" header="Interven√ß√£o" dynamic="true" modal="true" resizable="false" height="450" width="630" position="center">
 	
-		<h:outputText value="InstruÁıes para solicitaÁ„o de IntervenÁ„o:" />
+		<h:outputText value="Instru√ß√µes para solicita√ß√£o de Interven√ß√£o:" />
 		<br />
 		<p:spacer width="0" height="10" />
 		<div style="font-weight:bold;">
-			Para cada intervenÁ„o que deseje solicitar dever· preencher o formul·rio abaixo.
+			Para cada interven√ß√£o que deseje solicitar dever√° preencher o formul√°rio abaixo.
 		</div>
 	
 		<h:form id="formIntervencaoCorpoHidrico">
@@ -20,7 +21,7 @@
 				
 				<h:panelGrid>
 					<h:panelGroup>
-						<h:outputText value="* 1. Selecione o tipo de intervenÁ„o em corpo hÌdrico que ser· realizado:" />
+						<h:outputText value="* 1. Selecione o tipo de interven√ß√£o em corpo h√≠drico que ser√° realizado:" />
 					</h:panelGroup>
 					
 					<p:selectOneMenu id="oneRadioIntervencaoCorpoHidrico" layout="pageDirection" converter="simpleEntityConverter" value="#{intervencaoController.outorgaLocalizacaoGeografica.tipoIntervencaoPai}"
@@ -31,7 +32,7 @@
 					</p:selectOneMenu>
 					
 					<h:panelGrid rendered="#{not empty intervencaoController.tiposIntervencaoFilhos}">
-						<h:outputText value="* 1.1 Selecione o tipo de intervenÁ„o em corpo hÌdrico que ser· realizado:" />
+						<h:outputText value="* 1.1 Selecione o tipo de interven√ß√£o em corpo h√≠drico que ser√° realizado:" />
 						<p:selectOneMenu id="oneRadioIntervencaoCorpoHidricoFilhos" layout="pageDirection" converter="simpleEntityConverter" value="#{intervencaoController.outorgaLocalizacaoGeografica.tipoIntervencao}"
 										 valueChangeListener="#{intervencaoController.valueChangeTipoIntervencao()}" disabled="#{novoRequerimentoController.desabilitarTudo}" style="width:300px">
 							<f:selectItem itemLabel="Selecione..." />
@@ -42,13 +43,13 @@
 					
 					<h:panelGrid rendered="#{not empty intervencaoController.outorgaLocalizacaoGeografica.tipoIntervencao}">
 						<h:panelGrid columns="3">
-							<h:outputText value="* 2. Informe o nome da IntervenÁ„o:" />
-							<p:inputText id="inpNomeIntervencao" value="#{intervencaoController.outorgaLocalizacaoGeografica.nomIntervencao}" validatorMessage="O campo nome da intervenÁao deve ser preenchido."
+							<h:outputText value="* 2. Informe o nome da Interven√ß√£o:" />
+							<p:inputText id="inpNomeIntervencao" value="#{intervencaoController.outorgaLocalizacaoGeografica.nomIntervencao}" validatorMessage="O campo nome da interven√ßao deve ser preenchido."
 										 style="width: 300px" maxlength="50" disabled="#{novoRequerimentoController.desabilitarTudo}"/>
 						</h:panelGrid>
 						
 						<h:panelGroup>
-							<h:outputText value="* 3. Informe a localizaÁ„o geogr·fica da intervenÁ„o:"/>
+							<h:outputText value="* 3. Informe a localiza√ß√£o geogr√°fica da interven√ß√£o:"/>
 							<h:panelGroup id="intervencao_localizacao">
 								<h:panelGrid>
 									<p:outputPanel autoUpdate="true">
@@ -82,7 +83,7 @@
 										
 										<!-- GRID PONTO INICIAL -->
 										<p:dataTable var="localizacao" value="#{intervencaoController.outorgaLocalizacaoGeografica.ideLocalizacaoGeografica}" rendered="#{intervencaoController.outorgaLocalizacaoGeografica.ideLocalizacaoGeografica.ideLocalizacaoGeografica != null}">
-											<p:column headerText="Ponto de ReferÍncia">
+											<p:column headerText="Ponto de Refer√™ncia">
 												<h:outputText value="#{localizacao.desLocalizacaoGeografica}" />
 											</p:column>
 											<p:column headerText="Fonte da Coordenada">
@@ -91,14 +92,14 @@
 											<p:column headerText="Sistema de Coordenadas">
 												<h:outputText value="#{localizacao.nomeSistemaCoordenadas()}" />
 											</p:column>
-											<p:column headerText="AÁıes">
+											<p:column headerText="A√ß√µes">
 										
 												<p:commandLink oncomplete="dlgLocalizacaoGeograficaGeneric.show();" process="@this" action="#{localizacaoGeograficaGenericController.visualizarLocalizacaoGeografica()}" >
 													<f:setPropertyActionListener target="#{intervencaoController.outorgaLocalizacaoGeografica.localizacaoFinal}" value="#{false}" />
 													<f:setPropertyActionListener target="#{localizacaoGeograficaGenericController.localizacaoGeograficaSelecionada}" value="#{intervencaoController.outorgaLocalizacaoGeografica.ideLocalizacaoGeografica}" />
 													<f:setPropertyActionListener target="#{localizacaoGeograficaGenericController.objetoLocalizacao}" value="#{intervencaoController.outorgaLocalizacaoGeografica}" />
 													<f:setPropertyActionListener target="#{localizacaoGeograficaGenericController.empreendimento}" value="#{novoRequerimentoController.empreendimento}" />
-													<h:graphicImage title="Visualizar localizaÁ„o no GeoBahia" value="/resources/img/ico-pesquisa.png" />
+													<h:graphicImage title="Visualizar localiza√ß√£o no GeoBahia" value="/resources/img/ico-pesquisa.png" />
 												</p:commandLink>
 												
 												<p:commandLink disabled="#{novoRequerimentoController.desabilitarTudo}" oncomplete="dlgLocalizacaoGeograficaGeneric.show();" process="@this" action="#{localizacaoGeograficaGenericController.editarLocalizacaoGeografica()}"  >
@@ -107,14 +108,14 @@
 													<f:setPropertyActionListener target="#{localizacaoGeograficaGenericController.localizacaoGeograficaSelecionada}" value="#{intervencaoController.outorgaLocalizacaoGeografica.ideLocalizacaoGeografica}" />
 													<f:setPropertyActionListener target="#{localizacaoGeograficaGenericController.objetoLocalizacao}" value="#{intervencaoController.outorgaLocalizacaoGeografica}" />
 													<f:setPropertyActionListener target="#{localizacaoGeograficaGenericController.empreendimento}" value="#{novoRequerimentoController.empreendimento}" />
-													<h:graphicImage title="Editar localizaÁ„o geogr·fica" value="/resources/img/ico-editar.png" />
+													<h:graphicImage title="Editar localiza√ß√£o geogr√°fica" value="/resources/img/ico-editar.png" />
 												</p:commandLink>
 												
 												<p:commandLink disabled="#{novoRequerimentoController.desabilitarTudo}" oncomplete="confirmaExclusaoLocGeoDeOutorga.show();" process="@this" >
 													<f:setPropertyActionListener target="#{localizacaoGeograficaGenericController.localizacaoGeograficaSelecionada}" value="#{intervencaoController.outorgaLocalizacaoGeografica.ideLocalizacaoGeografica}" />
 													<f:setPropertyActionListener target="#{localizacaoGeograficaGenericController.objetoLocalizacao}" value="#{intervencaoController.outorgaLocalizacaoGeografica}" />
 													<f:setPropertyActionListener target="#{localizacaoGeograficaGenericController.empreendimento}" value="#{novoRequerimentoController.empreendimento}" />
-													<h:graphicImage title="Excluir localizaÁ„o geogr·fica" value="/resources/img/ico-excluir.png" />
+													<h:graphicImage title="Excluir localiza√ß√£o geogr√°fica" value="/resources/img/ico-excluir.png" />
 												</p:commandLink>
 											</p:column>
 										</p:dataTable>
@@ -138,7 +139,7 @@
 										
 										<!-- GRID PONTO FINAL -->
 										<p:dataTable var="localizacao" value="#{intervencaoController.outorgaLocalizacaoGeografica.ideLocalizacaoGeograficaFinal}" rendered="#{intervencaoController.outorgaLocalizacaoGeografica.ideLocalizacaoGeograficaFinal != null and intervencaoController.outorgaLocalizacaoGeografica.ideLocalizacaoGeograficaFinal.ideLocalizacaoGeografica != null}">
-											<p:column headerText="Ponto de ReferÍncia">
+											<p:column headerText="Ponto de Refer√™ncia">
 												<h:outputText value="#{localizacao.desLocalizacaoGeografica}" />
 											</p:column>
 											<p:column headerText="Fonte da Coordenada">
@@ -147,27 +148,27 @@
 											<p:column headerText="Sistema de Coordenadas">
 												<h:outputText value="#{localizacao.nomeSistemaCoordenadas()}" />
 											</p:column>
-											<p:column headerText="AÁıes">
+											<p:column headerText="A√ß√µes">
 										
 												<p:commandLink oncomplete="dlgLocalizacaoGeograficaGeneric.show();" process="@this" action="#{localizacaoGeograficaGenericController.visualizarLocalizacaoGeografica()}" >
 													<f:setPropertyActionListener target="#{intervencaoController.outorgaLocalizacaoGeografica.localizacaoFinal}" value="#{true}" />
 													<f:setPropertyActionListener target="#{localizacaoGeograficaGenericController.localizacaoGeograficaSelecionada}" value="#{intervencaoController.outorgaLocalizacaoGeografica.ideLocalizacaoGeograficaFinal}" />
 													<f:setPropertyActionListener target="#{localizacaoGeograficaGenericController.objetoLocalizacao}" value="#{intervencaoController.outorgaLocalizacaoGeografica}" />
-													<h:graphicImage title="Visualizar localizaÁ„o no GeoBahia" value="/resources/img/ico-pesquisa.png" />
+													<h:graphicImage title="Visualizar localiza√ß√£o no GeoBahia" value="/resources/img/ico-pesquisa.png" />
 												</p:commandLink>
 												
 												<p:commandLink disabled="#{novoRequerimentoController.desabilitarTudo}" oncomplete="dlgLocalizacaoGeograficaGeneric.show();" process="@this" action="#{localizacaoGeograficaGenericController.editarLocalizacaoGeografica()}"  >
 													<f:setPropertyActionListener target="#{intervencaoController.outorgaLocalizacaoGeografica.localizacaoFinal}" value="#{true}" />
 													<f:setPropertyActionListener target="#{localizacaoGeograficaGenericController.localizacaoGeograficaSelecionada}" value="#{intervencaoController.outorgaLocalizacaoGeografica.ideLocalizacaoGeograficaFinal}" />
 													<f:setPropertyActionListener target="#{localizacaoGeograficaGenericController.objetoLocalizacao}" value="#{intervencaoController.outorgaLocalizacaoGeografica}" />
-													<h:graphicImage title="Editar localizaÁ„o geogr·fica" value="/resources/img/ico-editar.png" />
+													<h:graphicImage title="Editar localiza√ß√£o geogr√°fica" value="/resources/img/ico-editar.png" />
 												</p:commandLink>
 												
 												<p:commandLink disabled="#{novoRequerimentoController.desabilitarTudo}" oncomplete="confirmaExclusaoLocGeoDeOutorga.show();" process="@this" >
 													<f:setPropertyActionListener target="#{localizacaoGeograficaGenericController.localizacaoGeograficaSelecionada}" value="#{intervencaoController.outorgaLocalizacaoGeografica.ideLocalizacaoGeograficaFinal}" />
 													<f:setPropertyActionListener target="#{localizacaoGeograficaGenericController.objetoLocalizacao}" value="#{intervencaoController.outorgaLocalizacaoGeografica}" />
 													<f:setPropertyActionListener target="#{localizacaoGeograficaGenericController.empreendimento}" value="#{novoRequerimentoController.empreendimento}" />
-													<h:graphicImage title="Excluir localizaÁ„o geogr·fica" value="/resources/img/ico-excluir.png" />
+													<h:graphicImage title="Excluir localiza√ß√£o geogr√°fica" value="/resources/img/ico-excluir.png" />
 												</p:commandLink>
 											</p:column>
 										</p:dataTable>
@@ -176,7 +177,7 @@
 							</h:panelGroup>
 							<h:panelGrid id='pnl1211' rendered="#{!novoRequerimentoController.imovelUnico}">
 								<h:panelGroup>
-									<h:outputText value="4. Selecione o(s) imÛvel(is):" />
+									<h:outputText value="4. Selecione o(s) im√≥vel(is):" />
 								</h:panelGroup>	
 							
 								<h:panelGroup layout="block" style="height:75px; width:200px; overflow:auto; border:1px solid gray;margin-top:5px;">
@@ -193,14 +194,14 @@
 								<h:outputText value="#{intervencaoController.perguntaNR_A4_DINTERV_P4.idePergunta.dscPergunta}" />
 								<p:selectOneRadio id="oneRadioIntervencao" value="#{intervencaoController.perguntaNR_A4_DINTERV_P4.indResposta}" disabled="#{novoRequerimentoController.desabilitarTudo}">
 									<f:selectItem itemLabel="Sim" itemValue="true" />
-									<f:selectItem itemLabel="N„o" itemValue="false" />
+									<f:selectItem itemLabel="N√£o" itemValue="false" />
 									<p:ajax event="change" global="false" update="panelGridIntervencaoRendered" />
 								</p:selectOneRadio>
 							</h:panelGroup>
 						</h:panelGrid>
 					<h:panelGrid rendered="#{!intervencaoController.isEtapa2}">	
 						<h:panelGroup rendered="#{intervencaoController.outorgaLocalizacaoGeografica.tipoIntervencao.barragem}">
-							<h:outputText value="* 5. Informe o volume m·ximo acumulado:" />
+							<h:outputText value="* 5. Informe o volume m√°ximo acumulado:" />
 						</h:panelGroup>
 						<h:panelGroup rendered="#{intervencaoController.outorgaLocalizacaoGeografica.tipoIntervencao.barragem}">
 							<p:inputText onkeyup="maskIt(this, event, '999.999.999,99', true)" value="#{intervencaoController.outorgaLocalizacaoGeografica.numVolumeMaximoAcumulado}" disabled="#{novoRequerimentoController.desabilitarTudo}">
@@ -210,7 +211,7 @@
 						</h:panelGroup>
 					
 						<h:panelGroup rendered="#{intervencaoController.outorgaLocalizacaoGeografica.tipoIntervencao.barragem}">
-							<h:outputText value="* 6. Informe a ·rea inundada do reservatÛrio no nÌvel d'·gua m·ximo:" />
+							<h:outputText value="* 6. Informe a √°rea inundada do reservat√≥rio no n√≠vel d'√°gua m√°ximo:" />
 						</h:panelGroup>
 						<h:panelGroup rendered="#{intervencaoController.outorgaLocalizacaoGeografica.tipoIntervencao.barragem}">
 							<p:inputText onkeyup="maskIt(this, event, '99.999.999,99', true)" value="#{intervencaoController.outorgaLocalizacaoGeografica.numAreaInundadaReservatorio}" disabled="#{novoRequerimentoController.desabilitarTudo}">
@@ -220,7 +221,7 @@
 						</h:panelGroup>
 					
 						<h:panelGroup rendered="#{intervencaoController.outorgaLocalizacaoGeografica.tipoIntervencao.barragem}">
-							<h:outputText value="* 7. A barragem È de:" />
+							<h:outputText value="* 7. A barragem √© de:" />
 							<p:selectOneRadio id="oneRadioBarragem" layout="pageDirection" converter="simpleEntityConverter" value="#{intervencaoController.outorgaLocalizacaoGeografica.ideTipoBarragem}"
 								disabled="#{novoRequerimentoController.desabilitarTudo}">
 								<f:selectItems value="#{intervencaoController.tiposBarragem}" var="tipoBarragem" itemLabel="#{tipoBarragem.nomTipoBarragem}" itemValue="#{tipoBarragem}" />
@@ -260,7 +261,7 @@
 								</h:panelGroup>
 								<p:selectOneRadio value="#{intervencaoController.perguntaNR_A4_DINTERV_P41.indResposta}" disabled="#{novoRequerimentoController.desabilitarTudo}">
 									<f:selectItem itemLabel="Sim" itemValue="true" />
-									<f:selectItem itemLabel="N„o" itemValue="false" />
+									<f:selectItem itemLabel="N√£o" itemValue="false" />
 								</p:selectOneRadio>
 							
 								<h:panelGroup>
@@ -269,7 +270,7 @@
 								<p:selectOneRadio value="#{intervencaoController.perguntaNR_A4_DINTERV_P42.indResposta}" valueChangeListener="#{intervencaoController.valueChangePerguntaNR_A4_P12()}"
 									disabled="#{novoRequerimentoController.desabilitarTudo}">
 									<f:selectItem itemLabel="Sim" itemValue="true" />
-									<f:selectItem itemLabel="N„o" itemValue="false" />
+									<f:selectItem itemLabel="N√£o" itemValue="false" />
 									<p:ajax global="false" event="change" update="pngOpcAcimaTrue1" />
 								</p:selectOneRadio>
 							
@@ -281,7 +282,7 @@
 										<p:selectOneRadio value="#{intervencaoController.perguntaNR_A4_DINTERV_P421.indResposta}" valueChangeListener="#{intervencaoController.valueChangePerguntaNR_A4_DCAPSUP_P121()}"
 										disabled="#{novoRequerimentoController.desabilitarTudo}">
 											<f:selectItem itemLabel="Sim" itemValue="true" />
-											<f:selectItem itemLabel="N„o" itemValue="false" />
+											<f:selectItem itemLabel="N√£o" itemValue="false" />
 											<p:ajax global="false" event="change" update="formIntervencaoCorpoHidrico:pngOpcAcimaTrue2" />
 										</p:selectOneRadio>
 									</h:panelGroup>
@@ -295,14 +296,14 @@
 											<p:selectOneRadio value="#{intervencaoController.perguntaNR_A4_DINTERV_P4211.indResposta}" valueChangeListener="#{intervencaoController.valueChangePerguntaNR_A4_DCAPSUP_P1211()}" 
 												disabled="#{novoRequerimentoController.desabilitarTudo}">
 												<f:selectItem itemLabel="Sim" itemValue="true" />
-												<f:selectItem itemLabel="N„o" itemValue="false" />
+												<f:selectItem itemLabel="N√£o" itemValue="false" />
 												<p:ajax global="false" event="change" update="formIntervencaoCorpoHidrico:pngOpcAcimaTrue3 formIntervencaoCorpoHidrico:pngOpcAcimaTrue4" />
 											</p:selectOneRadio>
 											
 											<p:outputPanel id="pngOpcAcimaTrue3">
 												<h:panelGroup rendered="#{intervencaoController.perguntaNR_A4_DINTERV_P4211.indResposta}">
 													<h:panelGroup>
-														<h:outputText value="* 6.1.1.1. A barragem È de:" />
+														<h:outputText value="* 6.1.1.1. A barragem √© de:" />
 													</h:panelGroup>
 													<p:selectOneRadio value="#{intervencaoController.outorgaLocalizacaoGeografica.ideTipoBarragem}" converter="simpleEntityConverter" disabled="#{novoRequerimentoController.desabilitarTudo}">
 														<f:selectItems value="#{intervencaoController.tiposBarragem}" var="barragem" itemLabel="#{barragem.nomTipoBarragem}" itemValue="#{barragem}" />
@@ -315,7 +316,7 @@
 															<p:selectOneRadio value="#{intervencaoController.perguntaNR_A4_DINTERV_P42112.indResposta}" valueChangeListener="#{intervencaoController.valueChangePerguntaNR_A4_DCAPSUP_P12112()}"
 																disabled="#{novoRequerimentoController.desabilitarTudo}">
 																<f:selectItem itemLabel="Sim" itemValue="true" />
-																<f:selectItem itemLabel="N„o" itemValue="false" />
+																<f:selectItem itemLabel="N√£o" itemValue="false" />
 																<p:ajax global="false" update="formIntervencaoCorpoHidrico:pngOpcAcimaTrue5" />
 															</p:selectOneRadio>
 													
@@ -324,7 +325,7 @@
 															<p:outputPanel id="pngOpcAcimaTrue5">
 																<h:panelGroup rendered="#{intervencaoController.perguntaNR_A4_DINTERV_P42112.indResposta}">
 																	<h:panelGroup>
-																		<h:outputText value="* 6.1.1.2.1. Informe uma das duas opÁıes abaixo:" />
+																		<h:outputText value="* 6.1.1.2.1. Informe uma das duas op√ß√µes abaixo:" />
 																	</h:panelGroup>
 																	<p:selectOneRadio value="#{intervencaoController.dispensa}" valueChangeListener="#{intervencaoController.valueChangeOutorgaDispensa()}"
 																		disabled="#{novoRequerimentoController.desabilitarTudo}">
@@ -334,8 +335,8 @@
 																	</p:selectOneRadio>
 																	<p:outputPanel id="outCapSuper">
 																		<h:panelGrid id="pnlOpcOutorga" columns="2" width="480px" rendered="#{not empty intervencaoController.dispensa and not intervencaoController.dispensa}">
-																			<h:outputText value="* 6.1.1.2.1.1. N˙mero de Portaria" />
-																			<h:outputText value="* 6.1.1.2.1.2. Data de publicaÁ„o da Portaria" />
+																			<h:outputText value="* 6.1.1.2.1.1. N√∫mero de Portaria" />
+																			<h:outputText value="* 6.1.1.2.1.2. Data de publica√ß√£o da Portaria" />
 																			<p:inputText value="#{intervencaoController.outorgaLocalizacaoGeografica.numPortariaBarragem}" disabled="#{novoRequerimentoController.desabilitarTudo}"/>
 																			<h:panelGroup>
 																				<p:calendar id="dataPublicPortDialogCapSuper" maxdate="#{novoRequerimentoController.dataHoje}" size="7" showOn="button" locale="pt"
@@ -345,8 +346,8 @@
 																			</h:panelGroup>
 																		</h:panelGrid>
 																		<h:panelGrid id="pnlOpcDispensa" columns="2" width="480px" rendered="#{intervencaoController.dispensa}">
-																			<h:outputText value="* 6.1.1.2.1.1. N˙mero de OfÌcio/DeclaraÁ„o" />
-																			<h:outputText value="* 6.1.1.2.1.2. Data de OfÌcio/DeclaraÁ„o" />
+																			<h:outputText value="* 6.1.1.2.1.1. N√∫mero de Of√≠cio/Declara√ß√£o" />
+																			<h:outputText value="* 6.1.1.2.1.2. Data de Of√≠cio/Declara√ß√£o" />
 																			<p:inputText value="#{intervencaoController.outorgaLocalizacaoGeografica.numOficio}" disabled="#{novoRequerimentoController.desabilitarTudo}"/>
 																			<h:panelGroup>
 																				<p:calendar id="dataOficioDialogCapSuper" maxdate="#{novoRequerimentoController.dataHoje}" size="7" showOn="button" locale="pt"
@@ -360,7 +361,7 @@
 																		<h:panelGroup rendered="#{intervencaoController.dispensa != null}">
 																		
 																			<h:panelGroup>
-																				<h:outputText value="* 6.1.1.2.1.3. N˙mero do Processo que outorgou / dispensou a construÁ„o da barragem." />
+																				<h:outputText value="* 6.1.1.2.1.3. N√∫mero do Processo que outorgou / dispensou a constru√ß√£o da barragem." />
 																			</h:panelGroup>
 																			<br />
 																			<br />
@@ -369,7 +370,7 @@
 																			</h:panelGroup>
 																			<br />
 																			<h:panelGroup>
-																				<h:outputText value="* 6.1.1.2.1.4. Informar o volume de acumulaÁ„o da barragem." />
+																				<h:outputText value="* 6.1.1.2.1.4. Informar o volume de acumula√ß√£o da barragem." />
 																			</h:panelGroup>
 																			<br />
 																			<br />
@@ -381,7 +382,7 @@
 																			</h:panelGroup>
 																			<br />
 																			<h:panelGroup>
-																				<h:outputText value="* 6.1.1.2.1.5. Informar ·rea de inundaÁ„o." />
+																				<h:outputText value="* 6.1.1.2.1.5. Informar √°rea de inunda√ß√£o." />
 																			</h:panelGroup>
 																			<br />
 																			<br />
@@ -427,7 +428,7 @@
 																							
 																					</p:column>
 																					<p:column style="text-align: center;">
-																						<f:facet name="header">AÁ„o</f:facet>
+																						<f:facet name="header">A√ß√£o</f:facet>
 																						<p:commandLink id="apagar" update="formIntervencaoCorpoHidrico:pngFinalidade" ajax="true" disabled="#{novoRequerimentoController.desabilitarTudo}">
 																							<h:graphicImage title="Apagar" value="/resources/img/ico-excluir.png" />
 																							<p:collector value="#{finalidade}" removeFrom="#{intervencaoController.outorgaLocalizacaoGeografica.listaFinalidadeUsoAgua}"/>
@@ -448,13 +449,13 @@
 										<h:panelGroup>
 											<h:panelGrid id="licencaBarragem" columns="3" rendered="#{intervencaoController.perguntaNR_A4_DINTERV_P421.indResposta}">
 												<h:panelGroup>
-													<h:outputText value="* 6.1.2. A barragem possui licenÁa ambiental?" />
+													<h:outputText value="* 6.1.2. A barragem possui licen√ßa ambiental?" />
 												</h:panelGroup>
 												<p:spacer width="30" height="8" />
-												<h:outputText value="* 6.1.2.1. Informe o n˙mero da portaria:" rendered="#{intervencaoController.perguntaNR_A4_DINTERV_P612.indResposta}" />
+												<h:outputText value="* 6.1.2.1. Informe o n√∫mero da portaria:" rendered="#{intervencaoController.perguntaNR_A4_DINTERV_P612.indResposta}" />
 												<p:selectOneRadio disabled="#{novoRequerimentoController.desabilitarTudo}" value="#{intervencaoController.perguntaNR_A4_DINTERV_P612.indResposta}">
 													<f:selectItem itemLabel="Sim" itemValue="true" />
-													<f:selectItem itemLabel="N„o" itemValue="false" />
+													<f:selectItem itemLabel="N√£o" itemValue="false" />
 													<p:ajax global="false" update="licencaBarragem" />
 												</p:selectOneRadio>
 												<p:spacer width="30" height="8" />
@@ -482,6 +483,7 @@
 	<p:confirmDialog id="confirmaExclusaoLocGeoDeOutorga" widgetVar="confirmaExclusaoLocGeoDeOutorga" header="#{bundle.geral_lbl_mensagem}" appendToBody="true"
 					 message="#{bundle.msg_confirma_exclusao}" severity="alert">
 		<h:form id="formConfirmaExclusaoLocGeoDeOutorga">
+        <ui:include src="/layout/csrfToken.xhtml" />
 			<div style="text-align: center;">
 				<p:commandButton actionListener="${localizacaoGeograficaGenericController.excluirLocGeo()}" 
 					 update="locGeografica localizacaoGeografica" onclick="confirmaExclusaoLocGeoDeOutorga.hide()" value="#{bundle.btn_sim}" id="btnConfirmaExclusaoLocGeoDeOutorga" />

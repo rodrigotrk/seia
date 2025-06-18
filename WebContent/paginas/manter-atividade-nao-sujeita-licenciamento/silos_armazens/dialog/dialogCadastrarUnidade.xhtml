@@ -13,6 +13,7 @@
 		style="top: 40px!important;left: 30% !important"
 		message="#{bundle.msg_confirma_exclusao}" severity="alert">
 		<h:form id="formConfirmaExclusaoLocGeografica">
+        <ui:include src="/layout/csrfToken.xhtml" />
 			<div style="text-align: center;">
 				<p:commandButton global="false"
 					id="btnConfirmaExclusaoLocGeografica"
@@ -30,22 +31,23 @@
 		position="center" resizable="false" draggable="true">
 		
 		<h:form id="formCadastrarUnidade">
+        <ui:include src="/layout/csrfToken.xhtml" />
 			<h:panelGrid columns="2">
 				
-				<h:outputText value="Identificação da unidade armazenadora" style="font-weight: bold;"/>
+				<h:outputText value="IdentificaÃ§Ã£o da unidade armazenadora" style="font-weight: bold;"/>
 				<p:inputText value="#{silosArmazensController.silosArmazensUnidadeArmazenadora.nomUnidadeArmazenadora}" size="50" disabled="#{silosArmazensController.isUnidadeEditavel}" maxlength="50"/>
 			</h:panelGrid>	
 			
 			<p:spacer height="10"/>
 			
 			<h:panelGrid columns="1">
-				<h:outputText value="Código CDA - Cadastro Nacional de Unidades Armazenadoras de Produtos Agrícolas" style="font-weight: bold;"/>
+				<h:outputText value="CÃ³digo CDA - Cadastro Nacional de Unidades Armazenadoras de Produtos AgrÃ­colas" style="font-weight: bold;"/>
 				<p:inputText value="#{silosArmazensController.silosArmazensUnidadeArmazenadora.codCda}" size="90" disabled="#{silosArmazensController.isUnidadeEditavel}" maxlength="30"/>
 			</h:panelGrid>
 			
 			<p:spacer height="10"/>
 			<h:panelGrid>
-			<h:outputText value="Espécie do armazém (Conforme o SICARM):" style="font-weight: bold;"/>
+			<h:outputText value="EspÃ©cie do armazÃ©m (Conforme o SICARM):" style="font-weight: bold;"/>
 				<p:selectOneRadio value="#{silosArmazensController.tipoEspecieArmazem}" valueChangeListener="#{silosArmazensController.carregarTipoArmazen()}" disabled="#{silosArmazensController.isUnidadeEditavel}">
 					<p:ajax event="change" />
 					<f:selectItems value="#{silosArmazensController.tipoEspecieArmazems}" var="tipo" itemLabel="#{tipo.nomTipoEspecieArmazem}" itemValue="#{tipo}"/>
@@ -57,7 +59,7 @@
 			<h:panelGroup id="panelTipoArmazem">
 			
 				<h:panelGrid rendered="#{not empty silosArmazensController.tipoEspecieArmazem.ideTipoEspecieArmazem}">
-				<h:outputText value="Tipo de armazém (Conforme o SICARM):" style="font-weight: bold;"/>
+				<h:outputText value="Tipo de armazÃ©m (Conforme o SICARM):" style="font-weight: bold;"/>
 					<p:selectOneRadio value="#{silosArmazensController.silosArmazensUnidadeArmazenadora.tipoArmazem}" disabled="#{silosArmazensController.isUnidadeEditavel}">
 						<f:selectItems value="#{silosArmazensController.tipoArmazems}" var="tipoEspecie" itemLabel="#{tipoEspecie.nomTipoArmazem}" itemValue="#{tipoEspecie}"/>
 						<f:converter converterId="simpleEntityConverter" />
@@ -67,7 +69,7 @@
 			
 			<p:spacer height="10"/>
 			<h:panelGrid columns="3">
-				<h:outputText value="Capacidade estática" style="font-weight: bold;"/>
+				<h:outputText value="Capacidade estÃ¡tica" style="font-weight: bold;"/>
 				<p:inputText value="#{silosArmazensController.silosArmazensUnidadeArmazenadora.valCapacidadeEstatica}" styleClass="campoNumericoComDecimal-2" disabled="#{silosArmazensController.isUnidadeEditavel}" maxlength="13">
 					<f:convertNumber minFractionDigits="2" locale="pt_BR"/>
 				</p:inputText>
@@ -76,7 +78,7 @@
 			
 			<p:spacer height="15"/>
 			<h:panelGrid>
-				<h:outputText value="Localização Geográfica" style="font-weight: bold;"/>
+				<h:outputText value="LocalizaÃ§Ã£o GeogrÃ¡fica" style="font-weight: bold;"/>
 				
 				<p:spacer height="10"/>
 				<p:commandLink oncomplete="dlgLocalizacaoGeograficaGeneric.show();" action="#{localizacaoGeograficaGenericController.carregarTela()}" 
@@ -87,7 +89,7 @@
 						<f:setPropertyActionListener target="#{localizacaoGeograficaGenericController.empreendimento}" value="#{silosArmazensController.empreendimento}"/>
 						<f:setPropertyActionListener target="#{localizacaoGeograficaGenericController.idDoComponenteParaSerAtualizado}" value="formCadastrarUnidade:gridLocalizacaoGeo"/>
 					<h:outputText
-							value="Incluir localização geográfica"
+							value="Incluir localizaÃ§Ã£o geogrÃ¡fica"
 							style="margin-right:5px;" />
 						<h:graphicImage value="/resources/img/ico-expandir.png" />
 				</p:commandLink>
@@ -106,7 +108,7 @@
 					<p:column headerText="Sistema de Coordenadas">
 						<h:outputText value="#{localizacao.ideSistemaCoordenada.nomSistemaCoordenada}" />
 					</p:column>
-					<p:column headerText="Ações">
+					<p:column headerText="AÃ§Ãµes">
 							<p:commandLink oncomplete="confirmaExclusaoLocGeografica.show();"
 								process="@this" disabled="#{silosArmazensController.isUnidadeEditavel}">
 								<h:graphicImage title="Excluir"

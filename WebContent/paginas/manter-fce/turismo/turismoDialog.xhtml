@@ -6,6 +6,7 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:p="http://primefaces.prime.com.tr/ui">
 	<h:form id="formTurismo">
+        <ui:include src="/layout/csrfToken.xhtml" />
 		<div align="center">
 			<h:outputText styleClass="titulo-grupo" style="font-weight:bold;" value="#{bundle.fce_tur_lulp}" rendered="#{!fceTurismoController.li}"/>
 			<h:outputText styleClass="titulo-grupo" style="font-weight:bold;" value="#{bundle.fce_tur_li}" rendered="#{fceTurismoController.li}"/>
@@ -31,7 +32,7 @@
 			<h:outputText value="#{bundle.fce_tur_plano_diretor}" rendered="#{fceTurismoController.temZonaUrbana}"/>
 			<p:selectOneRadio value="#{fceTurismoController.fceTurismo.indPlanoDiretor}" valueChangeListener="#{fceTurismoController.changePlanoDiretor()}" layout="pageDirection" style="margin-left:5px;" rendered="#{fceTurismoController.temZonaUrbana}" disabled="#{fceTurismoController.desabilitarTudo}">
 				<f:selectItem itemLabel="Sim" itemValue="true" />
-				<f:selectItem itemLabel="Não" itemValue="false" />
+				<f:selectItem itemLabel="NÃ£o" itemValue="false" />
 				<p:ajax global="false" update="expansaoUrbana" />
 			</p:selectOneRadio>
 			
@@ -133,7 +134,7 @@
 					<f:convertNumber integerOnly="false" minFractionDigits="2"/>
 					<p:ajax event="blur" global="false"/>
 				</p:inputText>
-				<h:outputText value="  (m²)" />
+				<h:outputText value="  (mÂ²)" />
 			</h:panelGrid>
 		</h:panelGrid>
 		
@@ -177,7 +178,7 @@
         <h:panelGrid id="dadoAdicional" style="margin-left:15px; margin-top: 15px; width:337px;">
 			<p:fileUpload id="btnUpload" widgetVar="btnUpload" label="Upload dos Dados Adicionais" fileUploadListener="#{envioDocumentoController.trataUploadDocumentoObrigatorioRequerimento}"
 				mode="advanced" oncomplete="updateDataTableDoc()" auto="true" allowTypes="/(\.|\/)(pdf|gif|jpeg|png|jpg)$/"
-				invalidFileMessage="Tipo de arquivo inválido."  process="@this"	disabled="#{envioDocumentoController.temArquivo}"/>
+				invalidFileMessage="Tipo de arquivo invÃ¡lido."  process="@this"	disabled="#{envioDocumentoController.temArquivo}"/>
 			<p:remoteCommand name="updateDataTableDoc" update="tblDoc btnUpload"/>
 			<p:dataTable id="dtDocumentos" rendered="#{envioDocumentoController.temArquivo}" widgetVar="dtDocumentos" value="#{envioDocumentoController.listaArquivo}" var="arquivo"
 						 lazy="true" emptyMessage="#{bundle.msg_lista_vazia}" style="width:333px;">

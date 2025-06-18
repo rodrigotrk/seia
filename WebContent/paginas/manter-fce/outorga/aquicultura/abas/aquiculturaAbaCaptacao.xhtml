@@ -6,12 +6,13 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:p="http://primefaces.prime.com.tr/ui">
 	<h:form id="formOutorgaAquiculturaAbaCaptacao">
+        <ui:include src="/layout/csrfToken.xhtml" />
 
 		<div style="width:350px; margin-left:265px; margin-bottom:15px;" align="center">
-			<h:outputText styleClass="titulo-grupo" style="font-weight:bold;" value="CAPTAÇÃO PARA FINS DE AQUICULTURA EM VIVEIRO - ESCAVADO, RACEWAY OU SIMILARES"/>
+			<h:outputText styleClass="titulo-grupo" style="font-weight:bold;" value="CAPTAÃ‡ÃƒO PARA FINS DE AQUICULTURA EM VIVEIRO - ESCAVADO, RACEWAY OU SIMILARES"/>
 		</div>
 		
-		<h:outputText styleClass="titulo-grupo" style="font-weight:bold;" value="* Coordenadas do ponto de captação Superficial" rendered="#{fceOutorgaAquiculturaCaptacaoController.pontoCaptacaoSuperficialPreenchido}"/>
+		<h:outputText styleClass="titulo-grupo" style="font-weight:bold;" value="* Coordenadas do ponto de captaÃ§Ã£o Superficial" rendered="#{fceOutorgaAquiculturaCaptacaoController.pontoCaptacaoSuperficialPreenchido}"/>
 
 		<h:panelGrid style="margin-left:30px;" rendered="#{fceOutorgaAquiculturaCaptacaoController.pontoCaptacaoSuperficialPreenchido}">
 		<p:dataTable id="tabelaPontosCaptacao" style="margin-top:10px; margin-bottom:15px;" emptyMessage="#{bundle.lac_dadosGerais_msg007}" value="#{fceOutorgaAquiculturaCaptacaoController.listaFceOutorgaLocalizacaoGeografica}" var="coordenada">
@@ -30,7 +31,7 @@
  		    	<h:outputText value="#{coordenada.sistemaCoordenada}"/>
  		    </p:column>
  		    
-  	 		    <p:column headerText="Bacia Hidrográfica" style="text-align:center;">
+  	 		    <p:column headerText="Bacia HidrogrÃ¡fica" style="text-align:center;">
  		    	<h:outputText value="#{coordenada.bacia}"/>
  		    </p:column>
  		    
@@ -44,7 +45,7 @@
  		    	</p:inputText>
  		    </p:column>
    		    
-			<p:column headerText="Ações" style="width:40px; text-align:center;">
+			<p:column headerText="AÃ§Ãµes" style="width:40px; text-align:center;">
 				<p:commandLink action="#{fceOutorgaAquiculturaCaptacaoController.confirmarCoordenada()}" disabled="#{fceOutorgaAquiculturaCaptacaoController.desabilitarTudo}"
 					rendered="#{!coordenada.confirmado}" global="false" update="aquiculturaAbas:formOutorgaAquiculturaAbaCaptacao:tabelaPontosCaptacao">
 					<h:graphicImage title="Confirmar nome do Rio" value="/resources/img/ico-aprovar-notificacao.png" />
@@ -56,16 +57,16 @@
 					<f:setPropertyActionListener target="#{fceOutorgaAquiculturaCaptacaoController.fceOutorgaLocalizacaoGeograficaSelecionado}" value="#{coordenada}"/>
 				</p:commandLink>
 				<p:commandLink rendered="#{!fceOutorgaAquiculturaCaptacaoController.fceTecnico}" onclick="javascript:${localizacaoGeograficaGenericController.retornarUrl(coordenada.ideOutorgaLocalizacaoGeografica.ideLocalizacaoGeografica)}">
-					<h:graphicImage title="Localização do Ponto no Geobahia" value="/resources/img/ico-arl-relocacao.png"/>
+					<h:graphicImage title="LocalizaÃ§Ã£o do Ponto no Geobahia" value="/resources/img/ico-arl-relocacao.png"/>
 	            </p:commandLink>
 				<p:commandLink rendered="#{fceOutorgaAquiculturaCaptacaoController.fceTecnico}" onclick="javascript:${localizacaoGeograficaGenericController.retornarUrl(coordenada.ideLocalizacaoGeografica)}">
-					<h:graphicImage title="Localização do Ponto no Geobahia" value="/resources/img/ico-arl-relocacao.png"/>
+					<h:graphicImage title="LocalizaÃ§Ã£o do Ponto no Geobahia" value="/resources/img/ico-arl-relocacao.png"/>
 	            </p:commandLink>
 			</p:column>
 		</p:dataTable> <!-- FIM DA DATATABLE COM OS PONTOS -->
 	</h:panelGrid> <!-- FIM DO PANEL GRID -->
 	
-	<h:outputText styleClass="titulo-grupo" style="font-weight:bold;" value="Coordenadas do ponto de captação Subterrânea" rendered="#{fceOutorgaAquiculturaCaptacaoController.pontoCaptacaoSubterranea}" />
+	<h:outputText styleClass="titulo-grupo" style="font-weight:bold;" value="Coordenadas do ponto de captaÃ§Ã£o SubterrÃ¢nea" rendered="#{fceOutorgaAquiculturaCaptacaoController.pontoCaptacaoSubterranea}" />
 	
 	<h:panelGrid style="margin-left:30px;" rendered="#{fceOutorgaAquiculturaCaptacaoController.pontoCaptacaoSubterranea}">
 		<p:dataTable id="tabelaPontosCaptacaoSubterranea" style="margin-top:10px; margin-bottom:15px;" emptyMessage="#{bundle.lac_dadosGerais_msg007}" value="#{fceOutorgaAquiculturaCaptacaoController.listaCaptacaoSubterranea}" var="coordenada">
@@ -84,7 +85,7 @@
  		    	<h:outputText value="#{coordenada.ideLocalizacaoGeografica.nomeSistemaCoordenadas}"/>
  		    </p:column>
  		    
-  	 		    <p:column headerText="Bacia Hidrográfica" style="text-align:center;">
+  	 		    <p:column headerText="Bacia HidrogrÃ¡fica" style="text-align:center;">
  		    	<h:outputText value="#{coordenada.ideLocalizacaoGeografica.baciaHidrografica}"/>
  		    </p:column>
  		    
@@ -92,9 +93,9 @@
  		    	<h:outputText value="#{coordenada.ideLocalizacaoGeografica.subBacia}"/>
  		    </p:column>
  		    
-			<p:column headerText="Ações" style="width:40px; text-align:center;">
+			<p:column headerText="AÃ§Ãµes" style="width:40px; text-align:center;">
 				<p:commandLink onclick="javascript:${localizacaoGeograficaGenericController.retornarUrl(coordenada.ideLocalizacaoGeografica)}">
-					<h:graphicImage title="Localização do Ponto no Geobahia" value="/resources/img/ico-arl-relocacao.png"/>
+					<h:graphicImage title="LocalizaÃ§Ã£o do Ponto no Geobahia" value="/resources/img/ico-arl-relocacao.png"/>
 	            </p:commandLink>
 			</p:column>
 		</p:dataTable> <!-- FIM DA DATATABLE COM OS PONTOS -->
@@ -113,7 +114,7 @@
 					</f:facet>
 					<h:outputText value="#{aquiculturaTipoAtividade.nomAquiculturaTipoAtividade}" />
 				</p:column>
-				<p:column style="width: 35px; text-align:center;" headerText="Ações">		
+				<p:column style="width: 35px; text-align:center;" headerText="AÃ§Ãµes">		
 					<p:commandLink title="Adicionar" process="@this" action="#{fceOutorgaAquiculturaCaptacaoController.adicionarTipoAtividade()}" 
 					oncomplete="updateTipoAtividadeCaptacao();" global="false" immediate="true" disabled="#{fceOutorgaAquiculturaCaptacaoController.desabilitarTudo}">
 						<h:graphicImage title="Adicionar Tipo Atividade" value="/resources/img/ico-adicionar.png"/>
@@ -138,7 +139,7 @@
 						<h:outputText value="#{tipoAtividade.nomAquiculturaTipoAtividade}"/>
 					</h:panelGroup>
 				</p:column>
-				<p:column headerText="Espécie(s)" style="text-align:justify; border-style:hidden;">
+				<p:column headerText="EspÃ©cie(s)" style="text-align:justify; border-style:hidden;">
 					<h:panelGroup id="groupEspecie" layout="block" style="height:90px; width:325px; overflow:auto;">
 						<p:selectManyCheckbox id="manyEspecie" value="#{tipoAtividade.listaEspecieAquiculturaTipoAtividadesSelected}"
 							converter="simpleEntityConverter" layout="pageDirection" 
@@ -152,11 +153,11 @@
 						</p:selectManyCheckbox>
 					</h:panelGroup>
 				</p:column >
-				<p:column headerText="Ações" style="width: 35px; text-align:center;" rendered="#{!fceOutorgaAquiculturaCaptacaoController.existeTipologiaFromEtapa7}">
+				<p:column headerText="AÃ§Ãµes" style="width: 35px; text-align:center;" rendered="#{!fceOutorgaAquiculturaCaptacaoController.existeTipologiaFromEtapa7}">
 					<p:commandLink process="@this" global="false" oncomplete="confirmaExclusaoFceAquiculturaEspecieCaptacao.show()" disabled="#{fceOutorgaAquiculturaCaptacaoController.desabilitarTudo}">
 						<h:graphicImage title="Excluir Tipo Atividades" value="/resources/img/ico-excluir.png" />
 						<f:setPropertyActionListener target="#{fceOutorgaAquiculturaCaptacaoController.tipoAtividadeSelecionado}" value="#{tipoAtividade}"/>
-					</p:commandLink> <!-- EXCLUSÃO -->
+					</p:commandLink> <!-- EXCLUSÃƒO -->
 				</p:column>
 			</p:dataTable>
 		</h:panelGrid>
@@ -166,13 +167,13 @@
 	<h:panelGrid id="gridDerivacao" style="margin-left:30px; margin-bottom:15px;">
 		<p:selectOneRadio style="width:120px; margin-top:10px;" layout="pageDirection" value="#{fceOutorgaAquiculturaCaptacaoController.fceAquiculturaCaptacao.ideTipoPeriodoDerivacao}" 
 		converter="simpleEntityConverter" disabled="#{fceOutorgaAquiculturaCaptacaoController.desabilitarTudo}" valueChangeListener="#{fceOutorgaAquiculturaCaptacaoController.changePeriodoDerivacao()}"
-		required="true" requiredMessage="O período de derivação #{bundle.msg_generica_preenchimento_obrigatorio}"> 
+		required="true" requiredMessage="O perÃ­odo de derivaÃ§Ã£o #{bundle.msg_generica_preenchimento_obrigatorio}"> 
         	<f:selectItems value="#{fceOutorgaAquiculturaCaptacaoController.listaTipoPeriodoDerivacao}" var="periodo" itemLabel="#{periodo.dscTipoPeriodoDerivacao}" itemValue="#{periodo}"/> 
         	<p:ajax global="false" update="gridDerivacao"/>
     	</p:selectOneRadio>
     	
 		<h:panelGroup rendered="#{fceOutorgaAquiculturaCaptacaoController.tipoPeriodoDerivacaoIntermitente}" style="margin-left:40px;">
-			<h:outputText value="Tempo de Captação   "/>
+			<h:outputText value="Tempo de CaptaÃ§Ã£o   "/>
 			<p:inputText id="tempoCapSuper" value="#{fceOutorgaAquiculturaCaptacaoController.fceAquiculturaCaptacao.numTempoCaptacao}" disabled="#{fceOutorgaAquiculturaCaptacaoController.desabilitarTudo}"
 			onkeyup="SomenteNumero(this);" converter="integerConverter" style="width:20px;" maxlength="2">
 				<p:ajax event="blur" global="false"/>
@@ -183,7 +184,7 @@
 		
 	<h:outputText styleClass="titulo-grupo" style="font-weight:bold;" value="* Dados sobre o cultivo" />
 	<h:panelGrid style="margin-left:30px; margin-top:10px; margin-bottom:15px;" columns="4">
-		<h:outputText value="Nº de viveiros   " />
+		<h:outputText value="NÂº de viveiros   " />
 		<p:inputText value="#{fceOutorgaAquiculturaCaptacaoController.fceAquiculturaCaptacao.numViveiro}" disabled="#{fceOutorgaAquiculturaCaptacaoController.desabilitarTudo}"
 		onkeyup="mascararNumeroAndAddZeros(this, event, 9, 0, '.', ',', 3);" maxlength="11" style="width:100px;">
 			<f:convertNumber integerOnly="true" />
@@ -191,7 +192,7 @@
 		</p:inputText>
 		<h:outputText value="   (unid)"/>
 		<p:spacer/>
-		<h:outputText value="Área total ocupada pelo cultivo   " />
+		<h:outputText value="Ãrea total ocupada pelo cultivo   " />
 		<p:inputText value="#{fceOutorgaAquiculturaCaptacaoController.fceAquiculturaCaptacao.numAreaTotalOcupada}" disabled="#{fceOutorgaAquiculturaCaptacaoController.desabilitarTudo}"
 		onkeyup="mascararNumeroAndAddZeros(this, event, 9, 4, '.', ',', 3);"  maxlength="16" style="width:100px;">
 			<f:convertNumber integerOnly="false" minFractionDigits="4"/>
@@ -205,9 +206,9 @@
 			<f:convertNumber integerOnly="false" minFractionDigits="2"/>
 			<p:ajax event="blur" global="false"/>
 		</p:inputText>
-		<h:outputText value="   (m³)"/>
+		<h:outputText value="   (mÂ³)"/>
 		<p:spacer/>
-		<h:outputText value="Produção anual do cultivo   " />
+		<h:outputText value="ProduÃ§Ã£o anual do cultivo   " />
 		<p:inputText value="#{fceOutorgaAquiculturaCaptacaoController.fceAquiculturaCaptacao.numProducaoCultivoAnual}" disabled="#{fceOutorgaAquiculturaCaptacaoController.desabilitarTudo}"
 		onkeyup="mascararNumeroAndAddZeros(this, event, 9, 2, '.', ',', 3);"  maxlength="14" style="width:100px;">
 			<f:convertNumber integerOnly="false" minFractionDigits="2"/>
@@ -215,26 +216,26 @@
 		</p:inputText>
 		<h:outputText value="   (t/ano)"/>
 		<p:spacer/>
-		<h:outputText value="Vazão requerida total   " />
+		<h:outputText value="VazÃ£o requerida total   " />
 		<p:inputText value="#{fceOutorgaAquiculturaCaptacaoController.numVazaoRequeridaTotal}" maxlength="14" style="width:100px;" disabled="true">
 			<f:convertNumber integerOnly="false" minFractionDigits="2"/>
 		</p:inputText>
-		<h:outputText value="   (m³/dia)"/>
+		<h:outputText value="   (mÂ³/dia)"/>
 		<h:panelGroup>
 			<h:graphicImage value="/resources/img/ico-ajuda.png" id="ajuda" style="margin: 1px 1px 2px 4px;" />
-			<p:tooltip for="ajuda" value="Vazão requerida informada no requerimento que engloba todos os usos relativos às captações" showEffect="fade" hideEffect="fade" />
+			<p:tooltip for="ajuda" value="VazÃ£o requerida informada no requerimento que engloba todos os usos relativos Ã s captaÃ§Ãµes" showEffect="fade" hideEffect="fade" />
 		</h:panelGroup>
 		
-		<h:outputText value="Vazão requerida para cultivo   " />
+		<h:outputText value="VazÃ£o requerida para cultivo   " />
 		<p:inputText value="#{fceOutorgaAquiculturaCaptacaoController.fceAquiculturaCaptacao.numVazaoRequerida}" disabled="#{fceOutorgaAquiculturaCaptacaoController.desabilitarTudo}"
 		onkeyup="mascararNumeroAndAddZeros(this, event, 9, 3, '.', ',', 3);"  maxlength="15" style="width:100px;">
 			<f:convertNumber integerOnly="false" minFractionDigits="3"/>
 			<p:ajax event="blur" global="false"/>
 		</p:inputText>
-		<h:outputText value="   (m³/dia)"/>
+		<h:outputText value="   (mÂ³/dia)"/>
 		<p:spacer/>
 		<!-- Inicio Campos novos -->
-		<h:outputText value="Profundidade média  " />
+		<h:outputText value="Profundidade mÃ©dia  " />
 		<p:inputText value="#{fceOutorgaAquiculturaCaptacaoController.fceAquiculturaCaptacao.profundidadeMedia}" disabled="#{fceOutorgaAquiculturaCaptacaoController.desabilitarTudo}"
 		onkeyup="mascararNumeroAndAddZeros(this, event, 9, 2, '.', ',', 3);"  maxlength="13" style="width:100px;">
 			<f:convertNumber integerOnly="false" minFractionDigits="2"/>
@@ -243,7 +244,7 @@
 		<h:outputText value="   (m)"/>
 		<p:spacer/>
 		
-		<h:outputText value="Taxa de renovação diária de água  " />
+		<h:outputText value="Taxa de renovaÃ§Ã£o diÃ¡ria de Ã¡gua  " />
 		<p:inputText value="#{fceOutorgaAquiculturaCaptacaoController.fceAquiculturaCaptacao.taxaRenovacaoDiariaAgua}" disabled="#{fceOutorgaAquiculturaCaptacaoController.desabilitarTudo}"
 		onkeyup="mascararNumeroAndAddZeros(this, event, 3, 2, '.', ',', 3);"  maxlength="13" style="width:100px;">
 			<f:convertNumber integerOnly="false" minFractionDigits="2"/>
@@ -252,7 +253,7 @@
 		<h:outputText value="   (%)"/>
 		<p:spacer/>
 		
-		<h:outputText value="N° de dias com renovação de água  " />
+		<h:outputText value="NÂ° de dias com renovaÃ§Ã£o de Ã¡gua  " />
 		<p:inputText value="#{fceOutorgaAquiculturaCaptacaoController.fceAquiculturaCaptacao.numDiasRenovacaoAgua}" disabled="#{fceOutorgaAquiculturaCaptacaoController.desabilitarTudo}"
 		onkeyup="mascararNumeroAndAddZeros(this, event, 3, 0, '.', ',', 3);" maxlength="3" style="width:100px;">
 			<!-- <f:convertNumber integerOnly="false" minFractionDigits="2"/> -->
@@ -267,7 +268,7 @@
 			<f:convertNumber integerOnly="false" minFractionDigits="2"/>
 			<p:ajax event="blur" global="false"/>
 		</p:inputText>
-		<h:outputText value="   (m³/dia)"/>
+		<h:outputText value="   (mÂ³/dia)"/>
 		<p:spacer/>
 		
 		<h:outputText value="Volume recirculado diariamente  " />
@@ -285,16 +286,16 @@
 			<!-- <f:convertNumber integerOnly="false" minFractionDigits="2"/> -->
 			<p:ajax event="blur" global="false"/>
 		</p:inputText>
-		<h:outputText value="   (n° vezes/ano)"/>
+		<h:outputText value="   (nÂ° vezes/ano)"/>
 		<p:spacer/>
 		
-		<h:outputText value="Área total de espelho d'água   " />
+		<h:outputText value="Ãrea total de espelho d'Ã¡gua   " />
 		<p:inputText value="#{fceOutorgaAquiculturaCaptacaoController.fceAquiculturaCaptacao.areaTotalEspelhoAgua}" disabled="#{fceOutorgaAquiculturaCaptacaoController.desabilitarTudo}"
 		onkeyup="mascararNumeroAndAddZeros(this, event, 9, 2, '.', ',', 3);"  maxlength="13" style="width:100px;" >
 			<f:convertNumber integerOnly="false" minFractionDigits="2"/>
 			<p:ajax event="blur" global="false"/>
 		</p:inputText>
-		<h:outputText value="   (m²)"/>
+		<h:outputText value="   (mÂ²)"/>
 		<p:spacer/>
 		
 		<h:outputText value="Volume total armazenado   " />
@@ -303,7 +304,7 @@
 			<f:convertNumber integerOnly="false" minFractionDigits="2"/>
 			<p:ajax event="blur" global="false"/>
 		</p:inputText>
-		<h:outputText value="   (m³)"/>
+		<h:outputText value="   (mÂ³)"/>
 		<p:spacer/>
 		
 		<!-- Fim Campos novos -->
@@ -320,15 +321,15 @@
     		<p:column style="text-align:center; width:200px;" headerText="Sistema de Coordenada">
  		    	<h:outputText value="#{fceAquiculturaLocGeo.ideLocalizacaoGeografica.ideSistemaCoordenada.nomSistemaCoordenada}"/>
  		    </p:column>
-			<p:column headerText="Ações" style="width:40px; text-align:center;">
+			<p:column headerText="AÃ§Ãµes" style="width:40px; text-align:center;">
 				<a onclick='javascript:${fceOutorgaAquiculturaCaptacaoController.getUrlToVisualizar(fceAquiculturaLocGeo.ideLocalizacaoGeografica)}' accesskey="VISUALIZAR GEOBAHIA" style="cursor: pointer;" >
-					<h:graphicImage title="Localização da Poligonal no Geobahia" value="/resources/img/ico-arl-relocacao.png"/>
+					<h:graphicImage title="LocalizaÃ§Ã£o da Poligonal no Geobahia" value="/resources/img/ico-arl-relocacao.png"/>
 				</a>
 				<p:commandLink onclick="confirmaExclusaoPoligonal.show()" global="false" disabled="#{fceOutorgaAquiculturaCaptacaoController.desabilitarTudo}"
 				action="#{fceOutorgaAquiculturaCaptacaoController.prepararExclusaoDePoligonal()}">
 					<h:graphicImage title="Excluir" value="/resources/img/ico-excluir.png" />
 					<f:setPropertyActionListener target="#{fceOutorgaAquiculturaCaptacaoController.poligonalSelecionado}" value="#{fceAquiculturaLocGeo}"/>
-				</p:commandLink> <!-- EXCLUSÃO -->
+				</p:commandLink> <!-- EXCLUSÃƒO -->
 			</p:column>
     	</p:dataTable>
 	</p:outputPanel>
@@ -340,7 +341,7 @@
 				process="formOutorgaAquiculturaAbaCaptacao"
 				actionListener="#{fceOutorgaAquiculturaCaptacaoController.voltarAba()}"
 				global="false" />
-			<p:commandButton id="btnAvancar" value="Avançar" style="width:90px;"
+			<p:commandButton id="btnAvancar" value="AvanÃ§ar" style="width:90px;"
 				update="aquiculturaAbas" process="formOutorgaAquiculturaAbaCaptacao"
 				actionListener="#{fceOutorgaAquiculturaCaptacaoController.avancarAba()}"
 				global="false" />

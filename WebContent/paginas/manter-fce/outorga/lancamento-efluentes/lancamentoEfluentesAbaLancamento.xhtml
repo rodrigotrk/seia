@@ -6,13 +6,14 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:p="http://primefaces.prime.com.tr/ui">
 	<h:form id="formLancamento">
+        <ui:include src="/layout/csrfToken.xhtml" />
 
 		<h:outputText styleClass="titulo-grupo" style="font-weight:bold; margin-left:10px;" value="* Dados do Efluente" />
 		<br /><br />
 		
 		<h:panelGrid id="checkBoxCaracterizacaoEfluente" style="margin-left:20px;">
 		<br />
-			<h:outputText value="Caracterização do Efluente" />
+			<h:outputText value="CaracterizaÃ§Ã£o do Efluente" />
 			<p:selectManyCheckbox layout="pageDirection" converter="simpleEntityConverter" value="#{fceLancamentoEfluentesController.listaCaracterizacaoEfluentesEscolhidos}"
 			disabled="#{fceLancamentoEfluentesController.desabilitarTudo}">
 				<f:selectItems itemValue="#{efluente}" itemLabel="#{efluente.dscCaracterizacaoEfluente}" value="#{fceLancamentoEfluentesController.listaCaracterizacaoEfluentes}" var="efluente"/>					      
@@ -23,17 +24,17 @@
 		
 		<h:panelGrid id="gridPeriodoLancamento">
 	      	<h:panelGroup>
-				<h:outputText value="Vazão do Efluente  " style="margin-left:20px;"/>
+				<h:outputText value="VazÃ£o do Efluente  " style="margin-left:20px;"/>
 				<p:inputText value="#{fceLancamentoEfluentesController.fceLancamentoEfluente.numVazaoEfluente}" onkeyup="mascararNumeroAndAddZeros(this, event, 9, 3, '.', ',', 3);" 
 				style="margin-left:5px; width:80px;" maxlength="15" disabled="#{fceLancamentoEfluentesController.desabilitarTudo}">
 					<f:convertNumber integerOnly="false" minFractionDigits="3" locale="pt_BR"/>
 					<p:ajax event="blur" global="false"/>
 				</p:inputText>
-				<h:outputText value="   (m³/dia)" />
+				<h:outputText value="   (mÂ³/dia)" />
 			</h:panelGroup> <!-- FIM DO PANEGROUP Vazao Efluente -->
 			<br /><br />
 			<h:panelGroup>
-				<h:outputText style="margin-left:20px;" value="Período de Lançamento" />
+				<h:outputText style="margin-left:20px;" value="PerÃ­odo de LanÃ§amento" />
 			</h:panelGroup>
 			
 			<p:selectOneRadio id="periodoLancamento" style="margin-left:30px; width:120px;" layout="pageDirection" value="#{fceLancamentoEfluentesController.fceLancamentoEfluente.ideTipoPeriodoDerivacao}" 
@@ -43,7 +44,7 @@
 	    	</p:selectOneRadio>
 	    	       
 			<h:panelGroup id="tempoLancamento" rendered="#{fceLancamentoEfluentesController.periodoDerivacaoIntermitente}" style="margin-left:40px;">
-				<h:outputText value="Tempo de Lançamento   " />
+				<h:outputText value="Tempo de LanÃ§amento   " />
 				<p:inputText id="tempo" value="#{fceLancamentoEfluentesController.fceLancamentoEfluente.numTempoLancamento}" disabled="#{fceLancamentoEfluentesController.desabilitarTudo}"
 				onkeyup="SomenteNumero(this);" converter="integerConverter" style="width:20px;" maxlength="2">
 					<p:ajax event="blur" global="false"/>
@@ -51,16 +52,16 @@
 				<h:outputText value="   (h/dia)"/>
 			</h:panelGroup>         
 			<br />
-		</h:panelGrid> <!-- FIM DO PANELGRID Período Irrigacao -->
+		</h:panelGrid> <!-- FIM DO PANELGRID PerÃ­odo Irrigacao -->
     	
     	<h:panelGrid style="margin-left:20px;">
     		<p:dataTable id="tabEfluentes" value="#{fceLancamentoEfluentesController.listaFceLancamentoEfluenteCaracteristicas}" var="fceCaracteristica" >
     			<p:columnGroup type="header">
     				<p:row>
-    					<p:column rowspan="2" headerText="Principais Características"/>
+    					<p:column rowspan="2" headerText="Principais CaracterÃ­sticas"/>
     					<p:column colspan="2" headerText="Efluente"/>
-    					<p:column rowspan="2" headerText="Eficiência de Remoção"/>
-    					<p:column rowspan="2" headerText="Ações"/>
+    					<p:column rowspan="2" headerText="EficiÃªncia de RemoÃ§Ã£o"/>
+    					<p:column rowspan="2" headerText="AÃ§Ãµes"/>
     				</p:row>
     				<p:row>
     					<p:column headerText="Bruto"/>
@@ -116,7 +117,7 @@
     	
 		<h:panelGrid id="gridBotoes" rendered="#{!fceLancamentoEfluentesController.desabilitarTudo}" columns="2" style="margin-top:40px;">
 			<p:commandButton id="btnVoltar" value="Voltar"  style="width:90px;" update="efluentesAbas" process="formLancamento" onclick="confirmationVoltarDialog.show()" global="false"/>
-			<p:commandButton id="btnAvancar" value="Avançar" style="width:90px;" update="efluentesAbas" process="formLancamento" action="#{fceLancamentoEfluentesController.avancarAba()}" global="false"/> 
+			<p:commandButton id="btnAvancar" value="AvanÃ§ar" style="width:90px;" update="efluentesAbas" process="formLancamento" action="#{fceLancamentoEfluentesController.avancarAba()}" global="false"/> 
 		</h:panelGrid> <!-- FIM DO PANELGRID BOTOES -->
 	</h:form>
 </ui:composition>

@@ -15,7 +15,14 @@
 	
 	<!-- 
 	
-	ABA DADOS BÁSICOS 
+        <ui:include src="/layout/csrfToken.xhtml" />
+        <ui:include src="/layout/csrfToken.xhtml" />
+        <ui:include src="/layout/csrfToken.xhtml" />
+        <ui:include src="/layout/csrfToken.xhtml" />
+        <ui:include src="/layout/csrfToken.xhtml" />
+        <ui:include src="/layout/csrfToken.xhtml" />
+        <ui:include src="/layout/csrfToken.xhtml" />
+	ABA DADOS BÃSICOS 
 	
 	-->
 	<p:dialog header="Selecionar Pessoa" widgetVar="dialogRequerente" modal="true" style="text-align:center;" resizable="false" position="center" dynamic="true" closable="true">
@@ -35,11 +42,11 @@
 	<p:confirmDialog message="#{bundle.consultapf_msg_confimrexclusao}" header="Mensagem" severity="alert" widgetVar="confirmationCampo">
 		<h:form>
 	        <p:commandButton value="Sim" update="tabViewOleoGas" actionListener="#{caepogController.excluirCampo()}" oncomplete="confirmationCampo.hide()"/>
-	        <p:commandButton value="Não" onclick="confirmationCampo.hide()" type="button" />
+	        <p:commandButton value="NÃ£o" onclick="confirmationCampo.hide()" type="button" />
 	    </h:form>
     </p:confirmDialog>
 	
-	<p:dialog header="Definição do Campo" widgetVar="dialogCampo" modal="true" style="text-align:center;" resizable="false" position="center" closable="true" dynamic="true">
+	<p:dialog header="DefiniÃ§Ã£o do Campo" widgetVar="dialogCampo" modal="true" style="text-align:center;" resizable="false" position="center" closable="true" dynamic="true">
 		
 		<p:ajax event="close" listener="#{caepogController.onCloseDialogCampo(this)}"/>
 		<ui:include src="/paginas/manter-oleo-gas/dialogCampo.xhtml" />
@@ -47,17 +54,17 @@
 	
 	<!-- 
 	
-	ABA LOCAÇÃO 
+	ABA LOCAÃ‡ÃƒO 
 	
 	-->
 	<p:confirmDialog message="#{bundle.consultapf_msg_confimrexclusao}" header="Mensagem" severity="alert" widgetVar="confirmationLocacao">
 		<h:form>
 	        <p:commandButton value="Sim" update="tabViewOleoGas" actionListener="#{caepogController.excluirLocacao()}" oncomplete="confirmationLocacao.hide()"/>
-	        <p:commandButton value="Não" onclick="confirmationLocacao.hide()" type="button" />
+	        <p:commandButton value="NÃ£o" onclick="confirmationLocacao.hide()" type="button" />
 	    </h:form>
     </p:confirmDialog>
 	
-	<p:dialog id="_dialogLocacao" header="#{caepogController.caepogDefinicaoCampo.ideCaepogCampo.nomCaepogCampo} - Locação" widgetVar="dialogLocacao" modal="true" 
+	<p:dialog id="_dialogLocacao" header="#{caepogController.caepogDefinicaoCampo.ideCaepogCampo.nomCaepogCampo} - LocaÃ§Ã£o" widgetVar="dialogLocacao" modal="true" 
 		style="text-align:center;" resizable="false" position="center" closable="true" dynamic="true">
 		
 		<p:ajax event="close" listener="#{caepogController.onCloseDialogLocacao(this)}"/>
@@ -66,24 +73,24 @@
 	
 	<!-- 
 	
-	ABA POÇO 
+	ABA POÃ‡O 
 	
 	-->
 	<p:confirmDialog message="#{bundle.consultapf_msg_confimrexclusao}" header="Mensagem" severity="alert" widgetVar="confirmationPoco">
 		<h:form>
 	        <p:commandButton value="Sim" update="tabViewOleoGas" actionListener="#{caepogController.excluirPoco()}" oncomplete="confirmationPoco.hide()"/>
-	        <p:commandButton value="Não" onclick="confirmationPoco.hide()" type="button" />
+	        <p:commandButton value="NÃ£o" onclick="confirmationPoco.hide()" type="button" />
 	    </h:form>
     </p:confirmDialog>
 	
     <p:confirmDialog message="#{bundle.consultapf_msg_confimrexclusao}" header="Mensagem" severity="alert" widgetVar="confirmationPerfuracao">
 		<h:form>
 	      	<p:commandButton value="Sim" update="formDialogPoco:tabViewDialogPoco:dataTablePerfuracaoPoco formDialogPoco:tabViewDialogPoco:dataTablePerfuracaoPoco2" actionListener="#{caepogController.excluirFasePerfuracao()}" oncomplete="confirmationPerfuracao.hide();"/>
-	      	<p:commandButton value="Não" onclick="confirmationPerfuracao.hide();" type="button" />
+	      	<p:commandButton value="NÃ£o" onclick="confirmationPerfuracao.hide();" type="button" />
 	  	</h:form>
 	</p:confirmDialog>
 	
-	<p:dialog id="_dialogPoco" header="#{caepogController.caepogDefinicaoCampo.ideCaepogCampo.nomCaepogCampo} - Locação #{caepogController.caepogLocacao.prefixPocoCaepogLocacao} - Poço" 
+	<p:dialog id="_dialogPoco" header="#{caepogController.caepogDefinicaoCampo.ideCaepogCampo.nomCaepogCampo} - LocaÃ§Ã£o #{caepogController.caepogLocacao.prefixPocoCaepogLocacao} - PoÃ§o" 
 		widgetVar="dialogPoco" modal="true" style="text-align:center;" resizable="false" position="top" closable="true" dynamic="true">
 		
 		<p:ajax event="close" listener="#{caepogController.onCloseDialogPoco(this)}"/>
@@ -102,13 +109,13 @@
 			<p:fileUpload 
 				uploadLabel="false" label="Upload Documento"  process="@this" update="tabViewOleoGas:formAbaDocumentosEstudos"
 				fileUploadListener="#{caepogController.uploadArquivoCaepog()}"
-				invalidFileMessage="Tipo de arquivo inválido." mode="advanced" auto="true" 
+				invalidFileMessage="Tipo de arquivo invÃ¡lido." mode="advanced" auto="true" 
 				allowTypes="/(\.|\/)(pdf|gif|jpeg|png|jpg)$/" oncomplete="fileUpload.hide();" />
 		</h:form>
 	</p:dialog>
 	
 	<p:dialog id="_emailPendenciaValidacao" widgetVar="emailPendenciaValidacao" resizable="false" position="top" modal="true"
-		header="Email de pendência de validação dos documentos e estudos" width="545" height="430" closable="false">
+		header="Email de pendÃªncia de validaÃ§Ã£o dos documentos e estudos" width="545" height="430" closable="false">
 			
 		<h:form id="formEnvioEmailPendenciaValidacao">
 			<h:panelGrid  columns="1">
@@ -125,12 +132,12 @@
 		</h:form>
 	</p:dialog>
 	
-	<p:confirmDialog message="Deseja enviar um email para o requerente solicitando a correção das pendências?" widgetVar="confirPendenciaValidacao"
+	<p:confirmDialog message="Deseja enviar um email para o requerente solicitando a correÃ§Ã£o das pendÃªncias?" widgetVar="confirPendenciaValidacao"
 		closable="false">
 		
 		<h:form>
 			<p:commandButton value="Sim" actionListener="#{caepogController.carregarEmail()}" onclick="confirPendenciaValidacao.hide()"/>
-			<p:commandButton value="Não" action="/paginas/manter-oleo-gas/consulta.xhtml" onclick="confirPendenciaValidacao.hide()" ajax="false" />
+			<p:commandButton value="NÃ£o" action="/paginas/manter-oleo-gas/consulta.xhtml" onclick="confirPendenciaValidacao.hide()" ajax="false" />
 		</h:form>
 	</p:confirmDialog>
 </ui:composition>

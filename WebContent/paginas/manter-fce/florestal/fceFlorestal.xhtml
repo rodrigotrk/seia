@@ -8,6 +8,7 @@
 	
 	<p:confirmDialog widgetVar="excluirEspecieFlorestal" header="#{bundle.geral_lbl_mensagem}" message="#{bundle.msg_confirma_exclusao}" severity="alert">
 		<h:form id="formexcluirEspecieFlorestal">
+        <ui:include src="/layout/csrfToken.xhtml" />
 			<p:commandButton value="#{bundle.btn_sim}" update="frmFceFlorestal:groupdProdutosFlorestal"
 			actionListener="#{fceFlorestalController.impl.removerEspecieNativa()}" oncomplete="excluirEspecieFlorestal.hide()" process="@this" />
 			<p:commandButton value="#{bundle.btn_nao}" onclick="excluirEspecieFlorestal.hide()" type="button" />
@@ -17,11 +18,13 @@
 	<h:panelGroup id="pnlImprimirRelatorioFceFlorestal" layout="block">
 		<p:confirmDialog widgetVar="dlgImprimirRelatorioFceFlorestal" header="Mensagem" message="#{fceFlorestalController.impl.msgImprimirRelatorio}" >
 			<h:form>
+        <ui:include src="/layout/csrfToken.xhtml" />
 				<div align="center">
 					<p:commandButton value="Sim" ajax="false" global="false" process="@this" onclick="fce_florestal.hide();dlgImprimirRelatorioFceFlorestal.hide();" style="margin-right:10px;">
 						<p:fileDownload value="#{fceFlorestalController.impl.imprimirRelatorio}" />
 					</p:commandButton>
-					<p:commandButton value="Não" oncomplete="fce_florestal.hide();dlgImprimirRelatorioFceFlorestal.hide();" process="@this"/>
+        <ui:include src="/layout/csrfToken.xhtml" />
+					<p:commandButton value="NÃ£o" oncomplete="fce_florestal.hide();dlgImprimirRelatorioFceFlorestal.hide();" process="@this"/>
 				</div>
 			</h:form>
 		</p:confirmDialog> 
@@ -164,7 +167,7 @@
 				</p:accordionPanel>
 			</h:panelGrid>
 			
-           <!-- Inicio Supressão -->
+           <!-- Inicio SupressÃ£o -->
 			<h:panelGroup>
 				
 				<h:panelGrid>
@@ -172,7 +175,7 @@
 				</h:panelGrid>
 				
 				
-				<!-- Inicio área total  -->
+				<!-- Inicio Ã¡rea total  -->
 				<p:spacer height="15"/>
 				<h:panelGroup style="margin-top:20px;">
 					<h:panelGrid columns="2" style="margin-left:10px;">
@@ -184,37 +187,37 @@
 					</h:panelGrid>
 					
 				</h:panelGroup>
-				<!-- Fim área total -->
+				<!-- Fim Ã¡rea total -->
 
 				<p:spacer height="15"/>
 				
-				<!-- Inicio área da unidade de producao -->
+				<!-- Inicio Ã¡rea da unidade de producao -->
 				<h:panelGroup rendered="#{fceFlorestalController.impl.renderedAreaUnidadeProducao}">
 					<h:panelGrid columns="2" style="margin-left:10px;">
-						<h:outputText value="*Área da Unidade de Produção(ha)" />
+						<h:outputText value="*Ãrea da Unidade de ProduÃ§Ã£o(ha)" />
 						<p:inputText value="#{fceFlorestalController.impl.fceFlorestal.valAreaUndProducao}" styleClass="campoNumericoComDecimal-4" maxlength="15"
 							disabled="#{fceFlorestalController.impl.desabilitarTudo}">
 							<f:convertNumber maxIntegerDigits="8" maxFractionDigits="4" pattern="###,##0.0000" locale="pt_BR"/>
 						</p:inputText>
 					</h:panelGrid>	
 				</h:panelGroup>
-				<!-- Fim área da unidade de producao -->
+				<!-- Fim Ã¡rea da unidade de producao -->
 				
 			</h:panelGroup>
-			<!-- Fim Supressão -->
+			<!-- Fim SupressÃ£o -->
 			<p:spacer height="25"/>
 			<h:panelGrid>
 			
-				<h:outputText value="Especificação do Produto Madeireiro" styleClass="titulo-grupo" style="font-weight:bold;"/>
+				<h:outputText value="EspecificaÃ§Ã£o do Produto Madeireiro" styleClass="titulo-grupo" style="font-weight:bold;"/>
 				
 			</h:panelGrid>
 			<p:spacer height="20"/>
 			<h:panelGroup rendered="#{fceFlorestalController.impl.exibirPerguntaMaterialLenhoso}">
 				<h:panelGrid style="margin-left:10px;">
-					<h:outputText value="*Haverá rendimento de material lenhoso?" />
+					<h:outputText value="*HaverÃ¡ rendimento de material lenhoso?" />
 					<p:selectOneRadio value="#{fceFlorestalController.impl.fceFlorestal.indMaterialLenhoso}" disabled="#{fceFlorestalController.impl.desabilitarTudo}">
 						<f:selectItem itemLabel="Sim" itemValue="true"/>
-						<f:selectItem itemLabel="Não" itemValue="false"/>
+						<f:selectItem itemLabel="NÃ£o" itemValue="false"/>
 						<p:ajax event="change" listener="#{fceFlorestalController.impl.limparEspeciesSelecionadas()}" update="frmFceFlorestal:groupdProdutosFlorestal" global="false" process="@this"/>
 					</p:selectOneRadio>
 				</h:panelGrid>
@@ -249,11 +252,11 @@
 		                <tr>
 		                    <td />
 		                    <td colspan="2">
-		                         <h:outputText value="Caso espécie não esteja listada, encaminhe um email para atendimento.seia@inema.ba.gov.br com o" style="line-height: 150%;"/>
+		                         <h:outputText value="Caso espÃ©cie nÃ£o esteja listada, encaminhe um email para atendimento.seia@inema.ba.gov.br com o" style="line-height: 150%;"/>
 		                         <br />
-		                         <h:outputText value="nome cientifico da espécie e seu nome vulgar, solicitando a inclusão nesta lista. A identificação da" style="line-height: 150%;"/>
+		                         <h:outputText value="nome cientifico da espÃ©cie e seu nome vulgar, solicitando a inclusÃ£o nesta lista. A identificaÃ§Ã£o da" style="line-height: 150%;"/>
 		                         <br />
-		                        <h:outputText value="espécie é condição necessária para a solicitação da supressão de vegetação!" style="line-height: 150%;"/>
+		                        <h:outputText value="espÃ©cie Ã© condiÃ§Ã£o necessÃ¡ria para a solicitaÃ§Ã£o da supressÃ£o de vegetaÃ§Ã£o!" style="line-height: 150%;"/>
 		                    </td>
 		                </tr>
 		            </table>
@@ -276,7 +279,7 @@
 			<h:panelGrid id="gridTableEspecieFlorestal">
 				<p:dataTable id="tblTipoClassificacao" rendered="#{!fceFlorestalController.impl.isLenha and fceFlorestalController.impl.produtoNativoSelecionado != null }" value="#{fceFlorestalController.impl.especieFlorestalList}" var="especieFlorestal" lazy="true" paginator="true" rows="15"  
 					paginatorPosition="bottom" paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}" rowsPerPageTemplate="5,10,15" 
-					emptyMessage="Nenhuma especie supressão encontrado.">
+					emptyMessage="Nenhuma especie supressÃ£o encontrado.">
 					<p:column style="text-align:justify; width:800px;">
 						<f:facet name="header">
 							<h:outputText value="Nome" />
@@ -284,15 +287,15 @@
 						<h:outputText value="#{especieFlorestal.nomEspecieFlorestal}"/>
 					</p:column>
 					
-					<p:column style="width:40px; text-align:center;" headerText="Ações">
-						<p:commandLink title="Adicionar Classificação(ões)" process="@this" update="formNomeVulgar frmFceFlorestal:gridTableEspecieSupressao" 
+					<p:column style="width:40px; text-align:center;" headerText="AÃ§Ãµes">
+						<p:commandLink title="Adicionar ClassificaÃ§Ã£o(Ãµes)" process="@this" update="formNomeVulgar frmFceFlorestal:gridTableEspecieSupressao" 
 							 global="false" actionListener="#{fceFlorestalController.impl.obterNovoNomePopular()}" action="#{nomePopularEspecieController.abrirNomePopularEspecieFlorestal(especieFlorestal)}">
 							 <f:setPropertyActionListener target="#{fceFlorestalController.impl.especieFlorestalSelecionada}" value="#{especieFlorestal}" />
 							 <f:setPropertyActionListener target="#{nomePopularEspecieController.metodoAtualizarExterno}" value="#{fceFlorestalController.impl.metodoRetornoEspecie}" />
 							 <f:setPropertyActionListener target="#{nomePopularEspecieController.nomePopularEspecieSelecionado}" value="#{fceFlorestalController.impl.nomePopularEspecieSelecionada}" />
 							 <f:setPropertyActionListener target="#{nomePopularEspecieController.idDoComponenteParaSerAtualizado}" value="frmFceFlorestal:gridTableEspecieSupressao" />
 							 <f:setPropertyActionListener target="#{nomePopularEspecieController.listaItemRemovidoNomePopularEspecie}" value="#{especieFlorestal.removidosNomePopularEspecie}" /> 
-							<h:graphicImage title="Adicionar Classificação(ões)" value="/resources/img/ico-aprovar-notificacao.png" />
+							<h:graphicImage title="Adicionar ClassificaÃ§Ã£o(Ãµes)" value="/resources/img/ico-aprovar-notificacao.png" />
 						</p:commandLink>
 					</p:column>
 				</p:dataTable>
@@ -329,7 +332,7 @@
 								<h:outputText value="Volume total" /> 
 							</f:facet>
 							<h:panelGrid columns="3" id="pgVolumeForaAPP">
-								<h:outputText value="m³" />
+								<h:outputText value="mÂ³" />
 								<p:spacer height="15px;"/>
 								<p:inputText value="#{especieFlorestal.volumeTotalForaApp}" style="width:80px;" converter="doubleConverter" onkeyup="maskIt(this, event, '99.999.999,99', true)" maxlength="13" disabled="#{!especieFlorestal.edicao}">
 			 		    			<p:ajax event="blur" global="false" process="@this" listener="#{fceFlorestalController.impl.calcularVolumeForaAPP()}" update="pgVolumeForaAPP"/>
@@ -353,7 +356,7 @@
 								<h:outputText value="Volume total" /> <br /> <h:outputText value="em APP" />
 							</f:facet>
 							<h:panelGrid columns="3" id="pgVolumeEmAPP">
-								<h:outputText value="m³" />
+								<h:outputText value="mÂ³" />
 								<p:spacer height="15px;"/>
 								<p:inputText value="#{especieFlorestal.volumeTotalEmApp}" style="width:80px;" converter="doubleConverter" onkeyup="maskIt(this, event, '99.999.999,99', true)" maxlength="13" disabled="#{!especieFlorestal.edicao}">
 			 		    			<p:ajax event="blur" global="false" process="@this"  listener="#{fceFlorestalController.impl.calcularVolumeEmAPP()}" update="pgVolumeEmAPP" />
@@ -375,7 +378,7 @@
 						</p:column> -->
 						<p:column style="text-align:justify; width: 200px !important;">
 							<f:facet name="header">
-								<h:outputText value="Destino socioeconêmico" /> <br /> <h:outputText value="do Produto" escape="false" />
+								<h:outputText value="Destino socioeconÃªmico" /> <br /> <h:outputText value="do Produto" escape="false" />
 							</f:facet>
 							<h:panelGrid layout="block" style="overflow:auto;">		        
 			 		    		<p:selectManyCheckbox value="#{especieFlorestal.listaDestinoSocioeconomicoSelecionado}" layout="pageDirection" converter="simpleEntityConverter" disabled="#{!especieFlorestal.edicao}">
@@ -386,11 +389,11 @@
 						</p:column>
 						<p:column style="text-align:justify;width: 60px">
 							<f:facet name="header">
-								<h:outputText value="Ações" />
+								<h:outputText value="AÃ§Ãµes" />
 							</f:facet>
 							
 							<h:panelGroup>
-								<p:commandLink title="Confirmar volumes e destino socioeconômico do produto" process="@this" global="false" actionListener="#{fceFlorestalController.impl.validarEspecie()}"
+								<p:commandLink title="Confirmar volumes e destino socioeconÃ´mico do produto" process="@this" global="false" actionListener="#{fceFlorestalController.impl.validarEspecie()}"
 		 		    			update="frmFceFlorestal:gridTableEspecieSupressao frmFceFlorestal:gridTableEspecieFlorestal" rendered="#{especieFlorestal.edicao}" disabled="#{fceFlorestalController.impl.desabilitarTudo}">
 									<h:graphicImage title="Confirmar" value="/resources/img/ico-aprovar-notificacao.png" />
 									<f:attribute name="especieFlorestal" value="#{especieFlorestal}" />

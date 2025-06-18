@@ -6,6 +6,7 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:p="http://primefaces.prime.com.tr/ui">
 	<h:form id="form_dados">
+        <ui:include src="/layout/csrfToken.xhtml" />
 
 		<div style="width: 700px;">
 			<h:panelGrid id="dados_gerais">
@@ -28,7 +29,7 @@
 				<h:panelGrid columns="3" rendered="#{!lacPostoController.operacao}">
 					<p:spacer height="10" width="20" rendered="#{lacPostoController.exibeDataInicioOperacao}" />
 					
-					<h:outputText value="* Data Prevista para início da operação:" rendered="#{lacPostoController.exibeDataInicioOperacao}" />
+					<h:outputText value="* Data Prevista para inÃ­cio da operaÃ§Ã£o:" rendered="#{lacPostoController.exibeDataInicioOperacao}" />
 					
 					<p:calendar navigator="true" showOn="button"
 						mindate="${lacPostoController.dataAtual}" pattern="dd/MM/yyyy"
@@ -47,7 +48,7 @@
 						disabled="#{lacPostoController.viewMode}">
 						<f:selectItem itemLabel="Reformado, conforme NBR 13.786 da ABNT"
 							itemValue="#{true}" />
-						<f:selectItem itemLabel="Não Reformado" itemValue="#{false}" />
+						<f:selectItem itemLabel="NÃ£o Reformado" itemValue="#{false}" />
 						<p:ajax event="change" listener="${lacPostoController.render()}" global="false" process="@this" update="posto_tab"/>
 					</p:selectOneRadio>
 				</h:panelGrid>
@@ -55,7 +56,7 @@
 					
 					<p:spacer height="10" width="5" rendered="#{lacPostoController.operacao}" />
 					
-					<h:outputText value="* Data de início da operação:" rendered="#{lacPostoController.operacao}" />
+					<h:outputText value="* Data de inÃ­cio da operaÃ§Ã£o:" rendered="#{lacPostoController.operacao}" />
 					
 					<p:calendar navigator="true" showOn="button" pattern="dd/MM/yyyy" locale="pt"
 						value="#{lacPostoController.lacPostoCombustivel.dtcInicioOperacao}"
@@ -109,7 +110,7 @@
 					<h:panelGrid columns="6" id="vigenciaContrato">
 						<p:spacer height="10" width="30"
 							rendered="#{lacPostoController.exibeDistribuidoras}" />
-						<h:outputText value="* Vigência do contrato até"
+						<h:outputText value="* VigÃªncia do contrato atÃ©"
 							rendered="#{lacPostoController.exibeDistribuidoras}" />
 						<p:calendar navigator="true" showOn="button"
 							rendered="#{lacPostoController.exibeDistribuidoras}"
@@ -129,13 +130,13 @@
 						value="#{lacPostoController.lacPostoCombustivel.indFlutuante}"
 						disabled="#{lacPostoController.viewMode}">
 						<f:selectItem itemLabel="Sim" itemValue="#{true}" />
-						<f:selectItem itemLabel="Não" itemValue="#{false}" />
+						<f:selectItem itemLabel="NÃ£o" itemValue="#{false}" />
 						<p:ajax event="change" listener="${lacPostoController.render()}" global="false" process="@this"/>
 					</p:selectOneRadio>
 				</h:panelGrid>
 
 				<h:panelGrid>
-					<h:outputText value="* Serviços prestados ou a serem prestados"
+					<h:outputText value="* ServiÃ§os prestados ou a serem prestados"
 						styleClass="form_label_b" />
 
 					<p:selectManyCheckbox layout="inline"
@@ -175,10 +176,10 @@
 				</h:panelGrid>
 
 				<h:panelGrid>
-					<h:outputText value="Área do empreendimento"
+					<h:outputText value="Ãrea do empreendimento"
 						styleClass="form_label_b" />
 					<h:panelGrid columns="14">
-						<h:outputText value="* Área total:" />
+						<h:outputText value="* Ãrea total:" />
 						<p:inputText styleClass="form_text_p"
 							disabled="#{lacPostoController.viewMode}"
 							converter="bigConverter"
@@ -187,10 +188,10 @@
 							onkeyup="mascararNumeroLR(this, event, 10, 2, '.', ',', 3);" >
 							<p:ajax event="blur" listener="${lacPostoController.render()}" global="false" process="@this"/>
 						</p:inputText>
-						<h:outputText value="m²" />
+						<h:outputText value="mÂ²" />
 
 						<p:spacer width="30" height="10" />
-						<h:outputText value="* Área construída:" />
+						<h:outputText value="* Ãrea construÃ­da:" />
 						<p:inputText styleClass="form_text_p"
 							disabled="#{lacPostoController.viewMode}"
 							converter="bigConverter"
@@ -199,10 +200,10 @@
 							onkeyup="mascararNumeroLR(this, event, 10, 2, '.', ',', 3);" >
 							<p:ajax event="blur" listener="${lacPostoController.render()}" global="false" process="@this"/>
 						</p:inputText>
-						<h:outputText value="m²" />
+						<h:outputText value="mÂ²" />
 
 						<p:spacer width="30" height="10" />
-						<h:outputText value="* Área para ampliação:" />
+						<h:outputText value="* Ãrea para ampliaÃ§Ã£o:" />
 						<p:inputText styleClass="form_text_p"
 							disabled="#{lacPostoController.viewMode}"
 							converter="bigConverter"
@@ -210,7 +211,7 @@
 							onkeypress="mascararNumeroLR(this, event, 10, 2, '.', ',', 3);"	onkeyup="mascararNumeroLR(this, event, 10, 2, '.', ',', 3);" >
 							<p:ajax event="blur" listener="${lacPostoController.render()}" global="false" process="@this"/>
 						</p:inputText>
-						<h:outputText value="m²" />
+						<h:outputText value="mÂ²" />
 
 					</h:panelGrid>
 				</h:panelGrid>
@@ -224,7 +225,7 @@
 			</h:panelGrid>
 			<h:panelGrid id="produtos_posto">
 				<h:outputText
-					value="* Produtos comercializados ou a serem comercializados/mês"
+					value="* Produtos comercializados ou a serem comercializados/mÃªs"
 					styleClass="form_label_b" />
 				<h:panelGrid columns="3">
 					<h:outputLabel value="* Tipo do Produto" />
@@ -236,7 +237,7 @@
 						disabled="#{lacPostoController.viewMode || empty lacPostoController.lacPostoCombustivel.ideLac}"
 						value="#{lacPostoController.produtoComercializado.produto.ideProduto}"
 						id="produto" required="true"
-						requiredMessage="O campo Nome do Produto é de preenchimento obrigatório.">
+						requiredMessage="O campo Nome do Produto Ã© de preenchimento obrigatÃ³rio.">
 						<f:selectItem itemLabel="Selecione o Produto..." itemValue="" />
 						<f:selectItems var="produto"
 							value="#{lacPostoController.produtos}"
@@ -249,9 +250,9 @@
 						onkeypress="mascararNumeroLR(this, event, 10, 2, '.', ',', 3);"
 						onkeyup="mascararNumeroLR(this, event, 10, 2, '.', ',', 3);"
 						value="#{lacPostoController.produtoComercializado.qtdVendida}"
-						required="true" requiredMessage="O campo Quantidade é de preenchimento obrigatório."
+						required="true" requiredMessage="O campo Quantidade Ã© de preenchimento obrigatÃ³rio."
 						converter="bigConverter" />
-					<h:outputLabel value="m³" />
+					<h:outputLabel value="mÂ³" />
 					<p:commandButton value="Incluir" global="false"
 						disabled="#{lacPostoController.viewMode || empty lacPostoController.lacPostoCombustivel.ideLac}"
 						action="#{lacPostoController.adicionarProdutoComercializado()}"
@@ -266,10 +267,10 @@
 						<p:column headerText="Nome do Produto">
 							<h:outputText value="#{produtos.produto.dscProduto}" />
 						</p:column>
-						<p:column headerText="Quantidade(m³)">
+						<p:column headerText="Quantidade(mÂ³)">
 							<h:outputText value="#{produtos.qtdVendida}" />
 						</p:column>
-						<p:column headerText="Opções">
+						<p:column headerText="OpÃ§Ãµes">
 							<p:commandLink id="excluir" title="Excluir" process="@this"
 								onclick="confirmDialogProduto.show();"
 								disabled="#{lacPostoController.viewMode}">
@@ -286,21 +287,21 @@
 			<p:confirmDialog id="_confirmDialogProduto"
 				styleClass="dialog_confirm"
 				message="Tem certeza que deseja excluir o(s) registro(s) selecionado(s)?"
-				header="Confirmação" severity="alert"
+				header="ConfirmaÃ§Ã£o" severity="alert"
 				widgetVar="confirmDialogProduto" appendToBody="true">
 
 				<p:commandButton id="confirmProduto" value="Sim" process="@this"
 					oncomplete="confirmDialogProduto.hide();"
 					actionListener="#{lacPostoController.removerProdutoComercializado()}"
 					update="posto_tab:form_dados:produtos_comercializados" />
-				<p:commandButton id="declineProduto" process="@this" value="Não"
+				<p:commandButton id="declineProduto" process="@this" value="NÃ£o"
 					onclick="confirmDialogProduto.hide();" type="button" />
 
 			</p:confirmDialog>
 
 		</div>
 		<div align="right">
-			<p:commandButton process="@this,dados_gerais" value="Avançar"
+			<p:commandButton process="@this,dados_gerais" value="AvanÃ§ar"
 				global="false" update="posto_tab,form_dados"
 				action="#{lacPostoController.validarDadosGerais()}" />
 		</div>

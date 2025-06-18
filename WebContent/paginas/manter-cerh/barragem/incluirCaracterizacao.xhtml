@@ -7,6 +7,7 @@
 	xmlns:p="http://primefaces.prime.com.tr/ui">
 
 	<h:form id="formCaracterizacaoBarragem">
+        <ui:include src="/layout/csrfToken.xhtml" />
 	
 		<h:panelGrid id="gridLocalizacaoGeografica" style="width:100%;">
 
@@ -42,7 +43,7 @@
 	 		    	<h:outputText value="#{cerhController.abaBarragem.cerhCaracterizacao.ideCerhLocalizacaoGeografica.ideLocalizacaoGeografica.baciaHidrografica}" />
 	 		    </p:column>
 	 		    
-	  	 		<p:column headerText="Ações" style="width:45px; text-align:center;">
+	  	 		<p:column headerText="AÃ§Ãµes" style="width:45px; text-align:center;">
 					<p:commandLink actionListener="#{cerhController.abaBarragem.confirmarNomeRio()}"
 						process="formCaracterizacaoBarragem:gridLocalizacaoGeografica"
 						update="formCaracterizacaoBarragem:tableGeobahia"
@@ -133,7 +134,7 @@
 					<h:outputText value="#{barragemDTO.longitude}"/>
 				</p:column>
 				
-				<p:column headerText="Ações" rendered="#{cerhController.abaBarragem.usuarioInterno}" style="width:45px; text-align:center;">
+				<p:column headerText="AÃ§Ãµes" rendered="#{cerhController.abaBarragem.usuarioInterno}" style="width:45px; text-align:center;">
 					<p:selectBooleanCheckbox value="#{barragemDTO.indSelecionado}" 
 						disabled="#{cerhController.abaBarragem.usuarioExterno or cerhController.abaBarragem.dto.caracterizacaoDTO.visualizacao or cerhController.abaBarragem.cerhDTO.visualizar}"
 						style="margin-left: 15px;">
@@ -240,7 +241,7 @@
 			
 			<h:panelGroup>
 				<h:outputText value="* " rendered="#{cerhController.abaBarragem.processoOutorgado or cerhController.abaBarragem.processoDispensado}"/>
-				<h:outputText value="#{bundle.cerh_aba_bar_vazao_regularizada} (m³/s):"/>
+				<h:outputText value="#{bundle.cerh_aba_bar_vazao_regularizada} (mÂ³/s):"/>
 			</h:panelGroup>
 			
 			<p:inputText value="#{cerhController.abaBarragem.cerhCaracterizacao.valAlturaMaximaBarragem}"

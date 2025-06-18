@@ -20,11 +20,12 @@
 		resizable="false">
 		
 		<h:form id="boleto">
+        <ui:include src="/layout/csrfToken.xhtml" />
 			<h1 style="font-size: 14px">GRAVAR TAXA BOLETO / DAE</h1>
 			<hr	style="width: 100%; margin-top: 5px; margin-bottom: 5px; border: none; border-top: 1px solid #ccc;" />
 			<p style="margin: 5px;" class="titulo-grupo"><h:outputText value="Dados do requerimento"/></p>
 			<h:panelGrid columns="4">
-				<h:outputLabel value="N∞ Requerimento " styleClass="tit-requerimento"/>
+				<h:outputLabel value="N¬∞ Requerimento " styleClass="tit-requerimento"/>
 				<h:outputText value="#{boletoAutomatizadoController.requerimento.numRequerimento}" styleClass="dados-requerimento"/>
 				<h:outputLabel value="Empreendimento "  styleClass="tit-requerimento"/>
 				<h:outputText value="#{boletoAutomatizadoController.requerimento.ultimoEmpreendimento.nomEmpreendimento}" styleClass="dados-requerimento"/>
@@ -48,7 +49,7 @@
 			</p>
 			
 			<h:panelGrid id="pnlLinkIncluirParametroCalculo" rendered="#{boletoAutomatizadoController.isRenderedIncluirParametroCalculoBoleto}">
-				<p:commandLink  value="+ Incluir par‚metro de c·lculo do boleto" process="@this" actionListener="#{boletoAutomatizadoController.incluirParametroCalculo()}" update=":frmDialogIncluirParametroCalculo"  />
+				<p:commandLink  value="+ Incluir par√¢metro de c√°lculo do boleto" process="@this" actionListener="#{boletoAutomatizadoController.incluirParametroCalculo()}" update=":frmDialogIncluirParametroCalculo"  />
 			</h:panelGrid>
 			
 			<br />
@@ -66,7 +67,7 @@
 					<h:outputText value="#{detalhe.ideTipologia.desTipologia}" rendered="#{detalhe.ideTipologia != null}" />
 					<h:outputText value=" - " rendered="#{detalhe.ideTipologia == null}" />
 				</p:column>
-				<p:column headerText="Vaz„o Total (m≥)" style="padding: 4px 5px; text-align:center;">
+				<p:column headerText="Vaz√£o Total (m¬≥)" style="padding: 4px 5px; text-align:center;">
 					<h:outputText value="#{detalhe.numVazao}" rendered="#{detalhe.numVazao != null}"/>
 					<h:outputText value="-" rendered="#{detalhe.numVazao == null}" />
 				</p:column>
@@ -76,7 +77,7 @@
 					<h:outputText value=" R$ #{detalhe.valorCertificadoFormatado} " rendered="#{detalhe.dae and not empty detalhe.valorCertificado}"/>
 					<h:outputText value=" - " rendered="#{detalhe.dae and empty detalhe.valorCertificado}"/>
 				</p:column>
-				<p:column headerText="AÁ„o" style="text-align:center">
+				<p:column headerText="A√ß√£o" style="text-align:center">
 					
 					<p:commandLink title="Boleto" style="color:blue" rendered="#{detalhe.exigeCalculo}" disabled="#{boletoAutomatizadoController.faltaParametros}" update="taxaBoleto taxaBoleto:valorTotal"
 						action="#{boletoController.calcularTaxaBoleto(detalhe)}" oncomplete="taxa_boleto.show()">
@@ -98,7 +99,7 @@
 						
 					</p:commandLink>
 					
-					<p:commandLink rendered="#{boletoAutomatizadoController.isRenderedLinkRemoverParametro(detalhe)}" title="Remover par‚metro" 
+					<p:commandLink rendered="#{boletoAutomatizadoController.isRenderedLinkRemoverParametro(detalhe)}" title="Remover par√¢metro" 
 						actionListener="#{boletoAutomatizadoController.removerParametroDetalhamentoBoleto(detalhe)}" process="@this" update="boleto:detalhamentoBoleto boleto:valor_boleto">
 						
 						<h:graphicImage title="Calcular Valor" value="/resources/img/ico-excluir.png" />
@@ -113,7 +114,7 @@
 				<h:panelGrid columns="2">
 					
 					<h:panelGrid rendered="#{!empty boletoAutomatizadoController.listaCaptacaoSubterranea}">
-						<h:outputText value="Tipologia: CaptaÁ„o Subterr‚nea" style="font-weight: bold;" />
+						<h:outputText value="Tipologia: Capta√ß√£o Subterr√¢nea" style="font-weight: bold;" />
 						<p:dataTable var="olg" value="#{boletoAutomatizadoController.listaCaptacaoSubterranea}">
 							<p:column>
 									<f:facet name="header">Latitude</f:facet>
@@ -124,14 +125,14 @@
 									<h:outputText value="#{olg.ideLocalizacaoGeografica.pontoLongitude}" />
 							</p:column>
 							<p:column style="text-align: center;">
-									<f:facet name="header">Vaz„o(m3)/dia</f:facet>
+									<f:facet name="header">Vaz√£o(m3)/dia</f:facet>
 									<h:outputText value="#{olg.numVazao}" />
 							</p:column>
 						</p:dataTable>
 					</h:panelGrid>
 					
 					<h:panelGrid rendered="#{!empty boletoAutomatizadoController.listaCaptacaoSuperficial}" layout="block">
-						<h:outputText value="Tipologia: CaptaÁ„o Superficial" style="font-weight: bold;" />
+						<h:outputText value="Tipologia: Capta√ß√£o Superficial" style="font-weight: bold;" />
 						<p:dataTable var="olg" value="#{boletoAutomatizadoController.listaCaptacaoSuperficial}">
 							<p:column>
 									<f:facet name="header">Latitude</f:facet>
@@ -142,14 +143,14 @@
 									<h:outputText value="#{olg.ideLocalizacaoGeografica.pontoLongitude}" />
 							</p:column>
 							<p:column style="text-align: center;">
-									<f:facet name="header">Vaz„o(m3)/dia</f:facet>
+									<f:facet name="header">Vaz√£o(m3)/dia</f:facet>
 									<h:outputText value="#{olg.numVazao}" />
 							</p:column>
 						</p:dataTable>
 					</h:panelGrid>
 					
 					<h:panelGrid rendered="#{!empty boletoAutomatizadoController.listaLancamentoEfluente}" layout="block">
-						<h:outputText value="Tipologia: LanÁamento de Efluentes" style="font-weight: bold;" />
+						<h:outputText value="Tipologia: Lan√ßamento de Efluentes" style="font-weight: bold;" />
 						<p:dataTable var="olg" value="#{boletoAutomatizadoController.listaLancamentoEfluente}">
 							<p:column>
 									<f:facet name="header">Latitude</f:facet>
@@ -160,7 +161,7 @@
 									<h:outputText value="#{olg.ideLocalizacaoGeografica.pontoLongitude}" />
 							</p:column>
 							<p:column style="text-align: center;">
-									<f:facet name="header">Vaz„o(m3)/dia</f:facet>
+									<f:facet name="header">Vaz√£o(m3)/dia</f:facet>
 									<h:outputText value="#{olg.numVazao}" />
 							</p:column>
 						</p:dataTable>
@@ -177,9 +178,9 @@
 				<h:panelGroup layout="block"  rendered="#{boletoAutomatizadoController.renderedPnlDetalhamentoBioma}">
 					
 					<p style="text-align: justify;">
-						Para cobranÁa de atos florestais de acordo com a Lei n∫ 13.457 de 03 de dezembro de 2015, s„o utilizados os seguintes produtos do Instituto Brasileiro 
-						de Geografia e EstatÌstica: mapa de Biomas do Brasil (2004) e Mapa da ¡rea de AplicaÁ„o da Lei n∫ 11.428 de 2006 
-						(Decreto n∫ 6.660, de 21 de novembro de 2008), ambos com escala 1:5.000.000.
+						Para cobran√ßa de atos florestais de acordo com a Lei n¬∫ 13.457 de 03 de dezembro de 2015, s√£o utilizados os seguintes produtos do Instituto Brasileiro 
+						de Geografia e Estat√≠stica: mapa de Biomas do Brasil (2004) e Mapa da √Årea de Aplica√ß√£o da Lei n¬∫ 11.428 de 2006 
+						(Decreto n¬∫ 6.660, de 21 de novembro de 2008), ambos com escala 1:5.000.000.
 					</p>
 				
 					<br />
@@ -191,7 +192,7 @@
 								<h:outputText value="#{bioma.ideBioma.nomBioma}" />
 							</p:column>
 							<p:column>
-								<f:facet name="header">¡rea(ha)</f:facet>
+								<f:facet name="header">√Årea(ha)</f:facet>
 								<p style="text-align: right;">
 									<h:outputText value="#{bioma.valArea}">
 										<f:convertNumber pattern="#,##0.0000" locale="pt_BR" />
@@ -225,7 +226,7 @@
 			<br/>
 			
 			<h:panelGrid rendered="#{boletoAutomatizadoController.existeBoleto or boletoAutomatizadoController.boletoApe}">
-				<h:outputText value="Valores para geraÁ„o do boleto:" style="text-decoration: underline;font-weight: bold;"/>
+				<h:outputText value="Valores para gera√ß√£o do boleto:" style="text-decoration: underline;font-weight: bold;"/>
 				<h:panelGrid columns="2">
 					<h:panelGrid columns="3" id="valor_boleto">
 						<h:outputText value="Valor Total do boleto" style="font-weight: bold;"/>
@@ -256,7 +257,7 @@
 						<p:selectBooleanCheckbox value="#{boletoAutomatizadoController.boleto.indIsento}" disabled="#{boletoAutomatizadoController.boleto.indBoletoGeradoManualmente}">
 							<p:ajax global="false" update="boleto:motivo valor_boleto boleto:boleto_manual" listener="#{boletoAutomatizadoController.isentarPagamento()}"/>
 						</p:selectBooleanCheckbox>
-						<h:outputLabel value="IsenÁ„o"  />
+						<h:outputLabel value="Isen√ß√£o"  />
 					</h:panelGrid>			
 				</h:panelGrid>
 				
@@ -269,7 +270,7 @@
 				
 				<h:panelGrid id="upload_boleto_manual" columns="1">
 					<h:panelGrid columns="1" rendered="#{boletoAutomatizadoController.boleto.indBoletoGeradoManualmente}">
-						* N˙mero do Boleto
+						* N√∫mero do Boleto
 						<p:inputText size="50" maxlength="50" value="#{boletoAutomatizadoController.boleto.numBoleto}" styleClass="inputTextOnlyInteger" >
 							<p:ajax event="change" global="false" process="@this" listener="#{boletoAutomatizadoController.removerCaracteres()}" />
 						</p:inputText>
@@ -288,13 +289,13 @@
 					<h:panelGrid columns="1" rendered="#{empty boletoAutomatizadoController.boleto.desCaminhoBoleto and boletoAutomatizadoController.boleto.indBoletoGeradoManualmente}">
 						* Upload do boleto
 						<p:fileUpload id="upload_bol_man" uploadLabel="false" label="Upload do documento" auto="true"
-							rendered="#{empty boletoAutomatizadoController.boleto.desCaminhoBoleto}" invalidFileMessage="Tipo de arquivo inv·lido." mode="advanced"
+							rendered="#{empty boletoAutomatizadoController.boleto.desCaminhoBoleto}" invalidFileMessage="Tipo de arquivo inv√°lido." mode="advanced"
 							fileUploadListener="#{boletoAutomatizadoController.uploadBoleto}" allowTypes="/(\.|\/)(pdf)$/" update="upload_boleto_manual" />
 					</h:panelGrid>			
 				</h:panelGrid>
 				
 				<h:panelGrid id="motivo" >
-					<h:outputText value="Selecione a justificativa da isenÁ„o de acordo com o artigo 166 do regulamento da Lei 10.431/2006 aprovado pelo decreto 14.024/2012 ou de acordo com as demais isenÁıes previstas no Anexo ⁄nico do referido decreto" 
+					<h:outputText value="Selecione a justificativa da isen√ß√£o de acordo com o artigo 166 do regulamento da Lei 10.431/2006 aprovado pelo decreto 14.024/2012 ou de acordo com as demais isen√ß√µes previstas no Anexo √önico do referido decreto" 
 						style="font-weight:bold" rendered="#{boletoAutomatizadoController.boleto.indIsento}"/>
 					<p:spacer height="10"/>
 					<p:selectOneMenu value="#{boletoAutomatizadoController.boleto.ideMotivoIsencaoBoleto}" converter="motivoIsencaoConverter"
@@ -308,7 +309,7 @@
 			
 			
 			<h:panelGrid rendered="#{boletoAutomatizadoController.existeDae}">
-				<h:outputText value="Valores para geraÁ„o de DAEs:" style="text-decoration: underline;font-weight: bold;"/>
+				<h:outputText value="Valores para gera√ß√£o de DAEs:" style="text-decoration: underline;font-weight: bold;"/>
 				<h:panelGrid columns="4">
 					<h:outputText value="Valor Total do DAE - Certificado" style="font-weight: bold;"/>
 					<p:spacer width="100" height="5"/>
@@ -316,7 +317,7 @@
 					<h:panelGroup>
 						<h:outputText value="Valor Total do DAE - Vistoria" style="font-weight: bold;"/>
 						<h:graphicImage value="/resources/img/ico-ajuda.png"  id="ajuda" style="margin: -3px 5px;" />
-					  	<p:tooltip for="ajuda" value="O valor do DAE - Vistoria È o somatÛrio das ·reas (ha) de todos os biomas impactados aplicando a taxa referente ao bioma predominante." showEffect="fade" hideEffect="fade" />
+					  	<p:tooltip for="ajuda" value="O valor do DAE - Vistoria √© o somat√≥rio das √°reas (ha) de todos os biomas impactados aplicando a taxa referente ao bioma predominante." showEffect="fade" hideEffect="fade" />
 					</h:panelGroup>
 					
 					
@@ -337,11 +338,11 @@
 						<p:selectBooleanCheckbox value="#{boletoAutomatizadoController.certificado.indIsento}" disabled="#{boletoAutomatizadoController.boleto.indBoletoGeradoManualmente}">
 							<p:ajax global="false" update="boleto:motivoDae valorVistoriaDae" listener="#{boletoAutomatizadoController.isentarPagamento()}"/>
 						</p:selectBooleanCheckbox>
-						<h:outputLabel value="IsenÁ„o"  />
+						<h:outputLabel value="Isen√ß√£o"  />
 					</h:panelGrid>	
 				</h:panelGrid>
 				<h:panelGrid id="motivoDae" >
-					<h:outputText value="Selecione a justificativa da isenÁ„o de acordo com o artigo 166 do regulamento da Lei 10.431/2006 aprovado pelo decreto 14.024/2012 ou de acordo com as demais isenÁıes previstas no Anexo ⁄nico do referido decreto" 
+					<h:outputText value="Selecione a justificativa da isen√ß√£o de acordo com o artigo 166 do regulamento da Lei 10.431/2006 aprovado pelo decreto 14.024/2012 ou de acordo com as demais isen√ß√µes previstas no Anexo √önico do referido decreto" 
 						style="font-weight:bold" rendered="#{boletoAutomatizadoController.certificado.indIsento}"/>
 					<p:spacer height="10"/>
 					<p:selectOneMenu value="#{boletoAutomatizadoController.certificado.ideMotivoIsencaoBoleto}" converter="motivoIsencaoConverter" 
@@ -368,8 +369,10 @@
 	
 	<p:confirmDialog widgetVar="modalConfirmarFechamentoDaTelaBoleto" appendToBody="true" header="Alerta" message="#{bundle.geral_msg_confirmar_nao_salvar}" severity="alert">
 		<h:form>
+        <ui:include src="/layout/csrfToken.xhtml" />
 			<p:commandButton value="Sim" global="false" oncomplete="modalConfirmarFechamentoDaTelaBoleto.hide();dialogBoleto.hide();"/>
-			<p:commandButton value="N„o" global="false" oncomplete="modalConfirmarFechamentoDaTelaBoleto.hide();"/>
+        <ui:include src="/layout/csrfToken.xhtml" />
+			<p:commandButton value="N√£o" global="false" oncomplete="modalConfirmarFechamentoDaTelaBoleto.hide();"/>
 		</h:form>
 	</p:confirmDialog>
 	
@@ -382,7 +385,7 @@
 				<f:setPropertyActionListener target="#{boletoAutomatizadoController.boleto.pathComprovante}" value="" />
 				<f:setPropertyActionListener target="#{boletoAutomatizadoController.boleto.desCaminhoBoleto}" value="" />
 			</p:commandButton>
-			<p:commandButton value="N„o" global="false" oncomplete="excluirBoletoManual.hide()" />
+			<p:commandButton value="N√£o" global="false" oncomplete="excluirBoletoManual.hide()" />
 		</h:form>
 	</p:confirmDialog>
 	

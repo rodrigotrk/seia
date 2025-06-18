@@ -8,26 +8,27 @@
 	
 	
 	<h:form id="formAbaEnergiaTermoeletrica">
+        <ui:include src="/layout/csrfToken.xhtml" />
 	
-			<h:outputText value="Unidade(s) Termoelétrica(s)" style="font-weight: bold;"/>
+			<h:outputText value="Unidade(s) TermoelÃ©trica(s)" style="font-weight: bold;"/>
 			<div class="line"/>
 		<br/><br/>
 		<p:commandLink process="@this" action="#{fceGeracaoEnergiaController.iniciarEnergiaTermoeletrica}" disabled="#{fceGeracaoEnergiaController.desabilitarTudo}" onsuccess="incluirUnidadeTermoeletrica.show()" update="formUnidadeTermoeletrica">
-			<h:graphicImage title="Incluir unidade termoelétrica" value="/resources/img/ico-expandir.png" style="margin-left: 2px;"/>
-			<h:outputText value="Incluir unidade termoelétrica" />
+			<h:graphicImage title="Incluir unidade termoelÃ©trica" value="/resources/img/ico-expandir.png" style="margin-left: 2px;"/>
+			<h:outputText value="Incluir unidade termoelÃ©trica" />
 		</p:commandLink>
 		<br/><br/>
-		<p:dataTable emptyMessage="Não existe nenhuma Unidade Termoéletrica cadastrada." id="listaEnergiaTermoeletrica" rows="5" var="unidade"
+		<p:dataTable emptyMessage="NÃ£o existe nenhuma Unidade TermoÃ©letrica cadastrada." id="listaEnergiaTermoeletrica" rows="5" var="unidade"
 			value="#{fceGeracaoEnergiaController.listaEnergiaTermoeletricaUnidade}" paginator="true" paginatorPosition="bottom" paginatorAlwaysVisible="false">
-			<p:column headerText="Identificação" style="width: 350px; text-align:center;">
+			<p:column headerText="IdentificaÃ§Ã£o" style="width: 350px; text-align:center;">
 				<h:outputText value="#{unidade.desIdentificacaoUnidade}" />
 			</p:column>
-			<p:column headerText="Área" style="text-align:center;">
+			<p:column headerText="Ãrea" style="text-align:center;">
 				<h:outputText value="#{unidade.localizacaoGeografica.vlrArea}" >
 					<f:convertNumber type="number" groupingUsed="true" minFractionDigits="2" pattern="###,##0.00"/>
 				</h:outputText>
 			</p:column>
-			<p:column headerText="Ações" style="text-align:center;">
+			<p:column headerText="AÃ§Ãµes" style="text-align:center;">
 				<p:commandLink id="visualizarUnidadeTermo" action="#{fceGeracaoEnergiaController.visualizarUnidadeTermo()}" title="Visualizar" update="formUnidadeTermoeletrica" onsuccess="incluirUnidadeTermoeletrica.show()" process="visualizarUnidadeTermo">
 					<h:graphicImage title="Visualizar" value="/resources/img/ico-pesquisa.png" />
 					<f:setPropertyActionListener value="#{unidade}" target="#{fceGeracaoEnergiaController.fceEnergiaTermoeletricaUnidadeAux}"/>
@@ -47,7 +48,7 @@
                		<p:column footerText="#{fceGeracaoEnergiaController.numeroTotalUnidade}" />
                	</p:row>
                	<p:row>
-               		<p:column footerText="Potência Total (MW)" colspan="2" style="text-align:left;"/>
+               		<p:column footerText="PotÃªncia Total (MW)" colspan="2" style="text-align:left;"/>
                		<p:column>
                			<f:facet name="footer">
                				<h:outputText value="#{fceGeracaoEnergiaController.numeroTotalPotencia}">
@@ -63,7 +64,7 @@
 		<p:commandButton value="Voltar" action="#{fceGeracaoEnergiaController.voltar}" update="tabAbasGeracaoEnergia">
 			<f:setPropertyActionListener value="4" target="#{fceGeracaoEnergiaController.numeroAba}"/>
 		</p:commandButton>
-		<p:commandButton value="Avançar" rendered="#{!fceGeracaoEnergiaController.desabilitarTudo}" action="#{fceGeracaoEnergiaController.avancar}" style="float:right" update="tabAbasGeracaoEnergia">
+		<p:commandButton value="AvanÃ§ar" rendered="#{!fceGeracaoEnergiaController.desabilitarTudo}" action="#{fceGeracaoEnergiaController.avancar}" style="float:right" update="tabAbasGeracaoEnergia">
 			<f:setPropertyActionListener value="4" target="#{fceGeracaoEnergiaController.numeroAba}"/>
 		</p:commandButton>
 		<p:commandButton value="Salvar" action="#{fceGeracaoEnergiaController.salvar}" rendered="#{!fceGeracaoEnergiaController.desabilitarTudo}" style="float:right; margin-right: 5px;">

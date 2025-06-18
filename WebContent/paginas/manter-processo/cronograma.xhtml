@@ -8,13 +8,16 @@
 
 	<p:confirmDialog id="confirmationExcluirAtividCronograma" message="#{bundle.crono_confimar_exclusao}" header="Mensagem" severity="alert" widgetVar="confirmationExcluirAtividCronograma">
 		<h:form>
+        <ui:include src="/layout/csrfToken.xhtml" />
 			<p:commandButton value="Sim" update=":formAtividadesCronograma:painelAtividadesCronograma" actionListener="#{cronogramaController.excluirAtividade()}"
 			oncomplete="confirmationExcluirAtividCronograma.hide()" process="@this"/>
-			<p:commandButton value="Não" onclick="confirmationExcluirAtividCronograma.hide()" type="button" />
+        <ui:include src="/layout/csrfToken.xhtml" />
+        <ui:include src="/layout/csrfToken.xhtml" />
+			<p:commandButton value="NÃ£o" onclick="confirmationExcluirAtividCronograma.hide()" type="button" />
 		</h:form>
 	</p:confirmDialog>
 			
-	<p:dialog id="_dialogSetDataRealizacao" header="Definir Data de Realização" closable="true" position="center" draggable="true"  resizable="false" widgetVar="dialogSetDataRealizacao" >	
+	<p:dialog id="_dialogSetDataRealizacao" header="Definir Data de RealizaÃ§Ã£o" closable="true" position="center" draggable="true"  resizable="false" widgetVar="dialogSetDataRealizacao" >	
 		<ui:include src="/paginas/manter-processo/definirDataRealizacao.xhtml" />
 	</p:dialog>
 	
@@ -39,7 +42,7 @@
 							<f:selectItems value="${cronogramaController.listaAtividades}" var="atividade" itemValue="#{atividade.ideItemCronograma}" itemLabel="#{atividade.dscItemCronograma}"/>
 						</p:selectOneMenu>
 						<p:calendar locale="pt" readOnlyInputText="true" pattern="dd/MM/yyyy" navigator="true" mindate="${cronogramaController.minDataPrevistaFormatada}" maxdate="#{cronogramaController.maxDataPrevista}"
-						 value="#{cronogramaController.atividadeCronogramaAdd.dtcItemPrevista}" requiredMessage="O campo Data Prevista é de preenchimento obrigatório." required="true"
+						 value="#{cronogramaController.atividadeCronogramaAdd.dtcItemPrevista}" requiredMessage="O campo Data Prevista Ã© de preenchimento obrigatÃ³rio." required="true"
 						 showOn="button"  disabled="#{cronogramaController.apenasVisualizacao}"/> 
 						
 						<p:commandButton 
@@ -92,9 +95,9 @@
 									<f:setPropertyActionListener value="#{atividadeCronograma}" target="#{cronogramaController.atividCronogData}" />
 								</p:commandLink>
 								
-								<p:commandLink onsuccess="dialogSetDataRealizacao.show()" process="@this" title="Definir Data de Realização" action="#{cronogramaController.showDefinirData()}"
+								<p:commandLink onsuccess="dialogSetDataRealizacao.show()" process="@this" title="Definir Data de RealizaÃ§Ã£o" action="#{cronogramaController.showDefinirData()}"
 											  update=":panelFormDefiniDataRealizacao" disabled="#{!cronogramaController.habilitaReplanejarData(atividadeCronograma) || cronogramaController.apenasVisualizacao}" >
-									<h:graphicImage title="Definir Data de Realização" value="/resources/img/definirData.gif" width="16" height="16" style="padding: 0px 4px;" />
+									<h:graphicImage title="Definir Data de RealizaÃ§Ã£o" value="/resources/img/definirData.gif" width="16" height="16" style="padding: 0px 4px;" />
 									<f:setPropertyActionListener value="#{atividadeCronograma}" target="#{cronogramaController.atividCronogData}" />						
 								</p:commandLink>
 								

@@ -9,6 +9,7 @@
 	<h:panelGrid id="pnlCadFormaManejo" rendered="#{!tipologiaPaiController.disableFormCadFormaManejo}">
 	
 		<h:form id="formAbaManejo">
+        <ui:include src="/layout/csrfToken.xhtml" />
 			<h:panelGrid columns="2" >
 					<h:outputText id="idtextNomeforma" value="* Nome da Forma de Manejo"  styleClass="titulo-grupo"/>
 					<h:outputText />
@@ -24,7 +25,10 @@
 			<br />
 				
 			<h:panelGrid columns="3" >
-				<h:outputText id="idtextpotencial" value="Potencial de poluiÁ„o" styleClass="titulo-grupo"/>
+        <ui:include src="/layout/csrfToken.xhtml" />
+        <ui:include src="/layout/csrfToken.xhtml" />
+        <ui:include src="/layout/csrfToken.xhtml" />
+				<h:outputText id="idtextpotencial" value="Potencial de polui√ß√£o" styleClass="titulo-grupo"/>
 				<h:outputText />
 				<h:outputText />
 							
@@ -39,7 +43,7 @@
 					</p:selectBooleanCheckbox>
 				</h:panelGroup>
 				
-				<h:outputLabel value="N„o se aplica" styleClass="titulo-grupo" />
+				<h:outputLabel value="N√£o se aplica" styleClass="titulo-grupo" />
 				<p:commandButton id="btSalvarManejoPotencial"   update="tabAbas:formAbaManejoUnMedida  tabAbas:formAbaCoordenacaoArea tabAbas:formAbaPorte tabAbas:formAbaCompertencias tabAbas:formAbaTipoAto:pnlTipoAto tabAbas:formAbaAtoAmbiental:pnlAtoAmbiental" actionListener="#{tipologiaPaiController.salvarManejoPotencial}" process="@this" value="Salvar"/>
 			</h:panelGrid>
 													
@@ -54,7 +58,7 @@
 				<p:selectBooleanCheckbox id="unMedidaSimNao" value="#{tipologiaPaiController.unidMedidaSimNao}"  valueChangeListener="#{tipologiaPaiController.validarUnMedSimNao}" disabled="#{tipologiaPaiController.habilitaCheckboxUndMedida}" >
 					<p:ajax  update="tabAbas:formAbaManejoUnMedida" /> 								
 				</p:selectBooleanCheckbox>
-				<h:outputLabel value="N„o se aplica" styleClass="titulo-grupo"/>
+				<h:outputLabel value="N√£o se aplica" styleClass="titulo-grupo"/>
 			</h:panelGrid>
 							
 			<h:panelGrid id="pnlUnMedida" columns="1" >
@@ -66,7 +70,7 @@
 							removeAllLabel="Remover Todos"  
 							disabled="#{tipologiaPaiController.habilitaPicklistUndMedida}"
 							>
-							<f:facet name="sourceCaption" >Unidades de medida <br /> n„o selecionadas</f:facet>  
+							<f:facet name="sourceCaption" >Unidades de medida <br /> n√£o selecionadas</f:facet>  
 		       				<f:facet name="targetCaption">Unidades de medida <br />selecionadas</f:facet>
 						</p:pickList>
 						<!-- fim Picklist Unidade Medida-->
@@ -86,8 +90,8 @@
 		
 			<h:panelGrid id="pnlCoordenacaoArea" columns="1" >
 				<p:separator style="width:600px;" />
-				<!-- PickList CoordenaÁ„o - Area-->
-					<h:outputText id="idtextcoordenacao" value="* COORDENA«√O" styleClass="titulo-grupo"/>
+				<!-- PickList Coordena√ß√£o - Area-->
+					<h:outputText id="idtextcoordenacao" value="* COORDENA√á√ÉO" styleClass="titulo-grupo"/>
 					<p:pickList id="pickListCoordenacao" value="#{tipologiaPaiController.area}" var="area" itemLabel="#{area.nomArea}" itemValue="#{area}"   converter="areaTipologiaConverter" 
 					addLabel="Adicionar"
 					addAllLabel="Adicionar todos"  			 
@@ -96,13 +100,13 @@
 					disabled="#{tipologiaPaiController.habilitaPicklistUndMedida}"> 
 					
 														  
-							<f:facet name="sourceCaption">CoordenaÁıes n„o <br/> selecionadas</f:facet>  
-		       				<f:facet name="targetCaption">CoordenaÁıes  <br/>selecionadas</f:facet>
+							<f:facet name="sourceCaption">Coordena√ß√µes n√£o <br/> selecionadas</f:facet>  
+		       				<f:facet name="targetCaption">Coordena√ß√µes  <br/>selecionadas</f:facet>
 					</p:pickList>
 				
-				<!-- Fim  PickList CoordenaÁ„o-->
+				<!-- Fim  PickList Coordena√ß√£o-->
 				<h:panelGrid columns="1">
-						<p:commandButton id="btSalvarCoordenacaoArea"  update="tabAbas:formAbaCoordenacaoArea:pnlCoordenacaoArea tabAbas:formformamanejotabela:pnltabelaFormamanejo"  actionListener="#{tipologiaPaiController.salvarCoordenacaoAreaTipologiaGrupo}"  value="Salvar CoordenaÁ„o"  process="@this tabAbas:formAbaCoordenacaoArea:pickListCoordenacao" disabled="#{tipologiaPaiController.habilitaPicklistUndMedida}"/>
+						<p:commandButton id="btSalvarCoordenacaoArea"  update="tabAbas:formAbaCoordenacaoArea:pnlCoordenacaoArea tabAbas:formformamanejotabela:pnltabelaFormamanejo"  actionListener="#{tipologiaPaiController.salvarCoordenacaoAreaTipologiaGrupo}"  value="Salvar Coordena√ß√£o"  process="@this tabAbas:formAbaCoordenacaoArea:pickListCoordenacao" disabled="#{tipologiaPaiController.habilitaPicklistUndMedida}"/>
 				</h:panelGrid>
 				<h:outputText />
 			</h:panelGrid>
@@ -113,12 +117,12 @@
 				<h:panelGrid columns="1">
 						<h:panelGrid columns="1">
 							<p:separator style="width:650px;" />
-							<h:outputText id="idtextcompetencia" value="COMPET NCIAS" styleClass="titulo-grupo" />
+							<h:outputText id="idtextcompetencia" value="COMPET√äNCIAS" styleClass="titulo-grupo" />
 						</h:panelGrid>
 						<br />
 						<h:panelGrid columns="2">
 							
-							<h:outputText id="idtextnivel1" value="CompetÍncia municipal - NÌvel 1 - " />
+							<h:outputText id="idtextnivel1" value="Compet√™ncia municipal - N√≠vel 1 - " />
 							<h:panelGroup>
 								<h:panelGrid columns="10" style="margin: 0 5 0 0;">
 								
@@ -129,7 +133,7 @@
 									<h:outputText id="idtextpe" value="Pequeno" />
 
 									<p:selectBooleanCheckbox value="#{tipologiaPaiController.nivel1MedioMunicipal}" disabled="#{tipologiaPaiController.habilitaCheckboxUndMedida}"/>
-									<h:outputText id="idtextme" value="MÈdio" />
+									<h:outputText id="idtextme" value="M√©dio" />
 									
 									<p:selectBooleanCheckbox value="#{tipologiaPaiController.nivel1GrandeMunicipal}" disabled="#{tipologiaPaiController.habilitaCheckboxUndMedida}" />
 									<h:outputText id="idtextgr" value="Grande" />
@@ -140,7 +144,7 @@
 								</h:panelGrid>
 							</h:panelGroup>
 
-							<h:outputText id="idtextnivel2" value="CompetÍncia municipal - NÌvel 2 - " />
+							<h:outputText id="idtextnivel2" value="Compet√™ncia municipal - N√≠vel 2 - " />
 							<h:panelGroup>
 								<h:panelGrid columns="10">
 									<p:selectBooleanCheckbox value="#{tipologiaPaiController.nivel2MicroMunicipal}" disabled="#{tipologiaPaiController.habilitaCheckboxUndMedida}" />
@@ -150,7 +154,7 @@
 									<h:outputText id="idtextpe2" value="Pequeno" />
 
 									<p:selectBooleanCheckbox value="#{tipologiaPaiController.nivel2MedioMunicipal}" disabled="#{tipologiaPaiController.habilitaCheckboxUndMedida}" />
-									<h:outputText id="idtextme2" value="MÈdio" />
+									<h:outputText id="idtextme2" value="M√©dio" />
 									
 									<p:selectBooleanCheckbox value="#{tipologiaPaiController.nivel2GrandeMunicipal}" disabled="#{tipologiaPaiController.habilitaCheckboxUndMedida}" />
 									<h:outputText id="idtextgr2" value="Grande" />
@@ -160,7 +164,7 @@
 								</h:panelGrid>
 							</h:panelGroup>
 
-							<h:outputText id="idtextnivel3" value="CompetÍncia municipal - NÌvel 3 - " />
+							<h:outputText id="idtextnivel3" value="Compet√™ncia municipal - N√≠vel 3 - " />
 							<h:panelGroup>
 								<h:panelGrid columns="10">
 								
@@ -171,7 +175,7 @@
 									<h:outputText id="idtextpe3" value="Pequeno" />
 
 									<p:selectBooleanCheckbox value="#{tipologiaPaiController.nivel3MedioMunicipal}" disabled="#{tipologiaPaiController.habilitaCheckboxUndMedida}" />
-									<h:outputText id="idtextme3" value="MÈdio" />
+									<h:outputText id="idtextme3" value="M√©dio" />
 									
 									<p:selectBooleanCheckbox value="#{tipologiaPaiController.nivel3GrandeMunicipal}" disabled="#{tipologiaPaiController.habilitaCheckboxUndMedida}" />
 									<h:outputText id="idtextgr3" value="Grande" />
@@ -181,7 +185,7 @@
 								</h:panelGrid>
 							</h:panelGroup>
 
-							<h:outputText id="idtextnivelest" value="CompetÍncia Estadual  " />
+							<h:outputText id="idtextnivelest" value="Compet√™ncia Estadual  " />
 							<h:panelGroup>
 								<h:panelGrid columns="10" style="colspan: 5px;">
 									<p:selectBooleanCheckbox value="#{tipologiaPaiController.nivel4estadualMicro}" disabled="#{tipologiaPaiController.habilitaCheckboxUndMedida}" />
@@ -191,7 +195,8 @@
 									<h:outputText id="idtextpeest" value="Pequeno" />
 
 									<p:selectBooleanCheckbox value="#{tipologiaPaiController.nivel4estadualMedio}" disabled="#{tipologiaPaiController.habilitaCheckboxUndMedida}" />
-									<h:outputText id="idtextmeest" value="MÈdio" />
+        <ui:include src="/layout/csrfToken.xhtml" />
+									<h:outputText id="idtextmeest" value="M√©dio" />
 									
 									<p:selectBooleanCheckbox value="#{tipologiaPaiController.nivel4estadualGrande}" disabled="#{tipologiaPaiController.habilitaCheckboxUndMedida}" />
 									<h:outputText id="idtextgrest" value="Grande" />
@@ -204,7 +209,7 @@
 						</h:panelGrid>
 						
 						<h:panelGrid columns="1">
-							<p:commandButton id="btSalvarPorteCompetencia"  update="tabAbas:formAbaPorte:pnlPorte"  actionListener="#{tipologiaPaiController.salvarPorteCompetencia}"  value="Salvar CompetÍncias"  process="@form" disabled="#{tipologiaPaiController.habilitaCheckboxUndMedida}" />
+							<p:commandButton id="btSalvarPorteCompetencia"  update="tabAbas:formAbaPorte:pnlPorte"  actionListener="#{tipologiaPaiController.salvarPorteCompetencia}"  value="Salvar Compet√™ncias"  process="@form" disabled="#{tipologiaPaiController.habilitaCheckboxUndMedida}" />
 						</h:panelGrid>
 				</h:panelGrid>	
 				
@@ -216,7 +221,7 @@
 				<p:separator style="width:650px;" />
 				
 				<h:panelGrid columns="2">
-					<h:outputLabel id="idTextNaoAplica" value="Porte - N„o se aplica " styleClass="titulo-grupo"/>
+					<h:outputLabel id="idTextNaoAplica" value="Porte - N√£o se aplica " styleClass="titulo-grupo"/>
 					<h:panelGroup>
 						<p:selectBooleanCheckbox id="idChckNaoAplica"  value="#{tipologiaPaiController.habilitaPorte}" 
 						valueChangeListener="#{tipologiaPaiController.validarPorte}"  disabled="#{tipologiaPaiController.habilitaCheckboxUndMedida}">
@@ -263,6 +268,7 @@
 		</h:form>
 						
 		<h:form id="formAbaTipoAto">
+        <ui:include src="/layout/csrfToken.xhtml" />
 						
 				<h:panelGrid columns="1" id="pnlTipoAto">
 				
@@ -277,10 +283,12 @@
 						removeLabel="Remover"  			 
 						removeAllLabel="Remover Todos"  
 						disabled="#{tipologiaPaiController.habilitaPicklistUndMedida}" > 
-								<f:facet name="sourceCaption">Tipos de ato <br/>n„o selecionados</f:facet>  
+        <ui:include src="/layout/csrfToken.xhtml" />
+		<h:form id="formTipoAtoLimitado">
+        <ui:include src="/layout/csrfToken.xhtml" />							
 			       				<f:facet name="targetCaption">Tipos de ato <br/>selecionados</f:facet>
 						</p:pickList>
-						<!-- Fim  PickList CoordenaÁ„o-->
+						<!-- Fim  PickList Coordena√ß√£o-->
 						
 						<br/>
 						<h:panelGrid columns="1">
@@ -303,10 +311,10 @@
 						removeLabel="Remover"  			 
 						removeAllLabel="Remover Todos"  
 						disabled="#{tipologiaPaiController.habilitaPicklistUndMedida}" >
-								<f:facet name="sourceCaption">Atos ambientais  n„o <br/> selecionados</f:facet>
+								<f:facet name="sourceCaption">Atos ambientais  n√£o <br/> selecionados</f:facet>
 			       				<f:facet name="targetCaption">Atos ambientais   <br/>selecionados</f:facet>
 						</p:pickList>
-						<!-- Fim  PickList CoordenaÁ„o-->
+						<!-- Fim  PickList Coordena√ß√£o-->
 						
 						<br/>
 						<h:panelGrid columns="1">
@@ -322,10 +330,10 @@
 				<p:separator style="width:650px;" />									
 
 					<br />
-					<h:outputText id="idtexttipoatos" value="O tipo de ato È limitado conforme valor de referÍncia?" styleClass="titulo-grupo"/>
+					<h:outputText id="idtexttipoatos" value="O tipo de ato √© limitado conforme valor de refer√™ncia?" styleClass="titulo-grupo"/>
 					<p:selectOneRadio value="#{tipologiaPaiController.tipoAtoChange}" valueChangeListener="#{tipologiaPaiController.tipoAtoChanged}">
 						<f:selectItem itemLabel="Sim" itemValue="1" />
-						<f:selectItem itemLabel="N„o" itemValue="2" />
+						<f:selectItem itemLabel="N√£o" itemValue="2" />
 						<p:ajax  update="tabAbas:formTipoAtoLimitado" />
 					</p:selectOneRadio>
 					
@@ -349,7 +357,7 @@
 						
 						
 						<h:panelGrid columns="1">
-							<p:commandButton id="btSalvarTipoAtoReferencia"  update="tabAbas:formTipoAtoLimitado:pnlViewer"  actionListener="#{tipologiaPaiController.salvarTipoAtoReferencia}"  value="Salvar LicenÁas"  disabled="#{tipologiaPaiController.habilitaPicklistUndMedida}" />
+							<p:commandButton id="btSalvarTipoAtoReferencia"  update="tabAbas:formTipoAtoLimitado:pnlViewer"  actionListener="#{tipologiaPaiController.salvarTipoAtoReferencia}"  value="Salvar Licen√ßas"  disabled="#{tipologiaPaiController.habilitaPicklistUndMedida}" />
 						</h:panelGrid>
 						
 					</h:panelGrid>

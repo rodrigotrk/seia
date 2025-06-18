@@ -16,6 +16,7 @@
 		width="400"
 		>
 		<h:form id="formDlgConfirmarFimAnaliseTecnicaGestor">
+        <ui:include src="/layout/csrfToken.xhtml" />
 			<h:panelGroup layout="block" style="height:auto;" >
 				<p>
 					<span class="ui-icon ui-icon-alert ui-confirm-dialog-severity" />
@@ -35,6 +36,7 @@
 		<h:panelGroup id="pnlAprovarAnaliseTecnica" layout="block">
 			
 			<h:form id="frmAprovarAnaliseTecnica" rendered="#{aprovarAnaliseTecnicaController.vwProcesso ne null}">
+        <ui:include src="/layout/csrfToken.xhtml" />
 				
 				<h:panelGrid id="pnlDadosProcesso" columns="2">
 					<h:outputText value="#{bundle.analise_tecnica_lbl_num_processo}: " /><h:outputText value="#{aprovarAnaliseTecnicaController.vwProcesso.numProcesso}" />
@@ -139,7 +141,7 @@
 				</h:panelGroup>
 				
 				<h:panelGrid id="pnlDecisao">
-					<h:outputText value="Decisão:" />
+					<h:outputText value="DecisÃ£o:" />
 					<h:selectOneMenu disabled="#{aprovarAnaliseTecnicaController.desabilitarCampos}" value="#{aprovarAnaliseTecnicaController.analiseTecnica.indAprovado}"
 						required="true" requiredMessage="#{bundle.analise_tecnica_msg_obrigatoriedade_decisao}"> 
 						<f:selectItem itemLabel="Selecione..." itemValue="" />
@@ -147,7 +149,7 @@
 						<f:selectItem itemLabel="#{bundle.analise_tecnica_lbl_decisao_revisao}" itemValue="#{false}" />
 					</h:selectOneMenu>
 					<p:spacer height="10" />
-					<h:outputText value="Observação:" />
+					<h:outputText value="ObservaÃ§Ã£o:" />
 					<p:inputTextarea disabled="#{aprovarAnaliseTecnicaController.desabilitarCampos}" value="#{aprovarAnaliseTecnicaController.analiseTecnica.observacao}" style="width:550px; height:50px;" />
 				</h:panelGrid>
 				

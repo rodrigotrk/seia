@@ -8,14 +8,15 @@
 	xmlns:s="http://java.sun.com/jsf/composite/seia">
 
 	<h:form id="formRenovarPrazo" >
+        <ui:include src="/layout/csrfToken.xhtml" />
 		<p:remoteCommand name="calcularNovaDataVencimento" actionListener="#{tccaController.calcularNovaDataVencimento()}" global="true" update="formRenovarPrazo" />
 		
 		<h:panelGrid columns="3" style="width:100%; text-align:left;">
-			<h:outputText value="Número do TCCA:"/>
+			<h:outputText value="NÃºmero do TCCA:"/>
 			<p:spacer width="25" height="0"/>
 			<p:inputText value="#{tccaController.tccaRenovarPrazoDTO.numTcca}" readonly="true" />
 			
-			<h:outputText value="Data da publicação:"/>
+			<h:outputText value="Data da publicaÃ§Ã£o:"/>
 			<p:spacer width="25" height="0"/>
 			<p:inputText value="#{tccaController.tccaRenovarPrazoDTO.dtcPublicacao}" readonly="true">
 				<f:convertDateTime  pattern="dd/MM/yyyy" locale="pt,BR" timeZone="Brazil/East"/>
@@ -35,7 +36,7 @@
 		<hr style="width:100%"/>
 		
 		<h:panelGrid columns="3" style="width:100%; text-align:left;">
-		    <h:outputText value="Data da renovação:"/>
+		    <h:outputText value="Data da renovaÃ§Ã£o:"/>
 		    <p:spacer width="25" height="0"/>
 			<p:calendar value="#{tccaController.tccaRenovarPrazoDTO.dtcRenovacao}" onchange="calcularNovaDataVencimento();"
 				readOnlyInputText="true" locale="pt" pattern="dd/MM/yyyy" mindate="01/01/1900" showOn="button" size="16"/>
@@ -53,7 +54,7 @@
 		</h:panelGrid> 
 		
 		<h:panelGrid columns="2" style="width:100%; margin-top:30px;">
-			<p:commandButton title="Renovar por igual período" value="Renovar por igual período" 
+			<p:commandButton title="Renovar por igual perÃ­odo" value="Renovar por igual perÃ­odo" 
 				actionListener="#{tccaController.renovarPrazoDeValidadePorIgualPeriodo()}" process="@form" styleClass="left"/>
 				
 			<p:commandButton title="Salvar" value="Salvar" actionListener="#{tccaController.salvarRenovarPrazoValidade()}" process="@form" styleClass="right"/>

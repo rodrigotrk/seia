@@ -7,6 +7,7 @@
 	xmlns:p="http://primefaces.prime.com.tr/ui">
 
 	<h:form id="formAtividadeInexigivel" binding="#{atividadeInexigivelController.formularioASerLimpo}">
+        <ui:include src="/layout/csrfToken.xhtml" />
 		<h:panelGrid id="panelAtividade" columns="1">
 
  			<h:outputLabel value="Nome da atividade:" />
@@ -16,25 +17,25 @@
 			<h3>Tipo de atividade</h3>
 			<h:panelGrid columns="4">
 				<p:selectBooleanCheckbox id="chkInexigivelOutorga" value="#{atividadeInexigivelController.inexigivelOutorga}" disabled="#{atividadeInexigivelController.visualizar}"/>
-				<h:outputText value="Inexigível de Outorga" />
+				<h:outputText value="InexigÃ­vel de Outorga" />
 				
 				<p:selectBooleanCheckbox id="chkInexigivelLicenca" value="#{atividadeInexigivelController.inexigivelLicenca}" disabled="#{atividadeInexigivelController.visualizar}">
 				</p:selectBooleanCheckbox>
-				<h:outputText value="Inexigível de Licença" />
+				<h:outputText value="InexigÃ­vel de LicenÃ§a" />
 			</h:panelGrid>
 			
 			<hr/>
 
-  			<h3>Caracterização da Atividade</h3>
+  			<h3>CaracterizaÃ§Ã£o da Atividade</h3>
 			
 			<h:panelGrid columns="2">
 
 				<p:selectOneRadio id="finalidadeAtividade" value="#{atividadeInexigivelController.finalidadeSelecionada}" layout="pageDirection" disabled="#{atividadeInexigivelController.visualizar}">
 		            <f:selectItem itemLabel="Ponte" itemValue="ponte" />
 		            <f:selectItem itemLabel="Sistema" itemValue="sistema" />
-		            <f:selectItem itemLabel="Intervenção" itemValue="projeto" />
+		            <f:selectItem itemLabel="IntervenÃ§Ã£o" itemValue="projeto" />
 		            <f:selectItem itemLabel="Unidade" itemValue="unidade" />
-		            <f:selectItem itemLabel="Nenhuma das opções" itemValue="nenhuma" />
+		            <f:selectItem itemLabel="Nenhuma das opÃ§Ãµes" itemValue="nenhuma" />
 		            <p:ajax listener="#{atividadeInexigivelController.changeFinalidade}" update="realizacaoAtividade"/>
 	       		</p:selectOneRadio> 
 	
@@ -72,26 +73,26 @@
 				<h:outputText value="A atividade faz parte do programa luz para todos?" />
 				<p:selectOneRadio id="luzParaTodos" value="#{atividadeInexigivelController.atividade.permiteLuzParaTodos}" disabled="#{atividadeInexigivelController.visualizar}">
 		            <f:selectItem itemLabel="Sim" itemValue="true" />
-		            <f:selectItem itemLabel="Não" itemValue="false" />
+		            <f:selectItem itemLabel="NÃ£o" itemValue="false" />
 	       		</p:selectOneRadio>		
 	       		
-				<h:outputText value="A atividade poderá ser realizada em municípios em estado de emergência?" />
+				<h:outputText value="A atividade poderÃ¡ ser realizada em municÃ­pios em estado de emergÃªncia?" />
 				<p:selectOneRadio id="estadoEmergencia" value="#{atividadeInexigivelController.atividade.permiteMunicipioEmergencial}" disabled="#{atividadeInexigivelController.visualizar}">
 		            <f:selectItem itemLabel="Sim" itemValue="true" />
-		            <f:selectItem itemLabel="Não" itemValue="false" />
+		            <f:selectItem itemLabel="NÃ£o" itemValue="false" />
 	       		</p:selectOneRadio>		
 	       		
-				<h:outputText value="Perguntar se a atividade é realizada em um local especifico ou em vários locais do estado da Bahia?" />
+				<h:outputText value="Perguntar se a atividade Ã© realizada em um local especifico ou em vÃ¡rios locais do estado da Bahia?" />
 				<p:selectOneRadio id="local" value="#{atividadeInexigivelController.atividade.permiteLocalRealizacao}" disabled="#{atividadeInexigivelController.visualizar}">
 		            <f:selectItem itemLabel="Sim" itemValue="true" />
-		            <f:selectItem itemLabel="Não" itemValue="false" />
+		            <f:selectItem itemLabel="NÃ£o" itemValue="false" />
 		            <p:ajax listener="#{atividadeInexigivelController.changeAtividadeLocaisEspecificos()}" update="realizacaoAtividade"/>
 	       		</p:selectOneRadio>	 
 	       		
-				<h:outputText value="É necessário informar endereço de realização da atividade?" />
+				<h:outputText value="Ã‰ necessÃ¡rio informar endereÃ§o de realizaÃ§Ã£o da atividade?" />
 				<p:selectOneRadio id="realizacaoAtividade" value="#{atividadeInexigivelController.atividade.permiteEndereco}" disabled="#{atividadeInexigivelController.visualizar or atividadeInexigivelController.disableEndereco}">
 		            <f:selectItem itemLabel="Sim" itemValue="true" />
-		            <f:selectItem itemLabel="Não" itemValue="false" />
+		            <f:selectItem itemLabel="NÃ£o" itemValue="false" />
 	       		</p:selectOneRadio>	 
        		</h:panelGrid>
 		<br/>

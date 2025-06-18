@@ -11,6 +11,7 @@
 	
 	<p:dialog id="_dialogdetalharProcesso" widgetVar="dialogdetalharProcesso" header="Detalhes do Processo" height="500" width="1000" modal="true" closable="true" draggable="true" resizable="false" position="center" >
 		<h:form id="formDetalharProcesso" >
+        <ui:include src="/layout/csrfToken.xhtml" />
 			<p:tabView id="tabviewprocesso" style="width: 940px" dynamic="true" activeIndex="#{detalharProcessoController.activeIndex}" >
 				<p:ajax event="tabChange" listener="#{detalharProcessoController.onChangeAba()}" />
 				
@@ -18,11 +19,11 @@
 					<ui:include src="/paginas/manter-processo/detalhe-processo/atos-dados-gerais/atosDadosGerais.xhtml" />
 				</p:tab>
 				
-				<p:tab title="Histórico do processo" rendered="#{!detalharProcessoController.usuarioExterno}" >
+				<p:tab title="HistÃ³rico do processo" rendered="#{!detalharProcessoController.usuarioExterno}" >
 					<ui:include src="/paginas/manter-processo/historicoProcesso.xhtml" />
 				</p:tab>
 				
-				<p:tab id="docsFormacao" title="Docs de Formação">        
+				<p:tab id="docsFormacao" title="Docs de FormaÃ§Ã£o">        
 					<ui:include src="/paginas/manter-processo/detalhe-processo/documentos-formacao/documentosFormacao.xhtml" />
 				</p:tab>
 				
@@ -30,7 +31,7 @@
 				    <ui:include src="/paginas/manter-processo/detalhe-processo/documento-apensados/documentosApensados.xhtml" />
 				</p:tab>
 				
-				<p:tab title="Notificações Emitidas" rendered="#{!detalharProcessoController.usuarioExterno}">        
+				<p:tab title="NotificaÃ§Ãµes Emitidas" rendered="#{!detalharProcessoController.usuarioExterno}">        
 				    <ui:include src="/paginas/manter-processo/detalhe-processo/notificacoes-emitidas/notificacoesEmitidas.xhtml" />
 				</p:tab>
 

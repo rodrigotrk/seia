@@ -9,7 +9,8 @@
 	
 	<ui:composition template="/layout/template.xhtml">
 		<ui:define name="titulo-pagina">
-			<h3>Execução do Projeto</h3>
+        <ui:include src="/layout/csrfToken.xhtml" />
+			<h3>ExecuÃ§Ã£o do Projeto</h3>
 		</ui:define>
 		
 		<ui:define name="conteudo-principal">
@@ -25,7 +26,7 @@
 				<p:spacer height="10" width="0"/>
 				
 				<h:panelGrid columns="2">
-					<h:outputText value="Número do TCCA:" styleClass="bold"/>
+					<h:outputText value="NÃºmero do TCCA:" styleClass="bold"/>
 					<h:outputText value="#{projetoTccaController.tcca.numTcca}" />
 				</h:panelGrid>
 					
@@ -97,7 +98,7 @@
 						rowsPerPageTemplate="5,10,15" emptyMessage="#{bundle.msg_lista_vazia}" style="min-width:350px;">
 			
 						<f:facet name="header">
-							<h:outputText value="Unidade(s) de Conservação" />
+							<h:outputText value="Unidade(s) de ConservaÃ§Ã£o" />
 						</f:facet>
 						
 						<p:column>
@@ -253,12 +254,12 @@
 				<h:panelGroup id="panelEmpresaExecutora" rendered="#{projetoTccaController.renderedEmpresaExecutora}">
 					<hr style="width:100%;"/>
 					
-					<h3><h:outputLabel styleClass="titulo-grupo" style="font-weight:bold;" value="Identificação da Empresa Executora" /></h3>
+					<h3><h:outputLabel styleClass="titulo-grupo" style="font-weight:bold;" value="IdentificaÃ§Ã£o da Empresa Executora" /></h3>
 					
 					<p:spacer height="10" width="0"/>
 					
 					<h:panelGrid columns="2">
-						<h:outputText value="* Nome/Razão Social:" />
+						<h:outputText value="* Nome/RazÃ£o Social:" />
 						<p:spacer height="0" width="1"/>
 						
 						<p:inputText value="#{projetoTccaController.projetoEmpresaExecutora.idePessoaExecutora.nomeRazao}" disabled="true" style="width: 200px;"/>
@@ -269,10 +270,10 @@
 					
 					<p:spacer height="20" width="0"/>
 					
-					<h:outputText value="* Vigência do Contrato:" />
+					<h:outputText value="* VigÃªncia do Contrato:" />
 					
 					<h:panelGrid columns="5">
-						<h:outputText value="Início:" />
+						<h:outputText value="InÃ­cio:" />
 						<p:calendar id="dtInicio" size="6" showOn="button" locale="pt" pattern="dd/MM/yyyy" readOnlyInputText="true"
 							value="#{projetoTccaController.projetoEmpresaExecutora.dtVigenciaContratoInicio}" mindate="01/01/1900">
 							<p:ajax event="dateSelect" global="false" process="@this" />
@@ -303,7 +304,7 @@
 						
 						<p:column>
 							<f:facet name="header">
-								<h:outputText value="Nome/Razão Social" />
+								<h:outputText value="Nome/RazÃ£o Social" />
 							</f:facet>
 							
 							<h:outputText value="#{ee.idePessoaExecutora.nomeRazao}" />
@@ -311,7 +312,7 @@
 						
 						<p:column>
 							<f:facet name="header">
-								<h:outputText value="Vigência" />
+								<h:outputText value="VigÃªncia" />
 							</f:facet>
 							
 							<h:outputText value="#{ee.dtVigenciaContratoInicio}">

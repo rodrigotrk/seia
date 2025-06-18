@@ -14,6 +14,7 @@
 		resizable="false" 
 		width="290">
 		<h:form id="frmDialogTelefone" >
+        <ui:include src="/layout/csrfToken.xhtml" />
 			<h:panelGrid id="display"  columns="2">
 				<h:outputLabel id="idlabeltipotelefone" class="form-label" value="#{bundle.LabelTipoTelefone}" />
 				<h:outputLabel id="idlabelnumerotelefone" class="form-label" value="#{bundle.LabelNumeroTelefone}"/>
@@ -58,24 +59,29 @@
 		
 	<p:confirmDialog header="#{bundle.geral_lbl_mensagem}" appendToBody="true" message="#{bundle.lac_dadosGerais_msg004}" severity="alert" widgetVar="confirmationTelefone" id="confirmationTelefone">
 		<h:form>
+        <ui:include src="/layout/csrfToken.xhtml" />
 			<p:commandButton value="Sim" 
 				update=":tabAbasId:formDadosGerais:panelTerceiros" 
 				actionListener="#{lacTransporteController.excluirTelefone()}" 
 				oncomplete="confirmationTelefone.hide()" />
-			<p:commandButton value="Não" 
+        <ui:include src="/layout/csrfToken.xhtml" />
+        <ui:include src="/layout/csrfToken.xhtml" />
+        <ui:include src="/layout/csrfToken.xhtml" />
+        <ui:include src="/layout/csrfToken.xhtml" />
+			<p:commandButton value="NÃ£o" 
 				onclick="confirmationTelefone.hide()" 
 				type="button" 
 				global="false"/>
 		</h:form>
 	</p:confirmDialog>
 	
-	<p:confirmDialog message="Deseja imprimir o relatório da LAC Transportadora" widgetVar="rel_transportadora" header="Mensagem">
+	<p:confirmDialog message="Deseja imprimir o relatÃ³rio da LAC Transportadora" widgetVar="rel_transportadora" header="Mensagem">
 		<h:form>
 			<div align="center">
 				<p:commandButton value="Sim" ajax="false" global="false" process="@this" id="imprimir_rel_transporte"  onclick="rel_transportadora.hide();" style="margin-right:10px;">
 					<p:fileDownload value="#{lacTransporteController.imprimirRelatorio}"/>
 				</p:commandButton>			
-				<p:commandButton value="Não" oncomplete="rel_transportadora.hide();" process="@this"/>
+				<p:commandButton value="NÃ£o" oncomplete="rel_transportadora.hide();" process="@this"/>
 			</div>
 		</h:form>
 	</p:confirmDialog> 
@@ -99,11 +105,11 @@
 		</h:form>
 	</p:confirmDialog>
 	
-	<p:confirmDialog header="Confirmação" appendToBody="true" message="#{bundle.geral_msg_informacoes_nao_foram_salvas_deseja_continuar}"
+	<p:confirmDialog header="ConfirmaÃ§Ã£o" appendToBody="true" message="#{bundle.geral_msg_informacoes_nao_foram_salvas_deseja_continuar}"
 		severity="alert" widgetVar="confirmationVoltarLAC" id="confirmationVoltarLAC">
 		<h:form>
 			<p:commandButton value="Sim" update="formDadosGerais" oncomplete="confirmationVoltarLAC.hide();lac_transporte.hide();" global="false"/>
-			<p:commandButton value="Não" onclick="confirmationVoltarLAC.hide();" type="button" global="false"/>
+			<p:commandButton value="NÃ£o" onclick="confirmationVoltarLAC.hide();" type="button" global="false"/>
 		</h:form>
 	</p:confirmDialog>
 	

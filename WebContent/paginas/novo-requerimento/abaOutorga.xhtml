@@ -7,18 +7,19 @@
 	xmlns:p="http://primefaces.prime.com.tr/ui">
 
 	<h:form id="formAbaOutorga">
+        <ui:include src="/layout/csrfToken.xhtml" />
 		<h:panelGroup id="pnlGroupInicial">
 			<h:panelGrid columns="1">
 				<h:panelGroup>
 					<h:outputText value="* #{abaOutorgaController.perguntaNR_A4_P1.idePergunta.dscPergunta}" />
 					<h:graphicImage value="/resources/img/ico-ajuda.png" id="ajudaIntervecaoCorpoHidrico1" style="margin: 1px 1px 2px 4px;" />
-					<p:tooltip for="ajudaIntervecaoCorpoHidrico1" value="Entende-se intervenção em recurso hídrico a atividade, obra ou empreendimento que altere as condições de escoamento das águas, criando obstáculo, produzindo modificações ou alterando o fluxo dessas águas." showEffect="fade" hideEffect="fade" />
+					<p:tooltip for="ajudaIntervecaoCorpoHidrico1" value="Entende-se intervenÃ§Ã£o em recurso hÃ­drico a atividade, obra ou empreendimento que altere as condiÃ§Ãµes de escoamento das Ã¡guas, criando obstÃ¡culo, produzindo modificaÃ§Ãµes ou alterando o fluxo dessas Ã¡guas." showEffect="fade" hideEffect="fade" />
 				</h:panelGroup>
 				
 				<p:selectOneRadio id="selLancamentoAfluenteIntervencaoCorpoHidrico"	value="#{abaOutorgaController.perguntaNR_A4_P1.indResposta}"	
 					valueChangeListener="#{abaOutorgaController.valueChangePerguntaNRA4P1()}" disabled="#{novoRequerimentoController.desabilitarTudo or abaOutorgaController.disablePerguntaA4P1}">
 					<f:selectItem itemLabel="Sim" itemValue="true" />
-					<f:selectItem itemLabel="Não" itemValue="false" />
+					<f:selectItem itemLabel="NÃ£o" itemValue="false" />
 					<p:ajax  update="pnlGroupInicial png111 pnlGridPotencialHidreletrico pnl131" />
 				</p:selectOneRadio>		
 			</h:panelGrid>
@@ -32,7 +33,7 @@
 				<p:selectOneRadio id="selOutorgaEmpreendimento" value="#{abaOutorgaController.perguntaNR_A4_P14.indResposta}"
 				 valueChangeListener="#{abaOutorgaController.valueChangePerguntaNR_A4_P14()}" disabled="#{novoRequerimentoController.desabilitarTudo}">
 					<f:selectItem itemLabel="Sim" itemValue="true" />
-					<f:selectItem itemLabel="Não" itemValue="false" />
+					<f:selectItem itemLabel="NÃ£o" itemValue="false" />
 					<p:ajax  update="pnlGroupCaptacaoAgua pnlGroupIntervencaoCorpoHidrico pnlGroupResiduosLiquidos pnlGroupEmpreendimentosOutorga pnlGroupLiquidoManancial pnlGroupIntervencaoCorpoHidrico2 pnlGridPotencialHidreletrico pnlGridPotencialHidreletrico2 pnlGroupCaminhaoPipa pnlGroupCaminhaoPipaVol" />
 				</p:selectOneRadio>
 
@@ -46,7 +47,7 @@
 					valueChangeListener="#{novoRequerimentoController.alteracaoResposta()}"
 					value="#{abaOutorgaController.perguntaNR_A4_P10.indResposta}" disabled="#{novoRequerimentoController.desabilitarTudo or !novoRequerimentoController.imovelRural}">
 						<f:selectItem itemLabel="Sim" itemValue="true" />
-						<f:selectItem itemLabel="Não" itemValue="false" />
+						<f:selectItem itemLabel="NÃ£o" itemValue="false" />
 						<p:ajax  update="gridInicial" />
 					</p:selectOneRadio>
 					
@@ -58,13 +59,13 @@
 						<p:spacer rendered="#{abaOutorgaController.perguntaNR_A4_P11.indResposta == false or abaOutorgaController.perguntaNR_A4_P11.indResposta == null}" />
 						
 						<h:panelGroup id="png111" style="margin-left:45px;" rendered="#{abaOutorgaController.perguntaNR_A4_P11.indResposta}">
-							<h:outputText value="* 1.1.2.1. Informe a Localização Geográfica:" />
+							<h:outputText value="* 1.1.2.1. Informe a LocalizaÃ§Ã£o GeogrÃ¡fica:" />
 						</h:panelGroup>
 						
 						<p:selectOneRadio id="selAutorizaPerfuracao" value="#{abaOutorgaController.perguntaNR_A4_P11.indResposta}" disabled="#{novoRequerimentoController.desabilitarTudo}"
 							valueChangeListener="#{abaOutorgaController.valueChangeAutorizacaoPoco()}">
 							<f:selectItem itemLabel="Sim" itemValue="true" />
-							<f:selectItem itemLabel="Não" itemValue="false" />
+							<f:selectItem itemLabel="NÃ£o" itemValue="false" />
 							<p:ajax  update="panelGrid11,pngTb122" />
 						</p:selectOneRadio>
 						
@@ -73,7 +74,7 @@
 								process="@this" rendered="#{abaOutorgaController.perguntaNR_A4_P11.indResposta}"
 								disabled="#{novoRequerimentoController.desabilitarTudo}">
 									<h:graphicImage title="Incluir dados" value="/resources/img/ico-expandir.png" style="margin-right: 2px;"/>
-								<h:outputText value="Incluir dados da perfuração de poço" />
+								<h:outputText value="Incluir dados da perfuraÃ§Ã£o de poÃ§o" />
 							</p:commandLink>
 						</p:outputPanel>
 						
@@ -88,10 +89,10 @@
 								<p:column headerText="Longitude" style="text-align:center;">
 									<h:outputText value="#{poco.pontos.get('longitude')}"/>
 								</p:column>
-								<p:column headerText="Imóvel" style="text-align:center;">
+								<p:column headerText="ImÃ³vel" style="text-align:center;">
 									<h:outputText value="#{poco.nomeImovel}"/>
 								</p:column>
-								<p:column style="text-align: center;" headerText="Ação">
+								<p:column style="text-align: center;" headerText="AÃ§Ã£o">
 									<p:commandLink id="visualizar" update="formDialogPoco" oncomplete="dialogPoco.show()" process="@this" action="#{pocoController.visualizar(poco)}" >
 										<h:graphicImage title="Visualizar" value="/resources/img/ico-pesquisa.png" />
 									</p:commandLink>
@@ -111,12 +112,12 @@
 					<h:panelGroup>
 						<h:outputText value="* #{abaOutorgaController.perguntaNR_A4_P12.idePergunta.dscPergunta}" />
 						<h:graphicImage value="/resources/img/ico-ajuda.png" id="ajudaDeclaracaoReservasDisponibilidadeHidrica" style="margin: 1px 1px 2px 4px;" />
-						<p:tooltip for="ajudaDeclaracaoReservasDisponibilidadeHidrica" value="A DRDH é utilizada para reserva de disponibilidade hídrica com finalidade de aproveitamento hidrelétrico com potência instalada superior a 1MW, para licitar a concessão ou autorizar o uso do potencial de energia hidráulica em corpo hídrico, conforme Lei nº 9.987 de 17/07/2000." showEffect="fade" hideEffect="fade" />
+						<p:tooltip for="ajudaDeclaracaoReservasDisponibilidadeHidrica" value="A DRDH Ã© utilizada para reserva de disponibilidade hÃ­drica com finalidade de aproveitamento hidrelÃ©trico com potÃªncia instalada superior a 1MW, para licitar a concessÃ£o ou autorizar o uso do potencial de energia hidrÃ¡ulica em corpo hÃ­drico, conforme Lei nÂº 9.987 de 17/07/2000." showEffect="fade" hideEffect="fade" />
 					</h:panelGroup>
 	
 					<p:selectOneRadio id="selDeclaracaoReservasDisponibilidadeHidrica" value="#{abaOutorgaController.perguntaNR_A4_P12.indResposta}" valueChangeListener="#{abaOutorgaController.valueChangePerguntaNRA4P12()}" disabled="#{novoRequerimentoController.desabilitarTudo}">
 						<f:selectItem itemLabel="Sim" itemValue="true" />
-						<f:selectItem itemLabel="Não" itemValue="false" />
+						<f:selectItem itemLabel="NÃ£o" itemValue="false" />
 						<p:ajax  update="@none"/>
 					</p:selectOneRadio>
 					
@@ -127,7 +128,7 @@
 							</h:panelGroup>
 							<p:selectOneRadio id="selCaptcaoAgua" value="#{abaOutorgaController.perguntaNR_A4_P141.indResposta}" valueChangeListener="#{abaOutorgaController.valueChangePerguntaNRA4P141()}" disabled="#{novoRequerimentoController.desabilitarTudo}">
 								<f:selectItem itemLabel="Sim" itemValue="true" />
-								<f:selectItem itemLabel="Não" itemValue="false" />
+								<f:selectItem itemLabel="NÃ£o" itemValue="false" />
 								<p:ajax  update="pnlGroupEmpreendimentosOutorga pnlGroupResiduosLiquidos pnlGroupIntervencaoCorpoHidrico pnlGroupCaminhaoPipa pnlGroupCaminhaoPipaVol"/>
 							</p:selectOneRadio>
 						</h:panelGrid>
@@ -140,7 +141,7 @@
 							</h:panelGroup>
 							<p:selectOneRadio id="selCaminhaoPipa" value="#{abaOutorgaController.perguntaNR_A4_P1411.indResposta}" valueChangeListener="#{abaOutorgaController.valueChangePerguntaNRA4P1411()}" disabled="#{novoRequerimentoController.desabilitarTudo}">
 								<f:selectItem itemLabel="Sim" itemValue="true" />
-								<f:selectItem itemLabel="Não" itemValue="false" />
+								<f:selectItem itemLabel="NÃ£o" itemValue="false" />
 								<p:ajax  update="pnlGroupCaminhaoPipaVol" />
 							</p:selectOneRadio>
 						</h:panelGrid>
@@ -148,8 +149,8 @@
 					
 					<h:panelGroup id="pnlGroupCaminhaoPipaVol">
 						<h:panelGrid id="pnlGridCaminhaoPipaVol" columns="2" rendered="#{abaOutorgaController.perguntaNR_A4_P1411.indResposta}">
-							<h:outputText value="* 1.1.4.1.1. Informe o volume do caminhão:"/>
-							<h:outputText value="* 1.1.4.1.2. Informe a média de transportes realizados:" style="margin-left:50px;"/>
+							<h:outputText value="* 1.1.4.1.1. Informe o volume do caminhÃ£o:"/>
+							<h:outputText value="* 1.1.4.1.2. Informe a mÃ©dia de transportes realizados:" style="margin-left:50px;"/>
 							<h:panelGroup>
 								<p:inputText onkeyup="maskIt(this, event, '99.999.999,99', true)" id="inpVolCaminhao"
 								valueChangeListener="#{novoRequerimentoController.alteracaoResposta()}"
@@ -183,7 +184,7 @@
 					<h:panelGroup id="pnlGroupEmpreendimentosOutorga">
 						<h:panelGrid id="pnlGridEmpreendimentosOutorga" rendered="#{abaOutorgaController.perguntaNR_A4_P141.indResposta}">
 							<h:panelGroup id="pnltooltip1412">
-								<h:outputText value="* 1.1.4.2. Qual(is) origem(ns) da(s) água(s) utilizada ou a ser utilizada?" />
+								<h:outputText value="* 1.1.4.2. Qual(is) origem(ns) da(s) Ã¡gua(s) utilizada ou a ser utilizada?" />
 							</h:panelGroup>
 							
 							<h:panelGroup id="pnlCheckBox">
@@ -197,7 +198,7 @@
 								disabled="#{novoRequerimentoController.desabilitarTudo}">
 									<p:ajax process="@this"/>
 								</p:selectBooleanCheckbox>
-								<h:outputText value="Captação de concessionária pública" />
+								<h:outputText value="CaptaÃ§Ã£o de concessionÃ¡ria pÃºblica" />
 								<br />
 								<br />								
 								
@@ -211,7 +212,7 @@
 								value="#{abaOutorgaController.captacaoPrecipitacaoPluvial}" disabled="#{novoRequerimentoController.desabilitarTudo}">
 									<p:ajax process="@this"/>
 								</p:selectBooleanCheckbox>
-								<h:outputText value="Captação de água de chuva/pluviométrica" />
+								<h:outputText value="CaptaÃ§Ã£o de Ã¡gua de chuva/pluviomÃ©trica" />
 								<br />
 								<br />
 								
@@ -225,7 +226,7 @@
 								value="#{abaOutorgaController.captacaoSubterranea}" disabled="#{novoRequerimentoController.desabilitarTudo}">
 									<p:ajax process="@this" event="change" update="pnlGroupCapSub" />
 								</p:selectBooleanCheckbox>
-								<h:outputText value="Captação subterrânea" />
+								<h:outputText value="CaptaÃ§Ã£o subterrÃ¢nea" />
 								<br />
 								<br />
 								
@@ -236,7 +237,7 @@
 												disabled="#{novoRequerimentoController.desabilitarTudo}" 
 												action="#{captacaoSubterraneaController.load()}">
 												<h:graphicImage title="Incluir dados" value="/resources/img/ico-expandir.png" style="margin-right: 2px;"/>
-												<h:outputText value="Incluir dados de captação subterrânea" />
+												<h:outputText value="Incluir dados de captaÃ§Ã£o subterrÃ¢nea" />
 											</p:commandLink>
 										</p:outputPanel>	
 										<p:dataTable id="tableCapSub" var="capSub" value="#{abaOutorgaController.captacoesSubterraneas}"	emptyMessage="#{bundle.consultapf_msg_empty_list}" style="width:245px;">
@@ -246,7 +247,7 @@
 											<p:column headerText="Longitude" style="text-align:center;">
 												<h:outputText value="#{capSub.pontos.get('longitude')}"/>
 											</p:column>
-											<p:column style="text-align: center;" headerText="Ação">
+											<p:column style="text-align: center;" headerText="AÃ§Ã£o">
 												<p:commandLink id="visualizar"  update="formDialogCaptacaoSubterranea formselFinalidade:pnlFinalidade" oncomplete="dialogCapSub.show()" process="@this" action="#{captacaoSubterraneaController.visualizar(capSub)}" >
 													<h:graphicImage title="Visualizar" value="/resources/img/ico-pesquisa.png" />
 												</p:commandLink>
@@ -266,7 +267,7 @@
 								 disabled="#{novoRequerimentoController.desabilitarTudo}">
 									<p:ajax process="@this" event="change" update="pnlGroupCapSuper" />
 								</p:selectBooleanCheckbox>
-								<h:outputText value="Captação superficial" />
+								<h:outputText value="CaptaÃ§Ã£o superficial" />
 							</h:panelGroup>
 							
 							<!-- 
@@ -280,7 +281,7 @@
 										<p:commandLink  oncomplete="dialogCapSuper.show()" action="#{captacaoSuperficialController.load()}" 
 											update="formDialogCaptacaoSuperficial"  disabled="#{novoRequerimentoController.desabilitarTudo}">
 											<h:graphicImage title="Incluir dados" value="/resources/img/ico-expandir.png" style="margin-right: 2px;"/>
-											<h:outputText value="Incluir dados de captação superficial" />
+											<h:outputText value="Incluir dados de captaÃ§Ã£o superficial" />
 										</p:commandLink>
 									</p:outputPanel>
 									
@@ -291,7 +292,7 @@
 										<p:column headerText="Longitude" style="text-align:center;">
 											<h:outputText value="#{capSuper.pontos.get('longitude')}" />
 										</p:column>
-										<p:column style="text-align: center;" headerText="Ação">
+										<p:column style="text-align: center;" headerText="AÃ§Ã£o">
 											<p:commandLink id="visualizar"	update="formDialogCaptacaoSuperficial formselFinalidade:pnlFinalidade" oncomplete="dialogCapSuper.show()" action="#{captacaoSuperficialController.visualizar(capSuper)}" process="@this" title="Visualizar">
 												<h:graphicImage title="Visualizar" value="/resources/img/ico-pesquisa.png" />
 											</p:commandLink>
@@ -329,7 +330,7 @@
 									valueChangeListener="#{novoRequerimentoController.alteracaoResposta()}"
 								 disabled="#{novoRequerimentoController.desabilitarTudo}">
 									<f:selectItem itemLabel="Sim" itemValue="true" />
-									<f:selectItem itemLabel="Não" itemValue="false" />
+									<f:selectItem itemLabel="NÃ£o" itemValue="false" />
 									<p:ajax update="pnlGroupLiquidoManancial pnlGroupLiquidoManancial dtIncluirResiduosLiquidos"  />
 								</p:selectOneRadio>
 							</h:panelGroup>
@@ -346,7 +347,7 @@
 									update="formDialogResiduosLiquidos" 
 									disabled="#{novoRequerimentoController.desabilitarTudo}">
 									<h:graphicImage title="Incluir dados" value="/resources/img/ico-expandir.png" style="margin-right: 2px;" />
-									<h:outputText value="Incluir dados do(s) receptor(es) dos efluentes em Corpo Hídrico" />
+									<h:outputText value="Incluir dados do(s) receptor(es) dos efluentes em Corpo HÃ­drico" />
 								</p:commandLink>
 							</p:outputPanel>
 						
@@ -357,7 +358,7 @@
 								<p:column headerText="Longitude" style="text-align:center;">
 									<h:outputText value="#{Lancamento.pontos.get('longitude')}" />
 								</p:column>		
-								<p:column style="text-align: center;" headerText="Ação">
+								<p:column style="text-align: center;" headerText="AÃ§Ã£o">
 									<p:commandLink id="visualizar" update="formAbaOutorga formDialogResiduosLiquidos" oncomplete="dialogLancamentoEfluentes.show();" action="#{lancamentoEfluentesController.visualizar(Lancamento)}" >
 										<h:graphicImage title="Visualizar" value="/resources/img/ico-pesquisa.png" />
 									</p:commandLink>
@@ -379,14 +380,14 @@
 							<h:panelGroup>
 								<h:outputText value="* #{abaOutorgaController.perguntaNR_A4_P143.idePergunta.dscPergunta}" />
 								<h:graphicImage value="/resources/img/ico-ajuda.png" id="ajudaIntervecaoCorpoHidrico" style="margin: 1px 1px 2px 4px;" />
-								<p:tooltip for="ajudaIntervecaoCorpoHidrico" value="Entende-se intervenção em recurso hídrico a atividade, obra ou empreendimento que altere as condições de escoamento das águas, criando obstáculo, produzindo modificações ou alterando o fluxo dessas águas." showEffect="fade" hideEffect="fade" />
+								<p:tooltip for="ajudaIntervecaoCorpoHidrico" value="Entende-se intervenÃ§Ã£o em recurso hÃ­drico a atividade, obra ou empreendimento que altere as condiÃ§Ãµes de escoamento das Ã¡guas, criando obstÃ¡culo, produzindo modificaÃ§Ãµes ou alterando o fluxo dessas Ã¡guas." showEffect="fade" hideEffect="fade" />
 							</h:panelGroup>
 							<h:panelGroup rendered="#{abaOutorgaController.perguntaNR_A4_P14.indResposta != null and abaOutorgaController.perguntaNR_A4_P14.indResposta == false}">
 								<p:selectOneRadio value="#{abaOutorgaController.perguntaNR_A4_P143.indResposta}"
 									valueChangeListener="#{novoRequerimentoController.alteracaoResposta()}"
 								 disabled="#{novoRequerimentoController.desabilitarTudo}">
 									<f:selectItem itemLabel="Sim" itemValue="true" />
-									<f:selectItem itemLabel="Não" itemValue="false" />
+									<f:selectItem itemLabel="NÃ£o" itemValue="false" />
 									<p:ajax update="pnlGroupIntervencaoCorpoHidrico2"  />
 								</p:selectOneRadio>
 							</h:panelGroup>
@@ -400,18 +401,18 @@
 									  update=":formIntervencaoCorpoHidrico, :formIntervencaoCorpoHidrico:panelIntervencaoCorpoHidrico" disabled="#{novoRequerimentoController.desabilitarTudo}">
 									
 									<h:graphicImage title="Incluir dados" value="/resources/img/ico-expandir.png" style="margin-right: 2px;"/>
-									<h:outputText value="Incluir dados da nova intervenção" />
+									<h:outputText value="Incluir dados da nova intervenÃ§Ã£o" />
 									<f:setPropertyActionListener target="#{intervencaoController.isEtapa2}" value="#{false}"/>
 								</p:commandLink>
 							</p:outputPanel>
 							<p:dataTable id="dtTaleIntervencao" var="dtIntervencaoCorpoHidrico" value="#{abaOutorgaController.intervencoes}" rendered="#{abaOutorgaController.perguntaNR_A4_P143.indResposta}" emptyMessage="#{bundle.consultapf_msg_empty_list}" style="margin-left:5px;">
-								<p:column headerText="Tipo de Intervenção">
+								<p:column headerText="Tipo de IntervenÃ§Ã£o">
 									<h:outputText value="#{dtIntervencaoCorpoHidrico.tipoIntervencao.nomTipoIntervencao}" />
 								</p:column>
-								<p:column headerText="Nome da Intervenção">
+								<p:column headerText="Nome da IntervenÃ§Ã£o">
 									<h:outputText value="#{dtIntervencaoCorpoHidrico.nomIntervencao}" />
 								</p:column>
-								<p:column headerText="Ação">
+								<p:column headerText="AÃ§Ã£o">
 									<p:commandLink id="cmdVisualizarIntervencaoCorpoHidrico" oncomplete="dialogIntervencaoCorpoHidrico.show();" update="formIntervencaoCorpoHidrico" 
 									action="#{intervencaoController.visualizar(dtIntervencaoCorpoHidrico)}">
 										<h:graphicImage title="Visualizar" value="/resources/img/ico-pesquisa.png" />
@@ -437,7 +438,7 @@
 	
 						<p:selectOneRadio id="selPotencialHidreletrico" value="#{abaOutorgaController.perguntaNR_A4_P15.indResposta}" rendered="#{abaOutorgaController.perguntaNR_A4_P1.indResposta}" valueChangeListener="#{abaOutorgaController.valueChangePerguntaNRA4P15()}"  disabled="#{novoRequerimentoController.desabilitarTudo}">
 							<f:selectItem itemLabel="Sim" itemValue="true" />
-							<f:selectItem itemLabel="Não" itemValue="false" />
+							<f:selectItem itemLabel="NÃ£o" itemValue="false" />
 							<p:ajax  update="pnlGridPotencialHidreletrico2" />
 						</p:selectOneRadio>
 					</h:panelGrid>
@@ -450,7 +451,7 @@
 						<p:selectOneRadio value="#{abaOutorgaController.perguntaNR_A4_P151.indResposta}" rendered="#{abaOutorgaController.perguntaNR_A4_P15.indResposta}" 
 										  valueChangeListener="#{abaOutorgaController.valueChangePerguntaNRA4P151()}" disabled="#{novoRequerimentoController.desabilitarTudo}">
 							<f:selectItem itemLabel="Sim" itemValue="true" />
-							<f:selectItem itemLabel="Não" itemValue="false" />
+							<f:selectItem itemLabel="NÃ£o" itemValue="false" />
 							<p:ajax  process="@this" update="@this" />
 						</p:selectOneRadio>
 					</h:panelGrid>
@@ -468,7 +469,7 @@
 				valueChangeListener="#{novoRequerimentoController.alteracaoResposta()}"
 				 value="#{abaOutorgaController.perguntaNR_A4_P13.indResposta}" disabled="#{novoRequerimentoController.desabilitarTudo}">
 					<f:selectItem itemLabel="Sim" itemValue="true" />
-					<f:selectItem itemLabel="Não" itemValue="false" />
+					<f:selectItem itemLabel="NÃ£o" itemValue="false" />
 					<p:ajax  update="pnl131"/>
 				</p:selectOneRadio>
 
@@ -476,14 +477,14 @@
 					<h:panelGrid
 						rendered="#{abaOutorgaController.perguntaNR_A4_P13.indResposta}"
 						columns="3">
-						<h:outputText value="1.2.1. Informe o número do processo da ANA:" />
+						<h:outputText value="1.2.1. Informe o nÃºmero do processo da ANA:" />
 						<p:spacer width="70" height="8"/>
-						<h:outputText value="1.2.2. Informe o número da portaria:" />
+						<h:outputText value="1.2.2. Informe o nÃºmero da portaria:" />
 						<p:inputText value="#{novoRequerimentoController.empreendimentoRequerimento.numProcessoAna}" maxlength="50" alt="Numero Processo Ana"
-									 title="Número Processo Ana" disabled="#{novoRequerimentoController.desabilitarTudo}"/>
+									 title="NÃºmero Processo Ana" disabled="#{novoRequerimentoController.desabilitarTudo}"/>
 						<p:spacer width="70" height="8"/>
 						<p:inputText value="#{novoRequerimentoController.empreendimentoRequerimento.numPortariaAna}" maxlength="50" alt="Numero Portaria Ana" 
-									 title="Número Portaria Ana" disabled="#{novoRequerimentoController.desabilitarTudo}"/>
+									 title="NÃºmero Portaria Ana" disabled="#{novoRequerimentoController.desabilitarTudo}"/>
 					</h:panelGrid>
 				</h:panelGroup>
 				
@@ -493,7 +494,7 @@
 		
 		<h:panelGrid columns="4" style="margin-top:40px;">
 			<p:commandButton id="btnVoltar" value="Voltar" action="#{novoRequerimentoController.voltarAbas()}" update="subViewAbas:tabAbasId"  style="width:90px;" />
-			<p:commandButton id="btnAvancar" value="Avançar" action="#{novoRequerimentoController.avancarAbas()}" update="subViewAbas:tabAbasId"  style="width:90px;"  />
+			<p:commandButton id="btnAvancar" value="AvanÃ§ar" action="#{novoRequerimentoController.avancarAbas()}" update="subViewAbas:tabAbasId"  style="width:90px;"  />
 			<p:spacer width="400" height="10"/>
 			<p:commandButton id="btnSalvarOutorga" value="Salvar" process="@form"  actionListener="#{abaOutorgaController.salvarAba()}" 
 							 update="@form" disabled="#{novoRequerimentoController.desabilitarTudo}"/>

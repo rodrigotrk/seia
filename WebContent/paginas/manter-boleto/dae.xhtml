@@ -8,6 +8,7 @@
 	
 	<p:dialog widgetVar="dae" dynamic="true" appendToBody="true" position="center" closable="true" width="500" height="270" showHeader="false" resizable="false">
 		<h:form id="taxaDae">
+        <ui:include src="/layout/csrfToken.xhtml" />
 			<h1 style="font-size: 14px">Calcular Taxa para DAEs</h1>
 			
 			<br/>
@@ -26,18 +27,18 @@
 					</h:panelGrid>
 				<h:panelGrid>
 				
-				<h:outputText value="Existe área a ser vistoriada para este ato?" />
+				<h:outputText value="Existe Ã¡rea a ser vistoriada para este ato?" />
 				
 				<p:selectOneRadio id="comboVistoria" value="#{daeController.detalhamentoBoletoACalcular.existeArea}" disabled="true">
 					<f:selectItem itemLabel="Sim" itemValue="#{true}" />
-					<f:selectItem itemLabel="Não" itemValue="#{false}"/>
+					<f:selectItem itemLabel="NÃ£o" itemValue="#{false}"/>
 					<p:ajax event="change" listener="#{daeController.zerarArea()}" process="@this" update="area_dae"  />
 				</p:selectOneRadio>
 			</h:panelGrid>
 			
 			<h:panelGrid id="area_dae">	
 				<h:panelGrid columns="3" rendered="#{daeController.detalhamentoBoletoACalcular.existeArea}">
-					<h:outputText value="Informe a área a ser vistoriada" />
+					<h:outputText value="Informe a Ã¡rea a ser vistoriada" />
 					<p:inputText size="12" value="#{daeController.detalhamentoBoletoACalcular.areaVistoriada}" converter="bigConverter" maxlength="12" 
 					styleClass="campoNumericoComDecimal-4">
 						<f:convertNumber pattern="#,##0.0000" locale="pt_BR" />

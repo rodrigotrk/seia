@@ -8,38 +8,39 @@
 	
 	
 	<h:form id="formUsuarioExterno" binding="#{usuarioExternoController.formularioASerLimpo}">
+        <ui:include src="/layout/csrfToken.xhtml" />
 		<h:panelGrid id="panelUsuarioExterno" columns="1">	
 			<h:outputLabel value="* #{bundle.lbl_cpf}:" />
 			<p:inputMask id="inpCpf" value="#{usuarioExternoController.usuarioExterno.pessoaFisica.numCpf}" mask="#{bundle.consultapf_msk_cpf}"
 				converter="cpfConverter" validator="cpfValidator" required="true" style="width: 160px;" 
-				requiredMessage="O campo CPF é de preenchimento obrigatório.">
+				requiredMessage="O campo CPF Ã© de preenchimento obrigatÃ³rio.">
 				<p:ajax event="blur" listener="${usuarioExternoController.consultarCpf()}" process="@this" update="@form"/>
 			</p:inputMask>
 			<h:outputLabel value="* #{bundle.lbl_nome}:" />
-			<p:inputText disabled="${usuarioExternoController.desabilitaCampos}" id="inpNomePessoa" value="#{usuarioExternoController.usuarioExterno.pessoaFisica.nomPessoa}" maxlength="200" style="width: 348px;" required="true" requiredMessage="O campo Nome é de preenchimento obrigatório."/>
+			<p:inputText disabled="${usuarioExternoController.desabilitaCampos}" id="inpNomePessoa" value="#{usuarioExternoController.usuarioExterno.pessoaFisica.nomPessoa}" maxlength="200" style="width: 348px;" required="true" requiredMessage="O campo Nome Ã© de preenchimento obrigatÃ³rio."/>
 			<h:outputLabel value="#{bundle.lbl_data_nascimento}:" />
-			<p:calendar label="#{bundle.lbl_data_nascimento}" disabled="${usuarioExternoController.desabilitaCampos}" value="#{usuarioExternoController.usuarioExterno.pessoaFisica.dtcNascimento}" required="true" requiredMessage="O campo #{bundle.lbl_data_nascimento} é de preenchimento obrigatório." 
+			<p:calendar label="#{bundle.lbl_data_nascimento}" disabled="${usuarioExternoController.desabilitaCampos}" value="#{usuarioExternoController.usuarioExterno.pessoaFisica.dtcNascimento}" required="true" requiredMessage="O campo #{bundle.lbl_data_nascimento} Ã© de preenchimento obrigatÃ³rio." 
 				showOn="button" size="10" locale="pt" pattern="dd/MM/yyyy" navigator="true" accesskey="true" yearRange="c-200" mindate="01/01/1822" maxdate="#{usuarioExternoController.dataAtual}" readOnlyInputText="true">
 				<f:validator validatorId="dataNascimentoValidator"/>
 			</p:calendar>
 	        <h:outputLabel value="* #{bundle.lbl_login}:" />
-		        <p:inputText disabled="${usuarioExternoController.desabilitaCampos}" id="inpLogin" styleClass="has_login" value="#{usuarioExternoController.usuarioExterno.usuario.dscLogin}" maxlength="25" style="width: 174px;" required="true" requiredMessage="O campo Login é de preenchimento obrigatório."/>
-		        (São considerados caracteres válidos, letras minúsculas, números e pontos)		        
+		        <p:inputText disabled="${usuarioExternoController.desabilitaCampos}" id="inpLogin" styleClass="has_login" value="#{usuarioExternoController.usuarioExterno.usuario.dscLogin}" maxlength="25" style="width: 174px;" required="true" requiredMessage="O campo Login Ã© de preenchimento obrigatÃ³rio."/>
+		        (SÃ£o considerados caracteres vÃ¡lidos, letras minÃºsculas, nÃºmeros e pontos)		        
 			<h:panelGrid id="panelSenha" rendered="#{not usuarioExternoController.editando}" >
-			 	<p:fieldset id="info" legend="Atenção"  style="background-color: rgb(257,231,219);">
+			 	<p:fieldset id="info" legend="AtenÃ§Ã£o"  style="background-color: rgb(257,231,219);">
 					<h:panelGrid columns="1" styleClass="aviso-home" style="background-color: rgb(257,231,219);">
-						<h:outputText value="Sua senha deve conter pelo menos um caractere especial, uma letra maiúscula, um numeral e no mínimo de 8 caracteres."/>
+						<h:outputText value="Sua senha deve conter pelo menos um caractere especial, uma letra maiÃºscula, um numeral e no mÃ­nimo de 8 caracteres."/>
 					</h:panelGrid>
 				</p:fieldset>
 	        	<h:outputLabel value="* #{bundle.lbl_senha}:" />
 		        <h:panelGrid columns="1">	
-		        	<p:password disabled="${usuarioExternoController.desabilitaCampos}" feedback="false" id="inpSenha" value="#{usuarioExternoController.usuarioExterno.usuario.dscSenha}" minLength="8" maxlength="15" required="true" requiredMessage="O campo Senha é de preenchimento obrigatório."/>
+		        	<p:password disabled="${usuarioExternoController.desabilitaCampos}" feedback="false" id="inpSenha" value="#{usuarioExternoController.usuarioExterno.usuario.dscSenha}" minLength="8" maxlength="15" required="true" requiredMessage="O campo Senha Ã© de preenchimento obrigatÃ³rio."/>
 		        </h:panelGrid>	
-	        	<h:outputLabel value="* Confirmação da Senha:" />
-	        	<p:password disabled="${usuarioExternoController.desabilitaCampos}" feedback="false" id="inpConfirmacaoSenha" value="#{usuarioExternoController.usuarioExterno.usuario.dscConfirmacaoSenha}" minLength="8" maxlength="15" required="true" requiredMessage="O campo Confirmação da Senha é de preenchimento obrigatório."/>
+	        	<h:outputLabel value="* ConfirmaÃ§Ã£o da Senha:" />
+	        	<p:password disabled="${usuarioExternoController.desabilitaCampos}" feedback="false" id="inpConfirmacaoSenha" value="#{usuarioExternoController.usuarioExterno.usuario.dscConfirmacaoSenha}" minLength="8" maxlength="15" required="true" requiredMessage="O campo ConfirmaÃ§Ã£o da Senha Ã© de preenchimento obrigatÃ³rio."/>
 			</h:panelGrid>
 			<h:outputLabel value="* #{bundle.lbl_email}:" />
-			<p:inputText disabled="${usuarioExternoController.desabilitaCampos}" value="#{usuarioExternoController.usuarioExterno.pessoaFisica.pessoa.desEmail}" maxlength="70" validator="emailValidator" style="width: 348px;" required="true" requiredMessage="O campo Email é de preenchimento obrigatório."/>
+			<p:inputText disabled="${usuarioExternoController.desabilitaCampos}" value="#{usuarioExternoController.usuarioExterno.pessoaFisica.pessoa.desEmail}" maxlength="70" validator="emailValidator" style="width: 348px;" required="true" requiredMessage="O campo Email Ã© de preenchimento obrigatÃ³rio."/>
 			<!-- <h:outputLabel value="#{bundle.lbl_estado_civil}:" />
 	        <p:selectOneMenu disabled="${usuarioExternoController.desabilitaCampos}" id="selectOneEstadoCivil" value="#{usuarioExternoController.usuarioExterno.pessoaFisica.ideEstadoCivil}" style="width: 355px;" converter="estadoCivilConverter">
 	            <f:selectItem itemLabel="Selecione..." />
@@ -51,22 +52,22 @@
 	            <f:selectItems value="#{usuarioExternoController.colEscolaridades}" var="escolaridade" itemLabel="#{escolaridade.nomEscolaridade}" itemValue="#{escolaridade}"/>  
 	        </p:selectOneMenu> -->
 			<h:outputLabel value="* #{bundle.lbl_ocupacao}:" />
-	        <p:selectOneMenu disabled="${usuarioExternoController.desabilitaCampos}" id="selectOneOcupacao" value="#{usuarioExternoController.usuarioExterno.pessoaFisica.ideOcupacao}" style="width: 355px;" converter="ocupacaoConverter" required="true" requiredMessage="O campo ocupação é de preenchimento obrigatório.">
+	        <p:selectOneMenu disabled="${usuarioExternoController.desabilitaCampos}" id="selectOneOcupacao" value="#{usuarioExternoController.usuarioExterno.pessoaFisica.ideOcupacao}" style="width: 355px;" converter="ocupacaoConverter" required="true" requiredMessage="O campo ocupaÃ§Ã£o Ã© de preenchimento obrigatÃ³rio.">
 	            <f:validator validatorId="ocupacaoComboValidator" />
 	            <f:selectItem itemLabel="Selecione..." />	            
 	            <f:selectItems value="#{usuarioExternoController.colOcupacoes}" var="ocupacao" itemLabel="#{ocupacao.nomOcupacao}" itemValue="#{ocupacao}"/>  
 	        </p:selectOneMenu>
 	        <h:outputLabel value="* #{bundle.lbl_nome_mae}:" />
-	        <p:inputText disabled="${usuarioExternoController.desabilitaCampos}" value="#{usuarioExternoController.usuarioExterno.pessoaFisica.nomMae}" maxlength="200" style="width: 348px;" required="true" requiredMessage="O campo Nome da Mãe é de preenchimento obrigatório."/>
+	        <p:inputText disabled="${usuarioExternoController.desabilitaCampos}" value="#{usuarioExternoController.usuarioExterno.pessoaFisica.nomMae}" maxlength="200" style="width: 348px;" required="true" requiredMessage="O campo Nome da MÃ£e Ã© de preenchimento obrigatÃ³rio."/>
 	        <!-- h:outputLabel value="#{bundle.lbl_nome_pai}:" />
 	        <p:inputText disabled="${usuarioExternoController.desabilitaCampos}" value="#{usuarioExternoController.usuarioExterno.pessoaFisica.nomPai}" maxlength="200" style="width: 348px;"/> -->
 			<h:outputLabel value="* #{bundle.lbl_nacionalidade}:" />
-	        <p:selectOneMenu disabled="${usuarioExternoController.desabilitaCampos}" id="selectOnePais" value="#{usuarioExternoController.usuarioExterno.pessoaFisica.idePais}" style="width: 355px;" converter="paisConverter" required="true" requiredMessage="O campo Nacionalidade é de preenchimento obrigatório.">
+	        <p:selectOneMenu disabled="${usuarioExternoController.desabilitaCampos}" id="selectOnePais" value="#{usuarioExternoController.usuarioExterno.pessoaFisica.idePais}" style="width: 355px;" converter="paisConverter" required="true" requiredMessage="O campo Nacionalidade Ã© de preenchimento obrigatÃ³rio.">
 	            <f:selectItem itemLabel="Selecione..." />  
 	            <f:selectItems value="#{usuarioExternoController.colPaises}" var="pais" itemLabel="#{pais.nomPais}" itemValue="#{pais}"/>  
 	        </p:selectOneMenu>
 			<h:outputLabel value="* #{bundle.lbl_naturalidade}:" />
-			<p:inputText id="naturalidadeUserEX" disabled="${usuarioExternoController.desabilitaCampos}" onkeyup="SomenteLetras(this.value);" value="#{usuarioExternoController.usuarioExterno.pessoaFisica.desNaturalidade}" maxlength="70" style="width: 348px;" required="true" requiredMessage="O campo Naturalidade é de preenchimento obrigatório."/>
+			<p:inputText id="naturalidadeUserEX" disabled="${usuarioExternoController.desabilitaCampos}" onkeyup="SomenteLetras(this.value);" value="#{usuarioExternoController.usuarioExterno.pessoaFisica.desNaturalidade}" maxlength="70" style="width: 348px;" required="true" requiredMessage="O campo Naturalidade Ã© de preenchimento obrigatÃ³rio."/>
 			<h:panelGroup>
 				<p:commandButton type="reset" value="#{bundle.btn_cancelar}" onclick="dlgUsuarioExterno.hide()" />
 				<p:commandButton disabled="${usuarioExternoController.desabilitaCampos}" action="#{usuarioExternoController.salvarAtualizarUsuarioExterno}" value="#{bundle.btn_salvar}"  update=":formUsuarioExterno :formListaUsuariosExterno" />

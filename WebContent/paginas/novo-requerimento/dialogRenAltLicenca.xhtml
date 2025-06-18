@@ -6,12 +6,13 @@ xmlns:f="http://java.sun.com/jsf/core"
 xmlns:ui="http://java.sun.com/jsf/facelets" 
 xmlns:p="http://primefaces.prime.com.tr/ui">
 
-	<p:dialog header="Renovação/Alteração da Licença" dynamic="true" modal="true" widgetVar="dialogIncluirLicenca" appendToBody="true"
+        <ui:include src="/layout/csrfToken.xhtml" />
+	<p:dialog header="RenovaÃ§Ã£o/AlteraÃ§Ã£o da LicenÃ§a" dynamic="true" modal="true" widgetVar="dialogIncluirLicenca" appendToBody="true"
 		width="620" position="top" resizable="false" draggable="false" style="max-height: 625px; top:20px !important;">
 		
 		<h:form id="formDialogRenAltLicenca">
 				
-			<h:outputText value="* 1. Definir solicitação:" />			
+			<h:outputText value="* 1. Definir solicitaÃ§Ã£o:" />			
 			
 			<p:selectOneRadio value="#{renovarAlterarLicencaController.licenca.tipoSolicitacao}" layout="horizontal" converter="simpleEntityConverter" 
 							  valueChangeListener="#{renovarAlterarLicencaController.valueChangeTipoSolicitacao()}" 
@@ -39,7 +40,7 @@ xmlns:p="http://primefaces.prime.com.tr/ui">
 						valueChangeListener="#{renovarAlterarLicencaController.valueChangePerguntaNR_A2_DRENALT_P11()}">
 						
 						<f:selectItem itemLabel="Sim" itemValue="true" />
-						<f:selectItem itemLabel="Não" itemValue="false" />
+						<f:selectItem itemLabel="NÃ£o" itemValue="false" />
 						<p:ajax global="false" update="formDialogRenAltLicenca:panelAlteracao"/>
 					</p:selectOneRadio>
 				</h:panelGroup>
@@ -50,7 +51,7 @@ xmlns:p="http://primefaces.prime.com.tr/ui">
 					<h:outputText value="* #{renovarAlterarLicencaController.perguntaNR_A2_DRENALT_P12.idePergunta.dscPergunta}"/>
 					<p:selectOneRadio value="#{renovarAlterarLicencaController.perguntaNR_A2_DRENALT_P12.indResposta}" disabled="#{novoRequerimentoController.desabilitarTudo or renovarAlterarLicencaController.desabilitarTudo}">
 						<f:selectItem itemLabel="Sim" itemValue="true" />
-						<f:selectItem itemLabel="Não" itemValue="false" />
+						<f:selectItem itemLabel="NÃ£o" itemValue="false" />
 						<p:ajax global="false" update="formDialogRenAltLicenca:panelAlteracao"/>
 					</p:selectOneRadio>
 				</h:panelGroup>
@@ -61,7 +62,7 @@ xmlns:p="http://primefaces.prime.com.tr/ui">
 							
 					<p:spacer height="10" width="0"/>
 					
-					<h:outputText value="* 1.2.1 Marque o(s) objeto(s) de alteração:" />
+					<h:outputText value="* 1.2.1 Marque o(s) objeto(s) de alteraÃ§Ã£o:" />
 					
 					<p:dataTable id="tableobjetoAlteracao" var="objetoAlteracao" value="#{renovarAlterarLicencaController.objetosAlteracao}" emptyMessage="#{bundle.consultapf_msg_empty_list}">
 						<p:column style="width:20px;">
@@ -70,7 +71,7 @@ xmlns:p="http://primefaces.prime.com.tr/ui">
 							</p:selectBooleanCheckbox>
 						</p:column>
 						
-						<p:column headerText="Objetos de alteração">
+						<p:column headerText="Objetos de alteraÃ§Ã£o">
 							<h:outputText value="#{objetoAlteracao.nomObjetoAlteracao}"/>	
 						</p:column>
 					</p:dataTable>
@@ -79,15 +80,15 @@ xmlns:p="http://primefaces.prime.com.tr/ui">
 				<p:spacer height="10" width="0"/>
 			
 				<h:panelGrid columns="2" id="numerosAlteracao">
-					<h:outputText value="* 2. Informe o número do processo:" />
-					<h:outputText value="* 3. Informe o número da portaria:" style="margin-left:75px;"/>
+					<h:outputText value="* 2. Informe o nÃºmero do processo:" />
+					<h:outputText value="* 3. Informe o nÃºmero da portaria:" style="margin-left:75px;"/>
 					
 					<p:inputText id="numProcessoAlteracao" value="#{renovarAlterarLicencaController.licenca.numProcessoLicenca}" style="width:200px;" maxlength="50" disabled="#{novoRequerimentoController.desabilitarTudo or renovarAlterarLicencaController.desabilitarTudo}"/>
 					<p:inputText id="numPortariaAlteracao" value="#{renovarAlterarLicencaController.licenca.numPortariaLicenca}" style="width:200px; margin-left:75px;" maxlength="50" disabled="#{novoRequerimentoController.desabilitarTudo or renovarAlterarLicencaController.desabilitarTudo}"/>
 				</h:panelGrid>
 				
 				<h:panelGrid columns="2" id="calendariosAlteracao">
-					<h:outputText value="* 4. Informe a data da publicação da portaria:" />
+					<h:outputText value="* 4. Informe a data da publicaÃ§Ã£o da portaria:" />
 					<h:outputText value="* 5. Informe a validade" style="margin-left:18px;" />	
 					
 					<p:calendar id="calendarPublicacaoAlteracao" maxdate="#{novoRequerimentoController.dataHoje}" size="7" showOn="button" locale="pt" pattern="dd/MM/yyyy" 
@@ -118,7 +119,7 @@ xmlns:p="http://primefaces.prime.com.tr/ui">
 			<h:panelGrid id="panelRenovacao" rendered="#{renovarAlterarLicencaController.licenca.tipoSolicitacao.ideTipoSolicitacao == 3}">
 				<h:panelGrid columns="2">
 					<h:panelGrid id="numeroProcesso" columns="1" style="padding-left: 0px;">
-						<h:outputText value="* 2. Informe o número do processo:" />
+						<h:outputText value="* 2. Informe o nÃºmero do processo:" />
 						<ui:fragment>
 							<p:inputText id="numProcessoRenovacao" value="#{renovarAlterarLicencaController.licenca.numProcessoLicenca}" 
 								style="width:200px;" maxlength="50" disabled="#{novoRequerimentoController.desabilitarTudo or renovarAlterarLicencaController.desabilitarTudo}" 
@@ -132,7 +133,7 @@ xmlns:p="http://primefaces.prime.com.tr/ui">
 					<h:panelGrid columns="2" id="numeroPortaria" rendered="#{!renovarAlterarLicencaController.renovacaoLicenca}">
 						<p:spacer height="0" width="70"/>
 						
-						<h:outputText value="* 3. Informe o número da portaria:" />
+						<h:outputText value="* 3. Informe o nÃºmero da portaria:" />
 						
 						<br />
 		
@@ -147,7 +148,7 @@ xmlns:p="http://primefaces.prime.com.tr/ui">
 				</h:panelGrid>
 				
 				<h:panelGrid columns="3" id="calendariosRenovacao" rendered="#{!renovarAlterarLicencaController.renovacaoLicenca}">
-					<h:outputText value="* 4. Informe a data da publicação da portaria:" />
+					<h:outputText value="* 4. Informe a data da publicaÃ§Ã£o da portaria:" />
 					<p:spacer height="0" width="25"/>
 					<h:outputText value="* 5. Informe a validade" />
 					
@@ -178,12 +179,12 @@ xmlns:p="http://primefaces.prime.com.tr/ui">
 				</h:panelGrid>
 				
 				<h:panelGrid columns="2" rendered="#{renovarAlterarLicencaController.renovacaoLicenca}">
-					<h:outputText value="Número do Certificado: " />
+					<h:outputText value="NÃºmero do Certificado: " />
 					<h:outputText value="#{renovarAlterarLicencaController.certificado.numCertificado}" />
 					
 					<p:spacer width="0" height="5"/><br />
 					
-					<h:outputText value="Emissão do Certificado: " />
+					<h:outputText value="EmissÃ£o do Certificado: " />
 					<h:outputText value="#{renovarAlterarLicencaController.dataValidadeCertificado}" />
 				</h:panelGrid>
 			</h:panelGrid>

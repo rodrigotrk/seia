@@ -7,13 +7,14 @@
 				xmlns:p="http://primefaces.prime.com.tr/ui">
 	
 	<h:form id="formAbaLocacao">
+        <ui:include src="/layout/csrfToken.xhtml" />
 		<div style="max-height: 500px; overflow: auto;">
 			<ui:repeat var="def" value="#{caepogController.caepog.caepogDefinicaoCampoCollection}">
 				<fieldset style="max-width: 620px;">
 					<legend>#{def.ideCaepogCampo.nomCaepogCampo}</legend>
 					
 					<h:panelGrid style="margin: 30px;">
-						<p:commandButton value="Inserir Locação" action="#{caepogController.preparaNovaLocacao()}" disabled="#{caepogController.caepog.visualizando}">
+						<p:commandButton value="Inserir LocaÃ§Ã£o" action="#{caepogController.preparaNovaLocacao()}" disabled="#{caepogController.caepog.visualizando}">
 							<f:setPropertyActionListener target="#{caepogController.caepogDefinicaoCampo}" value="#{def}"/>
 							<f:setPropertyActionListener target="#{caepogController.editando}" value="#{false}" />
 						</p:commandButton>
@@ -23,7 +24,7 @@
 						<p:dataTable id="dataTableLocacao" var="locacao" value="#{def.caepogLocacaoCollection}" lazy="true" emptyMessage="#{bundle.consultapf_msg_empty_list}">
 							<p:column>
 								<f:facet name="header">
-									<h:outputText value="Prefixo Poço" />
+									<h:outputText value="Prefixo PoÃ§o" />
 								</f:facet>
 				
 								<h:outputText value="#{locacao.prefixPocoCaepogLocacao}" />
@@ -31,7 +32,7 @@
 							
 							<p:column>
 								<f:facet name="header">
-									<h:outputText value="N° Processo" />
+									<h:outputText value="NÂ° Processo" />
 								</f:facet>
 				
 								<h:outputText value="#{locacao.numProcessoCaepogLocacao}" />
@@ -39,19 +40,19 @@
 							
 							<p:column style="text-align: center;">
 								<f:facet name="header">
-									<h:outputText value="Localização" />
+									<h:outputText value="LocalizaÃ§Ã£o" />
 								</f:facet>
 								
 								<h:panelGroup rendered="#{locacao.ideLocalizacaoGeografica != null}">
 									<a onclick="javascript:${localizacaoGeograficaGenericController.retornarUrl(locacao.ideLocalizacaoGeografica)}">
-										<h:graphicImage title="Localização do Ponto no Geobahia" value="/resources/img/ico-arl-relocacao.png" />
+										<h:graphicImage title="LocalizaÃ§Ã£o do Ponto no Geobahia" value="/resources/img/ico-arl-relocacao.png" />
 									</a>
 								</h:panelGroup>
 							</p:column>
 							
 							<p:column>
 								<f:facet name="header">
-									<h:outputText value="Ações" />
+									<h:outputText value="AÃ§Ãµes" />
 								</f:facet>
 				
 								<p:commandLink id="visualizar" update="formDialogLocacao" action="#{caepogController.preparaNovaLocacao()}" rendered="#{caepogController.caepog.visualizando}">

@@ -7,11 +7,12 @@
 	xmlns:p="http://primefaces.prime.com.tr/ui">
 
 	<h:form id="formCriacaoAnimais">
+        <ui:include src="/layout/csrfToken.xhtml" />
 		<h:panelGrid style="margin-left:-7px;">
-			<h:outputText value="*Deseja regularizar as atividades de CriaÁ„o de Animais cadastrados no CEFIR?" styleClass="titulo-grupo" style="font-weight:bold;"/>
+			<h:outputText value="*Deseja regularizar as atividades de Cria√ß√£o de Animais cadastrados no CEFIR?" styleClass="titulo-grupo" style="font-weight:bold;"/>
 			<p:selectOneRadio value="#{criacaoAnimaisController.regularizacaoAtivCefir}">
 				<f:selectItem itemLabel="Sim" itemValue="true" />
-				<f:selectItem itemLabel="N„o" itemValue="false"/>
+				<f:selectItem itemLabel="N√£o" itemValue="false"/>
 		    </p:selectOneRadio>
 		    <br />
 		    <h:outputText value="*Tipos de Cultura" styleClass="titulo-grupo" style="font-weight:bold;"/>
@@ -28,15 +29,15 @@
 				</h:panelGroup>
 				<p:dataTable id="tblTipoCriacao" value="#{criacaoAnimaisController.listaTipologiaAtividade}" var="cult" lazy="true" paginator="true" rows="10"  
 				paginatorPosition="bottom" paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}" rowsPerPageTemplate="5,10,15" 
-				emptyMessage="Nenhum tipo de criaÁ„o encontrado." style="width: 987px;">
+				emptyMessage="Nenhum tipo de cria√ß√£o encontrado." style="width: 987px;">
 					<p:column style="width: 580px; text-align:justify;">
 						<f:facet name="header">
-							<h:outputText value="Tipo CriaÁ„o" />
+							<h:outputText value="Tipo Cria√ß√£o" />
 						</f:facet>
 						<h:outputText value="#{cult.tipoCriacao}" />
 					</p:column>
 					
-					<p:column style="width: 40px; text-align:center;" headerText="AÁıes">		
+					<p:column style="width: 40px; text-align:center;" headerText="A√ß√µes">		
 						<p:commandLink title="Confirmar" process="@this" update="tabAbasId_Agro:formCriacaoAnimais:tblTipoCriacaoSelecionados tabAbasId_Agro:formCriacaoAnimais:tblTipoCriacao" 
 						action="#{criacaoAnimaisController.adicionarTipoCultura()}" global="false">
 							<h:graphicImage title="Confirmar" value="/resources/img/ico-aprovar-notificacao.png" />
@@ -52,13 +53,13 @@
 						<p:spacer width="123px" height="0"/>  
 						<h:outputText value="|"/>
 					    <p:spacer width="150px" height="0"/>  
-						<h:outputText value="EvoluÁ„o do Rebanho"/>
+						<h:outputText value="Evolu√ß√£o do Rebanho"/>
 						<p:spacer width="175px" height="0"/>  
 						<h:outputText value="|"/>
 					</f:facet>
 					<p:column styleClass="text-center" style="width: 80px;">
 						<f:facet name="header">
-							EspÈcie <br /> animal
+							Esp√©cie <br /> animal
 						</f:facet>
 						<div style="width:100">
 							<h:outputText value="#{cult.tipoCriacao}"/>
@@ -67,32 +68,32 @@
 					
 					<p:column style="width: 100px;" styleClass="text-center">
 						<f:facet name="header">
-							*¡rea a ser <br />Ocupada (ha)
+							*√Årea a ser <br />Ocupada (ha)
 						</f:facet>
 						<p:inputText value="#{cult.capacidade}" style="width: 80px;" converter="doubleConverter" onkeyup="maskIt(this, event, '99.999.999,99', true)" maxlength="13">
 							<p:ajax global="false"/>
 						</p:inputText>
 					</p:column>
 					
-					<p:column headerText="*N∫ CabeÁas" style="width: 85px" styleClass="text-center">
+					<p:column headerText="*N¬∫ Cabe√ßas" style="width: 85px" styleClass="text-center">
 						<p:inputText value="#{cult.numCabecas}" style="width: 80px"  maxlength="9">
 							<p:ajax global="false"/>
 						</p:inputText>
 					</p:column>
 					
-					<p:column headerText="N∫ Matrizes" style="width: 85px" styleClass="text-center">
+					<p:column headerText="N¬∫ Matrizes" style="width: 85px" styleClass="text-center">
 						<p:inputText value="#{cult.numMatrizes}" style="width: 80px" maxlength="9">
 							<p:ajax global="false"/>
 						</p:inputText>
 					</p:column>
 					
-					<p:column headerText="N∫ Reprodutores" style="width: 105px" styleClass="text-center">
+					<p:column headerText="N¬∫ Reprodutores" style="width: 105px" styleClass="text-center">
 						<p:inputText value="#{cult.numReprodutores}" style="width: 100px" maxlength="9">
 							<p:ajax global="false"/>
 						</p:inputText>
 					</p:column>
 			
-					<p:column headerText="*ProduÁ„o/und" style="width: 120px;">
+					<p:column headerText="*Produ√ß√£o/und" style="width: 120px;">
 						<h:panelGrid columns="2" style="margin-left:-7px;" styleClass=" ui-panelgrid">
 							<p:inputText value="#{cult.producaoEsperada}" style="width: 60px;" converter="doubleConverter" onkeyup="maskIt(this, event, '99.999.999,99', true)" maxlength="13">
 								<p:ajax global="false"/>
@@ -102,7 +103,7 @@
 					        </p:selectOneMenu>
 				        </h:panelGrid>
 					</p:column>
-					<p:column headerText="*N∫ Animais" style="width: 75px" styleClass="text-center">
+					<p:column headerText="*N¬∫ Animais" style="width: 75px" styleClass="text-center">
 						<p:inputText value="#{cult.numAnimais}" style="width: 70px" maxlength="9">
 							<p:ajax global="false"/>
 						</p:inputText>
@@ -115,7 +116,7 @@
 		   					 </p:selectManyCheckbox>
 				        </h:panelGroup>
 					</p:column>
-					<p:column headerText="AÁıes" style="width: 33px" styleClass="text-center">
+					<p:column headerText="A√ß√µes" style="width: 33px" styleClass="text-center">
 			          	<p:commandLink oncomplete="excluirTipoCultura.show()" title="Excluir" process="@this" global="false">
 		          			 <h:graphicImage title="Excluir Tipo Cultura Transportado" value="/resources/img/ico-excluir.png" />
 		     			     <f:setPropertyActionListener target="#{criacaoAnimaisController.tipoCultura}" value="#{cult}"/>
@@ -125,7 +126,7 @@
 			<h:panelGrid columns="3" style="margin-top:25px;">
 				<p:commandButton id="btnVoltar" value="Voltar" global="false" action="#{agrossilvopastorilController.voltarAba()}" update="tabAbasId_Agro"/>
 				<p:spacer width="15" height="0"/>
-			 	<p:commandButton id="btnAvancar" value="AvanÁar" action="#{criacaoAnimaisController.salvarAbaCriacaoAnimais()}" update="tabAbasId_Agro" global="false" />
+			 	<p:commandButton id="btnAvancar" value="Avan√ßar" action="#{criacaoAnimaisController.salvarAbaCriacaoAnimais()}" update="tabAbasId_Agro" global="false" />
 			</h:panelGrid>
 		</h:panelGrid>
 		</h:panelGrid>

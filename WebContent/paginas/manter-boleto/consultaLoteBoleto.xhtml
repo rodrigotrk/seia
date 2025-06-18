@@ -21,18 +21,24 @@
 					
 					<h:panelGroup id="pnlFileDownload" layout="block">
 						<h:form id="downloadRetornoForm" rendered="#{not empty consultaLoteBoletoController.caminhoArquivoRetorno}">
+        <ui:include src="/layout/csrfToken.xhtml" />
 							
 							<p:spacer height="20px;" />
 								
 							<p:dataTable value="1">
-								<p:column headerText="Descrição">
+        <ui:include src="/layout/csrfToken.xhtml" />
+        <ui:include src="/layout/csrfToken.xhtml" />
+        <ui:include src="/layout/csrfToken.xhtml" />
+        <ui:include src="/layout/csrfToken.xhtml" />
+        <ui:include src="/layout/csrfToken.xhtml" />
+								<p:column headerText="DescriÃ§Ã£o">
 									<h:panelGroup layout="block" style="text-align:center">
 										<h:commandLink value="arquivo_de_retorno" style="color:blue;">
 											<p:fileDownload value="#{consultaLoteBoletoController.retornoDownload}" />
 										</h:commandLink>
 									</h:panelGroup>
 								</p:column>							
-								<p:column headerText="Ações">
+								<p:column headerText="AÃ§Ãµes">
 									<h:panelGroup layout="block" style="text-align:center">
 										<p:commandLink  oncomplete="excluirArquivoRetorno.show();">
 											<h:graphicImage title="Excluir" value="/resources/img/ico-excluir.png" />
@@ -52,7 +58,7 @@
 								<h:panelGroup layout="block">
 									<p:fileUpload  
 										label="#{bundle.consulta_lote_boleto_upload_arquivo}" auto="true"
-										invalidFileMessage="Tipo de arquivo inválido." mode="advanced"
+										invalidFileMessage="Tipo de arquivo invÃ¡lido." mode="advanced"
 										fileUploadListener="#{consultaLoteBoletoController.uploadRetorno}" allowTypes="/(\.|\/)(ret)$/" update="pnlFileDownload frmRetorno:pnlFileUpload frmRetorno:pnlBotoes" >
 									</p:fileUpload>
 								</h:panelGroup>
@@ -87,7 +93,7 @@
 				<p:commandButton value="Sim" global="false" oncomplete="excluirArquivoRetorno.hide()" update="pnlRegistrarRetorno">
 					<f:setPropertyActionListener target="#{consultaLoteBoletoController.caminhoArquivoRetorno}" value="" />
 				</p:commandButton>
-				<p:commandButton value="Não" global="false" oncomplete="excluirArquivoRetorno.hide()" />
+				<p:commandButton value="NÃ£o" global="false" oncomplete="excluirArquivoRetorno.hide()" />
 			</h:form>
 		</p:confirmDialog>
 		
@@ -136,7 +142,7 @@
 		</p:dialog>
 		
 		<!-- Modal para confirmar processamento da remessa no BB cobranca. -->
-		<p:dialog widgetVar="confirmarProcessamento" header="Confirmação" message="#{bundle.consulta_lote_boleto_msg_confirmar_processamento}" severity="alert"
+		<p:dialog widgetVar="confirmarProcessamento" header="ConfirmaÃ§Ã£o" message="#{bundle.consulta_lote_boleto_msg_confirmar_processamento}" severity="alert"
 					modal="true" resizable="false">
 			<br/>
 			#{bundle.consulta_lote_boleto_msg_confirmar_processamento}
@@ -145,7 +151,7 @@
 				<p:commandButton value="Sim" global="true" update="formBoleto:panelGrid" oncomplete="confirmarProcessamento.hide()"
 					actionListener="#{consultaLoteBoletoController.confirmarProcessamentoRemessa()}" >
 				</p:commandButton>
-				<p:commandButton value="Não" global="false" oncomplete="confirmarProcessamento.hide()" />
+				<p:commandButton value="NÃ£o" global="false" oncomplete="confirmarProcessamento.hide()" />
 			</h:form>
 		</p:dialog>
 		
@@ -173,7 +179,7 @@
 					update="formBoleto:tabelaLotes, formBoleto:panelGrid" >
 				</p:commandButton>
 				
-				<p:commandButton value="#{bundle.consulta_lote_boleto_registrar_retorno}" title="O arquivo deve estar no padrão CNAB240. O nome deve estar no padrão IEDCBRxxxxxxx.ret "
+				<p:commandButton value="#{bundle.consulta_lote_boleto_registrar_retorno}" title="O arquivo deve estar no padrÃ£o CNAB240. O nome deve estar no padrÃ£o IEDCBRxxxxxxx.ret "
 					actionListener="#{consultaLoteBoletoController.limparCaminhoArquivoRetorno()}" 
 					update="formBoleto:tabelaLotes, formBoleto:panelGrid, pnlRegistrarRetorno" oncomplete="dlgRgistrarRetorno.show()" />
 			</h:panelGrid>
@@ -229,7 +235,7 @@
 							<h:graphicImage title="Visualizar Boletos" value="/resources/img/ico-pesquisa.png" />
 						</p:commandLink>
 						
-						<!-- Para as remessas que já foram registradas no BB Cobranca -->
+						<!-- Para as remessas que jÃ¡ foram registradas no BB Cobranca -->
 						<h:graphicImage title="Processamento Confirmado" value="/resources/img/ico-aprovado.png" style="vertical-align: middle;"
 							rendered="#{lote.ideTipoLoteBoleto.ideTipoLoteBoleto eq 1 and lote.loteRemessaBoleto.dtcEnvioRemessa ne null}">
 						</h:graphicImage>
@@ -241,7 +247,7 @@
 							<h:graphicImage title="Confirmar Processamento" value="/resources/img/check_circle_yellow2.png" />
 						</p:commandLink>
 						
-						<!-- Fazer download do arquivo de remessa que já tenha sido gerado -->
+						<!-- Fazer download do arquivo de remessa que jÃ¡ tenha sido gerado -->
 						<h:commandLink rendered="#{lote.ideTipoLoteBoleto.ideTipoLoteBoleto eq 1 and lote.loteRemessaBoleto.dtcEnvioRemessa eq null }">
 							<h:graphicImage title="Download arquivo de remessa" value="/resources/img/ico-download.png" />
 							<f:setPropertyActionListener target="#{consultaLoteBoletoController.loteSelecionado}" value="${lote}" />

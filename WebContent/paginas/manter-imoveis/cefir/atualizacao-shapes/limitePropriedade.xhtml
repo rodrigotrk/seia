@@ -5,7 +5,8 @@
 			xmlns:f="http://java.sun.com/jsf/core"
 			xmlns:ui="http://java.sun.com/jsf/facelets"
 			xmlns:p="http://primefaces.prime.com.tr/ui">
-			<h:form id="formAtualizacaoShape">		
+			<h:form id="formAtualizacaoShape">
+        <ui:include src="/layout/csrfToken.xhtml" />		
 				<p:tabView id="abasAtualizacaoShapes" dynamic="true"  activeIndex="#{atualizarShapesController.activeIndex}">
 					
 					<p:ajax event="tabChange" listener="#{atualizarShapesController.controlarAbas}" update="formAtualizarShape formAcao " />
@@ -18,11 +19,11 @@
 						<ui:include src="/paginas/manter-imoveis/cefir/includes/includes-atualizacao-shapes/atualizarShapeAbas.xhtml" />
 					</p:tab>
 					
-					<p:tab id="abaVegetacaoNativa" title="Vegetação Nativa" disabled="#{atualizarShapesController.tab2}">
+					<p:tab id="abaVegetacaoNativa" title="VegetaÃ§Ã£o Nativa" disabled="#{atualizarShapesController.tab2}">
 						<ui:include src="/paginas/manter-imoveis/cefir/includes/includes-atualizacao-shapes/atualizarShapeAbas.xhtml" />
 					</p:tab>
 					
-					<p:tab id="abaAPP" title="Área de Preservação Permanente" disabled="#{atualizarShapesController.tab3}">
+					<p:tab id="abaAPP" title="Ãrea de PreservaÃ§Ã£o Permanente" disabled="#{atualizarShapesController.tab3}">
 						<ui:include src="/paginas/manter-imoveis/cefir/includes/includes-atualizacao-shapes/atualizarShapeAbas.xhtml" />
 					</p:tab>			
 								
@@ -34,10 +35,10 @@
 						<ui:include src="/paginas/manter-imoveis/cefir/includes/includes-atualizacao-shapes/atualizarShapeAbas.xhtml" />
 					</p:tab>
 					
-					<p:tab id="abaVisualizacao" title="Visualização"  disabled="#{atualizarShapesController.tab6}" >
+					<p:tab id="abaVisualizacao" title="VisualizaÃ§Ã£o"  disabled="#{atualizarShapesController.tab6}" >
 						<br/>
 						<h3>
-							<h:outputText styleClass="titulo-grupo" style="font-size: 12px; font-weight: bold;" value="LOCALIZAÇÃO GEOGRÁFICA DO IMÓVEL" />
+							<h:outputText styleClass="titulo-grupo" style="font-size: 12px; font-weight: bold;" value="LOCALIZAÃ‡ÃƒO GEOGRÃFICA DO IMÃ“VEL" />
 						</h3>
 						<br/>
 						
@@ -76,9 +77,9 @@
 									<f:param name="tipo" value="2"/>
 								</h:outputLink>
 								
-								<!-- VEGETAÇÃO NATIVA -->
+								<!-- VEGETAÃ‡ÃƒO NATIVA -->
 								<h:outputLink value="#{atualizarShapesController.caminhoDesenharGeoBahia}" title="GEOBAHIA" target="_blank" rendered="#{!atualizarShapesController.tab2}">
-									<h:outputText value="VISUALIZAR SHAPE DA VEGETAÇÃO NATIVA" />
+									<h:outputText value="VISUALIZAR SHAPE DA VEGETAÃ‡ÃƒO NATIVA" />
 									<f:param name="acao" value="view" />
 									<f:param name="idimov" value="#{atualizarShapesController.imovel.ideImovelRural}" />
 									<f:param name="tipo" value="5"/>
@@ -86,7 +87,7 @@
 								<h:outputLink
 									value="#{atualizarShapesController.caminhoDesenharGeoBahia}"
 									title="GEOBAHIA" target="_blank" rendered="#{!atualizarShapesController.tab2}">
-									<h:graphicImage title="Visualizar Vegetação Nativa" value="/resources/img/ico-arl-relocacao.png" />
+									<h:graphicImage title="Visualizar VegetaÃ§Ã£o Nativa" value="/resources/img/ico-arl-relocacao.png" />
 									<f:param name="acao" value="view" />
 									<f:param name="idimov" value="#{atualizarShapesController.imovel.ideImovelRural}" />
 									<f:param name="tipo" value="5"/>
@@ -177,18 +178,19 @@
 			</h:form>
 			
 		    <h:form id="formAcao" >
+        <ui:include src="/layout/csrfToken.xhtml" />
 				<h:panelGrid id="panelAcao" columns="2">
 					<p:commandButton value="Voltar"  update="formAtualizacaoShape formAcao:panelAcao" 
 							action="#{atualizarShapesController.voltarAbas}" rendered="#{atualizarShapesController.exibirBtnVoltar}">
 				   	</p:commandButton>
 				   
-				   <p:commandButton value="Avançar" update="formAtualizacaoShape formAcao:panelAcao"  
+				   <p:commandButton value="AvanÃ§ar" update="formAtualizacaoShape formAcao:panelAcao"  
 						   		action="#{atualizarShapesController.avancarAbas}" 
 						   		rendered="#{!atualizarShapesController.exibirBtnSalvarOuAvancar and !atualizarShapesController.exibirBtnFinalizar}">
 			   		</p:commandButton>
 			   		
-			   		<!-- Botão avançar da aba Ativ.desenvol. -->
-			   		<p:commandButton value="Avançar"  update="formAtualizacaoShape formAcao:panelAcao"
+			   		<!-- BotÃ£o avanÃ§ar da aba Ativ.desenvol. -->
+			   		<p:commandButton value="AvanÃ§ar"  update="formAtualizacaoShape formAcao:panelAcao"
 					   				action="#{atualizarShapesController.salvar}" 
 						   			rendered="#{atualizarShapesController.exibirBtnSalvarOuAvancar and !atualizarShapesController.exibirBtnFinalizar}">
 				   	</p:commandButton>

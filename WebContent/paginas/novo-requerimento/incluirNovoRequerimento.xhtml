@@ -15,6 +15,7 @@ template="/layout/template.xhtml">
 		
 		<p:dialog widgetVar="dlgInformaProcessoConcluido" header="Processo no INEMA" height="120" width="270" modal="true" resizable="false">
 			<h:form id="frmDlgInformarProcessoConcluido">
+        <ui:include src="/layout/csrfToken.xhtml" />
 				<h:panelGrid>
 					<h:panelGrid columns="2">
 						<h:outputText value="*1. Informe o número do processo" />
@@ -38,6 +39,7 @@ template="/layout/template.xhtml">
 	
 	
 		<h:form id="formGeral">
+        <ui:include src="/layout/csrfToken.xhtml" />
 			<h:panelGrid columns="1" id="principal">
 				<h:inputHidden value="#{contextoController.pessoa.idePessoa}" />
 				
@@ -238,6 +240,7 @@ template="/layout/template.xhtml">
 		</h:form>
 		
 		<h:form id="formEndereco" rendered="#{!urlReqUnicoController.bloqueiaEndContatoTemporario}">
+        <ui:include src="/layout/csrfToken.xhtml" />
 		<!-- COMENTAR A PARTIR DESTE PONTO 
 		
 			<h:panelGroup>
@@ -371,6 +374,7 @@ template="/layout/template.xhtml">
 		 <!-- FIM COMENTARIO -->
 		
 		<h:form id="formQuestionario">
+        <ui:include src="/layout/csrfToken.xhtml" />
 			<h:panelGrid rendered="#{novoRequerimentoController.mostraQuestionarioAposSalvar}">
 				<hr></hr>
 				<h3><h:outputText value="#{bundle.requerimentoUnicoLabelHeaderQuestionario}" styleClass="titulo-grupo" style="font-size: 12px; font-weight: bold;"/></h3>
@@ -433,6 +437,7 @@ template="/layout/template.xhtml">
     	
 		<h:panelGroup id="pnlAceiteReenquadramento" layout="block">
 	    	<h:form id="frmAceiteReenquadramento" rendered="#{aceiteReenquadramentoController.renderedAceiteReenquadramento}">
+        <ui:include src="/layout/csrfToken.xhtml" />
 				<h:panelGrid id="pnlResposta">
 					<h:panelGroup layout="block">
 						<strong>Concorda com o reenquadramento do processo?</strong>
@@ -478,6 +483,7 @@ template="/layout/template.xhtml">
 				</p:tabView>
 				
 				<h:form style="float:right;">
+        <ui:include src="/layout/csrfToken.xhtml" />
 					<p:commandButton id="btnNovoEfetuarEnquadramento" value="Efetuar Enquadramento" rendered="#{novoRequerimentoController.modoEnquadramento}"
 						oncomplete="dialogEfetuarEnquadramento.show()" update="enquadramento" actionListener="#{enquadramentoController.load(novoRequerimentoController.requerimento)}"/>
 				</h:form>
@@ -506,6 +512,7 @@ template="/layout/template.xhtml">
 			</p>
 
 			<h:form id="formUploadJustificativaNaoConcordo">
+        <ui:include src="/layout/csrfToken.xhtml" />
 				<h:panelGroup id="pnlUpload" layout="block">
 
 					<p:fileUpload fileLimit="1" label="Upload Documento"
@@ -545,14 +552,16 @@ template="/layout/template.xhtml">
 		</p:dialog>
 		
 		<p:confirmDialog widgetVar="dlgFinalizarEdicaoParaReenquadramento" message="Requerimento foi editado. Deseja continuar?" > 
-	 		<h:form> 
+	 		<h:form>
+        <ui:include src="/layout/csrfToken.xhtml" /> 
 	 			<p:commandButton value="Sim" actionListener="#{novoRequerimentoController.finalizarEdicaoParaReenquadramento()}" onclick="dlgFinalizarEdicaoParaReenquadramento.hide();" /> 
 	 			<p:commandButton value="Não" onclick="dlgFinalizarEdicaoParaReenquadramento.hide();" /> 
 	 		</h:form> 
 	 	</p:confirmDialog>
 	 	
 		<p:confirmDialog widgetVar="dlgConcordoReenquadramento" message="Você realmente está de acordo com o reenquadramento?" > 
-	 		<h:form> 
+	 		<h:form>
+        <ui:include src="/layout/csrfToken.xhtml" /> 
 	 			<p:commandButton value="Sim" actionListener="#{aceiteReenquadramentoController.confirmarConcordarReenquadramento}">
 	 				<f:attribute name="metodoLiberarEdicao" value="#{novoRequerimentoController.metodoLiberarEdicao}" />
 	 			</p:commandButton> 
@@ -561,7 +570,8 @@ template="/layout/template.xhtml">
 	 	</p:confirmDialog>
 	 	
 		<p:confirmDialog widgetVar="dlgDiscordoReenquadramento" message="Deseja realmente discordar com o reenquadramento?" > 
-	 		<h:form> 
+	 		<h:form>
+        <ui:include src="/layout/csrfToken.xhtml" /> 
 	 			<p:commandButton value="Sim" actionListener="#{aceiteReenquadramentoController.confirmarDiscordarReenquadramento}" /> 
 	 			<p:commandButton value="Não" actionListener="#{aceiteReenquadramentoController.limparAceite}" onclick="dlgDiscordoReenquadramento.hide();" /> 
 	 		</h:form> 
@@ -569,6 +579,7 @@ template="/layout/template.xhtml">
 
 		<p:confirmDialog id="confirmacaoExclusaoProcessoINEMA" widgetVar="confirmacaoExclusaoProcessoINEMA" header="#{bundle.geral_lbl_mensagem}" appendToBody="true" message="#{bundle.msg_confirma_exclusao}" severity="alert" position="center">
 			<h:form id="formexclusaoProcesso">
+        <ui:include src="/layout/csrfToken.xhtml" />
 				<h:panelGroup>
 					<div style="text-align: center;">
 						<p:commandButton  id="confirmarExclusaoProcessoTramite" value="#{bundle.btn_sim}" update="subViewAbas:tabAbasId:formAbaProcesso:TblProcessoEmTramite subViewAbas:tabAbasId:formAbaProcesso:msgAbaProcesso" oncomplete="confirmacaoExclusaoProcessoINEMA.hide()" action="#{abaProcessoController.excluirProcessoInema()}" />
@@ -580,6 +591,7 @@ template="/layout/template.xhtml">
 		
 	    <p:confirmDialog  message="#{bundle.consultapf_msg_confimrexclusao}" header="Mensagem" severity="alert" widgetVar="confirmation" id="confirmation">
 			<h:form id="formConfirmation">
+        <ui:include src="/layout/csrfToken.xhtml" />
 		        <p:commandButton id="confirmarExcluir" value="#{bundle.consultapf_lbl_sim}" update=":formAbaRenovacao:tbRequerimentoProcesso" 
 		        				 actionListener="#{novoRequerimentoController.excluirProcesso()}" oncomplete="confirmation.hide()" process="confirmarExcluir"/>
 		        <p:commandButton  value="#{bundle.consultapf_lbl_nao}" onclick="confirmation.hide()" type="button" />
@@ -588,6 +600,7 @@ template="/layout/template.xhtml">
 		
 	    <p:confirmDialog  message="#{bundle.consultapf_msg_confimrexclusao}" header="Mensagem" severity="alert" widgetVar="confirmCondicionantes">
 			<h:form id="formExcluirCondicionante">
+        <ui:include src="/layout/csrfToken.xhtml" />
 		        <p:commandButton value="#{bundle.consultapf_lbl_sim}" update="subViewAbas:tabAbasId:formAbaRenovacao:tabelaRevisaoCondicionantes" 
 		        				 action="#{abaRenovacaoAlteracaoProrrogacaoController.excluirCondicionante()}" oncomplete="confirmCondicionantes.hide()" process="@this"/>
 		        <p:commandButton  value="#{bundle.consultapf_lbl_nao}" onclick="confirmCondicionantes.hide()" />
@@ -596,6 +609,7 @@ template="/layout/template.xhtml">
 			
 	    <p:confirmDialog message="#{bundle.consultapf_msg_confimrexclusao}" header="Mensagem" severity="alert" widgetVar="excluirTransfTitularidade">
 		  	<h:form id="removerTransfTitularidade">
+        <ui:include src="/layout/csrfToken.xhtml" />
 		        <p:commandButton  value="#{bundle.consultapf_lbl_sim}" update="subViewAbas:tabAbasId:formAbaProcesso:TblTranferenciaAtos subViewAbas:tabAbasId:formAbaProcesso:btnTitularidade subViewAbas:tabAbasId:formAbaProcesso:msgAbaProcesso" 
 		        				 action="#{abaProcessoController.excluirTransferenciaDeTitularidade()}" oncomplete="excluirTransfTitularidade.hide()" process="@this"/>
 		        <p:commandButton  value="#{bundle.consultapf_lbl_nao}" onclick="excluirTransfTitularidade.hide()" />
@@ -604,6 +618,7 @@ template="/layout/template.xhtml">
 	
 	    <p:confirmDialog message="#{bundle.consultapf_msg_confimrexclusao}" header="Mensagem" severity="alert" widgetVar="excluirLicenca">
 			<h:form id="removerLicenca">
+        <ui:include src="/layout/csrfToken.xhtml" />
 		        <p:commandButton   value="#{bundle.consultapf_lbl_sim}" update="subViewAbas:tabAbasId:formAbaRenovacao:pnlRenovAltLicenca_ativa subViewAbas:tabAbasId:formAbaRenovacao:tableLicenca" 
 		        				 actionListener="#{abaRenovacaoAlteracaoProrrogacaoController.excluirLicenca()}" oncomplete="excluirLicenca.hide()" process="@this"/>
 		        <p:commandButton  value="#{bundle.consultapf_lbl_nao}" onclick="excluirLicenca.hide()" />
@@ -612,6 +627,7 @@ template="/layout/template.xhtml">
 		
 	    <p:confirmDialog message="#{bundle.consultapf_msg_confimrexclusao}" header="Mensagem" severity="alert" widgetVar="excluirRenovarCancelOutorga" >
 			<h:form id="removerAlterRenovCancelOutorga">
+        <ui:include src="/layout/csrfToken.xhtml" />
 		        <p:commandButton  value="#{bundle.consultapf_lbl_sim}" update="subViewAbas:tabAbasId:formAbaRenovacao:tableARCO" 
 		        				 actionListener="#{abaRenovacaoAlteracaoProrrogacaoController.excluirOutorga()}" oncomplete="excluirRenovarCancelOutorga.hide()" process="@this"/>
 		        <p:commandButton  value="#{bundle.consultapf_lbl_nao}" onclick="excluirRenovarCancelOutorga.hide()" />
@@ -620,6 +636,7 @@ template="/layout/template.xhtml">
 		
 	    <p:dialog width="350" height="80" resizable="false" modal="false" header="Mensagem" widgetVar="excluirOutorgaLocGeo" >		    	
 			<h:form id="removerOutorgaLocalizacaoGeografica">
+        <ui:include src="/layout/csrfToken.xhtml" />
 		        <h:outputText value="#{bundle.consultapf_msg_confimrexclusao}" />
 		        <br />
 		        <br />		      
@@ -634,6 +651,7 @@ template="/layout/template.xhtml">
 		
 	    <p:confirmDialog message="#{bundle.consultapf_msg_confimrexclusao}" header="Mensagem" severity="alert" widgetVar="excluirProrrogarValidade" >
 	        <h:form id="removerPPV">
+        <ui:include src="/layout/csrfToken.xhtml" />
 		        <p:commandButton value="#{bundle.consultapf_lbl_sim}"  update="subViewAbas:tabAbasId:formAbaRenovacao:tbProcessoPrazoValidade" 
 		        				 actionListener="#{abaRenovacaoAlteracaoProrrogacaoController.excluirProrrogacao()}" oncomplete="excluirProrrogarValidade.hide()"  process="@this"/>
 		        <p:commandButton value="#{bundle.consultapf_lbl_nao}" onclick="excluirProrrogarValidade.hide()" />
@@ -645,6 +663,7 @@ template="/layout/template.xhtml">
 		<!-- Dialogs Aba 3 -->
 		<p:confirmDialog  header="#{bundle.geral_lbl_mensagem}" message="#{bundle.msg_confirma_exclusao}" severity="alert" widgetVar="confirmationExcluirManancialCorpoHidrico" id="confirmationExcluirManancialCorpoHidrico" style="left:100px; top:100px;">
 			<h:form id="cnfDialogManancialCorpoHidrico">
+        <ui:include src="/layout/csrfToken.xhtml" />
 			        	<p:commandButton id="confirmarExcluirManancialCorpoHidrico" value="#{bundle.consultapf_lbl_sim}" update="subViewAbas:tabAbasId:formAbaOutorga:msgAbaOutorga subViewAbas:tabAbasId:formAbaOutorga:dataTableIncluirResiduosLiquidos subViewAbas:tabAbasId:formAbaOutorga:msgAbaOutorga" 
 			        			 	     actionListener="#{novoRequerimentoController.excluirManancialCorpoHidrico()}" oncomplete="confirmationExcluirManancialCorpoHidrico.hide()" process="confirmarExcluirManancialCorpoHidrico"/>
 			        	<p:commandButton value="#{bundle.consultapf_lbl_nao}" onclick="confirmationExcluirManancialCorpoHidrico.hide()" type="button" />
@@ -653,6 +672,7 @@ template="/layout/template.xhtml">
 		
 		<p:confirmDialog header="#{bundle.geral_lbl_mensagem}" message="#{bundle.msg_confirma_exclusao}" severity="alert" widgetVar="confirmationExcluirIntervencaoCorpoHidrico" id="confirmationExcluirIntervencaoCorpoHidrico" style="left:100px; top:100px;">
 			<h:form id="cnfDialogIntervencaoCorpoHidrico">
+        <ui:include src="/layout/csrfToken.xhtml" />
 			        	<p:commandButton value="#{bundle.consultapf_lbl_sim}" update="subViewAbas:tabAbasId:formAbaOutorga:dtTaleIntervencao" 
 			        					 actionListener="#{abaOutorgaController.excluirIntervencao()}" oncomplete="confirmationExcluirIntervencaoCorpoHidrico.hide()" process="@this"/>
 			        	<p:commandButton value="#{bundle.consultapf_lbl_nao}" onclick="confirmationExcluirIntervencaoCorpoHidrico.hide()" type="button" />
@@ -661,6 +681,7 @@ template="/layout/template.xhtml">
 	    
 	    <p:confirmDialog header="#{bundle.geral_lbl_mensagem}" message="#{bundle.msg_confirma_exclusao}" severity="alert" widgetVar="confirmationSub" id="confirmationSub" appendToBody="true">
 	        <h:form id="removerCapSub">
+        <ui:include src="/layout/csrfToken.xhtml" />
 		        <p:commandButton id="confirmarExcluirCapSub" actionListener="#{abaOutorgaController.excluirCaptacaoSubterranea()}" value="#{bundle.consultapf_lbl_sim}" update="subViewAbas:tabAbasId:formAbaOutorga:tableCapSub" oncomplete="confirmationSub.hide()" process="@this"/>
 		        <p:commandButton value="#{bundle.consultapf_lbl_nao}" onclick="confirmationSub.hide()" type="button" />
 	     	</h:form>
@@ -668,6 +689,7 @@ template="/layout/template.xhtml">
 	    
 	    <p:confirmDialog header="#{bundle.geral_lbl_mensagem}" message="#{bundle.msg_confirma_exclusao}" severity="alert" widgetVar="confirmationPoco" id="confirmationPoco" appendToBody="true">
 	        <h:form id="removerPoco">
+        <ui:include src="/layout/csrfToken.xhtml" />
 		        <p:commandButton id="confirmarExcluirPoco" actionListener="#{abaOutorgaController.excluirPerfuracaoPoco()}" value="#{bundle.consultapf_lbl_sim}" update="subViewAbas:tabAbasId:formAbaOutorga:tableCapSub" oncomplete="confirmationPoco.hide()" process="@this"/>
 		        <p:commandButton value="#{bundle.consultapf_lbl_nao}" onclick="confirmationPoco.hide()" type="button" />
 	     	</h:form>
@@ -675,13 +697,15 @@ template="/layout/template.xhtml">
 	    
 	      <p:confirmDialog header="#{bundle.geral_lbl_mensagem}" message="#{bundle.msg_confirma_exclusao}" severity="alert" widgetVar="confirmationLancamento" id="confirmationLancamento" appendToBody="true">
 	        <h:form id="removerLancamento">
+        <ui:include src="/layout/csrfToken.xhtml" />
 		        <p:commandButton id="confirmarExcluirLancamento" actionListener="#{abaOutorgaController.excluirLancamento()}" value="#{bundle.consultapf_lbl_sim}" update="subViewAbas:tabAbasId:formAbaOutorga:tableLancamento" onclick="confirmationLancamento.hide()" process="@this"/>
 		        <p:commandButton value="#{bundle.consultapf_lbl_nao}" onclick="confirmationLancamento.hide()" type="button" />
 	     	</h:form>
 	    </p:confirmDialog>
 	    
 	    <p:confirmDialog message="#{bundle.msg_confirma_exclusao}" header="#{bundle.geral_lbl_mensagem}" severity="alert" widgetVar="confirmationSuper" appendToBody="true">
-	   	 <h:form id="removerCapSuper"> 
+	   	 <h:form id="removerCapSuper">
+        <ui:include src="/layout/csrfToken.xhtml" /> 
 	       	 <p:commandButton id="confirmarExcluirCapSuper" action="#{abaOutorgaController.excluirCaptacaoSuperficial()}" value="#{bundle.consultapf_lbl_sim}" update="subViewAbas:tabAbasId:formAbaOutorga:tableCapSuper" oncomplete="confirmationSuper.hide()" process="@this"/>
 	       	 <p:commandButton value="#{bundle.consultapf_lbl_nao}" onclick="confirmationSuper.hide()" type="button" />
 	    	</h:form>
@@ -690,6 +714,7 @@ template="/layout/template.xhtml">
 
 		<p:confirmDialog id="confirmacaoExclusaoFlorestal" widgetVar="confirmacaoExclusaoFlorestal" header="#{bundle.geral_lbl_mensagem}" appendToBody="true" message="#{bundle.msg_confirma_exclusao}" severity="alert">
 			<h:form id="formexclusaoFlorestal">
+        <ui:include src="/layout/csrfToken.xhtml" />
 					<p:commandButton id="confirmarExclusaoFlorestal" value="#{bundle.btn_sim}" update="subViewAbas:tabAbasId:formAbaFlorestal" actionListener="#{abaFlorestalController.excluirFlorestal()}" onclick="confirmacaoExclusaoFlorestal.hide()" process="@this"  />
 					<p:commandButton value="#{bundle.btn_nao}" onclick="confirmacaoExclusaoFlorestal.hide()" type="button" />
 			</h:form>
@@ -697,6 +722,7 @@ template="/layout/template.xhtml">
 		
 		<p:confirmDialog id="confirmacaoExclusaoLocalizacao" widgetVar="confirmacaoExclusaoLocalizacao" header="#{bundle.geral_lbl_mensagem}" message="#{bundle.msg_confirma_exclusao}" appendToBody="true" closable="false" severity="alert">
 			<h:form id="formConfirmExclusaoLocGeo">
+        <ui:include src="/layout/csrfToken.xhtml" />
 				<h:panelGroup>
 					<div style="text-align: center;">
 						<p:commandButton id="confirmarExclusaoLoc" process="@this" value="#{bundle.btn_sim}" update="formDialogFlorestal" oncomplete="confirmacaoExclusaoLocalizacao.hide()"/>
@@ -712,6 +738,7 @@ template="/layout/template.xhtml">
 		
 		<p:confirmDialog id="confirmacaoExclusaoFinalidade" widgetVar="confirmacaoExclusaoFinalidade" header="#{bundle.geral_lbl_mensagem}" appendToBody="true" message="#{bundle.msg_confirma_exclusao}" severity="alert">
 			<h:form id="formExclusaoFinalidades">
+        <ui:include src="/layout/csrfToken.xhtml" />
 				<p:commandButton id="confirmarApagarFinalidade" value="#{bundle.btn_sim}" actionListener="#{abaOutorgaController.excluirFinalidadeDaLista()}" onclick="confirmacaoExclusaoFinalidade.hide()" process="@this"  
 				update="formLocalizacaoDialogOutorga:pnlInformFinalidades:tblFinalidade 
 						formDialogCaptacaoSubterranea:pnl3
@@ -724,6 +751,7 @@ template="/layout/template.xhtml">
 		
 		<p:confirmDialog id="confirmacaoExclusaoFinalidadeBarragem" widgetVar="confirmacaoExclusaoFinalidadeBarragem" header="#{bundle.geral_lbl_mensagem}" appendToBody="true" message="#{bundle.msg_confirma_exclusao}" severity="alert">
 			<h:form id="formExclusaoFinalidadesBarragem">
+        <ui:include src="/layout/csrfToken.xhtml" />
 				<p:commandButton id="confirmarApagarFinalidade" value="#{bundle.btn_sim}" actionListener="#{abaOutorgaController.excluirFinalidadeDaListaBarragem()}" onclick="confirmacaoExclusaoFinalidadeBarragem.hide()" process="@this"/>
 				<p:commandButton value="#{bundle.btn_nao}" onclick="confirmacaoExclusaoFinalidade.hide()" type="button" />
 			</h:form>

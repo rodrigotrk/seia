@@ -7,33 +7,34 @@
 	xmlns:p="http://primefaces.prime.com.tr/ui">
 
 	<h:form id="formDialogLocacao">
+        <ui:include src="/layout/csrfToken.xhtml" />
 		<h:panelGrid style="text-align: left;">
-			<h:outputText value="* Prefixo do Poço existente:" />
+			<h:outputText value="* Prefixo do PoÃ§o existente:" />
 			<p:inputText value="#{caepogController.caepogLocacao.prefixPocoCaepogLocacao}" disabled="#{caepogController.caepog.visualizando}" maxlength="20"/>
 			
 			<p:spacer width="0" height="10"/>
 			
-			<h:outputText value="* Número do processo que concedeu a autorização/licença da locação do poço existente:" />
+			<h:outputText value="* NÃºmero do processo que concedeu a autorizaÃ§Ã£o/licenÃ§a da locaÃ§Ã£o do poÃ§o existente:" />
 			<p:inputText value="#{caepogController.caepogLocacao.numProcessoCaepogLocacao}" disabled="#{caepogController.caepog.visualizando}" maxlength="60" styleClass="maiusculo"/>
 			
 			<p:spacer width="0" height="10"/>
 			
 			<h:panelGrid id="panelGridDataTable">
-				<h:outputText value="Localização da Locação:" />
+				<h:outputText value="LocalizaÃ§Ã£o da LocaÃ§Ã£o:" />
 				
 				<h:panelGrid columns="2">
 					<p:commandLink oncomplete="dlgLocalizacaoGeograficaGeneric.show();" actionListener="#{caepogController.novaLocGeoLocacao()}" process="@this"
 						disabled="#{caepogController.caepogLocacao.ideLocalizacaoGeografica != null and LocalizacaoGeograficaGenericController.validarTipoShape() || caepogController.caepog.visualizando}">
 						
-						<h:graphicImage title="Incluir Localização" value="/resources/img/ico-expandir.png" style="margin-right: 5px;" />
-						<h:outputText value="Incluir Localização" />
+						<h:graphicImage title="Incluir LocalizaÃ§Ã£o" value="/resources/img/ico-expandir.png" style="margin-right: 5px;" />
+						<h:outputText value="Incluir LocalizaÃ§Ã£o" />
 					</p:commandLink>
 				</h:panelGrid>
 				
 				<p:dataTable id="dataTableLocalizacao" var="localizacao" value="#{caepogController.caepogLocacao.ideLocalizacaoGeografica}"
 					rendered="#{caepogController.caepogLocacao.ideLocalizacaoGeografica != null and LocalizacaoGeograficaGenericController.validarTipoShape()}" emptyMessage="#{bundle.consultapf_msg_empty_list}">
 					
-					<p:column headerText="Ponto de Referência">
+					<p:column headerText="Ponto de ReferÃªncia">
 						<h:outputText value="${localizacao.desLocalizacaoGeografica}" />
 					</p:column>
 					
@@ -45,10 +46,10 @@
 						<h:outputText value="${localizacao.nomeSistemaCoordenadas()}" />
 					</p:column>
 					
-					<p:column headerText="Ações">
+					<p:column headerText="AÃ§Ãµes">
 						<p:commandLink oncomplete="dlgLocalizacaoGeograficaGeneric.show();" action="#{localizacaoGeograficaGenericController.visualizarLocalizacaoGeografica()}" process="@this">
 							<f:setPropertyActionListener target="#{localizacaoGeograficaGenericController.localizacaoGeograficaSelecionada}" value="#{caepogController.caepogLocacao.ideLocalizacaoGeografica}" />
-							<h:graphicImage title="Visualizar Localização no GeoBahia" value="/resources/img/ico-pesquisa.png" />
+							<h:graphicImage title="Visualizar LocalizaÃ§Ã£o no GeoBahia" value="/resources/img/ico-pesquisa.png" />
 						</p:commandLink>
 						
 						<p:commandLink oncomplete="dlgLocalizacaoGeograficaGeneric.show();" action="#{localizacaoGeograficaGenericController.editarLocalizacaoGeografica()}" 
@@ -56,7 +57,7 @@
 							
 							<f:setPropertyActionListener target="#{localizacaoGeograficaGenericController.localizacaoGeograficaSelecionada}" value="#{caepogController.caepogLocacao.ideLocalizacaoGeografica}" />
 							<f:setPropertyActionListener target="#{localizacaoGeograficaGenericController.disableParaVisualizar}" value="#{false}" />
-							<h:graphicImage title="Editar Localização Geográfica" value="/resources/img/ico-editar.png" />
+							<h:graphicImage title="Editar LocalizaÃ§Ã£o GeogrÃ¡fica" value="/resources/img/ico-editar.png" />
 						</p:commandLink>
 						
 						<p:commandLink process="@this" oncomplete="confirmacaoExclusaoLocalizacaoGenerica.show();" disabled="#{caepogController.caepog.visualizando}">
@@ -71,7 +72,7 @@
 			<p:spacer width="0" height="10"/>
 			
 			<h:panelGrid>
-				<h:outputText value="Área da locação (m²):" />
+				<h:outputText value="Ãrea da locaÃ§Ã£o (mÂ²):" />
 				<p:inputText value="#{caepogController.caepogLocacao.areaLocacaoCaepogLocacao}" maxlength="6" onkeyup="SomenteNumero(this);" disabled="#{caepogController.caepog.visualizando}">
 					<p:ajax event="blur" global="false"/>
 				</p:inputText>
@@ -79,7 +80,7 @@
 	
 			<p:spacer width="0" height="10"/>
 			
-			<h:outputText value="Endereço(s) onde será(ão) desenvolvida(s) a(s) atividade(s):" />
+			<h:outputText value="EndereÃ§o(s) onde serÃ¡(Ã£o) desenvolvida(s) a(s) atividade(s):" />
 			
 			<h:panelGrid>
 				<p:dataTable id="dataTableDialogLocacao" var="imovel" value="#{caepogController.listImovel}" lazy="true" emptyMessage="#{bundle.consultapf_msg_empty_list}">

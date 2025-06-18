@@ -7,6 +7,7 @@
 	xmlns:p="http://primefaces.prime.com.tr/ui">
 
 	<h:form id="form_dialog_gerador_residuo">
+        <ui:include src="/layout/csrfToken.xhtml" />
 		<h:panelGrid columns="1">
 			<p:selectOneRadio value="${entidadeDeclaracaoTransporteController.tipoPessoa}" valueChangeListener="#{entidadeDeclaracaoTransporteController.mudarTipoPessoa}">
 				<f:selectItem itemLabel="#{bundle.requerente_lbl_pessoa_fisica}" itemValue="0" />
@@ -32,7 +33,7 @@
 					</h:panelGrid>
 
 					<h:panelGrid id="panel_juridica" columns="2" rendered="#{entidadeDeclaracaoTransporteController.tipoPessoa == 1}">
-						<h:outputLabel value="Razão Social" style="float:left;" />
+						<h:outputLabel value="RazÃ£o Social" style="float:left;" />
 						<h:outputLabel value="#{bundle.consultapj_lbl_cnpj}" style="float:left;" />
 
 						<p:inputText style="width:300px;" value="#{entidadeDeclaracaoTransporteController.nome}" />
@@ -89,7 +90,7 @@
 					</f:facet>
 					<p:column>
 						<f:facet name="header">
-							<h:outputText value="Razão Social" />
+							<h:outputText value="RazÃ£o Social" />
 						</f:facet>
 						<p:commandLink oncomplete="dialogselecionarGeradorResiduo.hide()" update="formDeclaracao:pnlRequerente" process="@this" actionListener="#{declaracaoTransporteResiduoPerigosoController.selecionarGeradorResiduoPJ(pessoaJuridica)}" >
 							<h:outputText value="#{pessoaJuridica.nomRazaoSocial}" />

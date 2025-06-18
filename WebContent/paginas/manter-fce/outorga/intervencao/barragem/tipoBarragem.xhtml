@@ -61,6 +61,7 @@
 	<p:confirmDialog id="dlgImprimirRelatorioIntervencaoBarragem" message="#{fceIntervencaoBarragemController.msgImprimirRelatorio('Intervenção Barragem')}" widgetVar="rel_barragem" header="Mensagem">
 		<div align="center">
 			<h:form>
+        <ui:include src="/layout/csrfToken.xhtml" />
 				<p:commandButton value="Sim" ajax="false" global="false" process="@this" id="imprimir_rel_barragem"  onclick="rel_barragem.hide();" style="margin-right:10px;">
                     <p:fileDownload value="#{fceIntervencaoBarragemController.imprimirRelatorio}"/>
 				</p:commandButton>			
@@ -71,6 +72,7 @@
 	
 	<p:confirmDialog header="Confirmação" appendToBody="true" message="#{bundle.geral_msg_informacoes_nao_foram_salvas_deseja_continuar}" severity="alert" widgetVar="confirmationVoltarFCEbarragem" id="confirmationVoltarFCEbarragem">
 		<h:form>
+        <ui:include src="/layout/csrfToken.xhtml" />
 			<p:commandButton value="Sim" update="formIntervencaoBarragem" oncomplete="confirmationVoltarFCEbarragem.hide();barragemRegularizacao.hide();" global="false"/>
 			<p:commandButton value="Não" onclick="confirmationVoltarFCEbarragem.hide();" type="button" global="false"/>
 		</h:form>
@@ -78,6 +80,7 @@
 	
 	<p:confirmDialog header="Confirmação" appendToBody="true" message="#{bundle.lac_dadosGerais_msg004}" severity="alert" widgetVar="confirmaExclusaoExtrato" id="confirmaExclusaoExtrato">
 		<h:form>
+        <ui:include src="/layout/csrfToken.xhtml" />
 			<p:commandButton value="Sim" actionListener="#{uploadDocumentoAdicionalController.limparListaArquivo()}" update="formBarragemRegularizacaoNovo:tblDoc formBarragemRegularizacaoSemPonto:tblDoc formBarragemRegularizacao:tblDoc" 
 				oncomplete="confirmaExclusaoExtrato.hide();" global="false" />
 				
@@ -87,6 +90,7 @@
 	
 	<p:confirmDialog header="Confirmação" appendToBody="true" message="#{bundle.lac_dadosGerais_msg004}" severity="alert" widgetVar="confirmaExclusaoExtratoAntigo" id="confirmaExclusaoExtratoAntigo">
 		<h:form>
+        <ui:include src="/layout/csrfToken.xhtml" />
 			<p:commandButton value="Sim" update="formBarragemRegularizacao:tblDoc" oncomplete="confirmaExclusaoExtratoAntigo.hide();" global="false" actionListener="#{enviarDocumentoController.limparListaArquivo()}"/>
 			<p:commandButton value="Não" onclick="confirmaExclusaoExtratoAntigo.hide();" type="button" global="false"/>
 		</h:form>

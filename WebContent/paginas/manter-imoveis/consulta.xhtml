@@ -5,11 +5,12 @@
 	<f:subview id="paginaImovel">
 		<h:panelGrid id="listaImoveis">
 			<h:form id="formTabelaImoveis">
+        <ui:include src="/layout/csrfToken.xhtml" />
 				<p:dataTable id="dataTableImoveis" var="imovel" value="#{imoveisController.listaImoveisTabela}" rendered="#{imoveisController.visualizaImoveisTabela}" lazy="true" paginator="true" rows="10"
 					paginatorPosition="bottom" paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}" emptyMessage="#{bundle.consultapf_msg_empty_list}"
 					style="width: 650px;" widgetVar="imovel">
 					<f:facet name="header">
-						<h:outputText value="Imóveis Cadastrados" />
+						<h:outputText value="ImÃ³veis Cadastrados" />
 					</f:facet>
 					<p:column>
 						<f:facet name="header">
@@ -19,19 +20,19 @@
 					</p:column>
 					<p:column >
 						<f:facet name="header">
-							<h:outputText value="Denominação do imóvel" />
+							<h:outputText value="DenominaÃ§Ã£o do imÃ³vel" />
 						</f:facet>
 						<h:outputText value="#{imovel.imovelRural.desDenominacao}" />
 					</p:column>
 					<p:column>
 						<f:facet name="header">
-							<h:outputText value="Endereço" />
+							<h:outputText value="EndereÃ§o" />
 						</f:facet>
 						<h:outputText value="#{imovel.ideEndereco.enderecoCompleto}" />
 					</p:column>
 					<p:column>
 						<f:facet name="header">
-							<h:outputText value="Ações" />
+							<h:outputText value="AÃ§Ãµes" />
 						</f:facet>
 							<p:commandLink id="EditarItr" action="#{imoveisController.editar}" title="Editar" process="@this" 
 								update=":tabAbas:paginaImovel:imovel :tabAbas:paginaImovel:formEnderecoPesquisaCep  :tabAbas:paginaImovel:listaImoveis :tabAbas:paginaImovel:form-pagina-compacionaria tabAbas:paginaImovel:locGeografica tabAbas:paginaImovel:imovel tabAbas:paginaImovel:formEndereco">
@@ -53,10 +54,11 @@
 						</p:commandLink>
 					</p:column>
 				</p:dataTable>
-				<p:confirmDialog message="Tem certeza que deseja excluir a(s) opção(ões) selecionadas?" width="400" header="Mensagem" severity="alert" widgetVar="confirmationImovelExcluir"
+        <ui:include src="/layout/csrfToken.xhtml" />
+				<p:confirmDialog message="Tem certeza que deseja excluir a(s) opÃ§Ã£o(Ãµes) selecionadas?" width="400" header="Mensagem" severity="alert" widgetVar="confirmationImovelExcluir"
 					id="confirmationImovelExcluir">
 					<p:commandButton value="Sim" update=":tabAbas" actionListener="#{imoveisController.desasociarImovelEmpreedimento}" oncomplete="confirmationImovelExcluir.hide()" />
-					<p:commandButton value="Não" onclick="confirmationImovelExcluir.hide()" type="button" />
+					<p:commandButton value="NÃ£o" onclick="confirmationImovelExcluir.hide()" type="button" />
 				</p:confirmDialog>
 			</h:form>
 		</h:panelGrid>
@@ -65,7 +67,7 @@
 			<h:panelGrid columns="1">
 				<h:outputLabel styleClass="form-label" for="itr" value="* #{bundle.empreendimento_lbl_itr_receita_federal}" />
 				<h:outputLabel>
-					<p:inputText id="itr" value="#{imoveisController.itr}" maxlength="15" required="true" requiredMessage="O campo ITR/Receita Federal é de preenchimento obrigatório"
+					<p:inputText id="itr" value="#{imoveisController.itr}" maxlength="15" required="true" requiredMessage="O campo ITR/Receita Federal Ã© de preenchimento obrigatÃ³rio"
 						disabled="#{empreendimentoController.visualizarEmpreendimento}" />
 					<p:commandLink image="ui-icon ui-icon-search" process="@this, itr"
 						update="tabAbas:paginaImovel:imovel :tabAbas:paginaImovel:formEnderecoPesquisaCep  :tabAbas:paginaImovel:listaImoveis :tabAbas:paginaImovel:form-pagina-compacionaria tabAbas:paginaImovel:locGeografica"
@@ -77,10 +79,10 @@
 				</h:outputLabel>
 			</h:panelGrid>
 			<h:panelGrid columns="2">
-				<h:outputLabel styleClass="mr410px form-label" for="denominação" value="* #{bundle.empreendimento_lbl_denominacao}" />
+				<h:outputLabel styleClass="mr410px form-label" for="denominaÃ§Ã£o" value="* #{bundle.empreendimento_lbl_denominacao}" />
 				<h:outputText />
-				<p:inputText id="denominação" value="#{imoveisController.denominacao}" rendered="#{!imoveisController.temItr or imoveisController.novaDenominacao}" required="true"
-					requiredMessage="O Campo Denominação é de preenchimento obrigatório" styleClass="w500px"
+				<p:inputText id="denominaÃ§Ã£o" value="#{imoveisController.denominacao}" rendered="#{!imoveisController.temItr or imoveisController.novaDenominacao}" required="true"
+					requiredMessage="O Campo DenominaÃ§Ã£o Ã© de preenchimento obrigatÃ³rio" styleClass="w500px"
 					disabled="#{true}" />
 				<p:selectOneMenu id="imovelSelecionado" value="#{imoveisController.imovelSelecionado}" valueChangeListener="#{imoveisController.mudaDenominacao}"
 					disabled="#{empreendimentoController.visualizarEmpreendimento}" >
@@ -99,7 +101,7 @@
 				<h:outputLabel>
 					<p:selectOneMenu update="opcoes" value="#{imoveisController.tipoVinculoImovel}" immediate="true" valueChangeListener="#{imoveisController.mudaTipoPropriedade}" id="formaVinculo"
 						disabled="#{true}" required="true"
-						requiredMessage="O Campo Forma de Vínculo é de preenchimento obrigatório.">
+						requiredMessage="O Campo Forma de VÃ­nculo Ã© de preenchimento obrigatÃ³rio.">
 						<f:selectItem itemLabel="Selecione..." />
 						<f:selectItems value="#{imoveisController.listaTipoVinculos}" var="tipo" itemLabel="#{tipo.nomTipoVinculoImovel}" itemValue="#{tipo}" />
 						<f:converter converterId="tipoVinculoImovelConverter" />
@@ -111,7 +113,7 @@
 			<h:panelGrid styleClass="actions" columns="1">
 				<h:outputLabel value="* #{bundle.empreendimento_lbl_area_registrada_cartorio_ha}" />
 				<p:inputText value="#{imoveisController.imovelRural.valArea}" converter="doubleConverter" onkeypress="mascararNumeroLR(this, event, 10, 2, '.', ',', 3);"
-					onkeyup="mascararNumeroLR(this, event, 10, 2, '.', ',', 3);" required="true" requiredMessage="Campo de Área é de preenchimento obrigatório" id="areaHa"
+					onkeyup="mascararNumeroLR(this, event, 10, 2, '.', ',', 3);" required="true" requiredMessage="Campo de Ãrea Ã© de preenchimento obrigatÃ³rio" id="areaHa"
 					disabled="#{true}" />
 			</h:panelGrid>
 			<h:panelGrid id="opcoes" columns="3">
@@ -120,22 +122,22 @@
 				<h:outputLabel value="* #{imoveisController.lblNumeroMatricula}" />
 				<p:inputText value="#{imoveisController.imovelRural.numFolha}" maxlength="9" converter="integerConverter" id="folhas" onkeypress="SomenteNumero(this);" onkeyup="SomenteNumero(this);"
 					disabled="#{true}" required="true"
-					requiredMessage="O campo Folhas é de preenchimento obrigatório." />
+					requiredMessage="O campo Folhas Ã© de preenchimento obrigatÃ³rio." />
 				<p:inputText value="#{imoveisController.imovelRural.desLivro}" id="livro" maxlength="9" converter="integerConverter" onkeypress="SomenteNumero(this);" onkeyup="SomenteNumero(this);"
 					disabled="#{true}" required="true"
-					requiredMessage="O campo Livro é de preenchimento obrigatório." />
+					requiredMessage="O campo Livro Ã© de preenchimento obrigatÃ³rio." />
 				<p:inputText value="#{imoveisController.imovelRural.numRegistro}" id="numReg" maxlength="9" converter="integerConverter" onkeypress="SomenteNumero(this);" onkeyup="SomenteNumero(this);"
 					disabled="#{true}" required="true"
-					requiredMessage="O Campo Número de Matrícula é de preenchimento obrigatório." />
+					requiredMessage="O Campo NÃºmero de MatrÃ­cula Ã© de preenchimento obrigatÃ³rio." />
 				<h:outputLabel value="* #{bundle.empreendimento_lbl_cartorio}" />
 				<h:outputLabel value="* #{bundle.empreendimento_lbl_comarca}" />
 				<h:outputLabel value="#{bundle.empreendimento_lbl_ccir_incra}" />
 				<p:inputText value="#{imoveisController.imovelRural.desCartorio}"
 					disabled="#{true}" required="true"
-					requiredMessage="O campo Cartório é de preenchimento obrigatório." />
+					requiredMessage="O campo CartÃ³rio Ã© de preenchimento obrigatÃ³rio." />
 				<p:inputText value="#{imoveisController.imovelRural.desComarca}" id="comarca"
 					disabled="#{true}" required="true"
-					requiredMessage="O campo comarca é de preenchimento obrigatório." />
+					requiredMessage="O campo comarca Ã© de preenchimento obrigatÃ³rio." />
 				<p:inputText value="#{imoveisController.imovelRural.numCcir}" id="CCIRINCRA" maxlength="15" onkeypress="SomenteNumero(this);" onkeyup="SomenteNumero(this);"
 					disabled="#{true}" />
 			</h:panelGrid>
@@ -152,19 +154,19 @@
 					<f:selectItem itemLabel="#{bundle.geral_lbl_nao}" itemValue="#{false}" />
 					<p:ajax event="change" update="boxPARA" />
 				</p:selectOneRadio>
-				<h:outputText value="Já aderiu ao PARA?" rendered="#{imoveisController.temPassivoAmbiental}" />
+				<h:outputText value="JÃ¡ aderiu ao PARA?" rendered="#{imoveisController.temPassivoAmbiental}" />
 				<p:selectOneRadio value="#{imoveisController.aderiuPARA}" valueChangeListener="#{imoveisController.mudaAderiuPARA}" rendered="#{imoveisController.temPassivoAmbiental}" id="aderiuPARA"
 					disabled="#{true}">
 					<f:selectItem itemLabel="#{bundle.geral_lbl_sim}" itemValue="#{true}" />
 					<f:selectItem itemLabel="#{bundle.geral_lbl_nao}" itemValue="#{false}" />
 					<p:ajax event="change" update="boxPARA" />
 				</p:selectOneRadio>
-				<h:outputText value="* Número do Processo" rendered="#{imoveisController.aderiuPARA and imoveisController.temPassivoAmbiental}" />
+				<h:outputText value="* NÃºmero do Processo" rendered="#{imoveisController.aderiuPARA and imoveisController.temPassivoAmbiental}" />
 				<p:inputText rendered="#{imoveisController.aderiuPARA and imoveisController.temPassivoAmbiental}" value="#{imoveisController.numProcessoPara}"
 					disabled="#{empreendimentoController.visualizarEmpreendimento}" required="true"
-								requiredMessage="O campo Número do Processo é uma informação obrigatória" />
+								requiredMessage="O campo NÃºmero do Processo Ã© uma informaÃ§Ã£o obrigatÃ³ria" />
 				<p:outputPanel rendered="#{!imoveisController.aderiuPARA or !imoveisController.temPassivoAmbiental }">
-					<h:outputText value="Deseja aderir ao PARA (Plano de Adequação de Regularização Ambiental)?" />
+					<h:outputText value="Deseja aderir ao PARA (Plano de AdequaÃ§Ã£o de RegularizaÃ§Ã£o Ambiental)?" />
 					<p:selectOneRadio value="#{imoveisController.aderePARA}" id="aderePARA"
 						disabled="#{true}">
 						<f:selectItem itemLabel="#{bundle.geral_lbl_sim}" itemValue="#{true}" />
@@ -203,10 +205,10 @@
 					<br />
 					<p:inputText value="#{imoveisController.areaAverbada}" converter="doubleConverter" id="AreaAverbada" onkeypress="mascararNumeroLR(this, event, 10, 2, '.', ',', 3);"
 						onkeyup="mascararNumeroLR(this, event, 10, 2, '.', ',', 3);"
-						disabled="#{!imoveisController.novaDenominacao or !imoveisController.editMode or empreendimentoController.visualizarEmpreendimento}" required="true" requiredMessage="O campo Área de Reserva Legal averbada é uma informação obrigatória"/>
+						disabled="#{!imoveisController.novaDenominacao or !imoveisController.editMode or empreendimentoController.visualizarEmpreendimento}" required="true" requiredMessage="O campo Ãrea de Reserva Legal averbada Ã© uma informaÃ§Ã£o obrigatÃ³ria"/>
 					<br />
 					<br />
-					<h:outputText value="* O imóvel possui processo de averbação de reserva legal em trâmite ou concluído no INEMA?" />
+					<h:outputText value="* O imÃ³vel possui processo de averbaÃ§Ã£o de reserva legal em trÃ¢mite ou concluÃ­do no INEMA?" />
 					<p:selectOneRadio value="#{imoveisController.temProcesso}" id="temProcesso" valueChangeListener="#{imoveisController.mudaProcesso}"
 						disabled="#{true}">
 						<f:selectItem itemLabel="#{bundle.geral_lbl_sim}" itemValue="#{true}" />
@@ -215,10 +217,10 @@
 					</p:selectOneRadio>
 					<h:panelGrid id="outPnlNumProcessInema">
 						<p:outputPanel rendered="#{imoveisController.temProcesso and imoveisController.checkTemAverbado}">
-							<h:outputText value="* Número do Processo" />
+							<h:outputText value="* NÃºmero do Processo" />
 							<p:inputText value="#{imoveisController.inema_numero_processo}" id="NumeroInemaProcesso"
 								disabled="#{true}" required="true"
-								requiredMessage="O campo Número do Processo é uma informação obrigatória" />
+								requiredMessage="O campo NÃºmero do Processo Ã© uma informaÃ§Ã£o obrigatÃ³ria" />
 						</p:outputPanel>
 					</h:panelGrid>
 				</p:outputPanel>
@@ -231,10 +233,10 @@
 			</p:commandButton>
 			<h:panelGrid>
 			  <h3>
-		           <h:outputLabel styleClass="titulo-grupo"  value="Endereço" />
+		           <h:outputLabel styleClass="titulo-grupo"  value="EndereÃ§o" />
 			  </h3>
 			  	<p:dataTable emptyMessage="#{imoveisController.enderecoCompleto}" >
-			  	   <f:facet name="header">Endereço</f:facet>
+			  	   <f:facet name="header">EndereÃ§o</f:facet>
 			  	</p:dataTable>
 			  	
 			  	

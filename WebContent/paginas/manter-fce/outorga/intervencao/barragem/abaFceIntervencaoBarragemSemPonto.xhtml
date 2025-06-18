@@ -6,13 +6,14 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:p="http://primefaces.prime.com.tr/ui">
 	<h:form id="formIntervencaoBarragemSemPonto">
+        <ui:include src="/layout/csrfToken.xhtml" />
 		<h:outputText styleClass="titulo-grupo" style="font-weight:bold;" value="Coordenada do Eixo do Barramento" />
 		<br /><br /><br />
 
  		<p:outputPanel id="pnl1" rendered="#{!fceIntervencaoBarragemControllerSemPonto.fceTecnico}">
 			<h:panelGrid columns="3" id="png1">
 				<h:panelGroup style="width:200px; margin-top:50px; margin-left:20px;">
-					<h:outputText value="Informe a localização geográfica:"/>
+					<h:outputText value="Informe a localizaÃ§Ã£o geogrÃ¡fica:"/>
 					<br/><br/><br/>
 					<p:commandLink oncomplete="dlgLocalizacaoGeograficaGeneric.show();" action="#{localizacaoGeograficaGenericController.carregarTela()}" 
 						actionListener="#{localizacaoGeograficaGenericController.limparLocalizacaoGeografSelecionada()}" process="@this" immediate="true"
@@ -23,7 +24,7 @@
 						<f:setPropertyActionListener target="#{localizacaoGeograficaGenericController.objetoLocalizacao}" value="#{fceIntervencaoBarragemControllerSemPonto.outorgaLocalizacaoGeograficaParaDialog}" />
 						<f:setPropertyActionListener target="#{localizacaoGeograficaGenericController.requerimento}" value="#{fceIntervencaoBarragemControllerSemPonto.requerimento.ideRequerimento}" />
 						<h:graphicImage title="Incluir Vertice" value="/resources/img/ico-expandir.png" />
-						<h:outputText value="Incluir Localização Geográfica" />
+						<h:outputText value="Incluir LocalizaÃ§Ã£o GeogrÃ¡fica" />
 					</p:commandLink>
 					<br/><br/><br/><br/><br/>
 				</h:panelGroup>	
@@ -31,7 +32,7 @@
 				<p:spacer width="130px;" height="5px;"/>
 				
 				<h:panelGroup rendered="#{!fceIntervencaoBarragemControllerSemPonto.empreendimento.indCessionario}">
-					<h:outputText value="Selecione o(s) imóvel(is) que usará(ão) a água:" />
+					<h:outputText value="Selecione o(s) imÃ³vel(is) que usarÃ¡(Ã£o) a Ã¡gua:" />
 					<br/><br/>
 			       	<h:panelGroup layout="block" style="width:280px; height:65px; overflow:auto; border:1px solid gray;">
 				    	<p:selectManyCheckbox converter="simpleEntityConverter" value="#{fceIntervencaoBarragemControllerSemPonto.listaImovelSelecionado}" layout="pageDirection" 
@@ -48,7 +49,7 @@
 			<h:panelGrid id="gridPontoSalvo" style="margin-left:20px;">
 				<p:dataTable var="localizacao" value="#{fceIntervencaoBarragemControllerSemPonto.outorgaLocalizacaoGeograficaParaDialog.ideLocalizacaoGeografica}" 
 							 style="width:625px;" rendered="#{fceIntervencaoBarragemControllerSemPonto.outorgaLocGeoAdicionada}">
-					<p:column headerText="Descrição">
+					<p:column headerText="DescriÃ§Ã£o">
 						<h:outputText value="#{localizacao.desLocalizacaoGeografica}" />
 					</p:column>
 					<p:column headerText="Fonte da Coordenada">
@@ -57,18 +58,18 @@
 					<p:column headerText="Sistema de Coordenadas">
 						<h:outputText value="#{localizacao.nomeSistemaCoordenadas()}" />
 					</p:column>
-					<p:column headerText="Ações">
+					<p:column headerText="AÃ§Ãµes">
 						<p:commandLink oncomplete="dlgLocalizacaoGeograficaGeneric.show();" process="@this" disabled="#{fceIntervencaoBarragemControllerSemPonto.desabilitarTudo}"
 							action="#{localizacaoGeograficaGenericController.visualizarLocalizacaoGeografica()}" >
 							<f:setPropertyActionListener target="#{localizacaoGeograficaGenericController.localizacaoGeograficaSelecionada}" value="#{fceIntervencaoBarragemControllerSemPonto.outorgaLocalizacaoGeograficaParaDialog.ideLocalizacaoGeografica}" />
 							<f:setPropertyActionListener target="#{localizacaoGeograficaGenericController.objetoLocalizacao}" value="#{fceIntervencaoBarragemControllerSemPonto.outorgaLocalizacaoGeograficaParaDialog}" />
-							<h:graphicImage title="Visualizar localização no Geobahia" value="/resources/img/ico-pesquisa.png" />
+							<h:graphicImage title="Visualizar localizaÃ§Ã£o no Geobahia" value="/resources/img/ico-pesquisa.png" />
 						</p:commandLink>
 						<p:commandLink oncomplete="dlgLocalizacaoGeograficaGeneric.show();" process="@this" disabled="#{fceIntervencaoBarragemControllerSemPonto.desabilitarTudo}"
 							action="#{localizacaoGeograficaGenericController.editarLocalizacaoGeografica()}"  >
 							<f:setPropertyActionListener target="#{localizacaoGeograficaGenericController.localizacaoGeograficaSelecionada}" value="#{fceIntervencaoBarragemControllerSemPonto.outorgaLocalizacaoGeograficaParaDialog.ideLocalizacaoGeografica}" />
 							<f:setPropertyActionListener target="#{localizacaoGeograficaGenericController.objetoLocalizacao}" value="#{fceIntervencaoBarragemControllerSemPonto.outorgaLocalizacaoGeograficaParaDialog}" />
-							<h:graphicImage title="Editar localização geográfica" value="/resources/img/ico-editar.png" />
+							<h:graphicImage title="Editar localizaÃ§Ã£o geogrÃ¡fica" value="/resources/img/ico-editar.png" />
 						</p:commandLink>
 					</p:column>
 				</p:dataTable>
@@ -96,9 +97,9 @@
 			 			<h:outputText value="#{outorgaLocGeo.ideLocalizacaoGeografica.longitudeInicial}"/>
 		 		    </p:column>
 		 		    
-		 		    <p:column headerText="Ações">
+		 		    <p:column headerText="AÃ§Ãµes">
 						<a onclick="javascript:${localizacaoGeograficaGenericController.retornarUrl(outorgaLocGeo.ideLocalizacaoGeografica)}">
-							<h:graphicImage title="Localização do Ponto no Geobahia" value="/resources/img/ico-arl-relocacao.png" />
+							<h:graphicImage title="LocalizaÃ§Ã£o do Ponto no Geobahia" value="/resources/img/ico-arl-relocacao.png" />
 						</a>
 						<p:commandLink oncomplete="dlgLocalizacaoGeograficaGeneric.show();" process="@this" 
 							action="#{localizacaoGeograficaGenericController.editarLocalizacaoGeografica()}"
@@ -107,7 +108,7 @@
 							<f:setPropertyActionListener target="#{localizacaoGeograficaGenericController.localizacaoGeograficaSelecionada}" value="#{outorgaLocGeo.ideLocalizacaoGeografica}" />
 							<f:setPropertyActionListener target="#{localizacaoGeograficaGenericController.objetoLocalizacao}" value="#{outorgaLocGeo}" />
 							<f:setPropertyActionListener target="#{localizacaoGeograficaGenericController.requerimento}" value="#{fceIntervencaoBarragemControllerSemPonto.requerimento.ideRequerimento}" />
-							<h:graphicImage title="Editar localização geográfica" value="/resources/img/ico-editar.png" />
+							<h:graphicImage title="Editar localizaÃ§Ã£o geogrÃ¡fica" value="/resources/img/ico-editar.png" />
 						</p:commandLink>
 		 		    </p:column>
 		 		    
@@ -124,7 +125,7 @@
 						</p:selectOneMenu>
 		 		    </p:column>
 		 		    
-	  		    	<p:column style="width:55px; text-align:center;" headerText="Ações">
+	  		    	<p:column style="width:55px; text-align:center;" headerText="AÃ§Ãµes">
 		  		    	
 		  		    	<p:commandLink title="Confirmar" process="@this" 
 								update="formIntervencaoBarragemSemPonto:tableOutorgaLocGeo"  
@@ -144,15 +145,15 @@
 							<f:setPropertyActionListener target="#{fceIntervencaoBarragemControllerSemPonto.outorgaLocGeoSelecionada}" value="#{outorgaLocGeo}"/>
 						</p:commandLink>
 		  		    	
-		  		    	<p:commandLink title="Informar barragem de regularização" update="formBarragemRegularizacaoSemPonto formIntervencaoBarragemSemPonto" process="@this" global="false" oncomplete="barragemRegularizacaoSemPonto.show();" 
+		  		    	<p:commandLink title="Informar barragem de regularizaÃ§Ã£o" update="formBarragemRegularizacaoSemPonto formIntervencaoBarragemSemPonto" process="@this" global="false" oncomplete="barragemRegularizacaoSemPonto.show();" 
 		  		    			 rendered="#{fceIntervencaoBarragemControllerSemPonto.isRegularizacao(outorgaLocGeo.ideTipoBarragem) and fceIntervencaoBarragemControllerSemPonto.isConfirmado(outorgaLocGeo)}" 
 	 		    				 action="#{fceIntervencaoBarragemControllerSemPonto.carregarFceIntervencaoAndDocumentoUpado()}"
 	 		    				 disabled="#{fceIntervencaoBarragemControllerSemPonto.desabilitaCampos or fceIntervencaoBarragemControllerSemPonto.desabilitarTudo}">
 		     			    <f:setPropertyActionListener target="#{fceIntervencaoBarragemControllerSemPonto.outorgaLocGeoSelecionada}" value="#{outorgaLocGeo}"/>
-							<h:graphicImage title="Informar barragem de regularização" value="/resources/img/ico-preencher.png" />
+							<h:graphicImage title="Informar barragem de regularizaÃ§Ã£o" value="/resources/img/ico-preencher.png" />
 						</p:commandLink>
 						
-						<p:commandLink oncomplete="confirmaExclusaoIntervencaoBarragem.show()" title="Excluir Intervenção em Barragem" process="@this" global="false" 
+						<p:commandLink oncomplete="confirmaExclusaoIntervencaoBarragem.show()" title="Excluir IntervenÃ§Ã£o em Barragem" process="@this" global="false" 
 								update="formIntervencaoBarragemSemPonto"
 								disabled="#{fceIntervencaoBarragemControllerSemPonto.desabilitaCampos or fceIntervencaoBarragemControllerSemPonto.desabilitarTudo}">
 							<f:setPropertyActionListener target="#{fceIntervencaoBarragemControllerSemPonto.outorgaLocGeoSelecionada}" value="#{outorgaLocGeo}" />
@@ -173,9 +174,9 @@
 			 			<h:outputText value="#{fceIntervencaoBarragem.ideFceOutorgaLocalizacaoGeografica.ideLocalizacaoGeografica.longitudeInicial}"/>
 		 		    </p:column>
 		 		    
-		 		    <p:column headerText="Ações">
+		 		    <p:column headerText="AÃ§Ãµes">
 						<a onclick="javascript:${localizacaoGeograficaGenericController.retornarUrl(fceIntervencaoBarragem.ideFceOutorgaLocalizacaoGeografica.ideLocalizacaoGeografica)}">
-							<h:graphicImage title="Localização do Ponto no Geobahia" value="/resources/img/ico-arl-relocacao.png" />
+							<h:graphicImage title="LocalizaÃ§Ã£o do Ponto no Geobahia" value="/resources/img/ico-arl-relocacao.png" />
 						</a>
 						<p:commandLink oncomplete="dlgLocalizacaoGeograficaGeneric.show();" process="@this" 
 							action="#{localizacaoGeograficaGenericController.editarLocalizacaoGeografica()}"
@@ -184,7 +185,7 @@
 							<f:setPropertyActionListener target="#{localizacaoGeograficaGenericController.objetoLocalizacao}" value="#{fceIntervencaoBarragem}" />
 							<f:setPropertyActionListener target="#{localizacaoGeograficaGenericController.requerimento}" value="#{fceIntervencaoBarragemControllerSemPonto.requerimento.ideRequerimento}" />
 							<f:setPropertyActionListener target="#{localizacaoGeograficaGenericController.idDoComponenteParaSerAtualizado}" value="formIntervencaoBarragemSemPonto:tableFceIntervencaoBarragem" />
-							<h:graphicImage title="Editar localização geográfica" value="/resources/img/ico-editar.png" />
+							<h:graphicImage title="Editar localizaÃ§Ã£o geogrÃ¡fica" value="/resources/img/ico-editar.png" />
 						</p:commandLink>
 		 		    </p:column>
 		 		    
@@ -204,7 +205,7 @@
 						</p:selectOneMenu>
 		 		    </p:column>
 		 		    
-	  		    	<p:column style="width:55px; text-align:center;" headerText="Ações">
+	  		    	<p:column style="width:55px; text-align:center;" headerText="AÃ§Ãµes">
 		  		    	
 		  		    	<p:commandLink title="Confirmar" process="@this" 
 							update="formIntervencaoBarragemSemPonto:tableFceIntervencaoBarragem"  
@@ -224,14 +225,14 @@
 							<f:setPropertyActionListener target="#{fceIntervencaoBarragemControllerSemPonto.intervencaoBarragem}" value="#{fceIntervencaoBarragem}"/>
 						</p:commandLink>
 		  		    	
-		  		    	<p:commandLink title="Informar barragem de regularização"
+		  		    	<p:commandLink title="Informar barragem de regularizaÃ§Ã£o"
 		  		    		update="formBarragemRegularizacaoSemPonto formIntervencaoBarragemSemPonto" 
 		  		    		process="@this" 
 		  		    		rendered="#{fceIntervencaoBarragem.confirmar}"
 		  		    		oncomplete="barragemRegularizacaoSemPonto.show();" 
 	 		    			disabled="#{fceIntervencaoBarragemControllerSemPonto.desabilitaCampos or fceIntervencaoBarragemControllerSemPonto.desabilitarTudo}">
 		     			    <f:setPropertyActionListener target="#{fceIntervencaoBarragemControllerSemPonto.intervencaoBarragem}" value="#{fceIntervencaoBarragem}"/>
-							<h:graphicImage title="Informar barragem de regularização" value="/resources/img/ico-preencher.png" />
+							<h:graphicImage title="Informar barragem de regularizaÃ§Ã£o" value="/resources/img/ico-preencher.png" />
 						</p:commandLink>
 	 		    	</p:column>
 			</p:dataTable> <!-- Fim da DataTable -->

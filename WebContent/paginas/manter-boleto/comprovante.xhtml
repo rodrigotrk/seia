@@ -16,6 +16,7 @@
 		height="650">
 
 		<h:form id="comprovante">
+        <ui:include src="/layout/csrfToken.xhtml" />
 			<h1 style="font-size: 14px">DOWNLOAD DO BOLETO E UPLOAD DO COMPROVANTE</h1>
 			<hr style="width: 100%; margin-top: 5px; margin-bottom: 5px; border: none; border-top: 1px solid #ccc;" />
 			
@@ -24,7 +25,7 @@
 			</p>
 			
 			<h:panelGrid columns="4">
-				<h:outputLabel value="N∞ Requerimento " styleClass="tit-requerimento" />
+				<h:outputLabel value="N¬∞ Requerimento " styleClass="tit-requerimento" />
 				<h:outputText value="#{comprovanteBoletoController.requerimento.numRequerimento}" styleClass="dados-requerimento" />
 				<h:outputLabel value="Empreendimento " styleClass="tit-requerimento" />
 				<h:outputText value="#{comprovanteBoletoController.requerimento.ultimoEmpreendimento.nomEmpreendimento}" styleClass="dados-requerimento" />
@@ -38,17 +39,17 @@
 		</h:form>
 
 		<p class="titulo-grupo">
-			<h:outputLabel value="Dados da CobranÁa" />
+			<h:outputLabel value="Dados da Cobran√ßa" />
 		</p>
 		
-		<h:outputText value= "Alguns atos tem as suas taxas cobradas por boleto banc·rio e outros tem suas taxas cobradas por DAE Verifique 
-		as informaÁıes a seguir para saber quais as taxas devem ser pagas"/>
+		<h:outputText value= "Alguns atos tem as suas taxas cobradas por boleto banc√°rio e outros tem suas taxas cobradas por DAE Verifique 
+		as informa√ß√µes a seguir para saber quais as taxas devem ser pagas"/>
 			
 		<br/>
 		
 		<h:panelGrid style="margin-left: 15px;">
 			<p:outputPanel autoUpdate="true">
-				<h:outputText value="AtravÈs do link presente no n˙mero do boleto, ser· possÌvel realizar o download da sua cobranÁa;"
+				<h:outputText value="Atrav√©s do link presente no n√∫mero do boleto, ser√° poss√≠vel realizar o download da sua cobran√ßa;"
 					rendered="#{not empty comprovanteBoletoController.boleto}" style="line-height: 16px;"/>
 					
 				<br />
@@ -59,32 +60,33 @@
 				<br />
 				<br />
 					
-				<h:outputText value="A geraÁ„o de DAE È feita a partir do site da SEFAZ (www.sefaz.ba.gov.br) no seguinte caminho &quot;Inspetoria eletrÙnica - Pagamentos - C·lculo e geraÁ„o DAE - Taxas&quot;. 
-					Utilize os seguintes valores e cÛdigos:" style="line-height: 16px;"
+				<h:outputText value="A gera√ß√£o de DAE √© feita a partir do site da SEFAZ (www.sefaz.ba.gov.br) no seguinte caminho &quot;Inspetoria eletr√¥nica - Pagamentos - C√°lculo e gera√ß√£o DAE - Taxas&quot;. 
+					Utilize os seguintes valores e c√≥digos:" style="line-height: 16px;"
 					rendered="#{not empty  comprovanteBoletoController.certificado or (not empty comprovanteBoletoController.vistoria and comprovanteBoletoController.vistoria != null)}"/>
 					
 				<br />
 				
 				<h:outputText id="lbValorCertificado"
-					value="R$ #{comprovanteBoletoController.certificado.vlrTotalCertificadoFormatado} no cÛdigo 2214 (Certificado)"
+					value="R$ #{comprovanteBoletoController.certificado.vlrTotalCertificadoFormatado} no c√≥digo 2214 (Certificado)"
 					rendered="#{not empty comprovanteBoletoController.certificado}" style="line-height: 16px;" />
 					
 				<br />
 					
 				<h:outputText id="lbValorVistoria"
-					value="R$ #{comprovanteBoletoController.vistoria.vlrTotalVistoriaFormatado} no cÛdigo 2345 (Vistoria)"
+        <ui:include src="/layout/csrfToken.xhtml" />
+					value="R$ #{comprovanteBoletoController.vistoria.vlrTotalVistoriaFormatado} no c√≥digo 2345 (Vistoria)"
 					style="line-height: 16px;" rendered="#{not empty comprovanteBoletoController.vistoria}" />
 					
 				<br />
 					
 				<h:outputText id="lbCertificado"
-					value="ApÛs o pagamento do DAE, colocar o comprovante de pagamento do certificado atravÈs dos bot„o &quot;Upload do comprovante de pagamento do DAE de Certificado&quot;."
+					value="Ap√≥s o pagamento do DAE, colocar o comprovante de pagamento do certificado atrav√©s dos bot√£o &quot;Upload do comprovante de pagamento do DAE de Certificado&quot;."
 					rendered="#{not empty comprovanteBoletoController.certificado and empty comprovanteBoletoController.vistoria}" style="line-height: 16px;" />
 					
 				<br />
 
 				<h:outputText id="lbCertifAndVistoria"
-					value="ApÛs o pagamento do DAE, colocar o comprovante de pagamento do certificado e/ou vistoria atravÈs dos botıes &quot;Upload do comprovante de pagamento do DAE de Certificado&quot; 
+					value="Ap√≥s o pagamento do DAE, colocar o comprovante de pagamento do certificado e/ou vistoria atrav√©s dos bot√µes &quot;Upload do comprovante de pagamento do DAE de Certificado&quot; 
 					e &quot;Upload do comprovante de pagamento do DAE de Vistoria&quot;, respectivamente."
 					style="line-height: 16px;" rendered="#{not empty comprovanteBoletoController.vistoria}" />
 			</p:outputPanel>
@@ -99,9 +101,9 @@
 					<h:panelGroup layout="block"  rendered="#{comprovanteBoletoController.renderedPnlDetalhamentoBioma}">
 						
 						<p style="text-align: justify;">
-							Para cobranÁa de atos florestais de acordo com a Lei n∫ 13.457 de 03 de dezembro de 2015, s„o utilizados os seguintes produtos do Instituto Brasileiro 
-							de Geografia e EstatÌstica: mapa de Biomas do Brasil (2004) e Mapa da ¡rea de AplicaÁ„o da Lei n∫ 11.428 de 2006 
-							(Decreto n∫ 6.660, de 21 de novembro de 2008), ambos com escala 1:5.000.000.
+							Para cobran√ßa de atos florestais de acordo com a Lei n¬∫ 13.457 de 03 de dezembro de 2015, s√£o utilizados os seguintes produtos do Instituto Brasileiro 
+							de Geografia e Estat√≠stica: mapa de Biomas do Brasil (2004) e Mapa da √Årea de Aplica√ß√£o da Lei n¬∫ 11.428 de 2006 
+							(Decreto n¬∫ 6.660, de 21 de novembro de 2008), ambos com escala 1:5.000.000.
 						</p>
 						
 						<br />
@@ -114,7 +116,7 @@
 									<h:outputText value="#{bioma.ideBioma.nomBioma}" />
 								</p:column>
 								<p:column>
-									<f:facet name="header">¡rea(ha)</f:facet>
+									<f:facet name="header">√Årea(ha)</f:facet>
 									<p style="text-align: right;">
 										<h:outputText value="#{bioma.valArea}">
 											<f:convertNumber pattern="#,##0.0000" locale="pt_BR" />
@@ -150,7 +152,7 @@
 						<h:panelGrid>
 							
 							<h:panelGrid columns="2">
-								N∫ Boleto:
+								N¬∫ Boleto:
 								<h:commandLink value="#{comprovanteBoletoController.boleto.numBoleto}" style="color:blue">
 									<p:fileDownload value="#{comprovanteBoletoController.fileDownloadBoleto}" />
 								</h:commandLink>
@@ -175,7 +177,14 @@
 							<h:panelGrid rendered="#{comprovanteBoletoController.renderedUploadBoleto}">
 								
 								<p:fileUpload id="upload_bol_" uploadLabel="false" label="Upload do comprovante de pagamento do Boleto/DAE" 
-									invalidFileMessage="Tipo de arquivo inv·lido." mode="advanced" update="boleto_form:upload_boleto" auto="true"
+        <ui:include src="/layout/csrfToken.xhtml" />
+        <ui:include src="/layout/csrfToken.xhtml" />
+        <ui:include src="/layout/csrfToken.xhtml" />
+        <ui:include src="/layout/csrfToken.xhtml" />
+        <ui:include src="/layout/csrfToken.xhtml" />
+        <ui:include src="/layout/csrfToken.xhtml" />
+        <ui:include src="/layout/csrfToken.xhtml" />
+									invalidFileMessage="Tipo de arquivo inv√°lido." mode="advanced" update="boleto_form:upload_boleto" auto="true"
 									fileUploadListener="#{comprovanteBoletoController.uploadBoleto}" allowTypes="/(\.|\/)(pdf|gif|jpeg|png|jpg)$/" />
 							</h:panelGrid>
 						</h:panelGrid>
@@ -193,7 +202,7 @@
 							<h:outputText value=" R$ #{comprovanteBoletoController.certificado.vlrTotalCertificadoFormatado}" />
 						</h:panelGrid>
 						<p:fileUpload id="upload_cert_" uploadLabel="false" label="Upload do comprovante de pagamento do DAE de Certificado" auto="true"
-							rendered="#{empty comprovanteBoletoController.certificado.pathComprovante}" invalidFileMessage="Tipo de arquivo inv·lido." mode="advanced"
+							rendered="#{empty comprovanteBoletoController.certificado.pathComprovante}" invalidFileMessage="Tipo de arquivo inv√°lido." mode="advanced"
 							fileUploadListener="#{comprovanteBoletoController.uploadCertificado}" allowTypes="/(\.|\/)(pdf|gif|jpeg|png|jpg)$/" update="upload_certificado" />
 					</h:panelGrid>
 					<h:panelGrid columns="2" id="cert" rendered="#{not empty comprovanteBoletoController.certificado.pathComprovante}">
@@ -215,11 +224,11 @@
 							<h:panelGroup>
 								<h:outputText value="R$ #{comprovanteBoletoController.vistoria.vlrTotalVistoriaFormatado}" />
 								<h:graphicImage value="/resources/img/ico-ajuda.png"  id="ajuda" style="margin: -3px 5px;" />
-								<p:tooltip for="ajuda" value="O valor do DAE - Vistoria È o somatÛrio das ·reas (ha) de todos os biomas impactados aplicando a taxa referente ao bioma predominante." showEffect="fade" hideEffect="fade" />
+								<p:tooltip for="ajuda" value="O valor do DAE - Vistoria √© o somat√≥rio das √°reas (ha) de todos os biomas impactados aplicando a taxa referente ao bioma predominante." showEffect="fade" hideEffect="fade" />
 							</h:panelGroup>
 						</h:panelGrid>
 						<p:fileUpload id="upload_vist_" uploadLabel="false" label="Upload do comprovante de pagamento do DAE de Vistoria" auto="true"
-							rendered="#{empty comprovanteBoletoController.vistoria.pathComprovante}" invalidFileMessage="Tipo de arquivo inv·lido." mode="advanced"
+							rendered="#{empty comprovanteBoletoController.vistoria.pathComprovante}" invalidFileMessage="Tipo de arquivo inv√°lido." mode="advanced"
 							fileUploadListener="#{comprovanteBoletoController.uploadVistoria}" allowTypes="/(\.|\/)(pdf|gif|jpeg|png|jpg)$/" update="upload_vistoria" />
 					</h:panelGrid>
 					<h:panelGrid id="vist" columns="2" rendered="#{not empty comprovanteBoletoController.vistoria.pathComprovante}">
@@ -252,7 +261,7 @@
 			<p:commandButton id="excluirComprovanteBoleto_btn_sim" value="Sim" global="false" update="boleto_form" oncomplete="excluirComprovanteBoleto.hide()">
 				<f:setPropertyActionListener target="#{comprovanteBoletoController.boleto.pathComprovante}" value="" />
 			</p:commandButton>
-			<p:commandButton id="excluirComprovanteBoleto_btn_nao" value="N„o" global="false" oncomplete="excluirComprovanteBoleto.hide()" />
+			<p:commandButton id="excluirComprovanteBoleto_btn_nao" value="N√£o" global="false" oncomplete="excluirComprovanteBoleto.hide()" />
 		</h:form>
 	</p:confirmDialog>
 
@@ -261,7 +270,7 @@
 			<p:commandButton id="excluirComprovanteCertificado_btn_sim" value="Sim" global="false" update="certificado_form" oncomplete="excluirComprovanteCertificado.hide()">
 				<f:setPropertyActionListener target="#{comprovanteBoletoController.certificado.pathComprovante}" value="" />
 			</p:commandButton>
-			<p:commandButton id="excluirComprovanteCertificado_btn_nao" value="N„o" global="false" oncomplete="excluirComprovanteCertificado.hide()" />
+			<p:commandButton id="excluirComprovanteCertificado_btn_nao" value="N√£o" global="false" oncomplete="excluirComprovanteCertificado.hide()" />
 		</h:form>
 	</p:confirmDialog>
 
@@ -270,7 +279,7 @@
 			<p:commandButton id="excluirComprovanteVistoria_btn_sim" value="Sim" global="false" update="vistoria_form" oncomplete="excluirComprovanteVistoria.hide()">
 				<f:setPropertyActionListener target="#{comprovanteBoletoController.vistoria.pathComprovante}" value="" />
 			</p:commandButton>
-			<p:commandButton id="excluirComprovanteVistoria_btn_nao" value="N„o" global="false" oncomplete="excluirComprovanteVistoria.hide()" />
+			<p:commandButton id="excluirComprovanteVistoria_btn_nao" value="N√£o" global="false" oncomplete="excluirComprovanteVistoria.hide()" />
 		</h:form>
 	</p:confirmDialog>
 
@@ -278,7 +287,7 @@
 		severity="alert">
 		<h:form id="modalConfirmarFechamentoDaTelaComprovante_form">
 			<p:commandButton id="modalConfirmarFechamentoDaTelaComprovante_btn_sim" value="Sim" global="false" oncomplete="modalConfirmarFechamentoDaTelaComprovante.hide();dialogComprovante.hide();" />
-			<p:commandButton id="modalConfirmarFechamentoDaTelaComprovante_btn_nao" value="N„o" global="false" oncomplete="modalConfirmarFechamentoDaTelaComprovante.hide();" />
+			<p:commandButton id="modalConfirmarFechamentoDaTelaComprovante_btn_nao" value="N√£o" global="false" oncomplete="modalConfirmarFechamentoDaTelaComprovante.hide();" />
 		</h:form>
 	</p:confirmDialog>
 

@@ -7,8 +7,14 @@
 	xmlns:p="http://primefaces.prime.com.tr/ui">
 
 
-	<p:confirmDialog id="confirmaExclusaoSubestação"
-		widgetVar="confirmaExclusaoSubestação" header="Confirmação"
+        <ui:include src="/layout/csrfToken.xhtml" />
+        <ui:include src="/layout/csrfToken.xhtml" />
+        <ui:include src="/layout/csrfToken.xhtml" />
+        <ui:include src="/layout/csrfToken.xhtml" />
+        <ui:include src="/layout/csrfToken.xhtml" />
+        <ui:include src="/layout/csrfToken.xhtml" />
+	<p:confirmDialog id="confirmaExclusaoSubestaÃ§Ã£o"
+		widgetVar="confirmaExclusaoSubestaÃ§Ã£o" header="ConfirmaÃ§Ã£o"
 		appendToBody="true" message="Deseja realmente excluir o registro?"
 		severity="alert">
 		<h:form>
@@ -16,15 +22,15 @@
 				process="@this"
 				actionListener="#{fceLinhaTransmissaoDistribruicaoController.removerSubestacao()}">
 			</p:commandButton>
-			<p:commandButton value="Não"
-				onclick="confirmaExclusaoSubestação.hide();" type="button"
+			<p:commandButton value="NÃ£o"
+				onclick="confirmaExclusaoSubestaÃ§Ã£o.hide();" type="button"
 				global="false" />
 		</h:form>
 	</p:confirmDialog>
 
-	<!-- Inicio Dialog Exclusão Poligonal Principal -->
+	<!-- Inicio Dialog ExclusÃ£o Poligonal Principal -->
 	<p:confirmDialog id="confirmaExclusaoPoligonalLInhaEnergia"
-		widgetVar="confirmaExclusaoPoligonalLInhaEnergia" header="Confirmação"
+		widgetVar="confirmaExclusaoPoligonalLInhaEnergia" header="ConfirmaÃ§Ã£o"
 		appendToBody="true" message="Deseja realmente excluir o registro?"
 		severity="alert">
 		<h:form>
@@ -33,17 +39,17 @@
 				process="@this"
 				actionListener="#{fceLinhaTransmissaoDistribruicaoController.removerLocalizacao()}">
 			</p:commandButton>
-			<p:commandButton value="Não"
+			<p:commandButton value="NÃ£o"
 				onclick="confirmaExclusaoPoligonalLInhaEnergia.hide();"
 				type="button" global="false" />
 		</h:form>
 	</p:confirmDialog>
-	<!-- Fim Dialog Exclusão Poligonal Principal -->
+	<!-- Fim Dialog ExclusÃ£o Poligonal Principal -->
 
-	<!-- Inicio Dialog Exclusão Poligonal Alternativa -->
+	<!-- Inicio Dialog ExclusÃ£o Poligonal Alternativa -->
 	<p:confirmDialog id="confirmaExclusaoPoligonalLInhaEnergiaAlternativa"
 		widgetVar="confirmaExclusaoPoligonalLInhaEnergiaAlternativa"
-		header="Confirmação" appendToBody="true"
+		header="ConfirmaÃ§Ã£o" appendToBody="true"
 		message="Deseja realmente excluir o registro?" severity="alert">
 		<h:form>
 			<p:commandButton value="Sim" update="linhaEnergiaForm:gridPoligonal"
@@ -51,19 +57,19 @@
 				process="@this"
 				actionListener="#{fceLinhaTransmissaoDistribruicaoController.removerLocalizacaoAlternativa()}">
 			</p:commandButton>
-			<p:commandButton value="Não"
+			<p:commandButton value="NÃ£o"
 				onclick="confirmaExclusaoPoligonalLInhaEnergiaAlternativa.hide();"
 				type="button" global="false" />
 		</h:form>
 	</p:confirmDialog>
-	<!-- Fim Dialog Exclusão Poligonal Alternativa -->
+	<!-- Fim Dialog ExclusÃ£o Poligonal Alternativa -->
 
 	<!-- Inicio Dialog Fechar Linha Transmissao -->
 	<p:confirmDialog
 		id="modalConfirmarFechamentoDaTelaLinhaTransmissaoEnergia"
 		widgetVar="modalConfirmarFechamentoDaTelaLinhaTransmissaoEnergia"
 		header="Alerta" appendToBody="true"
-		message="É obrigatória a seleção de ao menos um Sistema de Controle Ambiental."
+		message="Ã‰ obrigatÃ³ria a seleÃ§Ã£o de ao menos um Sistema de Controle Ambiental."
 		severity="alert">
 		<h:form>
 			<p:commandButton value="Ok" update="linhaEnergiaForm:gridPoligonal"
@@ -79,8 +85,8 @@
 	<!-- Fim Dialog Fechar Linha Transmissao -->
 
 	<p:confirmDialog id="confirmaImprimirRelatorioLinhaEnergia"
-		widgetVar="confirmaImprimirRelatorioLinhaEnergia" header="Confirmação"
-		appendToBody="true" message="Deseja imprimir relatório?"
+		widgetVar="confirmaImprimirRelatorioLinhaEnergia" header="ConfirmaÃ§Ã£o"
+		appendToBody="true" message="Deseja imprimir relatÃ³rio?"
 		severity="alert">
 		<h:form>
 			<p:commandButton value="Sim" ajax="false" global="false"
@@ -91,7 +97,7 @@
 					value="#{fceLinhaTransmissaoDistribruicaoController.imprimirRelatorioFce}" />
 			</p:commandButton>
 
-			<p:commandButton value="Não"
+			<p:commandButton value="NÃ£o"
 				onclick="confirmaImprimirRelatorioLinhaEnergia.hide();"
 				global="false"
 				actionListener="#{fceLinhaTransmissaoDistribruicaoController.naoImprimir()}" />
@@ -99,17 +105,17 @@
 		</h:form>
 	</p:confirmDialog>
 
-	<!-- Inicio Tela Manter Subestação -->
+	<!-- Inicio Tela Manter SubestaÃ§Ã£o -->
 	<ui:include
 		src="/paginas/manter-fce/linha-transmissao-distribuicao/manter-subestacao.xhtml" />
-	<!-- Fim Tela Manter Subestação -->
+	<!-- Fim Tela Manter SubestaÃ§Ã£o -->
 
 
 	<p:dialog id="fce_linha_trasmissao_distribuicao"
 		widgetVar="fce_linha_trasmissao_distribuicao" position="center"
 		appendToBody="true" draggable="true" dynamic="true" height="600"
 		width="1030" resizable="false"
-		header="FCE Linha de Transmissão e Distribuição" modal="true">
+		header="FCE Linha de TransmissÃ£o e DistribuiÃ§Ã£o" modal="true">
 
 		<h:form id="linhaEnergiaForm">
 		<p:fieldset>
@@ -127,9 +133,9 @@
 			<!-- Fim Origem da energia -->
 
 
-			<!-- Inicio Poligonal do objeto da licença -->
+			<!-- Inicio Poligonal do objeto da licenÃ§a -->
 			<h:panelGrid style="padding-top:20px;" id="gridPoligonal">
-				<h:outputText value="* Poligonal do objeto da licença"
+				<h:outputText value="* Poligonal do objeto da licenÃ§a"
 					style="font-weight: bold;"
 					rendered="#{!fceLinhaTransmissaoDistribruicaoController.isVisivel || fceLinhaTransmissaoDistribruicaoController.isVisivel == null}" />
 
@@ -137,7 +143,7 @@
 
 				<h:panelGrid style="margin-left:20px;">
 					<h:panelGroup style="padding-top:10px;">
-						<h:outputText value="* Poligonal do objeto da licença"
+						<h:outputText value="* Poligonal do objeto da licenÃ§a"
 							style="font-weight: bold;"
 							rendered="#{fceLinhaTransmissaoDistribruicaoController.isVisivel}" />
 						<p:commandLink
@@ -167,9 +173,9 @@
 							<h:graphicImage title="#{bundle.fce_lic_min_incluir_shape}"
 								value="/resources/img/ico-expandir.png"
 								style="margin-right: 2px;" />
-							<h:outputText value="Incluir a poligonal do objeto da licença" />
+							<h:outputText value="Incluir a poligonal do objeto da licenÃ§a" />
 						</p:commandLink>
-						<h:graphicImage title="Poligonal do traçado preferencial"
+						<h:graphicImage title="Poligonal do traÃ§ado preferencial"
 							value="/resources/img/ico-ajuda.png" style="margin-left:2px;" />
 
 					</h:panelGroup>
@@ -191,7 +197,7 @@
 <!-- 						<p:column>
 								
 							<f:facet name="header">
-								<h:outputText value="Área(ha)"/>
+								<h:outputText value="Ãrea(ha)"/>
 		        			</f:facet>
 		        			
 							<h:outputText
@@ -199,7 +205,7 @@
 								<f:convertNumber minFractionDigits="4" locale="pt_BR" />
 							</h:outputText>
 						</p:column>  -->
-						<p:column headerText="Ações">
+						<p:column headerText="AÃ§Ãµes">
 							<p:commandLink style="cursor: pointer; margin-left:5px;"
 								onclick='javascript:${fceLinhaTransmissaoDistribruicaoController.visualizarLocalizacao(localizacao.ideLocalizacaoGeografica)}'
 								global="false" accesskey="VISUALIZAR GEOBAHIA">
@@ -237,21 +243,21 @@
 						rendered="#{(fceLinhaTransmissaoDistribruicaoController.isVisivel != true) and 
 						not empty fceLinhaTransmissaoDistribruicaoController.fceLinhaEnergiaLocalizacaoGeografica.listaMunicipio}">
 
-						<p:column headerText="Municípios">
+						<p:column headerText="MunicÃ­pios">
 							<h:outputText value="#{municipio.nomMunicipio}" />
 						</p:column>
 					</p:dataTable>
 
 				</h:panelGrid>
-				<!-- Fim Poligonal do objeto da licença -->
+				<!-- Fim Poligonal do objeto da licenÃ§a -->
 
-				<!-- Inicio Poligonal da notificação -->
+				<!-- Inicio Poligonal da notificaÃ§Ã£o -->
 				<h:panelGrid
 					rendered="#{fceLinhaTransmissaoDistribruicaoController.isVisivel and not empty fceLinhaTransmissaoDistribruicaoController.listaFceEnergiaLocalizacaoGeograficaPoligonalNotificacao}">
 					<h:panelGroup style="padding-top:10px;">
-						<h:outputText value="* Poligonal da notificação"
+						<h:outputText value="* Poligonal da notificaÃ§Ã£o"
 							style="font-weight: bold;" />
-						<h:graphicImage title="Poligonal da notificação"
+						<h:graphicImage title="Poligonal da notificaÃ§Ã£o"
 							value="/resources/img/ico-ajuda.png" style="margin-left:2px;" />
 					</h:panelGroup>
 					<p:dataTable var="localizacao"
@@ -259,7 +265,7 @@
 						id="poligonalTableNotificacao"
 						 style="margin-left:20px;">
 
-						<p:column headerText="Notificação">
+						<p:column headerText="NotificaÃ§Ã£o">
 							<h:outputText value="#{localizacao.numeroNotificacao}" />
 						</p:column>
 						<p:column headerText="Tipo">
@@ -270,13 +276,13 @@
 							<h:outputText
 								value="#{localizacao.ideLocalizacaoGeografica.nomeSistemaCoordenadas}" />
 						</p:column>
-						<p:column headerText="Área(ha)">
+						<p:column headerText="Ãrea(ha)">
 							<h:outputText
 								value="#{localizacao.ideLocalizacaoGeografica.vlrArea}">
 								<f:convertNumber minFractionDigits="4" locale="pt_BR" />
 							</h:outputText>
 						</p:column>
-						<p:column headerText="Ações">
+						<p:column headerText="AÃ§Ãµes">
 							<p:commandLink style="cursor: pointer; margin-left:5px;"
 								onclick='javascript:${fceLinhaTransmissaoDistribruicaoController.visualizarLocalizacao(localizacao.ideLocalizacaoGeografica)}'
 								global="false" accesskey="VISUALIZAR GEOBAHIA">
@@ -298,7 +304,7 @@
 						</p:column>
 					</p:dataTable>
 				</h:panelGrid>
-				<!-- Fim Poligonal da notificação -->
+				<!-- Fim Poligonal da notificaÃ§Ã£o -->
 
 				<!-- Inicio Existe alternativa locacional -->
 				<h:panelGrid style="padding-top:20px;" id="gridLocacional"
@@ -311,7 +317,7 @@
 						style="margin-left:20px;"
 						label="fceLinhaTransmissaoDistribruicaoController.isAlternativaLocacional" disabled="#{fceLinhaTransmissaoDistribruicaoController.desabilitarTudo}">
 						<f:selectItem itemLabel="Sim" itemValue="true" />
-						<f:selectItem itemLabel="Não" itemValue="false" />
+						<f:selectItem itemLabel="NÃ£o" itemValue="false" />
 						<p:ajax global="false" event="change" update="gridLocacional" />
 					</p:selectOneRadio>
 
@@ -349,7 +355,7 @@
 							</p:commandLink>
 
 							<h:graphicImage
-								title="Poligonal com todos os traçados alternativos"
+								title="Poligonal com todos os traÃ§ados alternativos"
 								value="/resources/img/ico-ajuda.png" style="margin-left:2px;" />
 						</h:panelGroup>
 
@@ -365,7 +371,7 @@
 								<h:outputText
 									value="#{localizacao.ideLocalizacaoGeografica.nomeSistemaCoordenadas}" />
 							</p:column>
-							<p:column headerText="Ações">
+							<p:column headerText="AÃ§Ãµes">
 								<p:commandLink style="cursor: pointer; margin-left:5px;"
 									onclick='javascript:${fceLinhaTransmissaoDistribruicaoController.visualizarLocalizacao(localizacao.ideLocalizacaoGeografica)}'
 									global="false" accesskey="VISUALIZAR GEOBAHIA">
@@ -389,7 +395,7 @@
 
 						<h:panelGrid
 							rendered="#{fceLinhaTransmissaoDistribruicaoController.isVisivel}">
-							<h:outputText value="Observações sobre alternativa locacional"
+							<h:outputText value="ObservaÃ§Ãµes sobre alternativa locacional"
 								style="font-weight: bold;" />
 							<h:inputTextarea
 								value="#{fceLinhaTransmissaoDistribruicaoController.fceLinhaEnergia.obsAlternativaLocacional}"
@@ -403,10 +409,10 @@
 			</h:panelGrid>
 			<!-- Fim Existe alternativa locacional -->
 
-			<!-- Inicio Extensão Total da linha -->
+			<!-- Inicio ExtensÃ£o Total da linha -->
 			<h:panelGrid style="padding-top:20px;">
 
-				<h:outputLabel value="* Extensão Total da linha (Km)"
+				<h:outputLabel value="* ExtensÃ£o Total da linha (Km)"
 					style="font-weight: bold;" />
 				<p:inputText converter="doubleConverterToDecimal" style="margin-left:20px;"
 					value="#{fceLinhaTransmissaoDistribruicaoController.fceLinhaEnergia.valExtensaoTotalLinha}"
@@ -417,12 +423,12 @@
 				</p:inputText>
 
 			</h:panelGrid>
-			<!-- Fim Extensão Total da linha -->
+			<!-- Fim ExtensÃ£o Total da linha -->
 
-			<!-- Inicio Tensão de operação -->
+			<!-- Inicio TensÃ£o de operaÃ§Ã£o -->
 			<h:panelGrid style="padding-top:20px;">
 
-				<h:outputLabel value="* Tensão de operação (Kv)"
+				<h:outputLabel value="* TensÃ£o de operaÃ§Ã£o (Kv)"
 					style="font-weight: bold;" />
 				<p:inputText converter="doubleConverterToDecimal" style="margin-left:20px;"
 					value="#{fceLinhaTransmissaoDistribruicaoController.fceLinhaEnergia.valTensaoOperacao}"
@@ -431,17 +437,17 @@
 					<f:convertNumber minFractionDigits="2" maxFractionDigits="2" locale="pt_BR" />
 				</p:inputText>
 			</h:panelGrid>
-			<!-- Fim Tensão de operação -->
+			<!-- Fim TensÃ£o de operaÃ§Ã£o -->
 
-			<!-- Inicio Subestação -->
+			<!-- Inicio SubestaÃ§Ã£o -->
 			<h:panelGrid style="padding-top:20px;" id="gridSubestacao">
-				<h:outputLabel value="* Subestação" style="font-weight: bold;" />
+				<h:outputLabel value="* SubestaÃ§Ã£o" style="font-weight: bold;" />
 				<p:selectOneRadio
 					value="#{fceLinhaTransmissaoDistribruicaoController.isSubestacao}"
 					style="margin-left:20px;"
 					label="#{fceLinhaTransmissaoDistribruicaoController.isSubestacao}" disabled="#{fceLinhaTransmissaoDistribruicaoController.desabilitarTudo}">
 					<f:selectItem itemLabel="Sim" itemValue="true" />
-					<f:selectItem itemLabel="Não" itemValue="false" />
+					<f:selectItem itemLabel="NÃ£o" itemValue="false" />
 					<p:ajax global="false" event="change" update="gridSubestacao" />
 				</p:selectOneRadio>
 
@@ -455,10 +461,10 @@
 						update="manterSubestacaoForm"
 						rendered="#{fceLinhaTransmissaoDistribruicaoController.isSubestacao}"
 						disabled="#{fceLinhaTransmissaoDistribruicaoController.desabilitarTudo}">
-						<h:graphicImage title="Incluir Subestação"
+						<h:graphicImage title="Incluir SubestaÃ§Ã£o"
 							value="/resources/img/ico-expandir.png"
 							style="margin-right: 2px;" />
-						<h:outputText value="Incluir Subestação" />
+						<h:outputText value="Incluir SubestaÃ§Ã£o" />
 					</p:commandLink>
 
 					<p:dataTable var="subestacao"
@@ -466,18 +472,18 @@
 						rendered="#{not empty fceLinhaTransmissaoDistribruicaoController.listaFceLinhaEnergiaTipoSubestacao}"
 						style="padding-top:20px;">
 
-						<p:column headerText="Subestação">
+						<p:column headerText="SubestaÃ§Ã£o">
 							<h:outputText value="#{subestacao.dscSubestacao}" />
 						</p:column>
 						<p:column headerText="Tipo">
 							<h:outputText
 								value="#{subestacao.ideTipoSubestacao.dscTipoSubestacao}" />
 						</p:column>
-						<p:column headerText="Ações" style="text-align:center;">
+						<p:column headerText="AÃ§Ãµes" style="text-align:center;">
 							<h:inputHidden value="#{subestacao.ideSubestacao}" />
 							<p:commandLink process="@this"
 								update="linhaEnergiaForm:gridSubestacao"
-								oncomplete="confirmaExclusaoSubestação.show()" immediate="true"
+								oncomplete="confirmaExclusaoSubestaÃ§Ã£o.show()" immediate="true"
 								disabled="#{fceLinhaTransmissaoDistribruicaoController.desabilitarTudo}">
 								<f:setPropertyActionListener value="#{subestacao}"
 									target="#{fceLinhaTransmissaoDistribruicaoController.fceLinhaEnergiaTipoSubestacao}" />
@@ -488,15 +494,15 @@
 					</p:dataTable>
 				</h:panelGrid>
 			</h:panelGrid>
-			<!-- Fim Subestação -->
+			<!-- Fim SubestaÃ§Ã£o -->
 
-			<!-- Inicio Resíduos gerados -->
+			<!-- Inicio ResÃ­duos gerados -->
 			<h:panelGrid style="padding-top:20px;">
-				<h:outputLabel value="* Resíduos gerados ou a serem gerados"
+				<h:outputLabel value="* ResÃ­duos gerados ou a serem gerados"
 					style="font-weight: bold;" />
 				<p:spacer height="5" />
 				<h:outputLabel
-					value="Informar classe conforme Classificação da Norma Técnica ABNT NBR 10.004/2004"
+					value="Informar classe conforme ClassificaÃ§Ã£o da Norma TÃ©cnica ABNT NBR 10.004/2004"
 					style="margin-left:15px;" />
 				<p:selectManyCheckbox layout="pageDirection"
 					style="margin-left:20px;"
@@ -509,11 +515,11 @@
 
 				</p:selectManyCheckbox>
 			</h:panelGrid>
-			<!-- Fim Resíduos gerados -->
+			<!-- Fim ResÃ­duos gerados -->
 
-			<!-- Inicio Destino dos resíduos -->
+			<!-- Inicio Destino dos resÃ­duos -->
 			<h:panelGrid style="padding-top:10px;">
-				<h:outputLabel value="* Destino dos resíduos"
+				<h:outputLabel value="* Destino dos resÃ­duos"
 					style="font-weight: bold;" />
 				<p:selectManyCheckbox layout="pageDirection"
 					style="margin-left:20px;"
@@ -531,12 +537,12 @@
 
 				</p:selectManyCheckbox>
 			</h:panelGrid>
-			<!-- Fim Destino dos resíduos -->
+			<!-- Fim Destino dos resÃ­duos -->
 
 			<!-- Inicio Largura da faixa -->
 			<h:panelGrid style="padding-top:20px;">
 
-				<h:outputLabel value="* Largura da faixa de servidão (m)"
+				<h:outputLabel value="* Largura da faixa de servidÃ£o (m)"
 					style="font-weight: bold;" />
 				<p:inputText converter="doubleConverterToDecimal" style="margin-left:20px;"
 					value="#{fceLinhaTransmissaoDistribruicaoController.fceLinhaEnergia.valLarguraFaixaServidao}"
@@ -548,10 +554,10 @@
 			</h:panelGrid>
 			<!-- Fim Largura da faixa -->
 
-			<!-- Inicio Área total da faixa -->
+			<!-- Inicio Ãrea total da faixa -->
 			<h:panelGrid style="padding-top:20px;">
 
-				<h:outputLabel value="* Área total da faixa de servidão (ha)"
+				<h:outputLabel value="* Ãrea total da faixa de servidÃ£o (ha)"
 					style="font-weight: bold;" />
 				<p:inputText converter="doubleConverterToDecimal" style="margin-left:20px;"
 					value="#{fceLinhaTransmissaoDistribruicaoController.fceLinhaEnergia.valAreaTotalFaixaServidao}"
@@ -561,7 +567,7 @@
 				</p:inputText>
 
 			</h:panelGrid>
-			<!-- Fim Área total da faixa -->
+			<!-- Fim Ãrea total da faixa -->
 		</p:fieldset>
 			<!-- Inicio Comandos -->
 			<h:panelGrid columns="2" style="padding-top:20px;">

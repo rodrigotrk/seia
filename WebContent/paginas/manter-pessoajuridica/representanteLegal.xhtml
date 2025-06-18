@@ -12,6 +12,7 @@
 	</h3>
 
 	<h:form id="formtablereplegal">
+        <ui:include src="/layout/csrfToken.xhtml" />
 		<h:panelGrid id="paneltablereplegal" columns="1" style="width:520px;">
 			<p:dataTable id="tablereplegal" widgetVar="tablereplegal"
 				value="#{representanteLegalController.modelRepresentanteLegal}"
@@ -30,7 +31,7 @@
 						<f:converter converterId="cpfConverter" />
 					</h:outputText>
 				</p:column>
-				<p:column headerText="Ações">
+				<p:column headerText="AÃ§Ãµes">
 					<p:commandLink title="Editar" update="tabviewpj"
 						action="#{representanteLegalController.prepararParaEdicao()}"
 						disabled="#{pessoaJuridicaController.disableFormVisualizar}">
@@ -77,6 +78,7 @@
 	
 	<h:form id="formaddreplegal"
 		rendered="#{!pessoaJuridicaController.disableFormVisualizar}">
+        <ui:include src="/layout/csrfToken.xhtml" />
 		<h:panelGrid columns="1">
 			<h:panelGroup>
 				<h:outputText value="Incluir Representante Legal " />
@@ -116,7 +118,9 @@
 
 			<p:ajax event="tabChange" listener="#{representanteLegalController.onTabChange()}" update=":tabviewpj:tabviewreplegal" />
 
-			<p:tab title="Dados Básicos" disabled="#{representanteLegalController.disableTabRepLegal}">
+        <ui:include src="/layout/csrfToken.xhtml" />
+        <ui:include src="/layout/csrfToken.xhtml" />
+			<p:tab title="Dados BÃ¡sicos" disabled="#{representanteLegalController.disableTabRepLegal}">
 
 				<h:form id="formpesquisacpfreplegal">
 					<h:outputLabel id="idlblcpfreplegal" value="* CPF" />
@@ -125,7 +129,7 @@
 							<p:inputMask id="cpfreplegal" mask="#{bundle.consultapf_msk_cpf}"
 								value="#{representanteLegalController.pessoaPesquisa.numCpf}"
 								required="true"
-								requiredMessage="O campo CPF é de preenchimento obrigatório."
+								requiredMessage="O campo CPF Ã© de preenchimento obrigatÃ³rio."
 								disabled="#{representanteLegalController.disableTabRepLegal}">
 								<f:converter converterId="cpfConverter" />
 								<f:validator validatorId="cpfValidator" />
@@ -159,14 +163,14 @@
 									disabled="#{!representanteLegalController.enableFormPessoaFisica}"
 									value="#{representanteLegalController.pessoaSelecionada.nomPessoa}"
 									style="width: 300px;margin-top:0px;" required="true"
-									requiredMessage="O campo Nome é de preenchimento obrigatório." />
+									requiredMessage="O campo Nome Ã© de preenchimento obrigatÃ³rio." />
 								<h:panelGroup>
 						&nbsp;&nbsp;
 						<p:calendar
 										value="#{representanteLegalController.pessoaSelecionada.dtcNascimento}"
 										navigator="true" pattern="dd/MM/yyyy" showOn="button"
 										locale="pt" required="true"
-										requiredMessage="O campo Data de Nascimento é de preenchimento obrigatório."
+										requiredMessage="O campo Data de Nascimento Ã© de preenchimento obrigatÃ³rio."
 										disabled="#{!representanteLegalController.enableFormPessoaFisica}"
 										readOnlyInputText="true" yearRange="c-200"
 										mindate="01/01/1822"
@@ -180,7 +184,7 @@
 						<p:inputText
 							value="#{representanteLegalController.pessoa.desEmail}"
 							style="width: 300px;margin-left: 4px;" required="true"
-							requiredMessage="O campo E-mail é de preechimento obrigatório."
+							requiredMessage="O campo E-mail Ã© de preechimento obrigatÃ³rio."
 							disabled="#{!representanteLegalController.enableFormPessoaFisica or representanteLegalController.pessoaJaExiste}">
 							<f:validator validatorId="emailValidator" />
 						</p:inputText>
@@ -194,12 +198,12 @@
 									onkeyup="SomenteLetras(this.value);"
 									value="#{representanteLegalController.pessoaSelecionada.desNaturalidade}"
 									required="true"
-									requiredMessage="O campo Naturalidade é de preenchimento obrigatório." />
+									requiredMessage="O campo Naturalidade Ã© de preenchimento obrigatÃ³rio." />
 								<p:selectOneMenu id="idcombopaisreplegal"
 									value="#{representanteLegalController.pessoaSelecionada.idePais}"
 									disabled="#{!representanteLegalController.enableFormPessoaFisica}"
 									required="true"
-									requiredMessage="O campo Nacionalidade é de preenchimento obrigatório.">
+									requiredMessage="O campo Nacionalidade Ã© de preenchimento obrigatÃ³rio.">
 									<f:selectItem itemLabel="Selecione..." />
 									<f:selectItems value="#{paisController.valuesComboBox}" />
 									<f:converter converterId="paisConverter" />
@@ -208,20 +212,20 @@
 						</h:panelGroup>
 						<h:panelGroup>
 							<h:panelGrid columns="1">
-								<h:outputLabel id="idlblcopiarepresentacao"	value="* Cópia do estatuto social (.pdf.jpg - Máximo 5MB)" />
+								<h:outputLabel id="idlblcopiarepresentacao"	value="* CÃ³pia do estatuto social (.pdf.jpg - MÃ¡ximo 5MB)" />
 							</h:panelGrid>
 						</h:panelGroup>
 
 						<h:panelGroup>
 							<h:panelGrid columns="1">
 								<p:fileUpload uploadLabel="false" label="Upload Documento"
-									invalidFileMessage="Tipo de arquivo inválido."
+									invalidFileMessage="Tipo de arquivo invÃ¡lido."
 									disabled="#{!representanteLegalController.enableFormPessoaFisica}"
 									fileUploadListener="#{representanteLegalController.trataArquivo}"
 									mode="advanced" oncomplete="remoteCommandUpdateDataTable()"
 									auto="true" allowTypes="/(\.|\/)(pdf|gif|jpeg|png|jpg)$/"
 									immediate="true" sizeLimit="5242880"
-									invalidSizeMessage="O tamanho máximo do arquivo não pode ultrapassar 5MB" />
+									invalidSizeMessage="O tamanho mÃ¡ximo do arquivo nÃ£o pode ultrapassar 5MB" />
 
 								<p:remoteCommand name="remoteCommandUpdateDataTable"
 									process="@this"
@@ -251,7 +255,7 @@
 
 						<h:panelGroup>
 							<h:panelGrid columns="1">
-								<h:outputLabel id="idlblperiodorepresentação" value="*Período da Representação" />
+								<h:outputLabel id="idlblperiodorepresentaÃ§Ã£o" value="*PerÃ­odo da RepresentaÃ§Ã£o" />
 							</h:panelGrid>
 						</h:panelGroup>
 						<h:panelGroup>
@@ -270,12 +274,12 @@
 										value="#{representanteLegalController.representanteLegalSelecionado.dtcInicioRepresentacao}"
 										showOn="button" locale="pt" pattern="dd/MM/yyyy"
 										required="true"
-										requiredMessage="O campo Período da Data do Início da Representação é de preenchimento obrigatório."
+										requiredMessage="O campo PerÃ­odo da Data do InÃ­cio da RepresentaÃ§Ã£o Ã© de preenchimento obrigatÃ³rio."
 										label="Data de Inicio" validator="dataPosteriorValidator"
 										navigator="true" yearRange="c-100" readOnlyInputText="true"
 										maxdate="#{pessoaFisicaController.dataAtual}"
 										rendered="#{!representanteLegalController.habilitaCalendarios}" />
-									<h:outputText value="    Até"
+									<h:outputText value="    AtÃ©"
 										rendered="#{!representanteLegalController.habilitaCalendarios}" />
 								</h:panelGroup>
 								<p:calendar
@@ -283,7 +287,7 @@
 									value="#{representanteLegalController.representanteLegalSelecionado.dtcFimRepresentacao}"
 									showOn="button" locale="pt" pattern="dd/MM/yyyy"
 									required="true"
-									requiredMessage="O campo Período da Data do Fim da Representação é de preenchimento obrigatório."
+									requiredMessage="O campo PerÃ­odo da Data do Fim da RepresentaÃ§Ã£o Ã© de preenchimento obrigatÃ³rio."
 									navigator="true" yearRange="c-100:c+100"
 									readOnlyInputText="true"
 									mindate="#{pessoaFisicaController.dataAtual}"
@@ -294,13 +298,13 @@
 							<h:panelGroup>
 								<h:panelGrid columns="1">
 									<h:outputLabel id="idlblassinaturareplegal"
-										value="* A assinatura deste Representante Legal é obrigatória para a abertura de solicitações no SEIA?" />
+										value="* A assinatura deste Representante Legal Ã© obrigatÃ³ria para a abertura de solicitaÃ§Ãµes no SEIA?" />
 									<h:selectOneRadio
 										value="#{representanteLegalController.representanteLegalSelecionado.indAssinaturaObrigatoria}"
 										required="true"
-										requiredMessage="O campo Assinatura de representantes legais é de preenchimento obrigatório.">
+										requiredMessage="O campo Assinatura de representantes legais Ã© de preenchimento obrigatÃ³rio.">
 										<f:selectItem itemLabel="Sim" itemValue="#{true}" />
-										<f:selectItem itemLabel="Não" itemValue="#{false}" />
+										<f:selectItem itemLabel="NÃ£o" itemValue="#{false}" />
 									</h:selectOneRadio>
 								</h:panelGrid>
 							</h:panelGroup>
@@ -343,7 +347,8 @@
 			<p:tab title="Documento" disabled="#{representanteLegalController.disableTabDependenciasRepLegal}">
 				<ui:include src="/paginas/manter-pessoajuridica/documentoRepresentanteLegal.xhtml" />
 			</p:tab>
-			<p:tab title="Endereço" disabled="#{representanteLegalController.disableTabDependenciasRepLegal}">
+        <ui:include src="/layout/csrfToken.xhtml" />
+			<p:tab title="EndereÃ§o" disabled="#{representanteLegalController.disableTabDependenciasRepLegal}">
 				<ui:include src="/paginas/manter-endereco/endereco.xhtml" />
 			</p:tab>
 		</p:tabView>
@@ -357,7 +362,7 @@
 				update=":tabviewpj:tabviewreplegal form_avancar"
 				action="#{representanteLegalController.decrementaIndexAba}"
 				rendered="#{representanteLegalController.visualizaAnterior}"></p:commandButton>
-			<p:commandButton value="Avançar"
+			<p:commandButton value="AvanÃ§ar"
 				update=":tabviewpj:tabviewreplegal form_avancar"
 				style="float:right;"
 				action="#{representanteLegalController.incrementaIndexAba}"

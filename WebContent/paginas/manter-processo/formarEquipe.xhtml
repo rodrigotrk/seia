@@ -8,6 +8,7 @@
 	
 	<p:confirmDialog id="confirmDialogExclusaoEquipeProcesso" widgetVar="confirmDlgExclusaoEquipeProcesso" header="#{bundle.hdr_confirma_exclusao}" message="#{bundle.msg_confirma_exclusao}" severity="alert" appendToBody="true">
 		<h:form>
+        <ui:include src="/layout/csrfToken.xhtml" />
 			<p:commandButton value="#{bundle.btn_sim}" update=":formEquipeProcesso:dataTableEquipe botaoSalvar panelCombos panelBotoes" actionListener="#{formarEquipeController.excluirIntegranteEquipe}" oncomplete="confirmDlgExclusaoEquipeProcesso.hide()" process="@this"/>
 			<p:commandButton value="#{bundle.btn_nao}" type="button" onclick="confirmDlgExclusaoEquipeProcesso.hide()" />
 		</h:form>
@@ -17,6 +18,7 @@
 		closable="true" draggable="true" resizable="false" modal="true" width="650" height="650">	
 		
 		<h:form id="formEquipeProcesso" binding="#{formarEquipeController.formularioASerLimpo}">
+        <ui:include src="/layout/csrfToken.xhtml" />
 			<h:panelGrid id="panelFormacaoEquipe" columns="1">  
 				<h3><h:outputLabel styleClass="titulo-grupo" value="#{formarEquipeController.vwProcesso.numProcesso}" /></h3>
 				<br/>
@@ -25,7 +27,7 @@
 						<p:spacer width="15" height="10" />
 					</h:panelGroup>
 	
-					<h:outputText value="* Coordenação:" />
+					<h:outputText value="* CoordenaÃ§Ã£o:" />
 					<h:selectOneMenu id="selectOneArea" value="#{formarEquipeController.pessoaFisica.funcionario.ideArea}" valueChangeListener="#{formarEquipeController.changeListenerArea}" style="width: 150px;" converter="areaConverter">
 					    <f:selectItem itemLabel="Selecione..." />
 					    <f:selectItems value="#{formarEquipeController.colAreas}" var="area" itemLabel="#{area.nomArea}" itemValue="#{area}"/>
@@ -34,7 +36,7 @@
 	
 					<p:spacer width="40" height="10" />
 	
-					<h:outputText value="Formação:" />
+					<h:outputText value="FormaÃ§Ã£o:" />
 					<h:selectOneMenu id="selectOneOcupacao" value="#{formarEquipeController.pessoaFisica.ideOcupacao}" valueChangeListener="#{formarEquipeController.changeListenerOcupacao}" style="width: 150px;" converter="ocupacaoConverter">
 					    <f:selectItem itemLabel="Selecione..." />
 					    <f:selectItems value="#{formarEquipeController.colOcupacoes}" var="ocupacao" itemLabel="#{ocupacao.nomOcupacao}" itemValue="#{ocupacao}"/>
@@ -43,7 +45,7 @@
 	
 					<p:spacer width="15" height="10" />
 	
-					<h:outputText value="* Técnico:" />
+					<h:outputText value="* TÃ©cnico:" />
 					<h:selectOneMenu id="selectOnePessoaFisica" value="#{formarEquipeController.integranteEquipe.idePessoaFisica}" style="width: 150px;" converter="funcionarioConverter">
 					    <f:selectItem itemLabel="Selecione..." />
 					    <f:selectItems value="#{formarEquipeController.colFuncionarios}" var="funcionario" itemLabel="#{funcionario.pessoaFisica.nomPessoa}" itemValue="#{funcionario}"/>  
@@ -53,7 +55,7 @@
 	
 					<h:panelGroup>
 						<p:selectBooleanCheckbox value="#{formarEquipeController.integranteEquipe.indLiderEquipe}" />
-						<h:outputText value=" Líder" />
+						<h:outputText value=" LÃ­der" />
 					</h:panelGroup> 
 				 </h:panelGrid>
 	
@@ -86,7 +88,7 @@
 						<tr>
 							<td />
 							<td colspan="2">
-								<h:outputText value="Atenção!" style="font-weight: bold;"/>
+								<h:outputText value="AtenÃ§Ã£o!" style="font-weight: bold;"/>
 								<br />
 								<h:outputText value="Atualize a lista da equipe conforme os atos reenquadrados." style="line-height: 150%;font-weight: bold;"/>
 							</td>
@@ -105,7 +107,7 @@
 					</f:facet>
 					<p:column style="width: 200px;">  
 						<f:facet name="header">
-							<h:outputText value="Técnico" />  
+							<h:outputText value="TÃ©cnico" />  
 						</f:facet>
 						<h:outputText value="#{integranteEquipe.idePessoaFisica.pessoaFisica.nomPessoa}" />  
 					</p:column>
@@ -121,9 +123,9 @@
 					</p:column>
 					<p:column style="width: 30px;">  
 						<f:facet name="header">
-							<h:outputText value="Líder" />  
+							<h:outputText value="LÃ­der" />  
 						</f:facet>
-						<h:outputText value="#{integranteEquipe.indLiderEquipe ? 'Sim' : 'Não'}" />  
+						<h:outputText value="#{integranteEquipe.indLiderEquipe ? 'Sim' : 'NÃ£o'}" />  
 					</p:column>
 					<p:column>
 						<f:facet name="header">  
@@ -140,7 +142,7 @@
 				<br/>
 				
 				<h:panelGrid>
-					<h:outputText value="Observação:" />
+					<h:outputText value="ObservaÃ§Ã£o:" />
 					<h:inputTextarea id="texto_observacao" value="#{formarEquipeController.observacao}" style="width:550px;height:50px;" styleClass="maxlength500 limitedTextArea"/>
 				</h:panelGrid>
 				

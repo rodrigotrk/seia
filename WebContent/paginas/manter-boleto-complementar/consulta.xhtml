@@ -18,6 +18,7 @@
 		
 		<!-- FILTRO -->
 		<h:form id="formBoleto">
+        <ui:include src="/layout/csrfToken.xhtml" />
 			<!-- FILTROS NORMAIS -->
 			<h:panelGrid columns="5" id="filtrosNormais">
 				<h:outputLabel value="#{bundle.consulta_boleto_requerente}"/>
@@ -431,7 +432,7 @@
 					            <h:outputText value="#{bundle.geral_lbl_rs} #{detalhamentoBoleto.valBoletoFormatado}" />
 					        </p:column>
 					        
-					         <!-- VALOR TOTAL CERTIFICAÇÃO -->
+					         <!-- VALOR TOTAL CERTIFICAÃ‡ÃƒO -->
 					        <p:column style="text-align: center !important;" rendered="#{empty boleto.numBoleto}">
 					        	<f:facet name="header">
 					        		<h:outputText value="#{bundle.consulta_boleto_valor_total_certificacao}" />
@@ -494,22 +495,25 @@
 		
 		<p:confirmDialog widgetVar="excluirComprovanteCertificado" appendToBody="true" header="Alerta" message="#{bundle.consulta_boleto_confirmar_exlusao_comprovante}" severity="alert">
 			<h:form>
+        <ui:include src="/layout/csrfToken.xhtml" />
 				<p:commandButton value="Sim" global="false" update="certificadoForm, vistoriaForm" oncomplete="excluirComprovanteCertificado.hide()" action="#{boletoComplementarController.excluirComprovanteDAE('certificado')}" />
-				<p:commandButton value="Não" global="false" oncomplete="excluirComprovanteCertificado.hide()" />
+        <ui:include src="/layout/csrfToken.xhtml" />
+        <ui:include src="/layout/csrfToken.xhtml" />
+				<p:commandButton value="NÃ£o" global="false" oncomplete="excluirComprovanteCertificado.hide()" />
 			</h:form>
 		</p:confirmDialog>
 		
 		<p:confirmDialog widgetVar="excluirComprovanteVitoria" appendToBody="true" header="Alerta" message="#{bundle.consulta_boleto_confirmar_exlusao_comprovante}" severity="alert">
 			<h:form>
 				<p:commandButton value="Sim" global="false" update="certificadoForm, vistoriaForm" oncomplete="excluirComprovanteVitoria.hide()" action="#{boletoComplementarController.excluirComprovanteDAE('vistoria')}" />
-				<p:commandButton value="Não" global="false" oncomplete="excluirComprovanteVitoria.hide()" />
+				<p:commandButton value="NÃ£o" global="false" oncomplete="excluirComprovanteVitoria.hide()" />
 			</h:form>
 		</p:confirmDialog>
 		
 		<p:confirmDialog widgetVar="excluirComprovanteBoleto" appendToBody="true" header="Alerta" message="#{bundle.consulta_boleto_confirmar_exlusao_comprovante}" severity="alert">
 			<h:form>
 				<p:commandButton value="Sim" global="false" update="formDialogComprovante" oncomplete="excluirComprovanteBoleto.hide()" action="#{boletoComplementarController.excluirComprovanteBoleto()}" />
-				<p:commandButton value="Não" global="false" oncomplete="excluirComprovanteBoleto.hide()" />
+				<p:commandButton value="NÃ£o" global="false" oncomplete="excluirComprovanteBoleto.hide()" />
 			</h:form>
 		</p:confirmDialog>
 	</ui:define>

@@ -6,7 +6,8 @@ xmlns:f="http://java.sun.com/jsf/core"
 xmlns:ui="http://java.sun.com/jsf/facelets" 
 xmlns:p="http://primefaces.prime.com.tr/ui">
 
-	<p:dialog id="dialogLancamentoEfluentes" widgetVar="dialogLancamentoEfluentes" header="Lançamento de efluentes" dynamic="true" modal="true" resizable="false" height="380" width="640" position="center"  >
+        <ui:include src="/layout/csrfToken.xhtml" />
+	<p:dialog id="dialogLancamentoEfluentes" widgetVar="dialogLancamentoEfluentes" header="LanÃ§amento de efluentes" dynamic="true" modal="true" resizable="false" height="380" width="640" position="center"  >
 		<h:form id="formDialogResiduosLiquidos" >
 			<h:panelGrid columns="3" width="100%" id="panelDialogResiduosLiquidos">
 				<h:panelGroup>
@@ -15,7 +16,7 @@ xmlns:p="http://primefaces.prime.com.tr/ui">
 						
 						<h:panelGrid>
 							<h:panelGroup style="width:250px">
-								<h:outputText value="* 1. Informe a coordenada geográfica:" />
+								<h:outputText value="* 1. Informe a coordenada geogrÃ¡fica:" />
 							</h:panelGroup>	
 							<p:outputPanel autoUpdate="true">
 								<p:commandLink  
@@ -30,7 +31,7 @@ xmlns:p="http://primefaces.prime.com.tr/ui">
 									<f:setPropertyActionListener target="#{localizacaoGeograficaGenericController.objetoLocalizacao}" value="#{lancamentoEfluentesController.outorgaLocalizacaoGeografica}" />
 									<f:setPropertyActionListener target="#{localizacaoGeograficaGenericController.empreendimento}" value="#{novoRequerimentoController.empreendimento}" />
 									<h:graphicImage title="Incluir Vertice" value="/resources/img/ico-expandir.png" style="margin-right: 2px;"/>
-									<h:outputText value="Incluir Localização Geográfica" />
+									<h:outputText value="Incluir LocalizaÃ§Ã£o GeogrÃ¡fica" />
 								</p:commandLink>
 							</p:outputPanel>
 						</h:panelGrid>
@@ -40,7 +41,7 @@ xmlns:p="http://primefaces.prime.com.tr/ui">
 						<h:panelGroup rendered="#{!novoRequerimentoController.empreendimento.indCessionario and novoRequerimentoController.imovelSelecionado.imovelUrbano == null}">
 							<h:panelGrid id='pnl1211'>
 								<h:panelGroup>
-									<h:outputText value="* Selecione o(s) imóvel(is) que usará(ão) a água:" />
+									<h:outputText value="* Selecione o(s) imÃ³vel(is) que usarÃ¡(Ã£o) a Ã¡gua:" />
 								</h:panelGroup>	
 								<h:panelGroup layout="block" style="height:75px; width:200px; overflow:auto; border:1px solid gray;margin-top:5px;">
 									
@@ -63,7 +64,7 @@ xmlns:p="http://primefaces.prime.com.tr/ui">
 							value="#{lancamentoEfluentesController.outorgaLocalizacaoGeografica.ideLocalizacaoGeografica}" 
 							rendered="#{lancamentoEfluentesController.outorgaLocalizacaoGeografica.ideLocalizacaoGeografica.ideLocalizacaoGeografica != null}">
 							<!-- rendered="#{localizacaoGeograficaGenericController.mostraLista}"> -->
-								<p:column headerText="Ponto de Referência">
+								<p:column headerText="Ponto de ReferÃªncia">
 									<h:outputText value="${localizacao.desLocalizacaoGeografica}" />
 								</p:column>
 								<p:column headerText="Fonte da Coordenada">
@@ -72,19 +73,19 @@ xmlns:p="http://primefaces.prime.com.tr/ui">
 								<p:column headerText="Sistema de Coordenadas">
 									<h:outputText value="${localizacao.nomeSistemaCoordenadas()}" />
 								</p:column>
-								<p:column headerText="Ações">
+								<p:column headerText="AÃ§Ãµes">
 							
 									<p:commandLink oncomplete="dlgLocalizacaoGeograficaGeneric.show();" process="@this" action="#{localizacaoGeograficaGenericController.visualizarLocalizacaoGeografica()}" >
 										<f:setPropertyActionListener target="#{localizacaoGeograficaGenericController.localizacaoGeograficaSelecionada}" value="#{lancamentoEfluentesController.outorgaLocalizacaoGeografica.ideLocalizacaoGeografica}" />
 										<f:setPropertyActionListener target="#{localizacaoGeograficaGenericController.objetoLocalizacao}" value="#{lancamentoEfluentesController.outorgaLocalizacaoGeografica}" />
-										<h:graphicImage title="Visualizar localização no GeoBahia" value="/resources/img/ico-pesquisa.png" />
+										<h:graphicImage title="Visualizar localizaÃ§Ã£o no GeoBahia" value="/resources/img/ico-pesquisa.png" />
 									</p:commandLink>
 									
 									<p:commandLink oncomplete="dlgLocalizacaoGeograficaGeneric.show();" process="@this" disabled="#{novoRequerimentoController.desabilitarTudo}"
 									action="#{localizacaoGeograficaGenericController.editarLocalizacaoGeografica()}"  >
 										<f:setPropertyActionListener target="#{localizacaoGeograficaGenericController.localizacaoGeograficaSelecionada}" value="#{lancamentoEfluentesController.outorgaLocalizacaoGeografica.ideLocalizacaoGeografica}" />
 										<f:setPropertyActionListener target="#{localizacaoGeograficaGenericController.objetoLocalizacao}" value="#{lancamentoEfluentesController.outorgaLocalizacaoGeografica}" />
-										<h:graphicImage title="Editar localização geográfica" value="/resources/img/ico-editar.png" />
+										<h:graphicImage title="Editar localizaÃ§Ã£o geogrÃ¡fica" value="/resources/img/ico-editar.png" />
 									</p:commandLink>
 								</p:column>
 							</p:dataTable>
@@ -94,7 +95,7 @@ xmlns:p="http://primefaces.prime.com.tr/ui">
 			</h:panelGrid>
 			
 			<h:panelGrid columns="2">
-				<h:outputText value="* 1.1. informe a vazão média do efluente a ser outorgada:"/>
+				<h:outputText value="* 1.1. informe a vazÃ£o mÃ©dia do efluente a ser outorgada:"/>
 				<h:panelGroup>
 					<p:inputText onkeyup="maskIt(this, event, '99.999.999,99', true)" onblur= "maskIt(this, event, '99.999.999,99', true)" value="#{lancamentoEfluentesController.outorgaLocalizacaoGeografica.numVazao}" 
 						style="width: 100px" disabled="#{novoRequerimentoController.desabilitarTudo}">
@@ -109,7 +110,7 @@ xmlns:p="http://primefaces.prime.com.tr/ui">
 				</h:panelGroup>
 				<p:selectOneRadio id="oneRadioOutorgaPreventiva" value="#{lancamentoEfluentesController.perguntaNR_A4_DCHID_P3.indResposta}" disabled="#{novoRequerimentoController.desabilitarTudo}">  
 					<f:selectItem itemLabel="Sim" itemValue="true" />  
-					<f:selectItem itemLabel="Não" itemValue="false" />  
+					<f:selectItem itemLabel="NÃ£o" itemValue="false" />  
 				</p:selectOneRadio>  
 			</h:panelGrid>
 		
@@ -132,7 +133,7 @@ xmlns:p="http://primefaces.prime.com.tr/ui">
 						<p:column headerText="Origem" style="text-align: left;">
 							<h:outputText  value="#{finalidade.nomTipoFinalidadeUsoAgua}"/>
 						</p:column>
-						<p:column style="text-align:center;" headerText="Ação">
+						<p:column style="text-align:center;" headerText="AÃ§Ã£o">
 							<p:commandLink id="apagar" update="formDialogResiduosLiquidos:tabelaFinalidade" process="@this" disabled="#{novoRequerimentoController.desabilitarTudo}">
 								<h:graphicImage title="Apagar" value="/resources/img/ico-excluir.png" />
 								<p:collector value="#{finalidade}" removeFrom="#{lancamentoEfluentesController.outorgaLocalizacaoGeografica.listaFinalidadeUsoAgua}"/>

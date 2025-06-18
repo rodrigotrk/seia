@@ -9,7 +9,8 @@
 	
 	<ui:composition template="/layout/template.xhtml">
 		<ui:define name="titulo-pagina">
-			<h3>Movimentação Financeira - TCCA</h3>
+        <ui:include src="/layout/csrfToken.xhtml" />
+			<h3>MovimentaÃ§Ã£o Financeira - TCCA</h3>
 		</ui:define>
 		
 		<ui:define name="conteudo-principal">
@@ -27,7 +28,7 @@
 				<h:panelGrid columns="2">
 					<h:panelGrid style="width: 400px;" styleClass="cleanPaddingTD">
 						<h:panelGrid columns="2">
-							<h:outputText value="Número do TCCA:" styleClass="bold"/>
+							<h:outputText value="NÃºmero do TCCA:" styleClass="bold"/>
 							<h:outputText value="#{tccaController.tcca.numTcca}" />
 						</h:panelGrid>
 						
@@ -58,7 +59,7 @@
 						</h:panelGrid>
 						
 						<h:panelGrid columns="2">
-							<h:outputText value="Saldo Disponível do TCCA (R$): " styleClass="bold"/>
+							<h:outputText value="Saldo DisponÃ­vel do TCCA (R$): " styleClass="bold"/>
 							<h:outputText value="#{(tccaController.tcca.ultimoSaldo.valSaldoNaoDestinadoProjeto)==null ? 0.00 : (tccaController.tcca.ultimoSaldo.valSaldoNaoDestinadoProjeto)}"
 								styleClass="#{tccaController.isValorNegativo(tccaController.tcca.ultimoSaldo.valSaldoNaoDestinadoProjeto)}">
 								
@@ -76,7 +77,7 @@
 						</h:panelGrid>
 						
 						<h:panelGrid columns="2">
-							<h:outputText value="Saldo Para Execução (R$): " styleClass="bold"/>
+							<h:outputText value="Saldo Para ExecuÃ§Ã£o (R$): " styleClass="bold"/>
 							<h:outputText value="#{(tccaController.tcca.ultimoSaldo.valSaldoParaExecucao)==null ? 0.00 : (tccaController.tcca.ultimoSaldo.valSaldoParaExecucao)}"
 								styleClass="#{tccaController.isValorNegativo(tccaController.tcca.ultimoSaldo.valSaldoParaExecucao)}">
 								
@@ -124,14 +125,14 @@
 						<p:spacer width="0" height="50"/>
 						
 						<h:panelGroup>
-							<h:outputText value="* Valor da Operação (R$): " styleClass="bold"/>
+							<h:outputText value="* Valor da OperaÃ§Ã£o (R$): " styleClass="bold"/>
 							<p:inputText converter="bigConverter" maxlength="13" value="#{tccaController.valorMovimentacao}"
 								onkeyup="mascararNumeroAndAddZeros(this, event, 8, 2, '.',',', 3);" 
 								onblur="mascararNumeroAndAddZeros(this, event, 8, 2, '.',',', 3);"/>
 							
 							<p:spacer width="30" height="0"/>
 							
-							<h:outputText value="Número da Resolução: " styleClass="bold"/>
+							<h:outputText value="NÃºmero da ResoluÃ§Ã£o: " styleClass="bold"/>
 							<p:inputText value="#{tccaController.numResolucao}"/>
 						</h:panelGroup>
 					</s:divCentralizado>
@@ -411,7 +412,7 @@
 					         -->
 					        <h:panelGroup rendered="#{tccaController.saldoOutroTcca}">
 					        	<h:panelGrid columns="2" styleClass="cleanPaddingTD" style="margin-left: 10px;">
-									<h:outputText value="Número do TCCA:" styleClass="bold"/>
+									<h:outputText value="NÃºmero do TCCA:" styleClass="bold"/>
 									
 									<h:panelGroup id="numProcessoLicenca">
 										<p:inputText value="#{tccaController.tccaDestinoRecurso.numTcca}" style="width: 100px;"/>
@@ -451,7 +452,7 @@
 										</h:panelGrid>
 										
 										<h:panelGrid columns="2">
-											<h:outputText value="Saldo Disponível do TCCA (R$): " styleClass="bold"/>
+											<h:outputText value="Saldo DisponÃ­vel do TCCA (R$): " styleClass="bold"/>
 											<h:outputText value="#{(tccaController.tccaDestinoRecurso.ultimoSaldo.valSaldoNaoDestinadoProjeto)==null ? 0.00 : (tccaController.tccaDestinoRecurso.ultimoSaldo.valSaldoNaoDestinadoProjeto)}"
 												styleClass="#{tccaController.isValorNegativo(tccaController.tccaDestinoRecurso.ultimoSaldo.valSaldoNaoDestinadoProjeto)}">
 												
@@ -469,7 +470,7 @@
 										</h:panelGrid>
 										
 										<h:panelGrid columns="2">
-											<h:outputText value="Saldo Para Execução (R$): " styleClass="bold"/>
+											<h:outputText value="Saldo Para ExecuÃ§Ã£o (R$): " styleClass="bold"/>
 											<h:outputText value="#{(tccaController.tccaDestinoRecurso.ultimoSaldo.valSaldoParaExecucao)==null ? 0.00 : (tccaController.tccaDestinoRecurso.ultimoSaldo.valSaldoParaExecucao)}"
 												styleClass="#{tccaController.isValorNegativo(tccaController.tccaDestinoRecurso.ultimoSaldo.valSaldoParaExecucao)}">
 												<f:convertNumber pattern="#,###,##0.00" locale="pt_BR"/>

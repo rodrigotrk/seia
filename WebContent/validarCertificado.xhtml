@@ -9,13 +9,14 @@
 	template="/layout/template.xhtml">
 	
 	<ui:define name="titulo-pagina">	
-		<h3> SEIA | Sistema Estadual de Informações Ambientais e de
-			Recursos Hídricos</h3>		
+        <ui:include src="/layout/csrfToken.xhtml" />
+		<h3> SEIA | Sistema Estadual de InformaÃ§Ãµes Ambientais e de
+			Recursos HÃ­dricos</h3>		
 	</ui:define>
 	<ui:define name="conteudo-principal">
 		<div>
 			<h:form id="validacao">
-				<h:outputText value="Chave de Segurança " style="font-weight:bold;" />
+				<h:outputText value="Chave de SeguranÃ§a " style="font-weight:bold;" />
 				<h:panelGrid columns="2">
 					<p:inputMask id="fdTokenMask" value="#{validarCertificadoController.token}"  mask="********-********-********-********" style="width:250px;"/>
 					<p:commandButton value="Atestar" action="#{validarCertificadoController.validarCertificado()}" update="validacao" />
@@ -26,7 +27,7 @@
 						
 						<!-- 1a linha -->
 						<h:panelGrid columns="5">
-							<h:outputText style="font-weight:bold;" value="Nº Certificado:" />
+							<h:outputText style="font-weight:bold;" value="NÂº Certificado:" />
 							<h:outputText value="#{validarCertificadoController.dto.certificado.numCertificado}" />
 							
 							<p:spacer height="5" width="70"/>
@@ -44,7 +45,7 @@
 						
 						<!-- 2a linha -->
 						<h:panelGrid columns="2">
-							<h:outputText style="font-weight:bold;" value="Data Emissão:" />
+							<h:outputText style="font-weight:bold;" value="Data EmissÃ£o:" />
 							<h:outputText value="#{validarCertificadoController.dto.certificado.dtcEmissaoCertificado}">
 								<f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss" timeZone="Brazil/East"/>
 							</h:outputText>
@@ -88,8 +89,8 @@
 						
 						<p:fieldset legend="Aviso" style="background-color: rgb(257,231,219);" rendered="#{validarCertificadoController.exibeMensagemErroASV}">
 							<h:panelGrid styleClass="aviso-home">
-								Houve correção no certificado de Ato Declaratório originalmente emitido para este processo. 
-								<br/>O certificado correto é o referente à Declaração referente à Queima Controlada
+								Houve correÃ§Ã£o no certificado de Ato DeclaratÃ³rio originalmente emitido para este processo. 
+								<br/>O certificado correto Ã© o referente Ã  DeclaraÃ§Ã£o referente Ã  Queima Controlada
 							</h:panelGrid>
 						</p:fieldset>
 						
@@ -102,7 +103,7 @@
 						
 						<!-- 1a linha -->
 						<h:panelGrid columns="5">
-							<h:outputText style="font-weight:bold;" value="Nº Certificado:" />
+							<h:outputText style="font-weight:bold;" value="NÂº Certificado:" />
 							<h:outputText value="#{validarCertificadoController.dtoDeclaracao.declaracao.numDeclaracaoParcialDae}" />
 							
 							<p:spacer height="5" width="70"/>
@@ -118,7 +119,7 @@
 						
 						<!-- 2a linha -->
 						<h:panelGrid columns="2">
-							<h:outputText style="font-weight:bold;" value="Data Emissão:" />
+							<h:outputText style="font-weight:bold;" value="Data EmissÃ£o:" />
 							<h:outputText value="#{validarCertificadoController.dtoDeclaracao.declaracao.dtcEmissaoDeclaracaoParcialDae}">
 								<f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss" timeZone="Brazil/East"/>
 							</h:outputText>

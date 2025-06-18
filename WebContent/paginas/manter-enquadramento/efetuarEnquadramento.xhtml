@@ -6,12 +6,13 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:p="http://primefaces.prime.com.tr/ui">
 	<h:form id="efetuarEnquadramento">
+        <ui:include src="/layout/csrfToken.xhtml" />
 		<h:outputLabel styleClass="titulo"
 			style="font-weight:bold;color:#5D7750;" value="Efetuar Enquadramento" />
 		<br />
 		<h:panelGrid columns="2">
 			<h:outputLabel styleClass="dados-requerimento"
-				value="Número do Requerimento:" />
+				value="NÃºmero do Requerimento:" />
 			<h:outputText styleClass="titulo-grupo"
 				value="#{efetuarEnquadramentoController.requerimentoUnico.requerimento.numRequerimento}" />
 			<h:outputLabel styleClass="titulo-grupo"
@@ -47,7 +48,7 @@
 					id="confirmarEnquadramento"
 					valueChangeListener="#{efetuarEnquadramentoController.isPossivelRealizarEnquadramentoChanged}">
 					<f:selectItem itemLabel="Sim" itemValue="#{true}" />
-					<f:selectItem itemLabel="Não" itemValue="#{false}" />
+					<f:selectItem itemLabel="NÃ£o" itemValue="#{false}" />
 					<p:ajax update="@form" process="@form" />
 				</p:selectOneRadio>
 			</h:panelGroup>
@@ -62,7 +63,7 @@
 					value="#{efetuarEnquadramentoController.empreendimentoPassivel}"
 					id="empreendimentoPassivel">
 					<f:selectItem itemLabel="Sim" itemValue="1" />
-					<f:selectItem itemLabel="Não" itemValue="0" />
+					<f:selectItem itemLabel="NÃ£o" itemValue="0" />
 					<p:ajax event="change"
 						update="enquadramentoRendered,efetuarEnquadramento:uploadPanel,efetuarEnquadramento:listaArquivo"
 						process="@this" global="false" />
@@ -71,7 +72,7 @@
 			<h:panelGroup id="uploadPanel" style="width:240px;"
 				rendered="#{efetuarEnquadramentoController.isConfirmarEnquadramento}">
 				<p:fileUpload uploadLabel="false" label="Upload Documento"
-					invalidFileMessage="Tipo de arquivo inválido."
+					invalidFileMessage="Tipo de arquivo invÃ¡lido."
 					fileUploadListener="#{efetuarEnquadramentoController.trataArquivo}"
 					mode="advanced" auto="true"
 					rendered="#{efetuarEnquadramentoController.enquadramento.indPassivelEiarima}"
@@ -88,7 +89,7 @@
 					<p:column headerText="Nome do Arquivo">
 						<h:outputText value="#{doc}" />
 					</p:column>
-					<p:column headerText="Opções">
+					<p:column headerText="OpÃ§Ãµes">
 						<p:commandLink update="efetuarEnquadramento:listaArquivo"
 							action="${efetuarEnquadramentoController.removerArquivo()}">
 								
@@ -142,7 +143,7 @@
 			<h:panelGrid columns="2"
 				rendered="#{efetuarEnquadramentoController.isEnquadramentoRendered}">
 				<p:commandLink id="linkDialogDocs"
-					value="* Incluir Documento(s) Obrigatório(s)"
+					value="* Incluir Documento(s) ObrigatÃ³rio(s)"
 					styleClass="titulo-grupo"
 					actionListener="#{efetuarEnquadramentoController.montarDocsObrigatorios()}"
 					update="dialogDocumentos">

@@ -8,15 +8,16 @@
 	
 	<h:panelGrid columns="2" style="width: 100%;">
 		<h:form id="formDialogComprovante">
+        <ui:include src="/layout/csrfToken.xhtml" />
 			<h:panelGrid columns="1" id="panel_comprovante_geral">
 				
 				<h:panelGrid columns="1">
 					<h:outputText value="#{bundle.geral_lbl_dados_cobranca}" styleClass="titulo-grupo" />	
 					<p:spacer height="8" />
-					<h:outputText value= "Alguns atos tem as suas taxas cobradas por boleto bancário e outros tem suas taxas cobradas por DAE Verifique 
-					as informações a seguir para saber quais as taxas devem ser pagas."/>
+					<h:outputText value= "Alguns atos tem as suas taxas cobradas por boleto bancÃ¡rio e outros tem suas taxas cobradas por DAE Verifique 
+					as informaÃ§Ãµes a seguir para saber quais as taxas devem ser pagas."/>
 					<p:spacer height="6" />
-					<h:outputText value="Informações sobre o Boleto Bancário" style="font-weight:bold" rendered="#{boletoComplementarController.enviarComprovante_boleto.valor gt 0}"/>
+					<h:outputText value="InformaÃ§Ãµes sobre o Boleto BancÃ¡rio" style="font-weight:bold" rendered="#{boletoComplementarController.enviarComprovante_boleto.valor gt 0}"/>
 					<p:spacer height="8" />
 					<h:outputText value="#{bundle.enviar_comprovante_lbl_descricao}" rendered="#{boletoComplementarController.enviarComprovante_boleto.valor gt 0}"/>
 					
@@ -34,7 +35,7 @@
 					
 					
 					<p:spacer height="6" />
-					<h:outputText value="Informações sobre o DAE" style="font-weight:bold"
+					<h:outputText value="InformaÃ§Ãµes sobre o DAE" style="font-weight:bold"
 					rendered="#{boletoComplementarController.enviarComprovante_boleto.vlrTotalCertificado gt 0 or boletoComplementarController.enviarComprovante_boleto.vlrTotalVistoria gt 0}"/>
 					<p:spacer height="8" />
 					<h:outputText value="#{bundle.enviar_comprovante_lbl_descricao_dae}" escape="false"
@@ -70,6 +71,7 @@
 	</h:panelGrid>
 	<h:panelGrid columns="2" style="width: 100%;">
 		<h:form id="certificadoForm" columns="2" enctype="multipart/form-data">
+        <ui:include src="/layout/csrfToken.xhtml" />
 			<h:panelGrid id="uploadCertificado" rendered="#{boletoComplementarController.enviarComprovante_boleto.vlrTotalCertificado gt 0}">
 				<h:panelGrid>
 					<h:panelGrid columns="2">
@@ -94,6 +96,7 @@
 		</h:form>
 		
 		<h:form id="vistoriaForm" columns="2" enctype="multipart/form-data">
+        <ui:include src="/layout/csrfToken.xhtml" />
 			<h:panelGrid id="uploadVistoria" rendered="#{boletoComplementarController.enviarComprovante_boleto.vlrTotalVistoria gt 0}">
 				<h:panelGrid>
 					<h:panelGrid columns="2">
@@ -101,11 +104,12 @@
 						<h:panelGroup>
 							<h:outputText value=" #{bundle.geral_lbl_rs} #{boletoComplementarController.enviarComprovante_boleto.vlrTotalVistoriaFormatado}" />
 							<h:graphicImage value="/resources/img/ico-ajuda.png"  id="ajuda" style="margin: -3px 5px;" />
-							<p:tooltip for="ajuda" value="O valor do DAE - Vistoria é o somatório das áreas (ha) de todos os biomas impactados aplicando a taxa referente ao bioma predominante." showEffect="fade" hideEffect="fade" />
+        <ui:include src="/layout/csrfToken.xhtml" />
+							<p:tooltip for="ajuda" value="O valor do DAE - Vistoria Ã© o somatÃ³rio das Ã¡reas (ha) de todos os biomas impactados aplicando a taxa referente ao bioma predominante." showEffect="fade" hideEffect="fade" />
 						</h:panelGroup>
 					</h:panelGrid>
 					<p:fileUpload id="uploadVist" uploadLabel="false" label="#{bundle.consulta_boleto_upload_dae_vistoria}" auto="true"
-						rendered="#{empty boletoComplementarController.enviarComprovantePagamentoDTO.vistoria.pathComprovante}" invalidFileMessage="Tipo de arquivo inválido." mode="advanced"
+						rendered="#{empty boletoComplementarController.enviarComprovantePagamentoDTO.vistoria.pathComprovante}" invalidFileMessage="Tipo de arquivo invÃ¡lido." mode="advanced"
 						fileUploadListener="#{boletoComplementarController.uploadDaeCertificadoVistoria}" allowTypes="/(\.|\/)(pdf|gif|jpeg|png|jpg)$/" update="uploadVistoria, comprovanteDaeBt">
 						<f:attribute name="uploadDaeTipo" value="vistoria" />	
 					</p:fileUpload>

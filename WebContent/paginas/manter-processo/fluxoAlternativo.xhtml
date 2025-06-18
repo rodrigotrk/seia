@@ -18,12 +18,13 @@
 		showEffect="fade" hideEffect="fade">
 
 		<h:form id="formPortaria">
+        <ui:include src="/layout/csrfToken.xhtml" />
 
 			<h:panelGrid columns="2">
-				<h:outputText value="N° do processo: " />
+				<h:outputText value="NÂ° do processo: " />
 				<h:outputText
 					value="#{fluxoAlternativoController.processo.numProcesso}" />
-				<h:outputText value="Data de formação: " />
+				<h:outputText value="Data de formaÃ§Ã£o: " />
 				<h:outputText
 					value="#{fluxoAlternativoController.processo.dtcFormacao}" >
 						<f:convertDateTime type="date" pattern="dd/MM/yyyy"/>
@@ -33,13 +34,13 @@
 
 			<h:panelGrid columns="2">
 				<h:panelGrid>
-					<h:outputText value="N° Portaria:" />
+					<h:outputText value="NÂ° Portaria:" />
 					<p:inputText
 						maxlength="50"
 						value="#{fluxoAlternativoController.portaria.numPortaria}" />
 				</h:panelGrid>
 				<h:panelGrid>
-					<h:outputText value="Data da publicação:" />
+					<h:outputText value="Data da publicaÃ§Ã£o:" />
 					<p:calendar showOn="button" size="20" locale="pt"
 						pattern="dd/MM/yyyy" navigator="true"
 						value="#{fluxoAlternativoController.portaria.dtcPublicacaoPortaria}" />
@@ -80,6 +81,7 @@
 		<h:panelGroup id="pnlFluxoAlternativo" style="width:700px">
 			
 			<h:form id="formFluxoAlternativo">
+        <ui:include src="/layout/csrfToken.xhtml" />
 				<h3>
 					<h:panelGrid columns="1">
 						<h:outputLabel styleClass="titulo-grupo" value="Fluxo Alternativo" />
@@ -87,14 +89,14 @@
 				</h3>
 				<br />
 				<h:panelGrid columns="2">
-					<h:outputLabel value="Número do Processo: " />
+					<h:outputLabel value="NÃºmero do Processo: " />
 					<h:outputText
 						value="#{fluxoAlternativoController.processo.numProcesso}"
 						disabled="true" />
 		
 				</h:panelGrid>
 				<h:panelGrid columns="2">
-					<h:outputLabel value="Data de formação do processo: " />
+					<h:outputLabel value="Data de formaÃ§Ã£o do processo: " />
 					<h:outputText
 						value="#{fluxoAlternativoController.processo.dtcFormacao}"
 						disabled="true">
@@ -130,16 +132,16 @@
 						rendered="#{fluxoAlternativoController.tipoFluxo eq '3'}">
 						<h:outputLabel value="Origem:" />
 						<h:outputText
-							value="Área - #{fluxoAlternativoController.processo.ideOrgao.dscOrgao}"
+							value="Ãrea - #{fluxoAlternativoController.processo.ideOrgao.dscOrgao}"
 							disabled="true" />
 					</h:panelGrid>
 		
 					<h:panelGrid columns="2"
 						rendered="#{fluxoAlternativoController.tipoFluxo eq '3'}">
-						<h:outputLabel value="Órgão Destino:" />
+						<h:outputLabel value="Ã“rgÃ£o Destino:" />
 		
 						<p:selectOneMenu id="orgao"
-							requiredMessage="O campo orgão é de preenchimento obrigatório"
+							requiredMessage="O campo orgÃ£o Ã© de preenchimento obrigatÃ³rio"
 							value="#{fluxoAlternativoController.orgao}"
 							converter="orgaoConverter"
 							valueChangeListener="#{fluxoAlternativoController.mudaOrgao}">
@@ -155,11 +157,11 @@
 		
 					<h:panelGrid columns="2"
 						rendered="#{fluxoAlternativoController.visualizaAreas}">
-						<h:outputLabel value="Área Destino:" />
+						<h:outputLabel value="Ãrea Destino:" />
 		
 		
 						<p:selectOneMenu id="area"
-							requiredMessage="O campo Área Destino é de preenchimento obrigatório"
+							requiredMessage="O campo Ãrea Destino Ã© de preenchimento obrigatÃ³rio"
 							value="#{fluxoAlternativoController.area}"
 							converter="areaConverter"
 							valueChangeListener="#{fluxoAlternativoController.mudaArea}">
@@ -176,11 +178,11 @@
 					<br />
 					<h:panelGrid cellpadding="20" columns="1" id="detalhes">
 						<h:panelGrid columns="4">
-							<h:outputLabel value="Observação:" />
+							<h:outputLabel value="ObservaÃ§Ã£o:" />
 							<p:spacer width="105" height="0" />
 							<h:outputText
 								rendered="#{fluxoAlternativoController.tipoFluxo eq '3'}"
-								value="Responsável: " />
+								value="ResponsÃ¡vel: " />
 							<h:outputText
 								rendered="#{fluxoAlternativoController.tipoFluxo eq '3'}"
 								value="#{fluxoAlternativoController.areaSelecionada.idePessoaFisica.pessoaFisica.nomPessoa}"
@@ -229,10 +231,11 @@
 		position="center" modal="true" appendToBody="true" closable="false" resizable="false">
 		
 		<h:form style="text-align: justify; line-height: 2;">
-			Somente enviar processo para publicação após preenchimento dos <b>DADOS CONCEDIDOS</b> e do <b>DEFERIMENTO</b> ou <b>INDEFERIMENTO</b> 
-			do ato por meio da ferramenta Análise Técnica
+        <ui:include src="/layout/csrfToken.xhtml" />
+			Somente enviar processo para publicaÃ§Ã£o apÃ³s preenchimento dos <b>DADOS CONCEDIDOS</b> e do <b>DEFERIMENTO</b> ou <b>INDEFERIMENTO</b> 
+			do ato por meio da ferramenta AnÃ¡lise TÃ©cnica
 			<h:graphicImage style="margin: 2px; height:16px; width: 16px; vertical-align: middle;" value="/resources/img/prototipo/icon_pauta.png" />
-			na grid de ações da pauta do processo.
+			na grid de aÃ§Ãµes da pauta do processo.
 			
 			<br/>
 			<br/>

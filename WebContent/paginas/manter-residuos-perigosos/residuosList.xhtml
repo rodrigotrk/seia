@@ -8,21 +8,23 @@
 	template="../../layout/template.xhtml">
 
 	<ui:define name="titulo-pagina">		
-		<h3>Controle de Resíduos Perigosos</h3>		
+        <ui:include src="/layout/csrfToken.xhtml" />
+        <ui:include src="/layout/csrfToken.xhtml" />
+		<h3>Controle de ResÃ­duos Perigosos</h3>		
 	</ui:define>	
 
 	<ui:define name="conteudo-principal">
 
 		<h:form id="formFiltroResiduos">
 			
-			<h:outputText  value="Nome do resíduo/Código:" />
+			<h:outputText  value="Nome do resÃ­duo/CÃ³digo:" />
  			<p:inputText value="#{residuoController.descricaoResiduo}" >
 			    <p:ajax event="keyup" listener="#{residuoController.filtrarDados}"
        				 update="formListaResiduos:dataTableResiduos" process="@this" />
 			</p:inputText>
  			<!-- <p:autoComplete id="acSimple" value="#{residuoController.textFilter}" minQueryLength="3" completeMethod="#{residuoController.filtrarDados}" /> -->
 			&nbsp;
-			<p:commandButton action="#{residuoController.novoResiduo}" update=":formResiduo:panelResiduo" value="Novo resíduo" oncomplete="dlgResiduo.show()"/>
+			<p:commandButton action="#{residuoController.novoResiduo}" update=":formResiduo:panelResiduo" value="Novo resÃ­duo" oncomplete="dlgResiduo.show()"/>
 		
 		</h:form>
 		<br />
@@ -32,17 +34,17 @@
 			lazy="true" paginator="true" rows="10" paginatorPosition="bottom" paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}" rowsPerPageTemplate="5,10,15" emptyMessage="#{bundle.msg_lista_vazia}" style="width: 700px;">
 
         		<f:facet name="header">
-					<h:outputText value="Resíduos" />
+					<h:outputText value="ResÃ­duos" />
 				</f:facet>
 				<p:column style="width: 420px;">  
 					<f:facet name="header">
-						<h:outputText value="Nome do Resíduo" />  
+						<h:outputText value="Nome do ResÃ­duo" />  
 					</f:facet>
 					<h:outputText value="#{residuo.nomResiduo}" />  
 				</p:column>
 				<p:column style="width:40px;">  
 					<f:facet name="header">
-						<h:outputText value="Código" />  
+						<h:outputText value="CÃ³digo" />  
 					</f:facet>
 					<h:outputText value="#{residuo.codResiduo}" />  
 				</p:column>				
@@ -72,7 +74,7 @@
 
     	</h:form>
 
- 		<p:dialog id="dialogResisuo" header="Cadastro de Resíduo" closable="true" draggable="true" resizable="false" width="350" widgetVar="dlgResiduo" modal="true">	
+ 		<p:dialog id="dialogResisuo" header="Cadastro de ResÃ­duo" closable="true" draggable="true" resizable="false" width="350" widgetVar="dlgResiduo" modal="true">	
 			<ui:include src="/paginas/manter-residuos-perigosos/residuo.xhtml" />
 		</p:dialog>
 

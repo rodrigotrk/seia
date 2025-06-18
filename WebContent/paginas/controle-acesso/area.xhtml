@@ -7,9 +7,10 @@
 	xmlns:p="http://primefaces.prime.com.tr/ui">
 
 	<h:form id="formArea" binding="#{areaController.formularioASerLimpo}">
+        <ui:include src="/layout/csrfToken.xhtml" />
 		<h:panelGrid id="panelArea" columns="1">
 			
-			<h:outputLabel value="Tipo área:" />
+			<h:outputLabel value="Tipo Ã¡rea:" />
 			<p:selectOneMenu id="selectTipoArea" value="#{areaController.tipoArea}" style="width: 300px;" converter="tipoAreaConverter">
 	        	<f:selectItem itemLabel="Selecione..." />
 	            <f:selectItems value="#{areaController.tipoAreas}" var="tipoarea" itemLabel="#{tipoarea.dscTipoArea}" itemValue="#{tipoarea}"/>  
@@ -21,15 +22,15 @@
 	            <f:selectItems value="#{areaController.colAreas}" var="area" itemLabel="#{area.nomArea}" itemValue="#{area}"/>  
 	        </p:selectOneMenu>
 	        
-			<h:outputLabel value="Coordenador da Área:" />
+			<h:outputLabel value="Coordenador da Ãrea:" />
 	        <p:selectOneMenu id="selectOneFuncionario" value="#{areaController.area.idePessoaFisica}" style="width: 300px;" converter="funcionarioConverter">
 	        	<f:selectItem itemLabel="Selecione..." />
 	            <f:selectItems value="#{areaController.colFuncionarios}" var="funcionario" itemLabel="#{funcionario.pessoaFisica.nomPessoa}" itemValue="#{funcionario}"/>  
 	        </p:selectOneMenu>
 			<h:outputLabel value="* #{bundle.lbl_nome_area}:" />
-			<p:inputText id="inputNomeArea" value="#{areaController.area.nomArea}" maxlength="90" style="width: 300px;" required="true" requiredMessage="O campo Nome da Área é de preenchimento obrigatório."/>
+			<p:inputText id="inputNomeArea" value="#{areaController.area.nomArea}" maxlength="90" style="width: 300px;" required="true" requiredMessage="O campo Nome da Ãrea Ã© de preenchimento obrigatÃ³rio."/>
 			<h:outputLabel value="* #{bundle.lbl_orgao}:" />
-	        <p:selectOneMenu id="selectOneOrgao" value="#{areaController.area.ideOrgao}" style="width: 300px;" converter="orgaoConverter" required="true" requiredMessage="O campo Órgão é de preenchimento obrigatório.">
+	        <p:selectOneMenu id="selectOneOrgao" value="#{areaController.area.ideOrgao}" style="width: 300px;" converter="orgaoConverter" required="true" requiredMessage="O campo Ã“rgÄƒo Ã© de preenchimento obrigatÃ³rio.">
 	            <f:selectItem itemLabel="Selecione..." />
 	            <f:selectItems value="#{areaController.colOrgaos}" var="orgao" itemLabel="#{orgao.dscOrgao}" itemValue="#{orgao}"/>  
 	        </p:selectOneMenu>

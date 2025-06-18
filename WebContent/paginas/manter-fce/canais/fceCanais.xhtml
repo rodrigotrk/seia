@@ -6,7 +6,9 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:p="http://primefaces.prime.com.tr/ui">
 	
-	<p:confirmDialog header="Confirmação" appendToBody="true" message="Deseja imprimir o relatório do cadastro de Formulário de Caracterização do Empreendimento - Canais?"
+        <ui:include src="/layout/csrfToken.xhtml" />
+        <ui:include src="/layout/csrfToken.xhtml" />
+	<p:confirmDialog header="ConfirmaÃ§Ã£o" appendToBody="true" message="Deseja imprimir o relatÃ³rio do cadastro de FormulÃ¡rio de CaracterizaÃ§Ã£o do Empreendimento - Canais?"
 						severity="alert" widgetVar="confirmationSalvarFCECanais" id="_confirmationSalvarFCECanais" closable="false">
 		<h:form id="formConfirmaConfirmarFCE">
 			<p:commandButton value="Sim" 
@@ -16,7 +18,7 @@
 					onclick="dialogFceCanais.hide();confirmationSalvarFCECanais.hide();">
 				<p:fileDownload value="#{fceCanalController.imprimirRelatorio}" />
 			</p:commandButton>
-			<p:commandButton value="Não" onclick="dialogFceCanais.hide();confirmationSalvarFCECanais.hide();" type="button" global="false"/>
+			<p:commandButton value="NÃ£o" onclick="dialogFceCanais.hide();confirmationSalvarFCECanais.hide();" type="button" global="false"/>
 		</h:form>
 	</p:confirmDialog>
 	
@@ -35,7 +37,7 @@
 					<p:tab id="FceCanaisAbaDadosGerais" title="Dados Gerais" >
 						<ui:include rendered="#{fceCanalController.activeTab == 0}" src="/paginas/manter-fce/canais/canaisAbaDadosGerais.xhtml" />
 					</p:tab>
-					<p:tab id="FceCanaisAbacaracterizacaoAtividade" title="Caracterização da Atividade" disabled="#{fceCanalController.fceCanal == null or fceCanalController.fceCanal.ideFceCanal == null}">
+					<p:tab id="FceCanaisAbacaracterizacaoAtividade" title="CaracterizaÃ§Ã£o da Atividade" disabled="#{fceCanalController.fceCanal == null or fceCanalController.fceCanal.ideFceCanal == null}">
 						<ui:include rendered="#{fceCanalController.activeTab == 1}" src="/paginas/manter-fce/canais/canaisAbaCaracterizacaoAtividade.xhtml"/>
 					</p:tab>
 					<p:tab id="FceCanaisResumo" title="Resumo" 
@@ -46,9 +48,9 @@
 				<br/>	
 				<h:panelGroup id="pnlFcecanais" layout="block" >
 					<p:commandButton value="Voltar" style="float:left;" actionListener="#{fceCanalController.voltarAba()}" update="formFceCanais"/>
-					<p:commandButton value="#{fceCanalController.activeTab == 2? 'Finalizar': 'Avançar'}" style="float:right;"
+					<p:commandButton value="#{fceCanalController.activeTab == 2? 'Finalizar': 'AvanÃ§ar'}" style="float:right;"
 									actionListener="#{fceCanalController.avancarAba()}" update="formFceCanais" rendered="#{!fceCanalController.desabilitarTudo}"/>
-					<p:commandButton value="Avançar" style="float:right;" actionListener="#{fceCanalController.avancarAba()}" 
+					<p:commandButton value="AvanÃ§ar" style="float:right;" actionListener="#{fceCanalController.avancarAba()}" 
 									update="formFceCanais" rendered="#{fceCanalController.desabilitarTudo and fceCanalController.activeTab lt 2}"/>
 				</h:panelGroup>
 			</h:form>

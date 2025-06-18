@@ -7,10 +7,12 @@
 	xmlns:p="http://primefaces.prime.com.tr/ui">
 
     <h:form>
+        <ui:include src="/layout/csrfToken.xhtml" />
 		<p:remoteCommand name="fecharDialogCapitacaoSuperficial" actionListener="#{captacaoSuperficialController.fecharTela()}" process="@this"/>
 	</h:form>
 
-	<p:dialog header="Captação Superficial" modal="true" height="400" width="640" style="overflow:auto;" widgetVar="dialogCapSuper" dynamic="true" resizable="false" position="center" onHide="fecharDialogCapitacaoSuperficial();">
+        <ui:include src="/layout/csrfToken.xhtml" />
+	<p:dialog header="CaptaÃ§Ã£o Superficial" modal="true" height="400" width="640" style="overflow:auto;" widgetVar="dialogCapSuper" dynamic="true" resizable="false" position="center" onHide="fecharDialogCapitacaoSuperficial();">
 		<h:form id="formDialogCaptacaoSuperficial">
 			<h:panelGrid columns="3" width="100%">
 				<h:panelGroup>
@@ -18,7 +20,7 @@
 					<h:panelGrid columns="3" >
 						<h:panelGrid>
 							<h:panelGroup>
-								<h:outputText value="* 1. Informe a localização geográfica:" />
+								<h:outputText value="* 1. Informe a localizaÃ§Ã£o geogrÃ¡fica:" />
 							</h:panelGroup>	
 							<p:outputPanel autoUpdate="true">
 								<p:commandLink oncomplete="dlgLocalizacaoGeograficaGeneric.show();" action="#{localizacaoGeograficaGenericController.carregarTelaSistemaCoordenadasSirgas2000()}" style="margin-left:45px;" 
@@ -28,14 +30,14 @@
 									<f:setPropertyActionListener target="#{localizacaoGeograficaGenericController.objetoLocalizacao}" value="#{captacaoSuperficialController.outorgaLocalizacaoGeografica}" />
 									<f:setPropertyActionListener target="#{localizacaoGeograficaGenericController.isPerfuracaoPocoOuCaptacaoOuAquicuturaEmRede}" value="#{true}" />
 									<h:graphicImage title="Incluir Vertice" value="/resources/img/ico-expandir.png" style="margin-right: 2px;"/>
-									<h:outputText value="Incluir coordenada geográfica" />
+									<h:outputText value="Incluir coordenada geogrÃ¡fica" />
 								</p:commandLink>
 							</p:outputPanel>
 						</h:panelGrid>
 						<h:panelGroup rendered="#{!novoRequerimentoController.empreendimento.indCessionario and novoRequerimentoController.imovelSelecionado.imovelUrbano == null}">
 							<h:panelGrid id='pnl1211'>
 								<h:panelGroup>
-									<h:outputText value="* Selecione o(s) imóvel(is) que usará(ão) a água:" />
+									<h:outputText value="* Selecione o(s) imÃ³vel(is) que usarÃ¡(Ã£o) a Ã¡gua:" />
 								</h:panelGroup>	
 								<h:panelGroup layout="block" style="height:75px; width:200px; overflow:auto; border:1px solid gray;margin-top:5px;">
 									<p:selectManyCheckbox converter="simpleEntityConverter" value="#{captacaoSuperficialController.outorgaLocalizacaoGeografica.listaImovel}" layout="pageDirection" disabled="#{novoRequerimentoController.modoEdicaoDialog || novoRequerimentoController.imovelUnico}">
@@ -48,7 +50,7 @@
 					<h:panelGrid id="pngTb14123">
 						<p:outputPanel autoUpdate="true">
 							<p:dataTable var="localizacao"  value="#{captacaoSuperficialController.outorgaLocalizacaoGeografica.ideLocalizacaoGeografica}" rendered="#{captacaoSuperficialController.outorgaLocalizacaoGeografica.ideLocalizacaoGeografica.ideLocalizacaoGeografica != null}">
-								<p:column headerText="Ponto de Referência">
+								<p:column headerText="Ponto de ReferÃªncia">
 									<h:outputText value="${localizacao.desLocalizacaoGeografica}" />
 								</p:column>
 								<p:column headerText="Fonte da Coordenada">
@@ -57,18 +59,18 @@
 								<p:column headerText="Sistema de Coordenadas">
 									<h:outputText value="${localizacao.nomeSistemaCoordenadas()}" />
 								</p:column>
-								<p:column headerText="Ações">
+								<p:column headerText="AÃ§Ãµes">
 							
 									<p:commandLink oncomplete="dlgLocalizacaoGeograficaGeneric.show();" process="@this" action="#{localizacaoGeograficaGenericController.visualizarLocalizacaoGeografica()}" >
 										<f:setPropertyActionListener target="#{localizacaoGeograficaGenericController.localizacaoGeograficaSelecionada}" value="#{captacaoSuperficialController.outorgaLocalizacaoGeografica.ideLocalizacaoGeografica}" />
 										<f:setPropertyActionListener target="#{localizacaoGeograficaGenericController.objetoLocalizacao}" value="#{captacaoSuperficialController.outorgaLocalizacaoGeografica}" />
-										<h:graphicImage title="Visualizar localização no GeoBahia" value="/resources/img/ico-pesquisa.png" />
+										<h:graphicImage title="Visualizar localizaÃ§Ã£o no GeoBahia" value="/resources/img/ico-pesquisa.png" />
 									</p:commandLink>
 									
 									<p:commandLink oncomplete="dlgLocalizacaoGeograficaGeneric.show();" process="@this" action="#{localizacaoGeograficaGenericController.editarLocalizacaoGeografica()}" disabled="#{novoRequerimentoController.desabilitarTudo}" >
 										<f:setPropertyActionListener target="#{localizacaoGeograficaGenericController.localizacaoGeograficaSelecionada}" value="#{captacaoSuperficialController.outorgaLocalizacaoGeografica.ideLocalizacaoGeografica}" />
 										<f:setPropertyActionListener target="#{localizacaoGeograficaGenericController.objetoLocalizacao}" value="#{captacaoSuperficialController.outorgaLocalizacaoGeografica}" />
-										<h:graphicImage title="Editar localização geográfica" value="/resources/img/ico-editar.png" />
+										<h:graphicImage title="Editar localizaÃ§Ã£o geogrÃ¡fica" value="/resources/img/ico-editar.png" />
 									</p:commandLink>
 								</p:column>
 							</p:dataTable>
@@ -81,12 +83,12 @@
 				<h:panelGroup>
 					<h:outputLabel value="* #{captacaoSuperficialController.perguntaNR_A4_DCAPSUP_P11.idePergunta.dscPergunta}" style="margin: 0px;">
 						<h:graphicImage value="/resources/img/ico-ajuda.png"  id="ajuda" style="vertical-align: sub; margin-left: 5px;"/>
-		 				<p:tooltip for="ajuda" value="Outorga preventiva é aquela que objetiva reservar a vazão passível de outorga, mas não confere direito de uso de recursos hídricos, conforme o Art. 21 da Lei 11.612/2009." showEffect="fade" hideEffect="fade" />
+		 				<p:tooltip for="ajuda" value="Outorga preventiva Ã© aquela que objetiva reservar a vazÃ£o passÃ­vel de outorga, mas nÃ£o confere direito de uso de recursos hÃ­dricos, conforme o Art. 21 da Lei 11.612/2009." showEffect="fade" hideEffect="fade" />
 					</h:outputLabel>
 				</h:panelGroup>
 				<p:selectOneRadio value="#{captacaoSuperficialController.perguntaNR_A4_DCAPSUP_P11.indResposta}" disabled="#{novoRequerimentoController.desabilitarTudo}">
 					<f:selectItem itemLabel="Sim" itemValue="true" />
-					<f:selectItem itemLabel="Não" itemValue="false" />
+					<f:selectItem itemLabel="NÃ£o" itemValue="false" />
 				</p:selectOneRadio>
 				
 				<h:panelGroup>
@@ -94,7 +96,7 @@
 				</h:panelGroup>
 				<p:selectOneRadio value="#{captacaoSuperficialController.perguntaNR_A4_DCAPSUP_P12.indResposta}" valueChangeListener="#{captacaoSuperficialController.valueChangePerguntaNR_A4_P12()}" disabled="#{novoRequerimentoController.desabilitarTudo}">
 					<f:selectItem itemLabel="Sim" itemValue="true" />
-					<f:selectItem itemLabel="Não" itemValue="false" />
+					<f:selectItem itemLabel="NÃ£o" itemValue="false" />
 					<p:ajax global="false" event="change" update="pngOpcAcimaTrue1" />
 				</p:selectOneRadio>
 				
@@ -105,7 +107,7 @@
 						</h:panelGroup>
 						<p:selectOneRadio value="#{captacaoSuperficialController.perguntaNR_A4_DCAPSUP_P121.indResposta}" valueChangeListener="#{captacaoSuperficialController.valueChangePerguntaNR_A4_DCAPSUP_P121()}" disabled="#{novoRequerimentoController.desabilitarTudo}">
 							<f:selectItem itemLabel="Sim" itemValue="true" />
-							<f:selectItem itemLabel="Não" itemValue="false" />
+							<f:selectItem itemLabel="NÃ£o" itemValue="false" />
 							<p:ajax global="false" event="change" update="formDialogCaptacaoSuperficial:pngOpcAcimaTrue2 pergunta1212" />
 						</p:selectOneRadio>
 						
@@ -116,14 +118,14 @@
 								</h:panelGroup>
 								<p:selectOneRadio value="#{captacaoSuperficialController.perguntaNR_A4_DCAPSUP_P1211.indResposta}" valueChangeListener="#{captacaoSuperficialController.valueChangePerguntaNR_A4_DCAPSUP_P1211()}" disabled="#{novoRequerimentoController.desabilitarTudo}">
 									<f:selectItem itemLabel="Sim" itemValue="true" />
-									<f:selectItem itemLabel="Não" itemValue="false" />
+									<f:selectItem itemLabel="NÃ£o" itemValue="false" />
 									<p:ajax global="false" event="change" update="formDialogCaptacaoSuperficial:pngOpcAcimaTrue3 formDialogCaptacaoSuperficial:pngOpcAcimaTrue4" />
 								</p:selectOneRadio>
 						
 								<p:outputPanel id="pngOpcAcimaTrue3">
 									<h:panelGroup rendered="#{captacaoSuperficialController.perguntaNR_A4_DCAPSUP_P1211.indResposta}">
 										<h:panelGroup>
-											<h:outputText value="* 1.2.1.1.1 A barragem é de:" />
+											<h:outputText value="* 1.2.1.1.1 A barragem Ã© de:" />
 										</h:panelGroup>
 										<p:selectOneRadio value="#{captacaoSuperficialController.outorgaLocalizacaoGeografica.ideTipoBarragem}" converter="simpleEntityConverter" disabled="#{novoRequerimentoController.desabilitarTudo}">
 											<f:selectItems value="#{captacaoSuperficialController.tiposBarragem}" var="barragem" itemLabel="#{barragem.nomTipoBarragem}" itemValue="#{barragem}"/>
@@ -137,13 +139,13 @@
 												</h:panelGroup>
 												<p:selectOneRadio value="#{captacaoSuperficialController.perguntaNR_A4_DCAPSUP_P12112.indResposta}" valueChangeListener="#{captacaoSuperficialController.valueChangePerguntaNR_A4_DCAPSUP_P12112()}" disabled="#{novoRequerimentoController.desabilitarTudo}">
 													<f:selectItem itemLabel="Sim" itemValue="true" />
-													<f:selectItem itemLabel="Não" itemValue="false" />
+													<f:selectItem itemLabel="NÃ£o" itemValue="false" />
 													<p:ajax global="false" update="formDialogCaptacaoSuperficial:pngOpcAcimaTrue5" />
 												</p:selectOneRadio>
 												<p:outputPanel id="pngOpcAcimaTrue5">
 													<h:panelGroup rendered="#{captacaoSuperficialController.perguntaNR_A4_DCAPSUP_P12112.indResposta}">
 														<h:panelGroup>
-															<h:outputText value="* 1.2.1.1.2.1 Informe uma das duas opções abaixo:" />
+															<h:outputText value="* 1.2.1.1.2.1 Informe uma das duas opÃ§Ãµes abaixo:" />
 														</h:panelGroup>
 														<p:selectOneRadio value="#{captacaoSuperficialController.dispensa}" valueChangeListener="#{captacaoSuperficialController.valueChangeOutorgaDispensa()}" disabled="#{novoRequerimentoController.desabilitarTudo}">
 															<f:selectItem itemLabel="Outorga (A)" itemValue="false" />
@@ -152,8 +154,8 @@
 														</p:selectOneRadio>
 														<p:outputPanel id="outCapSuper">
 															<h:panelGrid id="pnlOpcOutorga" columns="2" rendered="#{not captacaoSuperficialController.dispensa}">
-																<h:outputText value="* 1.2.1.1.2.1.1. Informe o número de Portaria:" />
-																<h:outputText value="* 1.2.1.1.2.1.2. Informe a data de publicação da Portaria:"  />
+																<h:outputText value="* 1.2.1.1.2.1.1. Informe o nÃºmero de Portaria:" />
+																<h:outputText value="* 1.2.1.1.2.1.2. Informe a data de publicaÃ§Ã£o da Portaria:"  />
 																<p:inputText value="#{captacaoSuperficialController.outorgaLocalizacaoGeografica.numPortariaBarragem}" maxlength="50" disabled="#{novoRequerimentoController.desabilitarTudo}"/>
 																<h:panelGroup style="margin-left:60px;">
 																	<p:calendar	id="dataPublicPortDialogCapSuper" maxdate="#{novoRequerimentoController.dataHoje}" size="7" showOn="button" locale="pt" pattern="dd/MM/yyyy" readOnlyInputText="true"
@@ -164,8 +166,8 @@
 															</h:panelGrid>
 						
 															<h:panelGrid id="pnlOpcDispensa" columns="2" width="600px" rendered="#{captacaoSuperficialController.dispensa}">
-																<h:outputText value="* 1.2.1.1.2.1.1. Informe o número de Ofício/Declaração:" />
-																<h:outputText value="* 1.2.1.1.2.1.2. Informe a data de Ofício/Declaração:"	style="margin-left:30px;" />
+																<h:outputText value="* 1.2.1.1.2.1.1. Informe o nÃºmero de OfÃ­cio/DeclaraÃ§Ã£o:" />
+																<h:outputText value="* 1.2.1.1.2.1.2. Informe a data de OfÃ­cio/DeclaraÃ§Ã£o:"	style="margin-left:30px;" />
 																<p:inputText value="#{captacaoSuperficialController.outorgaLocalizacaoGeografica.numOficio}" disabled="#{novoRequerimentoController.desabilitarTudo}"/>
 																<h:panelGroup style="margin-left:30px;">
 																	<p:calendar id="dataOficioDialogCapSuper" maxdate="#{novoRequerimentoController.dataHoje}" size="7" showOn="button" locale="pt" pattern="dd/MM/yyyy" readOnlyInputText="true"
@@ -179,7 +181,7 @@
 															<h:panelGroup rendered="#{captacaoSuperficialController.dispensa != null}">
 														
 																<h:panelGroup>
-																	<h:outputText value="* 1.2.1.1.2.1.3. Informe o número do Processo que outorgou / dispensou a construção da barragem:" />
+																	<h:outputText value="* 1.2.1.1.2.1.3. Informe o nÃºmero do Processo que outorgou / dispensou a construÃ§Ã£o da barragem:" />
 																</h:panelGroup>
 																<br />
 																<br />
@@ -188,7 +190,7 @@
 																</h:panelGroup>
 																<br />
 																<h:panelGroup>
-																	<h:outputText value="* 1.2.1.1.2.1.4. Informe o volume de acumulação da barragem:" />
+																	<h:outputText value="* 1.2.1.1.2.1.4. Informe o volume de acumulaÃ§Ã£o da barragem:" />
 																</h:panelGroup>
 																<br />
 																<br />
@@ -196,11 +198,11 @@
 																	<p:inputText value="#{captacaoSuperficialController.outorgaLocalizacaoGeografica.numVolumeAcumulacaoBarragem}" onkeyup="maskIt(this, event, '99.999.999,99', true)" disabled="#{novoRequerimentoController.desabilitarTudo}">
 																		<f:converter converterId="bigConverter"/>
 																	</p:inputText>
-																	<h:outputText value=" m³" />
+																	<h:outputText value=" mÂ³" />
 																</h:panelGroup>
 																<br />
 																<h:panelGroup>
-																	<h:outputText value="* 1.2.1.1.2.1.5. Informe a área de inundação:" />
+																	<h:outputText value="* 1.2.1.1.2.1.5. Informe a Ã¡rea de inundaÃ§Ã£o:" />
 																</h:panelGroup>
 																<br />
 																<br />
@@ -220,7 +222,7 @@
 																	<p:inputText value="#{captacaoSuperficialController.outorgaLocalizacaoGeografica.numDescargaFundo}" onkeyup="maskIt(this, event, '99.999.999,99', true)" disabled="#{novoRequerimentoController.desabilitarTudo}">
 																		<f:converter converterId="bigConverter"/>
 																	</p:inputText>
-																	<h:outputText value=" m³/dia" />
+																	<h:outputText value=" mÂ³/dia" />
 																</h:panelGroup>
 																<br />
 																<h:panelGroup>
@@ -243,7 +245,7 @@
 																			<p:column headerText="Finalidade" style="text-align: left;">
 																				<h:outputText  value="#{finalidade.nomTipoFinalidadeUsoAgua}"/>
 																			</p:column>
-																			<p:column style="text-align:center;" headerText="Ação">
+																			<p:column style="text-align:center;" headerText="AÃ§Ã£o">
 																				<p:commandLink title="Remover" process="@this" rendered="#{!novoRequerimentoController.desabilitarTudo}" global="false"
 																					update="formDialogCaptacaoSuperficial:pngFinalidade">
 																					<h:graphicImage title="Excluir" value="/resources/img/ico-excluir.png" />
@@ -254,7 +256,7 @@
 																	</h:panelGrid>
 		
 																	<h:panelGroup id="pnlGroupAgriculturaIrrigada1" rendered="#{captacaoSuperficialController.outorgaLocalizacaoGeografica.irrigacao}">
-																		<h:outputText	value="* 1.2.1.1.2.1.7.1 Informe a área destinada a agricultura irrigada:" />
+																		<h:outputText	value="* 1.2.1.1.2.1.7.1 Informe a Ã¡rea destinada a agricultura irrigada:" />
 																	</h:panelGroup>
 																	<h:panelGroup id="pnlGroupAgriculturaIrrigada2" rendered="#{captacaoSuperficialController.outorgaLocalizacaoGeografica.irrigacao}">
 																		<p:inputText value="#{captacaoSuperficialController.outorgaLocalizacaoGeografica.numAreaIrrigada}" onkeyup="maskIt(this, event, '99.999.999,99', true)" disabled="#{novoRequerimentoController.desabilitarTudo}">
@@ -280,7 +282,7 @@
 			<p:outputPanel id="pnl3" >
 				<h:panelGrid id="png13">
 					<h:panelGroup>
-						<h:outputText value="* 1.3. Informe a(s) finalidade(s) da captação:" />
+						<h:outputText value="* 1.3. Informe a(s) finalidade(s) da captaÃ§Ã£o:" />
 					</h:panelGroup>
 					
 					<p:commandLink ajax="true" global="false" oncomplete="dialogFinalidadeUsoAgua.show()" process="@this" update="formselFinalidade:pnlFinalidade" 
@@ -301,7 +303,7 @@
 							<h:outputText  value="#{finalidade.nomTipoFinalidadeUsoAgua}"/>
 						</p:column>
 						
-						<p:column style="text-align:center;" headerText="Ação">
+						<p:column style="text-align:center;" headerText="AÃ§Ã£o">
 							<p:commandLink title="Remover" process="@this" rendered="#{!novoRequerimentoController.desabilitarTudo}" 
 								global="false" update="formDialogCaptacaoSuperficial:pnl3">
 								
@@ -313,7 +315,7 @@
 				</h:panelGrid>
 				
 				<h:panelGrid id="png1311" rendered="#{captacaoSuperficialController.outorgaLocalizacaoGeografica.irrigacaoCaptacao}" columns="3">
-					* 1.3.1. Informe a área destinada a agricultura irrigada referente <br/> a este ponto:
+					* 1.3.1. Informe a Ã¡rea destinada a agricultura irrigada referente <br/> a este ponto:
 					
 					<p:inputText onkeyup="maskIt(this, event, '99.999.999,99', true)" onblur= "maskIt(this, event, '99.999.999,99', true)"  
 						rendered="#{captacaoSuperficialController.outorgaLocalizacaoGeografica.irrigacaoCaptacao}"
@@ -327,7 +329,7 @@
 				</h:panelGrid>
 				
 				<h:panelGrid id="png1312" rendered="#{captacaoSuperficialController.outorgaLocalizacaoGeografica.pulverizacaoCaptacao}" columns="3">
-					<h:outputText value="* 1.3.2. Informe a área destinada a pulverização agrícola:" />
+					<h:outputText value="* 1.3.2. Informe a Ã¡rea destinada a pulverizaÃ§Ã£o agrÃ­cola:" />
 					
 					<p:inputText onkeyup="maskIt(this, event, '99.999.999,99', true)" onblur= "maskIt(this, event, '99.999.999,99', true)" 
 						value="#{captacaoSuperficialController.outorgaLocalizacaoGeografica.numAreaPulverizada}" 
@@ -340,7 +342,7 @@
 				</h:panelGrid>
 				
 				<h:panelGrid id="png1313" rendered="#{captacaoSuperficialController.outorgaLocalizacaoGeografica.dessedentacaoAnimal}" columns="3">
-					* 1.3.3. Informe a área utilizada para a dessedentação animal <br/> referente a este ponto:
+					* 1.3.3. Informe a Ã¡rea utilizada para a dessedentaÃ§Ã£o animal <br/> referente a este ponto:
 					
 					<p:inputText onkeyup="maskIt(this, event, '99.999.999,99', true)" onblur= "maskIt(this, event, '99.999.999,99', true)" 
 						value="#{captacaoSuperficialController.outorgaLocalizacaoGeografica.numAreaDessedentacaoAnimal}" 
@@ -353,20 +355,20 @@
 				</h:panelGrid>
 				
 				<h:panelGrid id="png1314" rendered="#{captacaoSuperficialController.outorgaLocalizacaoGeografica.abastecimentoIndustrial}" columns="1">
-					<h:outputText value="* 1.3.4. O abastecimento industrial está situado em um distrito industrial?" />
+					<h:outputText value="* 1.3.4. O abastecimento industrial estÃ¡ situado em um distrito industrial?" />
 					
 					<p:selectOneRadio value="#{captacaoSuperficialController.outorgaLocalizacaoGeografica.indAbastecimentoEmDistritoIndustrial}"
 						disabled="#{novoRequerimentoController.desabilitarTudo}">
 						
 						<f:selectItem itemLabel="Sim" itemValue="true"/>
-						<f:selectItem itemLabel="Não" itemValue="false"/>
+						<f:selectItem itemLabel="NÃ£o" itemValue="false"/>
 					</p:selectOneRadio>
 				</h:panelGrid>
 				
 				<h:panelGrid id="png1315" rendered="#{captacaoSuperficialController.outorgaLocalizacaoGeografica.irrigacaoCaptacao
 					or captacaoSuperficialController.outorgaLocalizacaoGeografica.pulverizacaoCaptacao}" columns="3">
 					
-					<h:outputText value="* 1.3.5. Informe a área do empreendimento:" />
+					<h:outputText value="* 1.3.5. Informe a Ã¡rea do empreendimento:" />
 					
 					<p:inputText onkeyup="maskIt(this, event, '99.999.999,99', true)" onblur= "maskIt(this, event, '99.999.999,99', true)" 
 						value="#{captacaoSuperficialController.outorgaLocalizacaoGeografica.numAreaEmpreendimento}" 
@@ -380,7 +382,7 @@
 			</p:outputPanel>
 			
 			<h:panelGrid columns="3">
-				<h:outputText value="* 1.4. Informar a vazão da captação: " />
+				<h:outputText value="* 1.4. Informar a vazÃ£o da captaÃ§Ã£o: " />
 				
 				<p:inputText value="#{captacaoSuperficialController.outorgaLocalizacaoGeografica.numVazao}" onblur="maskIt(this, event, '99.999.999,99', true)" 
 					onkeyup="maskIt(this, event, '99.999.999,99', true)" disabled="#{novoRequerimentoController.desabilitarTudo}">

@@ -22,6 +22,7 @@
 	
 	<p:confirmDialog header="Confirmação" appendToBody="true" message="#{bundle.geral_msg_informacoes_nao_foram_salvas_deseja_continuar}" severity="alert" widgetVar="confirmationVoltarTipoBarragemSemPonto" id="confirmationVoltarTipoBarragemSemPonto">
 		<h:form>
+        <ui:include src="/layout/csrfToken.xhtml" />
 			<p:commandButton value="Sim" update="formIntervencaoBarragemSemPonto" oncomplete="confirmationVoltarTipoBarragemSemPonto.hide();tipoBarragemSemPonto.hide();" global="false"/>
 			<p:commandButton value="Não" onclick="confirmationVoltarTipoBarragemSemPonto.hide();" type="button" global="false"/>
 		</h:form>
@@ -30,6 +31,7 @@
 	<p:confirmDialog message="Deseja imprimir o relatório da FCE - Intervenção Barragem?" widgetVar="rel_barragemSemPonto" header="Mensagem">
 		<div align="center">
 			<h:form>
+        <ui:include src="/layout/csrfToken.xhtml" />
 				<p:commandButton value="Sim" ajax="false" global="false" process="@this" immediate="true" id="imprimir_rel_barragemSemPonto"  onclick="rel_barragemSemPonto.hide();" style="margin-right:10px;" 
 					update="formulariosUpload:uploadFormulario" oncomplete="expandAll();">
                     <p:fileDownload value="#{fceIntervencaoBarragemControllerSemPonto.imprimirRelatorio}"/>
@@ -42,6 +44,7 @@
 	
 	<p:confirmDialog header="Confirmação" appendToBody="true" message="#{bundle.geral_msg_informacoes_nao_foram_salvas_deseja_continuar}" severity="alert" widgetVar="confirmationVoltarFCEbarragemSemPonto" id="confirmationVoltarFCEbarragemSemPonto">
 		<h:form>
+        <ui:include src="/layout/csrfToken.xhtml" />
 			<p:commandButton value="Sim" update="formIntervencaoBarragemSemPonto :formulariosUpload:tabelaFormulariosDowload" oncomplete="confirmationVoltarFCEbarragemSemPonto.hide();barragemRegularizacaoSemPonto.hide();" global="false"/>
 			<p:commandButton value="Não" update=":formulariosUpload:tabelaFormulariosDowload" onclick="confirmationVoltarFCEbarragemSemPonto.hide();" type="button" global="false"/>
 		</h:form>
@@ -49,6 +52,7 @@
 	
 	<p:confirmDialog header="Confirmação" appendToBody="true" message="#{bundle.lac_dadosGerais_msg004}" severity="alert" widgetVar="confirmaExclusaoExtratoSemPonto" id="confirmaExclusaoExtratoSemPonto">
 		<h:form>
+        <ui:include src="/layout/csrfToken.xhtml" />
 			<p:commandButton value="Sim" update="formBarragemRegularizacaoSemPonto:tblDoc" oncomplete="confirmaExclusaoExtratoSemPonto.hide();" global="false" actionListener="#{enviarDocumentoController.limparListaArquivo()}"/>
 			<p:commandButton value="Não" onclick="confirmaExclusaoExtratoSemPonto.hide();" type="button" global="false"/>
 		</h:form>
@@ -56,6 +60,7 @@
 	
 	<p:confirmDialog header="Confirmação" appendToBody="true" message="#{bundle.lac_dadosGerais_msg004}" severity="alert" widgetVar="confirmaExclusaoIntervencaoBarragemSemPonto" id="confirmaExclusaoIntervencaoBarragemSemPonto">
 		<h:form>
+        <ui:include src="/layout/csrfToken.xhtml" />
 			<p:commandButton value="Sim" update="formIntervencaoBarragemSemPonto:pnl1 formIntervencaoBarragemSemPonto:pnl2" oncomplete="confirmaExclusaoIntervencaoBarragemSemPonto.hide();" global="false" actionListener="#{fceIntervencaoBarragemControllerSemPonto.excluir()}"/>
 			<p:commandButton value="Não" onclick="confirmaExclusaoIntervencaoBarragemSemPonto.hide();" type="button" global="false"/>
 		</h:form>
@@ -63,6 +68,7 @@
 	
 	<p:confirmDialog header="Confirmação" appendToBody="true" message="#{bundle.fce_outorga_change_tipo_barragem}" severity="alert" widgetVar="changeTipoBarragemSemPonto" id="changeTipoBarragemSemPonto" width="415">
 		<h:form>
+        <ui:include src="/layout/csrfToken.xhtml" />
 			<p:commandButton value="Sim" update="formIntervencaoBarragemSemPonto:tableOutorgaLocGeo formIntervencaoBarragemSemPonto:pnl1 formIntervencaoBarragemSemPonto:pnl2" onclick="changeTipoBarragemSemPonto.hide();" global="false" action="#{fceIntervencaoBarragemControllerSemPonto.confirmarChange()}"/>
 			<p:commandButton value="Não" onclick="changeTipoBarragemSemPonto.hide();" global="false" action="#{fceIntervencaoBarragemControllerSemPonto.naoConfirmarChange()}"/>
 		</h:form>

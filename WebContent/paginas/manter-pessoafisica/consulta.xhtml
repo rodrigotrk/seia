@@ -6,18 +6,20 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:p="http://primefaces.prime.com.tr/ui"
 	template="../../layout/template.xhtml">
-	<ui:define name="titulo-pagina"><h3>Consultar Pessoas FÌsicas</h3></ui:define>
+        <ui:include src="/layout/csrfToken.xhtml" />
+        <ui:include src="/layout/csrfToken.xhtml" />
+	<ui:define name="titulo-pagina"><h3>Consultar Pessoas F√≠sicas</h3></ui:define>
 	<ui:define name="conteudo-principal">
 	
  	<ui:include src="/paginas/manter-pessoafisica/visualizarHistoricoPessoaFisica.xhtml"/>
 		<h:form id="filtroPessoaFisica">
-			<h3><h:outputLabel id="lblInstrucoes" styleClass="titulo-grupo" style="font-weight:bold;" value="INSTRU«’ES" /></h3>
+			<h3><h:outputLabel id="lblInstrucoes" styleClass="titulo-grupo" style="font-weight:bold;" value="INSTRU√á√ïES" /></h3>
 			<p class="titulo-grupo">
-				- Para consultar uma ou mais pessoas, informe o(s) par‚metro(s) de consulta desejado(s) e clique no bot„o "Consultar".<br />
-				<h:outputText id="txtMensagemIncluirPessoFisica" rendered="#{!contextoController.usuarioLogado.usuarioExterno}" value="- Para incluir uma nova pessoa fÌsica, clique no bot„o &#34;Incluir Pessoa FÌsica&#34;."></h:outputText>
+				- Para consultar uma ou mais pessoas, informe o(s) par√¢metro(s) de consulta desejado(s) e clique no bot√£o "Consultar".<br />
+				<h:outputText id="txtMensagemIncluirPessoFisica" rendered="#{!contextoController.usuarioLogado.usuarioExterno}" value="- Para incluir uma nova pessoa f√≠sica, clique no bot√£o &#34;Incluir Pessoa F√≠sica&#34;."></h:outputText>
 			</p>
 			<br />
-			<h3><h:outputLabel id="lblParametrosConsulta" styleClass="titulo-grupo" style="font-weight:bold;" value="PAR¬METROS DA CONSULTA" /></h3>
+			<h3><h:outputLabel id="lblParametrosConsulta" styleClass="titulo-grupo" style="font-weight:bold;" value="PAR√ÇMETROS DA CONSULTA" /></h3>
 				<h:panelGrid columns="2" >
 					<h:outputFormat id="lblNomPessoa" value="#{bundle.consultapf_lbl_nomedoispontos}" />
 					<h:outputFormat id="lblNumCpf" value="#{bundle.consultapf_lbl_cpfdoispontos}" disabled="${!security.temAcesso('3.12.4')}"/>
@@ -106,12 +108,13 @@
 						</p:commandLink>
 						
     					<p:commandLink id="historicoAlteracaoPessoa" rendered="${security.temAcesso('3.12.6')}"
-							title="Pesquisar histÛrico de alteraÁ„o"
+        <ui:include src="/layout/csrfToken.xhtml" />
+							title="Pesquisar hist√≥rico de altera√ß√£o"
 							oncomplete="dlgBuscaHistPessoa.show();">
 								<f:setPropertyActionListener
 								target="#{pessoaFisicaController.pessoaSelecionada}"
 								value="#{pessoa}" />
-							<h:graphicImage title="Pesquisar histÛrico de alteraÁ„o" value="/resources/img/ico-mnp.gif" />
+							<h:graphicImage title="Pesquisar hist√≥rico de altera√ß√£o" value="/resources/img/ico-mnp.gif" />
 						</p:commandLink>
 					</p:column>
 				</p:dataTable>

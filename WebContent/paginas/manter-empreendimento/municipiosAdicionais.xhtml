@@ -9,18 +9,19 @@
 	<ui:include	src="/paginas/manter-empreendimento/dlgAdicionarMunicipios.xhtml" />
 
 	<h:form id="frmMunicipiosAdicionais">
+        <ui:include src="/layout/csrfToken.xhtml" />
 		
 		<h:panelGrid id="pnlPergunta">
 			<h:panelGrid columns="3" layout="block">
-				<h:outputText value="O empreendimento ultrapassa os limites do município no endereço informado?" />
+				<h:outputText value="O empreendimento ultrapassa os limites do municÃ­pio no endereÃ§o informado?" />
 				<h:graphicImage id="ajuda" value="/resources/img/ico-ajuda.png"/>
-				<p:tooltip for="ajuda" value="Para transportadoras de resíduos e produtos perigosos, caso não exista base operacional na bahia, a resposta para esta pergunta deve ser 'Não'." showEffect="fade" hideEffect="fade" />
+				<p:tooltip for="ajuda" value="Para transportadoras de resÃ­duos e produtos perigosos, caso nÃ£o exista base operacional na bahia, a resposta para esta pergunta deve ser 'NÃ£o'." showEffect="fade" hideEffect="fade" />
 			</h:panelGrid>
 			<h:selectOneRadio id="resposta"
 				value="#{adicionarMunicipioController.resposta}"
 				disabled="#{adicionarMunicipioController.disabledResposta}">
 				<f:selectItem itemLabel="Sim" itemValue="#{true}" />
-				<f:selectItem itemLabel="Não" itemValue="#{false}" />
+				<f:selectItem itemLabel="NÃ£o" itemValue="#{false}" />
 				<f:ajax global="false" process="@this" listener="#{adicionarMunicipioController.removerMunicipioGrid()}" />
 			</h:selectOneRadio>
 		</h:panelGrid>
@@ -30,7 +31,7 @@
 				rendered="#{adicionarMunicipioController.renderedAdicionarMunicipio}"
 				actionListener="#{adicionarMunicipioController.carregarDialogAdicionarMunicipio()}"
 				disabled="#{adicionarMunicipioController.disabledResposta}">
-				<h:outputText value="Adicionar municípios" />
+				<h:outputText value="Adicionar municÃ­pios" />
 				<h:graphicImage value="/resources/img/ico-expandir.png" />
 			</p:commandLink>
 		</h:panelGrid>
@@ -40,13 +41,13 @@
 				value="#{adicionarMunicipioController.listaMunicipioEnvolvido}">
 				<p:column>
 					<f:facet name="header">
-						<h:outputText value="Municípios" />
+						<h:outputText value="MunicÃ­pios" />
 					</f:facet>
 					<h:outputText value="#{municipio.nomMunicipio}" />
 				</p:column>
 				<p:column>
 					<f:facet name="header">
-						<h:outputText value="Ação" />
+						<h:outputText value="AÃ§Ã£o" />
 					</f:facet>
 					<h:panelGroup layout="block">
 						<p:commandLink actionListener="#{adicionarMunicipioController.remover(municipio)}"

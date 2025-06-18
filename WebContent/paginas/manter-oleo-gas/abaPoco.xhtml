@@ -7,13 +7,14 @@
 				xmlns:p="http://primefaces.prime.com.tr/ui">
 
 	<h:form id="formAbaPoco">
+        <ui:include src="/layout/csrfToken.xhtml" />
 		<div style="max-height: 500px; overflow: auto;">
 		
 			<fieldset style="background-color: rgb(257,231,219); width: 620px;">
 				<legend>Aviso</legend>
 			
 				<h:panelGrid columns="1" styleClass="aviso-home" style="margin-left: 15px;">
-					<h:outputText value="É necessário cadastrar pelo menos um poço existente para cada locação." />
+					<h:outputText value="Ã‰ necessÃ¡rio cadastrar pelo menos um poÃ§o existente para cada locaÃ§Ã£o." />
 					<h:outputText />
 				</h:panelGrid>
 			</fieldset>
@@ -23,10 +24,10 @@
 			<ui:repeat var="campo" value="#{caepogController.caepog.caepogDefinicaoCampoCollection}">
 				<ui:repeat var="locacao" value="#{campo.caepogLocacaoCollection}">
 					<fieldset style="max-width: 620px;">
-						<legend>#{campo.ideCaepogCampo.nomCaepogCampo} - Locação #{locacao.prefixPocoCaepogLocacao}</legend>
+						<legend>#{campo.ideCaepogCampo.nomCaepogCampo} - LocaÃ§Ã£o #{locacao.prefixPocoCaepogLocacao}</legend>
 						
 						<h:panelGrid style="margin: 30px;">
-							<p:commandButton value="Inserir Poço" action="#{caepogController.preparaNovoPoco()}" disabled="#{caepogController.caepog.visualizando}">
+							<p:commandButton value="Inserir PoÃ§o" action="#{caepogController.preparaNovoPoco()}" disabled="#{caepogController.caepog.visualizando}">
 								<f:setPropertyActionListener value="#{campo}" target="#{caepogController.caepogDefinicaoCampo}" />
 								<f:setPropertyActionListener value="#{locacao}" target="#{caepogController.caepogLocacao}" />
 								<f:setPropertyActionListener target="#{caepogController.editando}" value="#{false}" />
@@ -53,7 +54,7 @@
 								
 								<p:column>
 									<f:facet name="header">
-										<h:outputText value="Nome do poço" />
+										<h:outputText value="Nome do poÃ§o" />
 									</f:facet>
 									
 									<h:outputText value="#{poco.nomPocoCaepogPoco}"/>
@@ -61,7 +62,7 @@
 								
 								<p:column>
 									<f:facet name="header">
-										<h:outputText value="Situação" />
+										<h:outputText value="SituaÃ§Ã£o" />
 									</f:facet>
 					
 									<h:outputText value="Novo" rendered="#{poco.indNovoCaepogPoco}"/>
@@ -70,19 +71,19 @@
 								
 								<p:column style="text-align: center;">
 									<f:facet name="header">
-										<h:outputText value="Localização" />
+										<h:outputText value="LocalizaÃ§Ã£o" />
 									</f:facet>
 									
 									<h:panelGroup rendered="#{poco.ideLocalizacaoGeografica != null}">
 										<a onclick="javascript:${localizacaoGeograficaGenericController.retornarUrl(poco.ideLocalizacaoGeografica)}">
-											<h:graphicImage title="Localização do Ponto no Geobahia" value="/resources/img/ico-arl-relocacao.png" />
+											<h:graphicImage title="LocalizaÃ§Ã£o do Ponto no Geobahia" value="/resources/img/ico-arl-relocacao.png" />
 										</a>
 									</h:panelGroup>
 								</p:column>
 								
 								<p:column>
 									<f:facet name="header">
-										<h:outputText value="Ações" />
+										<h:outputText value="AÃ§Ãµes" />
 									</f:facet>
 					
 									<p:commandLink id="visualizar" action="#{caepogController.preparaNovoPoco()}" rendered="#{caepogController.caepog.visualizando}">

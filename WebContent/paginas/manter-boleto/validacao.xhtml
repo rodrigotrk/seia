@@ -10,6 +10,7 @@
 		appendToBody="true" position="top" closable="true" width="850" showHeader="false" resizable="false">
 			
 		<h:form id="validacao_comprovante">
+        <ui:include src="/layout/csrfToken.xhtml" />
 			<h1 style="font-size: 14px">VALIDAR COMPROVANTES DOS BOLETOS</h1>
 			<hr	style="width: 100%; margin-top: 5px; margin-bottom: 5px; border: none; border-top: 1px solid #ccc;" />
 			
@@ -18,7 +19,7 @@
 			</p>
 			
 			<h:panelGrid columns="4">
-				<h:outputLabel value="N° Requerimento " styleClass="tit-requerimento"/>
+				<h:outputLabel value="NÂ° Requerimento " styleClass="tit-requerimento"/>
 				<h:outputText value="#{validacaoBoletoController.requerimento.numRequerimento}" styleClass="dados-requerimento"/>
 				
 				<h:outputLabel value="Empreendimento "  styleClass="tit-requerimento"/>
@@ -54,10 +55,10 @@
 
 			<p:dataTable var="comprovante" value="#{validacaoBoletoController.comprovantesPagamento}" rendered="#{not empty validacaoBoletoController.comprovantesPagamento}">
 				<f:facet name="header">
-					<h:outputText value="Lista de comprovantes de boleto para validação" />
+					<h:outputText value="Lista de comprovantes de boleto para validaÃ§Ã£o" />
 				</f:facet>
 				
-				<p:column headerText="Nº Boleto">
+				<p:column headerText="NÂº Boleto">
 					<h:commandLink value="#{comprovante.ideBoletoPagamentoRequerimento.numBoleto}" style="color:blue" immediate="true" ajax="false" >
 						<p:fileDownload value="#{validacaoBoletoController.fileDownloadBoleto(comprovante.ideBoletoPagamentoRequerimento)}"/>
 					</h:commandLink>
@@ -77,7 +78,7 @@
 					</p:selectBooleanCheckbox>
 				</p:column>
 				
-				<p:column headerText="Ações">
+				<p:column headerText="AÃ§Ãµes">
 					<h:commandLink title="Download do arquivo" rendered="#{validacaoBoletoController.renderedDownload(comprovante.dscCaminhoArquivo)}" >
 						<p:fileDownload value="#{validacaoBoletoController.getFileDownload(comprovante.dscCaminhoArquivo)}"/>
 						<h:graphicImage title="Download do arquivo" value="/resources/img/ico-download.png" />
@@ -91,7 +92,7 @@
 					<h:outputText value="Lista de boletos" />
 				</f:facet>
 				
-				<p:column headerText="Nº Boleto">
+				<p:column headerText="NÂº Boleto">
 					<h:commandLink value="#{boleto.numBoleto}" style="color:blue" immediate="true" ajax="false" >
 						<p:fileDownload value="#{validacaoBoletoController.fileDownloadBoleto(boleto)}"/>
 					</h:commandLink>
@@ -106,7 +107,7 @@
 			
 			<p:dataTable var="comprovante" value="#{validacaoBoletoController.comprovantesDAE}" rendered="#{not empty validacaoBoletoController.comprovantesDAE}">
 				<f:facet name="header">
-					<h:outputText value="Lista de comprovantes de DAE para validação" />
+					<h:outputText value="Lista de comprovantes de DAE para validaÃ§Ã£o" />
 				</f:facet>
 				
 				<p:column headerText="Nome do arquivo">
@@ -123,7 +124,7 @@
 					</p:selectBooleanCheckbox>
 				</p:column>
 				
-				<p:column headerText="Ações">
+				<p:column headerText="AÃ§Ãµes">
 					<h:commandLink title="Download do arquivo" immediate="true" rendered="#{validacaoBoletoController.renderedDownload(comprovante.dscCaminhoArquivo)}">
 						<p:fileDownload value="#{validacaoBoletoController.getFileDownload(comprovante.dscCaminhoArquivo)}"/>
 						<h:graphicImage title="Download do arquivo" value="/resources/img/ico-download.png" />
@@ -131,13 +132,17 @@
 				</p:column>
 			</p:dataTable>
 
-			<h:outputText value="Existe boleto complementar em aberto. É necessário remover as pendências de pagamento do boleto complementar antes de validar o comprovante de pagamento do requerimento" 
+			<h:outputText value="Existe boleto complementar em aberto. Ã‰ necessÃ¡rio remover as pendÃªncias de pagamento do boleto complementar antes de validar o comprovante de pagamento do requerimento" 
 				styleClass="dados-requerimento" style="color: red !important;" rendered="#{validacaoBoletoController.pendenteDeBoletoComplementar}"/>
 			
 			<br />
 
 			<h:panelGrid rendered="#{validacaoBoletoController.requerimentoAntigo and not validacaoBoletoController.existeDeclaracaoInexigibilidade}">
-				<h:outputText value="Selecione a área onde será formado o processo" styleClass="dados-requerimento" rendered="#{validacaoBoletoController.requerimentoAntigo}"/>
+        <ui:include src="/layout/csrfToken.xhtml" />
+        <ui:include src="/layout/csrfToken.xhtml" />
+		<h:form>
+        <ui:include src="/layout/csrfToken.xhtml" />			
+        <ui:include src="/layout/csrfToken.xhtml" />
 				
 				<p:selectOneRadio id="cb_area" value="#{validacaoBoletoController.requerimento.ideArea}" converter="areaConverter" rendered="#{validacaoBoletoController.requerimentoAntigo}" layout="pageDirection">
 					<f:selectItems var="area" value="#{validacaoBoletoController.areas}" itemLabel="#{area.nomArea}" itemValue="#{area}"/>
@@ -156,7 +161,7 @@
 	</p:dialog>
 	
 	<p:confirmDialog id="confirmarEnvioEmail" widgetVar="confirmarEnvioEmail" appendToBody="true"
-		header="#{bundle.geral_lbl_mensagem}" message="É necessário enviar um email para o requerente solicitando o envio da documentação não validada. Deseja enviá-lo agora?"
+		header="#{bundle.geral_lbl_mensagem}" message="Ã‰ necessÃ¡rio enviar um email para o requerente solicitando o envio da documentaÃ§Ã£o nÃ£o validada. Deseja enviÃ¡-lo agora?"
 		resizable="false" severity="alert">
 		<h:form>
 			<h:panelGroup>
@@ -189,7 +194,7 @@
 		</h:form>
 	</p:dialog>
 	
-	<!-- <p:dialog id="_emailValidacao" dynamic="true" widgetVar="emailValidacao" appendToBody="true" header="Email Validação Pendente" width="469" height="150" resizable="false">
+	<!-- <p:dialog id="_emailValidacao" dynamic="true" widgetVar="emailValidacao" appendToBody="true" header="Email ValidaÃ§Ã£o Pendente" width="469" height="150" resizable="false">
 		
 		<h:form>			
 			<h:panelGrid>				
@@ -207,7 +212,7 @@
 	<p:confirmDialog widgetVar="modalConfirmarFechamentoDaTelaValidacaoComprovante" appendToBody="true" header="Alerta" message="#{bundle.geral_msg_confirmar_nao_salvar}" severity="alert">
 		<h:form>
 			<p:commandButton value="Sim" global="false" oncomplete="modalConfirmarFechamentoDaTelaValidacaoComprovante.hide();dialogValidacaoComprovante.hide();"/>
-			<p:commandButton value="Não" global="false" oncomplete="modalConfirmarFechamentoDaTelaValidacaoComprovante.hide();"/>
+			<p:commandButton value="NÃ£o" global="false" oncomplete="modalConfirmarFechamentoDaTelaValidacaoComprovante.hide();"/>
 		</h:form>
 	</p:confirmDialog>	
 </ui:composition>

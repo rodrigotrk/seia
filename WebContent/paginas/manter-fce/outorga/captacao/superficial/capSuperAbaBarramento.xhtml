@@ -7,15 +7,16 @@
 	xmlns:p="http://primefaces.prime.com.tr/ui">
 	
 	<h:form id="formCapSuperBarramento">
+        <ui:include src="/layout/csrfToken.xhtml" />
 		<h:panelGroup id="groupTitulo" styleClass="titulo-grupo" style="font-weight:bold; margin-left:10px;">
-			<h:outputText value="Características do Barramento Existente" />
+			<h:outputText value="CaracterÃ­sticas do Barramento Existente" />
 			<h:outputText value=" *" rendered="#{fceCaptacaoSuperficialController.nenhumDominioBarramentoEscolhido or fceCaptacaoSuperficialController.captacaoParticular}"/>
 		</h:panelGroup>
 		<br />	
 		<h:panelGrid id="caractCaptacao">
 			<br />
 			<h:panelGroup style="margin-left:20px;" >
-				<h:outputText value="Domínio do Barramento"/>
+				<h:outputText value="DomÃ­nio do Barramento"/>
 				<h:outputText value=" *" rendered="#{!fceCaptacaoSuperficialController.captacaoParticular and !fceCaptacaoSuperficialController.nenhumDominioBarramentoEscolhido}"/>
 			</h:panelGroup>
 			<p:selectOneRadio style="margin-left:30px;" layout="pageDirection" value="#{fceCaptacaoSuperficialController.fceCaptacaoSuperficial.ideDominioBarramento}" 
@@ -27,13 +28,13 @@
 		</h:panelGrid> <!-- FIM DO PANELGRID Caracteristica Captacao -->
 		<br />	
 		<h:panelGrid id="inputVolumeBarragem" columns="4">
-			<h:outputText style="margin-left:20px;" value="Volume Máximo Acumulado"/>		
+			<h:outputText style="margin-left:20px;" value="Volume MÃ¡ximo Acumulado"/>		
 			<p:inputText value="#{fceCaptacaoSuperficialController.fceCaptacaoSuperficial.numValorMaximoAcumulado}" disabled="#{fceCaptacaoSuperficialController.desabilitarTudo}"
 			onkeyup="maskIt(this, event, '99.999.999,99', true)" maxlength="13" style="width:80px;" onblur="maskIt(this, event, '99.999.999,99', true)">
 				<f:convertNumber integerOnly="false" minFractionDigits="2"/>
 				<p:ajax event="blur" global="false" update="selectTipoVolume" listener="#{fceCaptacaoSuperficialController.anularTipoValorVolume()}" process="@this"/>		 
 			 </p:inputText>
-			<h:outputText value="(m³)"/>
+			<h:outputText value="(mÂ³)"/>
 			<p:selectOneRadio id="selectTipoVolume" style="margin-left:22px;" value="#{fceCaptacaoSuperficialController.fceCaptacaoSuperficial.tipoValorVolume}" 
 			converter="simpleEntityConverter" disabled="#{fceCaptacaoSuperficialController.valorMaximoAcumuladoNull or fceCaptacaoSuperficialController.desabilitarTudo}">  
 	        	<f:selectItems value="#{fceCaptacaoSuperficialController.listaTipoValor}" var="tipoValor" itemLabel="#{tipoValor.dscTipoValor}" itemValue="#{tipoValor}"/>
@@ -42,13 +43,13 @@
 		</h:panelGrid> <!-- FIM DO PANELGRID Volume -->
 		<br />	
 		<h:panelGrid id="inputVazaoBarragem" columns="4" rendered="#{fceCaptacaoSuperficialController.tipoBarragemRegularizada}">
-			<h:outputText style="margin-left:20px;" value="Vazão Regularizada"/>		
+			<h:outputText style="margin-left:20px;" value="VazÃ£o Regularizada"/>		
 			<p:inputText value="#{fceCaptacaoSuperficialController.fceCaptacaoSuperficial.numVazaoRegularizada}" disabled="#{fceCaptacaoSuperficialController.desabilitarTudo}"
 			onkeyup="maskIt(this, event, '99.999.999,99', true)" maxlength="13" style="margin-left:45px; width:80px;" onblur="maskIt(this, event, '99.999.999,99', true)">
 				<f:convertNumber integerOnly="false" minFractionDigits="2"/>
 				<p:ajax event="blur" global="false" update="selectTipoVazao" listener="#{fceCaptacaoSuperficialController.anularTipoValorVazao()}" process="@this"/>
 			</p:inputText>
-			<h:outputText value="(m³/dia)"/>
+			<h:outputText value="(mÂ³/dia)"/>
 			<p:selectOneRadio id="selectTipoVazao" value="#{fceCaptacaoSuperficialController.fceCaptacaoSuperficial.tipoValorVazao}" 
 			converter="simpleEntityConverter" disabled="#{fceCaptacaoSuperficialController.vazaoRegularizadaNull or fceCaptacaoSuperficialController.desabilitarTudo}">  
 	        	<f:selectItems value="#{fceCaptacaoSuperficialController.listaTipoValor}" var="tipoValor" itemLabel="#{tipoValor.dscTipoValor}" itemValue="#{tipoValor}"/>
@@ -58,7 +59,7 @@
 		<br />	
 		<h:panelGrid id="localCaptacao">
 			<h:panelGroup style="margin-left:20px;" >
-				<h:outputText value="Local da Captação"/>
+				<h:outputText value="Local da CaptaÃ§Ã£o"/>
 				<h:outputText value=" *" rendered="#{!fceCaptacaoSuperficialController.captacaoParticular and !fceCaptacaoSuperficialController.nenhumDominioBarramentoEscolhido}"/>
 			</h:panelGroup>
 			<p:selectOneRadio style="margin-left:30px;" value="#{fceCaptacaoSuperficialController.fceOutorgaLocalizacaoGeograficaSelecionada.localCaptacao}" 
@@ -69,7 +70,7 @@
 		</h:panelGrid>
 		<h:panelGrid id="gridBotoes" rendered="#{!fceCaptacaoSuperficialController.desabilitarTudo}" columns="2" style="margin-top:40px;">
 			<p:commandButton id="btnVoltar" value="Voltar"  style="width:90px;" update="capSuperAbas" process="formCapSuperBarramento" action="#{fceCaptacaoSuperficialController.voltarAba()}" global="false"/>
-			<p:commandButton id="btnAvancar" value="Avançar" style="width:90px;" update="capSuperAbas" process="formCapSuperBarramento" action="#{fceCaptacaoSuperficialController.avancarAba()}" global="false"/> 
+			<p:commandButton id="btnAvancar" value="AvanÃ§ar" style="width:90px;" update="capSuperAbas" process="formCapSuperBarramento" action="#{fceCaptacaoSuperficialController.avancarAba()}" global="false"/> 
 		</h:panelGrid> <!-- FIM DO PANELGRID BOTOES -->
 	</h:form>
 </ui:composition>

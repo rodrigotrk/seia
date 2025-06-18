@@ -7,7 +7,9 @@
 	xmlns:p="http://primefaces.prime.com.tr/ui">
 
 	<!-- CONFIRM DIALOG EXCLUIR LOCALIZACAO GEOGRAFICA -->
-	<p:confirmDialog header="ConfirmaÁ„o" 
+        <ui:include src="/layout/csrfToken.xhtml" />
+        <ui:include src="/layout/csrfToken.xhtml" />
+	<p:confirmDialog header="Confirma√ß√£o" 
 		id="_dialogExcluirLocGeoTrecho"  
 		widgetVar="dialogExcluirLocGeoTrecho" 
 		appendToBody="true" 
@@ -20,7 +22,7 @@
 				actionListener="#{fceCanalController.excluirTrecho()}"
 				update="formFceCanais">
 			</p:commandButton>
-			<p:commandButton value="N„o" 
+			<p:commandButton value="N√£o" 
 				onclick="dialogExcluirLocGeoTrecho.hide();" 
 				type="button" 
 				global="false" />
@@ -32,7 +34,7 @@
 		position="center" resizable="false" draggable="false"
 		onShow="dialogAddtrecho.initPosition();" header="Incluir Trecho">
 		<h:form id="formFceCanaisTrecho">
-			<h3>Ponto InÌcio:</h3>
+			<h3>Ponto In√≠cio:</h3>
 			<br/>
 			<p:commandLink oncomplete="dlgLocalizacaoGeograficaGeneric.show();"
 				action="#{localizacaoGeograficaGenericController.carregarTela()}"
@@ -50,7 +52,7 @@
 			</p:commandLink>
 			<h:panelGrid id="gridCoodenadaInicial" rendered="#{fceCanalController.trecho.localizacaoGeograficaInicio.ideSistemaCoordenada != null}">
 				<p:row>
-					<h3>Coordenada Geogr·fica</h3>
+					<h3>Coordenada Geogr√°fica</h3>
 				</p:row>
 				<p:row>
 					<p:dataTable var="ponto" value="#{fceCanalController.getTableLocalizacaoGeografica(fceCanalController.trecho.localizacaoGeograficaInicio)}">
@@ -99,7 +101,7 @@
 			</p:commandLink>
 			<h:panelGrid id="gridCoodenadaFinal" rendered="#{fceCanalController.trecho.localizacaoGeograficaFim.ideSistemaCoordenada != null}">
 				<p:row>
-					<h3>Coordenada Geogr·fica</h3>
+					<h3>Coordenada Geogr√°fica</h3>
 				</p:row>
 				<p:row>
 					<p:dataTable var="ponto" value="#{fceCanalController.getTableLocalizacaoGeografica(fceCanalController.trecho.localizacaoGeograficaFim)}">

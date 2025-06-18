@@ -13,17 +13,18 @@
 	<p:dialog id="_dialoghistoricoComunicacao" appendToBody="true" closable="false" showHeader="false" style="top:40px !important;"
 	width="835"	widgetVar="dialoghistoricoComunicacao" modal="true" position="top" resizable="false">
 		<h:form id="formHistorico">
-			<h1 style="font-size: 14px">#{comunicacaoRequerenteController.reenquadramento?"Histórico de Tramitação":"HISTÓRICO DO REQUERIMENTO"}</h1>
+        <ui:include src="/layout/csrfToken.xhtml" />
+			<h1 style="font-size: 14px">#{comunicacaoRequerenteController.reenquadramento?"HistÃ³rico de TramitaÃ§Ã£o":"HISTÃ“RICO DO REQUERIMENTO"}</h1>
 			<hr	style="width: 100%; margin-top: 5px; margin-bottom: 5px; border: none; border-top: 1px solid #ccc;" />
 			<p style="margin: 5px;" class="titulo-grupo"><h:outputText value="#{comunicacaoRequerenteController.reenquadramento?'Dados do Processo':'Dados do requerimento'}"/></p>
 			<h:panelGrid columns="4">
-				<h:outputLabel value="N° Requerimento : " styleClass="tit-requerimento"/>
+				<h:outputLabel value="NÂ° Requerimento : " styleClass="tit-requerimento"/>
 				<h:outputText value="#{comunicacaoRequerenteController.requerimento.numRequerimento}" styleClass="dados-requerimento"/>
 				<h:outputLabel value="Empreendimento : "  styleClass="tit-requerimento"/>
 				<h:outputText value="#{fn:length(comunicacaoRequerenteController.requerimento.ultimoEmpreendimento.nomEmpreendimento) gt 35 ? 
 								comunicacaoRequerenteController.requerimento.ultimoEmpreendimento.nomEmpreendimento.substring(0,35).concat('...') 
 								: comunicacaoRequerenteController.requerimento.ultimoEmpreendimento.nomEmpreendimento }" styleClass="dados-requerimento"/>
-				<h:outputLabel value="Nº Do Processo : "  styleClass="tit-requerimento"/>
+				<h:outputLabel value="NÂº Do Processo : "  styleClass="tit-requerimento"/>
 				<h:outputText value="#{comunicacaoRequerenteController.processoReenquadramentoDTO.processoReenquadramento.ideProcesso.numProcesso}"/>
 				<h:outputLabel value="CPF : "  styleClass="tit-requerimento" rendered="#{comunicacaoRequerenteController.requerimento.requerente.PF}"/>
 				<h:outputLabel value="CNPJ : "  styleClass="tit-requerimento" rendered="#{comunicacaoRequerenteController.requerimento.requerente.PJ}" />

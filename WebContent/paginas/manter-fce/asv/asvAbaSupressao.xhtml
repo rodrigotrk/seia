@@ -6,26 +6,27 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:p="http://primefaces.prime.com.tr/ui">
 	<h:form id="asvFormAbaSupressao">
+        <ui:include src="/layout/csrfToken.xhtml" />
 	
 	<p:remoteCommand name="atualizarGridTableEspecieSupressao" update="asvFormAbaSupressao:gridTableEspecieSupressao" process="@this"/>
 		<!-- SUPRESSAO -->
 		<p:outputPanel id="panel01">
 			<h:panelGrid id="grid01">
-				<h:outputText styleClass="titulo-grupo" style="font-weight:bold;" value="* Supress„o" />
+				<h:outputText styleClass="titulo-grupo" style="font-weight:bold;" value="* Supress√£o" />
 				<br />
 				<h:panelGroup id="group01" style="margin-left:10px;">
-					<h:outputText value="¡rea total da supress„o (ha)" />
+					<h:outputText value="√Årea total da supress√£o (ha)" />
 					<p:inputText value="#{asvSupressaoController.fceAsv.numAreaSupressao}" converter="doubleConverterToDecimal" onkeyup="mascararNumeroAndAddZeros(this, event, 8, 4, '.', ',', 3);" maxlength="15" style="margin-left:5px; width:100px;" disabled="#{asvDadosGeraisController.desabilitarTudo}" 
 								 onblur="mascararNumeroAndAddZeros(this, event, 8, 4, '.',',', 3);">
 						<p:ajax global="false" event="blur" listener="#{asvSupressaoController.calcularPorcentagemBySupressao()}" update="grid02 panel04"/>
 					</p:inputText>
 				</h:panelGroup>
 				<br />
-				<h:outputText styleClass="titulo-grupo" style="font-weight:bold; margin-left:10px;" value="Haver· Supress„o em ¡rea de PreservaÁ„o Permanente (APP)?"/>
+				<h:outputText styleClass="titulo-grupo" style="font-weight:bold; margin-left:10px;" value="Haver√° Supress√£o em √Årea de Preserva√ß√£o Permanente (APP)?"/>
 				<br />
 				<p:selectOneRadio value="#{asvSupressaoController.fceAsv.indApp}" style="margin-left:20px;" layout="pageDirection" valueChangeListener="#{asvSupressaoController.changeIndAPP()}" disabled="#{asvDadosGeraisController.desabilitarTudo}">
 					<f:selectItem itemLabel="Sim" itemValue="true" />
-					<f:selectItem itemLabel="N„o" itemValue="false" />
+					<f:selectItem itemLabel="N√£o" itemValue="false" />
 					<p:ajax event="change" update="grid02 panel04 tabAbasASVid:gridConversao tabAbasASVid:gridTableEspecieSupressao" global="false" />
 				</p:selectOneRadio>
 				<br />
@@ -34,7 +35,7 @@
 			<h:panelGrid id="grid02">
 				<h:panelGroup id="group02" layout="block" style="width:680px; height:240px; overflow:auto; border:1px solid gray; margin-left:30px;" rendered="#{asvSupressaoController.supressaoAPP}">
 					<h:panelGrid columns="2" rendered="#{asvSupressaoController.supressaoAPP}">
-						<h:outputText value="¡rea total de APP a ser suprimida (ha)" />
+						<h:outputText value="√Årea total de APP a ser suprimida (ha)" />
 
 						<p:inputText onkeyup="mascararNumeroAndAddZeros(this, event, 8, 4, '.',',', 3);" maxlength="15" onblur="mascararNumeroAndAddZeros(this, event, 8, 4, '.', ',', 3);" converter="doubleConverterToDecimal"
 									 value="#{asvSupressaoController.fceAsv.numAreaApp}" style="margin-left:-220px; width:80px;" disabled="#{asvSupressaoController.finalizarComAviso or asvDadosGeraisController.desabilitarTudo}">
@@ -44,14 +45,14 @@
 						<p:spacer height="5px;"/>
 						<p:spacer height="5px;"/>
 						
-						<h:outputText value="% de APP a ser suprimida em relaÁ„o ‡ ·rea total de APP do empreendimento" />
+						<h:outputText value="% de APP a ser suprimida em rela√ß√£o √† √°rea total de APP do empreendimento" />
 						
 						<p:inputText value="#{asvSupressaoController.fceAsv.numAreaSuprimida}" converter="doubleConverter" onkeyup="maskIt(this, event, '999,99', true)" style="margin-left:5px; width:80px;" 
 									 disabled="#{asvSupressaoController.blockPorcentagemApp or asvDadosGeraisController.desabilitarTudo}" maxlength="6"/>
 						<p:spacer height="5px;"/>
 						<p:spacer height="5px;"/>
 						
-						<h:outputText value="Justificativa da supress„o em APP:" />
+						<h:outputText value="Justificativa da supress√£o em APP:" />
 						<p:spacer height="10px;"/>
 						
 				        <p:selectManyCheckbox value="#{asvSupressaoController.listaJustificativaSupressaoSelecionadas}" layout="pageDirection" style="margin-left:30px;" converter="simpleEntityConverter" disabled="#{asvSupressaoController.finalizarComAviso or asvDadosGeraisController.desabilitarTudo}">
@@ -72,14 +73,14 @@
 		<!-- OBJETIVO DA SUPRESSAO -->
 		<p:outputPanel id="panel02">
 			<br />
-			<h:outputText styleClass="titulo-grupo" style="font-weight:bold;" value="* Objetivo da Supress„o" />
+			<h:outputText styleClass="titulo-grupo" style="font-weight:bold;" value="* Objetivo da Supress√£o" />
 			<!-- ATIVIDADE AGROSSILVOPASTORIL -->
 			<h:panelGrid id="gridAgro" style="width: 250px; margin-left:10px;">
 				<br />
 				<h:panelGroup id="atvAgro" >
 					<p:commandLink id="ADDatvAgro" actionListener="#{asvSupressaoController.changeAtividadeAgro()}" update="gridAgro" global="false" disabled="#{asvDadosGeraisController.desabilitarTudo}"> 
-						<h:graphicImage title="Adicionar Objetivo da Supress„o de Atividade Agrossilvopastoril" value="/resources/img/ico-adicionar.png"  rendered="#{asvSupressaoController.indAtividadeAgro == false}"/>
-						<h:graphicImage title="Adicionar Objetivo da Supress„o de Atividade Agrossilvopastoril" value="/resources/img/ico-retrair.png"  rendered="#{asvSupressaoController.indAtividadeAgro == true}"/>
+						<h:graphicImage title="Adicionar Objetivo da Supress√£o de Atividade Agrossilvopastoril" value="/resources/img/ico-adicionar.png"  rendered="#{asvSupressaoController.indAtividadeAgro == false}"/>
+						<h:graphicImage title="Adicionar Objetivo da Supress√£o de Atividade Agrossilvopastoril" value="/resources/img/ico-retrair.png"  rendered="#{asvSupressaoController.indAtividadeAgro == true}"/>
 					</p:commandLink>
 					<h:outputText value="Atividade Agrossilvopastoril" style="margin-left:10px;"/>
 			    </h:panelGroup>
@@ -96,27 +97,27 @@
 		    <h:panelGrid id="gridAtividadeMiner" style="width:400px;  margin-left:10px;">
 			    <h:panelGroup id="atvMiner">
 			   		<p:commandLink id="ADDatvMiner" actionListener="#{asvSupressaoController.changeAtividadeMiner()}" update="@this gridAtividadeMiner" global="false" disabled="#{asvDadosGeraisController.desabilitarTudo}"> 
-						<h:graphicImage title="Adicionar Objetivo da Supress„o de Atividade de MineraÁ„o" value="/resources/img/ico-adicionar.png"  rendered="#{asvSupressaoController.indAtividadeMiner == false}"/>
-						<h:graphicImage title="Adicionar Objetivo da Supress„o de Atividade de MineraÁ„o" value="/resources/img/ico-retrair.png"  rendered="#{asvSupressaoController.indAtividadeMiner == true}"/>
+						<h:graphicImage title="Adicionar Objetivo da Supress√£o de Atividade de Minera√ß√£o" value="/resources/img/ico-adicionar.png"  rendered="#{asvSupressaoController.indAtividadeMiner == false}"/>
+						<h:graphicImage title="Adicionar Objetivo da Supress√£o de Atividade de Minera√ß√£o" value="/resources/img/ico-retrair.png"  rendered="#{asvSupressaoController.indAtividadeMiner == true}"/>
 					</p:commandLink>
-					<h:outputText value="Atividade de MineraÁ„o" style="margin-left:10px;"/>
+					<h:outputText value="Atividade de Minera√ß√£o" style="margin-left:10px;"/>
 			    </h:panelGroup>
 			    
 			    <h:panelGrid id="gridMiner" columns="2" rendered="#{asvSupressaoController.indAtividadeMiner}" style="width:400px; margin-left:20px;">
 			        <h:panelGroup style="width:250px;">
 					    <p:commandLink id="ADDatvMinerOleo" actionListener="#{asvSupressaoController.changeOleoGas()}" update="@this groupOleo" global="false" disabled="#{asvDadosGeraisController.desabilitarTudo}"> 
-							<h:graphicImage title="Adicionar Objetivo da Supress„o de ”leo e G·s" value="/resources/img/ico-adicionar.png"  rendered="#{asvSupressaoController.indOleoGas == false}"/>
-							<h:graphicImage title="Adicionar Objetivo da Supress„o de ”leo e G·s" value="/resources/img/ico-retrair.png"  rendered="#{asvSupressaoController.indOleoGas == true}"/>
+							<h:graphicImage title="Adicionar Objetivo da Supress√£o de √ìleo e G√°s" value="/resources/img/ico-adicionar.png"  rendered="#{asvSupressaoController.indOleoGas == false}"/>
+							<h:graphicImage title="Adicionar Objetivo da Supress√£o de √ìleo e G√°s" value="/resources/img/ico-retrair.png"  rendered="#{asvSupressaoController.indOleoGas == true}"/>
 						</p:commandLink>
-						<h:outputText value="”leo e G·s" style="margin-left:10px;"/>
+						<h:outputText value="√ìleo e G√°s" style="margin-left:10px;"/>
 			    	</h:panelGroup>
 		    		
 		    		<h:panelGroup style="width:250px;">
 				        <p:commandLink id="ADDatvMinerMiner" actionListener="#{asvSupressaoController.changeMiner()}" update="@this groupMiner" global="false" disabled="#{asvDadosGeraisController.desabilitarTudo}"> 
-							<h:graphicImage title="Adicionar Objetivo da Supress„o de MineraÁ„o" value="/resources/img/ico-adicionar.png"  rendered="#{asvSupressaoController.indMiner == false}"/>
-							<h:graphicImage title="Adicionar Objetivo da Supress„o de MineraÁ„o" value="/resources/img/ico-retrair.png"  rendered="#{asvSupressaoController.indMiner == true}"/>
+							<h:graphicImage title="Adicionar Objetivo da Supress√£o de Minera√ß√£o" value="/resources/img/ico-adicionar.png"  rendered="#{asvSupressaoController.indMiner == false}"/>
+							<h:graphicImage title="Adicionar Objetivo da Supress√£o de Minera√ß√£o" value="/resources/img/ico-retrair.png"  rendered="#{asvSupressaoController.indMiner == true}"/>
 						</p:commandLink>
-						<h:outputText value="MineraÁ„o" style="margin-left:10px;"/>
+						<h:outputText value="Minera√ß√£o" style="margin-left:10px;"/>
 				    </h:panelGroup>
 				    
 				    <!-- OLEO E GAS -->
@@ -143,8 +144,8 @@
 			<h:panelGrid id="gridEmpIndust" style="width: 250px; margin-left:10px;">
 				<h:panelGroup id="atvEmpIndust" >
 					<p:commandLink id="ADDatvEmpIndust" actionListener="#{asvSupressaoController.changeEmprendimentoIndustrial()}" update="gridEmpIndust" global="false" disabled="#{asvDadosGeraisController.desabilitarTudo}"> 
-						<h:graphicImage title="Adicionar Objetivo da Supress„o de Empreendimento Industrial" value="/resources/img/ico-adicionar.png" rendered="#{asvSupressaoController.indEmpreendIndust == false}"/>
-						<h:graphicImage title="Adicionar Objetivo da Supress„o de Empreendimento Industrial" value="/resources/img/ico-retrair.png" rendered="#{asvSupressaoController.indEmpreendIndust == true}"/>
+						<h:graphicImage title="Adicionar Objetivo da Supress√£o de Empreendimento Industrial" value="/resources/img/ico-adicionar.png" rendered="#{asvSupressaoController.indEmpreendIndust == false}"/>
+						<h:graphicImage title="Adicionar Objetivo da Supress√£o de Empreendimento Industrial" value="/resources/img/ico-retrair.png" rendered="#{asvSupressaoController.indEmpreendIndust == true}"/>
 					</p:commandLink>
 					<h:outputText value="Empreendimento Industrial" style="margin-left:10px;"/>
 			    </h:panelGroup>
@@ -161,8 +162,8 @@
 		    <h:panelGrid id="gridEmpInfra" style="width: 450px; margin-left:10px;">
 				<h:panelGroup id="atvEmpInfra" >			
 					<p:commandLink id="ADDatvEmpInfra" actionListener="#{asvSupressaoController.changeEmprendimentoInfraestrutura()}" update="gridEmpInfra" global="false" disabled="#{asvDadosGeraisController.desabilitarTudo}"> 
-						<h:graphicImage title="Adicionar Objetivo da Supress„o de Empreendimento de Infraestrutura e Energia" value="/resources/img/ico-adicionar.png"  rendered="#{asvSupressaoController.indEmpreendInfraEner == false}"/>
-						<h:graphicImage title="Adicionar Objetivo da Supress„o de Empreendimento de Infraestrutura e Energia" value="/resources/img/ico-retrair.png"  rendered="#{asvSupressaoController.indEmpreendInfraEner == true}"/>
+						<h:graphicImage title="Adicionar Objetivo da Supress√£o de Empreendimento de Infraestrutura e Energia" value="/resources/img/ico-adicionar.png"  rendered="#{asvSupressaoController.indEmpreendInfraEner == false}"/>
+						<h:graphicImage title="Adicionar Objetivo da Supress√£o de Empreendimento de Infraestrutura e Energia" value="/resources/img/ico-retrair.png"  rendered="#{asvSupressaoController.indEmpreendInfraEner == true}"/>
 					</p:commandLink>
 				    <h:outputText value="Empreendimento de Infraestrutura e Energia" style="margin-left:10px;"/>
 			    </h:panelGroup>
@@ -179,8 +180,8 @@
 		    <h:panelGrid id="gridEmprIntSocial" style="width: 450px; margin-left:10px;">
 				<h:panelGroup id="atvEmprIntSocial" >			
 			    	<p:commandLink id="ADDatvEmprIntSocial" actionListener="#{asvSupressaoController.changeEmprendimentoInteresseSocial()}" update="gridEmprIntSocial" global="false" disabled="#{asvDadosGeraisController.desabilitarTudo}"> 
-						<h:graphicImage title="Adicionar Objetivo da Supress„o de Empreendimento de Interesse social" value="/resources/img/ico-adicionar.png"  rendered="#{asvSupressaoController.indEmpreendInterSocial == false}"/>
-						<h:graphicImage title="Adicionar Objetivo da Supress„o de Empreendimento de Interesse social" value="/resources/img/ico-retrair.png"  rendered="#{asvSupressaoController.indEmpreendInterSocial == true}"/>
+						<h:graphicImage title="Adicionar Objetivo da Supress√£o de Empreendimento de Interesse social" value="/resources/img/ico-adicionar.png"  rendered="#{asvSupressaoController.indEmpreendInterSocial == false}"/>
+						<h:graphicImage title="Adicionar Objetivo da Supress√£o de Empreendimento de Interesse social" value="/resources/img/ico-retrair.png"  rendered="#{asvSupressaoController.indEmpreendInterSocial == true}"/>
 					</p:commandLink>
 				    <h:outputText value="Empreendimento de Interesse social" style="margin-left:10px;"/>
 			    </h:panelGroup>
@@ -197,10 +198,10 @@
 			<h:panelGrid id="gridConstrCivil" style="width: 450px; margin-left:10px;">
 				<h:panelGroup id="atvConstrCivil" >			
 			    	<p:commandLink id="ADDatvConstrCivilL" actionListener="#{asvSupressaoController.changeConstrucaoCivil()}" update="gridConstrCivil" global="false" disabled="#{asvDadosGeraisController.desabilitarTudo}"> 
-						<h:graphicImage title="Adicionar Objetivo da Supress„o de ConstruÁ„o civil" value="/resources/img/ico-adicionar.png"  rendered="#{asvSupressaoController.indConstruCivil == false}"/>
-						<h:graphicImage title="Adicionar Objetivo da Supress„o de ConstruÁ„o civil" value="/resources/img/ico-retrair.png"  rendered="#{asvSupressaoController.indConstruCivil == true}"/>
+						<h:graphicImage title="Adicionar Objetivo da Supress√£o de Constru√ß√£o civil" value="/resources/img/ico-adicionar.png"  rendered="#{asvSupressaoController.indConstruCivil == false}"/>
+						<h:graphicImage title="Adicionar Objetivo da Supress√£o de Constru√ß√£o civil" value="/resources/img/ico-retrair.png"  rendered="#{asvSupressaoController.indConstruCivil == true}"/>
 					</p:commandLink>
-				    <h:outputText value="ConstruÁ„o civil" style="margin-left:10px;"/>
+				    <h:outputText value="Constru√ß√£o civil" style="margin-left:10px;"/>
 			    </h:panelGroup>
 			    
 			    <h:panelGroup id="groupConstrCivil" rendered="#{asvSupressaoController.indConstruCivil}">
@@ -215,10 +216,10 @@
 			<h:panelGrid id="gridEUTL" style="width: 450px; margin-left:10px;">
 				<h:panelGroup id="atvEUTL" >			
 			    	<p:commandLink id="ADDatvEUTL" actionListener="#{asvSupressaoController.changeEmpreendUrbanTuristicoLazer()}" update="gridEUTL" global="false" disabled="#{asvDadosGeraisController.desabilitarTudo}"> 
-						<h:graphicImage title="Adicionar Objetivo da Supress„o de Empreendimentos UrbanÌsticos, TurÌsticos e de Lazer" value="/resources/img/ico-adicionar.png"  rendered="#{asvSupressaoController.indEmpreendUrbanTuristicoLazer == false}"/>
-						<h:graphicImage title="Adicionar Objetivo da Supress„o de Empreendimentos UrbanÌsticos, TurÌsticos e de Lazer" value="/resources/img/ico-retrair.png"  rendered="#{asvSupressaoController.indEmpreendUrbanTuristicoLazer == true}"/>
+						<h:graphicImage title="Adicionar Objetivo da Supress√£o de Empreendimentos Urban√≠sticos, Tur√≠sticos e de Lazer" value="/resources/img/ico-adicionar.png"  rendered="#{asvSupressaoController.indEmpreendUrbanTuristicoLazer == false}"/>
+						<h:graphicImage title="Adicionar Objetivo da Supress√£o de Empreendimentos Urban√≠sticos, Tur√≠sticos e de Lazer" value="/resources/img/ico-retrair.png"  rendered="#{asvSupressaoController.indEmpreendUrbanTuristicoLazer == true}"/>
 					</p:commandLink>
-				    <h:outputText value="Empreendimentos UrbanÌsticos, TurÌsticos e de Lazer" style="margin-left:10px;"/>
+				    <h:outputText value="Empreendimentos Urban√≠sticos, Tur√≠sticos e de Lazer" style="margin-left:10px;"/>
 			    </h:panelGroup>
 			    
 			    <h:panelGroup id="groupEUTL" rendered="#{asvSupressaoController.indEmpreendUrbanTuristicoLazer}">
@@ -233,19 +234,19 @@
 			<h:panelGrid id="gridOurto" style="width: 450px; margin-left:10px;">
 				<h:panelGroup id="atvOurto" >
 					<p:commandLink id="ADDoutro" actionListener="#{asvSupressaoController.changeOutroObjetivo()}" update="gridOurto" global="false" disabled="#{asvDadosGeraisController.desabilitarTudo}"> 
-						<h:graphicImage title="Adicionar Outro Objetivo da Supress„o" value="/resources/img/ico-adicionar.png"  rendered="#{asvSupressaoController.indOutroEmpreendimento == false}"/>
-						<h:graphicImage title="Adicionar Outro Objetivo da Supress„o" value="/resources/img/ico-retrair.png"  rendered="#{asvSupressaoController.indOutroEmpreendimento == true}"/>
+						<h:graphicImage title="Adicionar Outro Objetivo da Supress√£o" value="/resources/img/ico-adicionar.png"  rendered="#{asvSupressaoController.indOutroEmpreendimento == false}"/>
+						<h:graphicImage title="Adicionar Outro Objetivo da Supress√£o" value="/resources/img/ico-retrair.png"  rendered="#{asvSupressaoController.indOutroEmpreendimento == true}"/>
 					</p:commandLink>
-				    <h:outputText value="Outro n„o especificado anteriormente" style="margin-left:10px;"/>
+				    <h:outputText value="Outro n√£o especificado anteriormente" style="margin-left:10px;"/>
 			    </h:panelGroup>
 		    	<p:inputText id="outro" value="#{asvSupressaoController.outroEmpreendimento}" rendered="#{asvSupressaoController.indOutroEmpreendimento}" style="width:310px; margin-left:25px;" maxlength="50" disabled="#{asvDadosGeraisController.desabilitarTudo}"/>
-				<p:watermark for="outro" value="Informe o objetivo n„o especificado" />
+				<p:watermark for="outro" value="Informe o objetivo n√£o especificado" />
 		    </h:panelGrid>					    
 		</p:outputPanel>
 		
 		<p:outputPanel id="panel03">
 			<br />
-			<h:outputText styleClass="titulo-grupo" style="font-weight:bold;" value="Informar a ocorrÍncia de ·reas no Empreendimento" />
+			<h:outputText styleClass="titulo-grupo" style="font-weight:bold;" value="Informar a ocorr√™ncia de √°reas no Empreendimento" />
 			<br /><br />
 			<h:panelGrid id="grid03" columns="2" style="width:680px; height:35px; margin-left:10px;">
 				<h:panelGroup style="width:430px;">
@@ -256,7 +257,7 @@
 				</h:panelGroup>
 				<p:spacer id="space01" rendered="#{!asvSupressaoController.indAbandonada}"/>
 				<h:panelGroup id="abandonada" rendered="#{asvSupressaoController.indAbandonada}">
-					<h:outputText value="¡rea (ha)" />
+					<h:outputText value="√Årea (ha)" />
 					<p:inputText value="#{asvSupressaoController.areaAbandonada}" style="margin-left:5px; width:80px;" converter="doubleConverter" onkeyup="maskIt(this, event, '99.999.999,99', true)" maxlength="13" disabled="#{asvDadosGeraisController.desabilitarTudo}"/>
 				</h:panelGroup>
 			</h:panelGrid>
@@ -266,11 +267,11 @@
 					<p:selectBooleanCheckbox value="#{asvSupressaoController.indInviavel}" valueChangeListener="#{asvSupressaoController.changeAreaInviavel()}" disabled="#{asvDadosGeraisController.desabilitarTudo}">  
 		           		<p:ajax update="grid04 space02" global="false"/>  
 				    </p:selectBooleanCheckbox>
-					<h:outputText value="Agronomicamente Invi·vel"/>
+					<h:outputText value="Agronomicamente Invi√°vel"/>
 				</h:panelGroup>
 				<p:spacer width="5px;" id="space02" rendered="#{!asvSupressaoController.indInviavel}"/>
 				<h:panelGroup id="inviavel" rendered="#{asvSupressaoController.indInviavel}" style="margin-left:282px;"> 
-					<h:outputText value="¡rea (ha)" />
+					<h:outputText value="√Årea (ha)" />
 					<p:inputText value="#{asvSupressaoController.areaInviavel}" style="margin-left:5px; width:80px;" converter="doubleConverter" onkeyup="maskIt(this, event, '99.999.999,99', true)" maxlength="13" disabled="#{asvDadosGeraisController.desabilitarTudo}"/>
 				</h:panelGroup>
 			</h:panelGrid>
@@ -279,7 +280,7 @@
 		<p:outputPanel id="plMaterialLenhoNovo" rendered="#{empty asvSupressaoController.fceAsv.indMaterialLenhoso}">
 		
 			<br />
-			<h:outputText styleClass="titulo-grupo" style="font-weight:bold;" value="EspecificaÁ„o do Produto da Supress„o" />
+			<h:outputText styleClass="titulo-grupo" style="font-weight:bold;" value="Especifica√ß√£o do Produto da Supress√£o" />
 			<br /><br />			
 			<h:panelGrid id="produtosSupressao" columns="2">
 			  	<p:selectOneMenu value="#{asvSupressaoController.produtoSelecionadoSupressao}" style="width:230px;" disabled="#{asvSupressaoController.listProdutoEmpty or asvDadosGeraisController.desabilitarTudo}" converter="simpleEntityConverter">  
@@ -301,9 +302,9 @@
 		                <tr>
 		                    <td />
 		                    <td colspan="2">
-		                         <p>Caso espÈcie n„o esteja listada, encaminhe um email para atendimento.seia@inema.ba.gov.br com o 
-		                         nome cientifico da espÈcie e seu nome vulgar, solicitando a inclus„o nesta lista. <b>A identificaÁ„o da
-		                         espÈcie È condiÁ„o necess·ria para a solicitaÁ„o da supress„o de vegetaÁ„o!</b></p>
+		                         <p>Caso esp√©cie n√£o esteja listada, encaminhe um email para atendimento.seia@inema.ba.gov.br com o 
+		                         nome cientifico da esp√©cie e seu nome vulgar, solicitando a inclus√£o nesta lista. <b>A identifica√ß√£o da
+		                         esp√©cie √© condi√ß√£o necess√°ria para a solicita√ß√£o da supress√£o de vegeta√ß√£o!</b></p>
 		                    </td>
 		                </tr>
 		            </table>
@@ -327,7 +328,7 @@
 			<h:panelGrid id="gridTableEspecie">
 				<p:dataTable id="tblTipoClassificacao" rendered="#{!asvSupressaoController.lenha and asvSupressaoController.produtoSelecionadoSupressao != null }" value="#{asvSupressaoController.listaEspecieSupressao}" var="especieSupressao" lazy="true" paginator="true" rows="15"  
 					paginatorPosition="bottom" paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}" rowsPerPageTemplate="5,10,15" 
-					emptyMessage="Nenhuma especie supress„o encontrado.">
+					emptyMessage="Nenhuma especie supress√£o encontrado.">
 					<p:column style="text-align:justify; width:800px;">
 						<f:facet name="header">
 							<h:outputText value="Nome" />
@@ -335,21 +336,21 @@
 						<h:outputText value="#{especieSupressao.nomEspecieSupressao}"/>
 					</p:column>
 					
-					<p:column style="width:40px; text-align:center;" headerText="AÁıes">
-						<p:commandLink title="Adicionar ClassificaÁ„o(ıes)" process="@this" update="formNomeVulgar asvFormAbaSupressao:gridTableEspecieSupressao" 
+					<p:column style="width:40px; text-align:center;" headerText="A√ß√µes">
+						<p:commandLink title="Adicionar Classifica√ß√£o(√µes)" process="@this" update="formNomeVulgar asvFormAbaSupressao:gridTableEspecieSupressao" 
 							 global="false" actionListener="#{asvSupressaoController.obterNovoNomePopular()}" action="#{nomePopularEspecieController.abrirNomePopular(especieSupressao)}">
 							 <f:setPropertyActionListener target="#{asvSupressaoController.especieSupressaoSelecionada}" value="#{especieSupressao}" />
 							 <f:setPropertyActionListener target="#{nomePopularEspecieController.metodoAtualizarExterno}" value="#{asvSupressaoController.metodoRetornoEspecie}" />
 							 <f:setPropertyActionListener target="#{nomePopularEspecieController.nomePopularEspecieSelecionado}" value="#{asvSupressaoController.nomePopularEspecieSelecionada}" />
 							 <f:setPropertyActionListener target="#{nomePopularEspecieController.idDoComponenteParaSerAtualizado}" value="tabAbasASVid:gridTableEspecieSupressao, asvFormAbaSupressao:gridTableEspecieSupressao" />
 							 <f:setPropertyActionListener target="#{nomePopularEspecieController.listaItemRemovidoNomePopularEspecie}" value="#{especieSupressao.removidosNomePopularEspecie}" /> 
-							<h:graphicImage title="Adicionar ClassificaÁ„o(ıes)" value="/resources/img/ico-aprovar-notificacao.png" />
+							<h:graphicImage title="Adicionar Classifica√ß√£o(√µes)" value="/resources/img/ico-aprovar-notificacao.png" />
 						</p:commandLink>
 					</p:column>
 				</p:dataTable>
 				<br />
 				<h:panelGrid id="gridTableEspecieSupressao" rendered="#{not empty asvSupressaoController.listaEspecieSupressaoAutorizacao}">
-					<h:outputText styleClass="titulo-grupo" style="font-weight:bold; margin-left:10px; " value="Especies selecionadas (A lista das espÈcies deve ser cadastrada conforme consta no invent·rio florestal)"/>
+					<h:outputText styleClass="titulo-grupo" style="font-weight:bold; margin-left:10px; " value="Especies selecionadas (A lista das esp√©cies deve ser cadastrada conforme consta no invent√°rio florestal)"/>
 					<br />
 					<p:dataTable id="tableEspecie" var="especieSupressao" value="#{asvSupressaoController.listaEspecieSupressaoAutorizacao}" style="width:877px;">
 						
@@ -377,7 +378,7 @@
 								<h:outputText value="Volume total" /> <br /> <h:outputText value="fora de APP" />
 							</f:facet>
 							<h:panelGrid columns="3" id="pgVolumeForaAPP">
-								<h:outputText value="m≥" />
+								<h:outputText value="m¬≥" />
 								<p:spacer height="15px;"/>
 								<p:inputText value="#{especieSupressao.volumeTotalForaApp}" style="width:80px;" converter="doubleConverterToDecimal" onkeyup="maskItQuatro(this, event, '99.999.999,9999', true)" onclick="maskItQuatro(this, event, '99.999.999,9999', true)" maxlength="15" disabled="#{asvSupressaoController.blockColunaForaApp or asvDadosGeraisController.desabilitarTudo or !especieSupressao.edicao}">
 			 		    			<p:ajax event="blur" process="@form" global="false" listener="#{asvSupressaoController.calcularVolumeForaAPP(especieSupressao)}" update="pgVolumeForaAPP"/>
@@ -400,7 +401,7 @@
 								<h:outputText value="Volume total" /> <br /> <h:outputText value="em APP" />
 							</f:facet>
 							<h:panelGrid columns="3" id="pgVolumeEmAPP">
-								<h:outputText value="m≥" />
+								<h:outputText value="m¬≥" />
 								<p:spacer height="15px;"/>
 								<p:inputText value="#{especieSupressao.volumeTotalEmApp}" style="width:80px;" converter="doubleConverterToDecimal" onkeyup="maskItQuatro(this, event, '99.999.999,9999', true)" onclick="maskItQuatro(this, event, '99.999.999,9999', true)" maxlength="15" disabled="#{asvDadosGeraisController.desabilitarTudo or !especieSupressao.edicao}">
 			 		    			<p:ajax event="blur" global="false" listener="#{asvSupressaoController.calcularVolumeEmAPP(especieSupressao)}" update="pgVolumeEmAPP"/>	
@@ -421,7 +422,7 @@
 						</p:column>
 						<p:column style="text-align:justify;">
 							<f:facet name="header">
-								<h:outputText value="Destino socioeconÍmico" /> <br /> <h:outputText value="do Produto" escape="false" />
+								<h:outputText value="Destino socioecon√™mico" /> <br /> <h:outputText value="do Produto" escape="false" />
 							</f:facet>
 							<h:panelGroup layout="block" style="overflow:auto;">		        
 			 		    		<p:selectManyCheckbox value="#{especieSupressao.listaDestinoSocioeconomicoSelecionado}" layout="pageDirection" converter="simpleEntityConverter" disabled="#{!especieSupressao.edicao}">
@@ -432,11 +433,11 @@
 						</p:column>
 						<p:column style="text-align:justify;width: 60px">
 							<f:facet name="header">
-								<h:outputText value="AÁıes" />
+								<h:outputText value="A√ß√µes" />
 							</f:facet>
 							
 							<h:panelGroup>
-								<p:commandLink title="Confirmar volumes e destino socioeconÙmico do produto" process="@this" global="false" rendered="#{especieSupressao.edicao}" action="#{asvSupressaoController.validarEspecie(especieSupressao)}"
+								<p:commandLink title="Confirmar volumes e destino socioecon√¥mico do produto" process="@this" global="false" rendered="#{especieSupressao.edicao}" action="#{asvSupressaoController.validarEspecie(especieSupressao)}"
 		 		    			update="tabAbasASVid:asvFormAbaSupressao:gridTableEspecieSupressao tabAbasASVid:asvFormAbaSupressao:gridTableEspecie asvFormAbaSupressao:gridTableEspecieSupressao" disabled="#{asvDadosGeraisController.desabilitarTudo}">
 									<h:graphicImage title="Confirmar" value="/resources/img/ico-aprovar-notificacao.png" />
 								</p:commandLink>
@@ -481,14 +482,14 @@
 		
 		<p:outputPanel id="panel04" rendered="#{asvSupressaoController.fceAsv.indMaterialLenhoso != null}">
 			<br />
-			<h:outputText styleClass="titulo-grupo" style="font-weight:bold;" value="* EspecificaÁ„o do Produto da Supress„o" />
+			<h:outputText styleClass="titulo-grupo" style="font-weight:bold;" value="* Especifica√ß√£o do Produto da Supress√£o" />
 			<br /><br />
-			<h:outputText styleClass="titulo-grupo" style="font-weight:bold; margin-left:10px;" value="Haver· rendimento de material lenhoso?"/>
+			<h:outputText styleClass="titulo-grupo" style="font-weight:bold; margin-left:10px;" value="Haver√° rendimento de material lenhoso?"/>
 			<br />
 			<br />
 			<p:selectOneRadio value="#{asvSupressaoController.fceAsv.indMaterialLenhoso}" style="margin-left:30px;" layout="pageDirection" valueChangeListener="#{asvSupressaoController.changeMaterialLenhoso()}" disabled="#{asvSupressaoController.finalizarComAviso or asvDadosGeraisController.desabilitarTudo}">
 				<f:selectItem itemLabel="Sim" itemValue="true" />
-				<f:selectItem itemLabel="N„o" itemValue="false" />
+				<f:selectItem itemLabel="N√£o" itemValue="false" />
 				<p:ajax update="panel04" global="false" />
 			</p:selectOneRadio>
 			
@@ -510,19 +511,19 @@
 				<p:columnGroup type="header">  
 		            <p:row>  
 		                <p:column rowspan="2" headerText="Produto Gerado" />
-		                <p:column id="grandeApp" colspan="2" headerText="Volume MÈdio (m≥/ha)" style="width:300px;" rendered="#{asvSupressaoController.fceAsv.indApp}"/>
+		                <p:column id="grandeApp" colspan="2" headerText="Volume M√©dio (m¬≥/ha)" style="width:300px;" rendered="#{asvSupressaoController.fceAsv.indApp}"/>
 		                <p:column rowspan="2" style="text-align:center;" rendered="#{!asvSupressaoController.fceAsv.indApp}">
-		                	<f:facet name="header"> Volume MÈdio  <br/> Fora de APP (m≥/ha) </f:facet>
+		                	<f:facet name="header"> Volume M√©dio  <br/> Fora de APP (m¬≥/ha) </f:facet>
 		                </p:column>
-		                <p:column rowspan="2" headerText="Volume Total (m≥)" />
+		                <p:column rowspan="2" headerText="Volume Total (m¬≥)" />
 		                <p:column rowspan="2" >
-		                	<f:facet name="header"> Destino SocioeconÙmico <br/> do Produto </f:facet>      
+		                	<f:facet name="header"> Destino Socioecon√¥mico <br/> do Produto </f:facet>      
 		             	</p:column>
-		                <p:column rowspan="2" headerText="AÁıes"/>
+		                <p:column rowspan="2" headerText="A√ß√µes"/>
 		            </p:row>  
 		            <p:row>  
-		                <p:column headerText="Fora de APP (m≥/ha)" style="text-align:center;" rendered="#{asvSupressaoController.fceAsv.indApp}"/>  
-		                <p:column headerText="Em APP (m≥/ha)" rendered="#{asvSupressaoController.fceAsv.indApp}"/>  
+		                <p:column headerText="Fora de APP (m¬≥/ha)" style="text-align:center;" rendered="#{asvSupressaoController.fceAsv.indApp}"/>  
+		                <p:column headerText="Em APP (m¬≥/ha)" rendered="#{asvSupressaoController.fceAsv.indApp}"/>  
 		            </p:row>  
 	 		    </p:columnGroup>
 	 		    	
@@ -589,14 +590,14 @@
 				<p:spacer height="10px;"/>
 				<p:spacer height="10px;"/>
 
-				<h:outputText value="Convers„o para EstÈreo" style="font-weight:bold;" rendered="#{asvSupressaoController.temVolumeTotal}"/>
+				<h:outputText value="Convers√£o para Est√©reo" style="font-weight:bold;" rendered="#{asvSupressaoController.temVolumeTotal}"/>
 	    		<h:panelGroup style="margin-left:5px;" rendered="#{asvSupressaoController.temVolumeTotal}">
 	    			<p:inputText value="#{asvSupressaoController.conversaoEstereo}" style="width:80px;" converter="doubleConverter" onchange="maskIt(this, event, '99.999.999,99', true)" maxlength="13" disabled="true" />
 	    			<p:spacer width="5px;"/>
 	    			<h:outputText value="st" />
 	    		</h:panelGroup>
 	    		
-				<h:outputText value="Convers„o para  MDC" style="font-weight:bold;" rendered="#{asvSupressaoController.temVolumeTotal}"/>
+				<h:outputText value="Convers√£o para  MDC" style="font-weight:bold;" rendered="#{asvSupressaoController.temVolumeTotal}"/>
 	    		<h:panelGroup style="margin-left:5px;" rendered="#{asvSupressaoController.temVolumeTotal}">
 	    			<p:inputText value="#{asvSupressaoController.conversaoMDC}" style="width:80px;" converter="doubleConverter" onchange="maskIt(this, event, '99.999.999,99', true)" maxlength="13" disabled="true"/>
 	    			<p:spacer width="5px;"/>

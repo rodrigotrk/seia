@@ -8,6 +8,7 @@
 		<h3><h:outputLabel styleClass="titulo-grupo" value="TELEFONES" /></h3>
 
 		<h:form id="formTelefoneIdentificacao">
+        <ui:include src="/layout/csrfToken.xhtml" />
 			<h:outputLabel value="Incluir Telefone" />
 			<p:commandLink id="linkDialogTelefone" action="#{empreendimentoController.limpar}" oncomplete="telefoneDlg.show()" update=":formConteudoTelefoneIdentificacao,:tabAbas:frmDialogTelefoneIdentificacao" disabled="#{empreendimentoController.desabilitaComponentesTipologiaTelefoneAbaIdentificacao}">
 				<h:graphicImage title="Incluir Telefone" value="/resources/img/ico-expandir.png" />
@@ -15,6 +16,7 @@
 		</h:form>
 
 		<h:form id="formConteudoTelefoneIdentificacao">
+        <ui:include src="/layout/csrfToken.xhtml" />
 
 		<!-- DATATABLE TELEFONE -->
 			<p:dataTable id="tabelaTelefoneIdentificacao" widgetVar="tabelaTelefoneIdentificacao" var="telefone" style="width:400px;" rendered="#{empreendimentoController.renderizaModelTelefone}"
@@ -28,11 +30,12 @@
 					<h:outputText value="#{telefone.ideTipoTelefone.nomTipoTelefone}" />
 				</p:column>
 
-				<p:column headerText="Número" style="text-align: center;">
+        <ui:include src="/layout/csrfToken.xhtml" />
+				<p:column headerText="NÃºmero" style="text-align: center;">
 					<h:outputText value="#{telefone.numTelefone}" />
 				</p:column>
 
-				<p:column style="text-align: center;" headerText="Ações">	
+				<p:column style="text-align: center;" headerText="AÃ§Ãµes">	
 
 						<p:commandLink update=":tabAbas:frmDialogTelefoneIdentificacao" oncomplete="telefoneDlg.show()" title="Visualizar" process="@this">
 							<h:graphicImage title="Visualizar" value="/resources/img/ico-pesquisa.png" />
@@ -57,7 +60,7 @@
 
 			<p:confirmDialog id="confirmationTelefoneIdentificacao" widgetVar="cftTelefone" header="#{bundle.hdr_confirma_exclusao}" message="#{bundle.msg_confirma_exclusao}" severity="alert">
 				<p:commandButton value="Sim" update="tabAbas:formConteudoTelefoneIdentificacao:tabelaTelefoneIdentificacao" actionListener="#{empreendimentoController.removerTelefone}" oncomplete="cftTelefone.hide()" process="@this" />
-				<p:commandButton value="Não" type="button" onclick="cftTelefone.hide()" />
+				<p:commandButton value="NÃ£o" type="button" onclick="cftTelefone.hide()" />
 			</p:confirmDialog>
 
 		</h:form>	
@@ -67,13 +70,13 @@
 				<h:panelGrid id="displayIdentificacao" columns="2" class="ui-dialog-title-dialog-telefone" cellpadding="0">
 					<br/>
 					<h:outputLabel id="idLabelTipoTelefoneIdentificacao" class="form-label" value="* Tipo:" />
-					<h:outputLabel id="idLabelNumeroTelefoneIdentificacao" class="form-label" value="* Número:" />
+					<h:outputLabel id="idLabelNumeroTelefoneIdentificacao" class="form-label" value="* NÃºmero:" />
 					<p:selectOneMenu id="idComboTipoTelefoneIdentificacao" disabled="#{empreendimentoController.visualiza}"
-						styleClass="form-input" value="#{empreendimentoController.telefone.ideTipoTelefone}" converter="tipoTelefoneConverter" required="true" requiredMessage="O campo Tipo é de preenchimento obrigatório.">
+						styleClass="form-input" value="#{empreendimentoController.telefone.ideTipoTelefone}" converter="tipoTelefoneConverter" required="true" requiredMessage="O campo Tipo Ã© de preenchimento obrigatÃ³rio.">
 							<f:selectItem itemLabel="Selecione..."  />
 							<f:selectItems value="#{empreendimentoController.listaTiposTelefone}" var="tipo" itemValue="#{tipo}" itemLabel="#{tipo.nomTipoTelefone}" /> 
 					</p:selectOneMenu>
-					<p:inputMask id="numeroIdentificacao" value="#{empreendimentoController.telefone.numTelefone}" mask="#{bundle.MascaraTelefone}" disabled="#{empreendimentoController.visualiza}" required="true" requiredMessage="O campo Número é de preenchimento obrigatório."/>
+					<p:inputMask id="numeroIdentificacao" value="#{empreendimentoController.telefone.numTelefone}" mask="#{bundle.MascaraTelefone}" disabled="#{empreendimentoController.visualiza}" required="true" requiredMessage="O campo NÃºmero Ã© de preenchimento obrigatÃ³rio."/>
 					<h:panelGroup rendered="#{!empreendimentoController.visualiza}">
 						<p:commandButton id="resetFormTelefoneIdentificacao" value="#{bundle.LabelBotaoLimpar}" action="#{empreendimentoController.limparTelefone}" update="displayIdentificacao" immediate="true" rendered="#{!empreendimentoController.visualiza}" styleClass="form-button"/>
 						<p:commandButton value="#{bundle.LabelBotaoSalvar}" actionListener="#{empreendimentoController.adicionaTelefone}" update="tabAbas:formConteudoTelefoneIdentificacao displayIdentificacao" rendered="#{!empreendimentoController.visualiza}" styleClass="form-button"/>

@@ -7,12 +7,13 @@
 	xmlns:p="http://primefaces.prime.com.tr/ui">
 
 	<h:form id="form_dialog_destinatario">
-	<!-- Alterado no ticket SEIA 34090, retirado integração para pessoa física que não era utilizada. -->
+        <ui:include src="/layout/csrfToken.xhtml" />
+	<!-- Alterado no ticket SEIA 34090, retirado integraÃ§Ã£o para pessoa fÃ­sica que nÃ£o era utilizada. -->
 		<h:panelGrid columns="1">
 			<h:panelGrid id="panel_formulario" columns="1">
 				<h:panelGroup id="consulta_dialog">
 					<h:panelGrid id="panel_juridica" columns="2">
-						<h:outputLabel value="Razão Social" style="float:left;" />
+						<h:outputLabel value="RazÃ£o Social" style="float:left;" />
 						<h:outputLabel value="#{bundle.consultapj_lbl_cnpj}" style="float:left;" />
 						<p:inputText style="width:300px;" value="#{entidadeDeclaracaoTransporteController.nome}" />
 						<h:panelGroup>
@@ -38,7 +39,7 @@
 					<f:facet name="header">
 						<h:outputText value="#{bundle.consultapj_lbl_lista}" />
 					</f:facet>
-					<p:column headerText="Razão Social">
+					<p:column headerText="RazÃ£o Social">
 						<p:commandLink oncomplete="dialogselecionarDestinatario.hide()" update="formDeclaracao:pnlEntidadeDestinataria" actionListener="#{declaracaoTransporteResiduoPerigosoController.selecionarEntidadeDestinataria(pessoaJuridica)}" process="@this">
 							<h:outputText value="#{pessoaJuridica.nomRazaoSocial}" />
 						</p:commandLink>

@@ -7,6 +7,7 @@
 	xmlns:p="http://primefaces.prime.com.tr/ui">
 
 	<h:form id="formDiapEtapaDois" style="width: 800px;">
+        <ui:include src="/layout/csrfToken.xhtml" />
 		
 		<h:panelGrid id="gridLocGeo" style="margin-top:10px;">
 			<h:outputText value="#{bundle.diap_lbl_local_intervencao}" />
@@ -21,7 +22,7 @@
 				<f:setPropertyActionListener target="#{localizacaoGeograficaGenericController.objetoLocalizacao}" value="#{declaracaoIntervencaoAppController.declaracaoIntervencaoApp}" />
 				<f:setPropertyActionListener target="#{localizacaoGeograficaGenericController.idDoComponenteParaSerAtualizado}" value="tabDiap:formDiapEtapaDois:gridLocGeo" />
 				<h:graphicImage value="/resources/img/ico-expandir.png" style="margin-right: 2px;" />
-				<h:outputText value="Incluir localização geográfica" style="cursor: initial;" />
+				<h:outputText value="Incluir localizaÃ§Ã£o geogrÃ¡fica" style="cursor: initial;" />
 			</p:commandLink>
 			
 			<p:dataTable id="tableLocIntervencao" 
@@ -41,7 +42,7 @@
 		 			<h:outputText value="#{locGeo.longitudeInicial}" />
 	 		    </p:column>
 	 		    
-	 		    <p:column headerText="Ações" style="width:55px; text-align:center;">
+	 		    <p:column headerText="AÃ§Ãµes" style="width:55px; text-align:center;">
 		 		    <p:commandLink style="cursor: pointer; margin-left:5px;"
 						onclick='javascript:#{declaracaoIntervencaoAppController.visualizarLocalizacao}'
 						global="false" accesskey="VISUALIZAR GEOBAHIA">
@@ -73,7 +74,8 @@
 		<h:outputText value="#{bundle.diap_lbl_caracterizacao_intervencao}" />
 					
 		<ui:repeat var="caracteristicaDto" value="#{declaracaoIntervencaoAppController.listaCaracteristicaDTO}">
-			<h:form id="grid" style="width: 800px;">			
+			<h:form id="grid" style="width: 800px;">
+        <ui:include src="/layout/csrfToken.xhtml" />			
 				<div style="display: flex; vertical-align: middle; margin-top:5px; margin-bottom: 5px;">
 					<p:selectBooleanCheckbox value="#{caracteristicaDto.selecionado}" valueChangeListener="#{caracteristicaDto.changeIntervencao()}"
 						disabled="#{declaracaoIntervencaoAppController.declaracaoIntervencaoApp.ideAtoDeclaratorio.desabilitaTudo}">
@@ -165,6 +167,7 @@
 	</h:panelGrid>
 	
 	<h:form>
+        <ui:include src="/layout/csrfToken.xhtml" />
 		<h:panelGrid id="gridObjetivo" style="margin-top:10px;">
 			<h:outputText value="#{bundle.diap_lbl_objetivo_intervencao}" />
 			<h:inputTextarea id="dscObjetivo" value="#{declaracaoIntervencaoAppController.declaracaoIntervencaoApp.desObjetivoIntervencaoApp}"

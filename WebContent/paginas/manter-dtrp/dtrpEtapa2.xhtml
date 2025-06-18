@@ -9,17 +9,18 @@
 	>
 
 	<h:form id="form_Etapa2">
+        <ui:include src="/layout/csrfToken.xhtml" />
 		
-		<h:outputText value="* Disposição final dos resíduos" style="font-weight: bold; font-size: 12px;"/>
+		<h:outputText value="* DisposiÃ§Ã£o final dos resÃ­duos" style="font-weight: bold; font-size: 12px;"/>
 		
 		<br/><br/>
 		
-		<p:dataTable emptyMessage="Nenhuma Disposição final dos resíduos" value="#{declaracaoTransporteResiduoPerigosoController.listaDisposicaoFinalResiduo}"
+		<p:dataTable emptyMessage="Nenhuma DisposiÃ§Ã£o final dos resÃ­duos" value="#{declaracaoTransporteResiduoPerigosoController.listaDisposicaoFinalResiduo}"
 		var="disposicaoFinalResiduos" rowKey="#{disposicaoFinalResiduos.ideDisposicaoFinalResiduo}" selection="#{declaracaoTransporteResiduoPerigosoController.listaDisposicaoFinalResiduoSelected}"
 		style="width:460px;" scrollable="true" scrollHeight="300">
 			
 			<f:facet name="header">  
-				<h:outputText value="Lista de disposição finais dos resíduos" />
+				<h:outputText value="Lista de disposiÃ§Ã£o finais dos resÃ­duos" />
 			</f:facet>
 			
 			<p:column style="width:20px;text-align:center">
@@ -39,11 +40,11 @@
 		
 		<br/><br/>
 		
-		<h:outputText value="Dados dos Resíduos" style="font-weight: bold; font-size: 12px;"/>
+		<h:outputText value="Dados dos ResÃ­duos" style="font-weight: bold; font-size: 12px;"/>
 		
 		<br/><br/>
 		
-		<h:outputText value="*Resíduos Transportados" styleClass="titulo-grupo" style="font-weight:bold;"/>
+		<h:outputText value="*ResÃ­duos Transportados" styleClass="titulo-grupo" style="font-weight:bold;"/>
 		
 		<br/><br/>
 		
@@ -52,7 +53,7 @@
                 <tr>
                     <td />
                     <td colspan="2">
-                        <h:outputText value="ATENÇÃO! Ao selecionar a nomenclatura do resíduo atente para que a ficha de emergêngia seja semelhante ao resíduo selecionado. " style="line-height: 150%;"/>
+                        <h:outputText value="ATENÃ‡ÃƒO! Ao selecionar a nomenclatura do resÃ­duo atente para que a ficha de emergÃªngia seja semelhante ao resÃ­duo selecionado. " style="line-height: 150%;"/>
                     </td>
                 </tr>
             </table>
@@ -63,7 +64,7 @@
 			<h:panelGrid id="selectResiduos"> 
 			
 				<h:panelGrid columns="3">
-					<h:outputText value="Nome do Resíduo / Código"/>
+					<h:outputText value="Nome do ResÃ­duo / CÃ³digo"/>
 					<p:inputText id="buscaResiduo" value="#{declaracaoTransporteResiduoPerigosoController.nomeResiduo}" 
 						onkeyup="pesquisar_residuo();" style="margin-left:5px;"
 						disabled="#{!declaracaoTransporteResiduoPerigosoController.permiteEditar}">
@@ -76,21 +77,21 @@
 				paginatorPosition="bottom" paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}" rowsPerPageTemplate="5,10,15" 
 				emptyMessage="#{bundle.lac_dadosGerais_msg007}" style="width: 750px;" >
 					<f:facet name="header">
-						<h:outputText value="Lista de Resíduos Cadastrados" />
+						<h:outputText value="Lista de ResÃ­duos Cadastrados" />
 					</f:facet>
 					<p:column style="width: 600px; text-align:justify;">
 						<f:facet name="header">
-							<h:outputText value="Descrição do Resíduo" />  
+							<h:outputText value="DescriÃ§Ã£o do ResÃ­duo" />  
 						</f:facet>
 						<h:outputText value="#{residuoTransporte.residuo.nomResiduo}" />
 					</p:column>
 					<p:column style="text-align:center">  
 						<f:facet name="header">
-							<h:outputText value="Código" />  
+							<h:outputText value="CÃ³digo" />  
 						</f:facet>
 						<h:outputText value="#{residuoTransporte.residuo.codResiduo}" />
 					</p:column>
-					<p:column style="width: 40px; text-align:center;" headerText="Ações">
+					<p:column style="width: 40px; text-align:center;" headerText="AÃ§Ãµes">
 						<p:commandLink title="Confirmar" process="@this" action="#{declaracaoTransporteResiduoPerigosoController.adicionarResiduoLista()}" immediate="true"  
 						update="tabViewDTRP:form_Etapa2:buscaResiduo tabViewDTRP:form_Etapa2:dataTableResiduos tabViewDTRP:form_Etapa2:gridResiduos"
 						disabled="#{!declaracaoTransporteResiduoPerigosoController.permiteEditar}">
@@ -104,7 +105,7 @@
 			<h:panelGrid id="gridResiduos">	 
 				<h:panelGroup id="groupResidSelect" rendered="#{declaracaoTransporteResiduoPerigosoController.temResiduoSelecionado()}">
 					<br />
-					<h:outputText styleClass="titulo-grupo" style="font-weight:bold;" value="Resíduos Selecionados"/>
+					<h:outputText styleClass="titulo-grupo" style="font-weight:bold;" value="ResÃ­duos Selecionados"/>
 					<br />
 				</h:panelGroup>
 				<h:panelGroup layout="block" style="width: 740px; overflow-x: scroll;">
@@ -113,14 +114,14 @@
 					rendered="#{declaracaoTransporteResiduoPerigosoController.temResiduoSelecionado()}" style="width: 740px;">
 						<p:column>
 							<f:facet name="header">
-								<h:outputText value="Código"/>	
+								<h:outputText value="CÃ³digo"/>	
 							</f:facet>
 							<h:outputText value="#{residuoSelecionado.residuo.codResiduo}" />
 						</p:column>
 						
 						<p:column style="width: 450px; text-align: justify; text-justify: inter-word;">
 							<f:facet name="header">
-								<h:outputText value="Descrição do Resíduo"/>	
+								<h:outputText value="DescriÃ§Ã£o do ResÃ­duo"/>	
 							</f:facet>
 							<h:outputText value="#{residuoSelecionado.residuo.nomResiduo}" />
 						</p:column>
@@ -134,37 +135,37 @@
 						
 						<p:column>
 							<f:facet name="header">
-								<h:outputText value="Ações"/>	
+								<h:outputText value="AÃ§Ãµes"/>	
 							</f:facet>
-							<p:commandLink title="Visualizar resíduo" process="@form"
+							<p:commandLink title="Visualizar resÃ­duo" process="@form"
 								actionListener="#{declaracaoTransporteResiduoPerigosoController.editarResiduo(residuoSelecionado,true)}" 
 								update="formResiduo" 
 								oncomplete="dialogCaracterizarResiduo.show()"
 								rendered="#{residuoSelecionado.ideDeclaracaoTransporteResiduo != null}">
-								<h:graphicImage title="Visualizar resíduo" value="/resources/img/ico-pesquisa.png" />
+								<h:graphicImage title="Visualizar resÃ­duo" value="/resources/img/ico-pesquisa.png" />
 								<f:setPropertyActionListener value="#{residuoSelecionado}" target="#{declaracaoTransporteResiduoPerigosoController.residuoSelecionado}"/>
 							</p:commandLink>
-							<p:commandLink title="Caracterizar resíduo" process="@form"
+							<p:commandLink title="Caracterizar resÃ­duo" process="@form"
 								actionListener="#{declaracaoTransporteResiduoPerigosoController.editarResiduo(residuoSelecionado,false)}" 
 								update="formResiduo" 
 								disabled="#{!declaracaoTransporteResiduoPerigosoController.permiteEditar}"
 								oncomplete="dialogCaracterizarResiduo.show()"
 								rendered="#{residuoSelecionado.ideDeclaracaoTransporteResiduo == null}">
-								<h:graphicImage title="Caracterizar resíduo" value="/resources/img/ico-preencher.png" />
+								<h:graphicImage title="Caracterizar resÃ­duo" value="/resources/img/ico-preencher.png" />
 								<f:setPropertyActionListener value="#{residuoSelecionado}" target="#{declaracaoTransporteResiduoPerigosoController.residuoSelecionado}"/>
 							</p:commandLink>
-							<p:commandLink title="Editar resíduo" process="@form"
+							<p:commandLink title="Editar resÃ­duo" process="@form"
 								actionListener="#{declaracaoTransporteResiduoPerigosoController.editarResiduo(residuoSelecionado,false)}" 
 								update="formResiduo" 
 								disabled="#{!declaracaoTransporteResiduoPerigosoController.permiteEditar}"
 								oncomplete="dialogCaracterizarResiduo.show()"
 								rendered="#{residuoSelecionado.ideDeclaracaoTransporteResiduo != null}">
-								<h:graphicImage title="Editar resíduo" value="/resources/img/ico-editar.png" />
+								<h:graphicImage title="Editar resÃ­duo" value="/resources/img/ico-editar.png" />
 								<f:setPropertyActionListener value="#{residuoSelecionado}" target="#{declaracaoTransporteResiduoPerigosoController.residuoSelecionado}"/>
 							</p:commandLink>
-				          	<p:commandLink onclick="confirmaExclusaoResiduo.show()" title="Excluir Resíduo Transportado" process="@this"
+				          	<p:commandLink onclick="confirmaExclusaoResiduo.show()" title="Excluir ResÃ­duo Transportado" process="@this"
 				          		disabled="#{!declaracaoTransporteResiduoPerigosoController.permiteEditar}">
-			          			 <h:graphicImage title="Excluir resíduo transportado" value="/resources/img/ico-excluir.png" />
+			          			 <h:graphicImage title="Excluir resÃ­duo transportado" value="/resources/img/ico-excluir.png" />
 			     			     <f:setPropertyActionListener target="#{declaracaoTransporteResiduoPerigosoController.residuoSelecionado}" value="#{residuoSelecionado}"/>
 				            </p:commandLink>
 						</p:column>		
@@ -173,7 +174,7 @@
 				
 				<p:spacer/>
 				<h:panelGroup id="mensagemComposicao" rendered="#{declaracaoTransporteResiduoPerigosoController.temResiduoSelecionado()}" style="color:green;">
-					<h:outputText value="Para verificar a composição do resíduo conforme NBR-10.004," style="margin-left:18px;"/>
+					<h:outputText value="Para verificar a composiÃ§Ã£o do resÃ­duo conforme NBR-10.004," style="margin-left:18px;"/>
 					<a href="/resources/NBRn10004-2004.pdf"  target="_blanck" style="color:green; font-weight:bold;"> clique aqui.</a>
 					<br />
 					<br />
@@ -185,7 +186,7 @@
 		<br/><br/>
 		<p:commandButton action="#{declaracaoTransporteResiduoPerigosoController.voltar()}" value="Voltar" image="ui-icon-arrowthick-1-w"/>
 		
-		<p:commandButton action="#{declaracaoTransporteResiduoPerigosoController.avancar}" value="Avançar" image="ui-icon-arrowthick-1-e" style="float:right; margin-left:5px;"/>
+		<p:commandButton action="#{declaracaoTransporteResiduoPerigosoController.avancar}" value="AvanÃ§ar" image="ui-icon-arrowthick-1-e" style="float:right; margin-left:5px;"/>
 		<p:commandButton action="#{declaracaoTransporteResiduoPerigosoController.salvar}" value="Salvar" image="ui-icon-disk" style="float:right;"
 			disabled="#{!declaracaoTransporteResiduoPerigosoController.permiteEditar}"/>
 		

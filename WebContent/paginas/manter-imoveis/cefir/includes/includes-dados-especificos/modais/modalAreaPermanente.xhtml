@@ -8,6 +8,7 @@
 	xmlns:c="http://java.sun.com/jsp/jstl/core">
 	
 	<h:form id="formApp">
+        <ui:include src="/layout/csrfToken.xhtml" />
 		<h:panelGrid id="panelApp" rendered="#{imovelRuralControllerNew.appSelecionada != null}">
 			<h:panelGrid id="panelDetalhesApp" columns="1">
 				<h:panelGrid id="panelTipoApp">
@@ -37,7 +38,7 @@
 						value="#{imovelRuralControllerNew.appSelecionada.ideSubTipoApp}"
 						disabled="#{imovelRuralControllerNew.visualizacaoApp}"
 						required="true"
-						requiredMessage="O campo largura do curso d'·gua natural È de preenchimento obrigatÛrio."
+						requiredMessage="O campo largura do curso d'√°gua natural √© de preenchimento obrigat√≥rio."
 						style="width: 260px;">
 						
 						<f:selectItem itemLabel="#{bundle.geral_lbl_selecione}" />
@@ -67,16 +68,16 @@
 				</h:panelGrid>
 				
 				<h:panelGrid id="panelTipoEstadoConservacaoApp">
-					<h:outputLabel value="* Estado de conservaÁ„o" 
+					<h:outputLabel value="* Estado de conserva√ß√£o" 
 						rendered="#{!imovelRuralControllerNew.imovelRural.imovelCDA and !imovelRuralControllerNew.imovelRural.imovelBNDES}" />
 						
-					<h:outputLabel value="Estado de conservaÁ„o" 
+					<h:outputLabel value="Estado de conserva√ß√£o" 
 						rendered="#{imovelRuralControllerNew.imovelRural.imovelCDA or imovelRuralControllerNew.imovelRural.imovelBNDES}" />
 					
 					<p:selectOneMenu id="tipoEstadoConservacaoApp" 
 						value="#{imovelRuralControllerNew.appSelecionada.ideTipoEstadoConservacao}"
 						required="#{!imovelRuralControllerNew.imovelRural.imovelCDA and !imovelRuralControllerNew.imovelRural.imovelBNDES}"
-						requiredMessage="O campo Estado de conservaÁ„o È de preenchimento obrigatÛrio."
+						requiredMessage="O campo Estado de conserva√ß√£o √© de preenchimento obrigat√≥rio."
 						disabled="#{imovelRuralControllerNew.visualizacaoApp}" 
 						style="width: 200px;"
 						valueChangeListener="#{imovelRuralControllerNew.changeTipoEstadoConservacao()}">
@@ -97,17 +98,17 @@
 			<h:panelGrid id="panelCronogramaApp">
 				<p:fieldset rendered="#{imovelRuralControllerNew.mostraDesejaCadastrarCronogramaApp || imovelRuralControllerNew.cadastrarCronogramaApp}">
 					<h:panelGrid id="panelDesejaCadastrarPrad" rendered="#{imovelRuralControllerNew.mostraDesejaCadastrarCronogramaApp}">
-						<h:outputLabel value="* Deseja cadastrar o Plano de RecuperaÁ„o de ¡reas Degradadas?"
+						<h:outputLabel value="* Deseja cadastrar o Plano de Recupera√ß√£o de √Åreas Degradadas?"
 							rendered="#{!imovelRuralControllerNew.imovelRural.imovelCDA and !imovelRuralControllerNew.imovelRural.imovelBNDES}" />
 							
-						<h:outputLabel value="Deseja cadastrar o Plano de RecuperaÁ„o de ¡reas Degradadas?"
+						<h:outputLabel value="Deseja cadastrar o Plano de Recupera√ß√£o de √Åreas Degradadas?"
 							rendered="#{imovelRuralControllerNew.imovelRural.imovelCDA or imovelRuralControllerNew.imovelRural.imovelBNDES}" />
 							
 						<p:selectOneRadio id="desejaCadastrarPrad"
 							value="#{imovelRuralControllerNew.appSelecionada.indDesejaCadPrad}"
 							disabled="#{imovelRuralControllerNew.visualizacaoApp}"
 							required="#{!imovelRuralControllerNew.imovelRural.imovelCDA and !imovelRuralControllerNew.imovelRural.imovelBNDES}"
-							requiredMessage="O campo Deseja Cadastrar o Plano de RecuperaÁ„o de ¡reas Degradadas È de preenchimento obrigatÛrio.">
+							requiredMessage="O campo Deseja Cadastrar o Plano de Recupera√ß√£o de √Åreas Degradadas √© de preenchimento obrigat√≥rio.">
 							
 							<f:selectItem itemLabel="#{bundle.geral_lbl_sim}" itemValue="#{true}" />
 							<f:selectItem itemLabel="#{bundle.geral_lbl_nao}" itemValue="#{false}" />
@@ -117,17 +118,17 @@
 					</h:panelGrid>
 					
 					<h:panelGrid id="panelAreaProcessoRecuperacao" rendered="#{imovelRuralControllerNew.cadastrarCronogramaApp}">
-						<h:outputLabel value="* Sua ·rea est· em processo de recuperaÁ„o?"
+						<h:outputLabel value="* Sua √°rea est√° em processo de recupera√ß√£o?"
 							rendered="#{!imovelRuralControllerNew.imovelRural.imovelCDA and !imovelRuralControllerNew.imovelRural.imovelBNDES}" />
 							
-						<h:outputLabel value="Sua ·rea est· em processo de recuperaÁ„o?"
+						<h:outputLabel value="Sua √°rea est√° em processo de recupera√ß√£o?"
 							rendered="#{imovelRuralControllerNew.imovelRural.imovelCDA or imovelRuralControllerNew.imovelRural.imovelBNDES}" />
 							
 						<p:selectOneRadio id="areaProcessoRecuperacao"
 							value="#{imovelRuralControllerNew.appSelecionada.indProcessoRecuperacao}"
 							disabled="#{imovelRuralControllerNew.visualizacaoApp}"
 							required="#{!imovelRuralControllerNew.imovelRural.imovelCDA and !imovelRuralControllerNew.imovelRural.imovelBNDES}"
-							requiredMessage="O campo Sua ·rea est· em processo de recuperaÁ„o È de preenchimento obrigatÛrio.">
+							requiredMessage="O campo Sua √°rea est√° em processo de recupera√ß√£o √© de preenchimento obrigat√≥rio.">
 							
 							<f:selectItem itemLabel="#{bundle.geral_lbl_sim}" itemValue="#{true}" />
 							<f:selectItem itemLabel="#{bundle.geral_lbl_nao}" itemValue="#{false}" />
@@ -135,17 +136,17 @@
 					</h:panelGrid>
 	
 					<h:panelGrid rendered="#{imovelRuralControllerNew.cadastrarCronogramaApp}" columns="2">
-						<h:outputLabel value="CRONOGRAMA DE RECUPERA«√O DE ¡REAS DEGRADADAS" styleClass="titulo-grupo" />
+						<h:outputLabel value="CRONOGRAMA DE RECUPERA√á√ÉO DE √ÅREAS DEGRADADAS" styleClass="titulo-grupo" />
 					</h:panelGrid>
 	
 					<h:panelGrid id="panelCondicoesRecuperacaoApp" columns="3" rendered="#{imovelRuralControllerNew.cadastrarCronogramaApp}">
-						<a onclick="dialogTermoRecuperacaoApp.show()" href="#">CondiÁıes para recuperaÁ„o de ·reas degradadas</a>
+						<a onclick="dialogTermoRecuperacaoApp.show()" href="#">Condi√ß√µes para recupera√ß√£o de √°reas degradadas</a>
 						
 						<h:selectBooleanCheckbox id="chkAceiteCondicoesApp"
 							value="#{imovelRuralControllerNew.aceiteCondicoesRecuperacaoApp}"
 							disabled="${imovelRuralControllerNew.visualizacaoApp}"
 							required="#{!imovelRuralControllerNew.imovelRural.imovelCDA and !imovelRuralControllerNew.imovelRural.imovelBNDES}"
-							requiredMessage="… preciso aceitar o termo de recuperaÁ„o para salvar!"/>
+							requiredMessage="√â preciso aceitar o termo de recupera√ß√£o para salvar!"/>
 							
 						<h:outputLabel value="Aceito" />
 					</h:panelGrid>
@@ -172,7 +173,7 @@
 							
 							<p:column>
 								<f:facet name="header">
-									<h:outputLabel value="InÌcio" />
+									<h:outputLabel value="In√≠cio" />
 								</f:facet>
 								<h:outputLabel value="#{cronogramaEtapa.mesInicio}/#{cronogramaEtapa.anoInicio}" />
 							</p:column>
@@ -193,7 +194,7 @@
 							
 							<p:column>
 								<f:facet name="header">
-									<h:outputLabel value="AÁıes" />
+									<h:outputLabel value="A√ß√µes" />
 								</f:facet>
 								
 								<p:commandLink id="EditarcronogramaEtapaApp" 
@@ -232,10 +233,10 @@
 					</h:panelGrid>
 	
 					<h:panelGrid id="panelPradMesmoApp" rendered="#{imovelRuralControllerNew.cadastrarCronogramaApp}">
-						<h:outputLabel value="* O Plano de RecuperaÁ„o Ambiental - PRA È o mesmo informado anteriormente?"
+						<h:outputLabel value="* O Plano de Recupera√ß√£o Ambiental - PRA √© o mesmo informado anteriormente?"
 							rendered="#{!imovelRuralControllerNew.imovelRural.imovelCDA and !imovelRuralControllerNew.imovelRural.imovelBNDES}" />
 							
-						<h:outputLabel value="O Plano de RecuperaÁ„o Ambiental - PRA È o mesmo informado anteriormente?"
+						<h:outputLabel value="O Plano de Recupera√ß√£o Ambiental - PRA √© o mesmo informado anteriormente?"
 							rendered="#{imovelRuralControllerNew.imovelRural.imovelCDA or imovelRuralControllerNew.imovelRural.imovelBNDES}" />
 							
 						<p:selectOneRadio id="radioPradMesmoApp" 
@@ -250,7 +251,7 @@
 					</h:panelGrid>
 	
 					<h:panelGrid id="panelArquivoPradApp" rendered="#{imovelRuralControllerNew.cadastrarCronogramaApp}">
-						<h:outputLabel value="Informe o  Plano de RecuperaÁ„o Ambiental - PRA a ser associado"
+						<h:outputLabel value="Informe o  Plano de Recupera√ß√£o Ambiental - PRA a ser associado"
 							rendered="#{imovelRuralControllerNew.appSelecionada.cronogramaRecuperacao != null
 								and imovelRuralControllerNew.appSelecionada.cronogramaRecuperacao.indPradImportada != null 
 								and imovelRuralControllerNew.appSelecionada.cronogramaRecuperacao.indPradImportada}" />
@@ -260,7 +261,7 @@
 							required="#{!imovelRuralControllerNew.imovelRural.imovelCDA 
 								and !imovelRuralControllerNew.imovelRural.imovelBNDES 
 								and !imovelRuralControllerNew.cadastrarCronogramaApp}"
-							requiredMessage="O campo Informe o Plano de RecuperaÁ„o Ambiental - PRA a ser associado È de preenchimento obrigatÛrio."
+							requiredMessage="O campo Informe o Plano de Recupera√ß√£o Ambiental - PRA a ser associado √© de preenchimento obrigat√≥rio."
 							immediate="true"
 							rendered="#{imovelRuralControllerNew.appSelecionada.cronogramaRecuperacao != null
 								and imovelRuralControllerNew.appSelecionada.cronogramaRecuperacao.indPradImportada != null 
@@ -335,7 +336,7 @@
 					</h:panelGrid>
 					
 					<h:panelGrid id="localizacaoGeograficaPradApp" columns="1" rendered="#{imovelRuralControllerNew.cadastrarCronogramaApp}">
-						<h3><h:outputLabel value="POLIGONAL DA ¡REA A SER RECUPERADA NA APP" styleClass="titulo-grupo" /></h3>
+						<h3><h:outputLabel value="POLIGONAL DA √ÅREA A SER RECUPERADA NA APP" styleClass="titulo-grupo" /></h3>
 						<h:panelGrid id="panelDetalhesLocalizacaoPrad" columns="3">
 							<h:outputLabel styleClass="form-label" value="* #{bundle.empreendimento_lbl_secao_geometrica}" />
 							
@@ -344,7 +345,7 @@
 				
 							<p:spacer width="10px" rendered="#{!imovelRuralControllerNew.renderedLabelSRID(imovelRuralControllerNew.appSelecionada.cronogramaRecuperacao.localizacaoGeografica)}" />
 							
-							<h:outputLabel styleClass="form-label" value="DescriÁ„o" />
+							<h:outputLabel styleClass="form-label" value="Descri√ß√£o" />
 							
 							<p:selectOneMenu id="tipoSecaoGeometricaShapePradApp"
 								value="#{imovelRuralControllerNew.appSelecionada.cronogramaRecuperacao.localizacaoGeografica.ideClassificacaoSecao}"
@@ -353,7 +354,7 @@
 										and not empty imovelRuralControllerNew.appSelecionada.cronogramaRecuperacao.localizacaoGeografica.listArquivosShape) 
 									or imovelRuralControllerNew.visualizacaoApp}"
 								required="true"
-								requiredMessage="O campo Tipo de InserÁ„o È de preenchimento obrigatÛrio."
+								requiredMessage="O campo Tipo de Inser√ß√£o √© de preenchimento obrigat√≥rio."
 								style="width: 160px;">
 								
 								<f:selectItem itemLabel="#{bundle.geral_lbl_selecione}" />
@@ -376,7 +377,7 @@
 							<p:inputText id="descLocGeoShapePradApp"
 								value="#{imovelRuralControllerNew.appSelecionada.cronogramaRecuperacao.localizacaoGeografica.desLocalizacaoGeografica}"
 								maxlength="150" 
-								title="DescriÁ„o da LocalizaÁ„o"
+								title="Descri√ß√£o da Localiza√ß√£o"
 								disabled="#{imovelRuralControllerNew.getExisteTheGeomPradApp(imovelRuralControllerNew.appSelecionada) 
 									or imovelRuralControllerNew.visualizacaoApp}" />
 						</h:panelGrid>
@@ -501,7 +502,7 @@
 		
 					<p:spacer width="10px" rendered="#{!imovelRuralControllerNew.renderedLabelSRID(imovelRuralControllerNew.appSelecionada.ideLocalizacaoGeografica)}" />
 					
-					<h:outputLabel styleClass="form-label" value="DescriÁ„o" />
+					<h:outputLabel styleClass="form-label" value="Descri√ß√£o" />
 					
 					<p:selectOneMenu id="tipoSecaoGeometricaShapeApp"
 						value="#{imovelRuralControllerNew.appSelecionada.ideLocalizacaoGeografica.ideClassificacaoSecao}"
@@ -510,7 +511,7 @@
 								and not empty imovelRuralControllerNew.appSelecionada.ideLocalizacaoGeografica.listArquivosShape) 
 							or imovelRuralControllerNew.visualizacaoApp}"
 						required="true"
-						requiredMessage="O campo Tipo de InserÁ„o È de preenchimento obrigatÛrio."
+						requiredMessage="O campo Tipo de Inser√ß√£o √© de preenchimento obrigat√≥rio."
 						style="width: 160px;">
 						
 						<f:selectItem itemLabel="#{bundle.geral_lbl_selecione}" />
@@ -533,7 +534,7 @@
 					<p:inputText id="descLocGeoShapeApp"
 						value="#{imovelRuralControllerNew.appSelecionada.ideLocalizacaoGeografica.desLocalizacaoGeografica}"
 						maxlength="150" 
-						title="DescriÁ„o da LocalizaÁ„o"
+						title="Descri√ß√£o da Localiza√ß√£o"
 						disabled="#{imovelRuralControllerNew.getExisteTheGeomApp(imovelRuralControllerNew.appSelecionada) or imovelRuralControllerNew.visualizacaoApp}" />
 				</h:panelGrid>
 
@@ -677,7 +678,7 @@
 		</h:panelGrid>
 		
 		<p:dialog id="dialogTermoRecuperacaoApp"
-			header="CondiÁıes para recuperaÁ„o de ·reas degradadas"
+			header="Condi√ß√µes para recupera√ß√£o de √°reas degradadas"
 			closable="true" 
 			draggable="true" 
 			resizable="false" 
@@ -688,52 +689,52 @@
 			onShow="dialogTermoRecuperacaoApp.initPosition();">
 			
 			<h:panelGrid id="panelTermoApp" columns="1">
-				<h4>O Plano para recuperaÁ„o de ·rea degradada dever· conter:</h4>
+				<h4>O Plano para recupera√ß√£o de √°rea degradada dever√° conter:</h4>
 				<br />
-				<b>1.</b> DiagnÛstico das ·reas a serem recuperadas, contemplando os seguintes aspectos: caracterizando a, com an·lise dos seus aspectos fÌsicos (clima, solo, topografia, recursos hÌdricos) e biÛticos (fauna, flora) e outros<br />
+				<b>1.</b> Diagn√≥stico das √°reas a serem recuperadas, contemplando os seguintes aspectos: caracterizando a, com an√°lise dos seus aspectos f√≠sicos (clima, solo, topografia, recursos h√≠dricos) e bi√≥ticos (fauna, flora) e outros<br />
 				<br />
-				&nbsp;&nbsp;&nbsp;&nbsp;a) CaracterizaÁ„o do fato gerador da degradaÁ„o e/ou da sua ocupaÁ„o atual<br />
-				&nbsp;&nbsp;&nbsp;&nbsp;b) Estado de conservaÁ„o da ·rea objeto do Plano com indicaÁ„o de:<br />
+				&nbsp;&nbsp;&nbsp;&nbsp;a) Caracteriza√ß√£o do fato gerador da degrada√ß√£o e/ou da sua ocupa√ß√£o atual<br />
+				&nbsp;&nbsp;&nbsp;&nbsp;b) Estado de conserva√ß√£o da √°rea objeto do Plano com indica√ß√£o de:<br />
 				<br />
-				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i) CondiÁıes do relevo, indicando ocorrÍncia de eros„o<br />
-				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ii) CondiÁıes do solo<br />
-				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;iii) CondiÁıes da cobertura vegetal<br />
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i) Condi√ß√µes do relevo, indicando ocorr√™ncia de eros√£o<br />
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ii) Condi√ß√µes do solo<br />
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;iii) Condi√ß√µes da cobertura vegetal<br />
 				<br />
-				&nbsp;&nbsp;&nbsp;&nbsp;c) Extens„o da ·rea a ser recuperada<br />
+				&nbsp;&nbsp;&nbsp;&nbsp;c) Extens√£o da √°rea a ser recuperada<br />
 				<br />
 	
-				<b>2.</b> CaracterizaÁ„o da fitofisionomia da regi„o:<br />
+				<b>2.</b> Caracteriza√ß√£o da fitofisionomia da regi√£o:<br />
 				<br />
 				&nbsp;&nbsp;&nbsp;&nbsp;a) Bioma<br />
-				&nbsp;&nbsp;&nbsp;&nbsp;b) Estado de conservaÁ„o da vegetaÁ„o do entorno<br />
-				&nbsp;&nbsp;&nbsp;&nbsp;c) OcorrÍncias relevantes, a exemplo de ·reas que possam servir de porta sementes<br />
+				&nbsp;&nbsp;&nbsp;&nbsp;b) Estado de conserva√ß√£o da vegeta√ß√£o do entorno<br />
+				&nbsp;&nbsp;&nbsp;&nbsp;c) Ocorr√™ncias relevantes, a exemplo de √°reas que possam servir de porta sementes<br />
 				<br />
 	
-				<b>3.</b> IndicaÁ„o do(s) Sistema(s) de Plantio de EspÈcies Nativas<br />
+				<b>3.</b> Indica√ß√£o do(s) Sistema(s) de Plantio de Esp√©cies Nativas<br />
 				<br />
-				&nbsp;&nbsp;&nbsp;&nbsp;a) ImplantaÁ„o<br />
+				&nbsp;&nbsp;&nbsp;&nbsp;a) Implanta√ß√£o<br />
 				&nbsp;&nbsp;&nbsp;&nbsp;b) Enriquecimento<br />
-				&nbsp;&nbsp;&nbsp;&nbsp;c) RegeneraÁ„o Natural<br />
+				&nbsp;&nbsp;&nbsp;&nbsp;c) Regenera√ß√£o Natural<br />
 				<br />
 	
-				<b>4.</b> DescriÁ„o da metodologia para recuperaÁ„o da ·rea comtemplando os itens abaixo, conforme a necessidade.<br />
+				<b>4.</b> Descri√ß√£o da metodologia para recupera√ß√£o da √°rea comtemplando os itens abaixo, conforme a necessidade.<br />
 				<br />
-				&nbsp;&nbsp;&nbsp;&nbsp;a) CorreÁıes topogr·ficas<br />
-				&nbsp;&nbsp;&nbsp;&nbsp;b) CorreÁıes do solo<br />
-				&nbsp;&nbsp;&nbsp;&nbsp;c) Isolamento da ¡rea<br />
-				&nbsp;&nbsp;&nbsp;&nbsp;d) Retirada dos fatores de degradaÁ„o<br />
-				&nbsp;&nbsp;&nbsp;&nbsp;e) TÈcnica de plantio<br />
-				&nbsp;&nbsp;&nbsp;&nbsp;f) PreparaÁ„o e espaÁamento das covas<br />
-				&nbsp;&nbsp;&nbsp;&nbsp;g) Listagem de espÈcies a serem plantadas por categorias regenerativas (pioneiras, secund·rias e tardias);<br />
-				&nbsp;&nbsp;&nbsp;&nbsp;h) Esquema do plantio por categoria regenerativa (distribuiÁ„o das espÈcies)<br />
-				&nbsp;&nbsp;&nbsp;&nbsp;i) ManutenÁ„o, contemplando: controle de pragas, adubaÁ„o ou irrigaÁ„o, quando couber<br />
-				&nbsp;&nbsp;&nbsp;&nbsp;j) ImplementaÁ„o de equipamentos atrativos para a avifauna <br />
+				&nbsp;&nbsp;&nbsp;&nbsp;a) Corre√ß√µes topogr√°ficas<br />
+				&nbsp;&nbsp;&nbsp;&nbsp;b) Corre√ß√µes do solo<br />
+				&nbsp;&nbsp;&nbsp;&nbsp;c) Isolamento da √Årea<br />
+				&nbsp;&nbsp;&nbsp;&nbsp;d) Retirada dos fatores de degrada√ß√£o<br />
+				&nbsp;&nbsp;&nbsp;&nbsp;e) T√©cnica de plantio<br />
+				&nbsp;&nbsp;&nbsp;&nbsp;f) Prepara√ß√£o e espa√ßamento das covas<br />
+				&nbsp;&nbsp;&nbsp;&nbsp;g) Listagem de esp√©cies a serem plantadas por categorias regenerativas (pioneiras, secund√°rias e tardias);<br />
+				&nbsp;&nbsp;&nbsp;&nbsp;h) Esquema do plantio por categoria regenerativa (distribui√ß√£o das esp√©cies)<br />
+				&nbsp;&nbsp;&nbsp;&nbsp;i) Manuten√ß√£o, contemplando: controle de pragas, aduba√ß√£o ou irriga√ß√£o, quando couber<br />
+				&nbsp;&nbsp;&nbsp;&nbsp;j) Implementa√ß√£o de equipamentos atrativos para a avifauna <br />
 				<br />
 	
-				O PRAD deve ser acompanhado da competente AnotaÁ„o de Responsabilidade TÈcnica (ART), ou documento equivalente, do respons·vel pela elaboraÁ„o, devidamente registrada no competente conselho de classe.
+				O PRAD deve ser acompanhado da competente Anota√ß√£o de Responsabilidade T√©cnica (ART), ou documento equivalente, do respons√°vel pela elabora√ß√£o, devidamente registrada no competente conselho de classe.
 				<br />
 				<br />
-				As ·reas degradadas fora de APP e RL, dever„o ser objetos de PRAD especÌfico, com cronograma fÌsico e execuÁ„o m·ximo de 5 anos, em percentuais mÌnimos de 10% no primeiro ano, 25% no segundo ano, 50% no terceiro ano, 75% no quarto ano e 100% no quinto ano.
+				As √°reas degradadas fora de APP e RL, dever√£o ser objetos de PRAD espec√≠fico, com cronograma f√≠sico e execu√ß√£o m√°ximo de 5 anos, em percentuais m√≠nimos de 10% no primeiro ano, 25% no segundo ano, 50% no terceiro ano, 75% no quarto ano e 100% no quinto ano.
 				<br />
 				<br />
 			</h:panelGrid>

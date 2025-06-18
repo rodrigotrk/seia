@@ -12,18 +12,24 @@
 		style="text-align: center;" header="#{bundle.validacao_previa_lbl_selecione_arquivo}">
 		
 		<h:form style="text-align: center;">
+        <ui:include src="/layout/csrfToken.xhtml" />
 			<p:fileUpload label="Upload Arquivo" fileUploadListener="#{tccaController.uploadArquivoTcca}" process="@this"
 				mode="advanced" auto="true" allowTypes="/(\.|\/)(pdf|gif|jpeg|png|jpg)$/" update="formCadastroTCCA:gridDocumentoTcca"
-				invalidFileMessage="Tipo de arquivo inválido." oncomplete="fileUpload.hide();"/>
+        <ui:include src="/layout/csrfToken.xhtml" />
+        <ui:include src="/layout/csrfToken.xhtml" />
+        <ui:include src="/layout/csrfToken.xhtml" />
+        <ui:include src="/layout/csrfToken.xhtml" />
+        <ui:include src="/layout/csrfToken.xhtml" />
+				invalidFileMessage="Tipo de arquivo invÃ¡lido." oncomplete="fileUpload.hide();"/>
 		</h:form>
 	</p:dialog>
 	
-	<!-- EXCLUSÃO DE DOCUMENTO APENSADO -->
+	<!-- EXCLUSÃƒO DE DOCUMENTO APENSADO -->
 	<p:confirmDialog message="Deseja excluir o documento?" header="Mensagem" severity="alert" widgetVar="confirmDeleteDocumento">
 		<h:form>
 			<s:divCentralizado>
 		        <p:commandButton value="Sim" update="formCadastroTCCA:gridDocumentoTcca" actionListener="#{tccaController.excluirDocumentoApensado()}" oncomplete="confirmDeleteDocumento.hide()"/>
-		        <p:commandButton value="Não" onclick="confirmDeleteDocumento.hide()" type="button" />
+		        <p:commandButton value="NÃ£o" onclick="confirmDeleteDocumento.hide()" type="button" />
 			</s:divCentralizado>
 	    </h:form>
     </p:confirmDialog>
@@ -43,7 +49,7 @@
 		<h:form>
 			<s:divCentralizado>
 		        <p:commandButton value="Sim" update="formConsultaTCCA:dataTableTCCA" actionListener="#{tccaController.excluirTcca()}" oncomplete="dialogExcluir.hide()"/>
-		        <p:commandButton value="Não" onclick="dialogExcluir.hide()" type="button" />
+		        <p:commandButton value="NÃ£o" onclick="dialogExcluir.hide()" type="button" />
 	        </s:divCentralizado>
 	    </h:form>
     </p:confirmDialog>
@@ -53,19 +59,19 @@
 		<h:form>
 			<s:divCentralizado>
 		        <p:commandButton value="Sim" update="formConsultaTCCA:dataTableTCCA" actionListener="#{tccaController.cancelarTcca()}" oncomplete="dialogCancelarTcca.hide()"/>
-		        <p:commandButton value="Não" onclick="dialogCancelarTcca.hide()" type="button" />
+		        <p:commandButton value="NÃ£o" onclick="dialogCancelarTcca.hide()" type="button" />
 	        </s:divCentralizado>
 	    </h:form>
     </p:confirmDialog>
     
     <!-- DUPLICAR TCCA -->
-    <p:confirmDialog message="Deseja criar uma cópia deste TCCA e aproveitar todos os dados já cadastrados?" severity="alert" 
+    <p:confirmDialog message="Deseja criar uma cÃ³pia deste TCCA e aproveitar todos os dados jÃ¡ cadastrados?" severity="alert" 
     	widgetVar="dialogDuplicarTcca" width="400" header="Duplicar Tcca">
     	
 		<h:form>
 			<s:divCentralizado>
 		        <p:commandButton value="Sim" actionListener="#{tccaController.acaoTcca('DUPLICAR')}"/>
-		        <p:commandButton value="Não" onclick="dialogDuplicarTcca.hide()" />
+		        <p:commandButton value="NÃ£o" onclick="dialogDuplicarTcca.hide()" />
 	        </s:divCentralizado>
 	    </h:form>
     </p:confirmDialog>
@@ -78,20 +84,20 @@
 	</p:dialog>
 	
 	<!-- RENOVAR PRAZO DE VALIDADE -->
-	<p:dialog header="Renovação do prazo de validade do TCCA" widgetVar="dialogRenovarPrazoTcca" width="365" height="340" modal="true" style="text-align:center;" resizable="false" position="center" dynamic="true">
+	<p:dialog header="RenovaÃ§Ã£o do prazo de validade do TCCA" widgetVar="dialogRenovarPrazoTcca" width="365" height="340" modal="true" style="text-align:center;" resizable="false" position="center" dynamic="true">
 		<ui:include src="/paginas/manter-tcca/dialogRenovarPrazoTcca.xhtml" />
 	</p:dialog>
 	
-	<!-- CONSULTAR HISTÓRICO DO TCCA -->
-    <p:dialog header="Relatório da movimentação Financeira" widgetVar="dialogRelatorioMovimentacaoTCCA" dynamic="true" modal="true" 
+	<!-- CONSULTAR HISTÃ“RICO DO TCCA -->
+    <p:dialog header="RelatÃ³rio da movimentaÃ§Ã£o Financeira" widgetVar="dialogRelatorioMovimentacaoTCCA" dynamic="true" modal="true" 
     	width="1000" position="top" resizable="false" style="min-height:500px;">
     	
 		<ui:include src="/paginas/manter-tcca/consultaMovimentacaoFinanceiraTcca.xhtml" />
 	</p:dialog>
 	
 	
-	<!-- CONFIRMAR MOVIMENTAÇÃO FINANCEIRA COM SALDO INSUFICIENTE -->
-	<p:confirmDialog message="Saldo insuficiente para a movimentação desejada. Confirma a operação?" header="Mensagem" severity="alert"
+	<!-- CONFIRMAR MOVIMENTAÃ‡ÃƒO FINANCEIRA COM SALDO INSUFICIENTE -->
+	<p:confirmDialog message="Saldo insuficiente para a movimentaÃ§Ã£o desejada. Confirma a operaÃ§Ã£o?" header="Mensagem" severity="alert"
 		widgetVar="dialogConfirmarMovimentacaoSaldoInsuficiente">
 		
 		<h:form>
@@ -99,7 +105,7 @@
 		        <p:commandButton value="Sim" oncomplete="dialogConfirmarMovimentacaoSaldoInsuficiente.hide()"
 		        	actionListener="#{tccaController.salvarMovimentacaoFinanceiraTcca()}" />
 		        	
-		        <p:commandButton value="Não" onclick="dialogConfirmarMovimentacaoSaldoInsuficiente.hide()" type="button" />
+		        <p:commandButton value="NÃ£o" onclick="dialogConfirmarMovimentacaoSaldoInsuficiente.hide()" type="button" />
 			</s:divCentralizado>
 	    </h:form>
     </p:confirmDialog>

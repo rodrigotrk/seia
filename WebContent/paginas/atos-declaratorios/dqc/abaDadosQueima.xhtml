@@ -7,6 +7,7 @@
 	xmlns:p="http://primefaces.prime.com.tr/ui">
 	
 	<h:form id="formAbaDadosQueima">
+        <ui:include src="/layout/csrfToken.xhtml" />
 		<h:panelGrid id="panelDadosQueima" columns="1" style="width: 700px;">
 			<h:outputText value="Dados da Queima" />
 			<p:spacer width="0" height="5"/>
@@ -20,14 +21,14 @@
 			<p:commandLink oncomplete="dialogIncluirImovelCAR.show()" actionListener="#{dqcController.prepararDialogIncluirImovel()}" 
 				update="formIncluirImovelCAR" disabled="#{dqcController.dqc.ideAtoDeclaratorio.desabilitaTudo}">
 				
-				<h:outputText value="Incluir Imóvel no qual será realizada a queima" style="margin-right:5px;"/>
+				<h:outputText value="Incluir ImÃ³vel no qual serÃ¡ realizada a queima" style="margin-right:5px;"/>
 				<h:graphicImage value="/resources/img/ico-expandir.png" />
 			</p:commandLink>
 			
 			<p:dataTable value="#{dqcController.listaDQCImovel}" var="dqcImovel" emptyMessage="Nenhum registro encontrado" style="width: 680px;"
 				lazy="true" paginator="true" rows="5" paginatorPosition="bottom" paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}">
 				
-				<p:column headerText="Imóvel" style="width: 300px;">
+				<p:column headerText="ImÃ³vel" style="width: 300px;">
 					<h:outputText value="#{dqcImovel.ideImovel.imovelRural.desDenominacao}"/>
 				</p:column>
 				
@@ -40,7 +41,7 @@
 					</ui:repeat>
 				</p:column>
 				
-				<p:column styleClass="text-center" headerText="Ações" style="width: 80px;">
+				<p:column styleClass="text-center" headerText="AÃ§Ãµes" style="width: 80px;">
 					
 					<p:commandLink action="#{dqcController.carregarListaDQCIObjetivoQueimaControlada(dqcImovel)}" oncomplete="dialogDQCImovel.show();" 
 						update="formDqcImovel" disabled="#{dqcController.dqc.ideAtoDeclaratorio.desabilitaTudo}">
@@ -75,7 +76,7 @@
 			
 			<p:spacer width="0" height="10"/>
 			
-			<h:outputText value="Técnica(s) a ser(em) utilizada(s) para realização da queima" />
+			<h:outputText value="TÃ©cnica(s) a ser(em) utilizada(s) para realizaÃ§Ã£o da queima" />
 			
 			<p:dataTable value="#{dqcController.listaDQCTecnicaUtilizada}" var="dqcTqc" emptyMessage="Nenhum registro encontrado" 
 				lazy="true" scrollable="true" scrollHeight="90" style="width: 680px;"
@@ -87,7 +88,7 @@
 					</p:selectBooleanCheckbox>
 				</p:column>
 				
-				<p:column headerText="Técnica" style="width:600px;">
+				<p:column headerText="TÃ©cnica" style="width:600px;">
 					<h:outputText value="#{dqcTqc.ideTecnicaQueimaControlada.nomTecnicaQueimaControlada}" style="line-height:2;"/>
 				</p:column>
 			</p:dataTable>
@@ -101,9 +102,9 @@
 			<p:spacer width="0" height="10"/>
 			
 			<h:panelGroup layout="block" id="panelAjudaElementos">
-				<h:outputText value="Selecione os elementos existentes nos arredores da área de intervenção, juntamente com a distância (KM)"/>
+				<h:outputText value="Selecione os elementos existentes nos arredores da Ã¡rea de intervenÃ§Ã£o, juntamente com a distÃ¢ncia (KM)"/>
 				<h:graphicImage value="/resources/img/ico-ajuda.png" id="ajuda" style="margin: 0px 0px -4px 5px;" />
-				<p:tooltip for="ajuda" value="É a menor distância entre a área da queima e a do referido elemento de entorno." showEffect="fade" hideEffect="fade"/>
+				<p:tooltip for="ajuda" value="Ã‰ a menor distÃ¢ncia entre a Ã¡rea da queima e a do referido elemento de entorno." showEffect="fade" hideEffect="fade"/>
 			</h:panelGroup>
 			
 			<p:dataTable value="#{dqcController.listaDQCElementoIntervencao}" var="dqcEi" emptyMessage="Nenhum registro encontrado" 
@@ -121,7 +122,7 @@
 					<h:outputText value="#{dqcEi.ideElementoIntervencaoQueimaControlada.nomElementoIntervencao}" style="line-height:2;"/>
 				</p:column>
 				
-				<p:column id="dmDqc" headerText="Distância mínima (KM)" style="width:290px;">
+				<p:column id="dmDqc" headerText="DistÃ¢ncia mÃ­nima (KM)" style="width:290px;">
                     <p:inputText value="#{dqcEi.valDistancia}" rendered="#{dqcController.renderizaDistanciaMinimaElemento(dqcEi)}" 
                     	maxlength="16" styleClass="campoNumericoComDecimal-2" id="iDqc" disabled="#{dqcController.dqc.ideAtoDeclaratorio.desabilitaTudo}">
                     	
@@ -140,7 +141,7 @@
 			<p:spacer width="0" height="10" />
 			
 			<p:commandLink actionListener="#{dqcController.prepararDialogDQCResponsavelTecnico()}" disabled="#{dqcController.dqc.ideAtoDeclaratorio.desabilitaTudo}">
-				<h:outputText value="Incluir dados do responsável técnico pela queima controlada" style="margin-right:5px;"/>
+				<h:outputText value="Incluir dados do responsÃ¡vel tÃ©cnico pela queima controlada" style="margin-right:5px;"/>
 				<h:graphicImage value="/resources/img/ico-expandir.png" />
 			</p:commandLink>
 			
@@ -158,7 +159,7 @@
 					</h:outputText>
 				</p:column>
 				
-				<p:column styleClass="text-center" headerText="Ações" style="width: 80px;">
+				<p:column styleClass="text-center" headerText="AÃ§Ãµes" style="width: 80px;">
 					<p:commandLink title="Visualizar" oncomplete="dialogDQCResponsavelTecnico.show()" update="formDQCResponsavelTecnico">
 						<f:setPropertyActionListener value="#{resp}" target="#{dqcController.dqcResponsavelTecnico}" />
 						<f:setPropertyActionListener value="#{true}" target="#{dqcController.dqcResponsavelTecnico.visualizar}" />

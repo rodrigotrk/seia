@@ -7,7 +7,8 @@
 	xmlns:p="http://primefaces.prime.com.tr/ui">
 	
 	<h:form id="formLanEfluentesDadosRequerimento">
-		<h:outputText styleClass="titulo-grupo" style="font-weight:bold; margin-left:10px;" value="* Coordenada de Lançamento"/>
+        <ui:include src="/layout/csrfToken.xhtml" />
+		<h:outputText styleClass="titulo-grupo" style="font-weight:bold; margin-left:10px;" value="* Coordenada de LanÃ§amento"/>
 		<br /><br />
 		<h:panelGrid id="gridCoordenadas">
 			<br />
@@ -27,7 +28,7 @@
 	 		    	<h:outputText value="#{fceOutorgaLocGeo.sistemaCoordenada}"/>
 	 		    </p:column>
 	 		    
-   	 		    <p:column headerText="Bacia Hidrográfica" id="bacia" style="text-align:center;">
+   	 		    <p:column headerText="Bacia HidrogrÃ¡fica" id="bacia" style="text-align:center;">
 	 		    	<h:outputText value="#{fceOutorgaLocGeo.bacia}"/>
 	 		    </p:column>
 	 		    
@@ -48,7 +49,7 @@
 					</h:panelGroup>
 	 		    </p:column>
 	 		    
-				<p:column headerText="Ações" style="width:45px; text-align:center;">
+				<p:column headerText="AÃ§Ãµes" style="width:45px; text-align:center;">
         			<p:commandLink update="formLanEfluentesDadosRequerimento:tabCoordenadas" action="#{fceLancamentoEfluentesController.confirmarCoordenada()}"
 						rendered="#{!fceOutorgaLocGeo.confirmado}" global="false" disabled="#{fceLancamentoEfluentesController.desabilitarTudo}">
 						<h:graphicImage title="Confirmar nome do rio" value="/resources/img/ico-aprovar-notificacao.png" />
@@ -61,12 +62,12 @@
 					</p:commandLink>
 					<h:panelGroup rendered="#{!fceLancamentoEfluentesController.fceTecnico}">
 						<a onclick="javascript:${localizacaoGeograficaGenericController.retornarUrl(fceOutorgaLocGeo.ideOutorgaLocalizacaoGeografica.ideLocalizacaoGeografica)}">
-							<h:graphicImage title="Localização do Ponto no Geobahia" value="/resources/img/ico-arl-relocacao.png" />
+							<h:graphicImage title="LocalizaÃ§Ã£o do Ponto no Geobahia" value="/resources/img/ico-arl-relocacao.png" />
 						</a>
 					</h:panelGroup>
 					<h:panelGroup rendered="#{fceLancamentoEfluentesController.fceTecnico}">
 						<a onclick="javascript:${localizacaoGeograficaGenericController.retornarUrl(fceOutorgaLocGeo.ideLocalizacaoGeografica)}">
-							<h:graphicImage title="Localização do Ponto no Geobahia" value="/resources/img/ico-arl-relocacao.png" />
+							<h:graphicImage title="LocalizaÃ§Ã£o do Ponto no Geobahia" value="/resources/img/ico-arl-relocacao.png" />
 						</a>
 						<p:commandLink oncomplete="dlgLocalizacaoGeograficaGeneric.show();" process="@this" actionListener="#{localizacaoGeograficaGenericController.editarLocGeoComActionEvent()}" rendered="#{fceOutorgaLocGeo.confirmado and !fceLancamentoEfluentesController.desabilitarTudo}">
 							<f:attribute name="ideLocalizacaoGeografica" value="#{fceOutorgaLocGeo.ideLocalizacaoGeografica}"/>
@@ -74,20 +75,20 @@
 							<f:attribute name="analiseTecnica" value="#{fceLancamentoEfluentesController.fceTecnico}"/>
 							<f:attribute name="objetoLocalizacao" value="#{fceOutorgaLocGeo.ideLocalizacaoGeografica}"/>
 							<f:attribute name="ideRequerimento" value="#{fceLancamentoEfluentesController.fce.ideRequerimento.ideRequerimento}"/>
-							<h:graphicImage title="Editar localização geográfica" value="/resources/img/edit_loc_geo.png" />
+							<h:graphicImage title="Editar localizaÃ§Ã£o geogrÃ¡fica" value="/resources/img/edit_loc_geo.png" />
 						</p:commandLink>
 						
 						<!-- 7534
-						<p:commandLink id="reservarAgua" title="Reservar Água" oncomplete="confirmar_reserva_agua.show()" rendered="#{!fceOutorgaLocGeo.aguaReservada and !fceCaptacaoSubterraneaController.desabilitarTudo}">
+						<p:commandLink id="reservarAgua" title="Reservar Ãgua" oncomplete="confirmar_reserva_agua.show()" rendered="#{!fceOutorgaLocGeo.aguaReservada and !fceCaptacaoSubterraneaController.desabilitarTudo}">
 							<f:setPropertyActionListener target="#{reservaAguaController.fceOutorgaLocalizacaoGeografica}" value="#{fceOutorgaLocGeo}"/>
 							<f:setPropertyActionListener target="#{reservaAguaController.ideToUpdate}" value="formLanEfluentesDadosRequerimento:tabCoordenadas"/>
-							<h:graphicImage title="Reservar Água" value="/resources/img/reserva_agua_16.png" />
+							<h:graphicImage title="Reservar Ãgua" value="/resources/img/reserva_agua_16.png" />
 						</p:commandLink>
 						
-						<p:commandLink id="cancelReservaAgua" title="Cancelar Reserva de Água" oncomplete="confirmar_cancelamento_reserva_agua.show()" rendered="#{fceOutorgaLocGeo.aguaReservada and !fceLancamentoEfluentesController.desabilitarTudo}">
+						<p:commandLink id="cancelReservaAgua" title="Cancelar Reserva de Ãgua" oncomplete="confirmar_cancelamento_reserva_agua.show()" rendered="#{fceOutorgaLocGeo.aguaReservada and !fceLancamentoEfluentesController.desabilitarTudo}">
 							<f:setPropertyActionListener target="#{reservaAguaController.fceOutorgaLocalizacaoGeografica}" value="#{fceOutorgaLocGeo}"/>
 							<f:setPropertyActionListener target="#{reservaAguaController.ideToUpdate}" value="formLanEfluentesDadosRequerimento:tabCoordenadas"/>
-							<h:graphicImage title="Cancelar Reserva de Água" value="/resources/img/cancelar_reserva_agua_16.png" />
+							<h:graphicImage title="Cancelar Reserva de Ãgua" value="/resources/img/cancelar_reserva_agua_16.png" />
 						</p:commandLink>
 						-->
 						
@@ -102,7 +103,7 @@
 					
 					<p:commandLink update="efluentes_dialog" process="@this" global="false" 
 						oncomplete="efluentes_dialog.show();" action="#{fceLancamentoEfluentesController.prepararFceLancamentoEfluentes()}" rendered="#{fceOutorgaLocGeo.confirmado}">
-						<h:graphicImage title="Informar características do Lançamento de Efluentes" value="/resources/img/ico-preencher.png" />
+						<h:graphicImage title="Informar caracterÃ­sticas do LanÃ§amento de Efluentes" value="/resources/img/ico-preencher.png" />
 						<f:setPropertyActionListener target="#{fceLancamentoEfluentesController.fceOutorgaLocalizacaoGeograficaSelecionada}" value="#{fceOutorgaLocGeo}"/>
 					</p:commandLink>
 					

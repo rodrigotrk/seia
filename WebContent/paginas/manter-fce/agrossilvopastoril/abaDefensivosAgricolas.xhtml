@@ -8,11 +8,12 @@
 	
 
 	<h:form id="formAbaDefensivosAgricolas">
+        <ui:include src="/layout/csrfToken.xhtml" />
 		<h:panelGrid id="gridDefensivosAgricolas">
-			<h:outputText value="Utiliza defensivos agrícolas?" styleClass="titulo-grupo" style="font-weight:bold;"/>
+			<h:outputText value="Utiliza defensivos agrÃ­colas?" styleClass="titulo-grupo" style="font-weight:bold;"/>
 			<p:selectOneRadio id="selDefensivoAgricol"	value="#{defensivosAgricolasController.pergunta_1}">
 				<f:selectItem itemLabel="Sim" itemValue="true" />
-				<f:selectItem itemLabel="Não" itemValue="false" />
+				<f:selectItem itemLabel="NÃ£o" itemValue="false" />
 				<p:ajax global="false" update="tabAbasId_Agro:formAbaDefensivosAgricolas:gridDefensivos tabAbasId_Agro:formAbaDefensivosAgricolas:gridClassificacaoToxicologica"/>
 			</p:selectOneRadio>
 		</h:panelGrid>
@@ -24,11 +25,11 @@
 			</p:selectManyCheckbox>
 			<br />
 			<br />
-			<h:outputText value="Classificação"  rendered="#{defensivosAgricolasController.pergunta_1}" styleClass="titulo-grupo" style="font-weight:bold;"/>
+			<h:outputText value="ClassificaÃ§Ã£o"  rendered="#{defensivosAgricolasController.pergunta_1}" styleClass="titulo-grupo" style="font-weight:bold;"/>
 			<p:selectOneRadio layout="pageDirection" value="#{defensivosAgricolasController.classificacaoDefensivosAgricolas}" 
 				rendered="#{defensivosAgricolasController.pergunta_1}">
 				<f:selectItem itemLabel="Naturais/Alternativas" itemValue="1"/>
-				<f:selectItem itemLabel="Sintéticos" itemValue="2"/>
+				<f:selectItem itemLabel="SintÃ©ticos" itemValue="2"/>
 				<p:ajax update="tabAbasId_Agro:formAbaDefensivosAgricolas:gridClassificacaoToxicologica" global="false"/>
 			</p:selectOneRadio>
 		</h:panelGrid>
@@ -42,7 +43,7 @@
 		<h:panelGrid columns="3">
 			<p:commandButton id="btnVoltar" value="Voltar" global="false" action="#{defensivosAgricolasController.agrossilvopastorilController.voltarAba()}" update="tabAbasId_Agro"/>
 			<p:spacer width="15" height="0"/>
-		 	<p:commandButton id="btnAvancar" value="Avançar" action="#{defensivosAgricolasController.salvarAbaDefensivosAgricolas()}" process="@form" global="false" update="tabAbasId_Agro"/>
+		 	<p:commandButton id="btnAvancar" value="AvanÃ§ar" action="#{defensivosAgricolasController.salvarAbaDefensivosAgricolas()}" process="@form" global="false" update="tabAbasId_Agro"/>
 		</h:panelGrid>
 	</h:form>
 </ui:composition>

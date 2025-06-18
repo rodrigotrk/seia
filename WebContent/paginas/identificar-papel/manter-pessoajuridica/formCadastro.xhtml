@@ -7,8 +7,9 @@
 	xmlns:p="http://primefaces.prime.com.tr/ui">
 
 	<h3>
-		<h:outputLabel styleClass="titulo-grupo" value="IDENTIFICAÇÃO DA PESSOA JURÍDICA" rendered="#{!identificarPapelController.isPCT or !identificarPapelController.renderedCadastranteConvenioPCT}"/>
-		<h:outputLabel styleClass="titulo-grupo" value="IDENTIFICAÇÃO DO REPRESENTANTE DA COMUNIDADE" rendered="#{identificarPapelController.isPCT and identificarPapelController.renderedCadastranteConvenioPCT}"/>
+        <ui:include src="/layout/csrfToken.xhtml" />
+		<h:outputLabel styleClass="titulo-grupo" value="IDENTIFICAÃ‡ÃƒO DA PESSOA JURÃDICA" rendered="#{!identificarPapelController.isPCT or !identificarPapelController.renderedCadastranteConvenioPCT}"/>
+		<h:outputLabel styleClass="titulo-grupo" value="IDENTIFICAÃ‡ÃƒO DO REPRESENTANTE DA COMUNIDADE" rendered="#{identificarPapelController.isPCT and identificarPapelController.renderedCadastranteConvenioPCT}"/>
 	</h3>
 	
 	<h:form id="formpessoajuridica" enctype="multipart/form-data" style="font-size: 11px;">
@@ -20,8 +21,8 @@
 					<p:inputMask id="cnpj" mask="#{bundle.consultapj_msk_cnpj}"
 						value="#{pessoaJuridicaController.pessoaJuridicaSelecionada.numCnpj}"
 						required="true"
-						requiredMessage="O campo CNPJ é de preenchimento obrigatório."
-						converterMessage="Cnpj Inválido"
+						requiredMessage="O campo CNPJ Ã© de preenchimento obrigatÃ³rio."
+						converterMessage="Cnpj InvÃ¡lido"
 						disabled="#{pessoaJuridicaController.disableFormVisualizar}">
 						<f:converter converterId="cnpjConverter" />
 						<f:validator validatorId="CnpjValidator" />
@@ -114,22 +115,22 @@
 					</h:commandButton>
 				</h:panelGrid>
 			</h:panelGrid>
-			<h:outputLabel value="Cópia do CNPJ(.pdf.jpg - Máximo 5MB)"
+			<h:outputLabel value="CÃ³pia do CNPJ(.pdf.jpg - MÃ¡ximo 5MB)"
 				rendered="#{!identificarPapelController.necessitaValidacao}" />
-			<h:outputLabel value="*Cópia do CNPJ(.pdf.jpg - Máximo 5MB)"
+			<h:outputLabel value="*CÃ³pia do CNPJ(.pdf.jpg - MÃ¡ximo 5MB)"
 				rendered="#{identificarPapelController.necessitaValidacao}" />
 	
 			<p:fileUpload uploadLabel="false" label="Upload Documento"
 				fileUploadListener="#{pessoaJuridicaController.trataArquivo}"
-				invalidFileMessage="Tipo de arquivo inválido." mode="advanced"
+				invalidFileMessage="Tipo de arquivo invÃ¡lido." mode="advanced"
 				auto="true"
 				required="#{identificarPapelController.necessitaValidacao}"
-				requiredMessage="Arquivo é Obrigatório!"
+				requiredMessage="Arquivo Ã© ObrigatÃ³rio!"
 				oncomplete="remoteCommandUpdateDataTable()"
 				allowTypes="/(\.|\/)(pdf|gif|jpeg|png|jpg)$/"
 				disabled="#{pessoaJuridicaController.disableForm}"
 				sizeLimit="5242880"
-				invalidSizeMessage="O tamanho máximo do arquivo não pode ultrapassar 5MB" />
+				invalidSizeMessage="O tamanho mÃ¡ximo do arquivo nÃ£o pode ultrapassar 5MB" />
 	
 			<p:remoteCommand name="remoteCommandUpdateDataTable"
 				update="tblDocumento" immediate="true" />
@@ -154,14 +155,14 @@
 			</h:panelGrid>
 	
 			<h:panelGrid columns="2">
-				<h:outputLabel value="*Razão Social" />
+				<h:outputLabel value="*RazÃ£o Social" />
 				<h:outputLabel value="Data de Abertura"
 					rendered="#{!identificarPapelController.necessitaValidacao}" />
 				<h:outputLabel value="*Data de Abertura"
 					rendered="#{identificarPapelController.necessitaValidacao}" />
 				<p:inputText
 					required="true"
-					requiredMessage="Razão social é campo obrigatório"
+					requiredMessage="RazÃ£o social Ã© campo obrigatÃ³rio"
 					value="#{pessoaJuridicaController.pessoaJuridicaSelecionada.nomRazaoSocial}"
 					style="width:400px;margin-top:11px;"
 					disabled="#{pessoaJuridicaController.disableForm or pessoaJuridicaController.disableEdicaoRazaoSocial}" />
@@ -172,7 +173,7 @@
 					pattern="dd/MM/yyyy"
 					disabled="#{pessoaJuridicaController.disableForm}"
 					required="#{identificarPapelController.necessitaValidacao}"
-					requiredMessage="O campo Data de Abertura é de preenchimento obrigatório."
+					requiredMessage="O campo Data de Abertura Ã© de preenchimento obrigatÃ³rio."
 					readOnlyInputText="true" yearRange="c-100"
 					maxdate="#{pessoaFisicaController.dataAtual}" />
 			</h:panelGrid>
@@ -182,40 +183,40 @@
 				<h:outputLabel value="*Nome Fantasia"
 					rendered="#{identificarPapelController.necessitaValidacao}" />
 	
-				<h:outputLabel value="Inscrição Municipal"
+				<h:outputLabel value="InscriÃ§Ã£o Municipal"
 					rendered="#{!identificarPapelController.necessitaValidacao}" />
-				<h:outputLabel value="*Inscrição Municipal"
+				<h:outputLabel value="*InscriÃ§Ã£o Municipal"
 					rendered="#{identificarPapelController.necessitaValidacao}" />
 	
-				<h:outputLabel value="Inscrição Estadual"
+				<h:outputLabel value="InscriÃ§Ã£o Estadual"
 					rendered="#{!identificarPapelController.necessitaValidacao}" />
-				<h:outputLabel value="*Inscrição Estadual"
+				<h:outputLabel value="*InscriÃ§Ã£o Estadual"
 					rendered="#{identificarPapelController.necessitaValidacao}" />
 				<p:inputText
 					value="#{pessoaJuridicaController.pessoaJuridicaSelecionada.nomeFantasia}"
 					required="#{identificarPapelController.necessitaValidacao}"
-					requiredMessage="O campo Nome Fantasia é de preenchimento obrigatório."
+					requiredMessage="O campo Nome Fantasia Ã© de preenchimento obrigatÃ³rio."
 					style="width:400px;"
 					disabled="#{pessoaJuridicaController.disableForm}" />
 				<p:inputText
 					value="#{pessoaJuridicaController.pessoaJuridicaSelecionada.numInscricaoMunicipal}"
 					disabled="#{pessoaJuridicaController.disableForm}"
 					required="#{identificarPapelController.necessitaValidacao}"
-					requiredMessage="O campo Inscrição Municipal é de preenchimento obrigatório."
+					requiredMessage="O campo InscriÃ§Ã£o Municipal Ã© de preenchimento obrigatÃ³rio."
 					maxlength="15" />
 				<p:inputText
 					value="#{pessoaJuridicaController.pessoaJuridicaSelecionada.numInscricaoEstadual}"
 					disabled="#{pessoaJuridicaController.disableForm}"
 					required="#{identificarPapelController.necessitaValidacao}"
-					requiredMessage="O campo Inscrição Estadual é de preenchimento obrigatório."
+					requiredMessage="O campo InscriÃ§Ã£o Estadual Ã© de preenchimento obrigatÃ³rio."
 					maxlength="15" />
 	
 			</h:panelGrid>
 			<h:panelGrid columns="1">
-				<h:outputLabel value="*Natureza Jurídica" />
+				<h:outputLabel value="*Natureza JurÃ­dica" />
 				<p:selectOneMenu id="idnaturezajuridica"
 					required="true"
-					requiredMessage="Natureza Jurídica é Campo obrigatório"
+					requiredMessage="Natureza JurÃ­dica Ã© Campo obrigatÃ³rio"
 					value="#{pessoaJuridicaController.pessoaJuridicaSelecionada.ideNaturezaJuridica}"
 					disabled="#{pessoaJuridicaController.disableForm}">
 					<f:selectItem itemLabel="Selecione..." />

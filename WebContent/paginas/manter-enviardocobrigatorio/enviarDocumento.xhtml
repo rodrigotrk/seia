@@ -2,35 +2,36 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.prime.com.tr/ui">
 	<div>
-		<h:outputLabel styleClass="titulo" style="font-weight:bold;color:#5D7750;" value="Enviar Documentação Obrigatória" />
+        <ui:include src="/layout/csrfToken.xhtml" />
+		<h:outputLabel styleClass="titulo" style="font-weight:bold;color:#5D7750;" value="Enviar DocumentaÃ§Ã£o ObrigatÃ³ria" />
 		<p:outputPanel style="float:left;width:100%">
 			<h:form id="formulariosdownload" enctype="multipart/form-data">
 				<h:panelGrid columns="1" rendered="#{enviarDocumentoController.renderedFormulario}">
 					<br />
-					<h:outputLabel styleClass="titulo-grupo" value="Formulários Download" />
+					<h:outputLabel styleClass="titulo-grupo" value="FormulÃ¡rios Download" />
 					<p:separator style="width:100%;" />
 					<br />
 					<p:dataTable value="#{enviarDocumentoController.arqvsFormsObrigatorios}" var="docObrigatorio" style="max-width: 450px !important;" styleClass="wrapword">
 						<p:column headerText="Documento">
 							<h:outputText value="#{docObrigatorio.nomDocumentoObrigatorio}" />
 						</p:column>
-						<p:column headerText="Ações">
-							<h:commandButton title="Download Documento Obrigatório" rendered="#{!enviarDocumentoController.isLac(docObrigatorio)}" image="/resources/img/ico-download.png" immediate="true">
+						<p:column headerText="AÃ§Ãµes">
+							<h:commandButton title="Download Documento ObrigatÃ³rio" rendered="#{!enviarDocumentoController.isLac(docObrigatorio)}" image="/resources/img/ico-download.png" immediate="true">
 								<p:fileDownload value="#{enviarDocumentoController.getFileDownload(docObrigatorio)}" />
 							</h:commandButton>
-							<p:commandLink title="Preenchimento Documento Obrigatório" rendered="#{enviarDocumentoController.isLacErb(docObrigatorio)}" immediate="true" action="#{lacErbController.novo}" oncomplete="lac.show();" update="form_lac">
+							<p:commandLink title="Preenchimento Documento ObrigatÃ³rio" rendered="#{enviarDocumentoController.isLacErb(docObrigatorio)}" immediate="true" action="#{lacErbController.novo}" oncomplete="lac.show();" update="form_lac">
 								<h:graphicImage title="Lac Erb" value="/resources/img/ico-preencher.png" />
 								<f:setPropertyActionListener target="#{lacErbController.lacErb.ideDocumentoObrigatorio}" value="#{docObrigatorio}" />
 								<f:setPropertyActionListener target="#{lacErbController.lacErb.ideRequerimento}" value="#{enviarDocumentoController.enquadramento.ideRequerimentoUnico.requerimento}" />
 							</p:commandLink>
-							<p:commandLink title="Preenchimento Documento Obrigatório" rendered="#{enviarDocumentoController.isLacPosto(docObrigatorio)}" immediate="true" action="#{lacPostoController.novo}" oncomplete="lac_posto.show();"
+							<p:commandLink title="Preenchimento Documento ObrigatÃ³rio" rendered="#{enviarDocumentoController.isLacPosto(docObrigatorio)}" immediate="true" action="#{lacPostoController.novo}" oncomplete="lac_posto.show();"
 								update="posto_tab,form_dados,form_abastecimento,form_controle,form_manutencao">
 								<h:graphicImage title="Lac Posto" value="/resources/img/ico-preencher.png" />
 								<f:setPropertyActionListener target="#{lacPostoController.lacPostoCombustivel.ideDocumentoObrigatorio}" value="#{docObrigatorio}" />
 								<f:setPropertyActionListener target="#{lacPostoController.lacPostoCombustivel.ideRequerimento}" value="#{enviarDocumentoController.enquadramento.ideRequerimentoUnico.requerimento}" />
 							</p:commandLink>
 							
-							<p:commandLink title="Preenchimento Documento Obrigatório" update="lac_transporte" rendered="#{enviarDocumentoController.isLacTransportadora(docObrigatorio)}" action="#{lacTransporteController.init()}" immediate="true" oncomplete="lac_transporte.show();">
+							<p:commandLink title="Preenchimento Documento ObrigatÃ³rio" update="lac_transporte" rendered="#{enviarDocumentoController.isLacTransportadora(docObrigatorio)}" action="#{lacTransporteController.init()}" immediate="true" oncomplete="lac_transporte.show();">
 								<h:graphicImage title="Lac Transportadora" value="/resources/img/ico-preencher.png" />
 								<f:setPropertyActionListener target="#{lacTransporteController.requerimentoUnico}" value="#{enviarDocumentoController.enquadramento.ideRequerimentoUnico}" />
 							</p:commandLink> 
@@ -38,19 +39,20 @@
 
 
 							<!-- FCE  Agrossivilpastoril 
-							<p:commandLink title="Preenchimento Documento Obrigatório" update="fce_agrossilvo" action="#{agrossilvopastorilController.init()}" rendered="#{enviarDocumentoController.isFceAgrossilvoPastoril(docObrigatorio)}" oncomplete="fce_agrossilvo.show();">
+        <ui:include src="/layout/csrfToken.xhtml" />
+							<p:commandLink title="Preenchimento Documento ObrigatÃ³rio" update="fce_agrossilvo" action="#{agrossilvopastorilController.init()}" rendered="#{enviarDocumentoController.isFceAgrossilvoPastoril(docObrigatorio)}" oncomplete="fce_agrossilvo.show();">
 								<f:setPropertyActionListener target="#{agrossilvopastorilController.requerimentoUnico}" value="#{enviarDocumentoController.enquadramento.ideRequerimentoUnico}" />
 								<h:graphicImage title="FCE Agrossivilpastoril" value="/resources/img/ico-preencher.png" />
 							</p:commandLink> -->
 
 							<!-- FCE ASV-->
-							<p:commandLink title="Preenchimento Documento Obrigatório" update="fce_asv" action="#{asvDadosGeraisController.init()}" rendered="#{enviarDocumentoController.isFceAsv(docObrigatorio)}" immediate="true" oncomplete="fce_asv.show()">
+							<p:commandLink title="Preenchimento Documento ObrigatÃ³rio" update="fce_asv" action="#{asvDadosGeraisController.init()}" rendered="#{enviarDocumentoController.isFceAsv(docObrigatorio)}" immediate="true" oncomplete="fce_asv.show()">
 								<h:graphicImage title="FCE ASV" value="/resources/img/ico-preencher.png" />
 								<f:setPropertyActionListener target="#{asvDadosGeraisController.requerimento}" value="#{enviarDocumentoController.enquadramento.ideRequerimentoUnico.requerimento}" />
 							</p:commandLink>
 							<!-- FCEINTERVENCAOBARRAGEMCONTROLLER -->
-							<p:commandLink title="Preenchimento Documento Obrigatório" update=":tipoBarragem :formIntervencaoBarragem" action="#{fceIntervencaoBarragemController.init()}" rendered="#{enviarDocumentoController.isFceIntervencaoBarragem(docObrigatorio)}" immediate="true" oncomplete="tipoBarragem.show()">
-								<h:graphicImage title="FCE Intervenção de Barragem" value="/resources/img/ico-preencher.png" />
+							<p:commandLink title="Preenchimento Documento ObrigatÃ³rio" update=":tipoBarragem :formIntervencaoBarragem" action="#{fceIntervencaoBarragemController.init()}" rendered="#{enviarDocumentoController.isFceIntervencaoBarragem(docObrigatorio)}" immediate="true" oncomplete="tipoBarragem.show()">
+								<h:graphicImage title="FCE IntervenÃ§Ã£o de Barragem" value="/resources/img/ico-preencher.png" />
 								<f:setPropertyActionListener target="#{fceIntervencaoBarragemController.requerimento}" value="#{enviarDocumentoController.enquadramento.ideRequerimentoUnico.requerimento}" />
 								<f:setPropertyActionListener target="#{fceIntervencaoBarragemController.requerimentoUnico}" value="#{enviarDocumentoController.enquadramento.ideRequerimentoUnico}" />
 							</p:commandLink> 
@@ -64,7 +66,7 @@
 				<h:panelGrid columns="1">
 					<br />
 					<br />
-					<h:outputLabel styleClass="titulo-grupo" value="Formulários/Documentos Upload" />
+					<h:outputLabel styleClass="titulo-grupo" value="FormulÃ¡rios/Documentos Upload" />
 					<p:separator style="width:100%;" />
 				</h:panelGrid>
 				<h:panelGrid columns="1" id="uploadFormulario" rendered="#{enviarDocumentoController.formularioLacCompleto}">
@@ -83,7 +85,7 @@
 						<p:rowExpansion > 
 							<div style="margin:0px;font-size:0px;">
 								<p:dataTable var="formularios" value="#{ato.documentosObrigatoriosRequerimento}" emptyMessage="#{bundle.msg_lista_vazia}" rendered="#{enviarDocumentoController.isExibirLista(ato.documentosObrigatoriosRequerimento)}">
-									<p:column headerText="Formulário/Documento" style="width: 361px !important;">
+									<p:column headerText="FormulÃ¡rio/Documento" style="width: 361px !important;">
 										<h:outputText value="#{formularios.ideDocumentoObrigatorio.nomDocumentoObrigatorio}" />
 									</p:column>
 									<p:column headerText="Nome Arquivo" style="width: 162px !important;">
@@ -92,7 +94,7 @@
 									<p:column headerText="Tamanho(KB)" style="width: 104px !important;">
 										<h:outputText value="#{enviarDocumentoController.getTamanhoDoc(formularios)}" />
 									</p:column>
-									<p:column headerText="Ações">
+									<p:column headerText="AÃ§Ãµes">
 										<h:link>
 											<h:commandLink title="Download do arquivo" immediate="true" rendered="#{!empty formularios.dscCaminhoArquivo}">
 												<h:graphicImage title="Download do arquivo" value="/resources/img/ico-download.png" />
@@ -121,7 +123,7 @@
 					<p:dataTable id="tabelaDocumentosIdentificacao" widgetVar="tabelaDocumentosIdentificacao" value="#{enviarDocumentoController.arqvsDocumentoIdentificacao}" var="docIdentificacao" style="width: 759px !important;" styleClass="wrapword"
 					rendered="#{enviarDocumentoController.exibirArqvsDocumentoIdentificacao}">
 						<f:facet name="header">
-							<h:outputText value="Documentos de Identificação" />
+							<h:outputText value="Documentos de IdentificaÃ§Ã£o" />
 						</f:facet>
 						<p:column headerText="Documento" style="width: 361px !important;">
 							<h:outputText value="#{docIdentificacao.ideTipoIdentificacao.nomTipoIdentificacao}" />
@@ -132,7 +134,8 @@
 						<p:column headerText="Tamanho(KB)" style="width: 104px !important;">
 							<h:outputText value="#{enviarDocumentoController.mostrarTamanhoArquivoDocumentoIdentificacao(docIdentificacao)}" />
 						</p:column>
-						<p:column headerText="Ações">
+        <ui:include src="/layout/csrfToken.xhtml" />
+						<p:column headerText="AÃ§Ãµes">
 							<h:link>
 								<h:commandLink title="Download do arquivo" immediate="true" rendered="#{!empty docIdentificacao.dscCaminhoArquivo}">
 									<h:graphicImage title="Download do arquivo" value="/resources/img/ico-download.png" />

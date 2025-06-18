@@ -6,22 +6,23 @@ xmlns:f="http://java.sun.com/jsf/core"
 xmlns:ui="http://java.sun.com/jsf/facelets" 
 xmlns:p="http://primefaces.prime.com.tr/ui">
 	
-	<p:dialog widgetVar="dialogRevisaoCondicionantes" dynamic="true" header="Revisão de Condicionantes" modal="true" resizable="false" height="306" width="430" position="center" >
+        <ui:include src="/layout/csrfToken.xhtml" />
+	<p:dialog widgetVar="dialogRevisaoCondicionantes" dynamic="true" header="RevisÃ£o de Condicionantes" modal="true" resizable="false" height="306" width="430" position="center" >
 		<h:form id="formRevisaoCondicionantes" >
 			<h:panelGrid columns ="1" id="panelGridRevisao" style="width: 100%;">
 	
-				<h:outputText value="* 1. Selecione o tipo de Revisão"/>
+				<h:outputText value="* 1. Selecione o tipo de RevisÃ£o"/>
 				<p:selectOneRadio value="#{revisaoCondicionantesController.revisaoCondicionante.ideTipoRevisaoCondicionante}" layout="horizontal" converter="simpleEntityConverter" disabled="#{novoRequerimentoController.desabilitarTudo}">  
 					<f:selectItems value="#{revisaoCondicionantesController.tiposRevisaoCondicionante}" var="tipoRevisao" itemLabel="#{tipoRevisao.nomTipoRevisaoCondicionante}" itemValue="#{tipoRevisao}"/>
 				</p:selectOneRadio>
 	
-				<h:outputText value="* 2. Informe o número do processo"/>
+				<h:outputText value="* 2. Informe o nÃºmero do processo"/>
 				<p:inputText id="inpNumProcesso" value="#{revisaoCondicionantesController.revisaoCondicionante.numProcesso}" style="width: 300px" maxlength="50" disabled="#{novoRequerimentoController.desabilitarTudo}"/>
 	
-				<h:outputText value="* 3. Informe o número da portaria"/>
+				<h:outputText value="* 3. Informe o nÃºmero da portaria"/>
 				<p:inputText id="inpNumPortaria" value="#{revisaoCondicionantesController.revisaoCondicionante.numPortaria}" style="width: 300px" maxlength="50" disabled="#{novoRequerimentoController.desabilitarTudo}"/>
 	
-				<h:outputText value="* 4. Informe a data da publicação da portaria"/>
+				<h:outputText value="* 4. Informe a data da publicaÃ§Ã£o da portaria"/>
 				<p:calendar maxdate="#{novoRequerimentoController.dataHoje}" size="6" showOn="button" locale="pt" pattern="dd/MM/yyyy" readOnlyInputText="true" 
 				value="#{revisaoCondicionantesController.revisaoCondicionante.dtcPublicacaoPortaria}" style="width: 50px" disabled="#{novoRequerimentoController.desabilitarTudo}"/>
 

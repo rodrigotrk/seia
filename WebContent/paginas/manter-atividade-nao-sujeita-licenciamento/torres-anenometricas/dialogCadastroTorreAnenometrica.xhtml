@@ -15,6 +15,7 @@
 		
 		<p:outputPanel id="scroll" style="height: 600px; width: 480px; overflow: hidden">
 			<h:form id="form_dialog_cadastro_torre">
+        <ui:include src="/layout/csrfToken.xhtml" />
 				
 				<h:panelGrid columns="1">
 					<h:outputLabel value="*#{bundle.lbl_identificacao_torre}"  style="font-weight:bold"/>
@@ -38,7 +39,7 @@
 				<h:panelGrid columns="1">
 					<h:outputLabel value="*#{bundle.lbl_perg_natureza_torre}" style="font-weight:bold"/>
 					<p:selectOneRadio id="inptNaturezaTorre" 
-						converter="simpleEntityConverter"  requiredMessage="Natureza Torre é de preenchimento obrigatório"
+						converter="simpleEntityConverter"  requiredMessage="Natureza Torre Ã© de preenchimento obrigatÃ³rio"
 						value="#{torresAnemometricasController.torreAnemometrica.ideTipoNaturezaTorre}" required="true"
 						disabled="#{torresAnemometricasController.visualizarTorre or torresAnemometricasController.visualizacao}">
 						
@@ -56,9 +57,9 @@
 						value="#{torresAnemometricasController.torreAnemometrica.valProjecaoMonitoramento}" 
 						disabled="#{torresAnemometricasController.visualizarTorre or torresAnemometricasController.visualizacao or torresAnemometricasController.naturezaPermanente}"
 						onkeyup="SomenteNumero(this)"/>
-					<h:outputText value="Mês(es)" />
+					<h:outputText value="MÃªs(es)" />
 				</h:panelGrid>
-                <!-- Localização Geográfica -->
+                <!-- LocalizaÃ§Ã£o GeogrÃ¡fica -->
                 <h:panelGrid columns="1">
 				    <h:outputLabel
 					   value="*#{bundle.novoRequerimneto_lbl_localizacaoGeografica}" style="font-weight:bold"/>
@@ -94,9 +95,9 @@
 		 		    	<h:outputText value="#{locGeo.nomeSistemaCoordenadas}" />
 		 		    </p:column>
 		 		    
-		 		    <p:column headerText="Ações" style="width:55px; text-align:center;">
+		 		    <p:column headerText="AÃ§Ãµes" style="width:55px; text-align:center;">
 			 		    <p:commandLink onclick="#{localizacaoGeograficaGenericController.visualizarLocalizacao(locGeo)}" process="@this">
-							<h:graphicImage title="Visualizar Localização no GeoBahia" value="/resources/img/ico-arl-relocacao.png" />
+							<h:graphicImage title="Visualizar LocalizaÃ§Ã£o no GeoBahia" value="/resources/img/ico-arl-relocacao.png" />
 						</p:commandLink>
 						
 						<p:commandLink process="@this" oncomplete="confirmacaoExclusaoLocalizacaoGenerica.show();" disabled="#{torresAnemometricasController.visualizarTorre or torresAnemometricasController.visualizacao}">
@@ -107,13 +108,13 @@
 						
 						<p:commandLink oncomplete="dlgLocalizacaoGeograficaGeneric.show();" action="#{localizacaoGeograficaGenericController.visualizarLocalizacaoGeografica()}" process="@this">
 							<f:setPropertyActionListener target="#{localizacaoGeograficaGenericController.localizacaoGeograficaSelecionada}" value="#{locGeo}" />
-							<h:graphicImage title="Visualizar Localização" value="/resources/img/ico-pesquisa.png" />
+							<h:graphicImage title="Visualizar LocalizaÃ§Ã£o" value="/resources/img/ico-pesquisa.png" />
 						</p:commandLink>
 						
 		 		    </p:column>
 		    	</p:dataTable>
 			</h:panelGrid>
-				<!-- Localização da atividade -->
+				<!-- LocalizaÃ§Ã£o da atividade -->
 				
 				<h:panelGrid columns="1">
                     <h:outputLabel value="*#{bundle.lbl_perg_atividade_situada_em_uc}" style="font-weight:bold"/>
@@ -125,7 +126,7 @@
                		disabled="#{torresAnemometricasController.visualizarTorre or torresAnemometricasController.visualizacao}" 
                		valueChangeListener="#{torresAnemometricasController.onChangeSelect()}">
                			<f:selectItem itemValue="#{true}" itemLabel="Sim"/>
-               			<f:selectItem itemValue="#{false}" itemLabel="Não"/>
+               			<f:selectItem itemValue="#{false}" itemLabel="NÃ£o"/>
                			
                			 <p:ajax event="change" process="@this" 
                         	update="form_dialog_cadastro_torre:panelAtividade"/>
@@ -163,7 +164,7 @@
 	                    	maxlength="100"
 	                    	disabled="#{torresAnemometricasController.visualizarTorre or torresAnemometricasController.visualizacao}" />
 	                </h:panelGrid>
-	                <!-- Pergunta Unidade Conservação -->
+	                <!-- Pergunta Unidade ConservaÃ§Ã£o -->
 	                <h:panelGrid columns="1">
 	                    <h:outputLabel value="*#{bundle.lbl_perg_unidade_conservacao}" style="font-weight:bold"/>
 	                </h:panelGrid>
@@ -173,8 +174,8 @@
 		                    value="#{torresAnemometricasController.torreAnemometrica.ideTipoUnidadeConservacaoTorre}"
 	                    	layout="pageDirection"
 	                    	converter="simpleEntityConverter" 
-		                    required="#{torresAnemometricasController.torreAnemometrica.ideLocalizacaoAtividadeTorre.nomLocalizacaoAtividadeTorre eq 'Unidade de Conservação'}"
-		                    requiredMessage="Qual o tipo da Unidade de conservação é de preenchimento obrigatório"
+		                    required="#{torresAnemometricasController.torreAnemometrica.ideLocalizacaoAtividadeTorre.nomLocalizacaoAtividadeTorre eq 'Unidade de ConservaÃ§Ã£o'}"
+		                    requiredMessage="Qual o tipo da Unidade de conservaÃ§Ã£o Ã© de preenchimento obrigatÃ³rio"
 		                    disabled="#{torresAnemometricasController.visualizarTorre or torresAnemometricasController.visualizacao}">
 		                    
 	                        <f:selectItems var="tipo" itemLabel="#{tipo.nomTipoUnidadeConservacaoTorre}" 
@@ -195,11 +196,11 @@
                 <!-- Pergunta tramite Processo -->
                 <h:panelGrid columns="1">
                     <p:selectOneRadio id="selectProcessoEmTramite" value="#{torresAnemometricasController.torreAnemometrica.indProcessoInema}"
-                    	required="true" requiredMessage="Possui processo em trâmite ou concluído no INEMA é de preenchimento obrigatório"
+                    	required="true" requiredMessage="Possui processo em trÃ¢mite ou concluÃ­do no INEMA Ã© de preenchimento obrigatÃ³rio"
                     	disabled="#{torresAnemometricasController.visualizarTorre or torresAnemometricasController.visualizacao}" 
                     	valueChangeListener="#{torresAnemometricasController.limparNumeroProcesso()}">
                         <f:selectItem itemLabel="Sim" itemValue="true"/>
-                        <f:selectItem itemLabel="Não" itemValue="false" />
+                        <f:selectItem itemLabel="NÃ£o" itemValue="false" />
                         <p:ajax event="change" update="form_dialog_cadastro_torre:panelProcessoInema" process="@this"/>
                     </p:selectOneRadio>
                 </h:panelGrid>

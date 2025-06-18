@@ -9,20 +9,21 @@
 	
 	
 	<h:form id="formAbaGeral">
-		<h:outputText styleClass="titulo-grupo" style="font-weight:bold;" value="Informações do empreendimento" />
+        <ui:include src="/layout/csrfToken.xhtml" />
+		<h:outputText styleClass="titulo-grupo" style="font-weight:bold;" value="InformaÃ§Ãµes do empreendimento" />
 		<div class="line"/>
 		<br/>
-		<h:outputText value="Identificação do empreendimento"/>
+		<h:outputText value="IdentificaÃ§Ã£o do empreendimento"/>
 		<p:inputText value="#{fceGeracaoEnergiaController.fceEnergia.desIdentificacaoEmpreendimento}" size="40" disabled="#{fceGeracaoEnergiaController.desabilitarTudo}" style="margin-left: 5px;" maxlength="100"/>
 		<br/><br/><br/>
-		<h:outputText value="Poligonal do objeto da licença" style="font-weight: bold;"/>
+		<h:outputText value="Poligonal do objeto da licenÃ§a" style="font-weight: bold;"/>
 		<div class="line"/>
 		<br/>
 		<p:outputPanel id="pnlFceLocalizacao">
 				 
 		<s:inputLocGeo
 			ideObjetoLocalizacao="#{fceGeracaoEnergiaController.fceEnergia}" 
-		    titulo="Incluir poligonal do objeto da licença"
+		    titulo="Incluir poligonal do objeto da licenÃ§a"
 		    update="tabAbasGeracaoEnergia:formAbaGeral:pnlFceLocalizacao"
 			ideTipoSecaoGeometrica="#{seiaController.classificacaoSecaoEnum('CLASSIFICACAO_SECAO_SHAPEFILE')}"
 			ideRequerimento="#{fceGeracaoEnergiaController.requerimento}" 
@@ -30,19 +31,19 @@
 			disabled="#{!empty fceGeracaoEnergiaController.fceEnergia.ideLocalizacaoGeografica.ideLocalizacaoGeografica || fceGeracaoEnergiaController.desabilitarTudo}"
 			metodo="#{fceGeracaoEnergiaController.metodoAtualizarExterno}" />
 		<br/>
-		<p:dataTable id="dataTableLocalizacao" value="#{fceGeracaoEnergiaController.fceEnergia.ideLocalizacaoGeografica}" var="loc" emptyMessage="Não existe nunhum Poligonal cadastrado" rendered="#{!empty fceGeracaoEnergiaController.fceEnergia.ideLocalizacaoGeografica.ideLocalizacaoGeografica}">
+		<p:dataTable id="dataTableLocalizacao" value="#{fceGeracaoEnergiaController.fceEnergia.ideLocalizacaoGeografica}" var="loc" emptyMessage="NÃ£o existe nunhum Poligonal cadastrado" rendered="#{!empty fceGeracaoEnergiaController.fceEnergia.ideLocalizacaoGeografica.ideLocalizacaoGeografica}">
 			<p:column headerText="Tipo">
 				<h:outputText value="#{loc.ideClassificacaoSecao.nomClassificacaoSecao}" />
 			</p:column>
 			<p:column headerText="Sistema de coordenadas">
 				<h:outputText value="#{loc.nomeSistemaCoordenadas}" />
 			</p:column>
-			<p:column headerText="Área(ha)">
+			<p:column headerText="Ãrea(ha)">
 				<h:outputText value="#{loc.vlrArea}">
 						<f:convertNumber maxFractionDigits="4"/>
 				</h:outputText>
 			</p:column>
-			<p:column headerText="Ações" style="text-align: center;">
+			<p:column headerText="AÃ§Ãµes" style="text-align: center;">
 				<s:linkGeoBahia ideLocalizacaoGeografica="#{loc}" />
 				<p:commandLink  oncomplete="excluirPoligonalDadosGerais.show()" update="tabAbasGeracaoEnergia:formAbaGeral" rendered="#{!fceGeracaoEnergiaController.desabilitarTudo}">
                      <f:setPropertyActionListener value="#{fceGeracaoEnergiaController.fceEnergia}" target="#{localizacaoGeograficaGenericController.objetoLocalizacao}" />
@@ -53,43 +54,43 @@
 		</p:dataTable>
 		
 		<br/><br/>
-		<h:outputText value="Município do objeto da licença: "/>
+		<h:outputText value="MunicÃ­pio do objeto da licenÃ§a: "/>
 		<h:outputText value="#{fceGeracaoEnergiaController.municipioAbaGeral}" style="font-weight: bold;"/>
 		</p:outputPanel>
 		
 		<br/><br/><br/>
 		
-		<h:outputText value="Informações da captação" style="font-weight: bold;"/>
+		<h:outputText value="InformaÃ§Ãµes da captaÃ§Ã£o" style="font-weight: bold;"/>
 		<div class="line"/>
 		<br/><br/>
 		<p:outputPanel id="opCaptacao">
-			<h:outputText value="O empreendimento faz captação de água? "/>
+			<h:outputText value="O empreendimento faz captaÃ§Ã£o de Ã¡gua? "/>
 			<p:selectOneRadio value="#{fceGeracaoEnergiaController.fceEnergia.indCaptacao}" disabled="#{fceGeracaoEnergiaController.desabilitaCaptacaoAgua || fceGeracaoEnergiaController.desabilitarTudo}">
 				<f:selectItem itemLabel="Sim" itemValue="true"/>
-				<f:selectItem itemLabel="Não" itemValue="false"/>
+				<f:selectItem itemLabel="NÃ£o" itemValue="false"/>
 				<p:ajax event="change" listener="#{fceGeracaoEnergiaController.validaCaptacao}" update="tabAbasGeracaoEnergia:formAbaGeral:opCaptacao tabAbasGeracaoEnergia:formAbaGeral:pnlNumOutorga"/>
 			</p:selectOneRadio>
 			<br/>
 			<p:outputPanel id="pnlNumOutorga" rendered="#{fceGeracaoEnergiaController.fceEnergia.indCaptacao}">
-				<h:outputText value="Número do processo de Outorga"/>
+				<h:outputText value="NÃºmero do processo de Outorga"/>
 				<p:inputText value="#{fceGeracaoEnergiaController.fceEnergia.numProcessoOutorga}" size="35" style="margin-left: 5px;" maxlength="50" disabled="#{fceGeracaoEnergiaController.desabilitarTudo}"/>
 			</p:outputPanel>
 		</p:outputPanel>
 		<br/><br/>
 		
-		<h:outputText value="Informações de ASV" style="font-weight: bold;"/>
+		<h:outputText value="InformaÃ§Ãµes de ASV" style="font-weight: bold;"/>
 		<div class="line"/>
 		<br/><br/>
 		<p:outputPanel id="opASV">
-			<h:outputText value="Existe processo de Autorização de Supressão de Vegetação (ASV)?"/>
+			<h:outputText value="Existe processo de AutorizaÃ§Ã£o de SupressÃ£o de VegetaÃ§Ã£o (ASV)?"/>
 			<p:selectOneRadio value="#{fceGeracaoEnergiaController.fceEnergia.indASV}" disabled="#{fceGeracaoEnergiaController.desabilitaASV || fceGeracaoEnergiaController.desabilitarTudo}">
 				<f:selectItem itemLabel="Sim" itemValue="true"/>
-				<f:selectItem itemLabel="Não" itemValue="false"/>
+				<f:selectItem itemLabel="NÃ£o" itemValue="false"/>
 				<p:ajax event="change" listener="#{fceGeracaoEnergiaController.validaASV}" update="tabAbasGeracaoEnergia:formAbaGeral:opASV tabAbasGeracaoEnergia:formAbaGeral:pnlFinalidade tabAbasGeracaoEnergia:formAbaGeral:pnlNumASV"/>
 			</p:selectOneRadio>
 			<br/>
 			<p:outputPanel id="pnlNumASV" rendered="#{fceGeracaoEnergiaController.fceEnergia.indASV}">
-				<h:outputText value="Número do processo de ASV"/>
+				<h:outputText value="NÃºmero do processo de ASV"/>
 				<p:inputText value="#{fceGeracaoEnergiaController.fceEnergia.numProcessoASV}" size="35" style="margin-left: 5px;" maxlength="50" 
 				disabled="#{fceGeracaoEnergiaController.desabilitaASV || fceGeracaoEnergiaController.desabilitarTudo}"/>
 			</p:outputPanel>
@@ -105,7 +106,7 @@
 			</p:outputPanel>
 		</p:outputPanel>
 		<br/>
-		<p:commandButton value="Avançar" action="#{fceGeracaoEnergiaController.avancar}" rendered="#{!fceGeracaoEnergiaController.desabilitarTudo}" style="float:right" update="tabAbasGeracaoEnergia">
+		<p:commandButton value="AvanÃ§ar" action="#{fceGeracaoEnergiaController.avancar}" rendered="#{!fceGeracaoEnergiaController.desabilitarTudo}" style="float:right" update="tabAbasGeracaoEnergia">
 			<f:setPropertyActionListener value="1" target="#{fceGeracaoEnergiaController.numeroAba}"/>
 		</p:commandButton>
 		<p:commandButton value="Salvar" action="#{fceGeracaoEnergiaController.salvar}" rendered="#{!fceGeracaoEnergiaController.desabilitarTudo}" style="float:right; margin-right: 5px;">

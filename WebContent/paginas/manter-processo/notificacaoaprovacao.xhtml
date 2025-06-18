@@ -7,7 +7,8 @@
 	xmlns:p="http://primefaces.prime.com.tr/ui">
 
 	<p:dialog id="_dialogAprovarNotificacao"
-		dasdaheader="Aprovar Notificação" header="Ações da notificação"
+        <ui:include src="/layout/csrfToken.xhtml" />
+		dasdaheader="Aprovar NotificaÃ§Ã£o" header="AÃ§Ãµes da notificaÃ§Ã£o"
 		widgetVar="dialogAprovarNotificacao" height="600" width="720"
 		closable="true" dynamic="true" modal="true" resizable="false"
 		position="center">
@@ -18,22 +19,22 @@
 
 				<div id="dados_processo">
 					<span class="titulo-grupo">Dados do processo</span><br /> <br />
-					N° do processo:
+					NÂ° do processo:
 					<h:outputText
 						value="#{notificacaoAprovacaoController.dto.vwProcesso.numProcesso}" />
-					<br /> Data de formação:
+					<br /> Data de formaÃ§Ã£o:
 					<h:outputText
 						value="#{notificacaoAprovacaoController.dto.vwProcesso.dtcFormacao}">
 						<f:convertDateTime pattern="dd/MM/yyyy" locale="pt,BR"
 							timeZone="Brazil/East" />
 					</h:outputText>
-					<br /> Nome/Razão Social:
+					<br /> Nome/RazÃ£o Social:
 					<h:outputText
 						value="#{notificacaoAprovacaoController.dto.vwProcesso.nomRequerente}" />
 					<br /> CNPJ/CPF:
 					<h:outputText
 						value="#{notificacaoAprovacaoController.dto.vwProcesso.numCpfcnpjRequerenteFormatado}" />
-					<br /> Endereço:
+					<br /> EndereÃ§o:
 					<h:outputText
 						value="#{notificacaoAprovacaoController.dto.enderecoEmpreendimento.enderecoCompleto}" />
 					<br /> Empreendimento:
@@ -47,10 +48,10 @@
 				<div id="dados_notificacao">
 					<h:outputText
 						rendered="#{notificacaoAprovacaoController.dto.notificacao.tipo eq 1}"
-						class="titulo-grupo" value="Dados da notificação" />
+						class="titulo-grupo" value="Dados da notificaÃ§Ã£o" />
 					<h:outputText
 						rendered="#{notificacaoAprovacaoController.dto.notificacao.tipo eq 2}"
-						class="titulo-grupo" value="Dados da notificação de comunicação" />
+						class="titulo-grupo" value="Dados da notificaÃ§Ã£o de comunicaÃ§Ã£o" />
 					<br /> <br /> Fundamento Legal:<br /> <br />
 					<div style="padding-left: 20px;">
 						<h:outputText
@@ -59,7 +60,7 @@
 				</div>
 
 				<div style="padding: 0px; padding-top: 15px;">
-					Texto final da notificação<br /> <br />
+					Texto final da notificaÃ§Ã£o<br /> <br />
 					<h:inputTextarea id="texto_notificacao"
 						value="#{notificacaoAprovacaoController.dto.notificacao.dscNotificacao}"
 						style="width:100%;height:135px" disabled="true" />
@@ -67,14 +68,14 @@
 						rendered="#{!empty lstDocumentosDaNotificacaoController.listaDocumentosDaNotificacao}"
 						style="width: 100%;">
 						<br />
-						<h:outputText value="Documento(s) apensados a notificação"
+						<h:outputText value="Documento(s) apensados a notificaÃ§Ã£o"
 							styleClass="titulo-grupo" />
 						<p:dataTable id="lista" scrollRows="5" paginator="false"
 							paginatorPosition="bottom" lazy="true"
 							value="#{lstDocumentosDaNotificacaoController.listaDocumentosDaNotificacao}"
 							var="docProcesso" emptyMessage="Nenhum registro encontrado.">
 							<p:column style="width:180px;">
-								<f:facet name="header">Descrição</f:facet>
+								<f:facet name="header">DescriÃ§Ã£o</f:facet>
 								<h:outputText value="#{docProcesso.dscArquivoProcesso}" />
 							</p:column>
 							<p:column style="width:160px;">
@@ -123,13 +124,13 @@
 							
 							<h:panelGroup id="pnlCorrigirPorte" layout="block" class="margin" rendered="#{notificacaoAprovacaoController.dto.renderedPnlCorrigirPorte}">
 								<h:panelGroup layout="block" class="margin">
-									<h:outputText value="Correção do porte do empreendimento" />
+									<h:outputText value="CorreÃ§Ã£o do porte do empreendimento" />
 								</h:panelGroup>
 							</h:panelGroup>
 							
 							<h:panelGroup id="pnlAlterarClasseEmpreendimento" layout="block" class="margin" rendered="#{notificacaoAprovacaoController.dto.renderedPnlAlterarClasseEmpreendimento}">
 								<h:panelGroup layout="block" class="margin">
-									<h:outputText value="Alteração de classe do empreendimento" />
+									<h:outputText value="AlteraÃ§Ã£o de classe do empreendimento" />
 								</h:panelGroup>
 								<h:panelGroup layout="block" class="margin">
 									<h:outputText value="Nova classe do empreendimento: " />
@@ -139,7 +140,7 @@
 							
 							<h:panelGroup id="pnlAlterarTipologia" layout="block" class="margin" rendered="#{notificacaoAprovacaoController.dto.renderedPnlAlterarTipologia}" >
 								<h:panelGroup layout="block" class="margin">
-									<h:outputText value="Alteração de tipologia" />
+									<h:outputText value="AlteraÃ§Ã£o de tipologia" />
 								</h:panelGroup>
 								<h:panelGroup layout="block" class="margin">
 									<h:outputText value="Todas as tipologias que caracterizam o empreendimento neste processo:" />
@@ -156,7 +157,7 @@
 							
 							<h:panelGroup id="pnlAlterarAtoAmbiental" layout="block" class="margin" rendered="#{notificacaoAprovacaoController.dto.renderedPnlAlterarAtoAmbiental}">
 								<h:panelGroup layout="block" class="margin">
-									<h:outputText value="Alteração de ato(s)" />
+									<h:outputText value="AlteraÃ§Ã£o de ato(s)" />
 								</h:panelGroup>
 								<p:dataTable var="rpa" value="#{notificacaoAprovacaoController.dto.listaAlteracaoReenquadramentoProcessoAto}">
 									<p:column>
@@ -189,7 +190,7 @@
 							
 							<h:panelGroup id="pnlIncluirNovoAtoAmbiental" layout="block" class="margin" rendered="#{notificacaoAprovacaoController.dto.renderedPnlIncluirNovoAtoAmbiental}">
 								<h:panelGroup layout="block" class="margin">
-									<h:outputText value="Inclusão de ato(s)" />
+									<h:outputText value="InclusÃ£o de ato(s)" />
 								</h:panelGroup>
 								<p:dataTable var="rpa" value="#{notificacaoAprovacaoController.dto.listaInclusaoReenquadramentoProcessoAto}">
 									<p:column>
@@ -209,7 +210,7 @@
 							
 							<h:panelGroup id="pnlAlterarPotencialPoluidor" layout="block" class="margin" rendered="#{notificacaoAprovacaoController.dto.renderedPnlAlterarPotencialPoluidor}">
 								<h:panelGroup layout="block" class="margin">
-									<h:outputText value="Alteração de potencial poluidor da atividade" />
+									<h:outputText value="AlteraÃ§Ã£o de potencial poluidor da atividade" />
 								</h:panelGroup>
 								<p:dataTable var="rpp" value="#{notificacaoAprovacaoController.dto.listaReenquadramentoPotencialPoluicao}">
 									<p:column>
@@ -234,7 +235,7 @@
 					</h:panelGroup>
 					
 					<h:panelGrid columns="1">
-					<h:outputLabel value="Solicitação de shapes:" rendered="#{!empty notificacaoAprovacaoController.listaNotificacaoEmpreendimento}"/>
+					<h:outputLabel value="SolicitaÃ§Ã£o de shapes:" rendered="#{!empty notificacaoAprovacaoController.listaNotificacaoEmpreendimento}"/>
 					<p:dataTable id="dtNotificacaoShape" value="#{notificacaoAprovacaoController.listaNotificacaoEmpreendimento}" var="solicitacao" 
 						rendered="#{!empty notificacaoAprovacaoController.listaNotificacaoEmpreendimento}">
 							<p:column headerText="Motivo">
@@ -253,10 +254,10 @@
 						<h:outputText rendered="#{notificacaoAprovacaoController.dto.notificacao.tipo eq 1}" value="#{notificacaoAprovacaoController.dto.notificacao.qtdDiasValidade} dias" />
 					</h:panelGrid>
 					<div style="padding-top: 20px; float: left; width: 100%">
-						<h:outputText class="titulo-grupo" value="Decisão a ser tomada" />
+						<h:outputText class="titulo-grupo" value="DecisÃ£o a ser tomada" />
 						<br /> <br />
 						
-						<p:selectOneMenu id="combotipnotificacao" required="true" requiredMessage="Favor informar a Aprovação/Reprovação da Notificação."
+						<p:selectOneMenu id="combotipnotificacao" required="true" requiredMessage="Favor informar a AprovaÃ§Ã£o/ReprovaÃ§Ã£o da NotificaÃ§Ã£o."
 							value="#{notificacaoAprovacaoController.dto.situacaoNotificacao}" style="width: 250px;"
 							valueChangeListener="#{notificacaoAprovacaoController.selecionaSituacaoNotificacao}">
 							
@@ -288,15 +289,15 @@
 								<p:inputTextarea id="areaOutros" required="true"
 									value="#{notificacaoAprovacaoController.dto.notificacao.dscOutroJustificativa}"
 									maxLength="500"
-									validatorMessage="O campo deve possuir 500 caracteres no máximo"
-									requiredMessage="O campo Descrição da Justificativa é de preenchimento obrigatório"
+									validatorMessage="O campo deve possuir 500 caracteres no mÃ¡ximo"
+									requiredMessage="O campo DescriÃ§Ã£o da Justificativa Ã© de preenchimento obrigatÃ³rio"
 									style="width:300px;
 									height:65px;" />
 							</h:panelGrid>
 
 							<h:panelGrid id="correcao_notificacao"
 								rendered="#{notificacaoAprovacaoController.renderedCorrecaoNotificacao}">
-								<h:outputText value="Motivo da edição da notificação:" />
+								<h:outputText value="Motivo da ediÃ§Ã£o da notificaÃ§Ã£o:" />
 								<p:selectManyCheckbox id="motivo_correcao"
 									value="#{notificacaoAprovacaoController.dto.notificacao.motivoEdicaoNotificacaoCollection}">
 									<f:converter converterId="simpleEntityConverter" />
@@ -308,14 +309,14 @@
 										update="texto_corrigido btn_salva_texto_corrigido form_aprovar_notificacao:btn_enviar"
 										process="@this,texto_corrigido,btn_salva_texto_corrigido,form_aprovar_notificacao:btn_enviar" />
 								</p:selectManyCheckbox>
-								<h:outputText value="Texto corrigido da notificação:" />
+								<h:outputText value="Texto corrigido da notificaÃ§Ã£o:" />
 								<h:inputTextarea id="texto_corrigido"
 									disabled="#{notificacaoAprovacaoController.disabledCorrecaoNotificacao}"
 									value="#{notificacaoAprovacaoController.dto.notificacao.dscNotificacao}"
 									style="width:568px;height:135px" />
 								<p:commandButton id="btn_salva_texto_corrigido"
 									disabled="#{notificacaoAprovacaoController.disabledCorrecaoNotificacao}"
-									value="Salvar edição da notificação"
+									value="Salvar ediÃ§Ã£o da notificaÃ§Ã£o"
 									update="situacaoNotificacao formPautaGestor:gridProcessos form_aprovar_notificacao:combotipnotificacao form_aprovar_notificacao:texto_notificacao form_aprovar_notificacao:btn_enviar"
 									action="#{notificacaoAprovacaoController.salvarCorrecaoNotificacao}" />
 							</h:panelGrid>

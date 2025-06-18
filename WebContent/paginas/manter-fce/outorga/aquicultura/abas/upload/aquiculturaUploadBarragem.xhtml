@@ -6,6 +6,7 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:p="http://primefaces.prime.com.tr/ui">
 	<h:form id="upDadoAdicionalBarragem" style="width:650px;" rendered="#{fceOutorgaAquiculturaBarragemController.temBarragem}">
+        <ui:include src="/layout/csrfToken.xhtml" />
 		<!-- INICIO GROUP INFO TANQUE - BARRAGEM -->
 		<h:panelGroup style="margin-left:10px;">
 			<h:outputText styleClass="titulo-grupo" style="font-weight:bold;" value="#{bundle.fce_out_aqui_da_rede_barragem}" />
@@ -20,7 +21,7 @@
 		<!-- INICIO DA GRID COM DOCUMENTO UPADO DE TANQUE - BARRAGEM -->
 		<h:panelGrid id="adicionalBarragem" style="margin-left:15px;">
 			<p:fileUpload id="upAdicionalBarragem" widgetVar="upAdicionalBarragem" label="#{bundle.fce_out_aqui_da_upload_barragem}" fileUploadListener="#{fceOutorgaAquiculturaBarragemController.tratarUploadBarragem()}"
-				mode="advanced" oncomplete="updateGridBarragem()" auto="true" allowTypes="/(\.|\/)(pdf|png|jpg)$/" invalidFileMessage="Tipo de arquivo inválido." 
+				mode="advanced" oncomplete="updateGridBarragem()" auto="true" allowTypes="/(\.|\/)(pdf|png|jpg)$/" invalidFileMessage="Tipo de arquivo invÃ¡lido." 
 				process="@this" disabled="#{fceOutorgaAquiculturaBarragemController.docAdicionalBarragemUpado or fceOutorgaAquiculturaBarragemController.desabilitarTudo}" />
 			<p:remoteCommand name="updateGridBarragem" update="adicionalBarragem" />
 			<p:dataTable id="docBarragemUpado" widgetVar="docBarragemUpado" rendered="#{fceOutorgaAquiculturaBarragemController.docAdicionalBarragemUpado}" value="#{fceOutorgaAquiculturaBarragemController.fceAquiculturaBarragem.uploadCaminhoArquivo}" var="barUpado" lazy="true" style="width:590px;">

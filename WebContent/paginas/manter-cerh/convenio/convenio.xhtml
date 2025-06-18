@@ -8,7 +8,10 @@
 	template="../../../layout/template.xhtml">
 
 	<ui:define name="titulo-pagina">
-		<h3>Consultar Convênios</h3>
+        <ui:include src="/layout/csrfToken.xhtml" />
+        <ui:include src="/layout/csrfToken.xhtml" />
+        <ui:include src="/layout/csrfToken.xhtml" />
+		<h3>Consultar ConvÃªnios</h3>
 	</ui:define>
 
 	<ui:define name="conteudo-principal">
@@ -35,14 +38,14 @@
 			</h:form>
 		</p:confirmDialog>		
 	
-	<p:dialog id="dialogIncluirConvenio" dynamic="true" width="630" header="Incluir Convênio" widgetVar="dialogIncluirConvenio" modal="true" position="top" resizable="false">
+	<p:dialog id="dialogIncluirConvenio" dynamic="true" width="630" header="Incluir ConvÃªnio" widgetVar="dialogIncluirConvenio" modal="true" position="top" resizable="false">
 		<ui:include src="/paginas/manter-cerh/convenio/associarEmpresaConvenio.xhtml" />
 	</p:dialog>
 	
 		<h:form id="formConvenio">
 		
 			<h3>
-				<h:outputLabel styleClass="titulo-grupo" style="font-weight:bold;" value="PARÂMETROS DA CONSULTA" />
+				<h:outputLabel styleClass="titulo-grupo" style="font-weight:bold;" value="PARÃ‚METROS DA CONSULTA" />
 			</h3>
 
 			<h:panelGroup id="panelContultarConvenio" layout="block" style="margin-top:15px; width: 100%;">
@@ -90,8 +93,8 @@
 		
 			<h:panelGrid>
 				<h:panelGrid columns="3">
-					<p:commandButton actionListener="#{contratoConvenioController.consultarConvenio()}" value="Consultar Convênio"/>
-					<p:commandButton actionListener="#{contratoConvenioController.incluirConvenio()}" oncomplete="dialogIncluirConvenio.show()" value="Incluir Convênio" />
+					<p:commandButton actionListener="#{contratoConvenioController.consultarConvenio()}" value="Consultar ConvÃªnio"/>
+					<p:commandButton actionListener="#{contratoConvenioController.incluirConvenio()}" oncomplete="dialogIncluirConvenio.show()" value="Incluir ConvÃªnio" />
 					<p:commandButton actionListener="#{contratoConvenioController.limpar()}" value="Limpar" />
 				</h:panelGrid>
 			</h:panelGrid>
@@ -99,7 +102,7 @@
 			<br/>
 			
 			<h:panelGrid id="dadosEmpresa" columns="2" rendered="#{not empty contratoConvenioController.listConvenio and not empty contratoConvenioController.pessoaJuridica.nomRazaoSocial}">
-				<h:outputText value="Nome/Razão Social:" style="font-weight: bold;" />
+				<h:outputText value="Nome/RazÃ£o Social:" style="font-weight: bold;" />
 				<h:outputText value="#{contratoConvenioController.pessoaJuridica.nomRazaoSocial}" />
 				<h:outputText value="Email:" style="font-weight: bold;"/>
 				<h:outputText value="#{contratoConvenioController.pessoaJuridica.pessoa.desEmail}" />
@@ -119,10 +122,10 @@
 				paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}">
 	
 					<f:facet name="header">
-		            	Lista de Convênios Vinculados à Empresa
+		            	Lista de ConvÃªnios Vinculados Ã  Empresa
 		        	</f:facet>
 	
-					<p:column headerText="Convênio" style="text-align:center;">
+					<p:column headerText="ConvÃªnio" style="text-align:center;">
 						<h:outputText value="#{convenio.nomContratoConvenio}" />
 					</p:column>
 					
@@ -130,21 +133,21 @@
 						<h:outputText value="#{convenio.numContrato}" />
 					</p:column>
 					
-					<p:column headerText="Ações" style="text-align:center;">
+					<p:column headerText="AÃ§Ãµes" style="text-align:center;">
 						
 						<p:commandLink  action="#{contratoConvenioController.visualizarConvenio()}" process="@this" update="formIncluirConvenio" oncomplete="dialogIncluirConvenio.show()">
 							<f:setPropertyActionListener target="#{contratoConvenioController.contratoConvenio}" value="#{convenio}" />
-							<h:graphicImage title="Visualizar Convênio" value="/resources/img/ico-pesquisa.png" />
+							<h:graphicImage title="Visualizar ConvÃªnio" value="/resources/img/ico-pesquisa.png" />
 						</p:commandLink>
 							
 						<p:commandLink  action="#{contratoConvenioController.editarContratoConvenio()}" process="@this" update="formIncluirConvenio" oncomplete="dialogIncluirConvenio.show()">
 							<f:setPropertyActionListener target="#{contratoConvenioController.contratoConvenio}" value="#{convenio}" />
-							<h:graphicImage title="Editar Convênio" value="/resources/img/ico-editar.png" />
+							<h:graphicImage title="Editar ConvÃªnio" value="/resources/img/ico-editar.png" />
 						</p:commandLink>
 							
 						<p:commandLink oncomplete="confirmaExclusaoConvenio.show();" process="@this" >
 							<f:setPropertyActionListener target="#{contratoConvenioController.contratoConvenio}" value="#{convenio}" />
-							<h:graphicImage title="Excluir Convênio" value="/resources/img/ico-excluir.png" />
+							<h:graphicImage title="Excluir ConvÃªnio" value="/resources/img/ico-excluir.png" />
 						</p:commandLink>
 						
 					</p:column>	

@@ -15,7 +15,8 @@
 		<ui:define name="conteudo-principal">	
 		
 		<!-- form -->
-		<h:form id="filtroEmpreendimento">	
+		<h:form id="filtroEmpreendimento">
+        <ui:include src="/layout/csrfToken.xhtml" />	
 			<h3><h:outputLabel styleClass="titulo-grupo" style="font-weight:bold;" value="INSTRUÇÕES" /></h3>
 			<p class="titulo-grupo">
 				- Para consultar um ou mais empreendimentos, informe o(s) parâmetro(s) de consulta desejado(s) e clique no botão "Consultar".<br />
@@ -142,6 +143,7 @@
 		<!--  dialog de confirmação -->
 		<p:confirmDialog id="confirmDialogExclusaoEmpreendimento" widgetVar="confirmDlgExclusaoEmpreendimento" header="#{bundle.hdr_confirma_exclusao}" message="#{bundle.msg_confirma_exclusao}" severity="alert">
 			<h:form>
+        <ui:include src="/layout/csrfToken.xhtml" />
 				<p:commandButton id="confirmarExclusao" value="#{bundle.btn_sim}" update=":filtroEmpreendimento:panel @form" action="#{empreendimentoController.excluirEmpreendimento}" oncomplete="confirmDlgExclusaoEmpreendimento.hide()" process="confirmarExclusao"/>
 				<p:commandButton value="#{bundle.btn_nao}" type="button" onclick="confirmDlgExclusaoEmpreendimento.hide()" />
 			</h:form>

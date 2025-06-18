@@ -7,6 +7,7 @@
 	xmlns:p="http://primefaces.prime.com.tr/ui">
 
 	<h:form id="formBoleto">
+        <ui:include src="/layout/csrfToken.xhtml" />
 
 		<h:outputText style="font-weight: bold;" value="Dados do Requerente"/> 
 		<h:panelGrid columns="2">
@@ -17,7 +18,7 @@
 		</h:panelGrid>
 		<p:spacer width="20" height="5"/>
 		<h:panelGrid columns="3">
-			<h:outputText value="Número Requerimento"/>
+			<h:outputText value="NÃºmero Requerimento"/>
 			<p:spacer width="50" height="1"/>				
 			<h:outputText value="Porte do Empreendimento"/>
 			<h:outputText value="#{requerimentoUnicoController.requerimentoUnicoDTO.requerimentoUnico.requerimento.numRequerimento}" />
@@ -40,7 +41,7 @@
 		<p:spacer width="20" height="5"/>
 		<h:panelGrid columns="2">
 			<p:graphicImage url="/resources/img/ico-msg-informacao.png"/>
-			<h:outputText value="Para os atos de Licenciamento e Outorga de água, utilizar o boleto do Banco do Brasil. Para os atos florestais usar o DAE." />		
+			<h:outputText value="Para os atos de Licenciamento e Outorga de Ã¡gua, utilizar o boleto do Banco do Brasil. Para os atos florestais usar o DAE." />		
 		</h:panelGrid>		
 		<p:remoteCommand name="validarValorBoleto" global="false" process="@this" update="formBoleto:coordenacoes formBoleto:botoes" action="#{requerimentoUnicoController.validarBoletoRequerimento()}"/>
 		<h:panelGrid columns="1">
@@ -114,9 +115,9 @@
 			</h:panelGrid>
 			
 			<h:panelGrid id="coordenacoes">
-				<h:outputText styleClass="titulo-grupo"	style="font-weight:bold;color:#5D7750;"	value="Encaminhar para coordenação:" rendered="#{requerimentoUnicoController.exibeCoordenacoes}"/>
+				<h:outputText styleClass="titulo-grupo"	style="font-weight:bold;color:#5D7750;"	value="Encaminhar para coordenaÃ§Ã£o:" rendered="#{requerimentoUnicoController.exibeCoordenacoes}"/>
 				<p:selectOneRadio value="${requerimentoUnicoController.areaSelecionada}" layout="pageDirection" rendered="#{requerimentoUnicoController.exibeCoordenacoes}"
- 						 required="#{requerimentoUnicoController.exibeCoordenacoes}"	requiredMessage="O campo Encaminhar para coordenação é de preenchimento obrigatório.">
+ 						 required="#{requerimentoUnicoController.exibeCoordenacoes}"	requiredMessage="O campo Encaminhar para coordenaÃ§Ã£o Ã© de preenchimento obrigatÃ³rio.">
 						<f:selectItems value="${requerimentoUnicoController.areas}" />
 				</p:selectOneRadio>
 			</h:panelGrid>

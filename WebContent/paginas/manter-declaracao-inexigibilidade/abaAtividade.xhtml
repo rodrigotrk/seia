@@ -7,7 +7,8 @@
 	xmlns:p="http://primefaces.prime.com.tr/ui">
 
 	<h:form id="formDeclaracao">
-		<h:outputLabel value="Selecione uma das atividades inexigíveis" />
+        <ui:include src="/layout/csrfToken.xhtml" />
+		<h:outputLabel value="Selecione uma das atividades inexigÃ­veis" />
 		<br/><br/>
 		
 		<h:panelGrid columns="1">
@@ -21,7 +22,7 @@
 				<p:commandLink actionListener="#{declaracaoInexigibilidadeController.filtrar}" process="@form" 
 							update="tabViewDI:formDeclaracao:dtAtividade tabViewDI:formDeclaracao:dtAtividadeSelecionada tabViewDI:formDeclaracao:pnlAtividadeSelecionada"
 							disabled="#{!declaracaoInexigibilidadeController.permiteEditar}">
-					<h:graphicImage title="Selecionar Gerador do resíduo" value="/resources/img/ico-pesquisa.png" />
+					<h:graphicImage title="Selecionar Gerador do resÃ­duo" value="/resources/img/ico-pesquisa.png" />
 				</p:commandLink>
 			</h:panelGrid>
 			
@@ -30,13 +31,13 @@
 								disabled="#{!declaracaoInexigibilidadeController.permiteEditar}">
 					<p:ajax listener="#{declaracaoInexigibilidadeController.filtrar}" update="tabViewDI:formDeclaracao:dtAtividade"/>
 				</p:selectBooleanCheckbox>
-				<h:outputText value="Inexigível de Outorga" />
+				<h:outputText value="InexigÃ­vel de Outorga" />
 				
 				<p:selectBooleanCheckbox id="chkInexigivelLicenca" value="#{declaracaoInexigibilidadeController.inexigivelLicenca}"
 								disabled="#{!declaracaoInexigibilidadeController.permiteEditar}">
 					<p:ajax listener="#{declaracaoInexigibilidadeController.filtrar}" update="tabViewDI:formDeclaracao:dtAtividade"/>
 				</p:selectBooleanCheckbox>
-				<h:outputText value="Inexigível de Licença" />
+				<h:outputText value="InexigÃ­vel de LicenÃ§a" />
 			</h:panelGrid>
 			
 			<p:dataTable id="dtAtividade" widgetVar="dtAtividade" var="ativ" value="#{declaracaoInexigibilidadeController.listaAtividade}"
@@ -49,7 +50,7 @@
 				<p:column headerText="Tipo Atividade">
 					<h:outputText value="#{ativ.tipoAtividadeInexigivel.desTipoAtividadeInexigivel}" />
 				</p:column>
-				<p:column headerText="Ação">
+				<p:column headerText="AÃ§Ã£o">
 		          	<p:commandLink title="Selecionar Atividade" process="@this" 
 		          		actionListener="#{declaracaoInexigibilidadeController.selecionarAtividade(ativ)}" 
 		          		update="tabViewDI:formDeclaracao:dtAtividade tabViewDI:formDeclaracao:dtAtividadeSelecionada tabViewDI:formDeclaracao:pnlAtividadeSelecionada tabViewDI:formBotoes:pnlFuncoes tabViewDI:formInfoAdicional"
@@ -70,7 +71,8 @@
 					<p:column headerText="Tipo Atividade">
 						<h:outputText value="#{ativ.tipoAtividadeInexigivel.desTipoAtividadeInexigivel}" />
 					</p:column>
-					<p:column headerText="Ação" style="align:center">
+        <ui:include src="/layout/csrfToken.xhtml" />
+					<p:column headerText="AÃ§Ã£o" style="align:center">
 			          	<p:commandLink title="Remover Atividade" process="@this" actionListener="#{declaracaoInexigibilidadeController.removerAtividade()}" 
 			          		update="tabViewDI:formDeclaracao:dtAtividade tabViewDI:formDeclaracao:dtAtividadeSelecionada tabViewDI:formDeclaracao:pnlAtividadeSelecionada  tabViewDI:formBotoes:pnlFuncoes"
 			          		disabled="#{!declaracaoInexigibilidadeController.permiteEditar}">
@@ -85,7 +87,7 @@
 	
 	<h:form id="formBotoes">
 		<p:outputPanel id="pnlFuncoes">
-		<p:commandButton actionListener="#{declaracaoInexigibilidadeController.avancar}" value="Avançar" 
+		<p:commandButton actionListener="#{declaracaoInexigibilidadeController.avancar}" value="AvanÃ§ar" 
 			image="ui-icon-arrowthick-1-e" style="float:right; margin-left:5px;" 
 			disabled="#{empty declaracaoInexigibilidadeController.listaAtividadeSelecionada}">
 			<f:setPropertyActionListener value="false" target="#{declaracaoInexigibilidadeController.permiteSalvar}"/>

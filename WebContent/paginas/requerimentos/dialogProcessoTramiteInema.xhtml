@@ -7,6 +7,7 @@
 	xmlns:p="http://primefaces.prime.com.tr/ui">
 
 	<h:form id="formProcesso">
+        <ui:include src="/layout/csrfToken.xhtml" />
 				<h:panelGrid columns="1">
 					<p:selectOneRadio value="${requerimentoUnicoController.periodoDoProcesso}" valueChangeListener="#{requerimentoUnicoController.alterarLayoutProcessoTramite()}" >	
 						 <f:selectItem itemLabel="Novo (a partir de 12/06/2012)" itemValue="0" />  
@@ -16,9 +17,9 @@
 				</h:panelGrid>
 				
 				<h:panelGrid columns="1" id="panelProcessosNovos"  >
-					<h:outputText value="Número do Processo" rendered="#{!requerimentoUnicoController.showPanelProcessosAntigos}"/>
+					<h:outputText value="NÃºmero do Processo" rendered="#{!requerimentoUnicoController.showPanelProcessosAntigos}"/>
 					<p:inputMask mask="9999.999.999999/INEMA/LIC-99999"
-						label="Número do Processo"
+						label="NÃºmero do Processo"
 						value="#{requerimentoUnicoController.processoExterno.processo}"
 						required="true" size="33" rendered="#{!requerimentoUnicoController.showPanelProcessosAntigos}">
 						<f:validateLength maximum="40" />
@@ -29,14 +30,14 @@
 					<p:selectOneRadio  rendered="#{requerimentoUnicoController.showPanelProcessosAntigos}" 
 					valueChangeListener="#{requerimentoUnicoController.alterarLayoutProcessoAntigo()}" 
 					value="#{requerimentoUnicoController.tipoDoProcesso}" >	
-						 <f:selectItem itemLabel="Licença" itemValue="0" />  
+						 <f:selectItem itemLabel="LicenÃ§a" itemValue="0" />  
 				         <f:selectItem itemLabel="Outorga" itemValue="1" />
    		         		 <p:ajax process="@this" update="formProcesso:panelProcessoLicenca formProcesso:panelProcessoOutorga" />
 					</p:selectOneRadio>
 					<h:panelGrid columns="1" id="panelProcessoLicenca">
-							<h:outputText value="Número do Processo" 
+							<h:outputText value="NÃºmero do Processo" 
 								rendered="#{requerimentoUnicoController.isLicenca and requerimentoUnicoController.showPanelProcessosAntigos}"/>
-						<p:inputMask label="Número do Processo"
+						<p:inputMask label="NÃºmero do Processo"
 							rendered="#{requerimentoUnicoController.showPanelProcessosAntigos and requerimentoUnicoController.isLicenca}"
 							value="#{requerimentoUnicoController.processoExterno.processo}"
 							required="true">
@@ -44,8 +45,8 @@
 						</p:inputMask>
 					</h:panelGrid>
 					<h:panelGrid columns="1" id="panelProcessoOutorga">
-						<h:outputText value="Número do Processo" rendered="#{!requerimentoUnicoController.isLicenca and requerimentoUnicoController.showPanelProcessosAntigos}"/>
-						<p:inputText label="Número do Processo" 
+						<h:outputText value="NÃºmero do Processo" rendered="#{!requerimentoUnicoController.isLicenca and requerimentoUnicoController.showPanelProcessosAntigos}"/>
+						<p:inputText label="NÃºmero do Processo" 
 							onkeypress="SomenteNumero(this);" 
 							onkeyup="SomenteNumero(this);"
 							rendered="#{!requerimentoUnicoController.isLicenca and requerimentoUnicoController.showPanelProcessosAntigos}"

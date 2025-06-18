@@ -6,24 +6,25 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:p="http://primefaces.prime.com.tr/ui">
 
-	<h:form id="formPermissao"><!-- binding="#{relGrupoPerfilFuncionalidadeController.formularioASerLimpoPermissao}" -->
+	<h:form id="formPermissao">
+        <ui:include src="/layout/csrfToken.xhtml" /><!-- binding="#{relGrupoPerfilFuncionalidadeController.formularioASerLimpoPermissao}" -->
 		<h:panelGrid id="panelPermissao" columns="1">
 			
 			<h:outputLabel value="* #{bundle.lbl_perfil}:" />
-	        <p:selectOneMenu id="selectOnePerfil" value="#{relGrupoPerfilFuncionalidadeController.permissao.perfil}" style="width: 300px;" converter="perfilConverter" required="true" requiredMessage="O campo Perfil é de preenchimento obrigatório.">
+	        <p:selectOneMenu id="selectOnePerfil" value="#{relGrupoPerfilFuncionalidadeController.permissao.perfil}" style="width: 300px;" converter="perfilConverter" required="true" requiredMessage="O campo Perfil Ã© de preenchimento obrigatÃ³rio.">
 	        	<f:selectItem itemLabel="Selecione..." />
 	            <f:selectItems value="#{relGrupoPerfilFuncionalidadeController.perfis}" var="perfil" itemLabel="#{perfil.dscPerfil}" itemValue="#{perfil}"/>  
 	        </p:selectOneMenu>
 	        
 	        <h:outputLabel value="* #{bundle.lbl_secao}:" />
-	        <p:selectOneMenu id="selectOneSecao" value="#{relGrupoPerfilFuncionalidadeController.funcionalidade.ideSecao}"  style="width: 300px;" converter="secaoConverter" required="true"  requiredMessage="O campo Seção é de preenchimento obrigatório.">
+	        <p:selectOneMenu id="selectOneSecao" value="#{relGrupoPerfilFuncionalidadeController.funcionalidade.ideSecao}"  style="width: 300px;" converter="secaoConverter" required="true"  requiredMessage="O campo SeÃ§Ã£o Ã© de preenchimento obrigatÃ³rio.">
 	            <f:selectItems value="#{relGrupoPerfilFuncionalidadeController.colSecoes}" var="secao" itemLabel="#{secao.dscSecao}" itemValue="#{secao}"/>  
 	            <p:ajax event="change" process="@this" global="false" update="selectOneFuncionalidade selectOneSecao"/>
 	        </p:selectOneMenu> 
 			
 			<h:outputLabel value="* #{bundle.lbl_funcionalidade}:" />
 	        <p:selectOneMenu id="selectOneFuncionalidade" value="#{relGrupoPerfilFuncionalidadeController.permissao.funcionalidade}" style="width: 300px;" converter="funcionalidadeConverter"
-	        	required="true" requiredMessage="O campo Funcionalidade é de preenchimento obrigatório." disabled="#{!relGrupoPerfilFuncionalidadeController.exibeComboFuncionalidade}" >
+	        	required="true" requiredMessage="O campo Funcionalidade Ã© de preenchimento obrigatÃ³rio." disabled="#{!relGrupoPerfilFuncionalidadeController.exibeComboFuncionalidade}" >
 	        	
 	            <f:selectItems value="#{relGrupoPerfilFuncionalidadeController.listaFuncionalidades}" var="funcionalidade" itemLabel="#{funcionalidade.dscFuncionalidade}" itemValue="#{funcionalidade}"/>
 	            <p:ajax event="change" global="false" update="selectOneAcao" />
@@ -31,7 +32,7 @@
 	        
 			<h:outputLabel value="* #{bundle.lbl_acao}:" />
 	        <p:selectOneMenu id="selectOneAcao" value="#{relGrupoPerfilFuncionalidadeController.permissao.acao}" style="width: 300px;" converter="simpleEntityConverter"
-				disabled="#{!relGrupoPerfilFuncionalidadeController.exibeComboAcaoPopup}" required="true" requiredMessage="O campo Ação é de preenchimento obrigatório.">
+				disabled="#{!relGrupoPerfilFuncionalidadeController.exibeComboAcaoPopup}" required="true" requiredMessage="O campo AÃ§Ã£o Ã© de preenchimento obrigatÃ³rio.">
 	        	
 	        	<f:selectItem itemLabel="Selecione..." />
 	            <f:selectItems value="#{relGrupoPerfilFuncionalidadeController.listaAcoesPopup}" var="acao"  itemLabel="#{acao.dscAcao}" itemValue="#{acao}"/>  

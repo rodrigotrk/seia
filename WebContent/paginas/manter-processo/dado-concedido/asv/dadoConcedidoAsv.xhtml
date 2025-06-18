@@ -30,6 +30,7 @@
 					
 					<p:tab title="#{dto.nomImovel}" style="width: 100%;" id="tabDadoConcedidoImovel">
 						<h:form id="frmDadoConcedidoPoligonal">
+        <ui:include src="/layout/csrfToken.xhtml" />
 							<h:panelGrid style="width: 100%;" rendered="#{dadoConcedidoAsvController.isRenderedPoligonalRequerimento(dto)}">
 								<h3><h:outputText styleClass="titulo-grupo" value="#{bundle.relocacao_reverva_legal_lbl_poligonais_requerimento}" /></h3>
 								<p:dataTable 
@@ -136,7 +137,7 @@
 							
 						<!-- <p:outputPanel id="plMaterialLenhoNovo">
 							<br />
-							<h:outputText styleClass="titulo-grupo" style="font-weight:bold;" value="Especificação do Produto da Supressão" />
+							<h:outputText styleClass="titulo-grupo" style="font-weight:bold;" value="EspecificaÃ§Ã£o do Produto da SupressÃ£o" />
 							<br /><br />
 							<h:outputText styleClass="titulo-grupo" style="font-weight:bold; margin-left:10px;" value="* Especies"/>
 							<br />
@@ -158,7 +159,7 @@
 							<h:panelGrid id="gridTableEspecie" style="width: 100%;">
 								<p:dataTable id="tblTipoClassificacao" value="#{dadoConcedidoAsvController.listaEspecieSupressao}" var="especieSupressao" lazy="true" paginator="true" rows="15"  
 									paginatorPosition="bottom" paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}" rowsPerPageTemplate="5,10,15" 
-									emptyMessage="Nenhuma especie supressão encontrado.">
+									emptyMessage="Nenhuma especie supressÃ£o encontrado.">
 									<p:column style="text-align:justify; width:90%">
 										<f:facet name="header">
 											<h:outputText value="Nome" />
@@ -166,8 +167,8 @@
 										<h:outputText value="#{especieSupressao.nomEspecieSupressao}"/>
 									</p:column>
 									
-									<p:column style="width:40px; text-align:center;" headerText="Ações" rendered="#{!dadoConcedidoAsvController.somenteVisualizacao}">
-										<p:commandLink title="Adicionar Classificação(ões)" process="@this"
+									<p:column style="width:40px; text-align:center;" headerText="AÃ§Ãµes" rendered="#{!dadoConcedidoAsvController.somenteVisualizacao}">
+										<p:commandLink title="Adicionar ClassificaÃ§Ã£o(Ãµes)" process="@this"
 											 global="false" actionListener="#{dadoConcedidoAsvController.obterNovoNomePopular()}" action="#{nomePopularEspecieController.abrirNomePopular(especieSupressao)}">
 											 
 											 <f:setPropertyActionListener target="#{dadoConcedidoAsvController.listaEspecieSupressaoAutorizacao}" value="#{dto.listaEspecieSupressaoAutorizacao}"/>
@@ -177,7 +178,7 @@
 											 <f:setPropertyActionListener target="#{nomePopularEspecieController.idDoComponenteParaSerAtualizado}" value="accDadoConcedidoImovel:#{dadoConcedidoAsvController.obterPosicaoNaLista(dadoConcedidoAsvController.listaDTO, dto)}:frmDadoConcedidoPoligonal" />
 											 <f:setPropertyActionListener target="#{nomePopularEspecieController.listaItemRemovidoNomePopularEspecie}" value="#{especieSupressao.removidosNomePopularEspecie}" /> 
 											<f:setPropertyActionListener target="#{dadoConcedidoAsvController.autorizacaoManejoCabrucaDTOSelecionado}" value="#{dto}" /> 
-											<h:graphicImage title="Adicionar Classificação(ões)" value="/resources/img/ico-aprovar-notificacao.png" />
+											<h:graphicImage title="Adicionar ClassificaÃ§Ã£o(Ãµes)" value="/resources/img/ico-aprovar-notificacao.png" />
 										</p:commandLink>
 									</p:column>
 								</p:dataTable>
@@ -203,7 +204,7 @@
 												<h:outputText value="Volume total" /> <br /> <h:outputText value="fora de APP" />
 											</f:facet>
 											<h:panelGrid columns="3" id="pgVolumeForaAPP">
-												<h:outputText value="m³" />
+												<h:outputText value="mÂ³" />
 												<p:spacer height="15px;"/>
 												<p:inputText value="#{especieSupressao.volumeTotalForaApp}" style="width:80px;" converter="doubleConverter" onkeyup="maskIt(this, event, '99.999.999,99', true)" maxlength="13" disabled="#{dadoConcedidoAsvController.somenteVisualizacao or !especieSupressao.edicao}">
 							 		    			<p:ajax event="blur" process="@form" global="false" listener="#{dadoConcedidoAsvController.calcularVolumeForaAPP(especieSupressao)}" partialSubmit="true" update="pgVolumeForaAPP teste"/>
@@ -226,7 +227,7 @@
 												<h:outputText value="Volume total" /> <br /> <h:outputText value="em APP" />
 											</f:facet>
 											<h:panelGrid columns="3" id="pgVolumeEmAPP">
-												<h:outputText value="m³" />
+												<h:outputText value="mÂ³" />
 												<p:spacer height="15px;"/>
 												<p:inputText value="#{especieSupressao.volumeTotalEmApp}" style="width:80px;" converter="doubleConverter" onkeyup="maskIt(this, event, '99.999.999,99', true)" maxlength="13" disabled="#{dadoConcedidoAsvController.somenteVisualizacao or !especieSupressao.edicao}">
 							 		    			<p:ajax event="blur" global="false" listener="#{asvSupressaoController.calcularVolumeEmAPP(especieSupressao)}" update="pgVolumeEmAPP"/>	
@@ -247,7 +248,7 @@
 										</p:column>
 										<p:column style="text-align:justify;">
 											<f:facet name="header">
-												<h:outputText value="Destino socioeconêmico" /> <br /> <h:outputText value="do Produto" escape="false" />
+												<h:outputText value="Destino socioeconÃªmico" /> <br /> <h:outputText value="do Produto" escape="false" />
 											</f:facet>
 											<h:panelGroup layout="block" style="overflow:auto;">		        
 							 		    		<p:selectManyCheckbox value="#{especieSupressao.listaDestinoSocioeconomicoSelecionado}" layout="pageDirection" converter="simpleEntityConverter" disabled="#{!especieSupressao.edicao or dadoConcedidoAsvController.somenteVisualizacao}">
@@ -258,11 +259,11 @@
 										</p:column>
 										<p:column style="text-align:justify;width: 100px">
 											<f:facet name="header">
-												<h:outputText value="Ações" />
+												<h:outputText value="AÃ§Ãµes" />
 											</f:facet>
 											
 											<h:panelGroup>
-												<p:commandLink title="Confirmar volumes e destino socioeconômico do produto" process="@form" global="false" 
+												<p:commandLink title="Confirmar volumes e destino socioeconÃ´mico do produto" process="@form" global="false" 
 												disabled="#{dadoConcedidoAsvController.somenteVisualizacao}"
 												rendered="#{especieSupressao.edicao}" actionListener="#{dadoConcedidoAsvController.validarEspecie()}">
 						 		    				<f:attribute name="especieSupressao" value="#{especieSupressao}"/>
@@ -309,6 +310,7 @@
 			
 			<h:panelGroup id="pnlDadoConcedidoBotoes" layout="block" style="width: 100%; text-align: right; margin-top: 30px;">
 				<h:form id="frmDadoConcedidoBotoes">
+        <ui:include src="/layout/csrfToken.xhtml" />
 					<p:commandButton value="Voltar" process="@this" onclick="dlgDadoConcedido.hide();" />
 					<p:commandButton  value="Salvar" oncomplete="confirmSalvarASV.show();"
 						rendered="#{!dadoConcedidoAsvController.somenteVisualizacao}"  process="teste, @this"/>
@@ -320,9 +322,10 @@
 	
 	<p:confirmDialog widgetVar="confirmSalvarASV" header="Mensagem" message="Confirma os dados concedidos?" severity="alert">
 		<h:form style="text-align: center;">
+        <ui:include src="/layout/csrfToken.xhtml" />
 			<p:commandButton value="Sim" actionListener="#{dadoConcedidoAsvController.salvar()}"
 				oncomplete="confirmSalvarASV.hide();" style="margin-right:30px;"/>
-			<p:commandButton value="Não" type="button" onclick="confirmSalvarASV.hide()" />
+			<p:commandButton value="NÃ£o" type="button" onclick="confirmSalvarASV.hide()" />
 		</h:form>
 	</p:confirmDialog>
 </ui:composition>

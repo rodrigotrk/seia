@@ -19,12 +19,13 @@
 			<ui:include src="/paginas/manter-tcca/includeDialogsProjeto.xhtml" />
 			
 			<h:form id="formCadastroProjeto">
+        <ui:include src="/layout/csrfToken.xhtml" />
 				<h3><h:outputLabel styleClass="titulo-grupo" style="font-weight:bold;" value="Dados do Projeto" /></h3>
 				
 				<p:spacer height="10" width="0"/>
 				
 				<h:panelGrid columns="2">
-					<h:outputText value="Número do TCCA:" styleClass="bold"/>
+					<h:outputText value="NÃºmero do TCCA:" styleClass="bold"/>
 					<h:outputText value="#{projetoTccaController.tcca.numTcca}" />
 				</h:panelGrid>
 					
@@ -44,7 +45,7 @@
 					<h:panelGrid columns="3">
 					 	<h:outputText value="* Nome do Projeto:" />
 					 	<p:spacer height="0" width="1"/>
-					 	<h:outputText value="Número da Resolução:" />
+					 	<h:outputText value="NÃºmero da ResoluÃ§Ã£o:" />
 					 	
 						<p:inputTextarea id="nomProjeto" value="#{projetoTccaController.projeto.nomProjeto}"
 							disabled="#{projetoTccaController.projeto.visualizando}" maxlength="100" cols="50"/>
@@ -59,7 +60,7 @@
 				
 				<h:panelGrid id="panelUnidadeConservacao">
 					<h:panelGroup>
-						<h:outputText value="* Selecionar Unidade de Conservação:" />
+						<h:outputText value="* Selecionar Unidade de ConservaÃ§Ã£o:" />
 						<p:spacer width="10" height="0"/>
 						<p:commandLink actionListener="#{projetoTccaController.prepararDialogUnidadeConservacao()}" oncomplete="dialogUC.show();" update="formUC:listaUnidades"
 							disabled="#{projetoTccaController.projeto.visualizando}">
@@ -73,7 +74,7 @@
 						rowsPerPageTemplate="5,10,15" emptyMessage="#{bundle.msg_lista_vazia}" style="max-width:500px;">
 						
 						<f:facet name="header">
-							<h:outputText value="Lista das Unidades de Conservação" />
+							<h:outputText value="Lista das Unidades de ConservaÃ§Ã£o" />
 						</f:facet>
 						
 						<p:column>

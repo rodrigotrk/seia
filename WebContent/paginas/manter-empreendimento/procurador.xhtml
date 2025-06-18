@@ -8,6 +8,7 @@
 	
 	<!-- PROCURADOR PESSOA FISICA -->
 	<h:form id="formModelProc">
+        <ui:include src="/layout/csrfToken.xhtml" />
 		<h:panelGrid id="paneltableproc">
 			<p:dataTable id="tabelaproc" widgetVar="tabelaproc" var="procPfEmp" style="width:400px;" rendered="#{procuradorEmpreendimentoController.mostrarTabelaProcuradoresPf}"
 				value="#{procuradorEmpreendimentoController.modelProcPf}"
@@ -28,7 +29,8 @@
 					<h:outputText value="#{procPfEmp.ideProcuradorPessoaFisica.ideProcurador.nomPessoa}" />
 				</p:column>
 				
-				<p:column style="text-align: center;" headerText="Ação">
+        <ui:include src="/layout/csrfToken.xhtml" />
+				<p:column style="text-align: center;" headerText="AÃ§Ã£o">
 					<p:commandLink title="Visualizar" actionListener="#{procuradorEmpreendimentoController.visualizarProcuracaoPF()}" process="@this" update="tabAbas:formProcuradorPf">
 						<h:graphicImage  value="/resources/img/ico-pesquisa.png" />
 						<f:attribute name="procPfEmp" value="#{procPfEmp}"/>
@@ -53,7 +55,7 @@
 				<h:outputLabel value="* Procurador" />
 				<h:outputLabel />
 				<p:selectOneMenu id="selectMenuProcuradorCHoi" value="#{procuradorEmpreendimentoController.procuradorPessoaFisica}"  disabled="#{empreendimentoController.visualizarEmpreendimento or procuradorEmpreendimentoController.isVisualizar}"
-					required="true" requiredMessage="O campo Procurador é uma informação obrigatória.">
+					required="true" requiredMessage="O campo Procurador Ã© uma informaÃ§Ã£o obrigatÃ³ria.">
 					<f:selectItem itemLabel="Selecione..." />
 					<f:selectItems value="#{procuradorEmpreendimentoController.valuesComboProcuradores}" />
 					<f:converter converterId="procuradorPessoaFisicaConverter" />
@@ -77,15 +79,19 @@
 			
 			<h:panelGroup>
 				<h:panelGrid columns="1">
-					<h:outputLabel id="idlblcopiaprocuracao" value="* Cópia da procuração (.pdf.jpg - Máximo 5MB)" />
+					<h:outputLabel id="idlblcopiaprocuracao" value="* CÃ³pia da procuraÃ§Ã£o (.pdf.jpg - MÃ¡ximo 5MB)" />
 				</h:panelGrid>
 			</h:panelGroup>
 			
 			<h:panelGroup>
 				<h:panelGrid columns="1" >
 					<p:fileUpload uploadLabel="false" label="Upload Documento"
-							fileUploadListener="#{procuradorEmpreendimentoController.trataArquivoProc()}" invalidFileMessage="Tipo de arquivo inválido."
-							mode="advanced" oncomplete="remoteCommandUpdateDataTable()" auto="true" required="true" requiredMessage="Arquivo é Obrigatório!"
+							fileUploadListener="#{procuradorEmpreendimentoController.trataArquivoProc()}" invalidFileMessage="Tipo de arquivo invÃ¡lido."
+        <ui:include src="/layout/csrfToken.xhtml" />
+        <ui:include src="/layout/csrfToken.xhtml" />
+        <ui:include src="/layout/csrfToken.xhtml" />
+        <ui:include src="/layout/csrfToken.xhtml" />
+							mode="advanced" oncomplete="remoteCommandUpdateDataTable()" auto="true" required="true" requiredMessage="Arquivo Ã© ObrigatÃ³rio!"
 							allowTypes="/(\.|\/)(pdf|gif|jpeg|png|jpg)$/" disabled="#{empreendimentoController.visualizarEmpreendimento or procuradorEmpreendimentoController.bloquearEdicao}"/>
 					
 					<p:remoteCommand name="remoteCommandUpdateDataTable" immediate="true" update="tblDocumento"/> 
@@ -111,7 +117,7 @@
 		
 		<h:form>
 			<h:panelGrid columns="1">
-				<h:outputLabel id="idlblperiodoprocuracao" value="* Período de validade  da procuração" />
+				<h:outputLabel id="idlblperiodoprocuracao" value="* PerÃ­odo de validade  da procuraÃ§Ã£o" />
 			</h:panelGrid>
 			
 			<h:panelGroup>
@@ -120,14 +126,14 @@
 						<h:outputText value="De   " />
 						<p:calendar value="#{procuradorEmpreendimentoController.procPfEmpreendimento.dtcInicioProcuracao}" 
 							showOn="button" locale="pt" pattern="dd/MM/yyyy"
-							required="true" requiredMessage="O campo Período da Procuração Data Início é de preechimento obrigatório." 
+							required="true" requiredMessage="O campo PerÃ­odo da ProcuraÃ§Ã£o Data InÃ­cio Ã© de preechimento obrigatÃ³rio." 
 							navigator="true" readOnlyInputText="true" maxdate="#{pessoaFisicaController.dataAtual}" disabled="#{empreendimentoController.visualizarEmpreendimento or procuradorEmpreendimentoController.bloquearEdicao}"  />
-						<h:outputText value="   Até" />
+						<h:outputText value="   AtÃ©" />
 					</h:panelGroup>
 					
 					<p:calendar value="#{procuradorEmpreendimentoController.procPfEmpreendimento.dtcFimProcuracao}" showOn="button" 
 					 	locale="pt" pattern="dd/MM/yyyy" disabled="#{empreendimentoController.visualizarEmpreendimento or procuradorEmpreendimentoController.bloquearEdicao}"
-						required="true" requiredMessage="O campo Período da Procuração Data Fim é de preechimento obrigatório."
+						required="true" requiredMessage="O campo PerÃ­odo da ProcuraÃ§Ã£o Data Fim Ã© de preechimento obrigatÃ³rio."
 						navigator="true" readOnlyInputText="true" mindate="#{pessoaFisicaController.dataAtual}" />
 				</h:panelGrid>
 			</h:panelGroup>
@@ -135,9 +141,9 @@
 			<h:panelGroup>
 				<h:panelGrid columns="1">
 					<h:outputLabel id="idlblassinaturareplegal" value="* Existe assinatura conjunta entre os procuradores?" />
-					<h:selectOneRadio value="#{procuradorEmpreendimentoController.procPfEmpreendimento.indAssinaturaObrigatoria}" disabled="#{empreendimentoController.visualizarEmpreendimento or procuradorEmpreendimentoController.bloquearEdicao}" required="true" requiredMessage="O campo Assinatura de procuradores é de preenchimento obrigatório.">
+					<h:selectOneRadio value="#{procuradorEmpreendimentoController.procPfEmpreendimento.indAssinaturaObrigatoria}" disabled="#{empreendimentoController.visualizarEmpreendimento or procuradorEmpreendimentoController.bloquearEdicao}" required="true" requiredMessage="O campo Assinatura de procuradores Ã© de preenchimento obrigatÃ³rio.">
 						<f:selectItem itemLabel="Sim" itemValue="#{true}" />
-						<f:selectItem itemLabel="Não" itemValue="#{false}" />
+						<f:selectItem itemLabel="NÃ£o" itemValue="#{false}" />
 					</h:selectOneRadio>
 				</h:panelGrid>
 			</h:panelGroup>
@@ -157,7 +163,7 @@
 				actionListener="#{procuradorEmpreendimentoController.excluirProcEmpPf()}"
 				oncomplete="confirmation.hide()" process="@this"/>
 			
-			<p:commandButton value="Não" onclick="confirmation.hide()" type="button" />
+			<p:commandButton value="NÃ£o" onclick="confirmation.hide()" type="button" />
 		</h:form>
 	</p:confirmDialog>
 	<!-- FIM PROCURADOR PESSOA FISICA -->
@@ -184,7 +190,7 @@
 				<p:column headerText="Nome" style="text-align: center;">
 					<h:outputText value="#{procRepEmp.ideProcuradorRepresentante.ideProcurador.nomPessoa}" />
 				</p:column>
-				<p:column style="text-align: center;" headerText="Ação">	
+				<p:column style="text-align: center;" headerText="AÃ§Ã£o">	
 					<p:commandLink title="Visualizar" actionListener="#{procuradorEmpreendimentoController.visualizarProcuracaoPJ()}" disabled="#{empreendimentoController.visualizarEmpreendimento}" process="@this" update="tabAbas:formProcuradorPJ">
 						<h:graphicImage value="/resources/img/ico-pesquisa.png" />
 						<f:attribute name="procRepEmp" value="#{procRepEmp}"  />
@@ -210,7 +216,7 @@
 				<p:selectOneMenu id = "selectProcurador"
 								 value="#{procuradorEmpreendimentoController.procuradorRepresentante}"  
 								 required="true" 
-								 requiredMessage="O campo Procurador é uma informação obrigatória."
+								 requiredMessage="O campo Procurador Ã© uma informaÃ§Ã£o obrigatÃ³ria."
 								 disabled="#{empreendimentoController.visualizarEmpreendimento or procuradorEmpreendimentoController.isVisualizar}">
 								 
 					<f:selectItem itemLabel="Selecione..." />
@@ -239,15 +245,17 @@
 			
 			<h:panelGroup>
 				<h:panelGrid columns="1">
-					<h:outputLabel id="idlblcopiaprocuracao" value="* Cópia da procuração (.pdf.jpg - Máximo 5MB)" />
+					<h:outputLabel id="idlblcopiaprocuracao" value="* CÃ³pia da procuraÃ§Ã£o (.pdf.jpg - MÃ¡ximo 5MB)" />
 				</h:panelGrid>
 			</h:panelGroup>
 			
 			<h:panelGroup>
 				<h:panelGrid columns="1" >
 					<p:fileUpload uploadLabel="false" label="Upload Documento" disabled="#{empreendimentoController.visualizarEmpreendimento or procuradorEmpreendimentoController.bloquearEdicao}"
-						fileUploadListener="#{procuradorEmpreendimentoController.trataArquivoProcPj()}" invalidFileMessage="Tipo de arquivo inválido."
-						mode="advanced" oncomplete="remoteCommandUpdateDataTable()" update="tblDocumento" auto="true" required="true" requiredMessage="Arquivo é Obrigatório!"
+        <ui:include src="/layout/csrfToken.xhtml" />
+        <ui:include src="/layout/csrfToken.xhtml" />
+						fileUploadListener="#{procuradorEmpreendimentoController.trataArquivoProcPj()}" invalidFileMessage="Tipo de arquivo invÃ¡lido."
+						mode="advanced" oncomplete="remoteCommandUpdateDataTable()" update="tblDocumento" auto="true" required="true" requiredMessage="Arquivo Ã© ObrigatÃ³rio!"
 						allowTypes="/(\.|\/)(pdf|gif|jpeg|png|jpg)$/" />
 					<p:remoteCommand name="remoteCommandUpdateDataTable" immediate="true" update="tblDocumento" /> 
 					<h:panelGrid id="tblDocumento">
@@ -269,7 +277,7 @@
 		
 		<h:form>
 			<h:panelGrid columns="1">
-				<h:outputLabel id="idlblperiodoprocuracao" value="* Período de validade  da procuração" />
+				<h:outputLabel id="idlblperiodoprocuracao" value="* PerÃ­odo de validade  da procuraÃ§Ã£o" />
 			</h:panelGrid>
 			
 			<h:panelGroup>
@@ -278,13 +286,13 @@
 					<h:outputText value="De   " />
 					<p:calendar value="#{procuradorEmpreendimentoController.procRepEmpreendimento.dtcInicioProcuracao}" disabled="#{empreendimentoController.visualizarEmpreendimento or procuradorEmpreendimentoController.bloquearEdicao}"
 						showOn="button" locale="pt" pattern="dd/MM/yyyy"
-						required="true" requiredMessage="O campo Período da Procuração Data Início é de preechimento obrigatório." 
+						required="true" requiredMessage="O campo PerÃ­odo da ProcuraÃ§Ã£o Data InÃ­cio Ã© de preechimento obrigatÃ³rio." 
 						navigator="true" readOnlyInputText="true" maxdate="#{pessoaFisicaController.dataAtual}"  />
-					<h:outputText value="   Até" />
+					<h:outputText value="   AtÃ©" />
 					</h:panelGroup>
 					<p:calendar value="#{procuradorEmpreendimentoController.procRepEmpreendimento.dtcFimProcuracao}" showOn="button" disabled="#{empreendimentoController.visualizarEmpreendimento or procuradorEmpreendimentoController.bloquearEdicao}"
 					 	locale="pt" pattern="dd/MM/yyyy" 
-						required="true" requiredMessage="O campo Período da Procuração Data Fim é de preechimento obrigatório."
+						required="true" requiredMessage="O campo PerÃ­odo da ProcuraÃ§Ã£o Data Fim Ã© de preechimento obrigatÃ³rio."
 						navigator="true" readOnlyInputText="true" mindate="#{pessoaFisicaController.dataAtual}" 
 					 />
 				</h:panelGrid>
@@ -293,9 +301,9 @@
 			<h:panelGroup>
 				<h:panelGrid columns="1">
 					<h:outputLabel id="idlblassinaturareplegal" value="* Existe assinatura conjunta entre os procuradores?" />
-					<h:selectOneRadio value="#{procuradorEmpreendimentoController.procRepEmpreendimento.indAssinaturaObrigatoria}" disabled="#{empreendimentoController.visualizarEmpreendimento or procuradorEmpreendimentoController.bloquearEdicao}" required="true" requiredMessage="O campo Assinatura de procuradores é de preenchimento obrigatório.">
+					<h:selectOneRadio value="#{procuradorEmpreendimentoController.procRepEmpreendimento.indAssinaturaObrigatoria}" disabled="#{empreendimentoController.visualizarEmpreendimento or procuradorEmpreendimentoController.bloquearEdicao}" required="true" requiredMessage="O campo Assinatura de procuradores Ã© de preenchimento obrigatÃ³rio.">
 						<f:selectItem itemLabel="Sim" itemValue="#{true}" />
-						<f:selectItem itemLabel="Não" itemValue="#{false}" />
+						<f:selectItem itemLabel="NÃ£o" itemValue="#{false}" />
 					</h:selectOneRadio>
 				</h:panelGrid>
 			</h:panelGroup>
@@ -316,7 +324,7 @@
 				actionListener="#{procuradorEmpreendimentoController.excluirProcEmpPJ()}"
 				oncomplete="confirmationpj.hide()" process="@this"/>
 			
-			<p:commandButton value="Não" onclick="confirmationpj.hide()" type="button" />
+			<p:commandButton value="NÃ£o" onclick="confirmationpj.hide()" type="button" />
 		</h:form>
 	</p:confirmDialog>
 <!-- FIM PROCURADOR PESSOA JURIDICA -->

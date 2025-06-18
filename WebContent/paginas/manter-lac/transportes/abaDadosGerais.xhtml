@@ -7,21 +7,22 @@ xmlns:ui="http://java.sun.com/jsf/facelets"
 xmlns:p="http://primefaces.prime.com.tr/ui">
 
 	<h:form id="formDadosGerais" style="width:800px">
+        <ui:include src="/layout/csrfToken.xhtml" />
 		<p:outputPanel id="panel01">
-			<h:outputText styleClass="titulo-grupo" style="font-weight:bold; margin-left:5px;" value="Frota de Veículos" />
+			<h:outputText styleClass="titulo-grupo" style="font-weight:bold; margin-left:5px;" value="Frota de VeÃ­culos" />
 			<h:panelGrid id="grid01">
 			<br />
-			<!-- Lista de exibição, somente leitura, para visualização da frota de veículos cadastrados no empreendimento -->
+			<!-- Lista de exibiÃ§Ã£o, somente leitura, para visualizaÃ§Ã£o da frota de veÃ­culos cadastrados no empreendimento -->
 				<p:dataTable id="tableTransporte" var="veiculo" value="#{lacTransporteController.listEmpreendimentoVeiculos}" emptyMessage="#{bundle.lac_dadosGerais_msg007}" style="width:765px; margin-left:10px;">
-					<p:column headerText="Nº do Veículo" style="text-align: center;">
+					<p:column headerText="NÂº do VeÃ­culo" style="text-align: center;">
 						<h:outputText value="#{lacTransporteController.listEmpreendimentoVeiculos.indexOf(veiculo) + 1}" />
 					</p:column>
 					
-					<p:column headerText="Tipo de Veículo" style="text-align: center;">
+					<p:column headerText="Tipo de VeÃ­culo" style="text-align: center;">
 						<h:outputText value="#{veiculo.ideTipoVeiculo.dscTipoVeiculo}" />
 					</p:column>
 					
-					<p:column headerText="Placa de Cavalo Mecânico" style="text-align: center;">
+					<p:column headerText="Placa de Cavalo MecÃ¢nico" style="text-align: center;">
 						<h:outputText value="#{veiculo.dscPlacaCavaloMecanico}" />
 					</p:column>
 					
@@ -41,7 +42,7 @@ xmlns:p="http://primefaces.prime.com.tr/ui">
 			<br />
 		</p:outputPanel>
 		
-		<h:outputText styleClass="titulo-grupo" style="font-weight:bold;" value="* O transporte será de Produtos e/ou Resíduos?"/>
+		<h:outputText styleClass="titulo-grupo" style="font-weight:bold;" value="* O transporte serÃ¡ de Produtos e/ou ResÃ­duos?"/>
         <br />
 		<p:outputPanel id="panelProdutos">
 		<br />
@@ -62,7 +63,7 @@ xmlns:p="http://primefaces.prime.com.tr/ui">
 				<p:spacer/>
 				<p:spacer/>
 				
-				<h:outputText value="Nome do Produto / Nº ONU" style="margin-left:10px;"/>
+				<h:outputText value="Nome do Produto / NÂº ONU" style="margin-left:10px;"/>
 				<p:inputText id="buscaProduo" value="#{lacTransporteController.nomeProduto}" onkeyup="pesquisar_produto();" style="margin-left:-590px;" >
 					<p:ajax event="blur" process="@this" global="false"/>
 				</p:inputText>
@@ -79,19 +80,19 @@ xmlns:p="http://primefaces.prime.com.tr/ui">
 					
 					<p:column style="width: 580px; text-align:justify;">  
 						<f:facet name="header">
-							<h:outputText value="Descrição do Produto" />  
+							<h:outputText value="DescriÃ§Ã£o do Produto" />  
 						</f:facet>
 						<h:outputText value="#{produto.dscProduto}" />
 					</p:column>
 					
 					<p:column style="text-align:center">  
 						<f:facet name="header">
-							<h:outputText value="Nº ONU" />  
+							<h:outputText value="NÂº ONU" />  
 						</f:facet>
 						<h:outputText value="#{produto.numOnu}" />
 					</p:column>
 					
-					<p:column style="width: 40px; text-align:center;" headerText="Ações">		
+					<p:column style="width: 40px; text-align:center;" headerText="AÃ§Ãµes">		
 						<p:commandLink title="Confirmar" process="@this" 
 							update="tabAbasId:formDadosGerais:buscaProduo
 									tabAbasId:formDadosGerais:dataTableProdutos
@@ -113,11 +114,11 @@ xmlns:p="http://primefaces.prime.com.tr/ui">
 				<p:dataTable id="tableProdutos" value="#{lacTransporteController.listProdutoSelected}" var="produto" style="width: 755px; margin-left:18px;" 
 				emptyMessage="#{bundle.lac_dadosGerais_msg007}"
 				rendered="#{lacTransporteController.temProdutoSelecionado()}">
-					<p:column headerText="Descrição do Produto" style="width: 340px; text-align:justify;">
+					<p:column headerText="DescriÃ§Ã£o do Produto" style="width: 340px; text-align:justify;">
 						<h:outputText value="#{produto.dscProduto}" />
 					</p:column>
 					
-					<p:column headerText="Nº ONU" style="text-align:center;">
+					<p:column headerText="NÂº ONU" style="text-align:center;">
 						<h:outputText value="#{produto.numOnu}" />
 					</p:column>
 					
@@ -127,7 +128,7 @@ xmlns:p="http://primefaces.prime.com.tr/ui">
 					</p:column>
 					
 					<p:column style="text-align:center; width:140px;">
-						<f:facet name="header">Quantidade Média <br/>Anual Transportada</f:facet>
+						<f:facet name="header">Quantidade MÃ©dia <br/>Anual Transportada</f:facet>
 						<h:panelGroup rendered="#{produto.outro == false}">
 							<p:inputText id="qtdProduto" value="#{produto.qtdTransporteAnual}" onkeyup="maskIt(this, event, '99.999.999,99', true)" converter="doubleConverter" style="width:70px;" disabled="#{produto.desabilitaQtd}" maxlength="12">
 								<p:ajax event="blur" global="false"/>
@@ -136,7 +137,7 @@ xmlns:p="http://primefaces.prime.com.tr/ui">
 						</h:panelGroup>
 					</p:column>
 			
-					<p:column headerText="Ações" style="width:35px; text-align:center;">
+					<p:column headerText="AÃ§Ãµes" style="width:35px; text-align:center;">
 						<p:commandLink title="Confirmar" process="@this,qtdProduto" update="tabAbasId:formDadosGerais:tableProdutos" actionListener="#{produto.setDesabilitaQtd(true)}" global="false"
 							rendered="#{produto.desabilitaQtd == false and produto.outro == false}">
 							<h:graphicImage title="Confirmar" value="/resources/img/ico-aprovar-notificacao.png" />
@@ -164,20 +165,20 @@ xmlns:p="http://primefaces.prime.com.tr/ui">
 	            	<p:ajax update="panelResiduos" global="false"/>
             	</p:selectBooleanCheckbox>
 	            <h:panelGroup>
-	     		    <h:outputText value="Resíduos"/>
+	     		    <h:outputText value="ResÃ­duos"/>
 	     		    <h:graphicImage title="#{bundle.lac_dadosGerais_ajuda002}" value="/resources/img/ico-ajuda.png" id="ajuda002" style="margin: 1px 1px 1px 4px; text-align:justify;"/>
 	            </h:panelGroup>
        			<br />
 			</h:panelGrid>
 			
-			<h:panelGrid id="selectResiduos" rendered="#{lacTransporteController.lacTransporte.indResiduo}" columns="3"> <!-- se RESÍDUO for marcado -->
+			<h:panelGrid id="selectResiduos" rendered="#{lacTransporteController.lacTransporte.indResiduo}" columns="3"> <!-- se RESÃDUO for marcado -->
 				<br />
 				<br />
-				<h:outputText styleClass="titulo-grupo" style="font-weight:bold;" value="* Resíduos Transportados"/>
+				<h:outputText styleClass="titulo-grupo" style="font-weight:bold;" value="* ResÃ­duos Transportados"/>
 				<p:spacer/>
 				<p:spacer/>
 				
-				<h:outputText value="Nome do Resíduo / Código" style="margin-left:10px;"/>
+				<h:outputText value="Nome do ResÃ­duo / CÃ³digo" style="margin-left:10px;"/>
 				<p:inputText id="buscaResiduo" value="#{lacTransporteController.nomeResiduo}" onkeyup="pesquisar_residuo();" style="margin-left:-580px;">
 					<p:ajax event="blur" process="@this" global="false"/>
 				</p:inputText>
@@ -187,21 +188,21 @@ xmlns:p="http://primefaces.prime.com.tr/ui">
 				paginatorPosition="bottom" paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}" rowsPerPageTemplate="5,10,15" 
 				emptyMessage="#{bundle.lac_dadosGerais_msg007}" style="width: 755px; margin-left:10px;" >
 					<f:facet name="header">
-						<h:outputText value="Lista de Resíduos Cadastrados" />
+						<h:outputText value="Lista de ResÃ­duos Cadastrados" />
 					</f:facet>
 					<p:column style="width: 600px; text-align:justify;">
 						<f:facet name="header">
-							<h:outputText value="Descrição do Resíduo" />  
+							<h:outputText value="DescriÃ§Ã£o do ResÃ­duo" />  
 						</f:facet>
 						<h:outputText value="#{residuo.nomResiduo}" />
 					</p:column>
 					<p:column style="text-align:center">  
 						<f:facet name="header">
-							<h:outputText value="Código" />  
+							<h:outputText value="CÃ³digo" />  
 						</f:facet>
 						<h:outputText value="#{residuo.codResiduo}" />
 					</p:column>
-					<p:column style="width: 40px; text-align:center;" headerText="Ações">
+					<p:column style="width: 40px; text-align:center;" headerText="AÃ§Ãµes">
 						<p:commandLink title="Confirmar" process="@this" action="#{lacTransporteController.adicionarResiduoLista()}" global="false" immediate="true"  
 						update="tabAbasId:formDadosGerais:buscaResiduo
 								tabAbasId:formDadosGerais:dataTableResiduos
@@ -216,17 +217,17 @@ xmlns:p="http://primefaces.prime.com.tr/ui">
 			<h:panelGrid id="gridResiduos">	 
 				<h:panelGroup id="groupResidSelect" rendered="#{lacTransporteController.temResiduoSelecionado()}">
 					<br />
-					<h:outputText styleClass="titulo-grupo" style="font-weight:bold; margin-left:8px;" value="Resíduos Selecionados"/>
+					<h:outputText styleClass="titulo-grupo" style="font-weight:bold; margin-left:8px;" value="ResÃ­duos Selecionados"/>
 					<br />
 				</h:panelGroup>
 				<p:dataTable id="tableResiduos" value="#{lacTransporteController.listResiduoSelected}" var="residuo" emptyMessage="#{bundle.lac_dadosGerais_msg007}" 
 							 rendered="#{lacTransporteController.temResiduoSelecionado()}" 
 							 style="width: 755px; margin-left:18px;">
-					<p:column headerText="Código" style="text-align: center;">
+					<p:column headerText="CÃ³digo" style="text-align: center;">
 						<h:outputText value="#{residuo.codResiduo}" />
 					</p:column>
 					
-					<p:column headerText="Descrição do Resíduo" style="text-align: justify; width:310px;">
+					<p:column headerText="DescriÃ§Ã£o do ResÃ­duo" style="text-align: justify; width:310px;">
 						<h:outputText value="#{residuo.nomResiduo}" />
 					</p:column>
 					
@@ -235,7 +236,7 @@ xmlns:p="http://primefaces.prime.com.tr/ui">
 					</p:column>
 					
 					<p:column style="text-align:center; width:140px;" id="colQtd">
-			        	<f:facet name="header">Quantidade Média <br/>Anual Transportada</f:facet>
+			        	<f:facet name="header">Quantidade MÃ©dia <br/>Anual Transportada</f:facet>
 			        	<h:panelGroup rendered="#{residuo.outro == false}">
 							<p:inputText id="qtdResiduo" value="#{residuo.qtdTransporteAnual}" onkeyup="maskIt(this, event, '99.999.999,99', true)" converter="doubleConverter" style="width:70px;" disabled="#{residuo.desabilitaQtd}" maxlength="12">
 								<p:ajax event="blur" global="false"/>
@@ -244,26 +245,26 @@ xmlns:p="http://primefaces.prime.com.tr/ui">
 						</h:panelGroup>
 					</p:column>
 					
-					<p:column headerText="Ações" style="width:35px; text-align:center">
+					<p:column headerText="AÃ§Ãµes" style="width:35px; text-align:center">
 						<p:commandLink title="Confirmar" process="@this,qtdResiduo" update="tabAbasId:formDadosGerais:tableResiduos" actionListener="#{residuo.setDesabilitaQtd(true)}" global="false"
 							rendered="#{residuo.desabilitaQtd == false and residuo.outro == false}">
 							<h:graphicImage title="Confirmar" value="/resources/img/ico-aprovar-notificacao.png" />
 		     			    <f:setPropertyActionListener target="#{lacTransporteController.residuoSelecionado}" value="#{residuo}"/>
 						</p:commandLink>
-						<p:commandLink title="Editar quantidade de resíduo transportado" process="@this" update="tabAbasId:formDadosGerais:tableResiduos" actionListener="#{residuo.setDesabilitaQtd(false)}" global="false"
+						<p:commandLink title="Editar quantidade de resÃ­duo transportado" process="@this" update="tabAbasId:formDadosGerais:tableResiduos" actionListener="#{residuo.setDesabilitaQtd(false)}" global="false"
 							  rendered="#{residuo.desabilitaQtd and residuo.outro == false}">
-		          			 <h:graphicImage title="Editar quantidade do resíduo transportado" value="/resources/img/ico-editar.png" />
+		          			 <h:graphicImage title="Editar quantidade do resÃ­duo transportado" value="/resources/img/ico-editar.png" />
 		     			     <f:setPropertyActionListener target="#{lacTransporteController.residuoSelecionado}" value="#{residuo}"/>
 			            </p:commandLink>
-			          	<p:commandLink oncomplete="confirmaExclusaoResiduo.show()" title="Excluir Resíduo Transportado" process="@this" global="false">
-		          			 <h:graphicImage title="Excluir resíduo transportado" value="/resources/img/ico-excluir.png" />
+			          	<p:commandLink oncomplete="confirmaExclusaoResiduo.show()" title="Excluir ResÃ­duo Transportado" process="@this" global="false">
+		          			 <h:graphicImage title="Excluir resÃ­duo transportado" value="/resources/img/ico-excluir.png" />
 		     			     <f:setPropertyActionListener target="#{lacTransporteController.residuoSelecionado}" value="#{residuo}"/>
 			            </p:commandLink>
 					</p:column>		
 				</p:dataTable>
 				<p:spacer/>
 				<h:panelGroup id="mensagemComposicao" rendered="#{lacTransporteController.temResiduoSelecionado()}" style="color:green;">
-					<h:outputText value="Para verificar a composição do resíduo conforme NBR-10.004," style="margin-left:18px;"/>
+					<h:outputText value="Para verificar a composiÃ§Ã£o do resÃ­duo conforme NBR-10.004," style="margin-left:18px;"/>
 					<a href="/resources/NBRn10004-2004.pdf"  target="_blanck" style="color:green; font-weight:bold;"> clique aqui.</a>
 					<br />
 					<br />
@@ -300,7 +301,7 @@ xmlns:p="http://primefaces.prime.com.tr/ui">
 				<p:outputPanel autoUpdate="true">
 					<p:dataTable var="localizacao" styleClass="90%" value="#{lacTransporteController.lacTransporte.ideLocalizacaoGeografica}" emptyMessage="#{bundle.lac_dadosGerais_msg007}" rendered="true"
 								 style="width:760px; margin-left:10px;">
-						<p:column headerText="Descrição" style="width:320px; text-align:center;"> 
+						<p:column headerText="DescriÃ§Ã£o" style="width:320px; text-align:center;"> 
 							<h:outputText value="#{localizacao.desLocalizacaoGeografica}" />
 						</p:column>
 						<p:column headerText="Fonte da Coordenada" style="text-align:center;">
@@ -309,7 +310,7 @@ xmlns:p="http://primefaces.prime.com.tr/ui">
 						<p:column headerText="Sistema de Coordenadas" style="text-align:center; width:180px;">
 							<h:outputText value="#{localizacao.nomeSistemaCoordenadas()}" />
 						</p:column>
-						<p:column headerText="Ações" style="width:40px;">
+						<p:column headerText="AÃ§Ãµes" style="width:40px;">
 							<p:commandLink process="@this" oncomplete="confirmacaoExclusaoLocalizacaoGenerica.show();" >
 								<f:setPropertyActionListener target="#{localizacaoGeograficaGenericController.objetoLocalizacao}" value="#{lacTransporteController.lacTransporte.ideLocalizacaoGeografica}" />
 								<h:graphicImage title="Excluir" value="/resources/img/ico-excluir.png" />
@@ -317,7 +318,7 @@ xmlns:p="http://primefaces.prime.com.tr/ui">
 							<p:commandLink oncomplete="dlgLocalizacaoGeograficaGeneric.show();" process="@this" action="#{localizacaoGeograficaGenericController.visualizarLocalizacaoGeografica()}">
 								<f:setPropertyActionListener target="#{localizacaoGeograficaGenericController.localizacaoGeograficaSelecionada}" value="#{lacTransporteController.lacTransporte.ideLocalizacaoGeografica}" />
 								<f:setPropertyActionListener target="#{localizacaoGeograficaGenericController.objetoLocalizacao}" value="#{lacTransporteController.lacTransporte}" />
-								<h:graphicImage title="Visualizar Localização no Geobahia" value="/resources/img/ico-pesquisa.png" />
+								<h:graphicImage title="Visualizar LocalizaÃ§Ã£o no Geobahia" value="/resources/img/ico-pesquisa.png" />
 							</p:commandLink>
 						</p:column>
 					</p:dataTable>
@@ -330,14 +331,14 @@ xmlns:p="http://primefaces.prime.com.tr/ui">
 		<p:outputPanel id="panelAtendimento">
 			<h:panelGrid id="cbAtendimento">
 				<br />
-				<h:outputText styleClass="titulo-grupo" style="font-weight:bold;" value="* Atendimento a Emergências Ambientais"/>
+				<h:outputText styleClass="titulo-grupo" style="font-weight:bold;" value="* Atendimento a EmergÃªncias Ambientais"/>
 		        <p:spacer/>
 		        <h:panelGroup>
 		        	<br />
 			        <p:selectBooleanCheckbox value="#{lacTransporteController.lacTransporte.indAtendimentoEmergenciaEmpresa}" style="margin-left:10px;">
 		        		<p:ajax global="false"/>
 	        		</p:selectBooleanCheckbox>
-		        	<h:outputText value="Próprio"/>
+		        	<h:outputText value="PrÃ³prio"/>
 		        </h:panelGroup>
 		        <br />
         		<h:panelGroup>
@@ -383,7 +384,7 @@ xmlns:p="http://primefaces.prime.com.tr/ui">
 						<f:ajax execute="cnpj" render="gridPj gridTelefone"/>
 					</p:commandLink>
 					
-					<h:outputText value="  * Razão Social" />
+					<h:outputText value="  * RazÃ£o Social" />
 					<p:inputText value="#{lacTransporteController.lacTransporte.idePessoaJuridica.nomRazaoSocial}" 
 						style="width: 290px;" 
 						maxlength="200" 
@@ -433,11 +434,11 @@ xmlns:p="http://primefaces.prime.com.tr/ui">
 								<h:outputText value="#{telefone.ideTipoTelefone.nomTipoTelefone}" />
 							</p:column>
 			
-							<p:column headerText="Número" style="text-align: center;">
+							<p:column headerText="NÃºmero" style="text-align: center;">
 								<h:outputText value="#{telefone.numTelefone}" />
 							</p:column>
 							
-							<p:column style="text-align: center;" headerText="Ações">	
+							<p:column style="text-align: center;" headerText="AÃ§Ãµes">	
 								<p:commandLink update="dialogTelefoneLac:frmDialogTelefone" 
 									process="@this" 
 									oncomplete="dialogTelefoneLac.show()" 
@@ -489,7 +490,7 @@ xmlns:p="http://primefaces.prime.com.tr/ui">
                 <br />
 				<p:selectOneRadio value="#{lacTransporteController.lacTransporte.indBaseOperacional}" style="margin-left:10px;">  
 		            <f:selectItem itemLabel="Sim" itemValue="true" />  
-		            <f:selectItem itemLabel="Não" itemValue="false" />
+		            <f:selectItem itemLabel="NÃ£o" itemValue="false" />
 		            <p:ajax update="tabAbasId gridBotoes" global="false"/>
 	       		</p:selectOneRadio>
 			</h:panelGrid>
@@ -498,7 +499,7 @@ xmlns:p="http://primefaces.prime.com.tr/ui">
 		<h:panelGrid id="gridBotoes" columns="2" style="margin-top:40px;">
 			<p:commandButton id="btnVoltar" value="Voltar" style="width:90px;" oncomplete="confirmationVoltarLAC.show()" global="false"/>
 			<p:commandButton id="btnFinalizar" value="Finalizar" style="width:90px;" action="#{lacTransporteController.finalizarLacTransporte()}" rendered="#{lacTransporteController.lacTransporte.indBaseOperacional == false}" update="documento"/>
-		 	<p:commandButton id="btnAvancar" value="Avançar" style="width:90px;" action="#{lacTransporteController.avancarAba()}" global="false" rendered="#{lacTransporteController.lacTransporte.indBaseOperacional}" update="tabAbasId" process="@form" />
+		 	<p:commandButton id="btnAvancar" value="AvanÃ§ar" style="width:90px;" action="#{lacTransporteController.avancarAba()}" global="false" rendered="#{lacTransporteController.lacTransporte.indBaseOperacional}" update="tabAbasId" process="@form" />
 		</h:panelGrid>
 
 	</h:form>

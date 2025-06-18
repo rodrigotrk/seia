@@ -8,33 +8,34 @@
 	template="../../layout/template.xhtml">
 		
 	<ui:define name="titulo-pagina">		
-		<h3> RelatÛrio Quantitativo</h3>		
+        <ui:include src="/layout/csrfToken.xhtml" />
+		<h3> Relat√≥rio Quantitativo</h3>		
 	</ui:define>
 	
 	<ui:define name="conteudo-principal">
 		
-		<h3><h:outputLabel styleClass="titulo-grupo" value="INSTRU«’ES" /></h3><br />
-		- Para elaborar um relatÛrio quantitativo, Informe os par‚metros de consulta desejados e clique no bot„o "Gerar".<br /><br />
-		<strong>- A geraÁ„o do relatÛrio pode demorar um pouco pois dados georreferenciais estar„o sendo processados.</strong><br /><br /><br />
-		<h3><h:outputLabel styleClass="titulo-grupo" value="PAR¬METROS DA CONSULTA" /></h3>
+		<h3><h:outputLabel styleClass="titulo-grupo" value="INSTRU√á√ïES" /></h3><br />
+		- Para elaborar um relat√≥rio quantitativo, Informe os par√¢metros de consulta desejados e clique no bot√£o "Gerar".<br /><br />
+		<strong>- A gera√ß√£o do relat√≥rio pode demorar um pouco pois dados georreferenciais estar√£o sendo processados.</strong><br /><br /><br />
+		<h3><h:outputLabel styleClass="titulo-grupo" value="PAR√ÇMETROS DA CONSULTA" /></h3>
 		<h:form id="formRelatorioQuantitativo">
 			<h:panelGrid columns="1">
 				<br/>
 				<h:panelGrid columns="2">
 					<h:panelGrid columns="1">
-						<h:outputText value="¡reas" style="font-weight:bold;" />
+						<h:outputText value="√Åreas" style="font-weight:bold;" />
 						<h:selectManyCheckbox id="chkArea" value="#{relatorioQuantitativoImovelController.listArea}" layout="pageDirection">
 				            <f:selectItem itemValue="1" itemLabel="Propriedade" />
    							<f:selectItem itemValue="2" itemLabel="Reserva Legal (RL)" />
-						   	<f:selectItem itemValue="3" itemLabel="¡rea de PreservaÁ„o Permanente (APP)" />
-						   	<f:selectItem itemValue="4" itemLabel="¡rea Produtiva" />
-						   	<f:selectItem itemValue="5" itemLabel="Remanescente de VegetaÁ„o Nativa" />
+						   	<f:selectItem itemValue="3" itemLabel="√Årea de Preserva√ß√£o Permanente (APP)" />
+						   	<f:selectItem itemValue="4" itemLabel="√Årea Produtiva" />
+						   	<f:selectItem itemValue="5" itemLabel="Remanescente de Vegeta√ß√£o Nativa" />
 							<p:ajax event="change" update="chkArea" />
 				        </h:selectManyCheckbox>
 				        <br />
 					</h:panelGrid>
 					<h:panelGrid columns="1">
-						<h:outputText value="Status do ImÛvel" style="font-weight:bold;" />
+						<h:outputText value="Status do Im√≥vel" style="font-weight:bold;" />
 						<h:selectOneRadio id="chkStatus" value="#{relatorioQuantitativoImovelController.listStatus}" layout="pageDirection">  
 							<f:selectItem itemValue="0" itemLabel="Registro incompleto" />
    							<f:selectItem itemValue="1" itemLabel="Registrado" />
@@ -47,7 +48,7 @@
 				</h:panelGrid>
 
 				<h:panelGrid columns="1">
-					<h:outputText value="PerÌodo de Cadastro" style="font-weight:bold;" />
+					<h:outputText value="Per√≠odo de Cadastro" style="font-weight:bold;" />
   			   	   	<h:panelGrid id="tblFiltroDataVencimento" columns="2">
 					   <h:panelGroup>
 						   <p:calendar showOn="button" id="dataVencimento1" size="13"
@@ -68,19 +69,19 @@
 					<h:outputText id="lblFilter" value="Tipo de Consulta" style="font-weight:bold;" />
 					<h:panelGrid columns="2">
 						<p:selectOneRadio id="tipoConsulta" value="#{relatorioQuantitativoImovelController.tipoConsulta}">
-							<f:selectItem itemValue="1" itemLabel="InterseÁ„o"/>
-							<f:selectItem itemValue="2" itemLabel="Uni„o"/>
+							<f:selectItem itemValue="1" itemLabel="Interse√ß√£o"/>
+							<f:selectItem itemValue="2" itemLabel="Uni√£o"/>
 						</p:selectOneRadio>
 					</h:panelGrid>						
 					<h:panelGrid columns="3">
 						<h:panelGrid columns="1">
-							<h:outputText value="TerritÛrio de Identidade" />
+							<h:outputText value="Territ√≥rio de Identidade" />
 							<p:selectManyMenu id="comboTerritorio" value="#{relatorioQuantitativoImovelController.listaGidTerSelect}" styleClass="form-input form-select" style="width:300px;height:200px" showCheckbox="true">
 								<f:selectItems value="#{relatorioQuantitativoImovelController.listaTerritorioIdentidade}" var="t" itemValue="#{t.gid}" itemLabel="#{t.nome}"/>
 							</p:selectManyMenu>
 						</h:panelGrid>
 						<h:panelGrid columns="1">
-							<h:outputText value="MunicÌpio" />							
+							<h:outputText value="Munic√≠pio" />							
 							<p:selectManyMenu id="comboMunicipio" value="#{relatorioQuantitativoImovelController.listaGidMunSelect}" styleClass="form-input form-select" style="width:300px;height:200px" showCheckbox="true">
 								<f:selectItems value="#{relatorioQuantitativoImovelController.listaMunicipios}" var="m" itemValue="#{m.gid}" itemLabel="#{m.nome}"/>
 							</p:selectManyMenu>							
@@ -94,7 +95,7 @@
 							</p:selectManyMenu>
 						</h:panelGrid>
 						<h:panelGrid columns="1">
-							<h:outputText value="Bacia Hidrogr·fica" />
+							<h:outputText value="Bacia Hidrogr√°fica" />
 							<p:selectManyMenu id="comboBacia" value="#{relatorioQuantitativoImovelController.listaGidBaciaSelect}" styleClass="form-input form-select" style="width:300px;height:200px" showCheckbox="true">
 								<f:selectItems value="#{relatorioQuantitativoImovelController.listaBacia}" var="g" itemValue="#{g.gid}" itemLabel="#{g.nome}"/>
 							</p:selectManyMenu>
@@ -102,7 +103,7 @@
 					</h:panelGrid>
 					<h:panelGrid columns="3">
 						<h:panelGrid columns="1">
-							<h:outputText value="Unidade de ConservaÁ„o" />
+							<h:outputText value="Unidade de Conserva√ß√£o" />
 							<p:selectManyMenu id="comboUnidade" value="#{relatorioQuantitativoImovelController.listaGidUniSelect}" styleClass="form-input form-select" style="width:300px;height:200px" showCheckbox="true">
 								<f:selectItems value="#{relatorioQuantitativoImovelController.listaUnidadeConservacao}" var="g" itemValue="#{g.gid}" itemLabel="#{g.nome}"/>
 							</p:selectManyMenu>
@@ -123,11 +124,11 @@
 						<!-- f:selectItem itemValue="2" itemLabel="Passivo de Dispensa de Outorga" itemDisabled="true" /-->
 					   	<f:selectItem itemValue="3" itemLabel="Outro Passivo Ambiental Fora de APP e RL" />
 					   	<f:selectItem itemValue="4" itemLabel="PRAD Cadastrado" />
-					   	<!-- f:selectItem itemValue="5" itemLabel="Uso de AgrotÛxico" itemDisabled="true" /-->
-			            <!-- f:selectItem itemValue="6" itemLabel="CaptaÁ„o de Concession·ria P˙blica" itemDisabled="true" /-->
-			            <!-- f:selectItem itemValue="7" itemLabel="CaptaÁ„o de PrecipitaÁ„o MeteorolÛgica/Pluvial" itemDisabled="true" /-->
-			            <!-- f:selectItem itemValue="8" itemLabel="CaptaÁ„o de Subterr‚nea" itemDisabled="true" /-->
-			            <!-- f:selectItem itemValue="9" itemLabel="CaptaÁ„o de Superficial" itemDisabled="true" /-->
+					   	<!-- f:selectItem itemValue="5" itemLabel="Uso de Agrot√≥xico" itemDisabled="true" /-->
+			            <!-- f:selectItem itemValue="6" itemLabel="Capta√ß√£o de Concession√°ria P√∫blica" itemDisabled="true" /-->
+			            <!-- f:selectItem itemValue="7" itemLabel="Capta√ß√£o de Precipita√ß√£o Meteorol√≥gica/Pluvial" itemDisabled="true" /-->
+			            <!-- f:selectItem itemValue="8" itemLabel="Capta√ß√£o de Subterr√¢nea" itemDisabled="true" /-->
+			            <!-- f:selectItem itemValue="9" itemLabel="Capta√ß√£o de Superficial" itemDisabled="true" /-->
 			        </h:selectManyCheckbox>
 				</h:panelGrid>
 

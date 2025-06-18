@@ -18,6 +18,7 @@
 		<h3> <h:outputLabel styleClass="titulo-grupo" style="font-weight:bold;" value="PARÂMETROS DA CONSULTA" /></h3>
 		
 		<h:form>
+        <ui:include src="/layout/csrfToken.xhtml" />
 			  
 			<h:panelGrid columns="1">
 				  
@@ -39,6 +40,7 @@
 		<br />
 
 		<h:form id="listaAtos">
+        <ui:include src="/layout/csrfToken.xhtml" />
 		
 			
 			<p:dataTable 
@@ -92,6 +94,7 @@
 	
 		<p:confirmDialog message="#{bundle.consultapf_msg_confimrexclusao}" header="Mensagem" severity="alert" widgetVar="confirmation" id="confirmation">
 			<h:form id="excluir">
+        <ui:include src="/layout/csrfToken.xhtml" />
 				<p:commandButton id="confirmarExcluir" 	value="#{bundle.consultapf_lbl_sim}" update=":listaAtos:tabelaAtos" actionListener="#{atoAmbientalController.excluirAtoAmbiental()}" onsuccess="confirmation.hide()" process="@this" />
 				<p:commandButton value="#{bundle.consultapf_lbl_nao}" onclick="confirmation.hide()" type="button" />
 			</h:form>

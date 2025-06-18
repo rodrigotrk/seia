@@ -6,6 +6,7 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:p="http://primefaces.prime.com.tr/ui">
 	<h:form id="minLicDadosGerais">
+        <ui:include src="/layout/csrfToken.xhtml" />
 		<h:panelGrid id="gridSubstanciaMineral" style="margin-left:10px;">
 			<h:outputText styleClass="titulo-grupo-bold" value="* #{bundle.fce_lic_min_substancia_mineral}" />
 			<p:commandLink title="#{bundle.fce_lic_min_incluir_substancia}" onclick ="dialogIncluirSubstanciaMineral.show()" update="formIncluirSubstancia"
@@ -19,13 +20,13 @@
 				value="#{fceLicenciamentoMineracaoController.listaFceLicenciamentoMineralSubstanciaMineral}"
 				var="substancia"
 				rendered="#{fceLicenciamentoMineracaoController.substanciaMineralAdicionada}">
-				<p:column headerText="Substância" style="text-align:center;">
+				<p:column headerText="SubstÃ¢ncia" style="text-align:center;">
 					<h:outputText value="#{substancia.substanciaMineralTipologia.ideSubstanciaMineral.nomSubstanciaMineral}" />
 				</p:column>
 				<p:column headerText="Grupo" style="text-align:center;">
 					<h:outputText value="#{substancia.substanciaMineralTipologia.ideTipologia.ideTipologiaPai.desTipologia}" />
 				</p:column>
-				<p:column headerText="Produção Anual" style="text-align:center;">
+				<p:column headerText="ProduÃ§Ã£o Anual" style="text-align:center;">
 					<h:panelGroup rendered="#{!substancia.outros}">
 						<p:inputText id="numProducao" value="#{substancia.numProducaoAnual}" onkeyup="mascararNumeroAndAddZeros(this, event, 13, 2, '.', ',', 3);" maxlength="16" 
 							disabled="#{substancia.confirmado}" style="width:100px;" converter="doubleConverter">
@@ -35,7 +36,7 @@
 						<h:outputText style="margin-left:5px;" value="#{substancia.substanciaMineralTipologia.labelUnidadeMedidaSubstanciaMineral}" />
 					</h:panelGroup>
 				</p:column>
-				<p:column headerText="Ação" style="text-align:center;">
+				<p:column headerText="AÃ§Ã£o" style="text-align:center;">
 					<p:commandLink update="tabLicMineracao:minLicDadosGerais:dataTableMinLicSubstancia" actionListener="#{fceLicenciamentoMineracaoController.confirmarSubstanciaMineral()}"
 						rendered="#{!substancia.confirmado and !substancia.outros}" disabled="#{fceLicenciamentoMineracaoController.desabilitarTudo}" process="tabLicMineracao:minLicDadosGerais:dataTableMinLicSubstancia">
 						<h:graphicImage title="Confirmar" value="/resources/img/ico-aprovar-notificacao.png" />
@@ -64,7 +65,7 @@
 				valueChangeListener="#{fceLicenciamentoMineracaoController.changeIntervencaoCorpoHidrico()}"
 				disabled="#{fceLicenciamentoMineracaoController.desabilitarTudo}">
 				<f:selectItem itemLabel="Sim" itemValue="true" />
-				<f:selectItem itemLabel="Não" itemValue="false" />
+				<f:selectItem itemLabel="NÃ£o" itemValue="false" />
 				<p:ajax event="change" update="tabLicMineracao:minLicDadosGerais:gridIntervencaoCorpoHidrico"/>
 			</p:selectOneRadio>
 			
@@ -82,7 +83,7 @@
 				value="#{fceLicenciamentoMineracaoController.fceLicenciamentoMineral.indSupressao}"
 				disabled="true">
 				<f:selectItem itemLabel="Sim" itemValue="true" />
-				<f:selectItem itemLabel="Não" itemValue="false" />
+				<f:selectItem itemLabel="NÃ£o" itemValue="false" />
 			</p:selectOneRadio>
 		</h:panelGrid>
 		
@@ -114,7 +115,7 @@
 				<p:column headerText="#{bundle.fce_lic_min_numero_processo}" style="text-align:center;">
 					<h:outputText value="#{outorgaMineracao.numProcessoOutorga}" />
 				</p:column>
-				<p:column headerText="Ação" style="text-align:center;">
+				<p:column headerText="AÃ§Ã£o" style="text-align:center;">
 					<p:commandLink update="tabLicMineracao:minLicDadosGerais:dataTableMinLicOutMin" actionListener="#{fceLicenciamentoMineracaoController.confirmarOutorgaMineracao()}"
 						rendered="#{!outorgaMineracao.confirmado}" disabled="#{fceLicenciamentoMineracaoController.desabilitarTudo}" process="tabLicMineracao:minLicDadosGerais:dataTableMinLicOutMin">
 						<h:graphicImage title="Confirmar" value="/resources/img/ico-aprovar-notificacao.png" />
@@ -146,7 +147,7 @@
 		<!-- PANELGRID BOTOES -->
 		<h:panelGrid id="gridBotoes" rendered="#{!fceLicenciamentoMineracaoController.desabilitarTudo}" columns="2" style="margin-top:40px; margin-left:575px;">
 			<p:commandButton id="btnVoltar" value="Voltar" style="width:90px;" update="minLicDadosGerais" onclick="voltarFceLicMineracao.show();" global="false"/>
-			<p:commandButton id="btnAvancar" value="Avançar" style="width:90px;" update="tabLicMineracao" process="minLicDadosGerais" action="#{fceLicenciamentoMineracaoController.avancarAba()}" /> 
+			<p:commandButton id="btnAvancar" value="AvanÃ§ar" style="width:90px;" update="tabLicMineracao" process="minLicDadosGerais" action="#{fceLicenciamentoMineracaoController.avancarAba()}" /> 
 		</h:panelGrid>
 		<!-- FIM DO PANELGRID BOTOES -->
 	</h:form>

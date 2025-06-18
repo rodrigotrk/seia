@@ -15,7 +15,13 @@
 			  height="600"
 			  width="950" 
 			  resizable="false" 
-			  header="Características do Poço"
+        <ui:include src="/layout/csrfToken.xhtml" />
+        <ui:include src="/layout/csrfToken.xhtml" />
+        <ui:include src="/layout/csrfToken.xhtml" />
+        <ui:include src="/layout/csrfToken.xhtml" />
+        <ui:include src="/layout/csrfToken.xhtml" />
+        <ui:include src="/layout/csrfToken.xhtml" />
+			  header="CaracterÃ­sticas do PoÃ§o"
 			  modal="true">
 			  
 		<ui:include src="/paginas/manter-fce/outorga/captacao/subterranea/dialogCaracteristicaPoco.xhtml" />
@@ -30,7 +36,7 @@
 			  height="450" 
 			  width="1100" 
 			  resizable="false"
-			  header="Captação Subterrânea" 
+			  header="CaptaÃ§Ã£o SubterrÃ¢nea" 
 			  modal="true">
 		
 		<p:ajax event="close" listener="#{fceCaptacaoSubterraneaController.limpar()}"/>
@@ -57,7 +63,7 @@
 		
 	</p:dialog>
 
-	<p:confirmDialog header="Confirmação" appendToBody="true"
+	<p:confirmDialog header="ConfirmaÃ§Ã£o" appendToBody="true"
 		message="#{bundle.geral_msg_informacoes_nao_foram_salvas_deseja_continuar}"
 		severity="alert" widgetVar="confirmationVoltarFCEcapSub"
 		id="_confirmationVoltarFCEcapSub">
@@ -65,13 +71,13 @@
 			<p:commandButton value="Sim"
 				oncomplete="confirmationVoltarFCEcapSub.hide();fce_caracteristica_poco.hide();"
 				global="false" />
-			<p:commandButton value="Não"
+			<p:commandButton value="NÃ£o"
 				onclick="confirmationVoltarFCEcapSub.hide();" type="button"
 				global="false" />
 		</h:form>
 	</p:confirmDialog>
 
-	<p:confirmDialog header="Confirmação" appendToBody="true"
+	<p:confirmDialog header="ConfirmaÃ§Ã£o" appendToBody="true"
 		message="#{bundle.geral_msg_informacoes_nao_foram_salvas_deseja_continuar}"
 		severity="alert" widgetVar="confirmationVoltarCapSub"
 		id="_confirmationVoltarCapSub">
@@ -79,14 +85,14 @@
 			<p:commandButton value="Sim" update="formDadosGerais"
 				oncomplete="fce_cap_subterranea.hide();confirmationVoltarCapSub.hide();"
 				global="false" />
-			<p:commandButton value="Não"
+			<p:commandButton value="NÃ£o"
 				onclick="confirmationVoltarCapSub.hide();" type="button"
 				global="false" />
 		</h:form>
 	</p:confirmDialog>
 
 	<p:confirmDialog id="idConfirmarExclusaoUnidadeGeologica"
-		widgetVar="confirmarExclusaoUnidadeGeologica" header="Confirmação"
+		widgetVar="confirmarExclusaoUnidadeGeologica" header="ConfirmaÃ§Ã£o"
 		appendToBody="true" message="#{bundle.msg_generica_deseja_exclusao}"
 		severity="alert">
 		<h:form>
@@ -96,14 +102,14 @@
 				process="@this"
 				actionListener="#{fceCaptacaoSubterraneaController.excluirUnidadeGeologica()}">
 			</p:commandButton>
-			<p:commandButton value="Não"
+			<p:commandButton value="NÃ£o"
 				onclick="confirmarExclusaoUnidadeGeologica.hide()" type="button"
 				global="false" />
 		</h:form>
 	</p:confirmDialog>
 
 	<p:confirmDialog id="idConfirmarExclusaoAquifero"
-		widgetVar="confirmarExclusaoAquifero" header="Confirmação"
+		widgetVar="confirmarExclusaoAquifero" header="ConfirmaÃ§Ã£o"
 		appendToBody="true" message="#{bundle.msg_generica_deseja_exclusao}"
 		severity="alert">
 		<h:form>
@@ -112,19 +118,19 @@
 				process="@this"
 				actionListener="#{fceCaptacaoSubterraneaController.excluirAquifero()}">
 			</p:commandButton>
-			<p:commandButton value="Não" onclick="confirmarAquifero.hide()"
+			<p:commandButton value="NÃ£o" onclick="confirmarAquifero.hide()"
 				type="button" global="false" />
 		</h:form>
 	</p:confirmDialog>
 
-	<p:confirmDialog id="dlgImprimirRelatorioCaptacaoSubterranea" message="#{fceCaptacaoSubterraneaController.msgImprimirRelatorio('Captacão Subterrânea')}"	widgetVar="rel_cap_sub" header="Mensagem">
+	<p:confirmDialog id="dlgImprimirRelatorioCaptacaoSubterranea" message="#{fceCaptacaoSubterraneaController.msgImprimirRelatorio('CaptacÃ£o SubterrÃ¢nea')}"	widgetVar="rel_cap_sub" header="Mensagem">
 		<div align="center">
 			<h:form>
 				<p:commandButton value="Sim" ajax="false" global="false" process="@this" 
 								 onclick="rel_cap_sub.hide();" style="margin-right:10px;">
 					<p:fileDownload	value="#{fceCaptacaoSubterraneaController.imprimirRelatorio}" />
 				</p:commandButton>
-				<p:commandButton value="Não" oncomplete="rel_cap_sub.hide();" process="@this"/>
+				<p:commandButton value="NÃ£o" oncomplete="rel_cap_sub.hide();" process="@this"/>
 			</h:form>
 		</div>
 	</p:confirmDialog>

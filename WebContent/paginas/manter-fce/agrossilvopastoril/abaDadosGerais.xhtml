@@ -7,7 +7,8 @@
 	xmlns:p="http://primefaces.prime.com.tr/ui">
 
 	<h:form id="formAbaDadosGerais">
-		<h:outputText value="*Caracterização do projeto" styleClass="titulo-grupo" style="font-weight:bold;" />
+        <ui:include src="/layout/csrfToken.xhtml" />
+		<h:outputText value="*CaracterizaÃ§Ã£o do projeto" styleClass="titulo-grupo" style="font-weight:bold;" />
 		<br/>
 		<p:spacer width="0" height="10"/>
 		<p:selectOneRadio value="#{agrossilvopastorilController.fceAgrossilvopastoril.ideTipoCaracterizacaoProjeto}" layout="pageDirection">
@@ -15,26 +16,26 @@
 		</p:selectOneRadio>
 		<br/>
 		<h:panelGrid columns="5">
-			<h:outputText value="*Data prevista para início da implantação" 
+			<h:outputText value="*Data prevista para inÃ­cio da implantaÃ§Ã£o" 
 			rendered="#{agrossilvopastorilController.faseImplantacao}"/>
 			<p:calendar size="7" showOn="button" locale="pt" pattern="dd/MM/yyyy" navigator="true" readOnlyInputText="true" value="#{agrossilvopastorilController.fceAgrossilvopastoril.dtcPrevista}" 
 			rendered="#{agrossilvopastorilController.faseImplantacao}">
 				<p:ajax global="false"/>
 			</p:calendar>
-			<h:outputText value="*Data prevista para início da Operação" 
+			<h:outputText value="*Data prevista para inÃ­cio da OperaÃ§Ã£o" 
 			rendered="#{agrossilvopastorilController.faseOperacao}"/>
 			<p:calendar size="7" showOn="button" locale="pt" pattern="dd/MM/yyyy" navigator="true" readOnlyInputText="true" value="#{agrossilvopastorilController.fceAgrossilvopastoril.dtcPrevista}" 
 			rendered="#{agrossilvopastorilController.faseOperacao}">
 				<p:ajax global="false"/>
 			</p:calendar>
-			<h:outputText value="*Área construída e/ou a ser construída" styleClass="input-left" style="margin-left:30px; width:225px;"/>
+			<h:outputText value="*Ãrea construÃ­da e/ou a ser construÃ­da" styleClass="input-left" style="margin-left:30px; width:225px;"/>
 			<p:inputText value="#{agrossilvopastorilController.fceAgrossilvopastoril.numAreaConstruida}" converter="doubleConverter" onkeyup="maskIt(this, event, '99.999.999,99', true)" maxlength="13">
 				<p:ajax global="false"/>
 			</p:inputText>
 			<h:outputLabel value="(ha)" />
 			<p:spacer/>
 			<p:spacer/>
-			<h:outputText value="*Área prevista para ampliação" rendered="#{agrossilvopastorilController.faseAlteracao}"/>
+			<h:outputText value="*Ãrea prevista para ampliaÃ§Ã£o" rendered="#{agrossilvopastorilController.faseAlteracao}"/>
 			<p:inputText value="#{agrossilvopastorilController.fceAgrossilvopastoril.numAreaAmpliacao}" converter="doubleConverter" 
 			onkeyup="maskIt(this, event, '99.999.999,99', true)" maxlength="13" rendered="#{agrossilvopastorilController.faseAlteracao}"/>
 			<h:outputLabel value="(ha)" rendered="#{agrossilvopastorilController.faseAlteracao}"/>
@@ -63,7 +64,7 @@
 						<h:outputText value="#{solo.dscTipoUsoSolo}" />
 					</p:column>
 					
-					<p:column style="width: 40px; text-align:center;" headerText="Ações">		
+					<p:column style="width: 40px; text-align:center;" headerText="AÃ§Ãµes">		
 						<p:commandLink title="Confirmar" process="@this" update="tabAbasId_Agro:formAbaDadosGerais:tblUsoSoloSelecionados tabAbasId_Agro:formAbaDadosGerais:tblUsoSolo" 
 							action="#{agrossilvopastorilController.adicionarUsoSolo()}" global="false">
 							<h:graphicImage title="Confirmar" value="/resources/img/ico-aprovar-notificacao.png" />
@@ -79,11 +80,11 @@
 				emptyMessage="#{bundle.lac_dadosGerais_msg007}" rendered="#{agrossilvopastorilController.exibirTblFceAgroSolo}">
 					<f:facet name="header">
 					    <p:spacer width="140px" height="0"/>  
-						<h:outputText value="Área total dos imóveis" styleClass="text-center"/>
+						<h:outputText value="Ãrea total dos imÃ³veis" styleClass="text-center"/>
 						<p:spacer width="70px" height="0"/>  
-						<h:outputText value="Percentual da área em relação a área" styleClass="text-center"/>
+						<h:outputText value="Percentual da Ã¡rea em relaÃ§Ã£o a Ã¡rea" styleClass="text-center"/>
 						<p:spacer width="340px" height="5px"/> 
-						<h:outputText value="dos imóveis" styleClass="text-center"/>
+						<h:outputText value="dos imÃ³veis" styleClass="text-center"/>
 					</f:facet>
 					<p:column headerText="Uso do Solo" style="width: 180px; text-align:justify;">
 						<h:outputText value="#{solo.ideTipoUsoSolo.dscTipoUsoSolo}" />
@@ -113,7 +114,7 @@
 						</p:inputText>
 					</p:column>
 			
-					<p:column headerText="Ações" style="width:35px; text-align:center;">
+					<p:column headerText="AÃ§Ãµes" style="width:35px; text-align:center;">
 						<p:commandLink update="tabAbasId_Agro:formAbaDadosGerais:tblUsoSoloSelecionados" action="#{agrossilvopastorilController.confirmarUsoSolo()}"
 							rendered="#{!solo.desabilitado}" global="false" process="@this">
 							<h:graphicImage title="Confirmar" value="/resources/img/ico-aprovar-notificacao.png" />
@@ -135,7 +136,7 @@
 			<h:panelGrid columns="3">
 				<p:commandButton id="btnVoltar" value="Voltar" global="false" oncomplete="fce_agrossilvo.hide()"/>
 				<p:spacer width="15" height="0"/>
-			 	<p:commandButton id="btnAvancar" value="Avançar" action="#{agrossilvopastorilController.salvarAbaDadosGerais()}" process="@form" global="false" update="tabAbasId_Agro"/>
+			 	<p:commandButton id="btnAvancar" value="AvanÃ§ar" action="#{agrossilvopastorilController.salvarAbaDadosGerais()}" process="@form" global="false" update="tabAbasId_Agro"/>
 			</h:panelGrid>
 	</h:form>
 </ui:composition>

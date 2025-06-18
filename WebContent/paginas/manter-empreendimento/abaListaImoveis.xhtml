@@ -4,7 +4,8 @@
  xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:p="http://primefaces.prime.com.tr/ui">
 
 	<h:form id="formListaImoveis">
-		<h3 class="titulo-grupo" style="font-weight: bold;">ImÛveis Rurais vinculados ao empreendimento:</h3>
+        <ui:include src="/layout/csrfToken.xhtml" />
+		<h3 class="titulo-grupo" style="font-weight: bold;">Im√≥veis Rurais vinculados ao empreendimento:</h3>
 		<h:panelGrid id="listaImoveisAssociados">
 
 			<!-- 
@@ -25,17 +26,17 @@
 				</p:column>
 
 				<p:column>
-					<f:facet name="header">DenominaÁ„o</f:facet>
+					<f:facet name="header">Denomina√ß√£o</f:facet>
 					<h:outputLabel value="#{imovel.imovelRural.desDenominacao}" />
 				</p:column>
 
 				<p:column>
-					<f:facet name="header">Valor ¡rea</f:facet>
+					<f:facet name="header">Valor √Årea</f:facet>
 					<h:outputLabel value="#{imovel.imovelRural.valArea}" />
 				</p:column>
 
 				<p:column>
-					<f:facet name="header">CartÛrio</f:facet>
+					<f:facet name="header">Cart√≥rio</f:facet>
 					<h:outputLabel value="#{imovel.imovelRural.desCartorio}" />
 				</p:column>
 
@@ -55,22 +56,22 @@
 				</p:column>
 
 				<p:column>
-					<f:facet name="header">AÁıes</f:facet>
+					<f:facet name="header">A√ß√µes</f:facet>
 					
 					<h:graphicImage value="/resources/imagens/atencao.png" rendered="#{listaImoveisController.exibeAlertaRequerenteAlterado(imovel)}"
-						title="O requerente deste imÛvel foi alterado." alt="O requerente deste imÛvel foi alterado."/>
+						title="O requerente deste im√≥vel foi alterado." alt="O requerente deste im√≥vel foi alterado."/>
 
-					<p:commandLink oncomplete="imovelDialog.show()" title="Visualisar ImÛvel Rural" process="@this" update="tabAbas:conteudoDialogImovel"
+					<p:commandLink oncomplete="imovelDialog.show()" title="Visualisar Im√≥vel Rural" process="@this" update="tabAbas:conteudoDialogImovel"
 						action="#{listaImoveisController.carregarImovelComEndereco()}">
 						
-						<h:graphicImage title="Visualisar ImÛvel Rural" value="/resources/img/ico-pesquisa.png" />
+						<h:graphicImage title="Visualisar Im√≥vel Rural" value="/resources/img/ico-pesquisa.png" />
 						<f:setPropertyActionListener target="#{listaImoveisController.imovelSelecionado}" value="#{imovel}" />
 					</p:commandLink>
 					
 					<p:commandLink disabled="#{listaImoveisController.desabilitarInclusaoOuRemocaoDeVinculo}" action="#{listaImoveisController.desassociarImovel()}" 
-						update="@form" title="Remover VÌnculo" process="@this">
+						update="@form" title="Remover V√≠nculo" process="@this">
 						
-						<h:graphicImage title="Remover VÌnculo" value="/resources/img/ico-excluir.png" />
+						<h:graphicImage title="Remover V√≠nculo" value="/resources/img/ico-excluir.png" />
 						<f:setPropertyActionListener target="#{listaImoveisController.imovelSelecionado}" value="#{imovel}" />
 					</p:commandLink>
 				</p:column>
@@ -79,7 +80,7 @@
 
 		<br /><br /><br />
 
-		<h3 class="titulo-grupo" style="font-weight: bold;">Selecionar ImÛveis para associar ao Empreendimento:</h3>
+		<h3 class="titulo-grupo" style="font-weight: bold;">Selecionar Im√≥veis para associar ao Empreendimento:</h3>
 
 		<h:panelGrid id="listaImoveis">
 
@@ -101,17 +102,17 @@
 				</p:column>
 
 				<p:column>
-					<f:facet name="header">DenominaÁ„o</f:facet>
+					<f:facet name="header">Denomina√ß√£o</f:facet>
 					<h:outputLabel value="#{imovel.desDenominacao}" />
 				</p:column>
 
 				<p:column>
-					<f:facet name="header">Vl. ¡rea</f:facet>
+					<f:facet name="header">Vl. √Årea</f:facet>
 					<h:outputLabel value="#{imovel.valArea}" />
 				</p:column>
 
 				<p:column>
-					<f:facet name="header">CartÛrio</f:facet>
+					<f:facet name="header">Cart√≥rio</f:facet>
 					<h:outputLabel value="#{imovel.desCartorio}" />
 				</p:column>
 
@@ -131,25 +132,25 @@
 				</p:column>
 
 				<p:column>
-					<f:facet name="header">AÁıes</f:facet>
+					<f:facet name="header">A√ß√µes</f:facet>
 					<h:panelGroup id="pnlGroupBotoesListaImoveisNaoAssociados" rendered="#{listaImoveisController.ocultarBotoes(imovel)}">
 
-						<p:commandLink id="visualizar" oncomplete="imovelRuralDialog.show()" title="Visualisar ImÛvel Rural" process="@this" update="tabAbas:conteudoDialogImovelRural">
-							<h:graphicImage title="Visualisar ImÛvel Rural" value="/resources/img/ico-pesquisa.png" />
+						<p:commandLink id="visualizar" oncomplete="imovelRuralDialog.show()" title="Visualisar Im√≥vel Rural" process="@this" update="tabAbas:conteudoDialogImovelRural">
+							<h:graphicImage title="Visualisar Im√≥vel Rural" value="/resources/img/ico-pesquisa.png" />
 							<f:setPropertyActionListener target="#{listaImoveisController.imovelRuralSelecionado}" value="#{imovel}" />
 						</p:commandLink>
 						
 						<p:commandLink id="associar" action="#{listaImoveisController.associarImovelAoEmpreendimento()}" update="@form" style="padding-left: 2px;"
 							rendered="#{listaImoveisController.podeAssociar(imovel)}" disabled="#{empreendimentoController.visualizarEmpreendimento}" 
-							title="Associar ImÛvel ao Empreendimento" process="@this">
+							title="Associar Im√≥vel ao Empreendimento" process="@this">
 							
-							<h:graphicImage title="Associar ImÛvel ao Empreendimento" value="/resources/img/ico-aprovado.png" />
+							<h:graphicImage title="Associar Im√≥vel ao Empreendimento" value="/resources/img/ico-aprovado.png" />
 							<f:setPropertyActionListener target="#{listaImoveisController.imovelRuralSelecionado}" value="#{imovel}" />
 						</p:commandLink>
 
 						<p:commandLink id="botaoIcnPendencia" disabled="true" rendered="#{!listaImoveisController.podeAssociar(imovel)}">
 							<h:graphicImage id="icnPendencia" width="19px" value="/resources/img/warning.png" style="border-width:0px!important"
-								title="Este ImÛvel est· com pendÍncias no Cadastro/Registro, v· em Cadastro de ImÛvel Rural e Finalize o Cadastro/Registro." />
+								title="Este Im√≥vel est√° com pend√™ncias no Cadastro/Registro, v√° em Cadastro de Im√≥vel Rural e Finalize o Cadastro/Registro." />
 						</p:commandLink>
 					</h:panelGroup>
 				</p:column>
@@ -160,11 +161,11 @@
 
 		<h:panelGroup rendered="#{!empreendimentoController.visualizarEmpreendimento}">
 			<h4 class="titulo-grupo" style="font-weight: bold; color: red;">
-				Caso o imÛvel n„o esteja cadastrado,
+				Caso o im√≥vel n√£o esteja cadastrado,
 				<h:commandLink style="color:blue;" action="/paginas/manter-imoveis/cefir/listaImoveisRural.xhtml" immediate="true">clique aqui</h:commandLink>
-				para cadastr·-lo.
+				para cadastr√°-lo.
 			</h4>
-			<h4 class="titulo-grupo" style="font-weight: bold; color: red;">ApÛs o Cadastro/Registro realizado com sucesso, retorne para vincula-lo ao empreendimento.</h4>
+			<h4 class="titulo-grupo" style="font-weight: bold; color: red;">Ap√≥s o Cadastro/Registro realizado com sucesso, retorne para vincula-lo ao empreendimento.</h4>
 		</h:panelGroup>
 	</h:form>
 
@@ -177,23 +178,23 @@
 	
 	
 	-->
-	<p:dialog id="imovelDialog" widgetVar="imovelDialog" header="Detalhes do ImÛvel" showEffect="fade" 
+	<p:dialog id="imovelDialog" widgetVar="imovelDialog" header="Detalhes do Im√≥vel" showEffect="fade" 
 		hideEffect="fade" draggable="true" resizable="false" position="center" width="600">
 		
 		<h:panelGrid id="conteudoDialogImovel">
-			<h3 class="titulo-grupo" style="font-weight: bold;">Detalhes do ImÛvel:</h3>
+			<h3 class="titulo-grupo" style="font-weight: bold;">Detalhes do Im√≥vel:</h3>
 
 			<h:panelGrid columns="2">
-				<h:outputText style="font-weight:bold;" value="N˙mero do ITR:" />
+				<h:outputText style="font-weight:bold;" value="N√∫mero do ITR:" />
 				<h:outputText value="#{listaImoveisController.imovelSelecionado.imovelRural.numItr}" />
 
-				<h:outputText style="font-weight:bold;" value="DenominaÁ„o:" />
+				<h:outputText style="font-weight:bold;" value="Denomina√ß√£o:" />
 				<h:outputText value="#{listaImoveisController.imovelSelecionado.imovelRural.desDenominacao}" />
 
-				<h:outputText style="font-weight:bold;" value="¡rea:" />
+				<h:outputText style="font-weight:bold;" value="√Årea:" />
 				<h:outputText value="#{listaImoveisController.imovelSelecionado.imovelRural.valArea}" />
 
-				<h:outputText style="font-weight:bold;" value="CartÛrio:" />
+				<h:outputText style="font-weight:bold;" value="Cart√≥rio:" />
 				<h:outputText value="#{listaImoveisController.imovelSelecionado.imovelRural.desCartorio}" />
 
 				<h:outputText style="font-weight:bold;" value="Comarca:" />
@@ -210,12 +211,12 @@
 				<h:outputText style="font-weight:bold;" value="Matricula:" />
 				<h:outputText value="#{listaImoveisController.imovelSelecionado.imovelRural.numMatricula}" />
 
-				<h:outputText style="font-weight:bold;" value="N˙mero de Registro:" />
+				<h:outputText style="font-weight:bold;" value="N√∫mero de Registro:" />
 				<h:outputText value="#{listaImoveisController.imovelSelecionado.imovelRural.numRegistro}" />
 			</h:panelGrid>
 
 			<h:panelGrid>
-				<h:outputText style="font-weight:bold;" value="EndereÁo:" />
+				<h:outputText style="font-weight:bold;" value="Endere√ßo:" />
 				<h:outputText value="#{listaImoveisController.imovelSelecionado.ideEndereco.enderecoCompleto}" />
 			</h:panelGrid>
 		</h:panelGrid>
@@ -230,23 +231,23 @@
 	
 	
 	-->
-	<p:dialog id="imovelRuralDialog" widgetVar="imovelRuralDialog" header="Detalhes do ImÛvel" 
+	<p:dialog id="imovelRuralDialog" widgetVar="imovelRuralDialog" header="Detalhes do Im√≥vel" 
 		showEffect="fade" hideEffect="fade" draggable="true" resizable="false" position="center" width="600">
 		
 		<h:panelGrid id="conteudoDialogImovelRural">
-			<h3 class="titulo-grupo" style="font-weight: bold;">Detalhes do ImÛvel:</h3>
+			<h3 class="titulo-grupo" style="font-weight: bold;">Detalhes do Im√≥vel:</h3>
 
 			<h:panelGrid columns="2">
-				<h:outputText style="font-weight:bold;" value="N˙mero do ITR:" />
+				<h:outputText style="font-weight:bold;" value="N√∫mero do ITR:" />
 				<h:outputText value="#{listaImoveisController.imovelRuralSelecionado.numItr}" />
 
-				<h:outputText style="font-weight:bold;" value="DenominaÁ„o:" />
+				<h:outputText style="font-weight:bold;" value="Denomina√ß√£o:" />
 				<h:outputText value="#{listaImoveisController.imovelRuralSelecionado.desDenominacao}" />
 
-				<h:outputText style="font-weight:bold;" value="¡rea:" />
+				<h:outputText style="font-weight:bold;" value="√Årea:" />
 				<h:outputText value="#{listaImoveisController.imovelRuralSelecionado.valArea}" />
 
-				<h:outputText style="font-weight:bold;" value="CartÛrio:" />
+				<h:outputText style="font-weight:bold;" value="Cart√≥rio:" />
 				<h:outputText value="#{listaImoveisController.imovelRuralSelecionado.desCartorio}" />
 
 				<h:outputText style="font-weight:bold;" value="Comarca:" />
@@ -264,12 +265,12 @@
 				<h:outputText style="font-weight:bold;" value="Matricula:" />
 				<h:outputText value="#{listaImoveisController.imovelRuralSelecionado.numMatricula}" />
 
-				<h:outputText style="font-weight:bold;" value="N˙mero de Registro:" />
+				<h:outputText style="font-weight:bold;" value="N√∫mero de Registro:" />
 				<h:outputText value="#{listaImoveisController.imovelRuralSelecionado.numRegistro}" />
 			</h:panelGrid>
 
 			<h:panelGrid>
-				<h:outputText style="font-weight:bold;" value="EndereÁo:" />
+				<h:outputText style="font-weight:bold;" value="Endere√ßo:" />
 				<h:outputText value="#{listaImoveisController.imovelRuralSelecionado.imovel.ideEndereco.enderecoCompleto}" />
 			</h:panelGrid>
 		</h:panelGrid>

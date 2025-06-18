@@ -15,7 +15,11 @@
 			  height="450" 
 			  width="1000"  
 			  resizable="false" 
-			  header="Perfuração de Poço" 
+        <ui:include src="/layout/csrfToken.xhtml" />
+        <ui:include src="/layout/csrfToken.xhtml" />
+        <ui:include src="/layout/csrfToken.xhtml" />
+        <ui:include src="/layout/csrfToken.xhtml" />
+			  header="PerfuraÃ§Ã£o de PoÃ§o" 
 			  modal="true">
 		
 		<p:ajax event="close" listener="#{fceLocalizacaoGeograficaController.limpar()}"/>
@@ -24,7 +28,7 @@
 			<h:form id="formTabPerfuracaoPoco">
 				<p:tabView id="tabAbasId_fcePerfuracaoPoco"  activeIndex="#{fceLocalizacaoGeograficaController.activeTab}" widgetVar="tabAbas" cache="false" dynamic="false">
 					<p:ajax event="tabChange" listener="#{fceLocalizacaoGeograficaController.controlarAbas()}" global="false"/>
-					<p:tab id="abaPerfuracaoPoco" title="Poço" >
+					<p:tab id="abaPerfuracaoPoco" title="PoÃ§o" >
 						<ui:include src="/paginas/manter-fce/outorga/perfuracao-poco/abaPoco.xhtml"/>
 					</p:tab>
 					<p:tab id="abaAdicionais" title="Adicionais">
@@ -37,32 +41,32 @@
 	</p:dialog>
 
 	<!-- exclusao ponto perfuracao poco -->
-	<p:confirmDialog header="Confirmação" appendToBody="true" message="#{bundle.lac_dadosGerais_msg004}" severity="alert" widgetVar="confirmaExclusao_PerfuracaoPoco" id="_confirmaExclusaoPerfuracaoPoco">
+	<p:confirmDialog header="ConfirmaÃ§Ã£o" appendToBody="true" message="#{bundle.lac_dadosGerais_msg004}" severity="alert" widgetVar="confirmaExclusao_PerfuracaoPoco" id="_confirmaExclusaoPerfuracaoPoco">
 		<h:form>
 			<p:commandButton value="Sim" update="formTabPerfuracaoPoco:tabAbasId_fcePerfuracaoPoco:pnl2" oncomplete="confirmaExclusao_PerfuracaoPoco.hide();" global="false" actionListener="#{fceLocalizacaoGeograficaController.excluirPerfuracaoPoco()}"/>
-			<p:commandButton value="Não" onclick="confirmaExclusao_PerfuracaoPoco.hide();" type="button" global="false"/>
+			<p:commandButton value="NÃ£o" onclick="confirmaExclusao_PerfuracaoPoco.hide();" type="button" global="false"/>
 		</h:form>
 	</p:confirmDialog>
 	<!-- fim exclusao -->
 	
 	<!-- Voltar  -->
-	<p:confirmDialog header="Confirmação" appendToBody="true" message="#{bundle.geral_msg_informacoes_nao_foram_salvas_deseja_continuar}"
+	<p:confirmDialog header="ConfirmaÃ§Ã£o" appendToBody="true" message="#{bundle.geral_msg_informacoes_nao_foram_salvas_deseja_continuar}"
 				     severity="alert" widgetVar="confirmationVoltarPerfuracaoPoco" id="_confirmationVoltarPerfuracaoPoco">
 		<h:form>
 			<p:commandButton value="Sim" update="formDadosGerais" oncomplete="confirmationVoltarPerfuracaoPoco.hide();fce_perfucacao_poco.hide();" global="false"/>
-			<p:commandButton value="Não" onclick="confirmationVoltarPerfuracaoPoco.hide();" type="button" global="false"/>
+			<p:commandButton value="NÃ£o" onclick="confirmationVoltarPerfuracaoPoco.hide();" type="button" global="false"/>
 		</h:form>
 	</p:confirmDialog>
 	<!-- fim voltar -->
 	
 	<!-- relatorio -->
-		<p:confirmDialog id="dlgImprimirRelatorioPerfuracaoPoco" message="#{fceLocalizacaoGeograficaController.msgImprimirRelatorio('Perfuração de Poço')}" widgetVar="relatorio_perfuracao_poco" header="Mensagem">
+		<p:confirmDialog id="dlgImprimirRelatorioPerfuracaoPoco" message="#{fceLocalizacaoGeograficaController.msgImprimirRelatorio('PerfuraÃ§Ã£o de PoÃ§o')}" widgetVar="relatorio_perfuracao_poco" header="Mensagem">
 			<h:form>
 					<div align="center">
 						<p:commandButton value="Sim" ajax="false" global="false" process="@this" id="imprimir_rel_transporte" onclick="relatorio_perfuracao_poco.hide();" style="margin-right:10px;">
 							 <p:fileDownload value="#{fceLocalizacaoGeograficaController.imprimirRelatorio}"/>
 						</p:commandButton>			
-							<p:commandButton value="Não" oncomplete="relatorio_perfuracao_poco.hide();" process="@this"/>
+							<p:commandButton value="NÃ£o" oncomplete="relatorio_perfuracao_poco.hide();" process="@this"/>
 					</div>
 			</h:form>
 		</p:confirmDialog> 

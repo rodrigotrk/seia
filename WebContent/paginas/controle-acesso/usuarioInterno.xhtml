@@ -7,6 +7,7 @@
 	xmlns:p="http://primefaces.prime.com.tr/ui">
 
 	<h:form id="formUsuarioInterno" binding="#{usuarioInternoController.formularioASerLimpo}">
+        <ui:include src="/layout/csrfToken.xhtml" />
 		<h:panelGrid id="panelUsuarioInterno" columns="1">
 		<script type="text/javascript">
 		$(document).ready(function() {
@@ -23,7 +24,7 @@
 					<h:outputText />
 					<h:outputLabel value="#{bundle.lbl_matricula}:" />
 					<p:inputMask id="inpCpf" mask="#{bundle.consultapf_msk_cpf}" value="#{usuarioInternoController.usuarioInterno.pessoaFisica.numCpf}"
-						converter="cpfConverter" validator="cpfValidator" required="true" style="width: 160px;" requiredMessage="O campo CPF é de preenchimento obrigatório.">
+						converter="cpfConverter" validator="cpfValidator" required="true" style="width: 160px;" requiredMessage="O campo CPF Ã© de preenchimento obrigatÃ³rio.">
 					</p:inputMask>
 					<p:commandLink disabled="${usuarioInternoController.editando}" actionListener="${usuarioInternoController.consultarCpf}" update="@form" process="@this :formUsuarioInterno:inpCpf">
 						<h:graphicImage title="Consultar" value="/resources/img/ico-pesquisa.png" />
@@ -32,33 +33,33 @@
 				</h:panelGrid>
 			</h:panelGroup>
 			<h:outputLabel value="* #{bundle.lbl_nome}:" />
-			<p:inputText  id="inpNomePessoa" value="#{usuarioInternoController.usuarioInterno.pessoaFisica.nomPessoa}" disabled="#{usuarioInternoController.desabilitaForm}"  maxlength="200" style="width: 348px;" required="true" requiredMessage="O campo Nome é de preenchimento obrigatório."/>
+			<p:inputText  id="inpNomePessoa" value="#{usuarioInternoController.usuarioInterno.pessoaFisica.nomPessoa}" disabled="#{usuarioInternoController.desabilitaForm}"  maxlength="200" style="width: 348px;" required="true" requiredMessage="O campo Nome Ã© de preenchimento obrigatÃ³rio."/>
 			<h:outputLabel value="#{bundle.lbl_data_nascimento}:" />
 			<p:calendar label="#{bundle.lbl_data_nascimento}" value="#{usuarioInternoController.usuarioInterno.pessoaFisica.dtcNascimento}" disabled="#{usuarioInternoController.desabilitaForm}" showOn="button" 
 				readOnlyInputText="true"  yearRange="c-200" mindate="01/01/1822" navigator="true" pattern="dd/MM/yyyy" locale="pt">
 				<f:validator validatorId="dataNascimentoValidator"/>
 			</p:calendar>
 			<h:outputLabel value="* #{bundle.lbl_perfil}:" />
-	        <p:selectOneMenu  id="selectOnePerfil"  value="#{usuarioInternoController.usuarioInterno.usuario.idePerfil}" style="width: 355px;" converter="perfilConverter" required="true" requiredMessage="O campo Perfil é de preenchimento obrigatório."
+	        <p:selectOneMenu  id="selectOnePerfil"  value="#{usuarioInternoController.usuarioInterno.usuario.idePerfil}" style="width: 355px;" converter="perfilConverter" required="true" requiredMessage="O campo Perfil Ã© de preenchimento obrigatÃ³rio."
 	         disabled="#{usuarioInternoController.desabilitadaCampoExisteProcessoParaUsuarioComPerfilAdministrador or usuarioInternoController.desabilitaForm}">
 	            <f:selectItem itemLabel="Selecione..." />
 	            <f:selectItems value="#{usuarioInternoController.colPerfis}" var="perfil" itemLabel="#{perfil.dscPerfil}" itemValue="#{perfil}"/>
 	            <p:ajax event="change" update="selectOnePerfil selectOneArea" />  
 	        </p:selectOneMenu>
-	        <!-- <h:outputText value="Favor utilizar no login somente letras minúsculas." />  -->	        
+	        <!-- <h:outputText value="Favor utilizar no login somente letras minÃºsculas." />  -->	        
 	        <h:outputLabel value="* #{bundle.lbl_login}:" />
-	        <p:inputText  id="inpLogin" value="#{usuarioInternoController.usuarioInterno.usuario.dscLogin}" disabled="#{usuarioInternoController.desabilitaForm}"  maxlength="25" style="width: 348px;" required="true" validatorMessage="" requiredMessage="O campo Login é de preenchimento obrigatório."
+	        <p:inputText  id="inpLogin" value="#{usuarioInternoController.usuarioInterno.usuario.dscLogin}" disabled="#{usuarioInternoController.desabilitaForm}"  maxlength="25" style="width: 348px;" required="true" validatorMessage="" requiredMessage="O campo Login Ã© de preenchimento obrigatÃ³rio."
 		        	onkeyup="minusculas(this)"/>
 			<h:panelGrid id="panelSenha" rendered="#{not usuarioInternoController.editando and !usuarioInternoController.trocaPerfil}">
-			  <p:fieldset id="info" legend="Atenção"  style="background-color: rgb(257,231,219);">
+			  <p:fieldset id="info" legend="AtenÃ§Ã£o"  style="background-color: rgb(257,231,219);">
 				<h:panelGrid columns="1" styleClass="aviso-home" style="background-color: rgb(257,231,219);">
-					<h:outputText value="Sua senha deve conter pelo menos um caractere especial, uma letra maiúscula, um numeral e no mínimo de 8 caracteres."/>
+					<h:outputText value="Sua senha deve conter pelo menos um caractere especial, uma letra maiÃºscula, um numeral e no mÃ­nimo de 8 caracteres."/>
 				</h:panelGrid>
 			</p:fieldset>
 	        	<h:outputLabel value="* #{bundle.lbl_senha}:" />
-	        	<p:password  feedback="false" id="inpSenha" value="#{usuarioInternoController.usuarioInterno.usuario.dscSenha}" disabled="#{usuarioInternoController.desabilitaForm}"  minLength="8" maxlength="15" required="true" requiredMessage="O campo Senha é de preenchimento obrigatório."/>
-	        	<h:outputLabel value="* Confirmação da Senha:" />
-	        	<p:password  feedback="false" id="inpConfirmacaoSenha" value="#{usuarioInternoController.usuarioInterno.usuario.dscConfirmacaoSenha}" disabled="#{usuarioInternoController.desabilitaForm}" minLength="8" maxlength="15" required="true" requiredMessage="O campo Confirmação da Senha é de preenchimento obrigatório."/>
+	        	<p:password  feedback="false" id="inpSenha" value="#{usuarioInternoController.usuarioInterno.usuario.dscSenha}" disabled="#{usuarioInternoController.desabilitaForm}"  minLength="8" maxlength="15" required="true" requiredMessage="O campo Senha Ã© de preenchimento obrigatÃ³rio."/>
+	        	<h:outputLabel value="* ConfirmaÃ§Ã£o da Senha:" />
+	        	<p:password  feedback="false" id="inpConfirmacaoSenha" value="#{usuarioInternoController.usuarioInterno.usuario.dscConfirmacaoSenha}" disabled="#{usuarioInternoController.desabilitaForm}" minLength="8" maxlength="15" required="true" requiredMessage="O campo ConfirmaÃ§Ã£o da Senha Ã© de preenchimento obrigatÃ³rio."/>
 			</h:panelGrid>
 			<h:outputLabel value="#{bundle.lbl_email}:" />
 			<p:inputText  value="#{usuarioInternoController.usuarioInterno.pessoaFisica.pessoa.desEmail}" maxlength="70" disabled="#{usuarioInternoController.desabilitaForm}"  validator="emailValidator" style="width: 348px;"/>
@@ -73,21 +74,21 @@
 	            <f:selectItems value="#{usuarioInternoController.colEscolaridades}" var="escolaridade" itemLabel="#{escolaridade.nomEscolaridade}" itemValue="#{escolaridade}"/>  
 	        </p:selectOneMenu>
 			<h:outputLabel value="* #{bundle.lbl_area}:" />
-	        <p:selectOneMenu  id="selectOneArea" value="#{usuarioInternoController.usuarioInterno.funcionario.ideArea}" disabled="#{usuarioInternoController.desabilitaForm}" style="width: 355px;" converter="areaConverter" required="true" requiredMessage="O campo Área é de preenchimento obrigatório.">
+	        <p:selectOneMenu  id="selectOneArea" value="#{usuarioInternoController.usuarioInterno.funcionario.ideArea}" disabled="#{usuarioInternoController.desabilitaForm}" style="width: 355px;" converter="areaConverter" required="true" requiredMessage="O campo Ãrea Ã© de preenchimento obrigatÃ³rio.">
 	            <f:selectItem itemLabel="Selecione..." />
 	            <f:selectItems value="#{usuarioInternoController.colAreas}" var="area" itemLabel="#{area.nomArea}" itemValue="#{area}"/>  
 	        </p:selectOneMenu>
 			<h:outputLabel value="* #{bundle.lbl_ocupacao}:" />
-	        <p:selectOneMenu  id="selectOneOcupacao" value="#{usuarioInternoController.usuarioInterno.pessoaFisica.ideOcupacao}" disabled="#{usuarioInternoController.desabilitaForm}" style="width: 355px;" converter="ocupacaoConverter" required="true" requiredMessage="O campo Ocupação é de preenchimento obrigatório.">
+	        <p:selectOneMenu  id="selectOneOcupacao" value="#{usuarioInternoController.usuarioInterno.pessoaFisica.ideOcupacao}" disabled="#{usuarioInternoController.desabilitaForm}" style="width: 355px;" converter="ocupacaoConverter" required="true" requiredMessage="O campo OcupaÃ§Ã£o Ã© de preenchimento obrigatÃ³rio.">
 	            <f:selectItem itemLabel="Selecione..." />
 	            <f:selectItems value="#{usuarioInternoController.colOcupacoes}" var="ocupacao" itemLabel="#{ocupacao.nomOcupacao}" itemValue="#{ocupacao}"/>  
 	        </p:selectOneMenu>
 	        <h:outputLabel value="* #{bundle.lbl_nome_mae}:" />
-	        <p:inputText  value="#{usuarioInternoController.usuarioInterno.pessoaFisica.nomMae}"  disabled="#{usuarioInternoController.desabilitaForm}" maxlength="200" style="width: 348px;" required="true" requiredMessage="O campo Nome da Mãe é de preenchimento obrigatório."/>
+	        <p:inputText  value="#{usuarioInternoController.usuarioInterno.pessoaFisica.nomMae}"  disabled="#{usuarioInternoController.desabilitaForm}" maxlength="200" style="width: 348px;" required="true" requiredMessage="O campo Nome da MÃ£e Ã© de preenchimento obrigatÃ³rio."/>
 	        <!-- h:outputLabel value="#{bundle.lbl_nome_pai}:" />
 	        <p:inputText  value="#{usuarioInternoController.usuarioInterno.pessoaFisica.nomPai}" maxlength="200" style="width: 348px;"/> -->
 			<h:outputLabel value="* #{bundle.lbl_nacionalidade}:" />
-	        <p:selectOneMenu  id="selectOnePais" value="#{usuarioInternoController.usuarioInterno.pessoaFisica.idePais}" disabled="#{usuarioInternoController.desabilitaForm}" style="width: 355px;" converter="paisConverter" required="true" requiredMessage="O campo Nacionalidade é de preenchimento obrigatório.">
+	        <p:selectOneMenu  id="selectOnePais" value="#{usuarioInternoController.usuarioInterno.pessoaFisica.idePais}" disabled="#{usuarioInternoController.desabilitaForm}" style="width: 355px;" converter="paisConverter" required="true" requiredMessage="O campo Nacionalidade Ã© de preenchimento obrigatÃ³rio.">
 	            <f:selectItem itemLabel="Selecione..." />  
 	            <f:selectItems value="#{usuarioInternoController.colPaises}" var="pais" itemLabel="#{pais.nomPais}" itemValue="#{pais}"/>  
 	        </p:selectOneMenu>

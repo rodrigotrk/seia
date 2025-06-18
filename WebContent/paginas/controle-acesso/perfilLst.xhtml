@@ -14,6 +14,7 @@
 	<ui:define name="conteudo-principal">
 
 		<h:form id="formFiltroPerfil">
+        <ui:include src="/layout/csrfToken.xhtml" />
 			<h:outputFormat value="#{bundle.lbl_descricao_perfil}:"/><p:inputText value="#{perfilController.descricaoPerfil}" />
 			&nbsp;
 			<p:commandButton value="#{bundle.btn_pesquisar}" action="#{perfilController.pesquisarPerfil}" ajax="false" process="pesquisar"/>
@@ -22,6 +23,7 @@
 		</h:form>
 		<br />
 		<h:form id="formListaPerfis">
+        <ui:include src="/layout/csrfToken.xhtml" />
 			<p:dataTable id="dataTablePerfis" widgetVar="dtTbPerfis" value="#{perfilController.modelPerfis}" var="perfil" 
 			lazy="true" paginator="true" rows="10" paginatorPosition="bottom" paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}" rowsPerPageTemplate="5,10,15" emptyMessage="#{bundle.msg_lista_vazia}" style="width: 700px;">
 

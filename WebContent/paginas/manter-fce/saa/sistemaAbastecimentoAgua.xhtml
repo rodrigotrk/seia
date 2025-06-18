@@ -6,7 +6,10 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:p="http://primefaces.prime.com.tr/ui">
 		
-		<p:confirmDialog id="confimarImpressaoRelatorioSaa" widgetVar="confimarImpressaoRelatorioSaa" header="Imprimir Relatório" appendToBody="true" message="#{fceSaaController.msgConfirmacaoImprimirRelatorio}" severity="alert" >
+			<h:form>
+        <ui:include src="/layout/csrfToken.xhtml" />			
+        <ui:include src="/layout/csrfToken.xhtml" />
+        <ui:include src="/layout/csrfToken.xhtml" />
 			<h:form>			
 				<p:commandButton id="imprimirRelatorioSaa" value="#{bundle.btn_sim}" ajax="false" global="false" process="@this" onclick="confimarImpressaoRelatorioSaa.hide();" style="margin-right:10px;">
 					<p:fileDownload value="#{fceSaaController.imprimirRelatorio}"/>
@@ -36,7 +39,7 @@
 				  width="850" 
 				  height="650"
 				  resizable="false" 
-				  header="#{fceSaaController.headerFce('Construção e Ampliação do Sistema de Abastecimento de Água')}" 
+				  header="#{fceSaaController.headerFce('ConstruÃ§Ã£o e AmpliaÃ§Ã£o do Sistema de Abastecimento de Ãgua')}" 
 				  modal="true">
 			
 				<p:ajax event="close" listener="#{fceSaaController.validarClose()}"/>
@@ -49,7 +52,7 @@
 						
 						<p:ajax event="tabChange" listener="#{fceSaaController.changeAba()}" global="false"  />
 						
-						<p:tab id="tabSaaDadosConcedidos" title="Informações da Captação" rendered="#{fceSaaController.fceTecnico}" >
+						<p:tab id="tabSaaDadosConcedidos" title="InformaÃ§Ãµes da CaptaÃ§Ã£o" rendered="#{fceSaaController.fceTecnico}" >
 		 					<ui:include src="/paginas/manter-fce/saa/saaDadosConcedidos.xhtml"/>
 						</p:tab>
 						
@@ -57,13 +60,13 @@
 		 					<ui:include src="/paginas/manter-fce/saa/saaDadosGerais.xhtml"/>
 						</p:tab>
 						
-						<p:tab id="tabSaaAguaBruta" title="Água Bruta" disabled="#{fceSaaController.aguaBruta}">
+						<p:tab id="tabSaaAguaBruta" title="Ãgua Bruta" disabled="#{fceSaaController.aguaBruta}">
 							 <ui:include src="/paginas/manter-fce/saa/saaAguaBruta.xhtml"/>				
 						</p:tab>
-						<p:tab id="tabSaaAguaTratada" title="Água Tratada" disabled="#{fceSaaController.aguatratada}">
+						<p:tab id="tabSaaAguaTratada" title="Ãgua Tratada" disabled="#{fceSaaController.aguatratada}">
 							<ui:include src="/paginas/manter-fce/saa/saaAguaTratada.xhtml"/>	
 						</p:tab>
-						<p:tab id="tabSaaDistribuicao" title="Distribuição" disabled="#{fceSaaController.distribuicao}">
+						<p:tab id="tabSaaDistribuicao" title="DistribuiÃ§Ã£o" disabled="#{fceSaaController.distribuicao}">
 							<ui:include src="/paginas/manter-fce/saa/saaReservacaoDistribuicao.xhtml"/> 
 						</p:tab>
 						
@@ -74,8 +77,8 @@
 							<p:commandButton value="Voltar" 
 							actionListener="#{fceSaaController.voltarAba()}"
 							update="pnlSaa formAvancarVoltar" process="@this" immediate="true"/>
-							<p:commandButton id="btnAvançar" 
-							value="Avançar" 
+							<p:commandButton id="btnAvanÃ§ar" 
+							value="AvanÃ§ar" 
 							rendered="#{!fceSaaController.btnFinalizar}"
 							actionListener="#{fceSaaController.avancarAba()}"
 							update="pnlSaa formAvancarVoltar"/>

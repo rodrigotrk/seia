@@ -6,6 +6,7 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:p="http://primefaces.prime.com.tr/ui">
 	<h:form id="formIntervencaoBarragem">
+        <ui:include src="/layout/csrfToken.xhtml" />
 		<h:outputText styleClass="titulo-grupo" style="font-weight:bold;" value="Coordenada do Eixo do Barramento" />
 		<br /> <br /> <br />
 
@@ -54,18 +55,18 @@
 				</h:panelGroup>
 			</p:column>
 
-			<p:column style="width:55px; text-align:center;" headerText="Ações">
+			<p:column style="width:55px; text-align:center;" headerText="AÃ§Ãµes">
 				<h:panelGroup rendered="#{!fceIntervencaoBarragemController.fceTecnico}">
 					<a onclick="javascript:${localizacaoGeograficaGenericController.retornarUrl(fceIntervencaoBarragem.ideOutorgaLocalizacaoGeografica.ideLocalizacaoGeografica)}">
-						<h:graphicImage title="Localização do Ponto Inicial no Geobahia" value="/resources/img/ico-arl-relocacao.png" />
+						<h:graphicImage title="LocalizaÃ§Ã£o do Ponto Inicial no Geobahia" value="/resources/img/ico-arl-relocacao.png" />
 					</a>
 				</h:panelGroup>
 				<h:panelGroup rendered="#{fceIntervencaoBarragemController.fceTecnico}">
 					<a onclick="javascript:${localizacaoGeograficaGenericController.retornarUrl(fceIntervencaoBarragem.ideFceOutorgaLocalizacaoGeografica.ideLocalizacaoGeografica)}">
-						<h:graphicImage title="Localização do Ponto Inicial no Geobahia" value="/resources/img/ico-arl-relocacao.png" />						
+						<h:graphicImage title="LocalizaÃ§Ã£o do Ponto Inicial no Geobahia" value="/resources/img/ico-arl-relocacao.png" />						
 					</a>
 				</h:panelGroup>
-				<p:commandLink title="Informar barragem de regularização"
+				<p:commandLink title="Informar barragem de regularizaÃ§Ã£o"
 					update="formBarragemRegularizacao formIntervencaoBarragem"
 					process="@this" global="false"
 					oncomplete="barragemRegularizacao.show();"
@@ -73,7 +74,7 @@
 					action="#{fceIntervencaoBarragemController.informarCaracterizacaoBarragem()}"
 					disabled="#{fceIntervencaoBarragemController.desabilitarTudo}">
 					<f:setPropertyActionListener target="#{fceIntervencaoBarragemController.intervencaoBarragem}" value="#{fceIntervencaoBarragem}" />
-					<h:graphicImage title="Informar barragem de regularização" value="/resources/img/ico-preencher.png" />
+					<h:graphicImage title="Informar barragem de regularizaÃ§Ã£o" value="/resources/img/ico-preencher.png" />
 				</p:commandLink>
 			</p:column>
 		</p:dataTable>

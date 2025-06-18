@@ -6,6 +6,7 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:p="http://primefaces.prime.com.tr/ui">
 	<h:form id="form_controle">
+        <ui:include src="/layout/csrfToken.xhtml" />
 
 		<div style="width: 700px;">
 
@@ -16,24 +17,24 @@
 
 			<h:panelGrid columns="2">
 				<h:outputText
-					value="* O empreendimento está localizado em área indígena ?" />
+					value="* O empreendimento estÃ¡ localizado em Ã¡rea indÃ­gena ?" />
 				<p:selectOneRadio id="indAreaIndigena" layout="inline"
 					value="#{lacPostoController.lacPostoCombustivel.indAreaIndigena}"
 					disabled="#{lacPostoController.viewMode}">
 					<f:selectItem itemLabel="Sim" itemValue="#{true}" />
-					<f:selectItem itemLabel="Não" itemValue="#{false}" />
+					<f:selectItem itemLabel="NÃ£o" itemValue="#{false}" />
 					<p:ajax event="change" listener="${lacPostoController.render()}" global="false" process="@this"/>
 				</p:selectOneRadio>
 			</h:panelGrid>
 
 			<h:panelGrid columns="2">
 				<h:outputText
-					value="* O empreendimento está localizado em sítio arqueológico ?" />
+					value="* O empreendimento estÃ¡ localizado em sÃ­tio arqueolÃ³gico ?" />
 				<p:selectOneRadio id="indSitio" layout="inline"
 					value="#{lacPostoController.lacPostoCombustivel.indSitioArqueologico}"
 					disabled="#{lacPostoController.viewMode}">
 					<f:selectItem itemLabel="Sim" itemValue="#{true}" />
-					<f:selectItem itemLabel="Não" itemValue="#{false}" />
+					<f:selectItem itemLabel="NÃ£o" itemValue="#{false}" />
 					<p:ajax event="change" listener="${lacPostoController.render()}" global="false" process="@this"/>
 				</p:selectOneRadio>
 			</h:panelGrid>
@@ -47,7 +48,7 @@
 				<p:selectOneMenu id="tipoEquipamento"
 					value="#{lacPostoController.tipoEquipamentoEntornoPosto.ideTipoEquipamentoEntornoPosto}"
 					disabled="#{lacPostoController.viewMode}" style="width:270px"
-					required="true" requiredMessage="Tipo de equipamento é obrigatório">
+					required="true" requiredMessage="Tipo de equipamento Ã© obrigatÃ³rio">
 					<f:selectItem itemValue="" itemLabel="Selecione o equipamento..." />
 					<f:selectItems
 						value="#{lacPostoController.tiposEquipamentoEntornoPosto}"
@@ -71,7 +72,7 @@
 							value="#{tipoEquipamento.dscTipoEquipamentoEntornoPosto}" />
 					</p:column>
 
-					<p:column headerText="Opções">
+					<p:column headerText="OpÃ§Ãµes">
 						<p:commandLink id="excluir" title="Excluir" process="@this"
 							disabled="#{lacPostoController.viewMode}"
 							onclick="confirmDialogEquipamento.show();"
@@ -88,14 +89,14 @@
 				<p:confirmDialog id="_confirmDialogEquipamento"
 					styleClass="dialog_confirm"
 					message="Tem certeza que deseja excluir o(s) registro(s) selecionado(s)?"
-					header="Confirmação" severity="alert"
+					header="ConfirmaÃ§Ã£o" severity="alert"
 					widgetVar="confirmDialogEquipamento" appendToBody="true">
 
 					<p:commandButton id="confirmEquipamento" value="Sim"
 						process="@this" oncomplete="confirmDialogEquipamento.hide()"
 						action="#{lacPostoController.removerEquipamentoEntorno()}"
 						update="posto_tab:form_controle:listaEquipamentos" />
-					<p:commandButton id="declineEquipamento" value="Não"
+					<p:commandButton id="declineEquipamento" value="NÃ£o"
 						process="@this" onclick="confirmDialogEquipamento.hide()"
 						type="button" />
 
@@ -104,7 +105,7 @@
 			</h:panelGrid>
 
 			<h:panelGrid columns="2">
-				<h:outputText value="* Classificação conforme NBR 13.786 :"
+				<h:outputText value="* ClassificaÃ§Ã£o conforme NBR 13.786 :"
 					styleClass="form_label_b" />
 				<p:selectOneMenu id="nbr"
 					value="#{lacPostoController.lacPostoCombustivel.ideClasseNbrPosto.ideClasseNbrPosto}"
@@ -118,7 +119,7 @@
 			</h:panelGrid>
 
 			<h:panelGrid columns="5">
-				<h:outputText value="Informe a profundidade do lençol freático:" />
+				<h:outputText value="Informe a profundidade do lenÃ§ol freÃ¡tico:" />
 				<p:inputText id="prof" styleClass="form_text_p"
 					onkeypress="mascararNumeroLR(this, event, 10, 2, '.', ',', 3);"
 					converter="bigConverter"
@@ -143,19 +144,19 @@
 					value="#{lacPostoController.lacPostoCombustivel.indSistemaControleAutomatico}"
 					disabled="#{lacPostoController.viewMode}" style="width:155px">
 					<f:selectItem itemLabel="Manual" itemValue="#{false}" />
-					<f:selectItem itemLabel="Automático" itemValue="#{true}" />
+					<f:selectItem itemLabel="AutomÃ¡tico" itemValue="#{true}" />
 					<p:ajax event="change" listener="${lacPostoController.render()}" global="false" process="@this"/>
 				</p:selectOneRadio>
 			</h:panelGrid>
 			<h:panelGrid columns="5">
 				<h:outputLabel value="* Tipo de Controle" />
 				<p:spacer height="5" width="110" />
-				<h:outputLabel value="* Situação" />
+				<h:outputLabel value="* SituaÃ§Ã£o" />
 				<p:spacer height="5" width="115" />
-				<h:outputLabel value="* Data de Implantação" />
+				<h:outputLabel value="* Data de ImplantaÃ§Ã£o" />
 			</h:panelGrid>
 			<h:panelGrid columns="4" id="sistemas">
-				<p:selectManyMenu id="tipoSistema" converter="tipoSistemaControleConverter" style="width:220px;height:120px;margin:3px;" required="true" requiredMessage="O tipo do Sistema de Controle é de preenchimento obrigatório"
+				<p:selectManyMenu id="tipoSistema" converter="tipoSistemaControleConverter" style="width:220px;height:120px;margin:3px;" required="true" requiredMessage="O tipo do Sistema de Controle Ã© de preenchimento obrigatÃ³rio"
 					value="#{lacPostoController.tiposSistemaControleASalvar}"
 					disabled="#{lacPostoController.viewMode}">
 					<f:selectItems
@@ -164,7 +165,7 @@
 						itemValue="#{controle}" />
 				</p:selectManyMenu>
 				<p:selectOneMenu id="situacaoSistema" style="width:180px"
-					value="#{lacPostoController.sistemaControlePosto.indImplantado}" required="true" requiredMessage="O campo Situação é de preenchimento obrigatório."
+					value="#{lacPostoController.sistemaControlePosto.indImplantado}" required="true" requiredMessage="O campo SituaÃ§Ã£o Ã© de preenchimento obrigatÃ³rio."
 					disabled="#{lacPostoController.viewMode}">
 					<f:selectItem itemValue="" itemLabel="Selecione..." />
 					<f:selectItem itemValue="#{true}" itemLabel="Implantado" />
@@ -173,11 +174,11 @@
 				</p:selectOneMenu>
 				<h:panelGrid columns="2" id="sistemas_calendar">
 					<p:calendar navigator="true" showOn="button" pattern="dd/MM/yyyy" required="${lacPostoController.sistemaControlePosto.indImplantado}"   
-						locale="pt" id="dataImplantacaoSistema2" style="width:180px" requiredMessage="O campo Data de Implantação é de preenchimento obrigatório."
+						locale="pt" id="dataImplantacaoSistema2" style="width:180px" requiredMessage="O campo Data de ImplantaÃ§Ã£o Ã© de preenchimento obrigatÃ³rio."
 						value="#{lacPostoController.sistemaControlePosto.dtcImplantacao}" 
 						disabled="#{lacPostoController.viewMode}" maxdate="${lacPostoController.dataAtual}" rendered="${lacPostoController.sistemaControlePosto.indImplantado}"/>
 					<p:calendar navigator="true" showOn="button" pattern="dd/MM/yyyy" mindate="${lacPostoController.dataAtual}" 
-						locale="pt" id="dataImplantacaoSistema1" style="width:180px" requiredMessage="Data de Implantacao é obrigatório"
+						locale="pt" id="dataImplantacaoSistema1" style="width:180px" requiredMessage="Data de Implantacao Ã© obrigatÃ³rio"
 						value="#{lacPostoController.sistemaControlePosto.dtcImplantacao}" required="${!lacPostoController.sistemaControlePosto.indImplantado}" 
 						disabled="#{lacPostoController.viewMode}" rendered="${!lacPostoController.sistemaControlePosto.indImplantado}"/>
 				</h:panelGrid>
@@ -198,20 +199,20 @@
 							value="#{sistema.ideTipoSistemaControlePosto.dscTipoSistemaControlePosto}" />
 					</p:column>
 
-					<p:column headerText="Situação">
+					<p:column headerText="SituaÃ§Ã£o">
 						<h:outputText value="Implantado"
 							rendered="#{sistema.indImplantado}" />
 						<h:outputText value="A ser Implantado"
 							rendered="#{!sistema.indImplantado}" />
 					</p:column>
 
-					<p:column headerText="Data de implantação">
+					<p:column headerText="Data de implantaÃ§Ã£o">
 						<h:outputText value="#{sistema.dtcImplantacao}">
 							<f:convertDateTime pattern="dd/MM/yyyy" locale="pt,BR" timeZone="Brazil/East"/>
 						</h:outputText>
 					</p:column>
 
-					<p:column headerText="Opções">
+					<p:column headerText="OpÃ§Ãµes">
 						<p:commandLink id="excluir" title="Excluir" process="@this"
 							disabled="#{lacPostoController.viewMode}"
 							onclick="confirmDialogSistema.show();">
@@ -226,14 +227,14 @@
 
 			<p:confirmDialog id="_confirmDialogSistema"
 				message="Tem certeza que deseja excluir o(s) registro(s) selecionado(s)?"
-				styleClass="dialog_confirm" header="Confirmação" severity="alert"
+				styleClass="dialog_confirm" header="ConfirmaÃ§Ã£o" severity="alert"
 				widgetVar="confirmDialogSistema" appendToBody="true">
 
 				<p:commandButton id="confirmSistema" value="Sim" process="@this"
 					oncomplete="confirmDialogSistema.hide()"
 					action="#{lacPostoController.removerSistemaControle()}"
 					update="posto_tab:form_controle:listaSistema" />
-				<p:commandButton id="declineSistema" process="@this" value="Não"
+				<p:commandButton id="declineSistema" process="@this" value="NÃ£o"
 					onclick="confirmDialogSistema.hide()" type="button" />
 
 			</p:confirmDialog>
@@ -275,7 +276,7 @@
 				<p:commandButton global="false"
 					rendered="#{lacPostoController.operacao and lacPostoController.lacPostoCombustivel.indReformado}"
 					process="@this,indAreaIndigena,indSitio,nbr,prof,indControleEstoque"
-					value="Avançar" update="posto_tab,form_controle"
+					value="AvanÃ§ar" update="posto_tab,form_controle"
 					action="#{lacPostoController.validarDadosControle()}" />
 			</div>
 		</div>

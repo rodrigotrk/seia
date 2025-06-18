@@ -7,6 +7,7 @@
 	xmlns:p="http://primefaces.prime.com.tr/ui">
 	
 	<h:form id="formIncluirConvenio">
+        <ui:include src="/layout/csrfToken.xhtml" />
 	
 		<h:panelGrid columns="5" id="panelEmpresa">
 			<h:outputLabel value="CNPJ" />
@@ -21,7 +22,7 @@
 				<h:graphicImage title="Pesquisar Empresa" value="/resources/img/ico-pesquisa.png" />
 			</p:commandLink>
 			
-			<h:outputLabel value="Nome/Razão Social:" id="nomeOutput" style="font-weight: bold;" rendered="#{not empty contratoConvenioController.pessoaJuridica.nomRazaoSocial}" />
+			<h:outputLabel value="Nome/RazÃ£o Social:" id="nomeOutput" style="font-weight: bold;" rendered="#{not empty contratoConvenioController.pessoaJuridica.nomRazaoSocial}" />
 			<h:outputText id="nomeInput" value="#{contratoConvenioController.pessoaJuridica.nomRazaoSocial}" rendered="#{not empty contratoConvenioController.pessoaJuridica.nomRazaoSocial}" />
 			
 		</h:panelGrid>
@@ -31,7 +32,7 @@
 			<h:panelGrid columns="2">
 				<h:panelGrid>
 					<h:outputText value="Tipo Projeto"/>
-					<p:selectOneMenu id="listaTipoProjeto" disabled="#{contratoConvenioController.desabilitar}" required="true" requiredMessage="Tipo Projeto é de preenchimento obrigatório"
+					<p:selectOneMenu id="listaTipoProjeto" disabled="#{contratoConvenioController.desabilitar}" required="true" requiredMessage="Tipo Projeto Ã© de preenchimento obrigatÃ³rio"
 						value="#{contratoConvenioController.contratoConvenio.ideTipoProjeto}" style="width: 317px;"
 						converter="simpleEntityConverter">
 						<f:selectItem itemLabel="Selecione..."/>
@@ -41,7 +42,7 @@
 				</h:panelGrid>
 				<h:panelGrid>
 					<h:outputText value="Gestor Financeiro"/>
-		 			<p:selectOneMenu id="listaGestorFinanceiro" disabled="#{contratoConvenioController.desabilitar}" required="true" requiredMessage="Gestor Financeiro é de preenchimento obrigatório"
+		 			<p:selectOneMenu id="listaGestorFinanceiro" disabled="#{contratoConvenioController.desabilitar}" required="true" requiredMessage="Gestor Financeiro Ã© de preenchimento obrigatÃ³rio"
 						value="#{contratoConvenioController.contratoConvenio.ideGestorFinanceiro}" style="width: 257px;"
 						converter="simpleEntityConverter">
 						<f:selectItem itemLabel="Selecione..."/>
@@ -50,12 +51,12 @@
 					</p:selectOneMenu>		 				
 				</h:panelGrid>
 				<h:panelGrid>
-					<h:outputText value="Nome Convênio"/>
-					<p:inputText value="#{contratoConvenioController.contratoConvenio.nomContratoConvenio}" required="true" requiredMessage="Nome Convênio é de preenchimento obrigatório" disabled="#{contratoConvenioController.desabilitar}" style="width: 310px;"/>
+					<h:outputText value="Nome ConvÃªnio"/>
+					<p:inputText value="#{contratoConvenioController.contratoConvenio.nomContratoConvenio}" required="true" requiredMessage="Nome ConvÃªnio Ã© de preenchimento obrigatÃ³rio" disabled="#{contratoConvenioController.desabilitar}" style="width: 310px;"/>
 				</h:panelGrid>
 				<h:panelGrid>
-					<h:outputText value="Número Contrato"/>
-					<p:inputText value="#{contratoConvenioController.contratoConvenio.numContrato}"  disabled="#{contratoConvenioController.desabilitar}" required="true" requiredMessage="Número Contrato é de preenchimento obrigatório" style="width: 250px;"/>
+					<h:outputText value="NÃºmero Contrato"/>
+					<p:inputText value="#{contratoConvenioController.contratoConvenio.numContrato}"  disabled="#{contratoConvenioController.desabilitar}" required="true" requiredMessage="NÃºmero Contrato Ã© de preenchimento obrigatÃ³rio" style="width: 250px;"/>
 				</h:panelGrid>
 				<p:commandButton actionListener="#{contratoConvenioController.salvarConvenio()}" value="Salvar" disabled="#{contratoConvenioController.desabilitar}" style="margin-left:3px"/>
 			</h:panelGrid>
@@ -83,12 +84,12 @@
 			<h:panelGroup layout="block" style="margin-top:15px;">
 				<p:dataTable id="tableUsuarioConvenioEmpresa"
 					style="width:610px" var="usuarioConvenio"
-					value="#{contratoConvenioController.listPessoaFisicaContratoConvenio()}" emptyMessage="Não há usuários vinculados até o momento"
+					value="#{contratoConvenioController.listPessoaFisicaContratoConvenio()}" emptyMessage="NÃ£o hÃ¡ usuÃ¡rios vinculados atÃ© o momento"
 					lazy="true" paginator="true" rows="10" paginatorPosition="bottom"
 					paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}">
 		
 					<f:facet name="header">
-		            	Lista de Usuários Vinculados ao Convênio
+		            	Lista de UsuÃ¡rios Vinculados ao ConvÃªnio
 		        	</f:facet>
 		
 					<p:column headerText="Nome" style="text-align:center;">
@@ -100,10 +101,10 @@
 						<h:outputText value="#{usuarioConvenio.idePessoaFisica.numCpf}" />
 					</p:column>
 		
-					<p:column headerText="Ações" style="text-align:center">
+					<p:column headerText="AÃ§Ãµes" style="text-align:center">
 						<p:commandLink oncomplete="confirmaExclusaoUsuario.show();" process="@this" disabled="#{contratoConvenioController.desabilitar}">
 							<f:setPropertyActionListener target="#{contratoConvenioController.pessoaFisicaContratoConvenio}" value="#{usuarioConvenio}" />
-							<h:graphicImage title="Desvincular usuário" value="/resources/img/ico-excluir.png" />
+							<h:graphicImage title="Desvincular usuÃ¡rio" value="/resources/img/ico-excluir.png" />
 						</p:commandLink>
 					</p:column>		
 		

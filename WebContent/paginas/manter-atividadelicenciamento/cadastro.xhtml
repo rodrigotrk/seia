@@ -34,13 +34,16 @@ xmlns:p="http://primefaces.prime.com.tr/ui" template="../../layout/template.xhtm
 								
 								
 								<h:form id="formAbaCnae" >
+        <ui:include src="/layout/csrfToken.xhtml" />
 									<h:panelGrid  columns="2"  rendered="#{tipologiaPaiController.disblePossuiFormas}" >
 										<h:outputText id="idtextformamanejo" value="Possui diferentes formas de manejo ?" />
 										<h:outputText />
 												
 										<p:selectOneRadio  value="#{tipologiaPaiController.isAtividade}"  valueChangeListener="#{tipologiaPaiController.habilitaAbaManejo}"  required="true" >
 										          <f:selectItem itemLabel="Sim" itemValue="1" />  
-										          <f:selectItem itemLabel="Não" itemValue="2" /> 
+        <ui:include src="/layout/csrfToken.xhtml" />
+			<h:form >
+        <ui:include src="/layout/csrfToken.xhtml" />	
 										          <p:ajax update="tabAbas"/>
 										</p:selectOneRadio>
 										 
@@ -78,7 +81,7 @@ xmlns:p="http://primefaces.prime.com.tr/ui" template="../../layout/template.xhtm
 		
 		<!-- fim Dialog Atos -->
 		
-		<!-- Dialog de confirmação -->
+		<!-- Dialog de confirmaÃ§Ã£o -->
 		<p:confirmDialog message="#{bundle.consultapf_msg_confimrexclusao}"
 				header="Mensagem" severity="alert"
 				widgetVar="confirmDlgExclusaoUsuarioExterno" id="confirmDlgExclusaoUsuarioExterno">
@@ -86,7 +89,7 @@ xmlns:p="http://primefaces.prime.com.tr/ui" template="../../layout/template.xhtm
 				<p:commandButton value="Sim" update=":tabAbas:formformamanejotabela:pnltabelaFormamanejo"
 					actionListener="#{tipologiaPaiController.excluirFormaManejo}"
 					oncomplete="confirmDlgExclusaoUsuarioExterno.hide()" />
-				<p:commandButton value="Não" onclick="confirmDlgExclusaoUsuarioExterno.hide()" 	type="button" />
+				<p:commandButton value="NÃ£o" onclick="confirmDlgExclusaoUsuarioExterno.hide()" 	type="button" />
 			</h:form>	
 		</p:confirmDialog>
 

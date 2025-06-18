@@ -7,29 +7,30 @@
 	xmlns:p="http://primefaces.prime.com.tr/ui"
 	template="../../layout/template.xhtml">
 	<ui:define name="titulo-pagina">
-		<h3>RelatÛrio Quantitativo</h3>
+        <ui:include src="/layout/csrfToken.xhtml" />
+		<h3>Relat√≥rio Quantitativo</h3>
 	</ui:define>
 
 	<ui:define name="conteudo-principal">
 		<h3>
-			<h:outputLabel styleClass="titulo-grupo" value="INSTRU«’ES" />
+			<h:outputLabel styleClass="titulo-grupo" value="INSTRU√á√ïES" />
 		</h3>
 		<br />
-		- Para elaborar um relatÛrio quantitativo, Informe os par‚mentros de consulta desejados e clique no bot„o "Gerar relatÛrio" .<br />
+		- Para elaborar um relat√≥rio quantitativo, Informe os par√¢mentros de consulta desejados e clique no bot√£o "Gerar relat√≥rio" .<br />
 		<br />
 		<br />
-		<h3><h:outputLabel styleClass="titulo-grupo" value="PAR¬METROS DA CONSULTA" /></h3>
+		<h3><h:outputLabel styleClass="titulo-grupo" value="PAR√ÇMETROS DA CONSULTA" /></h3>
 		<br />
 		<h:form id="frmRelatorioQuantitativo">
 			
 			<h:panelGrid>
 				<h:panelGrid id="pnlPeriodo" columns="1">
-					<h:outputText value="PerÌodo de formaÁ„o do processo: " />
+					<h:outputText value="Per√≠odo de forma√ß√£o do processo: " />
 					<h:panelGrid  columns="4">
 						<h:outputText value="De " />
 						<p:calendar id="tfPeriodoDeFormacaoDE" navigator="true" display="inline" value="#{relatorioQuantitativoController.periodoDeFormacaoDE}" showOn="button" locale="pt"
 									pattern="dd/MM/yyyy"  mindate="01/01/1900" maxdate="#{relatorioQuantitativoController.dataAtual}" accesskey="true" readOnlyInputText="true"/>
-						<h:outputText value=" atÈ " />
+						<h:outputText value=" at√© " />
 						<p:calendar id="tfPeriodoDeFormacaoATE" navigator="true" display="inline" value="#{relatorioQuantitativoController.periodoDeFormacaoATE}" showOn="button" locale="pt"
 									pattern="dd/MM/yyyy"  mindate="01/01/1900" maxdate="#{relatorioQuantitativoController.dataAtual}" accesskey="true" readOnlyInputText="true"/>
 					</h:panelGrid>
@@ -46,7 +47,7 @@
 						</p:selectOneMenu>
 					</h:panelGrid>
 					<h:panelGrid>
-						<h:outputText rendered="${relatorioQuantitativoController.statusFluxoSelecionado ne null}" value="PerÌodo do status: " />
+						<h:outputText rendered="${relatorioQuantitativoController.statusFluxoSelecionado ne null}" value="Per√≠odo do status: " />
 						<h:panelGrid columns="2">
 							<h:panelGrid columns="2">
 								<h:outputText rendered="${relatorioQuantitativoController.statusFluxoSelecionado ne null}" value="De " />
@@ -54,7 +55,7 @@
 											pattern="dd/MM/yyyy" navigator="true" mindate="01/01/1900" maxdate="#{relatorioQuantitativoController.dataAtual}" accesskey="true" readOnlyInputText="true"/>				
 							</h:panelGrid>
 							<h:panelGrid columns="2">
-								<h:outputText rendered="${relatorioQuantitativoController.statusFluxoSelecionado ne null}" value=" atÈ " />
+								<h:outputText rendered="${relatorioQuantitativoController.statusFluxoSelecionado ne null}" value=" at√© " />
 								<p:calendar  rendered="${relatorioQuantitativoController.statusFluxoSelecionado ne null}" id="tfPeriodoStatusATE" navigator="true" display="inline" value="#{relatorioQuantitativoController.periodoStatusATE}" showOn="button" locale="pt"
 											pattern="dd/MM/yyyy"  mindate="01/01/1900" maxdate="#{relatorioQuantitativoController.dataAtual}" accesskey="true" readOnlyInputText="true"/> 
 							</h:panelGrid>				
@@ -154,7 +155,7 @@
 			
 			<h:panelGrid style="margin:20px 0px;" columns="2">
 				<p:commandButton value="Limpar" action="#{relatorioQuantitativoController.limparCampos()}" update=":frmRelatorioQuantitativo"/>
-				<p:commandButton value="Gerar relatÛrio" ajax="false" process="@form" onclick="return verificarFiltros();" >
+				<p:commandButton value="Gerar relat√≥rio" ajax="false" process="@form" onclick="return verificarFiltros();" >
 					<p:fileDownload value="#{relatorioQuantitativoController.relatorioQuantitativoDeProcesso}" />
 				</p:commandButton>
 			</h:panelGrid>

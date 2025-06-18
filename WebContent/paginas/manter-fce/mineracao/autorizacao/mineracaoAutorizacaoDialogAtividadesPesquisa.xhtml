@@ -12,13 +12,14 @@
 		<p:dialog id="dialogProspeccao" showHeader="true" header="#{fceAutorizacaoMineracaoController.tituloDialogLocGeo}" widgetVar="dialogProspeccao" appendToBody="true" dynamic="true" position="center" width="250" height="170" resizable="false" modal="true"  draggable="true" >
 			<h:panelGrid id="pnlLocGeo" columns="1">
 				<h:form id="formProspeccao">
+        <ui:include src="/layout/csrfToken.xhtml" />
 					
 					<h:panelGroup style="padding-bottom:20px;">
 						<h:panelGroup style="padding-bottom:20px;">	
-							<h:outputText value="Sequência ou Identificação:" />
+							<h:outputText value="SequÃªncia ou IdentificaÃ§Ã£o:" />
 							<h:graphicImage value="/resources/img/ico-ajuda.png" id="dica" style="margin: 3px 1px 2px 4px;" />
-							<p:tooltip for="seqProspeccao" value="Sequência, Identificação ou Codificação da amostra" showEffect="fade" hideEffect="fade" />
-							<p:tooltip for="dica" value="Sequência, Identificação ou Codificação da amostra" showEffect="fade" hideEffect="fade" />
+							<p:tooltip for="seqProspeccao" value="SequÃªncia, IdentificaÃ§Ã£o ou CodificaÃ§Ã£o da amostra" showEffect="fade" hideEffect="fade" />
+							<p:tooltip for="dica" value="SequÃªncia, IdentificaÃ§Ã£o ou CodificaÃ§Ã£o da amostra" showEffect="fade" hideEffect="fade" />
 						</h:panelGroup>
 						
 						<p:inputText id="seqProspeccao" maxlength="20" value="#{fceAutorizacaoMineracaoController.fceProspeccao.seqProspeccao}" style="width:95%; margin-top: 10px; margin-bottom: 20px"/> 
@@ -37,7 +38,7 @@
 										<f:setPropertyActionListener target="#{localizacaoGeograficaGenericController.objetoLocalizacao}" value="#{fceAutorizacaoMineracaoController.fceProspeccao}" />
 										<f:setPropertyActionListener target="#{localizacaoGeograficaGenericController.idDoComponenteParaSerAtualizado}" value="formProspeccao:centerCont:commandLink" />
 									<h:graphicImage title="#{bundle.fce_lic_min_incluir_shape}" value="/resources/img/ico-expandir.png" style="margin-right: 2px;" />
-									<h:outputText value="Incluir Localização Geográfica" style="cursor: initial;" />
+									<h:outputText value="Incluir LocalizaÃ§Ã£o GeogrÃ¡fica" style="cursor: initial;" />
 								</p:commandLink>
 							</h:panelGrid><br/>
 							
@@ -82,16 +83,18 @@
 	</h:panelGroup>
 	
 	<h:form id = "formExcluirFceProspeccao">
-		<p:confirmDialog message="Deseja realmente excluir o registro?" widgetVar="cformExcluirFceProspeccao" header="Excluir Prospeccão">
+        <ui:include src="/layout/csrfToken.xhtml" />
+        <ui:include src="/layout/csrfToken.xhtml" />
+		<p:confirmDialog message="Deseja realmente excluir o registro?" widgetVar="cformExcluirFceProspeccao" header="Excluir ProspeccÃ£o">
 			<p:commandButton value="Sim" process="@this" actionListener="#{fceAutorizacaoMineracaoController.removerFceProspeccao()}" update=":tabAutMineracao:minAutAtividadesPesquisa" style="margin-right:10px;"  />			
-			<p:commandButton value="Não" oncomplete="cformExcluirFceProspeccao.hide();"/>
+			<p:commandButton value="NÃ£o" oncomplete="cformExcluirFceProspeccao.hide();"/>
 		</p:confirmDialog>
 	</h:form>
 		
 	<h:form id = "formExcluirLocGeo">
 		<p:confirmDialog message="Deseja realmente excluir o registro?" widgetVar="cformExcluirLocGeo" header="Excluir">
 			<p:commandButton value="Sim" process="@this" actionListener="#{fceAutorizacaoMineracaoController.excluirLocGeo()}" update=":tabAutMineracao:minAutAtividadesPesquisa" style="margin-right:10px;"  />			
-			<p:commandButton value="Não" oncomplete="cformExcluirLocGeo.hide();"/>
+			<p:commandButton value="NÃ£o" oncomplete="cformExcluirLocGeo.hide();"/>
 		</p:confirmDialog>
 	</h:form>
 

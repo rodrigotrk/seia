@@ -15,6 +15,7 @@
 		<h3><h:outputLabel styleClass="titulo-grupo" value="TELEFONES" /></h3>
 		
 		<h:form id="formtelefonepj" >
+        <ui:include src="/layout/csrfToken.xhtml" />
 			<h:outputLabel value="Incluir Telefone" />
 			<p:commandLink id="linkDialogTelefone" action="#{telefoneController.limpar}" disabled="#{pessoaJuridicaController.disableFormVisualizar}"
 				oncomplete="telefoneDialog.show()" update=":tabviewpj:formconteudotelefonepj,:tabviewpj:frmDialogTelefonepj" > 
@@ -23,6 +24,7 @@
 		</h:form>
 		
 		<h:form id="formconteudotelefonepj">
+        <ui:include src="/layout/csrfToken.xhtml" />
 			<h:panelGrid id="paneltabletelefone">
 		<!-- DATATABLE TELEFONE -->
 			<p:dataTable id="tabelaTelefone" widgetVar="tabelaTelefone" var="telefone" style="width:400px;"
@@ -36,11 +38,12 @@
 					<h:outputText value="#{telefone.ideTipoTelefone.nomTipoTelefone}" />
 				</p:column>
 
-				<p:column headerText="Número" style="text-align: center;">
+        <ui:include src="/layout/csrfToken.xhtml" />
+				<p:column headerText="NÃºmero" style="text-align: center;">
 					<h:outputText value="#{telefone.numTelefone}" />
 				</p:column>
 				
-				<p:column style="text-align: center;" headerText="Ações">	
+				<p:column style="text-align: center;" headerText="AÃ§Ãµes">	
 						
 						<p:commandLink update=":formconteudotelefonepj,:tabviewpj:frmDialogTelefonepj" oncomplete="limparMsgErro();telefoneDialog.show()" title="Visualizar">
 							<h:graphicImage title="Consultar" value="/resources/img/ico-pesquisa.png" />
@@ -136,7 +139,7 @@
 						actionListener="#{telefoneController.removerTelefonePessoaJuridica}"
 						oncomplete="confirmationTelefone.hide()" />
 					
-					<p:commandButton value="Não" onclick="confirmationTelefone.hide()"
+					<p:commandButton value="NÃ£o" onclick="confirmationTelefone.hide()"
 						type="button" />
 				</div>
 				</h:panelGroup>

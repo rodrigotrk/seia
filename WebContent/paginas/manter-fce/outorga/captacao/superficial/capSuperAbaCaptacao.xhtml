@@ -12,11 +12,12 @@
 	</p:dialog>			 -->
 	
 	<h:form id="formCapSuperCaptacao">
+        <ui:include src="/layout/csrfToken.xhtml" />
 	
-		<h:outputText styleClass="titulo-grupo" style="font-weight:bold; margin-left:10px;" value="Dados da Captação *" />
+		<h:outputText styleClass="titulo-grupo" style="font-weight:bold; margin-left:10px;" value="Dados da CaptaÃ§Ã£o *" />
 		<h:panelGrid id="gridCaptacao">
 			<br />
-			<h:outputText style="margin-left:20px;" value="Características da Captação"/>
+			<h:outputText style="margin-left:20px;" value="CaracterÃ­sticas da CaptaÃ§Ã£o"/>
 			<p:selectOneRadio value="#{fceCaptacaoSuperficialController.fceCaptacaoSuperficial.caracteristicaCaptacao}" style="margin-left:30px;" layout="pageDirection" 
 			valueChangeListener="#{fceCaptacaoSuperficialController.changeCaracteristicaCaptacao()}" converter="simpleEntityConverter" 
 			disabled="#{fceCaptacaoSuperficialController.fceIntervencaoBarragemSalva or fceCaptacaoSuperficialController.desabilitarTudo}">  
@@ -24,7 +25,7 @@
 	    		<p:ajax event="change" global="false" update="capSuperAbas formCapSuperCaptacao :formCapSuperBarramento"/>
 	    	</p:selectOneRadio>			
 	    	<br />
-			<h:outputText style="margin-left:20px;" value="Características do Sistema de Captação"/>
+			<h:outputText style="margin-left:20px;" value="CaracterÃ­sticas do Sistema de CaptaÃ§Ã£o"/>
 			
 			<p:selectOneRadio value="#{fceCaptacaoSuperficialController.fceCaptacaoSuperficial.caracteristicaSistemaCaptacao}" 
 			style="margin-left:30px;" layout="pageDirection" converter="simpleEntityConverter" disabled="#{fceCaptacaoSuperficialController.desabilitarTudo}">  
@@ -44,13 +45,13 @@
     	<!-- 
     	<h:panelGrid style="margin-left:15px;" columns="3"  rendered="#{fceCaptacaoSuperficialController.renderCamposCnaeEVazao}"> 
 		    	
-		    	<h:outputLabel value="Vazão da captação"/>
+		    	<h:outputLabel value="VazÃ£o da captaÃ§Ã£o"/>
 		    	<p:inputText value="#{fceCaptacaoSuperficialController.fceCaptacaoSuperficial.numVazaoCaptacao}" size="10"
 		    	 disabled="#{!fceCaptacaoSuperficialController.fceTecnico}" id="vazaoCaptacao" onkeyup="maskIt(this, event, '99.999.999,99', true)">
 		    		<f:convertNumber minFractionDigits="2" locale="pt_BR"/>
 		    		 
 		    	</p:inputText>
-		    	<h:outputText value="(m³/dia)" />
+		    	<h:outputText value="(mÂ³/dia)" />
     	</h:panelGrid>
     	-->
     	
@@ -82,7 +83,7 @@
 						<h:outputText value="#{fceSuperficialCnae.ideCnae.desCnae}" />
 					</p:column>
 					<p:column headerText="#{bundle.cnaeLabelTabAtividadePrincipal}">
-						<h:outputText value="#{fceSuperficialCnae.indCnaePrincipal eq true ? 'Sim' : 'Não'}" />				
+						<h:outputText value="#{fceSuperficialCnae.indCnaePrincipal eq true ? 'Sim' : 'NÃ£o'}" />				
 					</p:column>				
 					<p:column headerText="#{bundle.cnaeLabelTabAtividadeAcoes}">
 						<p:commandLink oncomplete="dialogCnae.show();" actionListener="#{cnaeController.editarItemLista(fceSuperficialCnae)}" disabled="#{fceCaptacaoSuperficialController.fceIntervencaoBarragemSalva or fceCaptacaoSuperficialController.desabilitarTudo}">
@@ -103,7 +104,7 @@
     	
 		<h:panelGrid id="gridBotoes" rendered="#{!fceCaptacaoSuperficialController.desabilitarTudo}" columns="2" style="margin-top:40px;">
 			<p:commandButton id="btnVoltar" value="Voltar"  style="width:90px;" update="formCapSuperCaptacao" process="formCapSuperCaptacao" onclick="confirmationVoltarAbaCaptacao.show();"  global="false"/>
-			<p:commandButton id="btnAvancar" value="Avançar" style="width:90px;" update="capSuperAbas" process="formCapSuperCaptacao" action="#{fceCaptacaoSuperficialController.avancarAba()}" global="false">
+			<p:commandButton id="btnAvancar" value="AvanÃ§ar" style="width:90px;" update="capSuperAbas" process="formCapSuperCaptacao" action="#{fceCaptacaoSuperficialController.avancarAba()}" global="false">
 				<f:setPropertyActionListener target="#{fceCaptacaoSuperficialController.fceCaptacaoSuperficialCnaeData}" value="#{cnaeController.fceCaptacaoSuperficialCnaeData}" />
 			</p:commandButton> 
 		</h:panelGrid> <!-- FIM DO PANELGRID BOTOES -->

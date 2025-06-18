@@ -7,12 +7,13 @@
 	xmlns:p="http://primefaces.prime.com.tr/ui">
 
 	<h:form id="formDeclaracao">
+        <ui:include src="/layout/csrfToken.xhtml" />
 		
-		<h:outputLabel value="Dados do gerador do resíduo" style="font-weight: bold; font-size: 12px;"/>
+		<h:outputLabel value="Dados do gerador do resÃ­duo" style="font-weight: bold; font-size: 12px;"/>
 		<br/><br/>
 		<p:outputPanel id="pnlRequerente" autoUpdate="true">
 			<h:panelGrid columns="2">
-				<h:outputLabel value="Nome/Razão Social:" />
+				<h:outputLabel value="Nome/RazÃ£o Social:" />
 				<h:outputText value="#{declaracaoTransporteResiduoPerigosoController.geradorResiduo.nomeRazao}" />
 				<h:outputLabel value="CPF/CNPJ:" />
 				<h:outputText value="#{declaracaoTransporteResiduoPerigosoController.geradorResiduo.cpfCnpjFormatado}" />
@@ -20,14 +21,14 @@
 		</p:outputPanel>
 		
 		<br/>
-		<h:outputLabel value="*Endereço(s) de geração dos resíduos" style="font-weight: bold; font-size: 12px;"/>
+		<h:outputLabel value="*EndereÃ§o(s) de geraÃ§Ã£o dos resÃ­duos" style="font-weight: bold; font-size: 12px;"/>
 		<br/><br/>
 		<p:commandLink oncomplete="dialogselecionarEnderecoResiduo.show()" actionListener="#{declaracaoEnderecoGeradorResiduoController.limparEndereco}" 
 			update="formEndereco formEnderecoPesquisaCep" process="@this"
 			disabled="#{!declaracaoTransporteResiduoPerigosoController.permiteEditar}">
-			<h:graphicImage title="Incluir endereço de geração dos resíduos" value="/resources/img/ico-expandir.png" />
+			<h:graphicImage title="Incluir endereÃ§o de geraÃ§Ã£o dos resÃ­duos" value="/resources/img/ico-expandir.png" />
 			<f:setPropertyActionListener target="#{declaracaoEnderecoGeradorResiduoController.cepAnterior}" value="0"/>
-			<h:outputText value="Incluir endereço de geração dos resíduos" />
+			<h:outputText value="Incluir endereÃ§o de geraÃ§Ã£o dos resÃ­duos" />
 		</p:commandLink>
 		<br/><br/>
 		<p:dataTable id="dtEnderecoResiduo" value="#{declaracaoTransporteResiduoPerigosoController.listaEnderecoGeradorResiduoModel}" var="dtrpEnd"
@@ -49,32 +50,33 @@
 			<p:column headerText="UF">
 				<h:outputText value="#{dtrpEnd.endereco.ideLogradouro.ideBairro.ideMunicipio.ideEstado.desSigla}" />
 			</p:column>
-			<p:column headerText="Licença/Autorização">
+			<p:column headerText="LicenÃ§a/AutorizaÃ§Ã£o">
 				<h:outputText value="#{dtrpEnd.possuiLicencaAutorizacao}" />
 			</p:column>
-			<p:column headerText="Ações">
-				<p:commandLink title="Visualizar endereço geração resíduo" prpermiteEditarocess="@this" update="formEndereco formEnderecoPesquisaCep formEndereco:pnlEndereco" 
+			<p:column headerText="AÃ§Ãµes">
+				<p:commandLink title="Visualizar endereÃ§o geraÃ§Ã£o resÃ­duo" prpermiteEditarocess="@this" update="formEndereco formEnderecoPesquisaCep formEndereco:pnlEndereco" 
 					actionListener="#{declaracaoEnderecoGeradorResiduoController.visualizarEnderecoGeradorResiduo(dtrpEnd)}" 
 					oncomplete="dialogselecionarEnderecoResiduo.show()">
-          			 <h:graphicImage title="Visualizar endereço geração resíduo" value="/resources/img/ico-pesquisa.png" />
+          			 <h:graphicImage title="Visualizar endereÃ§o geraÃ§Ã£o resÃ­duo" value="/resources/img/ico-pesquisa.png" />
 	            </p:commandLink>
-				<p:commandLink title="Editar endereço geração resíduo" process="@this" update="formEnderecoPesquisaCep formEndereco" 
+				<p:commandLink title="Editar endereÃ§o geraÃ§Ã£o resÃ­duo" process="@this" update="formEnderecoPesquisaCep formEndereco" 
 					actionListener="#{declaracaoEnderecoGeradorResiduoController.editarEnderecoGeradorResiduo(dtrpEnd)}" oncomplete="dialogselecionarEnderecoResiduo.show()"
 					disabled="#{!declaracaoTransporteResiduoPerigosoController.permiteEditar}">
-          			 <h:graphicImage title="Editar endereço geração resíduo" value="/resources/img/ico-editar.png" />
+          			 <h:graphicImage title="Editar endereÃ§o geraÃ§Ã£o resÃ­duo" value="/resources/img/ico-editar.png" />
      			     <f:setPropertyActionListener target="#{declaracaoEnderecoGeradorResiduoController.endereco}" value="#{dtrpEnd.endereco}"/>
      			     <f:setPropertyActionListener target="#{declaracaoEnderecoGeradorResiduoController.cepAnterior}" value="#{declaracaoEnderecoGeradorResiduoController.logradouroPesquisa.numCep}"/>
 	            </p:commandLink>
-	          	<p:commandLink oncomplete="confirmaExclusaoEnderecoResiduo.show()" title="Excluir endereço geração resíduo" process="@this"
+	          	<p:commandLink oncomplete="confirmaExclusaoEnderecoResiduo.show()" title="Excluir endereÃ§o geraÃ§Ã£o resÃ­duo" process="@this"
 	          		disabled="#{!declaracaoTransporteResiduoPerigosoController.permiteEditar}">
-          			 <h:graphicImage title="Excluir endereço geração resíduo" value="/resources/img/ico-excluir.png" />
+          			 <h:graphicImage title="Excluir endereÃ§o geraÃ§Ã£o resÃ­duo" value="/resources/img/ico-excluir.png" />
      			     <f:setPropertyActionListener target="#{declaracaoTransporteResiduoPerigosoController.enderecoSelecionado}" value="#{dtrpEnd}"/>
 	            </p:commandLink>
 			</p:column>
 		</p:dataTable>
 		
 		<br/><br/>
-		<h:outputLabel value="Entidade destinatária" style="font-weight: bold; font-size: 12px;"/>
+		<!-- <h:form id="formEnderecoDestinacaoResiduo">
+        <ui:include src="/layout/csrfToken.xhtml" /> -->
 		<br/>
 		<h:outputLabel value="* CNPJ" />
 		<p:outputPanel id="pnlEntidadeDestinataria" autoUpdate="true">
@@ -85,16 +87,16 @@
 				process="@this" update="form_dialog_destinatario"
 				disabled="#{!declaracaoTransporteResiduoPerigosoController.permiteEditar}">
 				<f:setPropertyActionListener value="1" target="#{entidadeDeclaracaoTransporteController.tipoPessoa}"/>
-				<h:graphicImage title="Selecionar Entidade Destinatária" value="/resources/img/ico-pesquisa.png" />
+				<h:graphicImage title="Selecionar Entidade DestinatÃ¡ria" value="/resources/img/ico-pesquisa.png" />
 			</p:commandLink>
 			
 		</h:panelGrid>
-		<h:outputText value="Razão Social: #{declaracaoTransporteResiduoPerigosoController.destinatario.nomeRazao}" />
+		<h:outputText value="RazÃ£o Social: #{declaracaoTransporteResiduoPerigosoController.destinatario.nomeRazao}" />
 		</p:outputPanel>
 		
 		<br/>
-		<!-- Endereço de destinação dos resíduos -->
-		<h:outputLabel value="Endereço de destinação dos resíduos" style="font-weight: bold; font-size: 12px;"/>
+		<!-- EndereÃ§o de destinaÃ§Ã£o dos resÃ­duos -->
+		<h:outputLabel value="EndereÃ§o de destinaÃ§Ã£o dos resÃ­duos" style="font-weight: bold; font-size: 12px;"/>
 		<h:graphicImage value="/resources/img/ico-ajuda.png" id="titEndGerRes" style="margin: 3px 1px 2px 4px;" />
 			<p:tooltip for="titEndGerRes"
 						value="#{declaracaoTransporteResiduoPerigosoController.hintEnderecoGeracaoResiduo}"
@@ -108,7 +110,7 @@
 	                <tr>
 	                    <td />
 	                    <td colspan="2">
-	                        <h:outputText value="Informe o endereço conforme consta na licença da empresa destinatária." style="line-height: 150%;"/>
+	                        <h:outputText value="Informe o endereÃ§o conforme consta na licenÃ§a da empresa destinatÃ¡ria." style="line-height: 150%;"/>
 	                    </td>
 	                </tr>
 	            </table>
@@ -170,7 +172,7 @@
 				</h:panelGrid>
 				
 				<h:panelGrid columns="2" id="panelmunicipioestado" width="100%">
-					<h:outputText id="idlblnumero" value="* Número"/>
+					<h:outputText id="idlblnumero" value="* NÃºmero"/>
 					<h:outputLabel id="idlblcomplemento" value="Complemento" />
 					<p:inputText style="width: 100px" disabled="#{!declaracaoEnderecoDestinacaoResiduoController.enableFormEndereco or !declaracaoTransporteResiduoPerigosoController.permiteEditar}" 
 						value="#{declaracaoEnderecoDestinacaoResiduoController.endereco.numEndereco}" maxlength="5" size="5" />
@@ -201,7 +203,7 @@
 				</h:panelGrid>
 				
 				<h:panelGrid columns="1">
-					<h:outputText id="idlblNumProcesso" value="* Nº do processo da licença/autorização em vigor" />
+					<h:outputText id="idlblNumProcesso" value="* NÂº do processo da licenÃ§a/autorizaÃ§Ã£o em vigor" />
 					<p:inputText id="txtNumProcesso" size="33" maxlength="35" 
 					value="#{declaracaoEnderecoDestinacaoResiduoController.enderecoSelecionado.numProcessoLicencaAutorizacao}"
 					disabled="#{!declaracaoTransporteResiduoPerigosoController.permiteEditar}"/>
@@ -225,7 +227,7 @@
                 <tr>
                     <td />
                     <td colspan="2">
-                        <h:outputText value="Conforme disposto no parágrafo segundo do artigo 156 do decreto 14.024/2012, a alteração ou acréscimo de resíduos perigosos, bem como alteração relativa ao transportador, objeto da DTRP concedida, dependerá de novo requerimento." 
+                        <h:outputText value="Conforme disposto no parÃ¡grafo segundo do artigo 156 do decreto 14.024/2012, a alteraÃ§Ã£o ou acrÃ©scimo de resÃ­duos perigosos, bem como alteraÃ§Ã£o relativa ao transportador, objeto da DTRP concedida, dependerÃ¡ de novo requerimento." 
                         	style="line-height: 150%;"/>
                     </td>
                 </tr>
@@ -253,13 +255,13 @@
 			<p:column headerText="CPF/CNPJ">
 				<h:outputText value="#{ent.pessoa.cpfCnpjFormatado}" />
 			</p:column>
-			<p:column headerText="Nome/Razão Social">
+			<p:column headerText="Nome/RazÃ£o Social">
 				<h:outputText value="#{ent.pessoa.nomeRazao}" />
 			</p:column>
 			<p:column headerText="Localidade">
 				<h:outputText value="#{ent.pessoa.endereco.ideLogradouro.municipio.nomMunicipio} / #{ent.pessoa.endereco.ideLogradouro.municipio.ideEstado.desSigla}" />
 			</p:column>
-			<p:column headerText="Ações">
+			<p:column headerText="AÃ§Ãµes">
 				<p:commandLink title="Visualizar Entidade Transportadora" process="@this" update="form_dialog_transportadora form_dialog_transportadora:pnlDadosPessoa" 
 					actionListener="#{entidadeTransportadoraController.visualizarEntidadeTransportadora(ent)}" oncomplete="dialogselecionarTransportadora.show()">
           			 <h:graphicImage title="Visualizar Entidade Transportadora" value="/resources/img/ico-pesquisa.png" />
@@ -283,7 +285,7 @@
 		<h:panelGrid columns="2" style="float:right;">
 			<p:commandButton actionListener="#{declaracaoTransporteResiduoPerigosoController.salvar}" value="Salvar" image="ui-icon-disk"
 				disabled="#{!declaracaoTransporteResiduoPerigosoController.permiteSalvar() or !declaracaoTransporteResiduoPerigosoController.permiteEditar}"/>
-			<p:commandButton action="#{declaracaoTransporteResiduoPerigosoController.avancar}" value="Avançar" 
+			<p:commandButton action="#{declaracaoTransporteResiduoPerigosoController.avancar}" value="AvanÃ§ar" 
 				image="ui-icon-arrowthick-1-e" style="margin-left:5px;"
 				disabled="#{!declaracaoTransporteResiduoPerigosoController.permiteSalvar()}"/>
 		</h:panelGrid>

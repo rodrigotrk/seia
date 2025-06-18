@@ -15,7 +15,7 @@
 			  width="850" 
 			  height="650"
 			  resizable="false" 
-			  header="FCE - Indústria" 
+			  header="FCE - IndÃºstria" 
 			  modal="true">
 		
 		<p:ajax event="close" listener="#{fceIndustriaController.limpar()}"/>
@@ -26,13 +26,16 @@
 				<p:tab id="abaDadosRequerimento" title="Dados do Empreendimento">
 					<ui:include src="/paginas/manter-fce/industria/industriaAbaDadosRequerimento.xhtml"/> 
 				</p:tab>
-				<p:tab id="abaEfluentes" title="Efluentes e Emissões">
+        <ui:include src="/layout/csrfToken.xhtml" />
+        <ui:include src="/layout/csrfToken.xhtml" />
+        <ui:include src="/layout/csrfToken.xhtml" />
+				<p:tab id="abaEfluentes" title="Efluentes e EmissÃµes">
 					<ui:include src="/paginas/manter-fce/industria/industriaAbaEfluentes.xhtml"/>
 				</p:tab>
-				<p:tab id="abaResiduos" title="Resíduos Sólidos">
+				<p:tab id="abaResiduos" title="ResÃ­duos SÃ³lidos">
 					<ui:include src="/paginas/manter-fce/industria/industriaAbaResiduos.xhtml"/>
 				</p:tab>
-				<p:tab id="abaCaracterizacaoAmbiental" title="Caracterização Ambiental">
+				<p:tab id="abaCaracterizacaoAmbiental" title="CaracterizaÃ§Ã£o Ambiental">
 					<ui:include src="/paginas/manter-fce/industria/industriaAbaCaracterizacaoAmbiental.xhtml"/>
 				</p:tab>
 			</p:tabView>
@@ -41,29 +44,29 @@
 	</p:dialog>
 	
 	<!-- ConfirmDialog -->
-	<p:confirmDialog id="confirmationVoltarIndustria" widgetVar="confirmationVoltarIndustria" header="Confirmação" appendToBody="true" message="#{bundle.geral_msg_informacoes_nao_foram_salvas_deseja_continuar}" severity="alert">
+	<p:confirmDialog id="confirmationVoltarIndustria" widgetVar="confirmationVoltarIndustria" header="ConfirmaÃ§Ã£o" appendToBody="true" message="#{bundle.geral_msg_informacoes_nao_foram_salvas_deseja_continuar}" severity="alert">
 		<h:form>
 			<p:commandButton value="Sim" update="formIndustrio" oncomplete="confirmationVoltarIndustria.hide(); industria.hide();" global="false"/>
-			<p:commandButton value="Não" onclick="confirmationVoltarIndustria.hide();" type="button" global="false"/>
+			<p:commandButton value="NÃ£o" onclick="confirmationVoltarIndustria.hide();" type="button" global="false"/>
 		</h:form>
 	</p:confirmDialog>
 	
-	<p:confirmDialog id="confirmaExclusaoSubstancia" widgetVar="confirmaExclusaoSubstancia" header="Confirmação" appendToBody="true" message="#{bundle.msg_generica_deseja_exclusao}" severity="alert">
+	<p:confirmDialog id="confirmaExclusaoSubstancia" widgetVar="confirmaExclusaoSubstancia" header="ConfirmaÃ§Ã£o" appendToBody="true" message="#{bundle.msg_generica_deseja_exclusao}" severity="alert">
 		<h:form>
 			<p:commandButton value="Sim" update="industriaAbas:formDadosRequerimento:panelSubstancais" onclick="confirmaExclusaoSubstancia.hide()"
 				global="false" process="@this" actionListener="#{fceIndustriaController.excluirSubstancia()}">
 			</p:commandButton>
-			<p:commandButton value="Não" onclick="confirmaExclusaoSubstancia.hide()" type="button" global="false"/>
+			<p:commandButton value="NÃ£o" onclick="confirmaExclusaoSubstancia.hide()" type="button" global="false"/>
 		</h:form>
 	</p:confirmDialog>
 	
-	<p:confirmDialog id="dlgImprimirRelatorioIndustria" message="#{fceIndustriaController.msgImprimirRelatorio('Indústria')}" widgetVar="rel_industria" header="Mensagem">
+	<p:confirmDialog id="dlgImprimirRelatorioIndustria" message="#{fceIndustriaController.msgImprimirRelatorio('IndÃºstria')}" widgetVar="rel_industria" header="Mensagem">
 		<div align="center">
 			<h:form>
 				<p:commandButton value="Sim" ajax="false" global="false" process="@this" onclick="rel_industria.hide();" style="margin-right:10px;">
 					<p:fileDownload value="#{fceIndustriaController.imprimirRelatorio}"/>
 				</p:commandButton>			
-				<p:commandButton value="Não" onclick="rel_industria.hide();" process="@this"/>
+				<p:commandButton value="NÃ£o" onclick="rel_industria.hide();" process="@this"/>
 			</h:form>
 		</div>
 	</p:confirmDialog>

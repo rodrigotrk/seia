@@ -6,9 +6,10 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:p="http://primefaces.prime.com.tr/ui">
 	<h:form id="form_abastecimento">
+        <ui:include src="/layout/csrfToken.xhtml" />
 		<div style="width: 700px;">
 			<h:panelGrid>
-				<h:outputText value="Descrição do sistema de abastecimento" styleClass="titulo-grupo" />
+				<h:outputText value="DescriÃ§Ã£o do sistema de abastecimento" styleClass="titulo-grupo" />
 				<p:spacer height="15"/>
 			</h:panelGrid>
 			<h:panelGrid columns="2">
@@ -34,24 +35,24 @@
 				
 				<p:column headerText="Instalado">
 					<h:outputText value="Sim" rendered="#{tanque.indInstalado}"/>
-					<h:outputText value="Não" rendered="#{!tanque.indInstalado}" />
+					<h:outputText value="NÃ£o" rendered="#{!tanque.indInstalado}" />
 				</p:column>
 			
 				<p:column headerText="Tipo de Tanque">
 					<h:outputText value="#{tanque.ideTipoTanquePosto.dscTipoTanquePosto}" />
 				</p:column>
 				
-				<p:column headerText="Total Capacidade(m³)">
+				<p:column headerText="Total Capacidade(mÂ³)">
 					<h:outputText value="#{tanque.valCapacidadeFormatado}"/>
 				</p:column>
 				
-				<p:column headerText="Data Instalação">
+				<p:column headerText="Data InstalaÃ§Ã£o">
 					<h:outputText value="#{tanque.dtcInstalacao}">
 						<f:convertDateTime pattern="dd/MM/yyyy" locale="pt,BR" timeZone="Brazil/East"/>
 					</h:outputText>
 				</p:column>
 			
-				<p:column headerText="Opções">
+				<p:column headerText="OpÃ§Ãµes">
 					<p:commandLink id="Editar" title="Editar" process="@this" action="#{lacPostoController.editarPostoCombustivelTanque()}"
 						update="posto_tab:form_abastecimento:listaTanque,posto_tab:form_abastecimento:form_tanque" disabled="#{lacPostoController.viewMode}">
 						<h:graphicImage value="/resources/img/ico-editar.png" />
@@ -66,11 +67,11 @@
 			</p:dataTable>
 			
 			<p:confirmDialog id="confirmationTanque" styleClass="dialog_confirm" message="Tem certeza que deseja excluir o(s) registro(s) selecionado(s)?"  
-	                header="Confirmação" severity="alert" widgetVar="confirmationDialogTanque" appendToBody="true">  
+	                header="ConfirmaÃ§Ã£o" severity="alert" widgetVar="confirmationDialogTanque" appendToBody="true">  
 	                  
 			        <p:commandButton id="confirmTanque" value="Sim" process="@this" oncomplete="confirmationDialogTanque.hide()" action="#{lacPostoController.removerPostoCombustivelTanque()}" 
 			        	update="posto_tab:form_abastecimento:listaTanque"/>  
-			        <p:commandButton id="declineTanque" process="@this" value="Não" onclick="confirmationDialogTanque.hide()" type="button" />   
+			        <p:commandButton id="declineTanque" process="@this" value="NÃ£o" onclick="confirmationDialogTanque.hide()" type="button" />   
 			                  
 			    </p:confirmDialog>  
 			
@@ -83,7 +84,7 @@
 				</p:commandButton>
 			</div>
 			<div style="float:right;margin-top: 10px;">
-				<p:commandButton  global="false" process="@this" value="Avançar" update="posto_tab" action="#{lacPostoController.validarDadosAbastecimento()}"/>
+				<p:commandButton  global="false" process="@this" value="AvanÃ§ar" update="posto_tab" action="#{lacPostoController.validarDadosAbastecimento()}"/>
 			</div>
 		</div>
 		<br/>

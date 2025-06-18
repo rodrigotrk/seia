@@ -9,6 +9,7 @@
 	<h3><h:outputLabel styleClass="titulo-grupo" value="DOCUMENTO" /></h3>
 	
 	<h:form id="formExpandirDoc" prependId="false" >
+        <ui:include src="/layout/csrfToken.xhtml" />
 		<h:outputLabel value="Incluir Documento" />
 		<p:commandLink id="linkDialogTelefone" oncomplete="dialogdocumentos.show()" actionListener="#{documentoIdentificacaoController.limparObjetosDocumento}" update=":formdocumentos"  >
 			<h:graphicImage title="Incluir Documento" value="/resources/img/ico-expandir.png"  />
@@ -17,6 +18,7 @@
 	</h:form>
 
 	<h:form id="formdocumentosLst">
+        <ui:include src="/layout/csrfToken.xhtml" />
 		<!-- DATATABLE DOCUMENTOS -->
 		<h:panelGrid id="paneltabledocreplegal">
 			<p:dataTable id="tabeladocumentos" widgetVar="tabeladocumentos" var="documento" style="width:615px;"
@@ -30,11 +32,11 @@
 					<h:outputText value="#{documento.ideTipoIdentificacao.nomTipoIdentificacao}" />
 				</p:column>
 				
-				<p:column headerText="Número Documento">
+				<p:column headerText="NÃºmero Documento">
 					<h:outputText value="#{documento.numDocumento}" />
 				</p:column>
 				
-				<p:column headerText="Data Emissão">
+				<p:column headerText="Data EmissÃ£o">
 					<h:outputText value="#{documento.dtcEmissao}">
 						<f:convertDateTime pattern="dd/MM/yyyy" locale="pt,BR" timeZone="Brazil/East"/>
 					</h:outputText>
@@ -46,7 +48,7 @@
 					</h:outputText>
 				</p:column>
 	
-				<p:column style="text-align: center;width: 56px;" headerText="Ações" >						
+				<p:column style="text-align: center;width: 56px;" headerText="AÃ§Ãµes" >						
 					<p:commandLink update=":formdocumentos" oncomplete="limparMsgErro();dialogdocumentos.show();"
 					 action="${documentoIdentificacaoController.carregarItensOrgaoExpedidor()}" title="Visualizar" process="@this">
 						<h:graphicImage title="Visualizar" value="/resources/img/ico-pesquisa.png" />

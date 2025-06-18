@@ -8,6 +8,7 @@
 	
 	<p:dialog header="Documento" widgetVar="dialogPessoaFisicaIncluirDocumento" modal="true" dynamic="true" position="center" resizable="false">
 		<h:form  id="pessoaFisicaDocumento">
+        <ui:include src="/layout/csrfToken.xhtml" />
 			<h:panelGrid id="panelPessoaFisicaDialogDocumento">
 			
 				<h:panelGrid id="panelDocumentos" columns="2">
@@ -17,7 +18,7 @@
 						<p:selectOneMenu 
 							value="#{identificarPapelSolicitacaoController.pessoaSolicitacao.documentoIdentificacao.ideTipoIdentificacao}"
 							required="#{true}"
-							requiredMessage="O campo Tipo de documento é de preenchimento obrigatório">
+							requiredMessage="O campo Tipo de documento Ã© de preenchimento obrigatÃ³rio">
 							<f:selectItem itemLabel="Selecione..." />
 							<f:selectItems value="#{tipoIdentificacaoController.valuesComboBox}" />
 							<f:converter converterId="simpleEntityConverter" />
@@ -25,21 +26,21 @@
 					</h:panelGrid>
 					
 					<h:panelGrid columns="1">
-						<h:outputLabel value="* Número de documento" />
+						<h:outputLabel value="* NÃºmero de documento" />
 						<p:inputText 
 							maxlength="15"
 							value="#{identificarPapelSolicitacaoController.pessoaSolicitacao.documentoIdentificacao.numDocumento}"
 							required="#{true}"
-							requiredMessage="O campo Número de documento é de preenchimento obrigatório"
+							requiredMessage="O campo NÃºmero de documento Ã© de preenchimento obrigatÃ³rio"
 							/>
 					</h:panelGrid>
 		
 					<h:panelGrid columns="1">
-						<h:outputText value="* Orgão emissor" />
+						<h:outputText value="* OrgÃ£o emissor" />
 						<p:selectOneMenu
 							value="#{identificarPapelSolicitacaoController.pessoaSolicitacao.documentoIdentificacao.ideOrgaoExpedidor}" 
 							required="#{true}"
-							requiredMessage="O campo Orgão emissor é de preenchimento obrigatório">
+							requiredMessage="O campo OrgÃ£o emissor Ã© de preenchimento obrigatÃ³rio">
 							<f:selectItem itemLabel="Selecione..." />
 							<f:selectItems value="#{identificarPapelSolicitacaoController.orgaoExpedidorList()}" />
 							<f:converter converterId="simpleEntityConverter" />
@@ -51,7 +52,7 @@
 							<p:selectOneMenu 
 								value="#{identificarPapelSolicitacaoController.pessoaSolicitacao.documentoIdentificacao.ideEstado}" 
 								required="#{true}"
-								requiredMessage="O campo UF é de preenchimento obrigatório">
+								requiredMessage="O campo UF Ã© de preenchimento obrigatÃ³rio">
 									<f:selectItem itemLabel="Selecione..." />
 									<f:selectItems value="#{identificarPapelSolicitacaoController.estadoList()}"/>
 									<f:converter converterId="simpleEntityConverter" />
@@ -61,13 +62,13 @@
 				</h:panelGrid>
 				
 				<h:panelGrid columns="2">
-					<h:outputText value="* Data de emissão" />
+					<h:outputText value="* Data de emissÃ£o" />
 					<p:calendar 
 						showOn="button" 
 						validator="dataPosteriorValidator"
 						value="#{identificarPapelSolicitacaoController.pessoaSolicitacao.documentoIdentificacao.dtcEmissao}"	
 						required="#{true}"
-						requiredMessage="O campo Data de emissão é de preenchimento obrigatório"
+						requiredMessage="O campo Data de emissÃ£o Ã© de preenchimento obrigatÃ³rio"
 						locale="pt" pattern="dd/MM/yyyy"
 						readOnlyInputText="true" yearRange="c-100"/>
 				
@@ -99,8 +100,8 @@
 						allowTypes="/(\.|\/)(pdf|gif|jpeg|png|jpg)$/" 
 						process="@this"
 						sizeLimit="5242880" 
-						invalidFileMessage="Tipo de arquivo inválido." 
-						invalidSizeMessage="O tamanho máximo do arquivo não pode ultrapassar 5MB"
+						invalidFileMessage="Tipo de arquivo invÃ¡lido." 
+						invalidSizeMessage="O tamanho mÃ¡ximo do arquivo nÃ£o pode ultrapassar 5MB"
 						update=":pessoaFisicaDocumento:pnlEnviarDocumento, :pessoaFisicaDocumento:pnlExibirDocumento" 
 						/>
 				</h:panelGrid>

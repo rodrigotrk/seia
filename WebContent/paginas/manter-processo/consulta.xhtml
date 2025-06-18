@@ -27,7 +27,8 @@
 		<ui:include src="/paginas/atos-declaratorios/include-atos.xhtml" />
 		
 		<h3>
-			<h:outputLabel styleClass="titulo-grupo" style="font-weight:bold;" value="INSTRUÇÕES" />
+        <ui:include src="/layout/csrfToken.xhtml" />
+			<h:outputLabel styleClass="titulo-grupo" style="font-weight:bold;" value="INSTRUÃ‡Ã•ES" />
 		</h3>
 		<p class="titulo-grupo">
 			<h:outputText value="#{bundle.processo_lbl_consulta}" /> <br/>
@@ -36,7 +37,7 @@
 		</p>
 		<br />
 		<h3>
-			<h:outputLabel styleClass="titulo-grupo" style="font-weight:bold;" value="PARÂMETROS DA CONSULTA" />
+			<h:outputLabel styleClass="titulo-grupo" style="font-weight:bold;" value="PARÃ‚METROS DA CONSULTA" />
 		</h3>
 		<h:form id="formConsultarProcesso">
 		    <h:panelGrid columns="1" id="panel" >
@@ -66,7 +67,7 @@
 		    </h:panelGrid>
 			<h:panelGrid columns="3" >
 				<h:panelGrid columns="1">
-					<h:outputText value="Nº do Processo:" />
+					<h:outputText value="NÂº do Processo:" />
 					<p:inputText value="#{processoController.numProcesso}" />
 				</h:panelGrid>
 				<h:panelGrid rendered="#{processoController.visualizaFiltro}">
@@ -77,7 +78,7 @@
 					</p:selectOneMenu>
 				</h:panelGrid>
 				<h:panelGrid columns="4">
-					<h:outputText value="Período de Formação:" />
+					<h:outputText value="PerÃ­odo de FormaÃ§Ã£o:" />
 					<h:outputText />
 					<h:outputText />
 					<h:outputText />
@@ -85,7 +86,7 @@
 						<h:outputText value="De   " />
 						<p:calendar showOn="button" size="10" value="#{processoController.periodoInicio}" locale="pt" pattern="dd/MM/yyyy" navigator="true" yearRange="c-50:c+10" />
 					</h:panelGroup>
-					<h:outputText value="Até" />
+					<h:outputText value="AtÃ©" />
 					<p:calendar showOn="button" size="10" value="#{processoController.periodoFim}" locale="pt" pattern="dd/MM/yyyy" navigator="true" yearRange="c-50:c+10" />
 				</h:panelGrid>
 			</h:panelGrid>
@@ -181,8 +182,8 @@
 							
 			<br />
 			<h:panelGrid columns="2" rendered="#{processoController.isUsuarioInterno and !contextoController.usuarioLogado.MP}">
-				<h:outputText rendered="${security.temAcesso('5.18') or security.temAcesso('5.19')}" value="Área dos Técnicos:" />
-				<h:outputText rendered="${security.temAcesso('5.18') or security.temAcesso('5.19')}" value="Técnico:" />
+				<h:outputText rendered="${security.temAcesso('5.18') or security.temAcesso('5.19')}" value="Ãrea dos TÃ©cnicos:" />
+				<h:outputText rendered="${security.temAcesso('5.18') or security.temAcesso('5.19')}" value="TÃ©cnico:" />
 				
 				<p:autoComplete  id="autoCompleteArea" rendered="${security.temAcesso('5.18') or security.temAcesso('5.19')}" 
 				                dropdown="true" value="#{processoController.area}" minQueryLength="3"
@@ -208,7 +209,7 @@
 					emptyMessage="#{bundle.msg_lista_vazia}" widgetVar="dataTableProcesso" rendered="#{processoController.showTable}">
 					
 					<p:column>
-						<f:facet name="header">Nº do Processo</f:facet>
+						<f:facet name="header">NÂº do Processo</f:facet>
 						<p:commandLink action="#{detalharProcessoController.visualizarProcesso()}" update=":formDetalharProcesso:tabviewprocesso" 
 							process="@this" oncomplete="dialogdetalharProcesso.show()" type="button">
 							
@@ -222,7 +223,7 @@
 					</p:column>
 					
 					<p:column>
-                        <f:facet name="header">Nome /<br />Razão Social</f:facet>
+                        <f:facet name="header">Nome /<br />RazÃ£o Social</f:facet>
                         <h:outputText value="#{vwProcesso.nomRequerente}" />
                     </p:column>
 					
@@ -232,7 +233,7 @@
 					</p:column>
 					
 					<p:column>
-						<f:facet name="header">Data<br />Formação</f:facet>
+						<f:facet name="header">Data<br />FormaÃ§Ã£o</f:facet>
 						<h:outputText id="dtcFormacao" value="#{vwProcesso.dtcFormacao}">
 							<f:convertDateTime for="dtcFormacao" pattern="dd/MM/yyyy" locale="pt,BR" timeZone="Brazil/East" />
 						</h:outputText>
@@ -279,7 +280,7 @@
 					</p:column>
 					
 					<p:column rendered="${security.temAcesso('5.18') or security.temAcesso('5.19') or security.temAcesso('5.20.62') or security.temAcesso('5.20.63')}" >
-						<f:facet name="header">Ações</f:facet>
+						<f:facet name="header">AÃ§Ãµes</f:facet>
 						<h:panelGroup layout="block" style="text-align: center;">
 							<p:commandLink action="#{fluxoAlternativoController.load(false,false,vwProcesso)}"
 								disabled="#{!processoController.isCoordenador or !(vwProcesso.podeEncaminhar and (vwProcesso.statusFluxo.ideStatusFluxo eq 6))}" 
@@ -290,7 +291,7 @@
 								actionListener="#{notificacaoAprovacaoController.load(vwProcesso,null)}"
 								disabled="#{!processoController.isCoordenador or !(vwProcesso.podeAprovarNotificacao and (vwProcesso.statusFluxo.ideStatusFluxo eq 6))}" 
 								onclick="dialogAprovarNotificacao.show()" update=":panelDialog3" process="@this">
-								<h:graphicImage title="Aprovar Notificação" value="/resources/img/ico-aprovar-not2.png" />
+								<h:graphicImage title="Aprovar NotificaÃ§Ã£o" value="/resources/img/ico-aprovar-not2.png" />
 							</p:commandLink>
 							<p:commandLink actionListener="#{apensarDocumentoController.load()}"
 								disabled="#{!processoController.isCoordenador or !(vwProcesso.podeApensarDocumento and (vwProcesso.statusFluxo.ideStatusFluxo eq 6))}" 
@@ -316,15 +317,15 @@
 								<f:setPropertyActionListener value="#{vwProcesso}" target="#{atualizarPassivoController.vwProcesso}" />
 							</p:commandLink>
 							<h:commandLink rendered="#{vwProcesso.renderedLacErb}">
-								<h:graphicImage title="Relatório Lac de ERB" value="/resources/img/licon.png" />
+								<h:graphicImage title="RelatÃ³rio Lac de ERB" value="/resources/img/licon.png" />
 								<p:fileDownload value="#{processoController.imprimirRelatorioLacErb(vwProcesso.ideRequerimento)}" />
 							</h:commandLink>
 							<h:commandLink rendered="#{vwProcesso.renderedLacPosto}">
-								<h:graphicImage title="Relatório Lac de Posto" value="/resources/img/licon.png" />
+								<h:graphicImage title="RelatÃ³rio Lac de Posto" value="/resources/img/licon.png" />
 								<p:fileDownload value="#{processoController.imprimirRelatorioLacPosto(vwProcesso.ideRequerimento)}" />
 							</h:commandLink>
 							<h:commandLink rendered="#{vwProcesso.renderedLacTransportadora}">
-								<h:graphicImage title="Relatório Lac de Transportadora" value="/resources/img/licon.png" />
+								<h:graphicImage title="RelatÃ³rio Lac de Transportadora" value="/resources/img/licon.png" />
 								<p:fileDownload value="#{processoController.imprimirRelatorioLacTransportadora(vwProcesso.ideRequerimento)}" />
 							</h:commandLink>
 							<h:commandLink rendered="#{vwProcesso.renderedLacErb}">
@@ -348,7 +349,7 @@
 								<p:fileDownload value="#{processoController.imprimirRelatorioCorteFloresta(vwProcesso.ideRequerimento)}" />
 							</h:commandLink>
 							<h:commandLink rendered="#{vwProcesso.renderedRfp}">
-								<h:graphicImage title="Gerar Certificado de Registro de Floresta de Produção Plantada" value="/resources/img/ico-pdf.png" />
+								<h:graphicImage title="Gerar Certificado de Registro de Floresta de ProduÃ§Ã£o Plantada" value="/resources/img/ico-pdf.png" />
 								<p:fileDownload value="#{processoController.imprimirRegistroCorteFlorestaProducaoPlantada(vwProcesso.ideRequerimento)}" />
 							</h:commandLink>
 							<h:commandLink rendered="#{vwProcesso.renderedDqc}">
@@ -387,6 +388,7 @@
 			message="Deseja realmente reabrir o processo?" header="#{bundle.geral_lbl_mensagem}">
 				
 			<h:form id="formConfirmacaoReaberturaProcesso">
+        <ui:include src="/layout/csrfToken.xhtml" />
 				<h:panelGroup>
 					<div style="text-align: center;"> 
 						<p:commandButton value="#{bundle.btn_sim}" actionListener="#{reaberturaProcessoController.salvar()}" 
@@ -408,6 +410,7 @@
 			message="Deseja realmente atualizar o passivo?" header="#{bundle.geral_lbl_mensagem}">
 				
 			<h:form id="formConfirmacaoAtualizarPassivo">
+        <ui:include src="/layout/csrfToken.xhtml" />
 				<h:panelGroup>
 					<div style="text-align: center;"> 
 						<p:commandButton value="#{bundle.btn_sim}" process="@this"

@@ -8,9 +8,10 @@
 	xmlns:s="http://java.sun.com/jsf/composite/seia">
 	
 	<h:form id="formReajustarValor">
+        <ui:include src="/layout/csrfToken.xhtml" />
 		<h:panelGrid>
 			<h:panelGrid columns="2">
-				<h:outputLabel value="Número do TCCA:" styleClass="bold"/>
+				<h:outputLabel value="NÃºmero do TCCA:" styleClass="bold"/>
 				<h:outputLabel value="#{tccaController.tcca.numTcca}"/>
 			</h:panelGrid>
 			
@@ -34,7 +35,7 @@
 			</h:panelGrid>
 			
 			<h:panelGrid columns="2">
-				<h:outputLabel value="Saldo Disponível do TCCA:" styleClass="bold" /> 
+				<h:outputLabel value="Saldo DisponÃ­vel do TCCA:" styleClass="bold" /> 
 				<h:outputText value="#{(tccaController.tcca.ultimoSaldo.valSaldoNaoDestinadoProjeto)==null ? 0.00 : (tccaController.tcca.ultimoSaldo.valSaldoNaoDestinadoProjeto)}"
 					styleClass="#{tccaController.isValorNegativo(tccaController.tcca.ultimoSaldo.valSaldoNaoDestinadoProjeto)}">
 					
@@ -45,7 +46,7 @@
 			<hr style="width: 100%;"/>
 			
 			<h:panelGrid columns="3">
-				<h:outputLabel value="Índice de reajuste (%):" onkeyup="SomenteNumero(this);" onblur="SomenteNumero(this);" styleClass="bold" /> 
+				<h:outputLabel value="Ãndice de reajuste (%):" onkeyup="SomenteNumero(this);" onblur="SomenteNumero(this);" styleClass="bold" /> 
 				
 				<p:inputText value="#{tccaController.tccaHistoricoReajusteValor.indiceReajuste}" converter="bigConverter" maxlength="6"
 					onkeyup="mascararNumeroAndAddZeros(this, event, 3, 2, '.',',', 3);"
@@ -59,7 +60,7 @@
 			</h:panelGrid>
 			
 			<h:panelGrid columns="2">
-				<h:outputLabel value="Valor do TCCA após o reajuste (R$):" styleClass="bold"/> 
+				<h:outputLabel value="Valor do TCCA apÃ³s o reajuste (R$):" styleClass="bold"/> 
 				<h:outputText value="#{(tccaController.valorTccaReajustado)==null ? 0.00 : (tccaController.valorTccaReajustado)}"
 					styleClass="#{tccaController.isValorNegativo(tccaController.valorTccaReajustado)}">
 					
@@ -68,7 +69,7 @@
 			</h:panelGrid>
 			
 			<h:panelGrid columns="2">
-				<h:outputLabel styleClass="bold">Saldo disponível no TCCA <br/>após o reajuste (R$):</h:outputLabel>
+				<h:outputLabel styleClass="bold">Saldo disponÃ­vel no TCCA <br/>apÃ³s o reajuste (R$):</h:outputLabel>
 				
 				<h:outputText value="#{(tccaController.valorSaldoNaoSuplementadoReajustado)==null ? 0.00 : (tccaController.valorSaldoNaoSuplementadoReajustado)}"
 					styleClass="#{tccaController.isValorNegativo(tccaController.valorSaldoNaoSuplementadoReajustado)}" style="margin-left: 10px;">

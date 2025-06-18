@@ -7,6 +7,7 @@ xmlns:ui="http://java.sun.com/jsf/facelets"
 xmlns:p="http://primefaces.prime.com.tr/ui">
 	
 	<h:form id="formAbaFlorestal">
+        <ui:include src="/layout/csrfToken.xhtml" />
 		<p:outputPanel id="pnl1">
 			<h:panelGrid id="form1">	
 				<h:panelGroup>
@@ -17,7 +18,7 @@ xmlns:p="http://primefaces.prime.com.tr/ui">
 				valueChangeListener="#{novoRequerimentoController.alteracaoResposta()}" 
 				value="#{abaFlorestalController.perguntaNR_A5_P1.indResposta}" required="true" disabled="#{novoRequerimentoController.desabilitarTudo}">  
 					<f:selectItem itemLabel="Sim" itemValue="true" />  
-					<f:selectItem itemLabel="Não" itemValue="false" />
+					<f:selectItem itemLabel="NÃ£o" itemValue="false" />
 					<p:ajax update="panelGrid2" />
 				</p:selectOneRadio>
 			</h:panelGrid>
@@ -27,17 +28,17 @@ xmlns:p="http://primefaces.prime.com.tr/ui">
 					<p:commandLink  oncomplete="dialogFlorestal.show()"  update="formDialogFlorestal" action="#{florestalController.load()}" 
 						rendered="#{abaFlorestalController.perguntaNR_A5_P1.indResposta}" disabled="#{novoRequerimentoController.desabilitarTudo or abaFlorestalController.todosImoveisPreenchidos}">
 						<h:graphicImage title="Incluir..." value="/resources/img/ico-expandir.png"  style="margin-right:2px;" />
-						<h:outputText value="Incluir novos dados para a solicitação do ato florestal por imóvel" />
+						<h:outputText value="Incluir novos dados para a solicitaÃ§Ã£o do ato florestal por imÃ³vel" />
 					</p:commandLink> 
 				</p:outputPanel>			
 		
 				<p:dataTable id="tbListaImovelFlorestal" var="imovelFlorestal" value="#{abaFlorestalController.florestais}" lazy="true" emptyMessage="#{bundle.consultapf_msg_empty_list}" style="width: 95%;" 
 							 rendered="#{abaFlorestalController.perguntaNR_A5_P1.indResposta}">
-	     		    <p:column style="text-align: left; width:200px;" headerText="Nome do Imóvel">
+	     		    <p:column style="text-align: left; width:200px;" headerText="Nome do ImÃ³vel">
 			            <h:outputText value="#{imovelFlorestal.ideImovel.imovelRural != null ? imovelFlorestal.ideImovel.imovelRural.desDenominacao : novoRequerimentoController.empreendimento.nomEmpreendimento}"/>
 			        </p:column>
 			        
-			        <p:column style="text-align: center;" headerText="Ações">
+			        <p:column style="text-align: center;" headerText="AÃ§Ãµes">
 			       
 			            <p:commandLink oncomplete="dialogFlorestal.show()" action="#{florestalController.editar(imovelFlorestal)}" 
 			            			   title="Editar" process="@this" update="formDialogFlorestal formDialogFlorestal:tabelaRVFR" rendered="#{!novoRequerimentoController.desabilitarTudo}">
@@ -64,7 +65,7 @@ xmlns:p="http://primefaces.prime.com.tr/ui">
 		
 		<h:panelGrid columns="4" style="margin-top:40px;">
 			<p:commandButton id="btnVoltar" value="Voltar" action="#{novoRequerimentoController.voltarAbas()}" update="subViewAbas:tabAbasId"  style="width:90px;" />
-			<p:commandButton id="btnAvancar" value="Avançar" action="#{novoRequerimentoController.avancarAbas()}" update="subViewAbas:tabAbasId"  style="width:90px;"  />
+			<p:commandButton id="btnAvancar" value="AvanÃ§ar" action="#{novoRequerimentoController.avancarAbas()}" update="subViewAbas:tabAbasId"  style="width:90px;"  />
 			<p:spacer width="400" height="10"/>
 			<p:commandButton style="float:right;" value="Salvar" action="#{abaFlorestalController.salvarAba()}" process="@form" update="formAbaFlorestal"  disabled="#{novoRequerimentoController.desabilitarTudo}"/>
 		</h:panelGrid>

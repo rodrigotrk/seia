@@ -11,6 +11,7 @@
 		<h3><h:outputLabel styleClass="titulo-grupo" value="LOCALIZAÇÃO GEOGRÁFICA" /></h3>
 
 		<h:form id="locGeografica">
+        <ui:include src="/layout/csrfToken.xhtml" />
 	        <p:outputPanel autoUpdate="true">
 		        <h:panelGrid columns="3" cellpadding="7" rendered="${!localizacaoGeograficaAllController.locGeoIsPonto}">
 					<h:outputLabel styleClass="form-label" value="#{bundle.empreendimento_lbl_secao_geometrica}" />
@@ -139,6 +140,7 @@
 		message="#{bundle.msg_confirma_exclusao}" severity="alert" appendToBody="true" >
 		
 		<h:form id="formConfirmaExclusaoShapeFileLocGeoImovel" >
+        <ui:include src="/layout/csrfToken.xhtml" />
 			<div style="text-align: center;">
 				<p:commandButton id="btnConfirmaExclusaoShapeFileLocGeoImovel" action="#{localizacaoGeograficaAllController.excluirArquivo()}" 
 					 update=":tabAbas:locGeografica:dataTableDocumentos :tabAbas:locGeografica:tblDocumento"
@@ -153,6 +155,7 @@
 		message="#{bundle.msg_confirma_exclusao}" severity="alert">
 		
 		<h:form id="formConfirmaExclusaoShapeFileLocGeo">
+        <ui:include src="/layout/csrfToken.xhtml" />
 			<div style="text-align: center;">
 				<p:commandButton global="false" id="btnConfirmaExclusaoShapeFileLocGeo" actionListener="#{localizacaoGeograficaAllController.excluirShape(localizacaoGeograficaAllController.localizacaoGeograficaSelecionada.ideLocalizacaoGeografica)}" action="#{localizacaoGeograficaAllController.limpaFormLocGeo()}"
 					update="locGeografica "  onclick="confirmaExclusaoShapeFileLocGeo.hide()" value="#{bundle.btn_sim}"/>
@@ -166,6 +169,7 @@
 		message="#{bundle.msg_confirma_exclusao}" severity="alert">
 		
 		<h:form id="formConfirmaExclusaoShapePontoLocGeo">
+        <ui:include src="/layout/csrfToken.xhtml" />
 			<div style="text-align: center;">
 				<p:commandButton id="btnConfirmaExclusaoShapePontoLocGeo" actionListener="#{localizacaoGeograficaAllController.excluirLocGeo(localizacaoGeograficaAllController.localizacaoGeograficaSelecionada.ideLocalizacaoGeografica)}" action="#{localizacaoGeograficaAllController.limpaFormLocGeo()}" 
 					 update="locGeografica localizacaoGeografica" onclick="confirmaExclusaoShapePontoLocGeo.hide()" value="#{bundle.btn_sim}"/>

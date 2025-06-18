@@ -11,8 +11,10 @@
 		position="center" resizable="false" draggable="false"
 		onShow="dialogMsgSecaoGeo.initPosition();" header="Mensagem">
 		<h:form id="formDialogMsgSecaoGeo">
+        <ui:include src="/layout/csrfToken.xhtml" />
 			<p>
-				Favor entrar em contato com o INEMA através do e-mail atendimento.seia@inema.ba.gov.br para que o cadastro da opção desejada realizado.
+        <ui:include src="/layout/csrfToken.xhtml" />
+				Favor entrar em contato com o INEMA atravÃ©s do e-mail atendimento.seia@inema.ba.gov.br para que o cadastro da opÃ§Ã£o desejada realizado.
 			</p>
 		</h:form>
 	</p:dialog>
@@ -27,14 +29,14 @@
 					* Tipo do Canal
 				</p:row>
 				<p:row>
-					<p:selectOneMenu id="listaTipoCanal" value="#{fceCanalController.trecho.tipoCanal}" rendered="#{not empty fceCanalController.tiposCanal}" disabled="#{fceCanalController.editarTrecho}" required="true" requiredMessage="Tipo do canal é de preenchimento obrigatório">
+					<p:selectOneMenu id="listaTipoCanal" value="#{fceCanalController.trecho.tipoCanal}" rendered="#{not empty fceCanalController.tiposCanal}" disabled="#{fceCanalController.editarTrecho}" required="true" requiredMessage="Tipo do canal Ã© de preenchimento obrigatÃ³rio">
 						<f:converter converterId="simpleEntityConverter" />
 						<f:selectItem itemLabel="Selecione"/>
 						<f:selectItems value="#{fceCanalController.tiposCanal}" var="tipoCanal" itemValue="#{tipoCanal}"  itemLabel="#{tipoCanal.dsTipoCanal}" />
 					</p:selectOneMenu>
 				</p:row>
 				<p:row>
-					* Seção geométrica
+					* SeÃ§Ã£o geomÃ©trica
 				</p:row>
 				<p:row>
 					<h:panelGrid id="checkBoxesSecaoGeometrica">
@@ -68,7 +70,7 @@
 									<f:converter converterId="doubleConverter"/>
 									<p:ajax event="change" process="@this"/>
 								</p:inputText>
-								<h:outputLabel value="Diâmetro (m):" rendered="#{secao.secaoGeometrica.id.equals(3)}"/> 
+								<h:outputLabel value="DiÃ¢metro (m):" rendered="#{secao.secaoGeometrica.id.equals(3)}"/> 
 								<p:inputText value="#{secao.diametro}" rendered="#{secao.secaoGeometrica.id.equals(3)}" onkeyup="maskIt(this, event, '99.999.999,99', true)" maxlength="10" disabled="#{fceCanalController.editarTrecho}">
 									<f:converter converterId="doubleConverter"/>
 									<p:ajax event="change" process="@this"/>

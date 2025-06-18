@@ -7,19 +7,20 @@
 	xmlns:p="http://primefaces.prime.com.tr/ui"
 	template="../../layout/template.xhtml">
 	<ui:define name="titulo-pagina">
-		<h3>Cadastrar Comunicação</h3>
+        <ui:include src="/layout/csrfToken.xhtml" />
+		<h3>Cadastrar ComunicaÃ§Ã£o</h3>
 	</ui:define>
 	<ui:define name="conteudo-principal">
 
 		<h:form id="formManterComunicacao">
 			<h:panelGrid columns="1" id="panel">
 				<h:panelGrid columns="2" >
-						<h:outputLabel value="Tipo de Comunicação"/>
-							<h:outputLabel value="Situação"/>
+						<h:outputLabel value="Tipo de ComunicaÃ§Ã£o"/>
+							<h:outputLabel value="SituaÃ§Ã£o"/>
 					<p:selectOneRadio id="tpComunicacao"
 						value="#{comunicacaoController.comunicacao.tpComunicacao}">
-						<f:selectItem itemLabel="Notificação" itemValue="N" />
-						<f:selectItem itemLabel="Temporária" itemValue="T" />
+						<f:selectItem itemLabel="NotificaÃ§Ã£o" itemValue="N" />
+						<f:selectItem itemLabel="TemporÃ¡ria" itemValue="T" />
 					</p:selectOneRadio>
 					<p:selectOneRadio id="indAtiva"
 						value="#{comunicacaoController.comunicacao.indAtiva}"
@@ -37,11 +38,11 @@
 						removeLabel="Remover"  			 
 						removeAllLabel="Remover Todos"   />
 				</h:panelGrid>
-					<h:outputLabel value="Período"/>
+					<h:outputLabel value="PerÃ­odo"/>
 				<h:panelGrid columns="4">
 					<h:panelGroup>
 						<h:outputText value="Data Inicial   " />
-						<p:calendar showOn="button" size="10" alt="Calendário"
+						<p:calendar showOn="button" size="10" alt="CalendÃ¡rio"
 							value="#{comunicacaoController.comunicacao.dtcPeriodoInicio}"
 							mindate="#{comunicacaoController.dtAtual}"
 							readOnlyInputText="true"
@@ -49,7 +50,7 @@
 							yearRange="c-50:c+10" />
 					</h:panelGroup>
 					<h:outputText value="Data Final" />
-					<p:calendar showOn="button" size="10" alt="Calendário"
+					<p:calendar showOn="button" size="10" alt="CalendÃ¡rio"
 						value="#{comunicacaoController.comunicacao.dtcPeriodoFim}"
 						locale="pt" pattern="dd/MM/yyyy" navigator="true"
 						readOnlyInputText="true"
@@ -57,11 +58,11 @@
 						yearRange="c-50:c+10" />
 				</h:panelGrid>
 				<h:panelGrid columns="2" >
-					<h:outputText value="Título" />
+					<h:outputText value="TÃ­tulo" />
 					<p:inputText id="dscTitulo" maxlength="100" value="#{comunicacaoController.comunicacao.dscTitulo}" style="width:590px" />
 				</h:panelGrid>
 				<h:panelGrid columns="1" id="textoComunicacao">
-					<h:outputText value="Texto da Comunicação" style="float:left;"/>
+					<h:outputText value="Texto da ComunicaÃ§Ã£o" style="float:left;"/>
 					<p:inputTextarea value="#{comunicacaoController.comunicacao.txtConteudo}"
 					style="width: 100% !important;" 
 					rows="6" cols="100" counter="display"
