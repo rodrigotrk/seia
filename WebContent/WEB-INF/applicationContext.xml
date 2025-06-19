@@ -4,8 +4,8 @@
 			 xmlns:beans="http://www.springframework.org/schema/beans"
 			 xsi:schemaLocation="http://www.springframework.org/schema/beans
 								http://www.springframework.org/schema/beans/spring-beans.xsd
-								http://www.springframework.org/schema/security
-								http://www.springframework.org/schema/security/spring-security-3.1.xsd">
+                        http://www.springframework.org/schema/security
+                        http://www.springframework.org/schema/security/spring-security-3.2.xsd">
 	
 	<beans:bean id="accessDecisionManager" class="org.springframework.security.access.vote.ConsensusBased">
 		<beans:property name="decisionVoters">
@@ -28,7 +28,8 @@
        <!-- <session-management>
         	<concurrency-control max-sessions="1" error-if-maximum-exceeded="true" expired-url="/login.xhtml" />
        </session-management> -->
-	    <session-management session-authentication-strategy-ref="sas"/>
+            <session-management session-authentication-strategy-ref="sas"/>
+            <csrf/>
     </http>
     
  
@@ -45,5 +46,8 @@
 	</beans:bean>
 	    
     <beans:bean id="sessionRegistry" class="org.springframework.security.core.session.SessionRegistryImpl" />
-    
+
+    <beans:bean id="requestDataValueProcessor"
+                class="org.springframework.security.web.servlet.support.csrf.CsrfRequestDataValueProcessor" />
+
 </beans:beans>
